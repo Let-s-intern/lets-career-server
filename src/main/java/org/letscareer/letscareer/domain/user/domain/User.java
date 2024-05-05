@@ -42,6 +42,9 @@ public class User {
     private String major;
 
     @Nullable
+    private UserGrade userGrade;
+
+    @Nullable
     private AccountType accountType;
 
     @Nullable
