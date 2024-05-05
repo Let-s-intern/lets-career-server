@@ -29,13 +29,13 @@ import static org.letscareer.letscareer.global.error.GlobalErrorCode.NOT_REFRESH
 @Component
 @RequiredArgsConstructor
 public class TokenProvider implements InitializingBean {
-    private final PrincipalDetailsService principalDetailsService;
-    private final RedisUtils redisUtils;
     private static final String AUTHORITIES_KEY = "auth";
     private static final String ACCESS_KEY = "access";
     private static final String REFRESH_KEY = "refresh";
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String BEARER_PREFIX = "Bearer ";
+    private final PrincipalDetailsService principalDetailsService;
+    private final RedisUtils redisUtils;
 
     @Value("${spring.jwt.secret}")
     private String secret;
