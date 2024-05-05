@@ -1,7 +1,7 @@
-package org.letscareer.letscareer.domain.contents.domain.converter;
+package org.letscareer.letscareer.domain.contents.type.converter;
 
 import jakarta.persistence.Converter;
-import org.letscareer.letscareer.domain.contents.domain.ContentsTopic;
+import org.letscareer.letscareer.domain.contents.type.ContentsTopic;
 import org.letscareer.letscareer.global.common.utils.AbstractEnumCodeAttributeConverter;
 
 @Converter

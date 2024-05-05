@@ -1,10 +1,12 @@
-package org.letscareer.letscareer.domain.contents.domain;
+package org.letscareer.letscareer.domain.contents.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.letscareer.letscareer.domain.contents.domain.converter.ContentsTopicConverter;
-import org.letscareer.letscareer.domain.contents.domain.converter.ContentsTypeConverter;
+import org.letscareer.letscareer.domain.contents.type.ContentsTopic;
+import org.letscareer.letscareer.domain.contents.type.ContentsType;
+import org.letscareer.letscareer.domain.contents.type.converter.ContentsTopicConverter;
+import org.letscareer.letscareer.domain.contents.type.converter.ContentsTypeConverter;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 @Entity
