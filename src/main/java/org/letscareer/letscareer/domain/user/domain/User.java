@@ -58,12 +58,16 @@ public class User {
     private UserGrade userGrade;
 
     @Nullable
-    @Convert(converter = AccountTypeConverter.class)
-    private AccountType accountType;
+    @Column(length = 30)
+    private String wishJob;
 
     @Nullable
     @Column(length = 30)
-    private String accountNum;
+    private String wishCompany;
+
+    @Nullable
+    @Column(length = 30)
+    private String inflowPath;
 
     @Nullable
     @Convert(converter = AuthProviderConverter.class)
@@ -73,6 +77,14 @@ public class User {
     @Builder.Default
     @Convert(converter = UserRoleConverter.class)
     private UserRole role = UserRole.USER;
+
+    @Nullable
+    @Convert(converter = AccountTypeConverter.class)
+    private AccountType accountType;
+
+    @Nullable
+    @Column(length = 30)
+    private String accountNum;
 
     public static User createUserFromOAuth2(OAuth2UserInfo oAuth2UserInfo, AuthProvider authProvider) {
         return User.builder()
