@@ -1,8 +1,8 @@
-package org.letscareer.letscareer.domain.user.domain.converter;
+package org.letscareer.letscareer.domain.user.type.converter;
 
 import jakarta.persistence.Converter;
 import org.letscareer.letscareer.global.common.utils.AbstractEnumCodeAttributeConverter;
-import org.letscareer.letscareer.domain.user.domain.AuthProvider;
+import org.letscareer.letscareer.domain.user.type.AuthProvider;
 
 @Converter
 public class AuthProviderConverter extends AbstractEnumCodeAttributeConverter<AuthProvider> {

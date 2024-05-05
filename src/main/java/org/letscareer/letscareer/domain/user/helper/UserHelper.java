@@ -1,7 +1,7 @@
 package org.letscareer.letscareer.domain.user.helper;
 
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.domain.user.domain.User;
+import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.repository.UserRepository;
 import org.springframework.stereotype.Component;
 
