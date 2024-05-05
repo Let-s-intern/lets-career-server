@@ -1,4 +1,4 @@
-package org.letscareer.letscareer.global.security.oauth2.user;
+package org.letscareer.letscareer.global.security.oauth2.userinfo;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,9 +1,9 @@
 package org.letscareer.letscareer.global.security.oauth2;
 
-import org.letscareer.letscareer.global.security.oauth2.user.GoogleOAuth2UserInfo;
-import org.letscareer.letscareer.global.security.oauth2.user.KakaoOAuth2UserInfo;
-import org.letscareer.letscareer.global.security.oauth2.user.NaverOAuth2UserInfo;
-import org.letscareer.letscareer.global.security.oauth2.user.OAuth2UserInfo;
+import org.letscareer.letscareer.global.security.oauth2.userinfo.GoogleOAuth2UserInfo;
+import org.letscareer.letscareer.global.security.oauth2.userinfo.KakaoOAuth2UserInfo;
+import org.letscareer.letscareer.global.security.oauth2.userinfo.NaverOAuth2UserInfo;
+import org.letscareer.letscareer.global.security.oauth2.userinfo.OAuth2UserInfo;
 
 import java.util.Map;
 
