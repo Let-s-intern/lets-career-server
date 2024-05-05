@@ -1,4 +1,4 @@
-package org.letscareer.letscareer.domain.user.domain;
+package org.letscareer.letscareer.domain.contents.type;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -7,10 +7,10 @@ import org.letscareer.letscareer.global.common.utils.EnumField;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public enum AuthProvider implements EnumField {
-    KAKAO(1, "카카오톡"),
-    NAVER(2, "네이버"),
-    GOOGLE(3, "구글");
+public enum ContentsTopic implements EnumField {
+    ESSENTIAL(1, "필수"),
+    ADDITIONAL(2, "추가"),
+    LIMITED(3, "제한");
 
     private final Integer code;
     private final String desc;

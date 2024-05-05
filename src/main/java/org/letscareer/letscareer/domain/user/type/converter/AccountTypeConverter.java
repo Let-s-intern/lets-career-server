@@ -1,7 +1,7 @@
-package org.letscareer.letscareer.domain.user.domain.converter;
+package org.letscareer.letscareer.domain.user.type.converter;
 
 import jakarta.persistence.Converter;
-import org.letscareer.letscareer.domain.user.domain.AccountType;
+import org.letscareer.letscareer.domain.user.type.AccountType;
 import org.letscareer.letscareer.global.common.utils.AbstractEnumCodeAttributeConverter;
 
 @Converter

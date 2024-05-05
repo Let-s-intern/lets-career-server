@@ -1,10 +1,10 @@
 package org.letscareer.letscareer.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.domain.user.domain.User;
+import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.helper.UserHelper;
 import org.letscareer.letscareer.domain.user.mapper.UserMapper;
-import org.letscareer.letscareer.domain.user.domain.AuthProvider;
+import org.letscareer.letscareer.domain.user.type.AuthProvider;
 import org.letscareer.letscareer.global.security.oauth2.userinfo.OAuth2UserInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

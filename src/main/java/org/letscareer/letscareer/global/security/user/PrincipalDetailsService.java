@@ -1,7 +1,7 @@
 package org.letscareer.letscareer.global.security.user;
 
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.domain.user.domain.User;
+import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
