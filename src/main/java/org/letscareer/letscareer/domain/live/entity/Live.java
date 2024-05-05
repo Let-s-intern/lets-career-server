@@ -50,5 +50,5 @@ public class Live extends BaseTimeEntity {
     private List<FaqLive> faqList = new ArrayList<>();
     @OneToMany(mappedBy = "live", cascade = CascadeType.ALL)
     @Builder.Default
-    private List<LiveReview> noticeList = new ArrayList<>();
+    private List<LiveReview> reviewList = new ArrayList<>();
 }

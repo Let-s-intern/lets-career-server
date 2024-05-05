@@ -16,7 +16,7 @@ import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 public class Notice extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "challenge_id")
+    @Column(name = "notice_id")
     private Long id;
     private String title;
     private String link;

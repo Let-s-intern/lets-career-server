@@ -12,7 +12,7 @@ import org.letscareer.letscareer.domain.price.type.converter.LivePriceConverter;
 @DiscriminatorValue("live_price")
 @Getter
 @Entity
-public class LivePrice extends Live {
+public class LivePrice extends Price {
     @Convert(converter = LivePriceConverter.class)
     private LivePriceType livePriceType;
     @ManyToOne(fetch = FetchType.LAZY)

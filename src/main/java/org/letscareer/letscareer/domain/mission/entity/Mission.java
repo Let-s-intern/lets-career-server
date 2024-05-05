@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PRIVATE)
 @Getter
-@Table(name = "attendance")
+@Table(name = "mission")
 @Entity
 public class Mission extends BaseTimeEntity {
     @Id
