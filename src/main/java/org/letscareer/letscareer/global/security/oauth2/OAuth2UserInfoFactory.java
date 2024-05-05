@@ -1,5 +1,6 @@
 package org.letscareer.letscareer.global.security.oauth2;
 
+import org.letscareer.letscareer.domain.user.domain.AuthProvider;
 import org.letscareer.letscareer.global.security.oauth2.userinfo.GoogleOAuth2UserInfo;
 import org.letscareer.letscareer.global.security.oauth2.userinfo.KakaoOAuth2UserInfo;
 import org.letscareer.letscareer.global.security.oauth2.userinfo.NaverOAuth2UserInfo;

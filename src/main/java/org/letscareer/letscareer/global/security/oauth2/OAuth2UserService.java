@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.global.security.oauth2;
 
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.user.domain.AuthProvider;
 import org.letscareer.letscareer.domain.user.domain.User;
 import org.letscareer.letscareer.domain.user.helper.UserHelper;
 import org.letscareer.letscareer.domain.user.service.UserService;

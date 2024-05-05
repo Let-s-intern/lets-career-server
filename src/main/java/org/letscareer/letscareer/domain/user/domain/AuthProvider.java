@@ -1,4 +1,4 @@
-package org.letscareer.letscareer.global.security.oauth2;
+package org.letscareer.letscareer.domain.user.domain;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
