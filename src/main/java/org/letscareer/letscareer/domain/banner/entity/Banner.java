@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.letscareer.letscareer.domain.banner.type.BannerType;
+import org.letscareer.letscareer.domain.banner.type.converter.BannerTypeConverter;
 
 import java.time.LocalDateTime;
 
@@ -21,6 +22,7 @@ public abstract class Banner {
     private Long id;
 
     @NotNull
+    @Convert(converter = BannerTypeConverter.class)
     private BannerType type;
 
     @NotNull

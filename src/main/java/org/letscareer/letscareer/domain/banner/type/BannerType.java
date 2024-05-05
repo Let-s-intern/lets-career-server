@@ -3,10 +3,11 @@ package org.letscareer.letscareer.domain.banner.type;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.letscareer.letscareer.global.common.utils.EnumField;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public enum BannerType {
+public enum BannerType implements EnumField {
     MAIN(1, "메인"),
     PROGRAM(2, "프로그램"),
     LINE(3, "띠"),
