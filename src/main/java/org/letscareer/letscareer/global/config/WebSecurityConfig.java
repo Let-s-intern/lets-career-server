@@ -7,7 +7,7 @@ import org.letscareer.letscareer.global.security.jwt.JwtAuthenticationEntryPoint
 import org.letscareer.letscareer.global.security.jwt.JwtAuthenticationFilter;
 import org.letscareer.letscareer.global.security.jwt.JwtExceptionHandlerFilter;
 import org.letscareer.letscareer.global.security.oauth2.CookieAuthorizationRequestRepository;
-import org.letscareer.letscareer.global.security.oauth2.OAuth2UserService;
+import org.letscareer.letscareer.global.security.oauth2.CustomOAuth2UserService;
 import org.letscareer.letscareer.global.security.oauth2.handler.OAuth2AuthenticationFailureHandler;
 import org.letscareer.letscareer.global.security.oauth2.handler.OAuth2AuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,7 +46,7 @@ public class WebSecurityConfig {
     private final JwtExceptionHandlerFilter jwtExceptionHandlerFilter;
     private final AccessDeniedFilter accessDeniedFilter;
     private final CookieAuthorizationRequestRepository cookieAuthorizationRequestRepository;
-    private final OAuth2UserService oAuth2UserService;
+    private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
     @Value("${server.url}")
@@ -114,7 +114,7 @@ public class WebSecurityConfig {
                     oauth2.authorizationEndpoint(auth -> auth.baseUri("/oauth2/authorize")
                                     .authorizationRequestRepository(cookieAuthorizationRequestRepository))
                             .redirectionEndpoint(redirect -> redirect.baseUri("/oauth2/callback/*"))
-                            .userInfoEndpoint(userInfo -> userInfo.userService(oAuth2UserService))
+                            .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
                             .successHandler(oAuth2AuthenticationSuccessHandler)
                             .failureHandler(oAuth2AuthenticationFailureHandler);
                 })

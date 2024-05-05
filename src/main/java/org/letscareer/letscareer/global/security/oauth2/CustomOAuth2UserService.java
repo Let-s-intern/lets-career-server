@@ -13,27 +13,26 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 
 
 @Component
 @RequiredArgsConstructor
-public class OAuth2UserService implements org.springframework.security.oauth2.client.userinfo.OAuth2UserService<OAuth2UserRequest, OAuth2User> {
+public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
     private final UserHelper userHelper;
     private final UserService userService;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException {
-        org.springframework.security.oauth2.client.userinfo.OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService = new DefaultOAuth2UserService();
-        OAuth2User oAuth2User = oAuth2UserService.loadUser(oAuth2UserRequest);
+        OAuth2UserService<OAuth2UserRequest, OAuth2User> customOAuth2UserService = new DefaultOAuth2UserService();
+        OAuth2User oAuth2User = customOAuth2UserService.loadUser(oAuth2UserRequest);
         return processOAuth2User(oAuth2UserRequest, oAuth2User);
     }
 
     protected OAuth2User processOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) {
         AuthProvider authProvider = AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase());
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(authProvider, oAuth2User.getAttributes());
-        if(!StringUtils.hasText(oAuth2UserInfo.getEmail()))
-            throw new RuntimeException("Email Not Found From OAuth2 Provider");
-
+        validateOAuth2UserInfoEmail(oAuth2UserInfo);
         return validateEmailAndCreateUserIfNeed(oAuth2UserInfo, authProvider);
     }
 
@@ -68,5 +67,10 @@ public class OAuth2UserService implements org.springframework.security.oauth2.cl
 
     private boolean equalAuthProvider(User user, AuthProvider authProvider) {
         return user.getAuthProvider().equals(authProvider);
+    }
+
+    private void validateOAuth2UserInfoEmail(OAuth2UserInfo oAuth2UserInfo) {
+        if(!StringUtils.hasText(oAuth2UserInfo.getEmail()))
+            throw new RuntimeException("Email Not Found From OAuth2 Provider");
     }
 }
