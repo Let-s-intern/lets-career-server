@@ -35,14 +35,11 @@ import java.util.Arrays;
 import java.util.List;
 
 @EnableWebSecurity
-@Configuration()
+@Configuration
 @ConditionalOnDefaultWebSecurity
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 @RequiredArgsConstructor
 public class WebSecurityConfig {
-
-    @Value("${server.url}")
-    private String SERVER_URL;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -52,6 +49,8 @@ public class WebSecurityConfig {
     private final OAuth2UserService oAuth2UserService;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
+    @Value("${server.url}")
+    private String SERVER_URL;
 
     private final String[] SwaggerPatterns = {
             "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html"
