@@ -1,4 +1,4 @@
-package org.letscareer.letscareer.domain.user.domain;
+package org.letscareer.letscareer.domain.user.type;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

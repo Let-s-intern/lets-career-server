@@ -1,14 +1,18 @@
-package org.letscareer.letscareer.domain.user.domain;
+package org.letscareer.letscareer.domain.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.letscareer.letscareer.domain.user.domain.converter.AccountTypeConverter;
-import org.letscareer.letscareer.domain.user.domain.converter.AuthProviderConverter;
-import org.letscareer.letscareer.domain.user.domain.converter.UserGradeConverter;
-import org.letscareer.letscareer.domain.user.domain.converter.UserRoleConverter;
+import org.letscareer.letscareer.domain.user.type.AccountType;
+import org.letscareer.letscareer.domain.user.type.AuthProvider;
+import org.letscareer.letscareer.domain.user.type.UserGrade;
+import org.letscareer.letscareer.domain.user.type.UserRole;
+import org.letscareer.letscareer.domain.user.type.converter.AccountTypeConverter;
+import org.letscareer.letscareer.domain.user.type.converter.AuthProviderConverter;
+import org.letscareer.letscareer.domain.user.type.converter.UserGradeConverter;
+import org.letscareer.letscareer.domain.user.type.converter.UserRoleConverter;
 import org.letscareer.letscareer.global.security.oauth2.userinfo.OAuth2UserInfo;
 
 import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils.updateValue;

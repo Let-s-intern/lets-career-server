@@ -1,4 +1,4 @@
-package org.letscareer.letscareer.domain.user.domain;
+package org.letscareer.letscareer.domain.user.type;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -7,9 +7,10 @@ import org.letscareer.letscareer.global.common.utils.EnumField;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public enum UserRole implements EnumField {
-    ADMIN(1, "관리자"),
-    USER(2, "사용자");
+public enum AuthProvider implements EnumField {
+    KAKAO(1, "카카오톡"),
+    NAVER(2, "네이버"),
+    GOOGLE(3, "구글");
 
     private final Integer code;
     private final String desc;

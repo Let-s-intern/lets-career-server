@@ -2,7 +2,7 @@ package org.letscareer.letscareer.global.security.user;
 
 import lombok.Data;
 import lombok.Setter;
-import org.letscareer.letscareer.domain.user.domain.User;
+import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;

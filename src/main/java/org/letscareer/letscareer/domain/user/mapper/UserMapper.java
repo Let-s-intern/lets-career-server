@@ -1,7 +1,7 @@
 package org.letscareer.letscareer.domain.user.mapper;
 
-import org.letscareer.letscareer.domain.user.domain.User;
-import org.letscareer.letscareer.domain.user.domain.AuthProvider;
+import org.letscareer.letscareer.domain.user.entity.User;
+import org.letscareer.letscareer.domain.user.type.AuthProvider;
 import org.letscareer.letscareer.global.security.oauth2.userinfo.OAuth2UserInfo;
 import org.springframework.stereotype.Component;
 
