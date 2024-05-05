@@ -6,6 +6,8 @@ import lombok.*;
 import org.letscareer.letscareer.domain.contents.domain.Contents;
 import org.letscareer.letscareer.domain.missiontemplate.type.MissionTemplateTopic;
 import org.letscareer.letscareer.domain.missiontemplate.type.MissionTemplateType;
+import org.letscareer.letscareer.domain.missiontemplate.type.converter.MissionTemplateTopicConverter;
+import org.letscareer.letscareer.domain.missiontemplate.type.converter.MissionTemplateTypeConverter;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 import java.util.List;
@@ -32,9 +34,11 @@ public class MissionTemplate extends BaseTimeEntity {
     private String guideLink;
 
     @NotNull
+    @Convert(converter = MissionTemplateTypeConverter.class)
     private MissionTemplateType type;
 
     @NotNull
+    @Convert(converter = MissionTemplateTopicConverter.class)
     private MissionTemplateTopic topic;
 
     @OneToMany(mappedBy = "mission_template", fetch = FetchType.LAZY)
