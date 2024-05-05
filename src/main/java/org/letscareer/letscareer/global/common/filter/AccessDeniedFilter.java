@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.global.error.GlobalErrorCode;
 import org.letscareer.letscareer.global.error.entity.ErrorResponse;
-import org.letscareer.letscareer.global.error.exception.BaseException;
+import org.letscareer.letscareer.global.error.exception.UnauthorizedException;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Component;
@@ -35,7 +35,7 @@ public class AccessDeniedFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             filterChain.doFilter(request, response);
-        } catch (BaseException e) {
+        } catch (UnauthorizedException e) {
             responseToClient(response, getErrorResponse(e.getErrorCode()));
         } catch (AccessDeniedException e) {
             responseToClient(response, getErrorResponse(GlobalErrorCode.FORBIDDEN));
