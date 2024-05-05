@@ -6,6 +6,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.letscareer.letscareer.global.security.oauth2.AuthProvider;
+import org.letscareer.letscareer.global.security.oauth2.userinfo.OAuth2UserInfo;
+
+import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils.updateValue;
 
 @Entity
 @Getter
@@ -57,4 +60,19 @@ public class User {
     @Builder.Default
     private UserRole role = UserRole.USER;
 
+    public static User createUserFromOAuth2(OAuth2UserInfo oAuth2UserInfo, AuthProvider authProvider) {
+        return User.builder()
+                .email(oAuth2UserInfo.getEmail())
+                .name(oAuth2UserInfo.getName())
+                .phoneNum(oAuth2UserInfo.getPhoneNum())
+                .authProvider(authProvider)
+                .build();
+    }
+
+    public User updateFromOAuth2(OAuth2UserInfo oAuth2UserInfo) {
+        this.email = updateValue(this.email, oAuth2UserInfo.getEmail());
+        this.name = updateValue(this.name, oAuth2UserInfo.getName());
+        this.phoneNum = updateValue(this.phoneNum, oAuth2UserInfo.getPhoneNum());
+        return this;
+    }
 }
