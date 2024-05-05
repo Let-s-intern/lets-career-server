@@ -1,4 +1,4 @@
-package org.letscareer.letscareer.domain.missiontemplate.domain;
+package org.letscareer.letscareer.domain.missiontemplate.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
