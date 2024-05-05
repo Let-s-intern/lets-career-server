@@ -1,11 +1,11 @@
-package org.letscareer.letscareer.domain.user;
+package org.letscareer.letscareer.domain.user.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
-public class UserController {
+public class UserV1Controller {
 }
