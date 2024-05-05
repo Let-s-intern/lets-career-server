@@ -5,6 +5,9 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.letscareer.letscareer.domain.application.entity.Application;
+import org.letscareer.letscareer.domain.attendance.entity.Attendance;
+import org.letscareer.letscareer.domain.price.entity.UserPayment;
 import org.letscareer.letscareer.domain.user.type.AccountType;
 import org.letscareer.letscareer.domain.user.type.AuthProvider;
 import org.letscareer.letscareer.domain.user.type.UserGrade;
@@ -14,6 +17,9 @@ import org.letscareer.letscareer.domain.user.type.converter.AuthProviderConverte
 import org.letscareer.letscareer.domain.user.type.converter.UserGradeConverter;
 import org.letscareer.letscareer.domain.user.type.converter.UserRoleConverter;
 import org.letscareer.letscareer.global.security.oauth2.userinfo.OAuth2UserInfo;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils.updateValue;
 
@@ -89,6 +95,16 @@ public class User {
     @Nullable
     @Column(length = 30)
     private String accountNum;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<Attendance> attendanceList = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<UserPayment> paymentList = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<Application> applicationList = new ArrayList<>();
 
     public static User createUserFromOAuth2(OAuth2UserInfo oAuth2UserInfo, AuthProvider authProvider) {
         return User.builder()
