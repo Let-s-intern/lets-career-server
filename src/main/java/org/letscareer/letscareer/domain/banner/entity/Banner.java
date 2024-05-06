@@ -5,16 +5,16 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.letscareer.letscareer.domain.banner.type.BannerType;
 import org.letscareer.letscareer.domain.banner.type.converter.BannerTypeConverter;
+import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Builder(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Banner {
+public abstract class Banner extends BaseTimeEntity {
 
     @Id
     @Column(name = "banner_id")
