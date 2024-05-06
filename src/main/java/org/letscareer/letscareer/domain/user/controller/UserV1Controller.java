@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.user.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.user.dto.request.UserPwSignInRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UserPwSignUpRequestDto;
 import org.letscareer.letscareer.domain.user.service.UserService;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
@@ -21,6 +22,11 @@ public class UserV1Controller {
     public ResponseEntity<SuccessResponse<?>> pwSignUp(@RequestBody @Valid UserPwSignUpRequestDto pwSignUpRequestDto) {
         userService.pwSignUp(pwSignUpRequestDto);
         return SuccessResponse.created(null);
+    }
+
+    @PostMapping("/signin")
+    public ResponseEntity<SuccessResponse<?>> pwSignIn(@RequestBody @Valid UserPwSignInRequestDto pwSignInRequestDto) {
+        return SuccessResponse.ok(userService.pwSignIn(pwSignInRequestDto));
     }
 
 }
