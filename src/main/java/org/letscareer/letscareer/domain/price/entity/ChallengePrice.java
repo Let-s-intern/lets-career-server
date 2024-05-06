@@ -7,6 +7,7 @@ import org.letscareer.letscareer.domain.challenge.type.converter.ChallengeTypeCo
 import org.letscareer.letscareer.domain.price.type.ChallengeParticipationType;
 import org.letscareer.letscareer.domain.price.type.ChallengePriceType;
 import org.letscareer.letscareer.domain.price.type.ChallengeUserType;
+import org.letscareer.letscareer.domain.price.type.converter.ChallengeParticipationTypeConverter;
 import org.letscareer.letscareer.domain.price.type.converter.ChallengePriceTypeConverter;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -22,7 +23,7 @@ public class ChallengePrice extends Price {
     private ChallengePriceType challengePriceType;
     @Convert(converter = ChallengeTypeConverter.class)
     private ChallengeUserType challengeUserType;
-    @Convert(converter = ChallengeParticipationType.class)
+    @Convert(converter = ChallengeParticipationTypeConverter.class)
     private ChallengeParticipationType challengeParticipationType;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "challenge_id")
