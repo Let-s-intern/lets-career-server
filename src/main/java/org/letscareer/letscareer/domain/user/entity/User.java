@@ -8,6 +8,7 @@ import lombok.*;
 import org.letscareer.letscareer.domain.application.entity.Application;
 import org.letscareer.letscareer.domain.attendance.entity.Attendance;
 import org.letscareer.letscareer.domain.price.entity.UserPayment;
+import org.letscareer.letscareer.domain.user.dto.request.UserPwSignUpRequestDto;
 import org.letscareer.letscareer.domain.user.type.AccountType;
 import org.letscareer.letscareer.domain.user.type.AuthProvider;
 import org.letscareer.letscareer.domain.user.type.UserGrade;
@@ -112,6 +113,15 @@ public class User {
                 .name(oAuth2UserInfo.getName())
                 .phoneNum(oAuth2UserInfo.getPhoneNum())
                 .authProvider(authProvider)
+                .build();
+    }
+
+    public static User createUser(UserPwSignUpRequestDto pwSignUpRequestDto, String encodedPassword) {
+        return User.builder()
+                .email(pwSignUpRequestDto.email())
+                .name(pwSignUpRequestDto.name())
+                .phoneNum(pwSignUpRequestDto.phoneNum())
+                .password(encodedPassword)
                 .build();
     }
 
