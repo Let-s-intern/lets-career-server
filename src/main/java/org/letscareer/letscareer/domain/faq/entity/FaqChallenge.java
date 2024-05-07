@@ -21,4 +21,15 @@ public class FaqChallenge {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "faq_id")
     private Faq faq;
+
+    public static FaqChallenge createFaqChallenge(Faq faq,
+                                                  Challenge challenge) {
+        FaqChallenge faqChallenge = FaqChallenge.builder()
+                .challenge(challenge)
+                .faq(faq)
+                .build();
+        faq.addFaqChallengeList(faqChallenge);
+        challenge.addChallengeFaqList(faqChallenge);
+        return faqChallenge;
+    }
 }
