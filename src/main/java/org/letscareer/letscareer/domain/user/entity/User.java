@@ -5,9 +5,9 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.letscareer.letscareer.domain.application.entity.Application;
-import org.letscareer.letscareer.domain.attendance.entity.Attendance;
-import org.letscareer.letscareer.domain.price.entity.UserPayment;
+//import org.letscareer.letscareer.domain.application.entity.Application;
+//import org.letscareer.letscareer.domain.attendance.entity.Attendance;
+//import org.letscareer.letscareer.domain.price.entity.UserPayment;
 import org.letscareer.letscareer.domain.user.dto.request.UserAddInfoRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UserPwSignUpRequestDto;
 import org.letscareer.letscareer.domain.user.type.AccountType;
@@ -107,15 +107,15 @@ public class User extends BaseTimeEntity {
     @Column(length = 30)
     private String accountOwner;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @Builder.Default
-    private List<Attendance> attendanceList = new ArrayList<>();
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @Builder.Default
-    private List<UserPayment> paymentList = new ArrayList<>();
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @Builder.Default
-    private List<Application> applicationList = new ArrayList<>();
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//    @Builder.Default
+//    private List<Attendance> attendanceList = new ArrayList<>();
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//    @Builder.Default
+//    private List<UserPayment> paymentList = new ArrayList<>();
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//    @Builder.Default
+//    private List<Application> applicationList = new ArrayList<>();
 
     public static User createUserFromOAuth2(OAuth2UserInfo oAuth2UserInfo, AuthProvider authProvider) {
         return User.builder()

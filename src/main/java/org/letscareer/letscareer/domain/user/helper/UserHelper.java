@@ -4,10 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.user.dto.request.UserAddInfoRequestDto;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.repository.UserRepository;
+import org.letscareer.letscareer.domain.user.vo.UserAdminVo;
 import org.letscareer.letscareer.global.error.exception.ConflictException;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.letscareer.letscareer.global.error.exception.InvalidValueException;
 import org.letscareer.letscareer.global.security.user.PrincipalDetailsService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -69,5 +72,9 @@ public class UserHelper {
 
     public void addUserInfo(User user, UserAddInfoRequestDto addInfoRequestDto) {
         user.addUserInfo(addInfoRequestDto);
+    }
+
+    public Page<UserAdminVo> findAllUserAdminVos(Pageable pageable) {
+        return userRepository.findAllUserAdminVos(pageable);
     }
 }
