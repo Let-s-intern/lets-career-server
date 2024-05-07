@@ -18,6 +18,7 @@ import org.letscareer.letscareer.domain.user.type.converter.AccountTypeConverter
 import org.letscareer.letscareer.domain.user.type.converter.AuthProviderConverter;
 import org.letscareer.letscareer.domain.user.type.converter.UserGradeConverter;
 import org.letscareer.letscareer.domain.user.type.converter.UserRoleConverter;
+import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 import org.letscareer.letscareer.global.security.oauth2.userinfo.OAuth2UserInfo;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUti
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PRIVATE)
-public class User {
+public class User extends BaseTimeEntity {
 
     @Id
     @Column(name = "user_id")
