@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.letscareer.letscareer.domain.classification.dto.request.CreateClassificationRequestDto;
 import org.letscareer.letscareer.domain.classification.type.ProgramType;
 import org.letscareer.letscareer.domain.classification.type.converter.ProgramTypeConverter;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
@@ -22,4 +23,8 @@ public abstract class Classification extends BaseTimeEntity {
     private Long id;
     @Convert(converter = ProgramTypeConverter.class)
     private ProgramType programType;
+
+    public Classification(CreateClassificationRequestDto requestDto) {
+        this.programType = requestDto.programType();
+    }
 }
