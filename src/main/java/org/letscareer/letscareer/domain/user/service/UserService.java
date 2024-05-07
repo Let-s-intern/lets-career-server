@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.user.dto.request.UserAddInfoRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UserPwSignInRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UserPwSignUpRequestDto;
 import org.letscareer.letscareer.domain.user.dto.response.TokenResponseDto;
@@ -10,6 +11,7 @@ import org.letscareer.letscareer.domain.user.mapper.UserMapper;
 import org.letscareer.letscareer.domain.user.type.AuthProvider;
 import org.letscareer.letscareer.global.security.jwt.TokenProvider;
 import org.letscareer.letscareer.global.security.oauth2.userinfo.OAuth2UserInfo;
+import org.letscareer.letscareer.global.security.user.PrincipalDetails;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,5 +48,10 @@ public class UserService {
         final String accessToken = tokenProvider.createAccessToken(user.getId(), authentication);
         final String refreshToken = tokenProvider.createRefreshToken(user.getId(), authentication);
         return userMapper.toTokenResponseDto(accessToken, refreshToken);
+    }
+
+    public void addUserInfo(PrincipalDetails principalDetails, UserAddInfoRequestDto addInfoRequestDto) {
+        User user = userHelper.findUserByIdOrThrow(principalDetails.getId());
+        userHelper.addUserInfo(user, addInfoRequestDto);
     }
 }

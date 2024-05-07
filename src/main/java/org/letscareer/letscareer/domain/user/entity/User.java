@@ -8,6 +8,7 @@ import lombok.*;
 import org.letscareer.letscareer.domain.application.entity.Application;
 import org.letscareer.letscareer.domain.attendance.entity.Attendance;
 import org.letscareer.letscareer.domain.price.entity.UserPayment;
+import org.letscareer.letscareer.domain.user.dto.request.UserAddInfoRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UserPwSignUpRequestDto;
 import org.letscareer.letscareer.domain.user.type.AccountType;
 import org.letscareer.letscareer.domain.user.type.AuthProvider;
@@ -66,7 +67,7 @@ public class User {
 
     @Nullable
     @Convert(converter = UserGradeConverter.class)
-    private UserGrade userGrade;
+    private UserGrade grade;
 
     @Nullable
     @Column(length = 30)
@@ -79,6 +80,10 @@ public class User {
     @Nullable
     @Column(length = 30)
     private String inflowPath;
+
+    @NotNull
+    @Builder.Default
+    private Boolean marketingAgree = false;
 
     @Nullable
     @Convert(converter = AuthProviderConverter.class)
@@ -96,6 +101,10 @@ public class User {
     @Nullable
     @Column(length = 30)
     private String accountNum;
+
+    @Nullable
+    @Column(length = 30)
+    private String accountOwner;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @Builder.Default
@@ -130,5 +139,17 @@ public class User {
         this.name = updateValue(this.name, oAuth2UserInfo.getName());
         this.phoneNum = updateValue(this.phoneNum, oAuth2UserInfo.getPhoneNum());
         return this;
+    }
+
+    public void addUserInfo(UserAddInfoRequestDto addInfoRequestDto) {
+        this.university = updateValue(this.university, addInfoRequestDto.university());
+        this.major = updateValue(this.major, addInfoRequestDto.major());
+        this.grade = updateValue(this.grade, addInfoRequestDto.grade());
+        this.wishJob = updateValue(this.wishJob, addInfoRequestDto.wishJob());
+        this.wishCompany = updateValue(this.wishCompany, addInfoRequestDto.wishCompany());
+        this.marketingAgree = updateValue(this.marketingAgree, addInfoRequestDto.marketingAgree());
+        this.accountType = updateValue(this.accountType, addInfoRequestDto.accountType());
+        this.accountNum = updateValue(this.accountNum, addInfoRequestDto.accountNum());
+        this.accountOwner = updateValue(this.accountOwner, addInfoRequestDto.accountOwner());
     }
 }

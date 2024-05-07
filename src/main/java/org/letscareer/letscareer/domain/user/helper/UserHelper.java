@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.user.helper;
 
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.user.dto.request.UserAddInfoRequestDto;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.repository.UserRepository;
 import org.letscareer.letscareer.global.error.exception.ConflictException;
@@ -24,6 +25,10 @@ public class UserHelper {
     private final PrincipalDetailsService principalDetailsService;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+    public User findUserByIdOrThrow(Long id) {
+        return userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    }
+
     public User findUserByEmailOrThrow(String email) {
         return userRepository.findByEmail(email).orElseThrow(EntityNotFoundException::new);
     }
@@ -38,7 +43,7 @@ public class UserHelper {
 
     public void validateExistingUser(String phoneNum) {
         User user = userRepository.findByPhoneNum(phoneNum).orElse(null);
-        if(user != null) throw new ConflictException();
+        if (user != null) throw new ConflictException();
     }
 
     public String encodePassword(String rawPassword) {
@@ -46,7 +51,7 @@ public class UserHelper {
     }
 
     public void validatePassword(User user, String inputPassword) {
-        if(!matchPassword(inputPassword, user.getPassword())) {
+        if (!matchPassword(inputPassword, user.getPassword())) {
             throw new InvalidValueException(MISMATCH_PASSWORD);
         }
     }
@@ -60,5 +65,9 @@ public class UserHelper {
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return authentication;
+    }
+
+    public void addUserInfo(User user, UserAddInfoRequestDto addInfoRequestDto) {
+        user.addUserInfo(addInfoRequestDto);
     }
 }
