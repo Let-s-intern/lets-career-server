@@ -36,8 +36,8 @@ public class UserHelper {
         return userRepository.findByEmail(email).orElseThrow(EntityNotFoundException::new);
     }
 
-    public User findUserByEmailOrNull(String email) {
-        return userRepository.findByEmail(email).orElse(null);
+    public User findUserByPhoneNumOrNull(String phoneNum) {
+        return userRepository.findByPhoneNum(phoneNum).orElse(null);
     }
 
     public User saveUser(User user) {
