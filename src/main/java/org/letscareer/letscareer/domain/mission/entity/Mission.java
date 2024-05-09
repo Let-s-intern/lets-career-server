@@ -41,13 +41,13 @@ public class Mission extends BaseTimeEntity {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
-    @OneToMany(mappedBy = "mission", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "missionEssential", fetch = FetchType.LAZY)
     private List<Contents> essentialContentsList;
 
-    @OneToMany(mappedBy = "mission", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "missionAdditional", fetch = FetchType.LAZY)
     private List<Contents> additionalContentsList;
 
-    @OneToMany(mappedBy = "mission", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "missionLimited", fetch = FetchType.LAZY)
     private List<Contents> limitedContentsList;
 
     @OneToMany(mappedBy = "mission", cascade = CascadeType.ALL)

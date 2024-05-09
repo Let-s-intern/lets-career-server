@@ -17,7 +17,6 @@ import org.letscareer.letscareer.domain.price.type.converter.ChallengePriceTypeC
 @Getter
 @Entity
 public class ChallengePrice extends Price {
-    @Builder.Default
     private Integer refund = 0;
     @Convert(converter = ChallengePriceTypeConverter.class)
     private ChallengePriceType challengePriceType;
