@@ -2,7 +2,6 @@ package org.letscareer.letscareer.domain.price.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.letscareer.letscareer.domain.live.dto.request.CreateLiveRequestDto;
 import org.letscareer.letscareer.domain.live.entity.Live;
 import org.letscareer.letscareer.domain.price.dto.request.CreateLivePriceRequestDto;
 import org.letscareer.letscareer.domain.price.type.LivePriceType;

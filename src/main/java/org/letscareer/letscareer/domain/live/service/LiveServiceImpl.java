@@ -24,7 +24,7 @@ public class LiveServiceImpl implements LiveService {
     private final FaqHelper faqHelper;
 
     @Override
-    public void createLiveService(CreateLiveRequestDto requestDto) {
+    public void createLive(CreateLiveRequestDto requestDto) {
         Live live = liveHelper.createLiveAndSave(requestDto);
         createClassificationListAndSave(requestDto.programTypeInfo(), live);
         createPriceListAndSave(requestDto.priceInfo(), live);

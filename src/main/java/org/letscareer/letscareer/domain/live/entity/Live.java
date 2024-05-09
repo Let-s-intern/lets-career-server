@@ -61,7 +61,7 @@ public class Live extends BaseTimeEntity {
                 .participationCount(requestDto.participationCount())
                 .thumbnail(requestDto.thumbnail())
                 .mentorName(requestDto.mentorName())
-                .stringJob(requestDto.stringJob())
+                .stringJob(requestDto.job())
                 .place(requestDto.place())
                 .startDate(requestDto.startDate())
                 .endDate(requestDto.endDate())

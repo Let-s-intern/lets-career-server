@@ -19,7 +19,7 @@ public class LiveV1Controller {
 
     @PostMapping
     public ResponseEntity<SuccessResponse<?>> createLiveProgram(@RequestBody final CreateLiveRequestDto requestDto) {
-        liveService.createLiveService(requestDto);
+        liveService.createLive(requestDto);
         return SuccessResponse.created(null);
     }
 }

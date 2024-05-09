@@ -5,5 +5,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface LiveService {
-    void createLiveService(CreateLiveRequestDto requestDto);
+    void createLive(CreateLiveRequestDto requestDto);
 }
