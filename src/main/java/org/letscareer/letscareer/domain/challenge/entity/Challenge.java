@@ -30,13 +30,19 @@ public class Challenge extends BaseTimeEntity {
     private String title;
     private String shortDesc;
     private String desc;
+    @Builder.Default
+    private Integer currentCount = 0;
     private Integer participationCount;
     private String thumbnail;
+    private String chatLink;
+    private String chatPassword;
+    private String zoomLink;
+    private String zoomPassword;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private LocalDateTime deadline;
-    private String chatLink;
-    private String chatPassword;
+    @Builder.Default
+    private Boolean isVisible = false;
     @Convert(converter = ChallengeTypeConverter.class)
     private ChallengeType challengeType;
 

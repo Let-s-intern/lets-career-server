@@ -1,7 +1,9 @@
 package org.letscareer.letscareer.domain.challenge.service;
 
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.application.dto.response.GetChallengeApplicationsResponseDto;
 import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeRequestDto;
+import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeDetailResponseDto;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
 import org.letscareer.letscareer.domain.classification.dto.request.CreateChallengeClassificationRequestDto;
@@ -24,6 +26,16 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final FaqHelper faqHelper;
 
     @Override
+    public GetChallengeDetailResponseDto getChallengeDetail(Long challengeId) {
+        return null;
+    }
+
+    @Override
+    public GetChallengeApplicationsResponseDto getApplications(Long challengeId, Boolean isConfirmed) {
+        return null;
+    }
+
+    @Override
     public void createChallenge(CreateChallengeRequestDto createChallengeRequestDto) {
         Challenge challenge = challengeHelper.createChallengeAndSave(createChallengeRequestDto);
         createClassificationListAndSave(createChallengeRequestDto.programTypeInfo(), challenge);
@@ -31,22 +43,32 @@ public class ChallengeServiceImpl implements ChallengeService {
         createFaqListAndSave(createChallengeRequestDto.faqInfo(), challenge);
     }
 
+    @Override
+    public void updateChallenge(Long challengeId, CreateChallengeRequestDto createChallengeRequestDto) {
+
+    }
+
+    @Override
+    public void deleteChallenge(Long challengeId) {
+
+    }
+
     private void createClassificationListAndSave(List<CreateChallengeClassificationRequestDto> requestDtoList,
-                                          Challenge challenge) {
+                                                 Challenge challenge) {
         requestDtoList.stream()
                 .map(requestDto -> challengeClassificationHelper.createChallengeClassificationAndSave(requestDto, challenge))
                 .collect(Collectors.toList());
     }
 
     private void createPriceListAndSave(List<CreateChallengePriceRequestDto> requestDtoList,
-                                 Challenge challenge) {
+                                        Challenge challenge) {
         requestDtoList.stream()
                 .map(requestDto -> challengePriceHelper.createChallengePriceAndSave(requestDto, challenge))
                 .collect(Collectors.toList());
     }
 
     private void createFaqListAndSave(List<CreateFaqRequestDto> requestDtoList,
-                               Challenge challenge) {
+                                      Challenge challenge) {
         requestDtoList.stream()
                 .map(requestDto -> faqHelper.createFaqChallengeAndSave(requestDto, challenge))
                 .collect(Collectors.toList());
