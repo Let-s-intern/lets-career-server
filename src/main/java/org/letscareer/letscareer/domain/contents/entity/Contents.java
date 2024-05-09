@@ -3,9 +3,8 @@ package org.letscareer.letscareer.domain.contents.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.letscareer.letscareer.domain.contents.type.ContentsTopic;
+import org.letscareer.letscareer.domain.contents.dto.request.CreateContentsRequestDto;
 import org.letscareer.letscareer.domain.contents.type.ContentsType;
-import org.letscareer.letscareer.domain.contents.type.converter.ContentsTopicConverter;
 import org.letscareer.letscareer.domain.contents.type.converter.ContentsTypeConverter;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
@@ -26,12 +25,16 @@ public class Contents extends BaseTimeEntity {
     private ContentsType type;
 
     @NotNull
-    @Convert(converter = ContentsTopicConverter.class)
-    private ContentsTopic topic;
-
-    @NotNull
     private String title;
 
     @NotNull
     private String link;
+
+    public static Contents createContents(CreateContentsRequestDto createContentsRequestDto) {
+        return Contents.builder()
+                .type(createContentsRequestDto.type())
+                .title(createContentsRequestDto.title())
+                .link(createContentsRequestDto.link())
+                .build();
+    }
 }
