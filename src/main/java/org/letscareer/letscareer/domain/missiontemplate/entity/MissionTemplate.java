@@ -13,11 +13,12 @@ import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 import java.util.List;
 
-@Entity
-@Getter
-@Builder(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder(access = AccessLevel.PRIVATE)
+@Getter
+@Table(name = "mission_template")
+@Entity
 public class MissionTemplate extends BaseTimeEntity {
 
     @Id
@@ -42,15 +43,15 @@ public class MissionTemplate extends BaseTimeEntity {
     @Convert(converter = MissionTemplateTopicConverter.class)
     private MissionTemplateTopic topic;
 
-    @OneToMany(mappedBy = "mission_template", fetch = FetchType.LAZY)
-    private List<Contents> essentialContentsList;
-
-    @OneToMany(mappedBy = "mission_template", fetch = FetchType.LAZY)
-    private List<Contents> additionalContentsList;
-
-    @OneToMany(mappedBy = "mission_template", fetch = FetchType.LAZY)
-    private List<Contents> limitedContentsList;
-
-    @OneToMany(mappedBy = "mission_template", fetch = FetchType.LAZY)
-    private List<Mission> missionList;
+//    @OneToMany(mappedBy = "mission_template_essential", fetch = FetchType.LAZY)
+//    private List<Contents> essentialContentsList;
+//
+//    @OneToMany(mappedBy = "mission_template_additional", fetch = FetchType.LAZY)
+//    private List<Contents> additionalContentsList;
+//
+//    @OneToMany(mappedBy = "mission_template_limited", fetch = FetchType.LAZY)
+//    private List<Contents> limitedContentsList;
+//
+//    @OneToMany(mappedBy = "mission_template", fetch = FetchType.LAZY)
+//    private List<Mission> missionList;
 }

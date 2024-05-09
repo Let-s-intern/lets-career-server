@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.challenge.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeRequestDto;
 import org.letscareer.letscareer.domain.challenge.type.ChallengeType;
 import org.letscareer.letscareer.domain.challenge.type.converter.ChallengeTypeConverter;
 import org.letscareer.letscareer.domain.classification.entity.ChallengeClassification;
@@ -54,4 +55,32 @@ public class Challenge extends BaseTimeEntity {
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
     @Builder.Default
     private List<Mission> missionList = new ArrayList<>();
+
+    public static Challenge createChallenge(CreateChallengeRequestDto requestDto) {
+        return Challenge.builder()
+                .title(requestDto.title())
+                .shortDesc(requestDto.shortDesc())
+                .desc(requestDto.desc())
+                .participationCount(requestDto.participationCount())
+                .thumbnail(requestDto.thumbnail())
+                .startDate(requestDto.startDate())
+                .endDate(requestDto.endDate())
+                .deadline(requestDto.deadline())
+                .chatLink(requestDto.chatLink())
+                .chatPassword(requestDto.chatPassword())
+                .challengeType(requestDto.challengeType())
+                .build();
+    }
+
+    public void addChallengeClassificationList(ChallengeClassification challengeClassification) {
+        this.classificationList.add(challengeClassification);
+    }
+
+    public void addChallengePriceList(ChallengePrice challengePrice) {
+        this.priceList.add(challengePrice);
+    }
+
+    public void addChallengeFaqList(FaqChallenge faqChallenge) {
+        this.faqList.add(faqChallenge);
+    }
 }

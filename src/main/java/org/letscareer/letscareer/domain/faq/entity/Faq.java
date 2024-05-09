@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.faq.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.letscareer.letscareer.domain.faq.dto.request.CreateFaqRequestDto;
 import org.letscareer.letscareer.domain.faq.type.FaqProgramType;
 import org.letscareer.letscareer.domain.faq.type.converter.FaqProgramTypeConverter;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
@@ -31,4 +32,20 @@ public class Faq extends BaseTimeEntity {
     @OneToMany(mappedBy = "faq", cascade = CascadeType.ALL)
     @Builder.Default
     private List<FaqLive> faqLiveList = new ArrayList<>();
+
+    public static Faq createFaq(CreateFaqRequestDto requestDto) {
+        return Faq.builder()
+                .question(requestDto.question())
+                .answer(requestDto.answer())
+                .faqProgramType(requestDto.faqProgramType())
+                .build();
+    }
+
+    public void addFaqChallengeList(FaqChallenge faqChallenge) {
+        this.faqChallengeList.add(faqChallenge);
+    }
+
+    public void addFaqLiveList(FaqLive faqLive) {
+        this.faqLiveList.add(faqLive);
+    }
 }

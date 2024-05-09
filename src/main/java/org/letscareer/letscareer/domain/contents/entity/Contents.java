@@ -7,6 +7,7 @@ import org.letscareer.letscareer.domain.contents.type.ContentsTopic;
 import org.letscareer.letscareer.domain.contents.type.ContentsType;
 import org.letscareer.letscareer.domain.contents.type.converter.ContentsTopicConverter;
 import org.letscareer.letscareer.domain.contents.type.converter.ContentsTypeConverter;
+import org.letscareer.letscareer.domain.missiontemplate.entity.MissionTemplate;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 @Entity
@@ -34,4 +35,14 @@ public class Contents extends BaseTimeEntity {
 
     @NotNull
     private String link;
+
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "contents_id")
+//    private MissionTemplate missionTemplate;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "contents_id")
+//    private MissionTemplate missionTemplateAdditional;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "contents_id")
+//    private MissionTemplate missionTemplateLimited;
 }

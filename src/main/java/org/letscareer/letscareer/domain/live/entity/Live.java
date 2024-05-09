@@ -4,10 +4,11 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.letscareer.letscareer.domain.classification.entity.LiveClassification;
 import org.letscareer.letscareer.domain.faq.entity.FaqLive;
+import org.letscareer.letscareer.domain.live.dto.request.CreateLiveRequestDto;
 import org.letscareer.letscareer.domain.live.type.ProgressType;
 import org.letscareer.letscareer.domain.live.type.converter.ProgressTypeConverter;
-import org.letscareer.letscareer.domain.review.entity.LiveReview;
 import org.letscareer.letscareer.domain.price.entity.LivePrice;
+import org.letscareer.letscareer.domain.review.entity.LiveReview;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 import java.time.LocalDateTime;
@@ -51,4 +52,25 @@ public class Live extends BaseTimeEntity {
     @OneToMany(mappedBy = "live", cascade = CascadeType.ALL)
     @Builder.Default
     private List<LiveReview> reviewList = new ArrayList<>();
+
+    public static Live createLive(CreateLiveRequestDto requestDto) {
+        return Live.builder()
+                .title(requestDto.title())
+                .shortDesc(requestDto.shortDesc())
+                .desc(requestDto.desc())
+                .participationCount(requestDto.participationCount())
+                .thumbnail(requestDto.thumbnail())
+                .mentorName(requestDto.mentorName())
+                .stringJob(requestDto.job())
+                .place(requestDto.place())
+                .startDate(requestDto.startDate())
+                .endDate(requestDto.endDate())
+                .deadline(requestDto.deadline())
+                .progressType(requestDto.progressType())
+                .build();
+    }
+
+    public void addLiveClassification(LiveClassification liveClassification) {
+        this.classificationList.add(liveClassification);
+    }
 }
