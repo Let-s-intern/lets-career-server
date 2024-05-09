@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.faq.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.live.entity.Live;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -21,4 +22,15 @@ public class FaqLive {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "faq_id")
     private Faq faq;
+
+    public static FaqLive createFaqLive(Faq faq,
+                                        Live live) {
+        FaqLive faqChallenge = FaqLive.builder()
+                .live(live)
+                .faq(faq)
+                .build();
+        faq.addFaqChallengeList(faqChallenge);
+        challenge.addChallengeFaqList(faqChallenge);
+        return faqChallenge;
+    }
 }

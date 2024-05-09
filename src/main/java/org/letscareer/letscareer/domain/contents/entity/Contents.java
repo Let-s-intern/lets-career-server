@@ -30,6 +30,16 @@ public class Contents extends BaseTimeEntity {
     @NotNull
     private String link;
 
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "contents_id")
+//    private MissionTemplate missionTemplate;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "contents_id")
+//    private MissionTemplate missionTemplateAdditional;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "contents_id")
+//    private MissionTemplate missionTemplateLimited;
+
     public static Contents createContents(CreateContentsRequestDto createContentsRequestDto) {
         return Contents.builder()
                 .type(createContentsRequestDto.type())

@@ -8,11 +8,12 @@ import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 import java.util.List;
 
-@Entity
-@Getter
-@Builder(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder(access = AccessLevel.PRIVATE)
+@Getter
+@Table(name = "mission_template")
+@Entity
 public class MissionTemplate extends BaseTimeEntity {
 
     @Id
@@ -34,4 +35,5 @@ public class MissionTemplate extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "mission_template", fetch = FetchType.LAZY)
     private List<Mission> missionList;
+
 }
