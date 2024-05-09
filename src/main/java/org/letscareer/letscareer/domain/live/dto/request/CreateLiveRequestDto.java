@@ -16,7 +16,7 @@ public record CreateLiveRequestDto(
         Integer participationCount,
         String thumbnail,
         String mentorName,
-        String stringJob,
+        String job,
         String place,
         LocalDateTime startDate,
         LocalDateTime endDate,
