@@ -37,7 +37,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     private PrincipalDetails validateEmailAndCreateUserIfNeed(OAuth2UserInfo oAuth2UserInfo, AuthProvider authProvider) {
-        User user = userHelper.findUserByEmailOrNull(oAuth2UserInfo.getEmail());
+        User user = userHelper.findUserByPhoneNumOrNull(oAuth2UserInfo.getPhoneNum());
         PrincipalDetails principalDetails = null;
 
         /* 신규 가입 */
