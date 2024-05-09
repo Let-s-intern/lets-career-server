@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.contents.dto.request.CreateContentsRequestDto;
 import org.letscareer.letscareer.domain.contents.dto.request.UpdateContentsRequestDto;
 import org.letscareer.letscareer.domain.contents.dto.response.ContentsAdminListResponseDto;
+import org.letscareer.letscareer.domain.contents.entity.Contents;
 import org.letscareer.letscareer.domain.contents.helper.ContentsHelper;
 import org.letscareer.letscareer.domain.contents.mapper.ContentsMapper;
 import org.letscareer.letscareer.domain.contents.vo.ContentsAdminVo;
@@ -19,7 +20,8 @@ public class ContentsServiceImpl implements ContentsService {
 
     @Override
     public void createContents(CreateContentsRequestDto createContentsRequestDto) {
-        contentsHelper.createContentsAndSave(createContentsRequestDto);
+        Contents newContents = contentsMapper.toEntity(createContentsRequestDto);
+        contentsHelper.saveContents(newContents);
     }
 
     @Override
