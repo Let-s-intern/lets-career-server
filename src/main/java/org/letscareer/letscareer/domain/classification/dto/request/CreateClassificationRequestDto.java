@@ -1,8 +1,8 @@
 package org.letscareer.letscareer.domain.classification.dto.request;
 
-import org.letscareer.letscareer.domain.classification.type.ProgramType;
+import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 
 public record CreateClassificationRequestDto(
-        ProgramType programType
+        ProgramClassification programClassification
 ) {
 }
