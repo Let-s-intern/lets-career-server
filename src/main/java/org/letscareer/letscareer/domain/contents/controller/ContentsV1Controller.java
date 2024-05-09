@@ -3,6 +3,7 @@ package org.letscareer.letscareer.domain.contents.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.contents.dto.request.CreateContentsRequestDto;
+import org.letscareer.letscareer.domain.contents.dto.response.ContentsAdminListResponseDto;
 import org.letscareer.letscareer.domain.contents.service.ContentsService;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +24,8 @@ public class ContentsV1Controller {
     }
 
     @GetMapping("/admin")
-    public ResponseEntity<SuccessResponse<?>> getContentsForAdmin(@PageableDefault Pageable pageable) {
-        return SuccessResponse.ok(null);
+    public ResponseEntity<SuccessResponse<?>> getAllContentsForAdmin(@PageableDefault Pageable pageable) {
+        final ContentsAdminListResponseDto responseDto = contentsService.getAllContents(pageable);
+        return SuccessResponse.ok(responseDto);
     }
 }

@@ -24,7 +24,8 @@ public class ContentsQueryRepositoryImpl implements ContentsQueryRepository {
                         contents.id,
                         contents.type,
                         contents.title,
-                        contents.link))
+                        contents.link,
+                        contents.createDate))
                 .from(contents)
                 .orderBy(contents.id.desc())
                 .offset(pageable.getOffset())
