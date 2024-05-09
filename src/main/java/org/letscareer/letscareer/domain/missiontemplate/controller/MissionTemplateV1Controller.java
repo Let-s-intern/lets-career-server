@@ -22,9 +22,15 @@ public class MissionTemplateV1Controller {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> updateMissionTemplate(@PathVariable Long id,
+    public ResponseEntity<SuccessResponse<?>> updateMissionTemplate(@PathVariable(name = "id") Long missionTemplateId,
                                                                     @RequestBody UpdateMissionTemplateRequestDto updateMissionTemplateRequestDto) {
-        missionTemplateService.updateMissionTemplate(id, updateMissionTemplateRequestDto);
+        missionTemplateService.updateMissionTemplate(missionTemplateId, updateMissionTemplateRequestDto);
+        return SuccessResponse.ok(null);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<SuccessResponse<?>> deleteMissionTemplate(@PathVariable(name = "id") Long missionTemplateId) {
+        missionTemplateService.deleteMissionTemplate(missionTemplateId);
         return SuccessResponse.ok(null);
     }
 }

@@ -24,4 +24,9 @@ public class MissionTemplateServiceImpl implements MissionTemplateService {
     public void updateMissionTemplate(Long missionTemplateId, UpdateMissionTemplateRequestDto updateMissionTemplateRequestDto) {
         missionTemplateHelper.updateMissionTemplate(missionTemplateId, updateMissionTemplateRequestDto);
     }
+
+    @Override
+    public void deleteMissionTemplate(Long missionTemplateId) {
+
+    }
 }

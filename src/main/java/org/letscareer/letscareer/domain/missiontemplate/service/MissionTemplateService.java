@@ -9,4 +9,6 @@ public interface MissionTemplateService {
     void createMissionTemplate(CreateMissionTemplateRequestDto createMissionTemplateRequestDto);
 
     void updateMissionTemplate(Long missionTemplateId, UpdateMissionTemplateRequestDto updateMissionTemplateRequestDto);
+
+    void deleteMissionTemplate(Long missionTemplateId);
 }
