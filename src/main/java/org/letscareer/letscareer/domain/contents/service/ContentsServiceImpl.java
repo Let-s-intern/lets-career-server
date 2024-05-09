@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.contents.service;
 
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.contents.dto.request.CreateContentsRequestDto;
+import org.letscareer.letscareer.domain.contents.dto.request.UpdateContentsRequestDto;
 import org.letscareer.letscareer.domain.contents.dto.response.ContentsAdminListResponseDto;
 import org.letscareer.letscareer.domain.contents.helper.ContentsHelper;
 import org.letscareer.letscareer.domain.contents.mapper.ContentsMapper;
@@ -25,5 +26,10 @@ public class ContentsServiceImpl implements ContentsService {
     public ContentsAdminListResponseDto getAllContents(Pageable pageable) {
         Page<ContentsAdminVo> contentsAdminList = contentsHelper.findAllContentsAdminVos(pageable);
         return contentsMapper.toContentsAdminListResponseDto(contentsAdminList);
+    }
+
+    @Override
+    public void updateContents(Long contentsId, UpdateContentsRequestDto updateContentsRequestDto) {
+        contentsHelper.updateContents(contentsId, updateContentsRequestDto);
     }
 }

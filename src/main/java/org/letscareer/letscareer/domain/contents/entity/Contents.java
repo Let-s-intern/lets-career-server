@@ -4,9 +4,12 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.letscareer.letscareer.domain.contents.dto.request.CreateContentsRequestDto;
+import org.letscareer.letscareer.domain.contents.dto.request.UpdateContentsRequestDto;
 import org.letscareer.letscareer.domain.contents.type.ContentsType;
 import org.letscareer.letscareer.domain.contents.type.converter.ContentsTypeConverter;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
+
+import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils.updateValue;
 
 @Entity
 @Getter
@@ -46,5 +49,11 @@ public class Contents extends BaseTimeEntity {
                 .title(createContentsRequestDto.title())
                 .link(createContentsRequestDto.link())
                 .build();
+    }
+
+    public void updateContents(UpdateContentsRequestDto updateContentsRequestDto) {
+        this.type = updateValue(this.type, updateContentsRequestDto.getType());
+        this.title = updateValue(this.title, updateContentsRequestDto.title());
+        this.link = updateValue(this.link, updateContentsRequestDto.link());
     }
 }
