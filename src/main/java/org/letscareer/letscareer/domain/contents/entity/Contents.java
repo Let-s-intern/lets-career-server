@@ -3,12 +3,13 @@ package org.letscareer.letscareer.domain.contents.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.letscareer.letscareer.domain.contents.type.ContentsTopic;
+import org.letscareer.letscareer.domain.contents.dto.request.CreateContentsRequestDto;
+import org.letscareer.letscareer.domain.contents.dto.request.UpdateContentsRequestDto;
 import org.letscareer.letscareer.domain.contents.type.ContentsType;
-import org.letscareer.letscareer.domain.contents.type.converter.ContentsTopicConverter;
 import org.letscareer.letscareer.domain.contents.type.converter.ContentsTypeConverter;
-import org.letscareer.letscareer.domain.missiontemplate.entity.MissionTemplate;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
+
+import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils.updateValue;
 
 @Entity
 @Getter
@@ -27,10 +28,6 @@ public class Contents extends BaseTimeEntity {
     private ContentsType type;
 
     @NotNull
-    @Convert(converter = ContentsTopicConverter.class)
-    private ContentsTopic topic;
-
-    @NotNull
     private String title;
 
     @NotNull
@@ -45,4 +42,18 @@ public class Contents extends BaseTimeEntity {
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "contents_id")
 //    private MissionTemplate missionTemplateLimited;
+
+    public static Contents createContents(CreateContentsRequestDto createContentsRequestDto) {
+        return Contents.builder()
+                .type(createContentsRequestDto.type())
+                .title(createContentsRequestDto.title())
+                .link(createContentsRequestDto.link())
+                .build();
+    }
+
+    public void updateContents(UpdateContentsRequestDto updateContentsRequestDto) {
+        this.type = updateValue(this.type, updateContentsRequestDto.getType());
+        this.title = updateValue(this.title, updateContentsRequestDto.title());
+        this.link = updateValue(this.link, updateContentsRequestDto.link());
+    }
 }

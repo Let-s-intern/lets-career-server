@@ -1,4 +1,4 @@
-package org.letscareer.letscareer.domain.contents.type;
+package org.letscareer.letscareer.domain.mission.type;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -7,10 +7,10 @@ import org.letscareer.letscareer.global.common.utils.EnumField;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public enum ContentsTopic implements EnumField {
-    ESSENTIAL(1, "필수"),
-    ADDITIONAL(2, "추가"),
-    LIMITED(3, "제한");
+public enum MissionType implements EnumField {
+    GENERAL(1, "일반"),
+    REWARD(2, "제한 컨텐츠 제공"),
+    REFUND(3, "보증금 반환");
 
     private final Integer code;
     private final String desc;
