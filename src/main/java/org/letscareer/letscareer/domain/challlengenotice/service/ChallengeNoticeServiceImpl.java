@@ -22,14 +22,14 @@ public class ChallengeNoticeServiceImpl implements ChallengeNoticeService {
 
     @Override
     public void createChallengeNotice(Long challengeId, CreateChallengeNoticeRequestDto createChallengeNoticeRequestDto) {
-        final Challenge challenge = challengeHelper.findChallengeByIdOrThrow(challengeId);
+        Challenge challenge = challengeHelper.findChallengeByIdOrThrow(challengeId);
         ChallengeNotice newChallengeNotice = challengeNoticeMapper.toEntity(createChallengeNoticeRequestDto, challenge);
         challengeNoticeHelper.saveChallengeNotice(newChallengeNotice);
     }
 
     @Override
     public ChallengeNoticeAdminListResponseDto getChallengeNoticesForAdmin(Long challengeId) {
-        final Challenge challenge = challengeHelper.findChallengeByIdOrThrow(challengeId);
+        Challenge challenge = challengeHelper.findChallengeByIdOrThrow(challengeId);
         List<ChallengeNoticeAdminVo> challengeNoticeAdminList = challengeNoticeHelper.findAllChallengeNoticeAdminVos(challenge.getId());
         return challengeNoticeMapper.toChallengeNoticeAdminListResponseDto(challengeNoticeAdminList);
     }
