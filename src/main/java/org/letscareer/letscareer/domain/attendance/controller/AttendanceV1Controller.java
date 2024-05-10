@@ -17,7 +17,7 @@ public class AttendanceV1Controller {
     private final AttendanceService attendanceService;
 
     @GetMapping("/admin/{id}")
-    public ResponseEntity<SuccessResponse<?>> getAttendancesOfChallenge(@PathVariable(name = "id") String challengeId) {
+    public ResponseEntity<SuccessResponse<?>> getAttendancesOfChallenge(@PathVariable(name = "id") Long challengeId) {
         AttendanceAdminListResponseDto responseDto = attendanceService.getAttendancesOfChallenge(challengeId);
         return SuccessResponse.ok(responseDto);
     }

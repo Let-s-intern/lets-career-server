@@ -5,5 +5,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface AttendanceService {
-    AttendanceAdminListResponseDto getAttendancesOfChallenge(String challengeId);
+    AttendanceAdminListResponseDto getAttendancesOfChallenge(Long challengeId);
 }

@@ -1,9 +1,12 @@
 package org.letscareer.letscareer.domain.user.repository;
 
+import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.user.entity.QUser;
 import org.letscareer.letscareer.domain.user.vo.UserAdminVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,5 +42,11 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 .select(user.count()).from(user);
 
         return PageableExecutionUtils.getPage(userAdminVoList, pageable, countQuery::fetchOne);
+    }
+
+    public static Expression<String> activeEmail(QUser user) {
+        return new CaseBuilder()
+                .when(user.contactEmail.isNotNull()).then(user.contactEmail)
+                .otherwise(user.email);
     }
 }
