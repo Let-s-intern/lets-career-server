@@ -16,9 +16,10 @@ import org.springframework.web.bind.annotation.*;
 public class MissionV1Controller {
     private final MissionService missionService;
 
-    @PostMapping
-    public ResponseEntity<SuccessResponse<?>> createMission(@RequestBody @Valid final CreateMissionRequestDto createMissionRequestDto) {
-        missionService.createMission(createMissionRequestDto);
+    @PostMapping("/{id}")
+    public ResponseEntity<SuccessResponse<?>> createMission(@PathVariable(name = "id") final Long challengeId,
+                                                            @RequestBody @Valid final CreateMissionRequestDto createMissionRequestDto) {
+        missionService.createMission(challengeId, createMissionRequestDto);
         return SuccessResponse.created(null);
     }
 

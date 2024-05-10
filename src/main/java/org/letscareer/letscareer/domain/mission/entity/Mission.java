@@ -80,13 +80,14 @@ public class Mission extends BaseTimeEntity {
     @JoinColumn(name = "mission_template_id")
     private MissionTemplate missionTemplate;
 
-    public static Mission createMission(CreateMissionRequestDto createMissionRequestDto, MissionTemplate missionTemplate) {
+    public static Mission createMission(CreateMissionRequestDto createMissionRequestDto, Challenge challenge, MissionTemplate missionTemplate) {
         return Mission.builder()
                 .title(createMissionRequestDto.title())
                 .type(createMissionRequestDto.type())
                 .refund(createMissionRequestDto.refund())
                 .startDate(createMissionRequestDto.startDate().atTime(6, 0))
                 .endDate(createMissionRequestDto.startDate().atTime(23, 59, 59))
+                .challenge(challenge)
                 .missionTemplate(missionTemplate)
                 .build();
     }

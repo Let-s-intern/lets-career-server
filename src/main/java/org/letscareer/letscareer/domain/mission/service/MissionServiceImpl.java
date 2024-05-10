@@ -1,6 +1,8 @@
 package org.letscareer.letscareer.domain.mission.service;
 
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.challenge.entity.Challenge;
+import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
 import org.letscareer.letscareer.domain.contents.entity.Contents;
 import org.letscareer.letscareer.domain.contents.helper.ContentsHelper;
 import org.letscareer.letscareer.domain.contents.type.ContentsType;
@@ -23,12 +25,14 @@ public class MissionServiceImpl implements MissionService{
     private final MissionHelper missionHelper;
     private final MissionMapper missionMapper;
     private final MissionTemplateHelper missionTemplateHelper;
+    private final ChallengeHelper challengeHelper;
     private final ContentsHelper contentsHelper;
 
     @Override
-    public void createMission(CreateMissionRequestDto createMissionRequestDto) {
+    public void createMission(Long challengeId, CreateMissionRequestDto createMissionRequestDto) {
+        final Challenge challenge = challengeHelper.findChallengeByIdOrThrow(challengeId);
         final MissionTemplate missionTemplate = missionTemplateHelper.findMissionTemplateByIdOrThrow(createMissionRequestDto.missionTemplateId());
-        Mission newMission = missionMapper.toEntity(createMissionRequestDto, missionTemplate);
+        Mission newMission = missionMapper.toEntity(createMissionRequestDto, challenge, missionTemplate);
         findContentsAndAdd(ContentsType.ESSENTIAL, createMissionRequestDto.essentialContentsIdList(), newMission);
         findContentsAndAdd(ContentsType.ADDITIONAL, createMissionRequestDto.additionalContentsIdList(), newMission);
         findContentsAndAdd(ContentsType.LIMITED, createMissionRequestDto.limitedContentsIdList(), newMission);
