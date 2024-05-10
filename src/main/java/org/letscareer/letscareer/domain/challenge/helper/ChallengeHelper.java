@@ -22,7 +22,8 @@ public class ChallengeHelper {
     }
 
     public Challenge findChallengeByIdOrThrow(Long challengeId) {
-        return challengeRepository.findById(challengeId).orElseThrow(EntityNotFoundException::new);
+        return challengeRepository.findById(challengeId)
+                .orElseThrow(() -> new EntityNotFoundException(ChallengeErrorCode.CHALLENGE_NOT_FOUND));
     }
 
     public ChallengeDetailVo findChallengeDetailByIdOrThrow(Long challengeId) {
