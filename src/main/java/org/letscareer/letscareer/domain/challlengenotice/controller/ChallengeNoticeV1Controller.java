@@ -19,4 +19,16 @@ public class ChallengeNoticeV1Controller {
         challengeNoticeService.createChallengeNotice(challengeId, createChallengeNoticeRequestDto);
         return SuccessResponse.created(null);
     }
+
+    @GetMapping("/admin/{id}")
+    public ResponseEntity<SuccessResponse<?>> getChallengeNoticesForAdmin(@PathVariable(name = "id") final Long challengeId) {
+        return SuccessResponse.ok(challengeNoticeService.getChallengeNoticesForAdmin(challengeId));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<SuccessResponse<?>> updateChallengeNotice(@PathVariable(name = "id") final Long challengeNoticeId,
+                                                                    @RequestBody final CreateChallengeNoticeRequestDto updateChallengeNoticeRequestDto) {
+        challengeNoticeService.updateChallengeNotice(challengeNoticeId, updateChallengeNoticeRequestDto);
+        return SuccessResponse.ok(null);
+    }
 }

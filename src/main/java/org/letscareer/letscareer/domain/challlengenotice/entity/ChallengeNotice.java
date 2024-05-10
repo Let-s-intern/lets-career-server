@@ -9,6 +9,8 @@ import org.letscareer.letscareer.domain.challlengenotice.type.ChallengeNoticeTyp
 import org.letscareer.letscareer.domain.challlengenotice.type.converter.ChallengeNoticeTypeConverter;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
+import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils.updateValue;
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PRIVATE)
@@ -42,5 +44,11 @@ public class ChallengeNotice extends BaseTimeEntity {
                 .type(createChallengeNoticeRequestDto.type())
                 .challenge(challenge)
                 .build();
+    }
+
+    public void updateChallengeNotice(CreateChallengeNoticeRequestDto updateChallengeNoticeRequestDto) {
+        this.type = updateValue(this.type, updateChallengeNoticeRequestDto.type());
+        this.title = updateValue(this.title, updateChallengeNoticeRequestDto.title());
+        this.link = updateValue(this.link, updateChallengeNoticeRequestDto.link());
     }
 }
