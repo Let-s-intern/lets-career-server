@@ -5,8 +5,11 @@ import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.price.dto.request.CreateChallengePriceRequestDto;
 import org.letscareer.letscareer.domain.price.entity.ChallengePrice;
 import org.letscareer.letscareer.domain.price.repository.ChallengePriceRepository;
+import org.letscareer.letscareer.domain.price.vo.ChallengePriceDetailVo;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Transactional
@@ -18,5 +21,9 @@ public class ChallengePriceHelper {
                                                       Challenge challenge) {
         ChallengePrice challengePrice = ChallengePrice.createChallengePrice(requestDto, challenge);
         return challengePriceRepository.save(challengePrice);
+    }
+
+    public List<ChallengePriceDetailVo> findChallengePriceDetailVos(Long challengeId) {
+        return challengePriceRepository.findChallengePriceDetailVos(challengeId);
     }
 }

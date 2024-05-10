@@ -5,8 +5,11 @@ import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.classification.dto.request.CreateChallengeClassificationRequestDto;
 import org.letscareer.letscareer.domain.classification.entity.ChallengeClassification;
 import org.letscareer.letscareer.domain.classification.repository.ChallengeClassificationRepository;
+import org.letscareer.letscareer.domain.classification.vo.ChallengeClassificationDetailVo;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Transactional
@@ -18,5 +21,9 @@ public class ChallengeClassificationHelper {
                                                                         Challenge challenge) {
         ChallengeClassification challengeClassification = ChallengeClassification.createChallengeClassification(requestDto, challenge);
         return challengeClassificationRepository.save(challengeClassification);
+    }
+
+    public List<ChallengeClassificationDetailVo> findClassificationDetailVos(Long challengeId) {
+        return challengeClassificationRepository.findClassificationDetailVos(challengeId);
     }
 }

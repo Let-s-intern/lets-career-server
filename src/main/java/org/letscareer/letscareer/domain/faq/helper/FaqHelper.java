@@ -9,9 +9,12 @@ import org.letscareer.letscareer.domain.faq.entity.FaqLive;
 import org.letscareer.letscareer.domain.faq.repository.FaqChallengeRepository;
 import org.letscareer.letscareer.domain.faq.repository.FaqLiveRepository;
 import org.letscareer.letscareer.domain.faq.repository.FaqRepository;
+import org.letscareer.letscareer.domain.faq.vo.FaqDetailVo;
 import org.letscareer.letscareer.domain.live.entity.Live;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Transactional
@@ -38,5 +41,9 @@ public class FaqHelper {
     public Faq createFaqAndSave(CreateFaqRequestDto requestDto) {
         Faq faq = Faq.createFaq(requestDto);
         return faqRepository.save(faq);
+    }
+
+    public List<FaqDetailVo> findChallengeFaqDetailVos(Long challengeId) {
+        return faqRepository.findChallengeFaqDetailVos(challengeId);
     }
 }

@@ -6,12 +6,17 @@ import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeReq
 import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeDetailResponseDto;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
+import org.letscareer.letscareer.domain.challenge.mapper.ChallengeMapper;
+import org.letscareer.letscareer.domain.challenge.vo.ChallengeDetailVo;
 import org.letscareer.letscareer.domain.classification.dto.request.CreateChallengeClassificationRequestDto;
 import org.letscareer.letscareer.domain.classification.helper.ChallengeClassificationHelper;
+import org.letscareer.letscareer.domain.classification.vo.ChallengeClassificationDetailVo;
 import org.letscareer.letscareer.domain.faq.dto.request.CreateFaqRequestDto;
 import org.letscareer.letscareer.domain.faq.helper.FaqHelper;
+import org.letscareer.letscareer.domain.faq.vo.FaqDetailVo;
 import org.letscareer.letscareer.domain.price.dto.request.CreateChallengePriceRequestDto;
 import org.letscareer.letscareer.domain.price.helper.ChallengePriceHelper;
+import org.letscareer.letscareer.domain.price.vo.ChallengePriceDetailVo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,10 +29,15 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final ChallengeClassificationHelper challengeClassificationHelper;
     private final ChallengePriceHelper challengePriceHelper;
     private final FaqHelper faqHelper;
+    private final ChallengeMapper challengeMapper;
 
     @Override
     public GetChallengeDetailResponseDto getChallengeDetail(Long challengeId) {
-        return null;
+        ChallengeDetailVo challengeDetailVo = challengeHelper.findChallengeDetailByIdOrThrow(challengeId);
+        List<ChallengeClassificationDetailVo> classificationInfo = challengeClassificationHelper.findClassificationDetailVos(challengeId);
+        List<ChallengePriceDetailVo> priceInfo = challengePriceHelper.findChallengePriceDetailVos(challengeId);
+        List<FaqDetailVo> faqInfo = faqHelper.findChallengeFaqDetailVos(challengeId);
+        return challengeMapper.createGetChallengeDetailResponseDto(challengeDetailVo, classificationInfo, priceInfo, faqInfo);
     }
 
     @Override
