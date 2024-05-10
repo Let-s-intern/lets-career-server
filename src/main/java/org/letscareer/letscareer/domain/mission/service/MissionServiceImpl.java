@@ -5,6 +5,7 @@ import org.letscareer.letscareer.domain.contents.entity.Contents;
 import org.letscareer.letscareer.domain.contents.helper.ContentsHelper;
 import org.letscareer.letscareer.domain.contents.type.ContentsType;
 import org.letscareer.letscareer.domain.mission.dto.request.CreateMissionRequestDto;
+import org.letscareer.letscareer.domain.mission.dto.request.UpdateMissionRequestDto;
 import org.letscareer.letscareer.domain.mission.dto.response.MissionAdminListResponseDto;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.mission.helper.MissionHelper;
@@ -37,6 +38,11 @@ public class MissionServiceImpl implements MissionService{
     @Override
     public MissionAdminListResponseDto getMissionsForAdmin() {
         return null;
+    }
+
+    @Override
+    public void updateMission(String missionId, UpdateMissionRequestDto updateMissionRequestDto) {
+
     }
 
     private void findContentsAndAdd(ContentsType contentsType, List<Long> contentsIdList, Mission newMission) {

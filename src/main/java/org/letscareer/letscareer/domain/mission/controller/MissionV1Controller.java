@@ -3,6 +3,7 @@ package org.letscareer.letscareer.domain.mission.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.mission.dto.request.CreateMissionRequestDto;
+import org.letscareer.letscareer.domain.mission.dto.request.UpdateMissionRequestDto;
 import org.letscareer.letscareer.domain.mission.dto.response.MissionAdminListResponseDto;
 import org.letscareer.letscareer.domain.mission.service.MissionService;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
@@ -28,5 +29,12 @@ public class MissionV1Controller {
     public ResponseEntity<SuccessResponse<?>> getMissionsForAdmin() {
         MissionAdminListResponseDto responseDto = missionService.getMissionsForAdmin();
         return SuccessResponse.ok(responseDto);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<SuccessResponse<?>> updateMission(@PathVariable(name = "id") String missionId,
+                                                            @RequestBody UpdateMissionRequestDto updateMissionRequestDto) {
+        missionService.updateMission(missionId, updateMissionRequestDto);
+        return SuccessResponse.ok(null);
     }
 }
