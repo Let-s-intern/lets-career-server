@@ -30,14 +30,20 @@ public class Live extends BaseTimeEntity {
     private String title;
     private String shortDesc;
     private String desc;
+    @Builder.Default
+    private Integer currentCount = 0;
     private Integer participationCount;
     private String thumbnail;
     private String mentorName;
     private String stringJob;
     private String place;
+    private String zoomLink;
+    private String zoomPassword;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private LocalDateTime deadline;
+    @Builder.Default
+    private Boolean isVisible = false;
     @Convert(converter = ProgressTypeConverter.class)
     private ProgressType progressType;
 
@@ -75,7 +81,7 @@ public class Live extends BaseTimeEntity {
         this.classificationList.add(liveClassification);
     }
 
-    public void addLiveFaqList(FaqLive faqLive) {
+    public void addFaqLiveList(FaqLive faqLive) {
         this.faqList.add(faqLive);
     }
 }

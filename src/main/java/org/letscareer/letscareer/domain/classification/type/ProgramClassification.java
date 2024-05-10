@@ -7,7 +7,7 @@ import org.letscareer.letscareer.global.common.utils.EnumField;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-public enum ProgramType implements EnumField {
+public enum ProgramClassification implements EnumField {
     CAREER_SEARCH(1, "커리어서치"),
     DOCUMENT_PREPARATION(2, " 서류준비"),
     MEETING_PREPARATION(3, "면접준비"),

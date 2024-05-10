@@ -29,7 +29,7 @@ public class FaqLive {
                 .faq(faq)
                 .build();
         faq.addFaqLiveList(faqLive);
-        live.addLiveFaqList(faqLive);
+        live.addFaqLiveList(faqLive);
         return faqLive;
     }
 }

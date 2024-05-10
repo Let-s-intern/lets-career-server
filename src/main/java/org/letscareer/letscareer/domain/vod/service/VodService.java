@@ -6,4 +6,6 @@ import org.springframework.stereotype.Service;
 @Service
 public interface VodService {
     void createVod(CreateVodRequestDto createVodRequestDto);
+    void updateVod(Long vodId, CreateVodRequestDto createVodRequestDto);
+    void deleteVod(Long vodId);
 }
