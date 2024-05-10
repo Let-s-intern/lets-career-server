@@ -29,13 +29,13 @@ public class Live extends BaseTimeEntity {
     private Long id;
     private String title;
     private String shortDesc;
-    private String desc;
+    private String description;
     @Builder.Default
     private Integer currentCount = 0;
     private Integer participationCount;
     private String thumbnail;
     private String mentorName;
-    private String stringJob;
+    private String job;
     private String place;
     private String zoomLink;
     private String zoomPassword;
@@ -64,11 +64,11 @@ public class Live extends BaseTimeEntity {
         return Live.builder()
                 .title(requestDto.title())
                 .shortDesc(requestDto.shortDesc())
-                .desc(requestDto.desc())
+                .description(requestDto.desc())
                 .participationCount(requestDto.participationCount())
                 .thumbnail(requestDto.thumbnail())
                 .mentorName(requestDto.mentorName())
-                .stringJob(requestDto.job())
+                .job(requestDto.job())
                 .place(requestDto.place())
                 .startDate(requestDto.startDate())
                 .endDate(requestDto.endDate())

@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.global.error.handler;
 
 import lombok.extern.slf4j.Slf4j;
+import org.letscareer.letscareer.global.error.ErrorCode;
 import org.letscareer.letscareer.global.error.GlobalErrorCode;
 import org.letscareer.letscareer.global.error.entity.ErrorResponse;
 import org.letscareer.letscareer.global.error.exception.BusinessException;
@@ -62,7 +63,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BusinessException.class)
     protected ResponseEntity<ErrorResponse> handleBusinessException(final BusinessException e) {
         log.error(">>> handle: BusinessException ", e);
-        final GlobalErrorCode errorCode = e.getErrorCode();
+        final ErrorCode errorCode = e.getErrorCode();
         final ErrorResponse errorBaseResponse = ErrorResponse.of(errorCode);
         return ResponseEntity.status(errorCode.getHttpStatus()).body(errorBaseResponse);
     }

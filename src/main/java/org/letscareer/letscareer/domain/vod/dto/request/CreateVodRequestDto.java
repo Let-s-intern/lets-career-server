@@ -8,7 +8,7 @@ public record CreateVodRequestDto(
         String title,
         String shortDesc,
         String thumbnail,
-        String stringJob,
+        String job,
         List<CreateVodClassificationRequestDto> programTypeInfo
 ) {
 }

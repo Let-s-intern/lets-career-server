@@ -1,5 +1,6 @@
 package org.letscareer.letscareer.global.error.exception;
 
+import org.letscareer.letscareer.global.error.ErrorCode;
 import org.letscareer.letscareer.global.error.GlobalErrorCode;
 
 public class EntityNotFoundException extends BusinessException {
@@ -7,7 +8,7 @@ public class EntityNotFoundException extends BusinessException {
         super(GlobalErrorCode.ENTITY_NOT_FOUND);
     }
 
-    public EntityNotFoundException(GlobalErrorCode errorCode) {
+    public EntityNotFoundException(ErrorCode errorCode) {
         super(errorCode);
     }
 }

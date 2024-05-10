@@ -16,7 +16,6 @@ public record ChallengePriceDetailVo(
         String accountNumber,
         LocalDateTime deadline,
         AccountType accountType,
-        CreatePriceRequestDto priceInfo,
         ChallengePriceType challengePriceType,
         ChallengeUserType challengeUserType,
         ChallengeParticipationType challengeParticipationType

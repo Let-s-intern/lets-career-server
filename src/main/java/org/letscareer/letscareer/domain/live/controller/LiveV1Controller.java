@@ -56,7 +56,7 @@ public class LiveV1Controller {
     public ResponseEntity<SuccessResponse<?>> updateChallengeProgram(@PathVariable("id") final Long liveId,
                                                                      @RequestBody final CreateLiveRequestDto requestDto) {
         liveService.updateLive(liveId, requestDto);
-        return SuccessResponse.created(null);
+        return SuccessResponse.ok(null);
     }
 
     @Operation(summary = "라이브 삭제", responses = {

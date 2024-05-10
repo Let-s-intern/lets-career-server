@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import org.letscareer.letscareer.global.error.ErrorCode;
 import org.letscareer.letscareer.global.error.GlobalErrorCode;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -13,7 +14,7 @@ public class ErrorResponse {
     private int status;
     private String message;
 
-    public static ErrorResponse of(GlobalErrorCode errorCode) {
+    public static ErrorResponse of(ErrorCode errorCode) {
         return ErrorResponse.builder()
                 .status(errorCode.getHttpStatus().value())
                 .message(errorCode.getMessage())

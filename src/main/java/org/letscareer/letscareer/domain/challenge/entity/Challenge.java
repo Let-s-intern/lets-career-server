@@ -29,7 +29,7 @@ public class Challenge extends BaseTimeEntity {
     private Long id;
     private String title;
     private String shortDesc;
-    private String desc;
+    private String description;
     @Builder.Default
     private Integer currentCount = 0;
     private Integer participationCount;
@@ -66,7 +66,7 @@ public class Challenge extends BaseTimeEntity {
         return Challenge.builder()
                 .title(requestDto.title())
                 .shortDesc(requestDto.shortDesc())
-                .desc(requestDto.desc())
+                .description(requestDto.desc())
                 .participationCount(requestDto.participationCount())
                 .thumbnail(requestDto.thumbnail())
                 .startDate(requestDto.startDate())

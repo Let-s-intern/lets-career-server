@@ -23,7 +23,7 @@ public class Vod extends BaseTimeEntity {
     private String title;
     private String shortDesc;
     private String thumbnail;
-    private String stringJob;
+    private String job;
     @Builder.Default
     private Boolean isVisible = false;
 
@@ -36,7 +36,7 @@ public class Vod extends BaseTimeEntity {
                 .title(requestDto.title())
                 .shortDesc(requestDto.shortDesc())
                 .thumbnail(requestDto.thumbnail())
-                .stringJob(requestDto.stringJob())
+                .job(requestDto.job())
                 .build();
     }
 
