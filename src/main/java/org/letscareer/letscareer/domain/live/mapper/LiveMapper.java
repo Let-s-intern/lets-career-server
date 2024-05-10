@@ -12,9 +12,9 @@ import java.util.List;
 @Component
 public class LiveMapper {
     public GetLiveDetailResponseDto createLiveDetailResponseDto(LiveDetailVo liveInfo,
-                                                                   List<LiveClassificationVo> classificationInfo,
-                                                                   LivePriceDetailVo priceInfo,
-                                                                   List<FaqDetailVo> faqInfo) {
+                                                                List<LiveClassificationVo> classificationInfo,
+                                                                LivePriceDetailVo priceInfo,
+                                                                List<FaqDetailVo> faqInfo) {
         return GetLiveDetailResponseDto.of(liveInfo, classificationInfo, priceInfo, faqInfo);
     }
 

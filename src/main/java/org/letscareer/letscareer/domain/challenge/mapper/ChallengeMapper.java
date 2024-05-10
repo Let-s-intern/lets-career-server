@@ -13,9 +13,9 @@ import java.util.List;
 public class ChallengeMapper {
 
     public GetChallengeDetailResponseDto createChallengeDetailResponseDto(ChallengeDetailVo challengeInfo,
-                                                                             List<ChallengeClassificationDetailVo> classificationInfo,
-                                                                             List<ChallengePriceDetailVo> priceInfo,
-                                                                             List<FaqDetailVo> faqInfo) {
+                                                                          List<ChallengeClassificationDetailVo> classificationInfo,
+                                                                          List<ChallengePriceDetailVo> priceInfo,
+                                                                          List<FaqDetailVo> faqInfo) {
         return GetChallengeDetailResponseDto.of(challengeInfo, classificationInfo, priceInfo, faqInfo);
     }
 }
