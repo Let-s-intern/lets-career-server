@@ -6,6 +6,7 @@ import lombok.*;
 import org.letscareer.letscareer.domain.attendance.entity.Attendance;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.contents.entity.Contents;
+import org.letscareer.letscareer.domain.mission.dto.request.CreateMissionRequestDto;
 import org.letscareer.letscareer.domain.mission.type.MissionStatusType;
 import org.letscareer.letscareer.domain.mission.type.MissionType;
 import org.letscareer.letscareer.domain.mission.type.converter.MissionStatusConverter;
@@ -28,17 +29,34 @@ public class Mission extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "mission_id")
     private Long id;
+
     @NotNull
     private String title;
+
     @NotNull
     @Convert(converter = MissionTypeConverter.class)
     private MissionType type;
+
+    @NotNull
     @Convert(converter = MissionStatusConverter.class)
-    private MissionStatusType missionStatusType;
+    @Builder.Default
+    private MissionStatusType missionStatusType = MissionStatusType.WAITING;
+
+    @NotNull
     private Integer refund;
-    private Integer attendanceCount;
-    private Integer lateAttendanceCount;
+
+    @NotNull
+    @Builder.Default
+    private Integer attendanceCount = 0;
+
+    @NotNull
+    @Builder.Default
+    private Integer lateAttendanceCount = 0;
+
+    @NotNull
     private LocalDateTime startDate;
+
+    @NotNull
     private LocalDateTime endDate;
 
     @OneToMany(mappedBy = "missionEssential", fetch = FetchType.LAZY)
@@ -62,4 +80,26 @@ public class Mission extends BaseTimeEntity {
     @JoinColumn(name = "mission_template_id")
     private MissionTemplate missionTemplate;
 
+    public static Mission createMission(CreateMissionRequestDto createMissionRequestDto, MissionTemplate missionTemplate) {
+        return Mission.builder()
+                .title(createMissionRequestDto.title())
+                .type(createMissionRequestDto.type())
+                .refund(createMissionRequestDto.refund())
+                .startDate(createMissionRequestDto.startDate().atTime(6, 0))
+                .endDate(createMissionRequestDto.startDate().atTime(23, 59, 59))
+                .missionTemplate(missionTemplate)
+                .build();
+    }
+
+    public void setEssentialContentsList(List<Contents> contentsList) {
+        this.essentialContentsList = contentsList;
+    }
+
+    public void setAdditionalContents(List<Contents> contentsList) {
+        this.additionalContentsList = contentsList;
+    }
+
+    public void setLimitedContents(List<Contents> contentsList) {
+        this.limitedContentsList = contentsList;
+    }
 }
