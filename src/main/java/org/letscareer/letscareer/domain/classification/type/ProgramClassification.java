@@ -10,7 +10,7 @@ import org.letscareer.letscareer.global.common.utils.EnumField;
 public enum ProgramClassification implements EnumField {
     CAREER_SEARCH(1, "커리어서치"),
     DOCUMENT_PREPARATION(2, " 서류준비"),
-    MEETING_PREPARATIOProgramTypeN(3, "면접준비"),
+    MEETING_PREPARATION(3, "면접준비"),
     PASS(4, "합격 후 성장");
 
     private final Integer code;
