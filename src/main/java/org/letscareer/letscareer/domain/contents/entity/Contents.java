@@ -7,6 +7,7 @@ import org.letscareer.letscareer.domain.contents.dto.request.CreateContentsReque
 import org.letscareer.letscareer.domain.contents.dto.request.UpdateContentsRequestDto;
 import org.letscareer.letscareer.domain.contents.type.ContentsType;
 import org.letscareer.letscareer.domain.contents.type.converter.ContentsTypeConverter;
+import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils.updateValue;
@@ -33,15 +34,15 @@ public class Contents extends BaseTimeEntity {
     @NotNull
     private String link;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "contents_id")
-//    private MissionTemplate missionTemplate;
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "contents_id")
-//    private MissionTemplate missionTemplateAdditional;
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "contents_id")
-//    private MissionTemplate missionTemplateLimited;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "essential_contents_id")
+    private Mission missionEssential;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "additional_contents_id")
+    private Mission missionAdditional;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "limited_contents_id")
+    private Mission missionLimited;
 
     public static Contents createContents(CreateContentsRequestDto createContentsRequestDto) {
         return Contents.builder()
@@ -52,7 +53,7 @@ public class Contents extends BaseTimeEntity {
     }
 
     public void updateContents(UpdateContentsRequestDto updateContentsRequestDto) {
-        this.type = updateValue(this.type, updateContentsRequestDto.getType());
+        this.type = updateValue(this.type, updateContentsRequestDto.type());
         this.title = updateValue(this.title, updateContentsRequestDto.title());
         this.link = updateValue(this.link, updateContentsRequestDto.link());
     }

@@ -4,12 +4,17 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
+import org.letscareer.letscareer.domain.missiontemplate.dto.request.CreateMissionTemplateRequestDto;
+import org.letscareer.letscareer.domain.missiontemplate.dto.request.UpdateMissionTemplateRequestDto;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils.updateValue;
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PRIVATE)
 @Getter
 @Table(name = "mission_template")
@@ -25,7 +30,7 @@ public class MissionTemplate extends BaseTimeEntity {
     private String title;
 
     @NotNull
-    private String desc;
+    private String description;
 
     @NotNull
     private String guide;
@@ -33,7 +38,23 @@ public class MissionTemplate extends BaseTimeEntity {
     @NotNull
     private String templateLink;
 
-    @OneToMany(mappedBy = "mission_template", fetch = FetchType.LAZY)
-    private List<Mission> missionList;
+    @OneToMany(mappedBy = "missionTemplate", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<Mission> missionList = new ArrayList<>();
 
+    public static MissionTemplate createMissionTemplate(CreateMissionTemplateRequestDto createMissionTemplateRequestDto) {
+        return MissionTemplate.builder()
+                .title(createMissionTemplateRequestDto.title())
+                .description(createMissionTemplateRequestDto.description())
+                .guide(createMissionTemplateRequestDto.guide())
+                .templateLink(createMissionTemplateRequestDto.templateLink())
+                .build();
+    }
+
+    public void updateMissionTemplate(UpdateMissionTemplateRequestDto updateMissionTemplateRequestDto) {
+        this.title = updateValue(this.title, updateMissionTemplateRequestDto.title());
+        this.description = updateValue(this.description, updateMissionTemplateRequestDto.description());
+        this.guide = updateValue(this.guide, updateMissionTemplateRequestDto.guide());
+        this.templateLink = updateValue(this.templateLink, updateMissionTemplateRequestDto.templateLink());
+    }
 }

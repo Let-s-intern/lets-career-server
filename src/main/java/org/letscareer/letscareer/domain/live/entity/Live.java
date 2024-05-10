@@ -3,6 +3,7 @@ package org.letscareer.letscareer.domain.live.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.letscareer.letscareer.domain.classification.entity.LiveClassification;
+import org.letscareer.letscareer.domain.faq.entity.FaqChallenge;
 import org.letscareer.letscareer.domain.faq.entity.FaqLive;
 import org.letscareer.letscareer.domain.live.dto.request.CreateLiveRequestDto;
 import org.letscareer.letscareer.domain.live.type.ProgressType;

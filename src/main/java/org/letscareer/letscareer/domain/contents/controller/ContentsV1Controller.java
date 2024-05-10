@@ -19,7 +19,7 @@ public class ContentsV1Controller {
     private final ContentsService contentsService;
 
     @PostMapping
-    public ResponseEntity<SuccessResponse<?>> createContents(@RequestBody @Valid CreateContentsRequestDto createContentsRequestDto) {
+    public ResponseEntity<SuccessResponse<?>> createContents(@RequestBody @Valid final CreateContentsRequestDto createContentsRequestDto) {
         contentsService.createContents(createContentsRequestDto);
         return SuccessResponse.created(null);
     }
@@ -31,8 +31,8 @@ public class ContentsV1Controller {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> updateContents(@PathVariable Long id,
-                                                             @RequestBody UpdateContentsRequestDto updateContentsRequestDto) {
+    public ResponseEntity<SuccessResponse<?>> updateContents(@PathVariable final Long id,
+                                                             @RequestBody final UpdateContentsRequestDto updateContentsRequestDto) {
         contentsService.updateContents(id, updateContentsRequestDto);
         return SuccessResponse.ok(null);
     }
