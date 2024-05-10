@@ -1,5 +1,9 @@
 package org.letscareer.letscareer.domain.user.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.user.dto.request.UserAddInfoRequestDto;
@@ -21,17 +25,26 @@ import org.springframework.web.bind.annotation.*;
 public class UserV1Controller {
     private final UserService userService;
 
+    @Operation(summary = "유저 이메일 회원가입", responses = {
+            @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
+    })
     @PostMapping("/signup")
     public ResponseEntity<SuccessResponse<?>> pwSignUp(@RequestBody @Valid final UserPwSignUpRequestDto pwSignUpRequestDto) {
         userService.pwSignUp(pwSignUpRequestDto);
         return SuccessResponse.created(null);
     }
 
+    @Operation(summary = "유저 이메일 로그인", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    })
     @PostMapping("/signin")
     public ResponseEntity<SuccessResponse<?>> pwSignIn(@RequestBody @Valid final UserPwSignInRequestDto pwSignInRequestDto) {
         return SuccessResponse.ok(userService.pwSignIn(pwSignInRequestDto));
     }
 
+    @Operation(summary = "유저 추가정보 입력", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    })
     @PostMapping("/info")
     public ResponseEntity<SuccessResponse<?>> addUserInfo(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                                           @RequestBody final UserAddInfoRequestDto addInfoRequestDto) {
@@ -39,6 +52,9 @@ public class UserV1Controller {
         return SuccessResponse.ok(null);
     }
 
+    @Operation(summary = "유저 전체 목록", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserAdminListResponseDto.class)))
+    })
     @GetMapping("/admin")
     public ResponseEntity<SuccessResponse<?>> getUsersForAdmin(@PageableDefault Pageable pageable) {
         final UserAdminListResponseDto responseDto = userService.getUsers(pageable);

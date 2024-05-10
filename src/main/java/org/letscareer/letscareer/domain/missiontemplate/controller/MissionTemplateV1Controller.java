@@ -1,5 +1,7 @@
 package org.letscareer.letscareer.domain.missiontemplate.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.missiontemplate.dto.request.CreateMissionTemplateRequestDto;
@@ -15,12 +17,18 @@ import org.springframework.web.bind.annotation.*;
 public class MissionTemplateV1Controller {
     private final MissionTemplateService missionTemplateService;
 
+    @Operation(summary = "미션 템플릿 생성", responses = {
+            @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
+    })
     @PostMapping
     public ResponseEntity<SuccessResponse<?>> createMissionTemplate(@RequestBody @Valid final CreateMissionTemplateRequestDto createMissionTemplateRequestDto) {
         missionTemplateService.createMissionTemplate(createMissionTemplateRequestDto);
         return SuccessResponse.created(null);
     }
 
+    @Operation(summary = "미션 템플릿 수정", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    })
     @PatchMapping("/{id}")
     public ResponseEntity<SuccessResponse<?>> updateMissionTemplate(@PathVariable(name = "id") final Long missionTemplateId,
                                                                     @RequestBody final UpdateMissionTemplateRequestDto updateMissionTemplateRequestDto) {
@@ -28,6 +36,9 @@ public class MissionTemplateV1Controller {
         return SuccessResponse.ok(null);
     }
 
+    @Operation(summary = "미션 템플릿 삭제", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<SuccessResponse<?>> deleteMissionTemplate(@PathVariable(name = "id") final Long missionTemplateId) {
         missionTemplateService.deleteMissionTemplate(missionTemplateId);
