@@ -20,7 +20,7 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
                 .select(Projections.constructor(ChallengeDetailVo.class,
                         challenge.title,
                         challenge.shortDesc,
-                        challenge.desc,
+                        challenge.description,
                         challenge.participationCount,
                         challenge.thumbnail,
                         challenge.startDate,
