@@ -1,8 +1,10 @@
-package org.letscareer.letscareer.domain.classification.dto.request;
+package org.letscareer.letscareer.domain.classification.vo;
 
+import lombok.Builder;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 
-public record CreateClassificationRequestDto(
+@Builder
+public record LiveClassificationVo(
         ProgramClassification programClassification
 ) {
 }

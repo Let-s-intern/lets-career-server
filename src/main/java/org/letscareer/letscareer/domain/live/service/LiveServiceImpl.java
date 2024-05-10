@@ -1,16 +1,19 @@
 package org.letscareer.letscareer.domain.live.service;
 
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.application.dto.response.GetLiveApplicationsResponseDto;
 import org.letscareer.letscareer.domain.classification.dto.request.CreateLiveClassificationRequestDto;
 import org.letscareer.letscareer.domain.classification.helper.LiveClassificationHelper;
 import org.letscareer.letscareer.domain.faq.dto.request.CreateFaqRequestDto;
 import org.letscareer.letscareer.domain.faq.helper.FaqHelper;
 import org.letscareer.letscareer.domain.live.dto.request.CreateLiveRequestDto;
+import org.letscareer.letscareer.domain.live.dto.response.GetLiveDetailResponseDto;
 import org.letscareer.letscareer.domain.live.entity.Live;
 import org.letscareer.letscareer.domain.live.helper.LiveHelper;
 import org.letscareer.letscareer.domain.price.dto.request.CreateLivePriceRequestDto;
 import org.letscareer.letscareer.domain.price.helper.LivePriceHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,11 +27,31 @@ public class LiveServiceImpl implements LiveService {
     private final FaqHelper faqHelper;
 
     @Override
+    public GetLiveDetailResponseDto getLiveDetail(Long liveId) {
+        return null;
+    }
+
+    @Override
+    public GetLiveApplicationsResponseDto getApplications(Long liveId, Boolean isConfirmed) {
+        return null;
+    }
+
+    @Override
     public void createLive(CreateLiveRequestDto requestDto) {
         Live live = liveHelper.createLiveAndSave(requestDto);
         createClassificationListAndSave(requestDto.programTypeInfo(), live);
         createPriceListAndSave(requestDto.priceInfo(), live);
         createFaqListAndSave(requestDto.faqInfo(), live);
+    }
+
+    @Override
+    public void updateLive(Long liveId, CreateLiveRequestDto requestDto) {
+
+    }
+
+    @Override
+    public void deleteLive(Long liveId) {
+
     }
 
     private void createClassificationListAndSave(List<CreateLiveClassificationRequestDto> requestDtoList,

@@ -24,6 +24,8 @@ public class Vod extends BaseTimeEntity {
     private String shortDesc;
     private String thumbnail;
     private String stringJob;
+    @Builder.Default
+    private Boolean isVisible = false;
 
     @OneToMany(mappedBy = "vod", cascade = CascadeType.ALL)
     @Builder.Default

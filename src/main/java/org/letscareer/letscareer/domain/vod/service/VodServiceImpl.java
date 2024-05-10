@@ -23,6 +23,16 @@ public class VodServiceImpl implements VodService {
         createClassificationListAndSave(createVodRequestDto.programTypeInfo(), vod);
     }
 
+    @Override
+    public void updateVod(Long vodId, CreateVodRequestDto createVodRequestDto) {
+
+    }
+
+    @Override
+    public void deleteVod(Long vodId) {
+
+    }
+
     public void createClassificationListAndSave(List<CreateVodClassificationRequestDto> requestDtoList,
                                                 Vod vod) {
         requestDtoList.stream()
