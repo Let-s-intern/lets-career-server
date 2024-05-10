@@ -21,6 +21,10 @@ public class ContentsHelper {
         return contentsRepository.findById(contentsId).orElseThrow(EntityNotFoundException::new);
     }
 
+    public Contents findContentsByIdOrNull(Long contentsId) {
+        return contentsRepository.findById(contentsId).orElse(null);
+    }
+
     public void saveContents(Contents contents) {
         contentsRepository.save(contents);
     }
