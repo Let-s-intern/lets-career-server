@@ -37,7 +37,7 @@ public class ChallengeServiceImpl implements ChallengeService {
         List<ChallengeClassificationDetailVo> classificationInfo = challengeClassificationHelper.findClassificationDetailVos(challengeId);
         List<ChallengePriceDetailVo> priceInfo = challengePriceHelper.findChallengePriceDetailVos(challengeId);
         List<FaqDetailVo> faqInfo = faqHelper.findChallengeFaqDetailVos(challengeId);
-        return challengeMapper.createGetChallengeDetailResponseDto(challengeDetailVo, classificationInfo, priceInfo, faqInfo);
+        return challengeMapper.createChallengeDetailResponseDto(challengeDetailVo, classificationInfo, priceInfo, faqInfo);
     }
 
     @Override

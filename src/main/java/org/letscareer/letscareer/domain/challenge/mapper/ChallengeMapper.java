@@ -12,7 +12,7 @@ import java.util.List;
 @Component
 public class ChallengeMapper {
 
-    public GetChallengeDetailResponseDto createGetChallengeDetailResponseDto(ChallengeDetailVo challengeInfo,
+    public GetChallengeDetailResponseDto createChallengeDetailResponseDto(ChallengeDetailVo challengeInfo,
                                                                              List<ChallengeClassificationDetailVo> classificationInfo,
                                                                              List<ChallengePriceDetailVo> priceInfo,
                                                                              List<FaqDetailVo> faqInfo) {
