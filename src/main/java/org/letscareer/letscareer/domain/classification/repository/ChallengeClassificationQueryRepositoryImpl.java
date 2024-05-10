@@ -23,12 +23,12 @@ public class ChallengeClassificationQueryRepositoryImpl implements ChallengeClas
                 ))
                 .from(challengeClassification)
                 .where(
-                        neChallengeId(challengeId)
+                        eqChallengeId(challengeId)
                 )
                 .fetch();
     }
 
-    private BooleanExpression neChallengeId(Long challengeId) {
-        return challengeId != null ? challengeClassification.id.ne(challengeId) : null;
+    private BooleanExpression eqChallengeId(Long challengeId) {
+        return challengeId != null ? challengeClassification.id.eq(challengeId) : null;
     }
 }

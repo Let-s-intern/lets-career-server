@@ -32,13 +32,13 @@ public class LiveQueryRepositoryImpl implements LiveQueryRepository {
                         live.progressType))
                 .from(live)
                 .where(
-                        neLiveId(liveId)
+                        eqLiveId(liveId)
                 )
                 .fetchOne()
         );
     }
 
-    private BooleanExpression neLiveId(Long liveId) {
-        return liveId != null ? live.id.ne(liveId) : null;
+    private BooleanExpression eqLiveId(Long liveId) {
+        return liveId != null ? live.id.eq(liveId) : null;
     }
 }

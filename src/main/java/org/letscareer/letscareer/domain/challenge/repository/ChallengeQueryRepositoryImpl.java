@@ -32,13 +32,13 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
                 ))
                 .from(challenge)
                 .where(
-                        neChallengeId(challengeId)
+                        eqChallengeId(challengeId)
                 )
                 .fetchOne()
         );
     }
 
-    private BooleanExpression neChallengeId(Long challengeId) {
-        return challengeId != null ? challenge.id.ne(challengeId) : null;
+    private BooleanExpression eqChallengeId(Long challengeId) {
+        return challengeId != null ? challenge.id.eq(challengeId) : null;
     }
 }

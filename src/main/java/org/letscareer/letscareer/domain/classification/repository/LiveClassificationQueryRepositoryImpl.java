@@ -22,12 +22,12 @@ public class LiveClassificationQueryRepositoryImpl implements LiveClassification
                 ))
                 .from(liveClassification)
                 .where(
-                        neLiveId(liveId)
+                        eqLiveId(liveId)
                 )
                 .fetch();
     }
 
-    private BooleanExpression neLiveId(Long liveId) {
-        return liveId != null ? liveClassification.id.ne(liveId) : null;
+    private BooleanExpression eqLiveId(Long liveId) {
+        return liveId != null ? liveClassification.id.eq(liveId) : null;
     }
 }

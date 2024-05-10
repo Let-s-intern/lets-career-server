@@ -9,7 +9,6 @@ import org.letscareer.letscareer.domain.classification.vo.VodClassificationDetai
 import java.util.List;
 
 import static org.letscareer.letscareer.domain.classification.entity.QVodClassification.vodClassification;
-import static org.letscareer.letscareer.domain.vod.entity.QVod.vod;
 
 @RequiredArgsConstructor
 public class VodClassificationRepositoryImpl implements VodClassificationQueryRepository {
@@ -23,12 +22,12 @@ public class VodClassificationRepositoryImpl implements VodClassificationQueryRe
                 ))
                 .from(vodClassification)
                 .where(
-                        neVodId(vodId)
+                        eqVodId(vodId)
                 )
                 .fetch();
     }
 
-    private BooleanExpression neVodId(Long vodId) {
-        return vodId != null ? vodClassification.id.ne(vodId) : null;
+    private BooleanExpression eqVodId(Long vodId) {
+        return vodId != null ? vodClassification.id.eq(vodId) : null;
     }
 }

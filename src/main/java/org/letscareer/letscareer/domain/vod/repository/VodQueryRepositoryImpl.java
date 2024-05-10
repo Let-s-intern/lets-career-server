@@ -25,13 +25,13 @@ public class VodQueryRepositoryImpl implements VodQueryRepository {
                 ))
                 .from(vod)
                 .where(
-                        neVodId(vodId)
+                        eqVodId(vodId)
                 )
                 .fetchOne()
         );
     }
 
-    private BooleanExpression neVodId(Long vodId) {
-        return vodId != null ? vod.id.ne(vodId) : null;
+    private BooleanExpression eqVodId(Long vodId) {
+        return vodId != null ? vod.id.eq(vodId) : null;
     }
 }

@@ -29,12 +29,12 @@ public class ChallengePriceQueryRepositoryImpl implements ChallengePriceQueryRep
                 ))
                 .from(challengePrice)
                 .where(
-                        neChallengeId(challengeId)
+                        eqChallengeId(challengeId)
                 )
                 .fetch();
     }
 
-    private BooleanExpression neChallengeId(Long challengeId) {
-        return challengeId != null ? challengePrice.id.ne(challengeId) : null;
+    private BooleanExpression eqChallengeId(Long challengeId) {
+        return challengeId != null ? challengePrice.id.eq(challengeId) : null;
     }
 }

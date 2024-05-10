@@ -27,13 +27,13 @@ public class LivePriceQueryRepositoryImpl implements LivePriceQueryRepository {
                 ))
                 .from(livePrice)
                 .where(
-                        neLiveId(liveId)
+                        eqLiveId(liveId)
                 )
                 .fetchOne()
         );
     }
 
-    private BooleanExpression neLiveId(Long liveId) {
-        return liveId != null ? livePrice.id.ne(liveId) : null;
+    private BooleanExpression eqLiveId(Long liveId) {
+        return liveId != null ? livePrice.id.eq(liveId) : null;
     }
 }
