@@ -1,4 +1,4 @@
-package org.letscareer.letscareer.domain.notice.type;
+package org.letscareer.letscareer.domain.challlengenotice.type;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -7,7 +7,7 @@ import org.letscareer.letscareer.global.common.utils.EnumField;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-public enum NoticeType implements EnumField {
+public enum ChallengeNoticeType implements EnumField {
     ESSENTIAL(1, "essential"),
     ADDITIONAL(2, "additional");
 
