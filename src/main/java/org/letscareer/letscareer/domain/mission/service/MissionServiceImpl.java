@@ -5,6 +5,7 @@ import org.letscareer.letscareer.domain.contents.entity.Contents;
 import org.letscareer.letscareer.domain.contents.helper.ContentsHelper;
 import org.letscareer.letscareer.domain.contents.type.ContentsType;
 import org.letscareer.letscareer.domain.mission.dto.request.CreateMissionRequestDto;
+import org.letscareer.letscareer.domain.mission.dto.response.MissionAdminListResponseDto;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.mission.helper.MissionHelper;
 import org.letscareer.letscareer.domain.mission.mapper.MissionMapper;
@@ -31,6 +32,11 @@ public class MissionServiceImpl implements MissionService{
         findContentsAndAdd(ContentsType.ADDITIONAL, createMissionRequestDto.additionalContentsIdList(), newMission);
         findContentsAndAdd(ContentsType.LIMITED, createMissionRequestDto.limitedContentsIdList(), newMission);
         missionHelper.saveMission(newMission);
+    }
+
+    @Override
+    public MissionAdminListResponseDto getMissionsForAdmin() {
+        return null;
     }
 
     private void findContentsAndAdd(ContentsType contentsType, List<Long> contentsIdList, Mission newMission) {
