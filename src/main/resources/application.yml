@@ -1,0 +1,44 @@
+spring:
+  profiles:
+    active:
+      - dev
+    include:
+      - dev
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        #        show_sql: true
+        format_sql: true
+        default_batch_fetch_size: 1000
+
+  servlet:
+    multipart:
+      maxFileSize: 100MB
+      maxRequestSize: 100MB
+
+  datasource:
+    - dev
+
+  data:
+    web:
+      pageable:
+        default-page-size: 10
+        one-indexed-parameters: true
+
+  messages:
+    encoding: UTF-8
+
+springdoc:
+  version: 0.0.1
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  swagger-ui:
+    operations-sorter: alpha
+    path: /swagger-ui.html
+
+logging:
+  level:
+    org.hibernate.SQL: debug

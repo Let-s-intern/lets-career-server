@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface MissionService {
-    void createMission(CreateMissionRequestDto createMissionRequestDto);
+    void createMission(Long challengeId, CreateMissionRequestDto createMissionRequestDto);
 
     MissionAdminListResponseDto getMissionsForAdmin();
 

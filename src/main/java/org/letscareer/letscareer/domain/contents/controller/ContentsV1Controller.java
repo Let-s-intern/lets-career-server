@@ -1,5 +1,9 @@
 package org.letscareer.letscareer.domain.contents.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.contents.dto.request.CreateContentsRequestDto;
@@ -18,18 +22,27 @@ import org.springframework.web.bind.annotation.*;
 public class ContentsV1Controller {
     private final ContentsService contentsService;
 
+    @Operation(summary = "콘텐츠 생성", responses = {
+            @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
+    })
     @PostMapping
     public ResponseEntity<SuccessResponse<?>> createContents(@RequestBody @Valid final CreateContentsRequestDto createContentsRequestDto) {
         contentsService.createContents(createContentsRequestDto);
         return SuccessResponse.created(null);
     }
 
+    @Operation(summary = "콘텐츠 전체 목록", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = ContentsAdminListResponseDto.class)))
+    })
     @GetMapping("/admin")
     public ResponseEntity<SuccessResponse<?>> getAllContentsForAdmin(@PageableDefault Pageable pageable) {
         final ContentsAdminListResponseDto responseDto = contentsService.getAllContents(pageable);
         return SuccessResponse.ok(responseDto);
     }
 
+    @Operation(summary = "콘텐츠 수정", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    })
     @PatchMapping("/{id}")
     public ResponseEntity<SuccessResponse<?>> updateContents(@PathVariable final Long id,
                                                              @RequestBody final UpdateContentsRequestDto updateContentsRequestDto) {

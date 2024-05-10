@@ -21,6 +21,11 @@ public class ChallengeHelper {
         return challengeRepository.save(newChallenge);
     }
 
+    public Challenge findChallengeByIdOrThrow(Long challengeId) {
+        return challengeRepository.findById(challengeId)
+                .orElseThrow(() -> new EntityNotFoundException(ChallengeErrorCode.CHALLENGE_NOT_FOUND));
+    }
+
     public ChallengeDetailVo findChallengeDetailByIdOrThrow(Long challengeId) {
         return challengeRepository.findChallengeDetailById(challengeId)
                 .orElseThrow(() -> new EntityNotFoundException(ChallengeErrorCode.CHALLENGE_NOT_FOUND));
