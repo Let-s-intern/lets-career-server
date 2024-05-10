@@ -1,5 +1,6 @@
 package org.letscareer.letscareer.global.error.exception;
 
+import org.letscareer.letscareer.global.error.ErrorCode;
 import org.letscareer.letscareer.global.error.GlobalErrorCode;
 
 public class ForbiddenException extends BusinessException {
@@ -7,7 +8,7 @@ public class ForbiddenException extends BusinessException {
         super(GlobalErrorCode.FORBIDDEN);
     }
 
-    public ForbiddenException(GlobalErrorCode errorCode) {
+    public ForbiddenException(ErrorCode errorCode) {
         super(errorCode);
     }
 }
