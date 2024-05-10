@@ -7,11 +7,8 @@ import org.letscareer.letscareer.domain.mission.dto.request.UpdateMissionRequest
 import org.letscareer.letscareer.domain.mission.dto.response.MissionAdminListResponseDto;
 import org.letscareer.letscareer.domain.mission.service.MissionService;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.awt.print.Pageable;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/mission")
@@ -20,7 +17,7 @@ public class MissionV1Controller {
     private final MissionService missionService;
 
     @PostMapping
-    public ResponseEntity<SuccessResponse<?>> createMission(@RequestBody @Valid CreateMissionRequestDto createMissionRequestDto) {
+    public ResponseEntity<SuccessResponse<?>> createMission(@RequestBody @Valid final CreateMissionRequestDto createMissionRequestDto) {
         missionService.createMission(createMissionRequestDto);
         return SuccessResponse.created(null);
     }
@@ -32,8 +29,8 @@ public class MissionV1Controller {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> updateMission(@PathVariable(name = "id") String missionId,
-                                                            @RequestBody UpdateMissionRequestDto updateMissionRequestDto) {
+    public ResponseEntity<SuccessResponse<?>> updateMission(@PathVariable(name = "id") final String missionId,
+                                                            @RequestBody final UpdateMissionRequestDto updateMissionRequestDto) {
         missionService.updateMission(missionId, updateMissionRequestDto);
         return SuccessResponse.ok(null);
     }
