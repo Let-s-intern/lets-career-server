@@ -35,7 +35,7 @@ public class LiveV1Controller {
     })
     @GetMapping("/{id}/applications")
     public ResponseEntity<SuccessResponse<?>> getApplications(@PathVariable("id") final Long liveId,
-                                                              @RequestParam final Boolean isConfirmed) {
+                                                              @RequestParam(required = false) final Boolean isConfirmed) {
         GetLiveApplicationsResponseDto responseDto = liveService.getApplications(liveId, isConfirmed);
         return SuccessResponse.ok(responseDto);
     }
