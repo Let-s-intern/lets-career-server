@@ -1,5 +1,6 @@
 package org.letscareer.letscareer.global.error.exception;
 
+import org.letscareer.letscareer.global.error.ErrorCode;
 import org.letscareer.letscareer.global.error.GlobalErrorCode;
 
 public class UnauthorizedException extends BusinessException {
@@ -7,7 +8,7 @@ public class UnauthorizedException extends BusinessException {
         super(GlobalErrorCode.UNAUTHORIZED);
     }
 
-    public UnauthorizedException(GlobalErrorCode errorCode) {
+    public UnauthorizedException(ErrorCode errorCode) {
         super(errorCode);
     }
 }

@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public enum GlobalErrorCode {
+public enum GlobalErrorCode implements ErrorCode {
     /**
      * 400 Bad Request
      */

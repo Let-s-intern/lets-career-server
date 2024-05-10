@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.global.error.ErrorCode;
 import org.letscareer.letscareer.global.error.GlobalErrorCode;
 import org.letscareer.letscareer.global.error.entity.ErrorResponse;
 import org.letscareer.letscareer.global.error.exception.UnauthorizedException;
@@ -42,7 +43,7 @@ public class AccessDeniedFilter extends OncePerRequestFilter {
         }
     }
 
-    private ErrorResponse getErrorResponse(GlobalErrorCode errorCode) {
+    private ErrorResponse getErrorResponse(ErrorCode errorCode) {
         return ErrorResponse.of(errorCode);
     }
 

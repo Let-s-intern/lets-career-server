@@ -54,7 +54,7 @@ public class ChallengeV1Controller {
     public ResponseEntity<SuccessResponse<?>> updateChallengeProgram(@PathVariable("id") final Long challengeId,
                                                                      @RequestBody final CreateChallengeRequestDto requestDto) {
         challengeService.updateChallenge(challengeId, requestDto);
-        return SuccessResponse.created(null);
+        return SuccessResponse.ok(null);
     }
 
     @Operation(summary = "챌린지 삭제", responses = {
