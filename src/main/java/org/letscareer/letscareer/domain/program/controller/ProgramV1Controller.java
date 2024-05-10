@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.awt.print.Pageable;
+
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/program")
 @RestController
@@ -23,8 +25,8 @@ public class ProgramV1Controller {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetProgramsResponseDto.class)))
     })
     @GetMapping
-    public ResponseEntity<SuccessResponse<?>> getPrograms() {
-        final GetProgramsResponseDto responseDto = programService.getPrograms();
+    public ResponseEntity<SuccessResponse<?>> getPrograms(Pageable pageable) {
+        final GetProgramsResponseDto responseDto = programService.getPrograms(pageable);
         return SuccessResponse.ok(responseDto);
     }
 }
