@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.attendance.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.letscareer.letscareer.domain.attendance.dto.request.AttendanceUpdateRequestDto;
 import org.letscareer.letscareer.domain.attendance.type.AttendanceResult;
 import org.letscareer.letscareer.domain.attendance.type.AttendanceStatus;
 import org.letscareer.letscareer.domain.attendance.type.converter.AttendanceResultConverter;
@@ -9,6 +10,9 @@ import org.letscareer.letscareer.domain.attendance.type.converter.AttendanceStat
 import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
+
+import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils.updateValue;
+
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -35,4 +39,12 @@ public class Attendance extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public void updateAttendanceAdmin(AttendanceUpdateRequestDto attendanceUpdateRequestDto) {
+        this.link = updateValue(this.link, attendanceUpdateRequestDto.link());
+        this.status = updateValue(this.status, attendanceUpdateRequestDto.status());
+        this.result = updateValue(this.result, attendanceUpdateRequestDto.result());
+        this.comments = updateValue(this.comments, attendanceUpdateRequestDto.comments());
+        this.isRefunded = updateValue(this.isRefunded, attendanceUpdateRequestDto.isRefunded());
+    }
 }
