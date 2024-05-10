@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface FaqQueryRepository {
     List<FaqDetailVo> findChallengeFaqDetailVos(Long challengeId);
+    List<FaqDetailVo> findLiveFaqDetailVos(Long liveId);
 }

@@ -46,4 +46,8 @@ public class FaqHelper {
     public List<FaqDetailVo> findChallengeFaqDetailVos(Long challengeId) {
         return faqRepository.findChallengeFaqDetailVos(challengeId);
     }
+
+    public List<FaqDetailVo> findLiveFaqDetailVos(Long liveId) {
+        return faqRepository.findLiveFaqDetailVos(liveId);
+    }
 }
