@@ -2,9 +2,12 @@ package org.letscareer.letscareer.domain.vod.controller;
 
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.vod.dto.request.CreateVodRequestDto;
+import org.letscareer.letscareer.domain.vod.dto.response.GetVodDetailResponseDto;
 import org.letscareer.letscareer.domain.vod.service.VodService;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +18,15 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class VodV1Controller {
     private final VodService vodService;
+
+    @Operation(summary = "vod 상세 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetVodDetailResponseDto.class)))
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<SuccessResponse<?>> getVodDetail(@PathVariable("id") final Long vodId) {
+        GetVodDetailResponseDto responseDto = vodService.getVodDetail(vodId);
+        return SuccessResponse.ok(responseDto);
+    }
 
     @Operation(summary = "vod 생성", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
@@ -32,7 +44,7 @@ public class VodV1Controller {
     public ResponseEntity<SuccessResponse<?>> updateVodProgram(@PathVariable("id") final Long vodId,
                                                                @RequestBody final CreateVodRequestDto requestDto) {
         vodService.updateVod(vodId, requestDto);
-        return SuccessResponse.created(null);
+        return SuccessResponse.ok(null);
     }
 
     @Operation(summary = "vod 삭제", responses = {

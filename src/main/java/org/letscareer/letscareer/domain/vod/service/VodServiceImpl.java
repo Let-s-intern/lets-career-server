@@ -3,9 +3,13 @@ package org.letscareer.letscareer.domain.vod.service;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.classification.dto.request.CreateVodClassificationRequestDto;
 import org.letscareer.letscareer.domain.classification.helper.VodClassificationHelper;
+import org.letscareer.letscareer.domain.classification.vo.VodClassificationDetailVo;
 import org.letscareer.letscareer.domain.vod.dto.request.CreateVodRequestDto;
+import org.letscareer.letscareer.domain.vod.dto.response.GetVodDetailResponseDto;
 import org.letscareer.letscareer.domain.vod.entity.Vod;
 import org.letscareer.letscareer.domain.vod.helper.VodHelper;
+import org.letscareer.letscareer.domain.vod.mapper.VodMapper;
+import org.letscareer.letscareer.domain.vod.vo.VodDetailVo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +19,15 @@ import java.util.stream.Collectors;
 @Service
 public class VodServiceImpl implements VodService {
     private final VodHelper vodHelper;
+    private final VodMapper vodMapper;
     private final VodClassificationHelper vodClassificationHelper;
+
+    @Override
+    public GetVodDetailResponseDto getVodDetail(Long vodId) {
+        VodDetailVo vodInfo = vodHelper.findVodDetailVoOrThrow(vodId);
+        List<VodClassificationDetailVo> programTypeInfo = vodClassificationHelper.findVodClassificationVos(vodId);
+        return vodMapper.createVodDetailResponseDto(vodInfo, programTypeInfo);
+    }
 
     @Override
     public void createVod(CreateVodRequestDto createVodRequestDto) {
