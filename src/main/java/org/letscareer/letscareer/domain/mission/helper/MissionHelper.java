@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class MissionHelper {
     private final MissionRepository missionRepository;
+
     public void saveMission(Mission mission) {
         missionRepository.save(mission);
     }
