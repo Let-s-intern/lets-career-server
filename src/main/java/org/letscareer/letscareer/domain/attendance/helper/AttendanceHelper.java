@@ -1,10 +1,11 @@
 package org.letscareer.letscareer.domain.attendance.helper;
 
-import jakarta.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.attendance.entity.Attendance;
+import org.letscareer.letscareer.domain.attendance.error.AttendanceErrorCode;
 import org.letscareer.letscareer.domain.attendance.repository.AttendanceRepository;
 import org.letscareer.letscareer.domain.attendance.vo.AttendanceAdminVo;
+import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ public class AttendanceHelper {
     }
 
     public Attendance findAttendanceByIdOrThrow(Long attendanceId) {
-        return attendanceRepository.findById(attendanceId).orElseThrow(EntityExistsException::new);
+        return attendanceRepository.findById(attendanceId)
+                .orElseThrow(() -> new EntityNotFoundException(AttendanceErrorCode.ATTENDANCE_NOT_FOUND));
     }
 }
