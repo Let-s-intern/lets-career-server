@@ -5,7 +5,10 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challengeguide.dto.request.CreateChallengeGuideRequestDto;
+import org.letscareer.letscareer.domain.challengeguide.dto.request.UpdateChallengeGuideRequestDto;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
+
+import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils.updateValue;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -36,5 +39,10 @@ public class ChallengeGuide extends BaseTimeEntity {
                 .link(createChallengeGuideRequestDto.link())
                 .challenge(challenge)
                 .build();
+    }
+
+    public void updateChallengeGuide(UpdateChallengeGuideRequestDto updateChallengeGuideRequestDto) {
+        this.title = updateValue(this.title, updateChallengeGuideRequestDto.title());
+        this.link = updateValue(this.link, updateChallengeGuideRequestDto.link());
     }
 }
