@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.banner.dto.request.CreateBannerRequestDto;
+import org.letscareer.letscareer.domain.banner.dto.request.UpdateBannerRequestDto;
 import org.letscareer.letscareer.domain.banner.dto.response.BannerAdminListResponseDto;
 import org.letscareer.letscareer.domain.banner.service.BannerServiceFactory;
 import org.letscareer.letscareer.domain.banner.type.BannerType;
@@ -27,6 +28,17 @@ public class BannerV1Controller {
                                                            @RequestBody final CreateBannerRequestDto createBannerRequestDto) {
         bannerServiceFactory.getBannerService(bannerType).createBanner(bannerType, createBannerRequestDto);
         return SuccessResponse.created(null);
+    }
+
+    @Operation(summary = "타입별 배너 수정", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    })
+    @PatchMapping("/{id}")
+    public ResponseEntity<SuccessResponse<?>> updateBanner(@PathVariable(name = "id") final Long bannerId,
+                                                           @RequestParam(name = "type") final BannerType bannerType,
+                                                           @RequestBody final UpdateBannerRequestDto updateBannerRequestDto) {
+        bannerServiceFactory.getBannerService(bannerType).updateBanner(bannerId, updateBannerRequestDto);
+        return SuccessResponse.ok(null);
     }
 
     @Operation(summary = "배너 타입별 전체 목록", responses = {

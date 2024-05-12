@@ -6,7 +6,10 @@ import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.letscareer.letscareer.domain.banner.dto.request.CreateBannerRequestDto;
+import org.letscareer.letscareer.domain.banner.dto.request.UpdateBannerRequestDto;
 import org.letscareer.letscareer.domain.banner.type.BannerType;
+
+import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils.updateValue;
 
 @Entity
 @Getter
@@ -38,5 +41,12 @@ public class LineBanner extends Banner {
                 .type(type)
                 .createBannerRequestDto(createBannerRequestDto)
                 .build();
+    }
+
+    public void updateLineBanner(UpdateBannerRequestDto updateBannerRequestDto) {
+        super.updateBanner(updateBannerRequestDto);
+        this.contents = updateValue(this.contents, updateBannerRequestDto.contents());
+        this.colorCode = updateValue(this.colorCode, updateBannerRequestDto.colorCode());
+        this.textColorCode = updateValue(this.textColorCode, updateBannerRequestDto.textColorCode());
     }
 }
