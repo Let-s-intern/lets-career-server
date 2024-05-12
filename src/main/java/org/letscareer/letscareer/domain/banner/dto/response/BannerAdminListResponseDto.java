@@ -9,7 +9,7 @@ import java.util.List;
 public record BannerAdminListResponseDto(
         List<?> bannerAdminList
 ) {
-    public static BannerAdminListResponseDto of(List<?> bannerAdminList) {
+    public static <T> BannerAdminListResponseDto of(List<T> bannerAdminList) {
         return BannerAdminListResponseDto.builder()
                 .bannerAdminList(bannerAdminList)
                 .build();
