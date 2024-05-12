@@ -43,4 +43,10 @@ public class ChallengeGuideServiceImpl implements ChallengeGuideService {
         challengeGuide.updateChallengeGuide(updateChallengeGuideRequestDto);
     }
 
+    @Override
+    public void deleteChallengeGuide(Long challengeGuideId) {
+        ChallengeGuide challengeGuide = challengeGuideHelper.findChallengeGuideByIdOrThrow(challengeGuideId);
+        challengeGuideHelper.deleteChallengeGuide(challengeGuide);
+    }
+
 }

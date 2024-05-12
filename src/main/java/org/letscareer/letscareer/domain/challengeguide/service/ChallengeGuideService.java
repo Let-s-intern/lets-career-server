@@ -10,4 +10,6 @@ public interface ChallengeGuideService {
     ChallengeGuideAdminListResponseDto getChallengeGuidesForAdmin(Long challengeId);
 
     void updateChallengeGuide(Long challengeGuideId, UpdateChallengeGuideRequestDto updateChallengeGuideRequestDto);
+
+    void deleteChallengeGuide(Long challengeGuideId);
 }

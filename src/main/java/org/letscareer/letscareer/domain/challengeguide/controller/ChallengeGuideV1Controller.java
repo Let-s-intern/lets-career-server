@@ -47,4 +47,13 @@ public class ChallengeGuideV1Controller {
         challengeGuideService.updateChallengeGuide(challengeGuideId, updateChallengeGuideRequestDto);
         return SuccessResponse.ok(null);
     }
+
+    @Operation(summary = "챌린지 가이드 삭제", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<SuccessResponse<?>> deleteChallengeGuide(@PathVariable(name = "id") final Long challengeGuideId) {
+        challengeGuideService.deleteChallengeGuide(challengeGuideId);
+        return SuccessResponse.ok(null);
+    }
 }

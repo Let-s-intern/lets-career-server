@@ -29,4 +29,8 @@ public class ChallengeGuideHelper {
     public ChallengeGuide findChallengeGuideByIdOrThrow(Long challengeGuideId) {
         return challengeGuideRepository.findById(challengeGuideId).orElseThrow(() -> new EntityNotFoundException(CHALLENGE_GUIDE_NOT_FOUND));
     }
+
+    public void deleteChallengeGuide(ChallengeGuide challengeGuide) {
+        challengeGuideRepository.delete(challengeGuide);
+    }
 }
