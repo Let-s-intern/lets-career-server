@@ -5,6 +5,7 @@ import lombok.*;
 import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeRequestDto;
 import org.letscareer.letscareer.domain.challenge.type.ChallengeType;
 import org.letscareer.letscareer.domain.challenge.type.converter.ChallengeTypeConverter;
+import org.letscareer.letscareer.domain.challengeguide.entity.ChallengeGuide;
 import org.letscareer.letscareer.domain.classification.entity.ChallengeClassification;
 import org.letscareer.letscareer.domain.faq.entity.FaqChallenge;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
@@ -61,6 +62,9 @@ public class Challenge extends BaseTimeEntity {
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
     @Builder.Default
     private List<Mission> missionList = new ArrayList<>();
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<ChallengeGuide> challengeGuideList = new ArrayList<>();
 
     public static Challenge createChallenge(CreateChallengeRequestDto requestDto) {
         return Challenge.builder()
