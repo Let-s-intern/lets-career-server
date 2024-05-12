@@ -28,4 +28,8 @@ public class PopupHelper {
     public Popup findByIdOrThrow(Long bannerId) {
         return popupRepository.findById(bannerId).orElseThrow(() -> new EntityNotFoundException(BannerErrorCode.BANNER_NOT_FOUND));
     }
+
+    public void deletePopup(Popup popup) {
+        popupRepository.delete(popup);
+    }
 }

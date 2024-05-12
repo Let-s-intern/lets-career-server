@@ -28,4 +28,8 @@ public class ProgramBannerHelper {
     public ProgramBanner findByIdOrThrow(Long bannerId) {
         return programBannerRepository.findById(bannerId).orElseThrow(() -> new EntityNotFoundException(BannerErrorCode.BANNER_NOT_FOUND));
     }
+
+    public void deleteProgramBanner(ProgramBanner programBanner) {
+        programBannerRepository.delete(programBanner);
+    }
 }

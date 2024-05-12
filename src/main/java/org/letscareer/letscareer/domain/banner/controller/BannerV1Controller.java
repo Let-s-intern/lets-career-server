@@ -49,4 +49,14 @@ public class BannerV1Controller {
         BannerAdminListResponseDto responseDto = bannerServiceFactory.getBannerService(bannerType).getBannersForAdmin();
         return SuccessResponse.ok(responseDto);
     }
+
+    @Operation(summary = "배너 삭제", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<SuccessResponse<?>> deleteBanner(@PathVariable(name = "id") final Long bannerId,
+                                                           @RequestParam(name = "type") final BannerType bannerType) {
+        bannerServiceFactory.getBannerService(bannerType).deleteBanner(bannerId);
+        return SuccessResponse.ok(null);
+    }
 }

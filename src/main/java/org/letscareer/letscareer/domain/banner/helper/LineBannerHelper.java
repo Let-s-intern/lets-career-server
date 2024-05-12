@@ -28,4 +28,8 @@ public class LineBannerHelper {
     public LineBanner findLineBannerByIdOrThrow(Long bannerId) {
         return lineBannerRepository.findById(bannerId).orElseThrow(() -> new EntityNotFoundException(BannerErrorCode.BANNER_NOT_FOUND));
     }
+
+    public void deleteLineBanner(LineBanner lineBanner) {
+        lineBannerRepository.delete(lineBanner);
+    }
 }

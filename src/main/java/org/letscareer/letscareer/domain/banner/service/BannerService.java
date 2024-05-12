@@ -11,4 +11,6 @@ public interface BannerService {
     BannerAdminListResponseDto getBannersForAdmin();
 
     void updateBanner(Long bannerId, UpdateBannerRequestDto updateBannerRequestDto);
+
+    void deleteBanner(Long bannerId);
 }

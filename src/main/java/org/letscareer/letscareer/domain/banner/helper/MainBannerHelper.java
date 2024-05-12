@@ -28,4 +28,8 @@ public class MainBannerHelper {
     public MainBanner findByIdOrThrow(Long bannerId) {
         return mainBannerRepository.findById(bannerId).orElseThrow(() -> new EntityNotFoundException(BannerErrorCode.BANNER_NOT_FOUND));
     }
+
+    public void deleteMainBanner(MainBanner mainBanner) {
+        mainBannerRepository.delete(mainBanner);
+    }
 }

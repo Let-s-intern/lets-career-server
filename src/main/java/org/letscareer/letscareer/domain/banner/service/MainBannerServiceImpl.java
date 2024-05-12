@@ -41,4 +41,10 @@ public class MainBannerServiceImpl implements BannerService {
         mainBanner.updateMainBanner(updateBannerRequestDto);
     }
 
+    @Override
+    public void deleteBanner(Long bannerId) {
+        MainBanner mainBanner = mainBannerHelper.findByIdOrThrow(bannerId);
+        mainBannerHelper.deleteMainBanner(mainBanner);
+    }
+
 }

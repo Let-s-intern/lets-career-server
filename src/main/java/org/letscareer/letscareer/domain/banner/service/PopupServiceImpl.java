@@ -41,4 +41,10 @@ public class PopupServiceImpl implements BannerService {
         popup.updatePopup(updateBannerRequestDto);
     }
 
+    @Override
+    public void deleteBanner(Long bannerId) {
+        Popup popup = popupHelper.findByIdOrThrow(bannerId);
+        popupHelper.deletePopup(popup);
+    }
+
 }

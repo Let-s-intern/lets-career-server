@@ -40,4 +40,10 @@ public class LineBannerServiceImpl implements BannerService {
         LineBanner lineBanner = lineBannerHelper.findLineBannerByIdOrThrow(bannerId);
         lineBanner.updateLineBanner(updateBannerRequestDto);
     }
+
+    @Override
+    public void deleteBanner(Long bannerId) {
+        LineBanner lineBanner = lineBannerHelper.findLineBannerByIdOrThrow(bannerId);
+        lineBannerHelper.deleteLineBanner(lineBanner);
+    }
 }

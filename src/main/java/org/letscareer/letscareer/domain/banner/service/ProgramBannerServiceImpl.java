@@ -41,4 +41,10 @@ public class ProgramBannerServiceImpl implements BannerService {
         programBanner.updateProgramBanner(updateBannerRequestDto);
     }
 
+    @Override
+    public void deleteBanner(Long bannerId) {
+        ProgramBanner programBanner = programBannerHelper.findByIdOrThrow(bannerId);
+        programBannerHelper.deleteProgramBanner(programBanner);
+    }
+
 }
