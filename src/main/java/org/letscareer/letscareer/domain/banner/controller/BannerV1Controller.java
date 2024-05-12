@@ -46,7 +46,7 @@ public class BannerV1Controller {
     })
     @GetMapping("/admin")
     public ResponseEntity<SuccessResponse<?>> getBannersForAdmin(@RequestParam(name = "type") final BannerType bannerType) {
-        BannerAdminListResponseDto responseDto = bannerServiceFactory.getBannerService(bannerType).getBannersForAdmin();
+        final BannerAdminListResponseDto responseDto = bannerServiceFactory.getBannerService(bannerType).getBannersForAdmin();
         return SuccessResponse.ok(responseDto);
     }
 
