@@ -3,6 +3,7 @@ package org.letscareer.letscareer.domain.banner.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.letscareer.letscareer.domain.banner.dto.request.CreateBannerRequestDto;
 import org.letscareer.letscareer.domain.banner.type.BannerType;
 import org.letscareer.letscareer.domain.banner.type.converter.BannerTypeConverter;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
@@ -13,12 +14,13 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "bannerType", discriminatorType = DiscriminatorType.INTEGER)
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Banner extends BaseTimeEntity {
 
     @Id
     @Column(name = "banner_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
 
     @NotNull
@@ -43,4 +45,14 @@ public abstract class Banner extends BaseTimeEntity {
 
     @NotNull
     private Boolean isVisible;
+
+    public Banner(BannerType type, CreateBannerRequestDto createBannerRequestDto) {
+        this.type = type;
+        this.title = createBannerRequestDto.title();
+        this.link = createBannerRequestDto.link();
+        this.startDate = createBannerRequestDto.startDate();
+        this.endDate = createBannerRequestDto.endDate();
+        this.isValid = true;
+        this.isVisible = false;
+    }
 }
