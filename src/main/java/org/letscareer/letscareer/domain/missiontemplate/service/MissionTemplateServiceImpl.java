@@ -3,10 +3,14 @@ package org.letscareer.letscareer.domain.missiontemplate.service;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.missiontemplate.dto.request.CreateMissionTemplateRequestDto;
 import org.letscareer.letscareer.domain.missiontemplate.dto.request.UpdateMissionTemplateRequestDto;
+import org.letscareer.letscareer.domain.missiontemplate.dto.response.MissionTemplateAdminListResponseDto;
 import org.letscareer.letscareer.domain.missiontemplate.entity.MissionTemplate;
 import org.letscareer.letscareer.domain.missiontemplate.helper.MissionTemplateHelper;
 import org.letscareer.letscareer.domain.missiontemplate.mapper.MissionTemplateMapper;
+import org.letscareer.letscareer.domain.missiontemplate.vo.MissionTemplateAdminVo;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -29,4 +33,11 @@ public class MissionTemplateServiceImpl implements MissionTemplateService {
     public void deleteMissionTemplate(Long missionTemplateId) {
 
     }
+
+    @Override
+    public MissionTemplateAdminListResponseDto getMissionTemplatesForAdmin() {
+        List<MissionTemplateAdminVo> missionTemplateAdminList = missionTemplateHelper.findAllMissionTemplateAdminVos();
+        return missionTemplateMapper.toMissionTemplateAdminListResponseDto(missionTemplateAdminList);
+    }
+
 }

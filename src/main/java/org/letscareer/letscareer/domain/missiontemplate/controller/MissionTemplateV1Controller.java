@@ -1,11 +1,15 @@
 package org.letscareer.letscareer.domain.missiontemplate.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.mission.dto.response.MissionAdminListResponseDto;
 import org.letscareer.letscareer.domain.missiontemplate.dto.request.CreateMissionTemplateRequestDto;
 import org.letscareer.letscareer.domain.missiontemplate.dto.request.UpdateMissionTemplateRequestDto;
+import org.letscareer.letscareer.domain.missiontemplate.dto.response.MissionTemplateAdminListResponseDto;
 import org.letscareer.letscareer.domain.missiontemplate.service.MissionTemplateService;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +28,15 @@ public class MissionTemplateV1Controller {
     public ResponseEntity<SuccessResponse<?>> createMissionTemplate(@RequestBody @Valid final CreateMissionTemplateRequestDto createMissionTemplateRequestDto) {
         missionTemplateService.createMissionTemplate(createMissionTemplateRequestDto);
         return SuccessResponse.created(null);
+    }
+
+    @Operation(summary = "미션 템플릿 전체 목록", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = MissionTemplateAdminListResponseDto.class)))
+    })
+    @GetMapping("/admin")
+    public ResponseEntity<SuccessResponse<?>> getMissionTemplatesForAdmin() {
+        MissionTemplateAdminListResponseDto responseDto = missionTemplateService.getMissionTemplatesForAdmin();
+        return SuccessResponse.ok(responseDto);
     }
 
     @Operation(summary = "미션 템플릿 수정", responses = {

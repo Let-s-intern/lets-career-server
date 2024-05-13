@@ -149,6 +149,7 @@ public class User extends BaseTimeEntity {
         this.wishJob = updateValue(this.wishJob, addInfoRequestDto.wishJob());
         this.wishCompany = updateValue(this.wishCompany, addInfoRequestDto.wishCompany());
         this.marketingAgree = updateValue(this.marketingAgree, addInfoRequestDto.marketingAgree());
+        this.contactEmail = updateValue(this.contactEmail, addInfoRequestDto.contactEmail());
         this.accountType = updateValue(this.accountType, addInfoRequestDto.accountType());
         this.accountNum = updateValue(this.accountNum, addInfoRequestDto.accountNum());
         this.accountOwner = updateValue(this.accountOwner, addInfoRequestDto.accountOwner());

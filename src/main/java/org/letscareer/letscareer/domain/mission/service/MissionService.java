@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public interface MissionService {
     void createMission(Long challengeId, CreateMissionRequestDto createMissionRequestDto);
 
-    MissionAdminListResponseDto getMissionsForAdmin();
+    MissionAdminListResponseDto getMissionsForAdmin(Long challengeId);
 
     void updateMission(String missionId, UpdateMissionRequestDto updateMissionRequestDto);
 }
