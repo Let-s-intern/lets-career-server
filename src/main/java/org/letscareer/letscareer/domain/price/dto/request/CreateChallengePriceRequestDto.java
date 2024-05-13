@@ -6,6 +6,8 @@ import org.letscareer.letscareer.domain.price.type.ChallengeUserType;
 
 public record CreateChallengePriceRequestDto(
         CreatePriceRequestDto priceInfo,
+        Integer charge,
+        Integer refund,
         ChallengePriceType challengePriceType,
         ChallengeUserType challengeUserType,
         ChallengeParticipationType challengeParticipationType

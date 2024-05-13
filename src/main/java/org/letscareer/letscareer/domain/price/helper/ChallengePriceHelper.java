@@ -6,10 +6,13 @@ import org.letscareer.letscareer.domain.price.dto.request.CreateChallengePriceRe
 import org.letscareer.letscareer.domain.price.entity.ChallengePrice;
 import org.letscareer.letscareer.domain.price.repository.ChallengePriceRepository;
 import org.letscareer.letscareer.domain.price.vo.ChallengePriceDetailVo;
+import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static org.letscareer.letscareer.domain.price.error.ChallengePriceErrorCode.CHALLENGE_PRICE_NOT_FOUND;
 
 @RequiredArgsConstructor
 @Transactional
@@ -25,5 +28,14 @@ public class ChallengePriceHelper {
 
     public List<ChallengePriceDetailVo> findChallengePriceDetailVos(Long challengeId) {
         return challengePriceRepository.findChallengePriceDetailVos(challengeId);
+    }
+
+    public ChallengePrice findChallengePriceByIdOrThrow(Long challengeId) {
+        return challengePriceRepository.findById(challengeId)
+                .orElseThrow(() -> new EntityNotFoundException(CHALLENGE_PRICE_NOT_FOUND));
+    }
+
+    public void deleteChallengePricesByChallengeId(Long challengeId) {
+        challengePriceRepository.deleteAllByChallengeId(challengeId);
     }
 }

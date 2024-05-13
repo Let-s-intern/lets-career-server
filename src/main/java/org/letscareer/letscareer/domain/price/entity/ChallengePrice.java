@@ -17,6 +17,7 @@ import org.letscareer.letscareer.domain.price.type.converter.ChallengePriceTypeC
 @Getter
 @Entity
 public class ChallengePrice extends Price {
+    private Integer charge = 0;
     private Integer refund = 0;
     @Convert(converter = ChallengePriceTypeConverter.class)
     private ChallengePriceType challengePriceType;
@@ -32,7 +33,8 @@ public class ChallengePrice extends Price {
     public ChallengePrice(CreateChallengePriceRequestDto requestDto,
                           Challenge challenge) {
         super(requestDto.priceInfo());
-        this.refund = 0;
+        this.charge = requestDto.charge();
+        this.refund = requestDto.refund();
         this.challengePriceType = requestDto.challengePriceType();
         this.challengeUserType = requestDto.challengeUserType();
         this.challengeParticipationType = requestDto.challengeParticipationType();

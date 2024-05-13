@@ -4,4 +4,5 @@ import org.letscareer.letscareer.domain.classification.entity.ChallengeClassific
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ChallengeClassificationRepository extends JpaRepository<ChallengeClassification, Long>, ChallengeClassificationQueryRepository {
+    void deleteAllByChallengeId(Long challengeId);
 }
