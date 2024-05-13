@@ -40,7 +40,7 @@ public class MissionServiceImpl implements MissionService{
     }
 
     @Override
-    public MissionAdminListResponseDto getMissionsForAdmin() {
+    public MissionAdminListResponseDto getMissionsForAdmin(Long challengeId) {
         return null;
     }
 

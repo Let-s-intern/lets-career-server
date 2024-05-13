@@ -33,9 +33,9 @@ public class MissionV1Controller {
     @Operation(summary = "어드민 챌린지 1개의 미션 전체 목록", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = MissionAdminListResponseDto.class)))
     })
-    @GetMapping("/admin")
-    public ResponseEntity<SuccessResponse<?>> getMissionsForAdmin() {
-        MissionAdminListResponseDto responseDto = missionService.getMissionsForAdmin();
+    @GetMapping("/admin/{id}")
+    public ResponseEntity<SuccessResponse<?>> getMissionsForAdmin(@PathVariable(name = "id") Long challengeId) {
+        MissionAdminListResponseDto responseDto = missionService.getMissionsForAdmin(challengeId);
         return SuccessResponse.ok(responseDto);
     }
 
