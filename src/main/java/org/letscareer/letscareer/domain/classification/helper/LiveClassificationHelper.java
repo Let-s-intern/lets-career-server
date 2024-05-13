@@ -26,4 +26,8 @@ public class LiveClassificationHelper {
     public List<LiveClassificationVo> findLiveClassificationVos(Long liveId) {
         return liveClassificationRepository.findLiveClassificationVos(liveId);
     }
+
+    public void deleteLiveClassificationsByLiveId(Long liveId) {
+        liveClassificationRepository.deleteAllByLiveId(liveId);
+    }
 }

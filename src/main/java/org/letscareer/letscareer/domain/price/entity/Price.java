@@ -1,7 +1,10 @@
 package org.letscareer.letscareer.domain.price.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.letscareer.letscareer.domain.price.dto.request.CreatePriceRequestDto;
 import org.letscareer.letscareer.domain.price.type.AccountType;
 import org.letscareer.letscareer.domain.price.type.converter.AccountTypeConverter;

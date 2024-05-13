@@ -21,8 +21,17 @@ public class LiveHelper {
         return liveRepository.save(live);
     }
 
+    public Live findLiveByIdOrThrow(Long liveId) {
+        return liveRepository.findById(liveId)
+                .orElseThrow(() -> new EntityNotFoundException(LiveErrorCode.LIVE_NOT_FOUND));
+    }
+
     public LiveDetailVo findLiveDetailVoOrThrow(Long liveId) {
         return liveRepository.findLiveDetailVo(liveId)
                 .orElseThrow(() -> new EntityNotFoundException(LiveErrorCode.LIVE_NOT_FOUND));
+    }
+
+    public void deleteLiveById(Long liveId) {
+        liveRepository.deleteById(liveId);
     }
 }
