@@ -30,6 +30,6 @@ public class LivePriceHelper {
     }
 
     public void deleteLivePriceByLiveId(Long liveId) {
-        livePriceRepository.deleteByLiveId(liveId);
+        livePriceRepository.deleteAllByLiveId(liveId);
     }
 }
