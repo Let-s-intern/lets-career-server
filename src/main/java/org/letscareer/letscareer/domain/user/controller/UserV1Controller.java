@@ -61,6 +61,14 @@ public class UserV1Controller {
         return SuccessResponse.ok(userService.getUserInfo(user));
     }
 
+    @Operation(summary = "유저 관리자 여부", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Boolean.class)))
+    })
+    @GetMapping("/is-admin")
+    public ResponseEntity<SuccessResponse<?>> isAdmin(@CurrentUser User user) {
+        return SuccessResponse.ok(userService.isAdmin(user));
+    }
+
     @Operation(summary = "유저 전체 목록", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserAdminListResponseDto.class)))
     })

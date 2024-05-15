@@ -11,6 +11,7 @@ import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.helper.UserHelper;
 import org.letscareer.letscareer.domain.user.mapper.UserMapper;
 import org.letscareer.letscareer.domain.user.type.AuthProvider;
+import org.letscareer.letscareer.domain.user.type.UserRole;
 import org.letscareer.letscareer.domain.user.vo.UserAdminVo;
 import org.letscareer.letscareer.global.security.jwt.TokenProvider;
 import org.letscareer.letscareer.global.security.oauth2.userinfo.OAuth2UserInfo;
@@ -66,5 +67,9 @@ public class UserService {
 
     public UserInfoResponseDto getUserInfo(User user) {
         return userMapper.toUserInfoResponseDto(user);
+    }
+
+    public Boolean isAdmin(User user) {
+        return user.getRole().equals(UserRole.ADMIN);
     }
 }
