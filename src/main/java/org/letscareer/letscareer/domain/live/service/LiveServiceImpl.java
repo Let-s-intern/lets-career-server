@@ -2,6 +2,9 @@ package org.letscareer.letscareer.domain.live.service;
 
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.dto.response.GetLiveApplicationsResponseDto;
+import org.letscareer.letscareer.domain.application.helper.LiveApplicationHelper;
+import org.letscareer.letscareer.domain.application.mapper.LiveApplicationMapper;
+import org.letscareer.letscareer.domain.application.vo.AdminLiveApplicationVo;
 import org.letscareer.letscareer.domain.classification.dto.request.CreateLiveClassificationRequestDto;
 import org.letscareer.letscareer.domain.classification.helper.LiveClassificationHelper;
 import org.letscareer.letscareer.domain.classification.vo.LiveClassificationVo;
@@ -20,6 +23,7 @@ import org.letscareer.letscareer.domain.price.vo.LivePriceDetailVo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -27,6 +31,8 @@ import java.util.stream.Collectors;
 public class LiveServiceImpl implements LiveService {
     private final LiveHelper liveHelper;
     private final LiveMapper liveMapper;
+    private final LiveApplicationHelper liveApplicationHelper;
+    private final LiveApplicationMapper liveApplicationMapper;
     private final LiveClassificationHelper liveClassificationHelper;
     private final LivePriceHelper livePriceHelper;
     private final FaqHelper faqHelper;
@@ -42,7 +48,8 @@ public class LiveServiceImpl implements LiveService {
 
     @Override
     public GetLiveApplicationsResponseDto getApplications(Long liveId, Boolean isConfirmed) {
-        return null;
+        List<AdminLiveApplicationVo> applicationVos = liveApplicationHelper.findAdminLiveApplicationVos(liveId, isConfirmed);
+        return liveApplicationMapper.toGetLiveApplicationsResponseDto(applicationVos);
     }
 
     @Override
@@ -55,12 +62,16 @@ public class LiveServiceImpl implements LiveService {
 
     @Override
     public void updateLive(Long liveId, CreateLiveRequestDto requestDto) {
-
+        Live live = liveHelper.findLiveByIdOrThrow(liveId);
+        live.updateLive(requestDto);
+        updateClassifications(live, requestDto.programTypeInfo());
+        updatePrice(live, requestDto.priceInfo());
+        updateFaqs(live, requestDto.faqInfo());
     }
 
     @Override
     public void deleteLive(Long liveId) {
-
+        liveHelper.deleteLiveById(liveId);
     }
 
     private void createClassificationListAndSave(List<CreateLiveClassificationRequestDto> requestDtoList,
@@ -80,5 +91,26 @@ public class LiveServiceImpl implements LiveService {
         requestDtoList.stream()
                 .map(requestDto -> faqHelper.createFaqLiveAndSave(requestDto, live))
                 .collect(Collectors.toList());
+    }
+
+    private void updateClassifications(Live live, List<CreateLiveClassificationRequestDto> programTypeInfo) {
+        if (Objects.isNull(programTypeInfo)) return;
+        liveClassificationHelper.deleteLiveClassificationsByLiveId(live.getId());
+        live.setInitClassificationList();
+        createClassificationListAndSave(programTypeInfo, live);
+    }
+
+    private void updatePrice(Live live, CreateLivePriceRequestDto priceInfo) {
+        if (Objects.isNull(priceInfo)) return;
+        livePriceHelper.deleteLivePriceByLiveId(live.getId());
+        live.setInitPriceList();
+        createPriceListAndSave(priceInfo, live);
+    }
+
+    private void updateFaqs(Live live, List<CreateFaqRequestDto> faqInfo) {
+        if (Objects.isNull(faqInfo)) return;
+        faqHelper.deleteLiveFaqsByLiveId(live.getId());
+        live.setInitFaqList();
+        createFaqListAndSave(faqInfo, live);
     }
 }

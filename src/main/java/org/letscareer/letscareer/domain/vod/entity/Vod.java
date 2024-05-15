@@ -5,9 +5,12 @@ import lombok.*;
 import org.letscareer.letscareer.domain.classification.entity.VodClassification;
 import org.letscareer.letscareer.domain.vod.dto.request.CreateVodRequestDto;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
+import org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils.updateValue;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -40,7 +43,18 @@ public class Vod extends BaseTimeEntity {
                 .build();
     }
 
+    public void updateVod(CreateVodRequestDto requestDto) {
+        this.title = updateValue(this.title, requestDto.title());
+        this.shortDesc = updateValue(this.shortDesc, requestDto.shortDesc());
+        this.thumbnail = updateValue(this.thumbnail, requestDto.thumbnail());
+        this.job = updateValue(this.job, requestDto.job());
+    }
+
     public void addClassification(VodClassification vodClassification) {
         this.classificationList.add(vodClassification);
+    }
+
+    public void setInitClassifications() {
+        this.classificationList = new ArrayList<>();
     }
 }

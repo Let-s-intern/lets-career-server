@@ -13,11 +13,9 @@ public record AdminChallengeApplicationVo(
         String university,
         UserGrade grade,
         String major,
-        String motivate,
-        String question,
         String couponName,
         Integer totalCost,
         Boolean isConfirmed,
-        LocalDateTime created_date
+        LocalDateTime createDate
 ) {
 }
