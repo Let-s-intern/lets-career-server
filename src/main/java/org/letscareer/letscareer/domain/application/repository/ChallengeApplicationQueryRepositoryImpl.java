@@ -13,7 +13,7 @@ import static org.letscareer.letscareer.domain.application.entity.QChallengeAppl
 import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
 import static org.letscareer.letscareer.domain.coupon.entity.QCoupon.coupon;
 import static org.letscareer.letscareer.domain.price.entity.QChallengePrice.challengePrice;
-import static org.letscareer.letscareer.domain.payment.entity.QPayment.payment;
+import static org.letscareer.letscareer.domain.price.entity.QUserPayment.userPayment;
 import static org.letscareer.letscareer.domain.user.entity.QUser.user;
 
 @RequiredArgsConstructor
@@ -32,15 +32,15 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                         user.major,
                         coupon.name,
                         calculateTotalCost(),
-                        payment.isConfirmed,
+                        userPayment.isConfirmed,
                         challengeApplication.createDate
                 ))
                 .from(challengeApplication)
                 .leftJoin(challengeApplication.challenge, challenge)
                 .leftJoin(challenge, challengePrice.challenge)
                 .leftJoin(challengeApplication.user, user)
-                .leftJoin(challengeApplication.payment, payment)
-                .leftJoin(challengeApplication.payment.coupon, coupon)
+                .leftJoin(challengeApplication.userPayment, userPayment)
+                .leftJoin(challengeApplication.userPayment.coupon, coupon)
                 .orderBy(challengeApplication.id.desc())
                 .where(
                         eqChallengeId(challengeId),
@@ -58,6 +58,6 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
     }
 
     private BooleanExpression eqIsConfirmed(Boolean isConfirmed) {
-        return isConfirmed != null ? payment.isConfirmed.eq(isConfirmed) : null;
+        return isConfirmed != null ? userPayment.isConfirmed.eq(isConfirmed) : null;
     }
 }
