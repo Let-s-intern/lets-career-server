@@ -28,6 +28,6 @@ public class VodClassificationRepositoryImpl implements VodClassificationQueryRe
     }
 
     private BooleanExpression eqVodId(Long vodId) {
-        return vodId != null ? vodClassification.id.eq(vodId) : null;
+        return vodId != null ? vodClassification.vod.id.eq(vodId) : null;
     }
 }
