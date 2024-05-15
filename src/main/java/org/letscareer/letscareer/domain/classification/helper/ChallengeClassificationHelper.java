@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.letscareer.letscareer.domain.application.error.ChallengeErrorCode.CHALLENGE_CLASSIFICATION_NOT_FOUND;
+import static org.letscareer.letscareer.domain.classification.error.ChallengeErrorCode.CHALLENGE_CLASSIFICATION_NOT_FOUND;
 
 @RequiredArgsConstructor
 @Transactional

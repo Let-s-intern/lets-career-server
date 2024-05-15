@@ -1,4 +1,4 @@
-package org.letscareer.letscareer.domain.application.error;
+package org.letscareer.letscareer.domain.classification.error;
 
 import lombok.AccessLevel;
 import lombok.Getter;
