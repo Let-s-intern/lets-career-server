@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.letscareer.letscareer.domain.coupon.type.CouponType;
 import org.letscareer.letscareer.domain.coupon.type.converter.CouponTypeConverter;
-import org.letscareer.letscareer.domain.price.entity.UserPayment;
+import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 import java.time.LocalDateTime;
@@ -32,7 +32,7 @@ public class Coupon extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "coupon", cascade = CascadeType.ALL)
     @Builder.Default
-    private List<UserPayment> userPaymentList = new ArrayList<>();
+    private List<Payment> paymentList = new ArrayList<>();
     @OneToMany(mappedBy = "coupon", cascade = CascadeType.ALL)
     @Builder.Default
     private List<CouponProgram> couponProgramList = new ArrayList<>();
