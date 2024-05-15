@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.letscareer.letscareer.domain.application.entity.Application;
 import org.letscareer.letscareer.domain.coupon.entity.Coupon;
+import org.letscareer.letscareer.domain.payment.dto.request.CreatePaymentRequestDto;
 import org.letscareer.letscareer.domain.price.entity.Price;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
@@ -14,9 +15,13 @@ import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 @Getter
 @Entity
 public class Payment extends BaseTimeEntity {
-    private Integer finalPrice;
+    @Builder.Default
+    private Integer finalPrice = 0;
+
     private Integer couponRemainTime;
-    private Boolean isConfirmed;
+
+    @Builder.Default
+    private Boolean isConfirmed = false;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,10 +40,13 @@ public class Payment extends BaseTimeEntity {
     @JoinColumn(name = "price_id")
     private Price price;
 
-    public static Payment createPayment(Coupon coupon,
+    public static Payment createPayment(CreatePaymentRequestDto paymentInfo,
+                                        Coupon coupon,
                                         Application application,
                                         Price price) {
         return Payment.builder()
+                .finalPrice(paymentInfo.finalPrice())
+                .couponRemainTime(paymentInfo.couponRemainTime())
                 .coupon(coupon)
                 .application(application)
                 .price(price)

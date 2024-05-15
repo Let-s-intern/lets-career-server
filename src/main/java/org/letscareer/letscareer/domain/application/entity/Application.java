@@ -23,6 +23,7 @@ public abstract class Application extends BaseTimeEntity {
     private Payment payment;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
     public Application(User user) {

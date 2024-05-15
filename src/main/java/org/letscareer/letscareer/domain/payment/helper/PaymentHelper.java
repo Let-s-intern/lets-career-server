@@ -21,10 +21,10 @@ public class PaymentHelper {
     private final PriceHelper priceHelper;
 
     public Payment createPaymentAndSave(Application application,
-                                     CreatePaymentRequestDto paymentInfo) {
-        Coupon coupon = couponHelper.findCouponByIdOrThrow(paymentInfo.couponId());
+                                        CreatePaymentRequestDto paymentInfo) {
+        Coupon coupon = couponHelper.findCouponByIdOrNull(paymentInfo.couponId());
         Price price = priceHelper.findPriceByIdOrThrow(paymentInfo.priceId());
-        Payment newPayment = Payment.createPayment(coupon, application, price);
+        Payment newPayment = Payment.createPayment(paymentInfo, coupon, application, price);
         return paymentRepository.save(newPayment);
     }
 }

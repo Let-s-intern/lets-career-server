@@ -19,4 +19,8 @@ public class CouponHelper {
         return couponRepository.findById(couponId)
                 .orElseThrow(() -> new EntityNotFoundException(COUPON_NOT_FOUND));
     }
+
+    public Coupon findCouponByIdOrNull(Long couponId) {
+        return couponId != null ? couponRepository.findById(couponId).orElse(null) : null;
+    }
 }

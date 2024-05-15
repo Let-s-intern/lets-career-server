@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Transactional
@@ -24,5 +25,9 @@ public class ChallengeApplicationHelper {
     public ChallengeApplication createChallengeApplicationAndSave(Challenge challenge, User user) {
         ChallengeApplication newChallengeApplication = ChallengeApplication.createChallengeApplication(challenge, user);
         return challengeApplicationRepository.save(newChallengeApplication);
+    }
+
+    public Optional<ChallengeApplication> findChallengeApplicationByChallengeIdAndUserId(Long challengeId, Long userId) {
+        return challengeApplicationRepository.findChallengeApplicationByChallengeIdAndUserId(challengeId, userId);
     }
 }
