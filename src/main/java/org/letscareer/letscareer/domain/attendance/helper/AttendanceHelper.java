@@ -7,12 +7,10 @@ import org.letscareer.letscareer.domain.attendance.repository.AttendanceReposito
 import org.letscareer.letscareer.domain.attendance.vo.AttendanceAdminVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @RequiredArgsConstructor
-@Transactional
 @Component
 public class AttendanceHelper {
     private final AttendanceRepository attendanceRepository;

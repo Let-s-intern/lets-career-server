@@ -8,10 +8,8 @@ import org.letscareer.letscareer.domain.live.repository.LiveRepository;
 import org.letscareer.letscareer.domain.live.vo.LiveDetailVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
-@Transactional
 @Service
 public class LiveHelper {
     private final LiveRepository liveRepository;

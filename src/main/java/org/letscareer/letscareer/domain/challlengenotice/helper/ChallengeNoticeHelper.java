@@ -6,12 +6,10 @@ import org.letscareer.letscareer.domain.challlengenotice.repository.ChallengeNot
 import org.letscareer.letscareer.domain.challlengenotice.vo.ChallengeNoticeAdminVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @RequiredArgsConstructor
-@Transactional
 @Component
 public class ChallengeNoticeHelper {
     private final ChallengeNoticeRepository challengeNoticeRepository;

@@ -6,14 +6,12 @@ import org.letscareer.letscareer.domain.challengeguide.repository.ChallengeGuide
 import org.letscareer.letscareer.domain.challengeguide.vo.ChallengeGuideAdminVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static org.letscareer.letscareer.domain.challengeguide.error.ChallengeGuideErrorCode.CHALLENGE_GUIDE_NOT_FOUND;
 
 @RequiredArgsConstructor
-@Transactional
 @Component
 public class ChallengeGuideHelper {
     private final ChallengeGuideRepository challengeGuideRepository;
