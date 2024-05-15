@@ -26,4 +26,8 @@ public class VodClassificationHelper {
     public List<VodClassificationDetailVo> findVodClassificationVos(Long vodId) {
         return vodClassificationRepository.findVodClassificationDetailVos(vodId);
     }
+
+    public void deleteVodClassificationsByVodId(Long vodId) {
+        vodClassificationRepository.deleteAllByVodId(vodId);
+    }
 }

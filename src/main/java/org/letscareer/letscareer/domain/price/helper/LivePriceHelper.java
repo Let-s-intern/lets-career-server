@@ -28,4 +28,8 @@ public class LivePriceHelper {
         return livePriceRepository.findLivePriceDetailVo(liveId)
                 .orElseThrow(() -> new EntityNotFoundException(PriceErrorCode.LIVE_PRICE_NOT_FOUND));
     }
+
+    public void deleteLivePriceByLiveId(Long liveId) {
+        livePriceRepository.deleteByLiveId(liveId);
+    }
 }

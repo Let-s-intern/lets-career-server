@@ -50,4 +50,12 @@ public class FaqHelper {
     public List<FaqDetailVo> findLiveFaqDetailVos(Long liveId) {
         return faqRepository.findLiveFaqDetailVos(liveId);
     }
+
+    public void deleteChallengeFaqsByChallengeId(Long challengeId) {
+        faqChallengeRepository.deleteAllByChallengeId(challengeId);
+    }
+
+    public void deleteLiveFaqsByLiveId(Long liveId) {
+        faqLiveRepository.deleteAllByLiveId(liveId);
+    }
 }

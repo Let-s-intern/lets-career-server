@@ -11,10 +11,13 @@ import org.letscareer.letscareer.domain.live.type.converter.ProgressTypeConverte
 import org.letscareer.letscareer.domain.price.entity.LivePrice;
 import org.letscareer.letscareer.domain.review.entity.LiveReview;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
+import org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils.updateValue;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -77,11 +80,39 @@ public class Live extends BaseTimeEntity {
                 .build();
     }
 
+    public void updateLive(CreateLiveRequestDto requestDto) {
+        this.title = updateValue(this.title, requestDto.title());
+        this.shortDesc = updateValue(this.shortDesc, requestDto.shortDesc());
+        this.description = updateValue(this.description, requestDto.desc());
+        this.participationCount = updateValue(this.participationCount, requestDto.participationCount());
+        this.thumbnail = updateValue(this.thumbnail, requestDto.thumbnail());
+        this.mentorName = updateValue(this.mentorName, requestDto.mentorName());
+        this.job = updateValue(this.job, requestDto.job());
+        this.place = updateValue(this.place, requestDto.place());
+        this.startDate = updateValue(this.startDate, requestDto.startDate());
+        this.endDate = updateValue(this.endDate, requestDto.endDate());
+        this.deadline = updateValue(this.deadline, requestDto.deadline());
+        this.progressType = updateValue(this.progressType, requestDto.progressType());
+    }
+
+
     public void addLiveClassification(LiveClassification liveClassification) {
         this.classificationList.add(liveClassification);
     }
 
     public void addFaqLiveList(FaqLive faqLive) {
         this.faqList.add(faqLive);
+    }
+
+    public void setInitClassificationList() {
+        this.classificationList = new ArrayList<>();
+    }
+
+    public void setInitPriceList() {
+        this.priceList = new ArrayList<>();
+    }
+
+    public void setInitFaqList() {
+        this.faqList = new ArrayList<>();
     }
 }
