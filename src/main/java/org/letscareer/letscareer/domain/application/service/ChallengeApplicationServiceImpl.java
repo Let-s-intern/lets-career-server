@@ -7,9 +7,12 @@ import org.letscareer.letscareer.domain.application.helper.ChallengeApplicationH
 import org.letscareer.letscareer.domain.application.mapper.ChallengeApplicationMapper;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
+import org.letscareer.letscareer.domain.coupon.entity.Coupon;
+import org.letscareer.letscareer.domain.coupon.helper.CouponHelper;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.payment.helper.PaymentHelper;
-import org.letscareer.letscareer.domain.payment.service.PaymentService;
+import org.letscareer.letscareer.domain.price.entity.Price;
+import org.letscareer.letscareer.domain.price.helper.PriceHelper;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,14 +24,18 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
     private final ChallengeApplicationHelper challengeApplicationHelper;
     private final ChallengeApplicationMapper challengeApplicationMapper;
     private final ChallengeHelper challengeHelper;
-    private final PaymentService paymentService;
+    private final PaymentHelper paymentHelper;
+    private final CouponHelper couponHelper;
+    private final PriceHelper priceHelper;
 
     @Override
     public void createApplication(Long programId, User user, CreateApplicationRequestDto createApplicationRequestDto) {
         Challenge challenge = challengeHelper.findChallengeByIdOrThrow(programId);
         challengeApplicationHelper.validateExistingApplication(challenge.getId(), user.getId());
         ChallengeApplication challengeApplication = challengeApplicationHelper.createChallengeApplicationAndSave(challenge, user);
-        Payment payment = paymentService.createPaymentAndSave(challengeApplication, createApplicationRequestDto.paymentInfo());
+        Coupon coupon = couponHelper.findCouponByIdOrNull(createApplicationRequestDto.paymentInfo().couponId());
+        Price price = priceHelper.findPriceByIdOrThrow(createApplicationRequestDto.paymentInfo().priceId());
+        Payment payment = paymentHelper.createPaymentAndSave(createApplicationRequestDto.paymentInfo(), challengeApplication, coupon, price);
         challengeApplication.setPayment(payment);
     }
 }
