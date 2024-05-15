@@ -6,11 +6,14 @@ import org.letscareer.letscareer.domain.application.repository.ChallengeApplicat
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.user.entity.User;
+import org.letscareer.letscareer.global.error.exception.ConflictException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+
+import static org.letscareer.letscareer.domain.application.error.ApplicationErrorCode.CONFLICT_APPLICATION;
 
 @RequiredArgsConstructor
 @Transactional
@@ -27,7 +30,8 @@ public class ChallengeApplicationHelper {
         return challengeApplicationRepository.save(newChallengeApplication);
     }
 
-    public Optional<ChallengeApplication> findChallengeApplicationByChallengeIdAndUserId(Long challengeId, Long userId) {
-        return challengeApplicationRepository.findChallengeApplicationByChallengeIdAndUserId(challengeId, userId);
+    public void validateExistingApplication(Long challengeId, Long userId) {
+        Optional<ChallengeApplication> challengeApplication = challengeApplicationRepository.findChallengeApplicationByChallengeIdAndUserId(challengeId, userId);
+        if(challengeApplication.isPresent()) throw new ConflictException(CONFLICT_APPLICATION);
     }
 }

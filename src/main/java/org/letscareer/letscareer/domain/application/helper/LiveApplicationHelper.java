@@ -7,10 +7,13 @@ import org.letscareer.letscareer.domain.application.repository.LiveApplicationRe
 import org.letscareer.letscareer.domain.application.vo.AdminLiveApplicationVo;
 import org.letscareer.letscareer.domain.live.entity.Live;
 import org.letscareer.letscareer.domain.user.entity.User;
+import org.letscareer.letscareer.global.error.exception.ConflictException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
+
+import static org.letscareer.letscareer.domain.application.error.ApplicationErrorCode.CONFLICT_APPLICATION;
 
 @RequiredArgsConstructor
 @Component
@@ -26,7 +29,8 @@ public class LiveApplicationHelper {
         return liveApplicationRepository.save(newLiveApplication);
     }
 
-    public Optional<LiveApplication> findLiveApplicationByLiveIdAndUserId(Long liveId, Long userId) {
-        return liveApplicationRepository.findLiveApplicationByLiveIdAndUserId(liveId, userId);
+    public void validateExistingApplication(Long liveId, Long userId) {
+        Optional<LiveApplication> liveApplication = liveApplicationRepository.findLiveApplicationByLiveIdAndUserId(liveId, userId);
+        if(liveApplication.isPresent()) throw new ConflictException(CONFLICT_APPLICATION);
     }
 }

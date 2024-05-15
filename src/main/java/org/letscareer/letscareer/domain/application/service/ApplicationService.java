@@ -6,7 +6,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface ApplicationService {
-
     void createApplication(Long programId, User user, CreateApplicationRequestDto requestDto);
-    void validateExistingApplication(Long programId, Long userId);
 }
