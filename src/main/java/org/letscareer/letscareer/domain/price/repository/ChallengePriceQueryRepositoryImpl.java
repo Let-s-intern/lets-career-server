@@ -35,6 +35,6 @@ public class ChallengePriceQueryRepositoryImpl implements ChallengePriceQueryRep
     }
 
     private BooleanExpression eqChallengeId(Long challengeId) {
-        return challengeId != null ? challengePrice.id.eq(challengeId) : null;
+        return challengeId != null ? challengePrice.challenge.id.eq(challengeId) : null;
     }
 }

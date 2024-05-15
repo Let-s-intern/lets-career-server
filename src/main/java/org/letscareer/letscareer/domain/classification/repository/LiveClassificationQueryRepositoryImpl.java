@@ -28,6 +28,6 @@ public class LiveClassificationQueryRepositoryImpl implements LiveClassification
     }
 
     private BooleanExpression eqLiveId(Long liveId) {
-        return liveId != null ? liveClassification.id.eq(liveId) : null;
+        return liveId != null ? liveClassification.live.id.eq(liveId) : null;
     }
 }
