@@ -5,7 +5,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.letscareer.letscareer.domain.price.entity.UserPayment;
+import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
@@ -22,8 +22,9 @@ public abstract class Application extends BaseTimeEntity {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_payment_id")
-    private UserPayment userPayment;
+    @JoinColumn(name = "payment_id")
+    private Payment payment;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 }

@@ -1,25 +1,37 @@
-package org.letscareer.letscareer.domain.price.entity;
+package org.letscareer.letscareer.domain.payment.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
 import org.letscareer.letscareer.domain.application.entity.Application;
 import org.letscareer.letscareer.domain.coupon.entity.Coupon;
-import org.letscareer.letscareer.domain.user.entity.User;
+import org.letscareer.letscareer.domain.price.entity.Price;
+import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder(access = AccessLevel.PRIVATE)
-@DiscriminatorValue("user_payment")
+@DiscriminatorValue("payment")
 @Getter
 @Entity
-public class UserPayment extends Price {
+public class Payment extends BaseTimeEntity {
+    private Integer finalPrice;
     private Integer couponRemainTime;
     private Boolean isConfirmed;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "payment_id")
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "coupon_id")
     private Coupon coupon;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id")
     private Application application;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "price_id")
+    private Price price;
 }
