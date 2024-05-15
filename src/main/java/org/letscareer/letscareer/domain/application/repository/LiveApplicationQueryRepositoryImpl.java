@@ -13,7 +13,7 @@ import static org.letscareer.letscareer.domain.application.entity.QLiveApplicati
 import static org.letscareer.letscareer.domain.coupon.entity.QCoupon.coupon;
 import static org.letscareer.letscareer.domain.live.entity.QLive.live;
 import static org.letscareer.letscareer.domain.price.entity.QLivePrice.livePrice;
-import static org.letscareer.letscareer.domain.price.entity.QUserPayment.userPayment;
+import static org.letscareer.letscareer.domain.payment.entity.QPayment.payment;
 import static org.letscareer.letscareer.domain.user.entity.QUser.user;
 
 @RequiredArgsConstructor
@@ -34,15 +34,15 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
                         liveApplication.question,
                         coupon.name,
                         calculateTotalCost(),
-                        userPayment.isConfirmed,
+                        payment.isConfirmed,
                         liveApplication.createDate
                 ))
                 .from(liveApplication)
                 .leftJoin(liveApplication.live, live)
                 .leftJoin(live, livePrice.live)
                 .leftJoin(liveApplication.user, user)
-                .leftJoin(liveApplication.userPayment, userPayment)
-                .leftJoin(liveApplication.userPayment.coupon, coupon)
+                .leftJoin(liveApplication.payment, payment)
+                .leftJoin(liveApplication.payment.coupon, coupon)
                 .orderBy(liveApplication.id.desc())
                 .where(
                         eqLiveId(liveId),
@@ -60,6 +60,6 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
     }
 
     private BooleanExpression eqIsConfirmed(Boolean isConfirmed) {
-        return isConfirmed != null ? userPayment.isConfirmed.eq(isConfirmed) : null;
+        return isConfirmed != null ? payment.isConfirmed.eq(isConfirmed) : null;
     }
 }

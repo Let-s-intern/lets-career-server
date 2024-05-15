@@ -3,6 +3,7 @@ package org.letscareer.letscareer.domain.user.mapper;
 import org.letscareer.letscareer.domain.user.dto.request.UserPwSignUpRequestDto;
 import org.letscareer.letscareer.domain.user.dto.response.TokenResponseDto;
 import org.letscareer.letscareer.domain.user.dto.response.UserAdminListResponseDto;
+import org.letscareer.letscareer.domain.user.dto.response.UserInfoResponseDto;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.type.AuthProvider;
 import org.letscareer.letscareer.domain.user.vo.UserAdminVo;
@@ -29,5 +30,9 @@ public class UserMapper {
     public UserAdminListResponseDto toUserAdminListResponseDto(Page<UserAdminVo> userAdminList) {
         PageInfo pageInfo = PageInfo.of(userAdminList);
         return UserAdminListResponseDto.of(userAdminList, pageInfo);
+    }
+
+    public UserInfoResponseDto toUserInfoResponseDto(User user) {
+        return UserInfoResponseDto.of(user);
     }
 }
