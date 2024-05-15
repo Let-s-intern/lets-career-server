@@ -39,7 +39,7 @@ public class ChallengeV1Controller {
     }
 
     @Operation(summary = "챌린지 생성", responses = {
-            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+            @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
     })
     @PostMapping
     public ResponseEntity<SuccessResponse<?>> createChallengeProgram(@RequestBody final CreateChallengeRequestDto requestDto) {
