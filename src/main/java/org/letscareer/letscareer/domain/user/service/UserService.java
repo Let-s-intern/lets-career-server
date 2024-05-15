@@ -54,8 +54,8 @@ public class UserService {
         return userMapper.toTokenResponseDto(accessToken, refreshToken);
     }
 
-    public void addUserInfo(PrincipalDetails principalDetails, UserAddInfoRequestDto addInfoRequestDto) {
-        User user = userHelper.findUserByIdOrThrow(principalDetails.getId());
+    public void addUserInfo(Long userId, UserAddInfoRequestDto addInfoRequestDto) {
+        User user = userHelper.findUserByIdOrThrow(userId);
         userHelper.addUserInfo(user, addInfoRequestDto);
     }
 
