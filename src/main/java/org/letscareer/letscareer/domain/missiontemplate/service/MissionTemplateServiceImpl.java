@@ -9,10 +9,12 @@ import org.letscareer.letscareer.domain.missiontemplate.helper.MissionTemplateHe
 import org.letscareer.letscareer.domain.missiontemplate.mapper.MissionTemplateMapper;
 import org.letscareer.letscareer.domain.missiontemplate.vo.MissionTemplateAdminVo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class MissionTemplateServiceImpl implements MissionTemplateService {
     private final MissionTemplateHelper missionTemplateHelper;

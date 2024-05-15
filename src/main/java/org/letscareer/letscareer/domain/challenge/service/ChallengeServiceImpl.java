@@ -21,12 +21,14 @@ import org.letscareer.letscareer.domain.price.dto.request.CreateChallengePriceRe
 import org.letscareer.letscareer.domain.price.helper.ChallengePriceHelper;
 import org.letscareer.letscareer.domain.price.vo.ChallengePriceDetailVo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class ChallengeServiceImpl implements ChallengeService {
     private final ChallengeHelper challengeHelper;
@@ -55,6 +57,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     @Override
     public void createChallenge(CreateChallengeRequestDto createChallengeRequestDto) {
         Challenge challenge = challengeHelper.createChallengeAndSave(createChallengeRequestDto);
+        System.out.println(challenge.getId());
         createClassificationListAndSave(createChallengeRequestDto.programTypeInfo(), challenge);
         createPriceListAndSave(createChallengeRequestDto.priceInfo(), challenge);
         createFaqListAndSave(createChallengeRequestDto.faqInfo(), challenge);

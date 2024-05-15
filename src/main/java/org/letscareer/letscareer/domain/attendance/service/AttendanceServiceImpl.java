@@ -8,10 +8,12 @@ import org.letscareer.letscareer.domain.attendance.helper.AttendanceHelper;
 import org.letscareer.letscareer.domain.attendance.mapper.AttendanceMapper;
 import org.letscareer.letscareer.domain.attendance.vo.AttendanceAdminVo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class AttendanceServiceImpl implements AttendanceService {
     private final AttendanceHelper attendanceHelper;

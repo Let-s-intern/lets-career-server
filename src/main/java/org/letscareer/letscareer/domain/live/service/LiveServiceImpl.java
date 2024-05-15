@@ -21,12 +21,14 @@ import org.letscareer.letscareer.domain.price.dto.request.CreateLivePriceRequest
 import org.letscareer.letscareer.domain.price.helper.LivePriceHelper;
 import org.letscareer.letscareer.domain.price.vo.LivePriceDetailVo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class LiveServiceImpl implements LiveService {
     private final LiveHelper liveHelper;
