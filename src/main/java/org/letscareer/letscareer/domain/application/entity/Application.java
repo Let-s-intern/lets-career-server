@@ -1,10 +1,7 @@
 package org.letscareer.letscareer.domain.application.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
@@ -27,4 +24,12 @@ public abstract class Application extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
+
+    public Application(User user) {
+        this.user = user;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
+    }
 }

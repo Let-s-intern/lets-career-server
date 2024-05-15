@@ -34,4 +34,14 @@ public class Payment extends BaseTimeEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "price_id")
     private Price price;
+
+    public static Payment createPayment(Coupon coupon,
+                                        Application application,
+                                        Price price) {
+        return Payment.builder()
+                .coupon(coupon)
+                .application(application)
+                .price(price)
+                .build();
+    }
 }

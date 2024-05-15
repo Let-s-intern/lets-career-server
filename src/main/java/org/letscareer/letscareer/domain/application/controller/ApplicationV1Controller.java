@@ -1,5 +1,7 @@
 package org.letscareer.letscareer.domain.application.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.dto.request.CreateApplicationRequestDto;
 import org.letscareer.letscareer.domain.application.service.ApplicationServiceFactory;
@@ -16,12 +18,15 @@ import org.springframework.web.bind.annotation.*;
 public class ApplicationV1Controller {
     private final ApplicationServiceFactory applicationServiceFactory;
 
+    @Operation(summary = "신청서 생성", responses = {
+            @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
+    })
     @PostMapping("/{id}")
     public ResponseEntity<SuccessResponse<?>> createApplication(@PathVariable(name = "id") final Long programId,
                                                                 @RequestParam(name = "type") final ProgramType programType,
                                                                 @CurrentUser final User user,
                                                                 @RequestBody final CreateApplicationRequestDto requestDto) {
-        applicationServiceFactory.getApplicationService(programType).createApplication(programId, user.getId(), requestDto);
+        applicationServiceFactory.getApplicationService(programType).createApplication(programId, user, requestDto);
         return SuccessResponse.created(null);
     }
 }

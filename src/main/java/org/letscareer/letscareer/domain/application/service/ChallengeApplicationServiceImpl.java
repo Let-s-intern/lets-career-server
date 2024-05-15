@@ -2,6 +2,14 @@ package org.letscareer.letscareer.domain.application.service;
 
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.dto.request.CreateApplicationRequestDto;
+import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
+import org.letscareer.letscareer.domain.application.helper.ChallengeApplicationHelper;
+import org.letscareer.letscareer.domain.application.mapper.ChallengeApplicationMapper;
+import org.letscareer.letscareer.domain.challenge.entity.Challenge;
+import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
+import org.letscareer.letscareer.domain.payment.entity.Payment;
+import org.letscareer.letscareer.domain.payment.helper.PaymentHelper;
+import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,8 +17,16 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @Service("CHALLENGE")
 public class ChallengeApplicationServiceImpl implements ApplicationService {
-    @Override
-    public void createApplication(Long programId, Long userId, CreateApplicationRequestDto requestDto) {
+    private final ChallengeApplicationHelper challengeApplicationHelper;
+    private final ChallengeApplicationMapper challengeApplicationMapper;
+    private final ChallengeHelper challengeHelper;
+    private final PaymentHelper paymentHelper;
 
+    @Override
+    public void createApplication(Long programId, User user, CreateApplicationRequestDto createApplicationRequestDto) {
+        Challenge challenge = challengeHelper.findChallengeByIdOrThrow(programId);
+        ChallengeApplication challengeApplication = challengeApplicationHelper.createChallengeApplicationAndSave(challenge, user);
+        Payment payment = paymentHelper.createPaymentAndSave(challengeApplication, createApplicationRequestDto.paymentInfo());
+        challengeApplication.setPayment(payment);
     }
 }
