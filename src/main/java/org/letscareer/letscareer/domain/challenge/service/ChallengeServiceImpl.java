@@ -57,7 +57,6 @@ public class ChallengeServiceImpl implements ChallengeService {
     @Override
     public void createChallenge(CreateChallengeRequestDto createChallengeRequestDto) {
         Challenge challenge = challengeHelper.createChallengeAndSave(createChallengeRequestDto);
-        System.out.println(challenge.getId());
         createClassificationListAndSave(createChallengeRequestDto.programTypeInfo(), challenge);
         createPriceListAndSave(createChallengeRequestDto.priceInfo(), challenge);
         createFaqListAndSave(createChallengeRequestDto.faqInfo(), challenge);
