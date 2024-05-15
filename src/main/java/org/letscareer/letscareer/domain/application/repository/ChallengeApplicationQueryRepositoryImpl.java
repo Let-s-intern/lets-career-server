@@ -50,7 +50,7 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
     }
 
     private NumberExpression<Integer> calculateTotalCost() {
-        return challengePrice.price.add(challengePrice.charge).subtract(challengePrice.discount).subtract(coupon.discount);
+        return challengePrice.price.subtract(challengePrice.discount).subtract(coupon.discount);
     }
 
     private BooleanExpression eqChallengeId(Long challengeId) {
