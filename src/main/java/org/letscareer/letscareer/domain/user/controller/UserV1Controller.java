@@ -10,6 +10,7 @@ import org.letscareer.letscareer.domain.user.dto.request.UserAddInfoRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UserPwSignInRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UserPwSignUpRequestDto;
 import org.letscareer.letscareer.domain.user.dto.response.UserAdminListResponseDto;
+import org.letscareer.letscareer.domain.user.dto.response.UserInfoResponseDto;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.service.UserService;
 import org.letscareer.letscareer.global.common.annotation.CurrentUser;
@@ -50,6 +51,14 @@ public class UserV1Controller {
                                                           @RequestBody final UserAddInfoRequestDto addInfoRequestDto) {
         userService.addUserInfo(user.getId(), addInfoRequestDto);
         return SuccessResponse.ok(null);
+    }
+
+    @Operation(summary = "유저 마이페이지 정보", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserInfoResponseDto.class)))
+    })
+    @GetMapping
+    public ResponseEntity<SuccessResponse<?>> getUserInfo(@CurrentUser User user) {
+        return SuccessResponse.ok(userService.getUserInfo(user));
     }
 
     @Operation(summary = "유저 전체 목록", responses = {

@@ -6,6 +6,7 @@ import org.letscareer.letscareer.domain.user.dto.request.UserPwSignInRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UserPwSignUpRequestDto;
 import org.letscareer.letscareer.domain.user.dto.response.TokenResponseDto;
 import org.letscareer.letscareer.domain.user.dto.response.UserAdminListResponseDto;
+import org.letscareer.letscareer.domain.user.dto.response.UserInfoResponseDto;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.helper.UserHelper;
 import org.letscareer.letscareer.domain.user.mapper.UserMapper;
@@ -13,7 +14,6 @@ import org.letscareer.letscareer.domain.user.type.AuthProvider;
 import org.letscareer.letscareer.domain.user.vo.UserAdminVo;
 import org.letscareer.letscareer.global.security.jwt.TokenProvider;
 import org.letscareer.letscareer.global.security.oauth2.userinfo.OAuth2UserInfo;
-import org.letscareer.letscareer.global.security.user.PrincipalDetails;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -62,5 +62,9 @@ public class UserService {
     public UserAdminListResponseDto getUsers(Pageable pageable) {
         Page<UserAdminVo> userAdminList = userHelper.findAllUserAdminVos(pageable);
         return userMapper.toUserAdminListResponseDto(userAdminList);
+    }
+
+    public UserInfoResponseDto getUserInfo(User user) {
+        return userMapper.toUserInfoResponseDto(user);
     }
 }
