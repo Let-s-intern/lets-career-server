@@ -34,6 +34,6 @@ public class LivePriceQueryRepositoryImpl implements LivePriceQueryRepository {
     }
 
     private BooleanExpression eqLiveId(Long liveId) {
-        return liveId != null ? livePrice.id.eq(liveId) : null;
+        return liveId != null ? livePrice.live.id.eq(liveId) : null;
     }
 }

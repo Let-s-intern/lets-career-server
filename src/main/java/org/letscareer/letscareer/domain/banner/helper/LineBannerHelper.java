@@ -7,12 +7,10 @@ import org.letscareer.letscareer.domain.banner.repository.LineBannerRepository;
 import org.letscareer.letscareer.domain.banner.vo.LineBannerAdminVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @RequiredArgsConstructor
-@Transactional
 @Component
 public class LineBannerHelper {
     private final LineBannerRepository lineBannerRepository;

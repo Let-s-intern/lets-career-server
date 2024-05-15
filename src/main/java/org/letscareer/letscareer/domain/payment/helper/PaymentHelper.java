@@ -8,10 +8,8 @@ import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.payment.repository.PaymentRepository;
 import org.letscareer.letscareer.domain.price.entity.Price;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
-@Transactional
 @Component
 public class PaymentHelper {
     private final PaymentRepository paymentRepository;

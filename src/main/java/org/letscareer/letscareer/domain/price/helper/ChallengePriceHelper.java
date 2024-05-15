@@ -8,14 +8,12 @@ import org.letscareer.letscareer.domain.price.repository.ChallengePriceRepositor
 import org.letscareer.letscareer.domain.price.vo.ChallengePriceDetailVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static org.letscareer.letscareer.domain.price.error.ChallengePriceErrorCode.CHALLENGE_PRICE_NOT_FOUND;
 
 @RequiredArgsConstructor
-@Transactional
 @Component
 public class ChallengePriceHelper {
     private final ChallengePriceRepository challengePriceRepository;

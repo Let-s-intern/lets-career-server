@@ -8,14 +8,12 @@ import org.letscareer.letscareer.domain.classification.repository.ChallengeClass
 import org.letscareer.letscareer.domain.classification.vo.ChallengeClassificationDetailVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static org.letscareer.letscareer.domain.classification.error.ChallengeErrorCode.CHALLENGE_CLASSIFICATION_NOT_FOUND;
 
 @RequiredArgsConstructor
-@Transactional
 @Component
 public class ChallengeClassificationHelper {
     private final ChallengeClassificationRepository challengeClassificationRepository;

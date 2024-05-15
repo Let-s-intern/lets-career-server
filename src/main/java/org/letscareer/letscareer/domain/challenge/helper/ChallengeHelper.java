@@ -1,7 +1,6 @@
 package org.letscareer.letscareer.domain.challenge.helper;
 
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
 import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeRequestDto;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challenge.error.ChallengeErrorCode;
@@ -9,12 +8,8 @@ import org.letscareer.letscareer.domain.challenge.repository.ChallengeRepository
 import org.letscareer.letscareer.domain.challenge.vo.ChallengeDetailVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @RequiredArgsConstructor
-@Transactional
 @Component
 public class ChallengeHelper {
     private final ChallengeRepository challengeRepository;

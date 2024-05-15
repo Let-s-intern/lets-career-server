@@ -12,12 +12,10 @@ import org.letscareer.letscareer.domain.faq.repository.FaqRepository;
 import org.letscareer.letscareer.domain.faq.vo.FaqDetailVo;
 import org.letscareer.letscareer.domain.live.entity.Live;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @RequiredArgsConstructor
-@Transactional
 @Component
 public class FaqHelper {
     private final FaqRepository faqRepository;

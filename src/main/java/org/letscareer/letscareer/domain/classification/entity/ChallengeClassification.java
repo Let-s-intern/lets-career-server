@@ -19,7 +19,8 @@ public class ChallengeClassification extends Classification {
     public ChallengeClassification(CreateChallengeClassificationRequestDto requestDto,
                                    Challenge challenge) {
         super(requestDto.classificationInfo());
-        challenge.addChallengeClassificationList(this);
+        this.challenge = challenge;
+        challenge.addChallengeClassification(this);
     }
 
     public static ChallengeClassification createChallengeClassification(CreateChallengeClassificationRequestDto requestDto,

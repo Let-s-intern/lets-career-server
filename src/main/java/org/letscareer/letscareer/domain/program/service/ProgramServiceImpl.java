@@ -14,11 +14,13 @@ import org.letscareer.letscareer.global.common.entity.PageInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class ProgramServiceImpl implements ProgramService {
     private final ProgramHelper programHelper;
@@ -48,6 +50,7 @@ public class ProgramServiceImpl implements ProgramService {
     }
 
     private List<?> getProgramClassificationsForType(ProgramType type, Long programId) {
+        System.out.println(type + " " + programId);
         if (ProgramType.CHALLENGE.equals(type))
             return challengeClassificationHelper.findClassificationDetailVos(programId);
         else if (ProgramType.LIVE.equals(type))

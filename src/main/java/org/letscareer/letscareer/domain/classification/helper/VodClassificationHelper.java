@@ -7,12 +7,10 @@ import org.letscareer.letscareer.domain.classification.repository.VodClassificat
 import org.letscareer.letscareer.domain.classification.vo.VodClassificationDetailVo;
 import org.letscareer.letscareer.domain.vod.entity.Vod;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @RequiredArgsConstructor
-@Transactional
 @Component
 public class VodClassificationHelper {
     private final VodClassificationRepository vodClassificationRepository;

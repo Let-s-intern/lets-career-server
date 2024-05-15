@@ -15,11 +15,13 @@ import org.letscareer.letscareer.domain.mission.mapper.MissionMapper;
 import org.letscareer.letscareer.domain.missiontemplate.entity.MissionTemplate;
 import org.letscareer.letscareer.domain.missiontemplate.helper.MissionTemplateHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
 
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class MissionServiceImpl implements MissionService{
     private final MissionHelper missionHelper;

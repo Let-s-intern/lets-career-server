@@ -33,6 +33,7 @@ public class ChallengePrice extends Price {
     public ChallengePrice(CreateChallengePriceRequestDto requestDto,
                           Challenge challenge) {
         super(requestDto.priceInfo());
+        this.challenge = challenge;
         this.charge = requestDto.charge();
         this.refund = requestDto.refund();
         this.challengePriceType = requestDto.challengePriceType();

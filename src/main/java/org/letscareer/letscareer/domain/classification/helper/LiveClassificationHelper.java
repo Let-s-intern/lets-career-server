@@ -7,12 +7,10 @@ import org.letscareer.letscareer.domain.classification.repository.LiveClassifica
 import org.letscareer.letscareer.domain.classification.vo.LiveClassificationVo;
 import org.letscareer.letscareer.domain.live.entity.Live;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @RequiredArgsConstructor
-@Transactional
 @Component
 public class LiveClassificationHelper {
     private final LiveClassificationRepository liveClassificationRepository;

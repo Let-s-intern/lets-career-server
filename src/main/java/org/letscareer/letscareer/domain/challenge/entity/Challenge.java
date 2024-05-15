@@ -99,7 +99,7 @@ public class Challenge extends BaseTimeEntity {
         this.challengeType = updateValue(this.challengeType, requestDto.challengeType());
     }
 
-    public void addChallengeClassificationList(ChallengeClassification challengeClassification) {
+    public void addChallengeClassification(ChallengeClassification challengeClassification) {
         this.classificationList.add(challengeClassification);
     }
 

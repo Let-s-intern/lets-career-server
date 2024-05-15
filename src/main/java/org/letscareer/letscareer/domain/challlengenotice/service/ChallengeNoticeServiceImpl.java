@@ -10,10 +10,12 @@ import org.letscareer.letscareer.domain.challlengenotice.helper.ChallengeNoticeH
 import org.letscareer.letscareer.domain.challlengenotice.mapper.ChallengeNoticeMapper;
 import org.letscareer.letscareer.domain.challlengenotice.vo.ChallengeNoticeAdminVo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class ChallengeNoticeServiceImpl implements ChallengeNoticeService {
     private final ChallengeNoticeHelper challengeNoticeHelper;
