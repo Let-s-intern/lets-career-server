@@ -14,7 +14,8 @@ import org.letscareer.letscareer.domain.challenge.vo.ChallengeDetailVo;
 import org.letscareer.letscareer.domain.classification.dto.request.CreateChallengeClassificationRequestDto;
 import org.letscareer.letscareer.domain.classification.helper.ChallengeClassificationHelper;
 import org.letscareer.letscareer.domain.classification.vo.ChallengeClassificationDetailVo;
-import org.letscareer.letscareer.domain.faq.dto.request.CreateFaqRequestDto;
+import org.letscareer.letscareer.domain.faq.dto.request.CreateProgramFaqRequestDto;
+import org.letscareer.letscareer.domain.faq.entity.Faq;
 import org.letscareer.letscareer.domain.faq.helper.FaqHelper;
 import org.letscareer.letscareer.domain.faq.vo.FaqDetailVo;
 import org.letscareer.letscareer.domain.price.dto.request.CreateChallengePriceRequestDto;
@@ -90,11 +91,12 @@ public class ChallengeServiceImpl implements ChallengeService {
                 .collect(Collectors.toList());
     }
 
-    private void createFaqListAndSave(List<CreateFaqRequestDto> requestDtoList,
+    private void createFaqListAndSave(List<CreateProgramFaqRequestDto> requestDtoList,
                                       Challenge challenge) {
-        requestDtoList.stream()
-                .map(requestDto -> faqHelper.createFaqChallengeAndSave(requestDto, challenge))
-                .collect(Collectors.toList());
+        List<Faq> faqs = getFaqsById(requestDtoList);
+        faqs.stream().forEach(faq -> {
+            faqHelper.createFaqChallengeAndSave(faq, challenge);
+        });
     }
 
     private void updateChallengeClassifications(Challenge challenge, List<CreateChallengeClassificationRequestDto> programInfo) {
@@ -111,10 +113,16 @@ public class ChallengeServiceImpl implements ChallengeService {
         createPriceListAndSave(priceInfo, challenge);
     }
 
-    private void updateChallengeFaqs(Challenge challenge, List<CreateFaqRequestDto> faqInfo) {
+    private void updateChallengeFaqs(Challenge challenge, List<CreateProgramFaqRequestDto> faqInfo) {
         if (Objects.isNull(faqInfo)) return;
         faqHelper.deleteChallengeFaqsByChallengeId(challenge.getId());
         challenge.setInitFaqList();
         createFaqListAndSave(faqInfo, challenge);
+    }
+
+    private List<Faq> getFaqsById(List<CreateProgramFaqRequestDto> requestDtoList) {
+        return requestDtoList.stream()
+                .map(request -> faqHelper.findFaqByIdAndThrow(request.faqId()))
+                .collect(Collectors.toList());
     }
 }
