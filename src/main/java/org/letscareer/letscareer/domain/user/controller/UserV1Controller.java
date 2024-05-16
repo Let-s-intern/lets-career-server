@@ -43,7 +43,7 @@ public class UserV1Controller {
         return SuccessResponse.ok(userService.pwSignIn(pwSignInRequestDto));
     }
 
-    @Operation(summary = "유저 추가정보 입력", responses = {
+    @Operation(summary = "유저 정보 수정", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @PostMapping("/info")
