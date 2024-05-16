@@ -5,6 +5,7 @@ import org.letscareer.letscareer.domain.faq.type.FaqProgramType;
 
 @Builder
 public record FaqDetailVo(
+        Long id,
         String question,
         String answer,
         FaqProgramType faqProgramType

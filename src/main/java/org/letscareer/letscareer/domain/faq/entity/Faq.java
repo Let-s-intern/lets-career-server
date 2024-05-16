@@ -10,6 +10,8 @@ import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils.updateValue;
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PRIVATE)
@@ -37,8 +39,13 @@ public class Faq extends BaseTimeEntity {
         return Faq.builder()
                 .question(requestDto.question())
                 .answer(requestDto.answer())
-                .faqProgramType(requestDto.faqProgramType())
+                .faqProgramType(requestDto.type())
                 .build();
+    }
+
+    public void updateFaq(CreateFaqRequestDto requestDto) {
+        this.question = updateValue(this.question, requestDto.question());
+        this.answer = updateValue(this.answer, requestDto.answer());
     }
 
     public void addFaqChallengeList(FaqChallenge faqChallenge) {

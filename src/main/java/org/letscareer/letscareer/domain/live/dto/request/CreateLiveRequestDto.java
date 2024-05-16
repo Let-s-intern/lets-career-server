@@ -1,8 +1,7 @@
 package org.letscareer.letscareer.domain.live.dto.request;
 
-import org.letscareer.letscareer.domain.classification.dto.request.CreateChallengeClassificationRequestDto;
 import org.letscareer.letscareer.domain.classification.dto.request.CreateLiveClassificationRequestDto;
-import org.letscareer.letscareer.domain.faq.dto.request.CreateFaqRequestDto;
+import org.letscareer.letscareer.domain.faq.dto.request.CreateProgramFaqRequestDto;
 import org.letscareer.letscareer.domain.live.type.ProgressType;
 import org.letscareer.letscareer.domain.price.dto.request.CreateLivePriceRequestDto;
 
@@ -24,6 +23,6 @@ public record CreateLiveRequestDto(
         ProgressType progressType,
         List<CreateLiveClassificationRequestDto> programTypeInfo,
         CreateLivePriceRequestDto priceInfo,
-        List<CreateFaqRequestDto> faqInfo
+        List<CreateProgramFaqRequestDto> faqInfo
 ) {
 }

@@ -2,6 +2,8 @@ package org.letscareer.letscareer.domain.application.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -12,8 +14,8 @@ import java.util.List;
 import static org.letscareer.letscareer.domain.application.entity.QChallengeApplication.challengeApplication;
 import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
 import static org.letscareer.letscareer.domain.coupon.entity.QCoupon.coupon;
-import static org.letscareer.letscareer.domain.price.entity.QChallengePrice.challengePrice;
 import static org.letscareer.letscareer.domain.payment.entity.QPayment.payment;
+import static org.letscareer.letscareer.domain.price.entity.QChallengePrice.challengePrice;
 import static org.letscareer.letscareer.domain.user.entity.QUser.user;
 
 @RequiredArgsConstructor
@@ -37,7 +39,7 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                 ))
                 .from(challengeApplication)
                 .leftJoin(challengeApplication.challenge, challenge)
-                .leftJoin(challenge, challengePrice.challenge)
+                .leftJoin(challengeApplication.challenge.priceList, challengePrice)
                 .leftJoin(challengeApplication.user, user)
                 .leftJoin(challengeApplication.payment, payment)
                 .leftJoin(challengeApplication.payment.coupon, coupon)
@@ -50,7 +52,22 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
     }
 
     private NumberExpression<Integer> calculateTotalCost() {
-        return challengePrice.price.subtract(challengePrice.discount).subtract(coupon.discount);
+        NumberExpression<Integer> safePrice = new CaseBuilder()
+                .when(challengePrice.price.isNull())
+                .then(0)
+                .otherwise(challengePrice.price);
+
+        NumberExpression<Integer> safeDiscount = new CaseBuilder()
+                .when(challengePrice.discount.isNull())
+                .then(0)
+                .otherwise(challengePrice.discount);
+
+        NumberExpression<Integer> safeCouponDiscount = new CaseBuilder()
+                .when(coupon.discount.isNull())
+                .then(0)
+                .otherwise(coupon.discount);
+
+        return safePrice.subtract(safeDiscount).subtract(safeCouponDiscount);
     }
 
     private BooleanExpression eqChallengeId(Long challengeId) {

@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.application.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import java.util.List;
 import static org.letscareer.letscareer.domain.application.entity.QLiveApplication.liveApplication;
 import static org.letscareer.letscareer.domain.coupon.entity.QCoupon.coupon;
 import static org.letscareer.letscareer.domain.live.entity.QLive.live;
+import static org.letscareer.letscareer.domain.price.entity.QChallengePrice.challengePrice;
 import static org.letscareer.letscareer.domain.price.entity.QLivePrice.livePrice;
 import static org.letscareer.letscareer.domain.payment.entity.QPayment.payment;
 import static org.letscareer.letscareer.domain.user.entity.QUser.user;
@@ -39,7 +41,7 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
                 ))
                 .from(liveApplication)
                 .leftJoin(liveApplication.live, live)
-                .leftJoin(live, livePrice.live)
+                .leftJoin(liveApplication.live.priceList, livePrice)
                 .leftJoin(liveApplication.user, user)
                 .leftJoin(liveApplication.payment, payment)
                 .leftJoin(liveApplication.payment.coupon, coupon)
@@ -52,7 +54,22 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
     }
 
     private NumberExpression<Integer> calculateTotalCost() {
-        return livePrice.price.subtract(livePrice.discount).subtract(coupon.discount);
+        NumberExpression<Integer> safePrice = new CaseBuilder()
+                .when(livePrice.price.isNull())
+                .then(0)
+                .otherwise(livePrice.price);
+
+        NumberExpression<Integer> safeDiscount = new CaseBuilder()
+                .when(livePrice.discount.isNull())
+                .then(0)
+                .otherwise(livePrice.discount);
+
+        NumberExpression<Integer> safeCouponDiscount = new CaseBuilder()
+                .when(coupon.discount.isNull())
+                .then(0)
+                .otherwise(coupon.discount);
+
+        return safePrice.subtract(safeDiscount).subtract(safeCouponDiscount);
     }
 
     private BooleanExpression eqLiveId(Long liveId) {
