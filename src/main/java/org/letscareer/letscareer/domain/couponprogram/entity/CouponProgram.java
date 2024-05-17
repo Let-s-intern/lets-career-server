@@ -1,7 +1,9 @@
-package org.letscareer.letscareer.domain.coupon.entity;
+package org.letscareer.letscareer.domain.couponprogram.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.letscareer.letscareer.domain.coupon.dto.request.CreateCouponProgramRequestDto;
+import org.letscareer.letscareer.domain.coupon.entity.Coupon;
 import org.letscareer.letscareer.domain.coupon.type.CouponProgramType;
 import org.letscareer.letscareer.domain.coupon.type.converter.CouponProgramTypeConverter;
 
@@ -21,4 +23,11 @@ public class CouponProgram {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "coupon_id")
     private Coupon coupon;
+
+    public static CouponProgram createCouponProgram(CreateCouponProgramRequestDto requestDto, Coupon coupon) {
+        return CouponProgram.builder()
+                .couponProgramType(requestDto.programType())
+                .coupon(coupon)
+                .build();
+    }
 }

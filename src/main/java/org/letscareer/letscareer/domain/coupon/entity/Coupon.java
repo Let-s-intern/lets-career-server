@@ -2,8 +2,10 @@ package org.letscareer.letscareer.domain.coupon.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.letscareer.letscareer.domain.coupon.dto.request.CreateCouponRequestDto;
 import org.letscareer.letscareer.domain.coupon.type.CouponType;
 import org.letscareer.letscareer.domain.coupon.type.converter.CouponTypeConverter;
+import org.letscareer.letscareer.domain.couponprogram.entity.CouponProgram;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
@@ -36,4 +38,24 @@ public class Coupon extends BaseTimeEntity {
     @OneToMany(mappedBy = "coupon", cascade = CascadeType.ALL)
     @Builder.Default
     private List<CouponProgram> couponProgramList = new ArrayList<>();
+
+    public static Coupon createCoupon(CreateCouponRequestDto couponRequestDto) {
+        return Coupon.builder()
+                .name(couponRequestDto.name())
+                .code(couponRequestDto.code())
+                .discount(couponRequestDto.discount())
+                .time(couponRequestDto.time())
+                .couponType(couponRequestDto.couponType())
+                .startDate(couponRequestDto.startDate())
+                .endDate(couponRequestDto.endDate())
+                .build();
+    }
+
+    public void addCouponProgram(CouponProgram couponProgram) {
+        this.couponProgramList.add(couponProgram);
+    }
+
+    public void setInitCouponProgramList() {
+        this.couponProgramList = new ArrayList<>();
+    }
 }
