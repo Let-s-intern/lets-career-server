@@ -29,4 +29,15 @@ public class ApplicationV1Controller {
         applicationServiceFactory.getApplicationService(programType).createApplication(programId, user, requestDto);
         return SuccessResponse.created(null);
     }
+
+    @Operation(summary = "신청서 삭제", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<SuccessResponse<?>> deleteApplication(@PathVariable(name = "id") final Long applicationId,
+                                                                @RequestParam(name = "type") final ProgramType programType,
+                                                                @CurrentUser User user) {
+        applicationServiceFactory.getApplicationService(programType).deleteApplication(applicationId, user);
+        return SuccessResponse.ok(null);
+    }
 }

@@ -3,6 +3,7 @@ package org.letscareer.letscareer.domain.application.service;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.dto.request.CreateApplicationRequestDto;
 import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
+import org.letscareer.letscareer.domain.application.helper.ApplicationHelper;
 import org.letscareer.letscareer.domain.application.helper.ChallengeApplicationHelper;
 import org.letscareer.letscareer.domain.application.mapper.ChallengeApplicationMapper;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ChallengeApplicationServiceImpl implements ApplicationService {
     private final ChallengeApplicationHelper challengeApplicationHelper;
     private final ChallengeApplicationMapper challengeApplicationMapper;
+    private final ApplicationHelper applicationHelper;
     private final ChallengeHelper challengeHelper;
     private final PaymentHelper paymentHelper;
     private final CouponHelper couponHelper;
@@ -37,5 +39,12 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
         Price price = priceHelper.findPriceByIdOrThrow(createApplicationRequestDto.paymentInfo().priceId());
         Payment payment = paymentHelper.createPaymentAndSave(createApplicationRequestDto.paymentInfo(), challengeApplication, coupon, price);
         challengeApplication.setPayment(payment);
+    }
+
+    @Override
+    public void deleteApplication(Long applicationId, User user) {
+        ChallengeApplication challengeApplication = challengeApplicationHelper.findChallengeApplicationByIdOrThrow(applicationId);
+        applicationHelper.validateAuthorizedUser(challengeApplication.getUser(), user);
+        challengeApplicationHelper.deleteChallengeApplication(challengeApplication);
     }
 }
