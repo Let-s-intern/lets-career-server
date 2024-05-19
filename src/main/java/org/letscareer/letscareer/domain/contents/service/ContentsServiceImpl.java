@@ -38,7 +38,7 @@ public class ContentsServiceImpl implements ContentsService {
     }
 
     @Override
-    public ContentsAdminSimpleListResponseDto getAllContentsSimple(ContentsType contentsType) {
+    public ContentsAdminSimpleListResponseDto getAllSimpleContents(ContentsType contentsType) {
         List<ContentsAdminSimpleVo> contentsAdminSimpleList = contentsHelper.findAllContentsAdminSimpleVos(contentsType);
         return contentsMapper.toContentsAdminSimpleListResponseDto(contentsAdminSimpleList);
     }

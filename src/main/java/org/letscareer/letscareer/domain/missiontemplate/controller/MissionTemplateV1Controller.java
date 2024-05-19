@@ -10,6 +10,7 @@ import org.letscareer.letscareer.domain.mission.dto.response.MissionAdminListRes
 import org.letscareer.letscareer.domain.missiontemplate.dto.request.CreateMissionTemplateRequestDto;
 import org.letscareer.letscareer.domain.missiontemplate.dto.request.UpdateMissionTemplateRequestDto;
 import org.letscareer.letscareer.domain.missiontemplate.dto.response.MissionTemplateAdminListResponseDto;
+import org.letscareer.letscareer.domain.missiontemplate.dto.response.MissionTemplateAdminSimpleListResponseDto;
 import org.letscareer.letscareer.domain.missiontemplate.service.MissionTemplateService;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +37,15 @@ public class MissionTemplateV1Controller {
     @GetMapping("/admin")
     public ResponseEntity<SuccessResponse<?>> getMissionTemplatesForAdmin() {
         MissionTemplateAdminListResponseDto responseDto = missionTemplateService.getMissionTemplatesForAdmin();
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "미션 템플릿 간단 목록", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = MissionTemplateAdminSimpleListResponseDto.class)))
+    })
+    @GetMapping("/admin/simple")
+    public ResponseEntity<SuccessResponse<?>> getSimpleMissionTemplatesForAdmin() {
+        MissionTemplateAdminSimpleListResponseDto responseDto = missionTemplateService.getSimpleMissionTemplatesForAdmin();
         return SuccessResponse.ok(responseDto);
     }
 

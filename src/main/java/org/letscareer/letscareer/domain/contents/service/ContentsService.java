@@ -14,5 +14,5 @@ public interface ContentsService {
     ContentsAdminListResponseDto getAllContents(Pageable pageable);
     void updateContents(Long contentsId, UpdateContentsRequestDto updateContentsRequestDto);
 
-    ContentsAdminSimpleListResponseDto getAllContentsSimple(ContentsType contentsType);
+    ContentsAdminSimpleListResponseDto getAllSimpleContents(ContentsType contentsType);
 }

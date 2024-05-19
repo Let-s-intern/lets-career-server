@@ -42,12 +42,12 @@ public class ContentsV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "콘텐츠 전체 목록", responses = {
+    @Operation(summary = "콘텐츠 타입별 간단 목록", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = ContentsAdminSimpleListResponseDto.class)))
     })
     @GetMapping("/admin/simple")
-    public ResponseEntity<SuccessResponse<?>> getAllContentsForAdmin(@RequestParam(name = "type") final ContentsType contentsType) {
-        final ContentsAdminSimpleListResponseDto responseDto = contentsService.getAllContentsSimple(contentsType);
+    public ResponseEntity<SuccessResponse<?>> getAllSimpleContentsForAdmin(@RequestParam(name = "type") final ContentsType contentsType) {
+        final ContentsAdminSimpleListResponseDto responseDto = contentsService.getAllSimpleContents(contentsType);
         return SuccessResponse.ok(responseDto);
     }
 
