@@ -1,9 +1,13 @@
 package org.letscareer.letscareer.domain.contents.repository;
 
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.contents.type.ContentsType;
+import org.letscareer.letscareer.domain.contents.vo.ContentsAdminSimpleVo;
 import org.letscareer.letscareer.domain.contents.vo.ContentsAdminVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,5 +40,23 @@ public class ContentsQueryRepositoryImpl implements ContentsQueryRepository {
                 .select(contents.count()).from(contents);
 
         return PageableExecutionUtils.getPage(contentsAdminVoList, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public List<ContentsAdminSimpleVo> findAllContentsAdminSimpleVos(ContentsType contentsType) {
+        return queryFactory
+                .select(Projections.constructor(ContentsAdminSimpleVo.class,
+                        contents.id,
+                        contents.title))
+                .from(contents)
+                .where(
+                        eqContentsType(contentsType)
+                )
+                .orderBy(contents.id.desc())
+                .fetch();
+    }
+
+    private BooleanExpression eqContentsType(ContentsType contentsType) {
+        return contentsType != null ? contents.type.eq(contentsType) : null;
     }
 }
