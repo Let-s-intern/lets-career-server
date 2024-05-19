@@ -5,6 +5,7 @@ import org.letscareer.letscareer.domain.live.type.ProgressType;
 import java.time.LocalDateTime;
 
 public record LiveDetailVo(
+        Long id,
         String title,
         String shortDesc,
         String desc,
