@@ -67,7 +67,7 @@ public class LiveQueryRepositoryImpl implements LiveQueryRepository {
                 .where(
                         eqLiveClassification(type)
                 )
-                .orderBy()
+                .orderBy(live.id.desc())
                 .fetch();
 
         JPAQuery<Live> countQuery = jpaQueryFactory
