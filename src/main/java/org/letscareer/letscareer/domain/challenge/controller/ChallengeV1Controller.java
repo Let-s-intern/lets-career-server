@@ -8,8 +8,11 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.dto.response.GetChallengeApplicationsResponseDto;
 import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeDetailResponseDto;
+import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengesResponseDto;
 import org.letscareer.letscareer.domain.challenge.service.ChallengeService;
+import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,11 +22,21 @@ import org.springframework.web.bind.annotation.*;
 public class ChallengeV1Controller {
     private final ChallengeService challengeService;
 
+    @Operation(summary = "챌린지 목록 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengesResponseDto.class)))
+    })
+    @GetMapping
+    public ResponseEntity<SuccessResponse<?>> getChallengeList(@RequestParam(required = false) final ProgramClassification type,
+                                                               final Pageable pageable) {
+        GetChallengesResponseDto responseDto = challengeService.getChallengeList(type, pageable);
+        return SuccessResponse.ok(responseDto);
+    }
+
     @Operation(summary = "챌린지 상세 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeDetailResponseDto.class)))
     })
     @GetMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> getLiveDetail(@PathVariable("id") final Long challengeId) {
+    public ResponseEntity<SuccessResponse<?>> getChallengeDetail(@PathVariable("id") final Long challengeId) {
         GetChallengeDetailResponseDto responseDto = challengeService.getChallengeDetail(challengeId);
         return SuccessResponse.ok(responseDto);
     }
