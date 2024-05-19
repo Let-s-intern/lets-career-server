@@ -7,11 +7,15 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.dto.response.GetLiveApplicationsResponseDto;
-import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeRequestDto;
+import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.live.dto.request.CreateLiveRequestDto;
 import org.letscareer.letscareer.domain.live.dto.response.GetLiveDetailResponseDto;
+import org.letscareer.letscareer.domain.live.dto.response.GetLivesResponseDto;
+import org.letscareer.letscareer.domain.live.error.LiveErrorCode;
 import org.letscareer.letscareer.domain.live.service.LiveService;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
+import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +24,16 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class LiveV1Controller {
     private final LiveService liveService;
+
+    @Operation(summary = "라이브 목록 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetLivesResponseDto.class)))
+    })
+    @GetMapping
+    public ResponseEntity<SuccessResponse<?>> getLiveList(@RequestParam(required = false) final ProgramClassification type,
+                                                          final Pageable pageable) {
+        GetLivesResponseDto responseDto = liveService.getLiveList(type, pageable);
+        return SuccessResponse.ok(responseDto);
+    }
 
     @Operation(summary = "라이브 상세 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetLiveDetailResponseDto.class)))
