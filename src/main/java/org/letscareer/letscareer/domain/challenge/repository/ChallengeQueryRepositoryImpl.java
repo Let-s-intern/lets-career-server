@@ -66,6 +66,8 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
                 .where(
                         eqChallengeClassification(type)
                 )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
 
         JPAQuery<Challenge> countQuery = queryFactory

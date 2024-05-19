@@ -68,6 +68,8 @@ public class LiveQueryRepositoryImpl implements LiveQueryRepository {
                         eqLiveClassification(type)
                 )
                 .orderBy(live.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
 
         JPAQuery<Live> countQuery = jpaQueryFactory
