@@ -7,12 +7,15 @@ import org.letscareer.letscareer.domain.application.mapper.ChallengeApplicationM
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
 import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeDetailResponseDto;
+import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengesResponseDto;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
 import org.letscareer.letscareer.domain.challenge.mapper.ChallengeMapper;
 import org.letscareer.letscareer.domain.challenge.vo.ChallengeDetailVo;
+import org.letscareer.letscareer.domain.challenge.vo.ChallengeProfileVo;
 import org.letscareer.letscareer.domain.classification.dto.request.CreateChallengeClassificationRequestDto;
 import org.letscareer.letscareer.domain.classification.helper.ChallengeClassificationHelper;
+import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.classification.vo.ChallengeClassificationDetailVo;
 import org.letscareer.letscareer.domain.faq.dto.request.CreateProgramFaqRequestDto;
 import org.letscareer.letscareer.domain.faq.entity.Faq;
@@ -21,6 +24,8 @@ import org.letscareer.letscareer.domain.faq.vo.FaqDetailVo;
 import org.letscareer.letscareer.domain.price.dto.request.CreateChallengePriceRequestDto;
 import org.letscareer.letscareer.domain.price.helper.ChallengePriceHelper;
 import org.letscareer.letscareer.domain.price.vo.ChallengePriceDetailVo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,12 +46,18 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final FaqHelper faqHelper;
 
     @Override
+    public GetChallengesResponseDto getChallengeList(ProgramClassification type, Pageable pageable) {
+        Page<ChallengeProfileVo> challengeProfileVos = challengeHelper.findChallengeProfiles(type, pageable);
+        return challengeMapper.toGetChallengesResponseDto(challengeProfileVos);
+    }
+
+    @Override
     public GetChallengeDetailResponseDto getChallengeDetail(Long challengeId) {
         ChallengeDetailVo challengeDetailVo = challengeHelper.findChallengeDetailByIdOrThrow(challengeId);
         List<ChallengeClassificationDetailVo> classificationInfo = challengeClassificationHelper.findClassificationDetailVos(challengeId);
         List<ChallengePriceDetailVo> priceInfo = challengePriceHelper.findChallengePriceDetailVos(challengeId);
         List<FaqDetailVo> faqInfo = faqHelper.findChallengeFaqDetailVos(challengeId);
-        return challengeMapper.createChallengeDetailResponseDto(challengeDetailVo, classificationInfo, priceInfo, faqInfo);
+        return challengeMapper.toChallengeDetailResponseDto(challengeDetailVo, classificationInfo, priceInfo, faqInfo);
     }
 
     @Override
@@ -94,9 +105,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     private void createFaqListAndSave(List<CreateProgramFaqRequestDto> requestDtoList,
                                       Challenge challenge) {
         List<Faq> faqs = getFaqsById(requestDtoList);
-        faqs.stream().forEach(faq -> {
-            faqHelper.createFaqChallengeAndSave(faq, challenge);
-        });
+        faqs.stream().forEach(faq -> faqHelper.createFaqChallengeAndSave(faq, challenge));
     }
 
     private void updateChallengeClassifications(Challenge challenge, List<CreateChallengeClassificationRequestDto> programInfo) {
