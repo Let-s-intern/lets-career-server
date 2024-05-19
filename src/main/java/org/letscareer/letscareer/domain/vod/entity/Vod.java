@@ -5,7 +5,6 @@ import lombok.*;
 import org.letscareer.letscareer.domain.classification.entity.VodClassification;
 import org.letscareer.letscareer.domain.vod.dto.request.CreateVodRequestDto;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
-import org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +26,7 @@ public class Vod extends BaseTimeEntity {
     private String shortDesc;
     private String thumbnail;
     private String job;
+    private String link;
     @Builder.Default
     private Boolean isVisible = false;
 
@@ -40,6 +40,7 @@ public class Vod extends BaseTimeEntity {
                 .shortDesc(requestDto.shortDesc())
                 .thumbnail(requestDto.thumbnail())
                 .job(requestDto.job())
+                .link(requestDto.link())
                 .build();
     }
 
@@ -48,6 +49,7 @@ public class Vod extends BaseTimeEntity {
         this.shortDesc = updateValue(this.shortDesc, requestDto.shortDesc());
         this.thumbnail = updateValue(this.thumbnail, requestDto.thumbnail());
         this.job = updateValue(this.job, requestDto.job());
+        this.link = updateValue(this.link, requestDto.link());
     }
 
     public void addClassification(VodClassification vodClassification) {
