@@ -8,4 +8,9 @@ import org.letscareer.letscareer.domain.coupon.vo.AdminCouponDetailVo;
 public record GetCouponDetailResponseDto(
         AdminCouponDetailVo couponInfo
 ) {
+    public static GetCouponDetailResponseDto of(AdminCouponDetailVo couponInfo) {
+        return GetCouponDetailResponseDto.builder()
+                .couponInfo(couponInfo)
+                .build();
+    }
 }

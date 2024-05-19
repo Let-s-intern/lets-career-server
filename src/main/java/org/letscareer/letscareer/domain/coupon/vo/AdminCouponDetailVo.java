@@ -1,16 +1,15 @@
 package org.letscareer.letscareer.domain.coupon.vo;
 
-import lombok.Builder;
 import org.letscareer.letscareer.domain.coupon.type.CouponProgramType;
 import org.letscareer.letscareer.domain.coupon.type.CouponType;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Builder
 public record AdminCouponDetailVo(
+        Long id,
         CouponType couponType,
-        List<CouponProgramType> couponProgramList,
+        List<CouponProgramType> couponProgramTypeList,
         String name,
         String code,
         Integer discount,

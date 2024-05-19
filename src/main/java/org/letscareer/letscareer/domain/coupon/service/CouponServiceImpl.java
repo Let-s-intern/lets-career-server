@@ -8,6 +8,7 @@ import org.letscareer.letscareer.domain.coupon.dto.response.GetCouponsResponseDt
 import org.letscareer.letscareer.domain.coupon.entity.Coupon;
 import org.letscareer.letscareer.domain.coupon.helper.CouponHelper;
 import org.letscareer.letscareer.domain.coupon.mapper.CouponMapper;
+import org.letscareer.letscareer.domain.coupon.vo.AdminCouponDetailVo;
 import org.letscareer.letscareer.domain.coupon.vo.AdminCouponVo;
 import org.letscareer.letscareer.domain.couponprogram.helper.CouponProgramHelper;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,8 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     public GetCouponDetailResponseDto getCouponDetail(Long couponId) {
-        return null;
+        AdminCouponDetailVo couponDetailVo = couponHelper.getCouponDetail(couponId);
+        return couponMapper.toGetCouponDetailResponseDto(couponDetailVo);
     }
 
     @Override
