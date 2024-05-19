@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 
 @Builder
 public record ChallengeDetailVo(
+        Long id,
         String title,
         String shortDesc,
         String desc,
