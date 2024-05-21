@@ -5,6 +5,7 @@ import org.letscareer.letscareer.domain.application.type.ApplicationStatus;
 
 import java.time.LocalDateTime;
 
+@Builder
 public record MyApplicationVo(
         Long id,
         ApplicationStatus status,
@@ -12,7 +13,6 @@ public record MyApplicationVo(
         LocalDateTime programStartDate,
         LocalDateTime programEndDate
 ) {
-    @Builder
     public MyApplicationVo(Long id,
                            Boolean paymentIsConfirmed,
                            String programTitle,

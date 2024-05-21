@@ -46,8 +46,8 @@ public class ContentsV1Controller {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = ContentsAdminSimpleListResponseDto.class)))
     })
     @GetMapping("/admin/simple")
-    public ResponseEntity<SuccessResponse<?>> getAllSimpleContentsForAdmin(@RequestParam(name = "type") final ContentsType contentsType) {
-        final ContentsAdminSimpleListResponseDto responseDto = contentsService.getAllSimpleContents(contentsType);
+    public ResponseEntity<SuccessResponse<?>> getAllSimpleContentsForAdmin(@RequestParam final ContentsType type) {
+        final ContentsAdminSimpleListResponseDto responseDto = contentsService.getAllSimpleContents(type);
         return SuccessResponse.ok(responseDto);
     }
 

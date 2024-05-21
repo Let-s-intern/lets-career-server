@@ -7,7 +7,6 @@ import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.type.UserRole;
 import org.letscareer.letscareer.global.error.exception.UnauthorizedException;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -15,7 +14,6 @@ import java.util.Objects;
 import static org.letscareer.letscareer.global.error.GlobalErrorCode.UNAUTHORIZED;
 
 @RequiredArgsConstructor
-@Transactional
 @Component
 public class ApplicationHelper {
     private final ApplicationRepository applicationRepository;

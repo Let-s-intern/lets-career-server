@@ -50,9 +50,9 @@ public class ApplicationV1Controller {
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<SuccessResponse<?>> deleteApplication(@PathVariable(name = "id") final Long applicationId,
-                                                                @RequestParam(name = "type") final ProgramType programType,
+                                                                @RequestParam final ProgramType type,
                                                                 @CurrentUser User user) {
-        applicationServiceFactory.getApplicationService(programType).deleteApplication(applicationId, user);
+        applicationServiceFactory.getApplicationService(type).deleteApplication(applicationId, user);
         return SuccessResponse.ok(null);
     }
 }
