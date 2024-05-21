@@ -3,7 +3,7 @@ package org.letscareer.letscareer.domain.user.dto.request;
 import org.letscareer.letscareer.domain.user.type.AccountType;
 import org.letscareer.letscareer.domain.user.type.UserGrade;
 
-public record UserAddInfoRequestDto(
+public record UserUpdateRequestDto(
         String university,
         UserGrade grade,
         String major,
