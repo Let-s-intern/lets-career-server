@@ -8,7 +8,8 @@ import org.letscareer.letscareer.domain.application.vo.AdminLiveApplicationVo;
 import org.letscareer.letscareer.domain.classification.dto.request.CreateLiveClassificationRequestDto;
 import org.letscareer.letscareer.domain.classification.helper.LiveClassificationHelper;
 import org.letscareer.letscareer.domain.classification.vo.LiveClassificationVo;
-import org.letscareer.letscareer.domain.faq.dto.request.CreateFaqRequestDto;
+import org.letscareer.letscareer.domain.faq.dto.request.CreateProgramFaqRequestDto;
+import org.letscareer.letscareer.domain.faq.entity.Faq;
 import org.letscareer.letscareer.domain.faq.helper.FaqHelper;
 import org.letscareer.letscareer.domain.faq.vo.FaqDetailVo;
 import org.letscareer.letscareer.domain.live.dto.request.CreateLiveRequestDto;
@@ -88,11 +89,12 @@ public class LiveServiceImpl implements LiveService {
         livePriceHelper.createLivePriceAndSave(requestDto, live);
     }
 
-    private void createFaqListAndSave(List<CreateFaqRequestDto> requestDtoList,
+    private void createFaqListAndSave(List<CreateProgramFaqRequestDto> requestDtoList,
                                       Live live) {
-        requestDtoList.stream()
-                .map(requestDto -> faqHelper.createFaqLiveAndSave(requestDto, live))
-                .collect(Collectors.toList());
+        List<Faq> faqs = getFaqsById(requestDtoList);
+        faqs.stream().forEach(faq -> {
+            faqHelper.createFaqLiveAndSave(faq, live);
+        });
     }
 
     private void updateClassifications(Live live, List<CreateLiveClassificationRequestDto> programTypeInfo) {
@@ -109,10 +111,16 @@ public class LiveServiceImpl implements LiveService {
         createPriceListAndSave(priceInfo, live);
     }
 
-    private void updateFaqs(Live live, List<CreateFaqRequestDto> faqInfo) {
+    private void updateFaqs(Live live, List<CreateProgramFaqRequestDto> faqInfo) {
         if (Objects.isNull(faqInfo)) return;
         faqHelper.deleteLiveFaqsByLiveId(live.getId());
         live.setInitFaqList();
         createFaqListAndSave(faqInfo, live);
+    }
+
+    private List<Faq> getFaqsById(List<CreateProgramFaqRequestDto> requestDtoList) {
+        return requestDtoList.stream()
+                .map(request -> faqHelper.findFaqByIdAndThrow(request.faqId()))
+                .collect(Collectors.toList());
     }
 }
