@@ -7,6 +7,7 @@ import org.letscareer.letscareer.domain.application.mapper.LiveApplicationMapper
 import org.letscareer.letscareer.domain.application.vo.AdminLiveApplicationVo;
 import org.letscareer.letscareer.domain.classification.dto.request.CreateLiveClassificationRequestDto;
 import org.letscareer.letscareer.domain.classification.helper.LiveClassificationHelper;
+import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.classification.vo.LiveClassificationVo;
 import org.letscareer.letscareer.domain.faq.dto.request.CreateProgramFaqRequestDto;
 import org.letscareer.letscareer.domain.faq.entity.Faq;
@@ -14,13 +15,17 @@ import org.letscareer.letscareer.domain.faq.helper.FaqHelper;
 import org.letscareer.letscareer.domain.faq.vo.FaqDetailVo;
 import org.letscareer.letscareer.domain.live.dto.request.CreateLiveRequestDto;
 import org.letscareer.letscareer.domain.live.dto.response.GetLiveDetailResponseDto;
+import org.letscareer.letscareer.domain.live.dto.response.GetLivesResponseDto;
 import org.letscareer.letscareer.domain.live.entity.Live;
 import org.letscareer.letscareer.domain.live.helper.LiveHelper;
 import org.letscareer.letscareer.domain.live.mapper.LiveMapper;
 import org.letscareer.letscareer.domain.live.vo.LiveDetailVo;
+import org.letscareer.letscareer.domain.live.vo.LiveProfileVo;
 import org.letscareer.letscareer.domain.price.dto.request.CreateLivePriceRequestDto;
 import org.letscareer.letscareer.domain.price.helper.LivePriceHelper;
 import org.letscareer.letscareer.domain.price.vo.LivePriceDetailVo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,12 +46,18 @@ public class LiveServiceImpl implements LiveService {
     private final FaqHelper faqHelper;
 
     @Override
+    public GetLivesResponseDto getLiveList(ProgramClassification type, Pageable pageable) {
+        Page<LiveProfileVo> liveProfileVos = liveHelper.findLiveProfileVos(type, pageable);
+        return liveMapper.toGetLivesResponseDto(liveProfileVos);
+    }
+
+    @Override
     public GetLiveDetailResponseDto getLiveDetail(Long liveId) {
         LiveDetailVo liveInfo = liveHelper.findLiveDetailVoOrThrow(liveId);
         List<LiveClassificationVo> classificationInfo = liveClassificationHelper.findLiveClassificationVos(liveId);
         LivePriceDetailVo priceInfo = livePriceHelper.findLivePriceDetailVos(liveId);
         List<FaqDetailVo> faqInfo = faqHelper.findLiveFaqDetailVos(liveId);
-        return liveMapper.createLiveDetailResponseDto(liveInfo, classificationInfo, priceInfo, faqInfo);
+        return liveMapper.toLiveDetailResponseDto(liveInfo, classificationInfo, priceInfo, faqInfo);
     }
 
     @Override

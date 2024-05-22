@@ -3,13 +3,11 @@ package org.letscareer.letscareer.domain.vod.vo;
 import lombok.Builder;
 
 @Builder
-public record VodDetailVo(
+public record VodProfileVo(
         Long id,
         String title,
         String shortDesc,
         String thumbnail,
-        String job,
-        String link,
-        Boolean isVisible
+        String link
 ) {
 }

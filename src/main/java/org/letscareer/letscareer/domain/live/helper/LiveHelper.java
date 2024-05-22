@@ -1,12 +1,16 @@
 package org.letscareer.letscareer.domain.live.helper;
 
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.live.dto.request.CreateLiveRequestDto;
 import org.letscareer.letscareer.domain.live.entity.Live;
 import org.letscareer.letscareer.domain.live.error.LiveErrorCode;
 import org.letscareer.letscareer.domain.live.repository.LiveRepository;
 import org.letscareer.letscareer.domain.live.vo.LiveDetailVo;
+import org.letscareer.letscareer.domain.live.vo.LiveProfileVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -27,6 +31,10 @@ public class LiveHelper {
     public LiveDetailVo findLiveDetailVoOrThrow(Long liveId) {
         return liveRepository.findLiveDetailVo(liveId)
                 .orElseThrow(() -> new EntityNotFoundException(LiveErrorCode.LIVE_NOT_FOUND));
+    }
+
+    public Page<LiveProfileVo> findLiveProfileVos(ProgramClassification type, Pageable pageable) {
+        return liveRepository.findLiveProfileVos(type, pageable);
     }
 
     public void deleteLiveById(Long liveId) {
