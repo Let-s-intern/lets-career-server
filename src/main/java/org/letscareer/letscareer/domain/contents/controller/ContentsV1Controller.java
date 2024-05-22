@@ -9,7 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.contents.dto.request.CreateContentsRequestDto;
 import org.letscareer.letscareer.domain.contents.dto.request.UpdateContentsRequestDto;
 import org.letscareer.letscareer.domain.contents.dto.response.ContentsAdminListResponseDto;
+import org.letscareer.letscareer.domain.contents.dto.response.ContentsAdminSimpleListResponseDto;
 import org.letscareer.letscareer.domain.contents.service.ContentsService;
+import org.letscareer.letscareer.domain.contents.type.ContentsType;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -37,6 +39,15 @@ public class ContentsV1Controller {
     @GetMapping("/admin")
     public ResponseEntity<SuccessResponse<?>> getAllContentsForAdmin(@PageableDefault Pageable pageable) {
         final ContentsAdminListResponseDto responseDto = contentsService.getAllContents(pageable);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "콘텐츠 타입별 간단 목록", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = ContentsAdminSimpleListResponseDto.class)))
+    })
+    @GetMapping("/admin/simple")
+    public ResponseEntity<SuccessResponse<?>> getAllSimpleContentsForAdmin(@RequestParam final ContentsType type) {
+        final ContentsAdminSimpleListResponseDto responseDto = contentsService.getAllSimpleContents(type);
         return SuccessResponse.ok(responseDto);
     }
 

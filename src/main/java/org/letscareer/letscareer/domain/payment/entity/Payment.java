@@ -5,8 +5,11 @@ import lombok.*;
 import org.letscareer.letscareer.domain.application.entity.Application;
 import org.letscareer.letscareer.domain.coupon.entity.Coupon;
 import org.letscareer.letscareer.domain.payment.dto.request.CreatePaymentRequestDto;
+import org.letscareer.letscareer.domain.payment.dto.request.UpdatePaymentRequestDto;
 import org.letscareer.letscareer.domain.price.entity.Price;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
+
+import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils.updateValue;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -51,5 +54,9 @@ public class Payment extends BaseTimeEntity {
                 .application(application)
                 .price(price)
                 .build();
+    }
+
+    public void updatePayment(UpdatePaymentRequestDto updatePaymentRequestDto) {
+        this.isConfirmed = updateValue(this.isConfirmed, updatePaymentRequestDto.isConfirmed());
     }
 }

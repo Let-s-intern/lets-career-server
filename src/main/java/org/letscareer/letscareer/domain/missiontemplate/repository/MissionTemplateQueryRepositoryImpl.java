@@ -3,6 +3,7 @@ package org.letscareer.letscareer.domain.missiontemplate.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.missiontemplate.vo.MissionTemplateAdminSimpleVo;
 import org.letscareer.letscareer.domain.missiontemplate.vo.MissionTemplateAdminVo;
 
 import java.util.List;
@@ -23,6 +24,17 @@ public class MissionTemplateQueryRepositoryImpl implements MissionTemplateQueryR
                         missionTemplate.description,
                         missionTemplate.guide,
                         missionTemplate.templateLink))
+                .from(missionTemplate)
+                .orderBy(missionTemplate.id.desc())
+                .fetch();
+    }
+
+    @Override
+    public List<MissionTemplateAdminSimpleVo> findAllMissionTemplateAdminSimpleVos() {
+        return queryFactory
+                .select(Projections.constructor(MissionTemplateAdminSimpleVo.class,
+                        missionTemplate.id,
+                        missionTemplate.title))
                 .from(missionTemplate)
                 .orderBy(missionTemplate.id.desc())
                 .fetch();

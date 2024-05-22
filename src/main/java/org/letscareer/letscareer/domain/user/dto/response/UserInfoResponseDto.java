@@ -20,7 +20,8 @@ public record UserInfoResponseDto(
         String wishCompany,
         AccountType accountType,
         String accountNum,
-        String accountOwner
+        String accountOwner,
+        Boolean marketingAgree
 ) {
     public static UserInfoResponseDto of(User user) {
         return UserInfoResponseDto.builder()
@@ -37,6 +38,7 @@ public record UserInfoResponseDto(
                 .accountType(user.getAccountType())
                 .accountNum(user.getAccountNum())
                 .accountOwner(user.getAccountOwner())
+                .marketingAgree(user.getMarketingAgree())
                 .build();
     }
 }

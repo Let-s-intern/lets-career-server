@@ -39,12 +39,12 @@ public class CouponV1Controller {
     }
 
     @Operation(summary = "쿠폰 생성", responses = {
-            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+            @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
     })
     @PostMapping
     public ResponseEntity<SuccessResponse<?>> createCoupon(@RequestBody final CreateCouponRequestDto requestDto) {
         couponService.createCoupon(requestDto);
-        return SuccessResponse.ok(null);
+        return SuccessResponse.created(null);
     }
 
     @Operation(summary = "쿠폰 수정", responses = {

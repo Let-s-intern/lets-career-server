@@ -8,11 +8,13 @@ import org.letscareer.letscareer.domain.application.vo.AdminLiveApplicationVo;
 import org.letscareer.letscareer.domain.live.entity.Live;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.error.exception.ConflictException;
+import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
+import static org.letscareer.letscareer.domain.application.error.ApplicationErrorCode.APPLICATION_NOT_FOUND;
 import static org.letscareer.letscareer.domain.application.error.ApplicationErrorCode.CONFLICT_APPLICATION;
 
 @RequiredArgsConstructor
@@ -32,5 +34,14 @@ public class LiveApplicationHelper {
     public void validateExistingApplication(Long liveId, Long userId) {
         Optional<LiveApplication> liveApplication = liveApplicationRepository.findLiveApplicationByLiveIdAndUserId(liveId, userId);
         if(liveApplication.isPresent()) throw new ConflictException(CONFLICT_APPLICATION);
+    }
+
+    public LiveApplication findLiveApplicationByIdOrThrow(Long applicationId) {
+        return liveApplicationRepository.findById(applicationId)
+                .orElseThrow(() -> new EntityNotFoundException(APPLICATION_NOT_FOUND));
+    }
+
+    public void deleteLiveApplication(LiveApplication liveApplication) {
+        liveApplicationRepository.delete(liveApplication);
     }
 }
