@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 
 @Builder
 public record AdminCouponVo(
+        Long id,
         CouponType couponType,
         String name,
         String code,

@@ -1,7 +1,7 @@
 package org.letscareer.letscareer.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.domain.user.dto.request.UserAddInfoRequestDto;
+import org.letscareer.letscareer.domain.user.dto.request.UserUpdateRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UserPwSignInRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UserPwSignUpRequestDto;
 import org.letscareer.letscareer.domain.user.dto.response.TokenResponseDto;
@@ -36,7 +36,7 @@ public class UserService {
     }
 
     public User updateUserFromOAuth2(User user, OAuth2UserInfo oAuth2UserInfo) {
-        return user.updateFromOAuth2(oAuth2UserInfo);
+        return user.updateUserFromOAuth2(oAuth2UserInfo);
     }
 
     public void pwSignUp(UserPwSignUpRequestDto pwSignUpRequestDto) {
@@ -55,9 +55,9 @@ public class UserService {
         return userMapper.toTokenResponseDto(accessToken, refreshToken);
     }
 
-    public void addUserInfo(Long userId, UserAddInfoRequestDto addInfoRequestDto) {
+    public void updateUser(Long userId, UserUpdateRequestDto userUpdateRequestDto) {
         User user = userHelper.findUserByIdOrThrow(userId);
-        userHelper.addUserInfo(user, addInfoRequestDto);
+        userHelper.updateUser(user, userUpdateRequestDto);
     }
 
     public UserAdminListResponseDto getUsers(Pageable pageable) {

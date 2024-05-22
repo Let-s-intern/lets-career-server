@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.missiontemplate.dto.request.UpdateMissionTemplateRequestDto;
 import org.letscareer.letscareer.domain.missiontemplate.entity.MissionTemplate;
 import org.letscareer.letscareer.domain.missiontemplate.repository.MissionTemplateRepository;
+import org.letscareer.letscareer.domain.missiontemplate.vo.MissionTemplateAdminSimpleVo;
 import org.letscareer.letscareer.domain.missiontemplate.vo.MissionTemplateAdminVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
@@ -30,5 +31,9 @@ public class MissionTemplateHelper {
 
     public List<MissionTemplateAdminVo> findAllMissionTemplateAdminVos() {
         return missionTemplateRepository.findAllMissionTemplateAdminVos();
+    }
+
+    public List<MissionTemplateAdminSimpleVo> findAllMissionTemplateAdminSimpleVos() {
+        return missionTemplateRepository.findAllMissionTemplateAdminSimpleVos();
     }
 }

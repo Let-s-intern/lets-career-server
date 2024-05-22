@@ -1,7 +1,7 @@
 package org.letscareer.letscareer.domain.user.helper;
 
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.domain.user.dto.request.UserAddInfoRequestDto;
+import org.letscareer.letscareer.domain.user.dto.request.UserUpdateRequestDto;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.repository.UserRepository;
 import org.letscareer.letscareer.domain.user.vo.UserAdminVo;
@@ -70,8 +70,8 @@ public class UserHelper {
         return authentication;
     }
 
-    public void addUserInfo(User user, UserAddInfoRequestDto addInfoRequestDto) {
-        user.addUserInfo(addInfoRequestDto);
+    public void updateUser(User user, UserUpdateRequestDto userUpdateRequestDto) {
+        user.updateUser(userUpdateRequestDto);
     }
 
     public Page<UserAdminVo> findAllUserAdminVos(Pageable pageable) {

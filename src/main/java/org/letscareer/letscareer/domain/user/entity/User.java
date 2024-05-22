@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.letscareer.letscareer.domain.application.entity.Application;
 import org.letscareer.letscareer.domain.attendance.entity.Attendance;
-import org.letscareer.letscareer.domain.user.dto.request.UserAddInfoRequestDto;
+import org.letscareer.letscareer.domain.user.dto.request.UserUpdateRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UserPwSignUpRequestDto;
 import org.letscareer.letscareer.domain.user.type.AccountType;
 import org.letscareer.letscareer.domain.user.type.AuthProvider;
@@ -131,14 +131,14 @@ public class User extends BaseTimeEntity {
                 .build();
     }
 
-    public User updateFromOAuth2(OAuth2UserInfo oAuth2UserInfo) {
+    public User updateUserFromOAuth2(OAuth2UserInfo oAuth2UserInfo) {
         this.email = updateValue(this.email, oAuth2UserInfo.getEmail());
         this.name = updateValue(this.name, oAuth2UserInfo.getName());
         this.phoneNum = updateValue(this.phoneNum, oAuth2UserInfo.getPhoneNum());
         return this;
     }
 
-    public void addUserInfo(UserAddInfoRequestDto addInfoRequestDto) {
+    public void updateUser(UserUpdateRequestDto addInfoRequestDto) {
         this.university = updateValue(this.university, addInfoRequestDto.university());
         this.major = updateValue(this.major, addInfoRequestDto.major());
         this.grade = updateValue(this.grade, addInfoRequestDto.grade());

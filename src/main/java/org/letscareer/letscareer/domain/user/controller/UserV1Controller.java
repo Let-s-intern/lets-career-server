@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.domain.user.dto.request.UserAddInfoRequestDto;
+import org.letscareer.letscareer.domain.user.dto.request.UserUpdateRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UserPwSignInRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UserPwSignUpRequestDto;
 import org.letscareer.letscareer.domain.user.dto.response.UserAdminListResponseDto;
@@ -43,13 +43,13 @@ public class UserV1Controller {
         return SuccessResponse.ok(userService.pwSignIn(pwSignInRequestDto));
     }
 
-    @Operation(summary = "유저 추가정보 입력", responses = {
+    @Operation(summary = "유저 정보 업데이트", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
-    @PostMapping("/info")
-    public ResponseEntity<SuccessResponse<?>> addUserInfo(@CurrentUser User user,
-                                                          @RequestBody final UserAddInfoRequestDto addInfoRequestDto) {
-        userService.addUserInfo(user.getId(), addInfoRequestDto);
+    @PatchMapping()
+    public ResponseEntity<SuccessResponse<?>> updateUser(@CurrentUser User user,
+                                                         @RequestBody final UserUpdateRequestDto userUpdateRequestDto) {
+        userService.updateUser(user.getId(), userUpdateRequestDto);
         return SuccessResponse.ok(null);
     }
 

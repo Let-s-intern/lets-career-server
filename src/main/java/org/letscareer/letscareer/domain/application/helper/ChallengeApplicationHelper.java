@@ -7,11 +7,13 @@ import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplication
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.error.exception.ConflictException;
+import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
+import static org.letscareer.letscareer.domain.application.error.ApplicationErrorCode.APPLICATION_NOT_FOUND;
 import static org.letscareer.letscareer.domain.application.error.ApplicationErrorCode.CONFLICT_APPLICATION;
 
 @RequiredArgsConstructor
@@ -31,5 +33,14 @@ public class ChallengeApplicationHelper {
     public void validateExistingApplication(Long challengeId, Long userId) {
         Optional<ChallengeApplication> challengeApplication = challengeApplicationRepository.findChallengeApplicationByChallengeIdAndUserId(challengeId, userId);
         if (challengeApplication.isPresent()) throw new ConflictException(CONFLICT_APPLICATION);
+    }
+
+    public ChallengeApplication findChallengeApplicationByIdOrThrow(Long applicationId) {
+        return challengeApplicationRepository.findById(applicationId)
+                .orElseThrow(() -> new EntityNotFoundException(APPLICATION_NOT_FOUND));
+    }
+
+    public void deleteChallengeApplication(ChallengeApplication challengeApplication) {
+        challengeApplicationRepository.delete(challengeApplication);
     }
 }
