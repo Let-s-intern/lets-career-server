@@ -3,6 +3,7 @@ package org.letscareer.letscareer.domain.application.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
+import org.letscareer.letscareer.domain.review.entity.Review;
 import org.letscareer.letscareer.domain.user.entity.User;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)

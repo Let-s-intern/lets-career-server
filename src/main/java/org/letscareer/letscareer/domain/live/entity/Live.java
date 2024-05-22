@@ -3,15 +3,12 @@ package org.letscareer.letscareer.domain.live.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.letscareer.letscareer.domain.classification.entity.LiveClassification;
-import org.letscareer.letscareer.domain.faq.entity.FaqChallenge;
 import org.letscareer.letscareer.domain.faq.entity.FaqLive;
 import org.letscareer.letscareer.domain.live.dto.request.CreateLiveRequestDto;
 import org.letscareer.letscareer.domain.live.type.ProgressType;
 import org.letscareer.letscareer.domain.live.type.converter.ProgressTypeConverter;
 import org.letscareer.letscareer.domain.price.entity.LivePrice;
-import org.letscareer.letscareer.domain.review.entity.LiveReview;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
-import org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -59,9 +56,6 @@ public class Live extends BaseTimeEntity {
     @OneToMany(mappedBy = "live", cascade = CascadeType.ALL)
     @Builder.Default
     private List<FaqLive> faqList = new ArrayList<>();
-    @OneToMany(mappedBy = "live", cascade = CascadeType.ALL)
-    @Builder.Default
-    private List<LiveReview> reviewList = new ArrayList<>();
 
     public static Live createLive(CreateLiveRequestDto requestDto) {
         return Live.builder()

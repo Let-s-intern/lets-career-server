@@ -10,9 +10,7 @@ import org.letscareer.letscareer.domain.classification.entity.ChallengeClassific
 import org.letscareer.letscareer.domain.faq.entity.FaqChallenge;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.price.entity.ChallengePrice;
-import org.letscareer.letscareer.domain.review.entity.ChallengeReview;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
-import org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -59,9 +57,6 @@ public class Challenge extends BaseTimeEntity {
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
     @Builder.Default
     private List<FaqChallenge> faqList = new ArrayList<>();
-    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
-    @Builder.Default
-    private List<ChallengeReview> noticeList = new ArrayList<>();
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
     @Builder.Default
     private List<Mission> missionList = new ArrayList<>();
