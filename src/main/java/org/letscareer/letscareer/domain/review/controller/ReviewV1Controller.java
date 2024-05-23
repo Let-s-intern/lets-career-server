@@ -22,6 +22,6 @@ public class ReviewV1Controller {
     public ResponseEntity<SuccessResponse<?>> createReview(@RequestParam final Long applicationId,
                                                            @RequestBody final CreateReviewRequestDto requestDto) {
         reviewService.createReview(applicationId, requestDto);
-        return SuccessResponse.ok(null);
+        return SuccessResponse.created(null);
     }
 }
