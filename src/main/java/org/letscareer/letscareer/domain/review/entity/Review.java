@@ -18,6 +18,7 @@ public class Review extends BaseTimeEntity {
     private Long id;
     private Integer nps;
     private String npsAns;
+    private Boolean npsCheckAns;
     private String content;
     private Integer score;
 
@@ -28,6 +29,8 @@ public class Review extends BaseTimeEntity {
     public static Review createReview(Application application, CreateReviewRequestDto reviewRequestDto) {
         Review review = Review.builder()
                 .nps(reviewRequestDto.nps())
+                .npsAns(reviewRequestDto.npsAns())
+                .npsCheckAns(reviewRequestDto.npsCheckAns())
                 .content(reviewRequestDto.content())
                 .score(reviewRequestDto.score())
                 .application(application)
