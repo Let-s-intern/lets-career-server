@@ -31,6 +31,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                         user.name,
                         review.nps,
                         review.npsAns,
+                        review.npsCheckAns,
                         review.content,
                         review.score
                 ))
