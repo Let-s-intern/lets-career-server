@@ -24,7 +24,7 @@ public class ChallengeNoticeQueryRepositoryImpl implements ChallengeNoticeQueryR
                         challengeNotice.createDate))
                 .from(challengeNotice)
                 .where(
-                       eqChallenge(challengeId)
+                        eqChallenge(challengeId)
                 )
                 .orderBy(challengeNotice.id.desc())
                 .fetch();

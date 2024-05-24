@@ -15,6 +15,7 @@ import org.letscareer.letscareer.domain.faq.helper.FaqHelper;
 import org.letscareer.letscareer.domain.faq.vo.FaqDetailVo;
 import org.letscareer.letscareer.domain.live.dto.request.CreateLiveRequestDto;
 import org.letscareer.letscareer.domain.live.dto.response.GetLiveDetailResponseDto;
+import org.letscareer.letscareer.domain.live.dto.response.GetLiveReviewsResponseDto;
 import org.letscareer.letscareer.domain.live.dto.response.GetLivesResponseDto;
 import org.letscareer.letscareer.domain.live.entity.Live;
 import org.letscareer.letscareer.domain.live.helper.LiveHelper;
@@ -24,6 +25,8 @@ import org.letscareer.letscareer.domain.live.vo.LiveProfileVo;
 import org.letscareer.letscareer.domain.price.dto.request.CreateLivePriceRequestDto;
 import org.letscareer.letscareer.domain.price.helper.LivePriceHelper;
 import org.letscareer.letscareer.domain.price.vo.LivePriceDetailVo;
+import org.letscareer.letscareer.domain.review.helper.ReviewHelper;
+import org.letscareer.letscareer.domain.review.vo.ReviewVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -43,6 +46,7 @@ public class LiveServiceImpl implements LiveService {
     private final LiveApplicationMapper liveApplicationMapper;
     private final LiveClassificationHelper liveClassificationHelper;
     private final LivePriceHelper livePriceHelper;
+    private final ReviewHelper reviewHelper;
     private final FaqHelper faqHelper;
 
     @Override
@@ -64,6 +68,12 @@ public class LiveServiceImpl implements LiveService {
     public GetLiveApplicationsResponseDto getApplications(Long liveId, Boolean isConfirmed) {
         List<AdminLiveApplicationVo> applicationVos = liveApplicationHelper.findAdminLiveApplicationVos(liveId, isConfirmed);
         return liveApplicationMapper.toGetLiveApplicationsResponseDto(applicationVos);
+    }
+
+    @Override
+    public GetLiveReviewsResponseDto getReviews(Long liveId, Pageable pageable) {
+        Page<ReviewVo> reviewVos = reviewHelper.findLiveReviewVos(liveId, pageable);
+        return liveMapper.toGetLiveReviewsResponseDto(reviewVos);
     }
 
     @Override

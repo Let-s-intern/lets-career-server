@@ -7,9 +7,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.dto.response.GetLiveApplicationsResponseDto;
+import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeReviewResponseDto;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.live.dto.request.CreateLiveRequestDto;
 import org.letscareer.letscareer.domain.live.dto.response.GetLiveDetailResponseDto;
+import org.letscareer.letscareer.domain.live.dto.response.GetLiveReviewsResponseDto;
 import org.letscareer.letscareer.domain.live.dto.response.GetLivesResponseDto;
 import org.letscareer.letscareer.domain.live.error.LiveErrorCode;
 import org.letscareer.letscareer.domain.live.service.LiveService;
@@ -51,6 +53,16 @@ public class LiveV1Controller {
     public ResponseEntity<SuccessResponse<?>> getApplications(@PathVariable("id") final Long liveId,
                                                               @RequestParam(required = false) final Boolean isConfirmed) {
         GetLiveApplicationsResponseDto responseDto = liveService.getApplications(liveId, isConfirmed);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "신청자 리뷰 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetLiveReviewsResponseDto.class)))
+    })
+    @GetMapping("/{id}/review")
+    public ResponseEntity<SuccessResponse<?>> getReviews(@PathVariable("id") final Long liveId,
+                                                         final Pageable pageable) {
+        final GetLiveReviewsResponseDto responseDto = liveService.getReviews(liveId, pageable);
         return SuccessResponse.ok(responseDto);
     }
 

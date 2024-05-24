@@ -7,6 +7,7 @@ import org.letscareer.letscareer.domain.application.mapper.ChallengeApplicationM
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
 import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeDetailResponseDto;
+import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeReviewResponseDto;
 import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengesResponseDto;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
@@ -24,6 +25,8 @@ import org.letscareer.letscareer.domain.faq.vo.FaqDetailVo;
 import org.letscareer.letscareer.domain.price.dto.request.CreateChallengePriceRequestDto;
 import org.letscareer.letscareer.domain.price.helper.ChallengePriceHelper;
 import org.letscareer.letscareer.domain.price.vo.ChallengePriceDetailVo;
+import org.letscareer.letscareer.domain.review.helper.ReviewHelper;
+import org.letscareer.letscareer.domain.review.vo.ReviewVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -43,6 +46,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final ChallengeApplicationHelper challengeApplicationHelper;
     private final ChallengeApplicationMapper challengeApplicationMapper;
     private final ChallengePriceHelper challengePriceHelper;
+    private final ReviewHelper reviewHelper;
     private final FaqHelper faqHelper;
 
     @Override
@@ -64,6 +68,12 @@ public class ChallengeServiceImpl implements ChallengeService {
     public GetChallengeApplicationsResponseDto getApplications(Long challengeId, Boolean isConfirmed) {
         List<AdminChallengeApplicationVo> applicationVos = challengeApplicationHelper.findAdminChallengeApplicationVos(challengeId, isConfirmed);
         return challengeApplicationMapper.toGetChallengeApplicationsResponseDto(applicationVos);
+    }
+
+    @Override
+    public GetChallengeReviewResponseDto getReviews(Long challengeId, Pageable pageable) {
+        Page<ReviewVo> challengeReviewVos = reviewHelper.findChallengeReviewVos(challengeId, pageable);
+        return challengeMapper.toGetChallengeReviewResponseDto(challengeReviewVos);
     }
 
     @Override

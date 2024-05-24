@@ -4,6 +4,7 @@ import org.letscareer.letscareer.domain.application.dto.response.GetLiveApplicat
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.live.dto.request.CreateLiveRequestDto;
 import org.letscareer.letscareer.domain.live.dto.response.GetLiveDetailResponseDto;
+import org.letscareer.letscareer.domain.live.dto.response.GetLiveReviewsResponseDto;
 import org.letscareer.letscareer.domain.live.dto.response.GetLivesResponseDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,8 @@ public interface LiveService {
     GetLiveDetailResponseDto getLiveDetail(Long liveId);
 
     GetLiveApplicationsResponseDto getApplications(Long liveId, Boolean isConfirmed);
+
+    GetLiveReviewsResponseDto getReviews(Long liveId, Pageable pageable);
 
     void createLive(CreateLiveRequestDto requestDto);
 

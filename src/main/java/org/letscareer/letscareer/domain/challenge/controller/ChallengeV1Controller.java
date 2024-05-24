@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.dto.response.GetChallengeApplicationsResponseDto;
 import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeDetailResponseDto;
+import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeReviewResponseDto;
 import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengesResponseDto;
 import org.letscareer.letscareer.domain.challenge.service.ChallengeService;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
@@ -28,7 +29,7 @@ public class ChallengeV1Controller {
     @GetMapping
     public ResponseEntity<SuccessResponse<?>> getChallengeList(@RequestParam(required = false) final ProgramClassification type,
                                                                final Pageable pageable) {
-        GetChallengesResponseDto responseDto = challengeService.getChallengeList(type, pageable);
+        final GetChallengesResponseDto responseDto = challengeService.getChallengeList(type, pageable);
         return SuccessResponse.ok(responseDto);
     }
 
@@ -37,7 +38,7 @@ public class ChallengeV1Controller {
     })
     @GetMapping("/{id}")
     public ResponseEntity<SuccessResponse<?>> getChallengeDetail(@PathVariable("id") final Long challengeId) {
-        GetChallengeDetailResponseDto responseDto = challengeService.getChallengeDetail(challengeId);
+        final GetChallengeDetailResponseDto responseDto = challengeService.getChallengeDetail(challengeId);
         return SuccessResponse.ok(responseDto);
     }
 
@@ -47,7 +48,17 @@ public class ChallengeV1Controller {
     @GetMapping("/{id}/applications")
     public ResponseEntity<SuccessResponse<?>> getApplications(@PathVariable("id") final Long challengeId,
                                                               @RequestParam(required = false) final Boolean isConfirmed) {
-        GetChallengeApplicationsResponseDto responseDto = challengeService.getApplications(challengeId, isConfirmed);
+        final GetChallengeApplicationsResponseDto responseDto = challengeService.getApplications(challengeId, isConfirmed);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "신청자 리뷰 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeReviewResponseDto.class)))
+    })
+    @GetMapping("/{id}/review")
+    public ResponseEntity<SuccessResponse<?>> getReviews(@PathVariable("id") final Long challengeId,
+                                                         final Pageable pageable) {
+        final GetChallengeReviewResponseDto responseDto = challengeService.getReviews(challengeId, pageable);
         return SuccessResponse.ok(responseDto);
     }
 
