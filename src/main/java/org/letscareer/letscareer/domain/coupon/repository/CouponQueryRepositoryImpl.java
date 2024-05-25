@@ -35,21 +35,12 @@ public class CouponQueryRepositoryImpl implements CouponQueryRepository {
     public Optional<AdminCouponDetailVo> findAdminCouponDetailVo(Long couponId) {
         return Optional.ofNullable(queryFactory
                 .select(Projections.constructor(AdminCouponDetailVo.class,
-                        coupon.id,
-                        coupon.couponType,
-                        coupon.couponProgramList,
-                        coupon.name,
-                        coupon.code,
-                        coupon.discount,
-                        coupon.time,
-                        coupon.startDate,
-                        coupon.endDate,
-                        coupon.createDate))
+                        coupon))
                 .from(coupon)
                 .where(
                         eqCouponId(couponId)
                 )
-                .fetchOne());
+                .fetchFirst());
     }
 
     private BooleanExpression eqCouponId(Long couponId) {
