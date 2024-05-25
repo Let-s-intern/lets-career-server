@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -40,12 +41,14 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public void createCoupon(CreateCouponRequestDto createCouponRequestDto) {
         Coupon newCoupon = couponHelper.createCouponAndSave(createCouponRequestDto);
-        couponProgramListAndSave(createCouponRequestDto.programTypeList(), newCoupon);
+        createCouponProgramListAndSave(createCouponRequestDto.programTypeList(), newCoupon);
     }
 
     @Override
-    public void updateCoupon(Long couponId, CreateCouponRequestDto couponRequestDto) {
-
+    public void updateCoupon(Long couponId, CreateCouponRequestDto updateCouponRequestDto) {
+        Coupon coupon = couponHelper.findCouponByIdOrThrow(couponId);
+        coupon.updateCoupon(updateCouponRequestDto);
+        updateCouponProgramList(updateCouponRequestDto.programTypeList(), coupon);
     }
 
     @Override
@@ -53,9 +56,16 @@ public class CouponServiceImpl implements CouponService {
 
     }
 
-    private void couponProgramListAndSave(List<CreateCouponProgramRequestDto> programTypeList, Coupon coupon) {
+    private void createCouponProgramListAndSave(List<CreateCouponProgramRequestDto> programTypeList, Coupon coupon) {
         programTypeList.stream()
                 .map(requestDto -> couponProgramHelper.createCouponProgramAndSave(requestDto, coupon))
                 .collect(Collectors.toList());
+    }
+
+    private void updateCouponProgramList(List<CreateCouponProgramRequestDto> couponProgramList, Coupon coupon) {
+        if(Objects.isNull(couponProgramList)) return;
+        couponProgramHelper.deleteCouponProgramsByCouponId(coupon.getId());
+        coupon.setInitCouponProgramList();
+        createCouponProgramListAndSave(couponProgramList, coupon);
     }
 }

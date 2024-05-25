@@ -13,6 +13,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils.updateValue;
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PRIVATE)
@@ -57,5 +59,15 @@ public class Coupon extends BaseTimeEntity {
 
     public void setInitCouponProgramList() {
         this.couponProgramList = new ArrayList<>();
+    }
+
+    public void updateCoupon(CreateCouponRequestDto couponRequestDto) {
+        this.couponType = updateValue(this.couponType, couponRequestDto.couponType());
+        this.name = updateValue(this.name, couponRequestDto.name());
+        this.code = updateValue(this.code, couponRequestDto.code());
+        this.discount = updateValue(this.discount, couponRequestDto.discount());
+        this.time = updateValue(this.time, couponRequestDto.time());
+        this.startDate = updateValue(this.startDate, couponRequestDto.startDate());
+        this.endDate = updateValue(this.endDate, couponRequestDto.endDate());
     }
 }
