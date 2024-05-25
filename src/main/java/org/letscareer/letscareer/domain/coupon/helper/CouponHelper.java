@@ -10,7 +10,6 @@ import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.letscareer.letscareer.domain.coupon.error.CouponErrorCode.COUPON_NOT_FOUND;
 
@@ -40,5 +39,9 @@ public class CouponHelper {
     public AdminCouponDetailVo getCouponDetail(Long couponId) {
         return couponRepository.findAdminCouponDetailVo(couponId)
                 .orElseThrow(() -> new EntityNotFoundException(COUPON_NOT_FOUND));
+    }
+
+    public void deleteCoupon(Coupon coupon) {
+        couponRepository.delete(coupon);
     }
 }

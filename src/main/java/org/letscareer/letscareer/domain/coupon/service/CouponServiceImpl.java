@@ -53,7 +53,8 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     public void deleteCoupon(Long couponId) {
-
+        Coupon coupon = couponHelper.findCouponByIdOrThrow(couponId);
+        couponHelper.deleteCoupon(coupon);
     }
 
     private void createCouponProgramListAndSave(List<CreateCouponProgramRequestDto> programTypeList, Coupon coupon) {
