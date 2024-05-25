@@ -25,6 +25,7 @@ import org.letscareer.letscareer.domain.live.vo.LiveProfileVo;
 import org.letscareer.letscareer.domain.price.dto.request.CreateLivePriceRequestDto;
 import org.letscareer.letscareer.domain.price.helper.LivePriceHelper;
 import org.letscareer.letscareer.domain.price.vo.LivePriceDetailVo;
+import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.domain.review.helper.ReviewHelper;
 import org.letscareer.letscareer.domain.review.vo.ReviewVo;
 import org.springframework.data.domain.Page;
@@ -50,8 +51,8 @@ public class LiveServiceImpl implements LiveService {
     private final FaqHelper faqHelper;
 
     @Override
-    public GetLivesResponseDto getLiveList(ProgramClassification type, Pageable pageable) {
-        Page<LiveProfileVo> liveProfileVos = liveHelper.findLiveProfileVos(type, pageable);
+    public GetLivesResponseDto getLiveList(List<ProgramClassification> typeList, List<ProgramStatusType> statusList, Pageable pageable) {
+        Page<LiveProfileVo> liveProfileVos = liveHelper.findLiveProfileVos(typeList, statusList, pageable);
         return liveMapper.toGetLivesResponseDto(liveProfileVos);
     }
 

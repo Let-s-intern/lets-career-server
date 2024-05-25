@@ -8,10 +8,13 @@ import org.letscareer.letscareer.domain.live.error.LiveErrorCode;
 import org.letscareer.letscareer.domain.live.repository.LiveRepository;
 import org.letscareer.letscareer.domain.live.vo.LiveDetailVo;
 import org.letscareer.letscareer.domain.live.vo.LiveProfileVo;
+import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -33,8 +36,8 @@ public class LiveHelper {
                 .orElseThrow(() -> new EntityNotFoundException(LiveErrorCode.LIVE_NOT_FOUND));
     }
 
-    public Page<LiveProfileVo> findLiveProfileVos(ProgramClassification type, Pageable pageable) {
-        return liveRepository.findLiveProfileVos(type, pageable);
+    public Page<LiveProfileVo> findLiveProfileVos(List<ProgramClassification> typeList, List<ProgramStatusType> statusList, Pageable pageable) {
+        return liveRepository.findLiveProfileVos(typeList, statusList, pageable);
     }
 
     public void deleteLiveById(Long liveId) {

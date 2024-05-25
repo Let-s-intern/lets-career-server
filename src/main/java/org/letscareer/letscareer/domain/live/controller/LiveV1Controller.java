@@ -15,11 +15,14 @@ import org.letscareer.letscareer.domain.live.dto.response.GetLiveReviewsResponse
 import org.letscareer.letscareer.domain.live.dto.response.GetLivesResponseDto;
 import org.letscareer.letscareer.domain.live.error.LiveErrorCode;
 import org.letscareer.letscareer.domain.live.service.LiveService;
+import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/live")
@@ -31,9 +34,10 @@ public class LiveV1Controller {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetLivesResponseDto.class)))
     })
     @GetMapping
-    public ResponseEntity<SuccessResponse<?>> getLiveList(@RequestParam(required = false) final ProgramClassification type,
+    public ResponseEntity<SuccessResponse<?>> getLiveList(@RequestParam(required = false) final List<ProgramClassification> typeList,
+                                                          @RequestParam(required = false) final List<ProgramStatusType> statusList,
                                                           final Pageable pageable) {
-        GetLivesResponseDto responseDto = liveService.getLiveList(type, pageable);
+        GetLivesResponseDto responseDto = liveService.getLiveList(typeList, statusList, pageable);
         return SuccessResponse.ok(responseDto);
     }
 
