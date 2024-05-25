@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.missiontemplate.vo;
 
 import lombok.Builder;
+import org.letscareer.letscareer.domain.missiontemplate.type.MissionTemplateType;
 
 import java.time.LocalDateTime;
 
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 public record MissionTemplateAdminVo(
         Long id,
         LocalDateTime createDate,
+        MissionTemplateType type,
         String title,
         String description,
         String guide,

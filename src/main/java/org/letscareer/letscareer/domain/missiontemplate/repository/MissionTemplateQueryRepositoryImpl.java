@@ -20,6 +20,7 @@ public class MissionTemplateQueryRepositoryImpl implements MissionTemplateQueryR
                 .select(Projections.constructor(MissionTemplateAdminVo.class,
                         missionTemplate.id,
                         missionTemplate.createDate,
+                        missionTemplate.type,
                         missionTemplate.title,
                         missionTemplate.description,
                         missionTemplate.guide,
