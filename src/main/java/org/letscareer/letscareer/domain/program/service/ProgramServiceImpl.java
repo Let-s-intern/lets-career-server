@@ -4,12 +4,16 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.classification.helper.ChallengeClassificationHelper;
 import org.letscareer.letscareer.domain.classification.helper.LiveClassificationHelper;
 import org.letscareer.letscareer.domain.classification.helper.VodClassificationHelper;
+import org.letscareer.letscareer.domain.program.dto.request.GetProgramsForDurationRequestDto;
+import org.letscareer.letscareer.domain.program.dto.response.GetProgramForDurationResponseDto;
 import org.letscareer.letscareer.domain.program.dto.response.GetProgramResponseDto;
+import org.letscareer.letscareer.domain.program.dto.response.GetProgramsForDurationResponseDto;
 import org.letscareer.letscareer.domain.program.dto.response.GetProgramsResponseDto;
 import org.letscareer.letscareer.domain.program.helper.ProgramHelper;
 import org.letscareer.letscareer.domain.program.mapper.ProgramMapper;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.program.vo.AdminProgramVo;
+import org.letscareer.letscareer.domain.program.vo.ProgramForDurationVo;
 import org.letscareer.letscareer.global.common.entity.PageInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,10 +41,24 @@ public class ProgramServiceImpl implements ProgramService {
         return programMapper.toGetProgramsResponseDto(contents, pageInfo);
     }
 
+    @Override
+    public GetProgramsForDurationResponseDto getProgramsForDuration(GetProgramsForDurationRequestDto requestDto) {
+        List<ProgramForDurationVo> programForDurationVo = programHelper.findProgramForDurationVos(requestDto);
+        List<GetProgramForDurationResponseDto<?>> programForDurationResponseDtoList
+                = composeProgramForDurationVosAndClassifications(programForDurationVo);
+        return programMapper.toGetProgramsForDurationResponseDto(programForDurationResponseDtoList);
+    }
+
     private List<GetProgramResponseDto<?>> composeProgramVosAndClassifications(Page<AdminProgramVo> adminProgramVos) {
         List<AdminProgramVo> contents = adminProgramVos.getContent();
         return contents.stream()
                 .map(this::createGetProgramResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    private List<GetProgramForDurationResponseDto<?>> composeProgramForDurationVosAndClassifications(List<ProgramForDurationVo> programForDurationVo) {
+        return programForDurationVo.stream()
+                .map(this::createGetProgramForDurationResponseDto)
                 .collect(Collectors.toList());
     }
 
@@ -49,8 +67,12 @@ public class ProgramServiceImpl implements ProgramService {
         return programMapper.toGetProgramResponseDto(content, classificationList);
     }
 
+    private GetProgramForDurationResponseDto<?> createGetProgramForDurationResponseDto(ProgramForDurationVo programVo) {
+        List<?> classificationList = getProgramClassificationsForType(programVo.programType(), programVo.id());
+        return programMapper.toGetProgramForDurationResponseDto(programVo, classificationList);
+    }
+
     private List<?> getProgramClassificationsForType(ProgramType type, Long programId) {
-        System.out.println(type + " " + programId);
         if (ProgramType.CHALLENGE.equals(type))
             return challengeClassificationHelper.findClassificationDetailVos(programId);
         else if (ProgramType.LIVE.equals(type))
