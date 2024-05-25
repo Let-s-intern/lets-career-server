@@ -30,12 +30,14 @@ public class MissionTemplateServiceImpl implements MissionTemplateService {
 
     @Override
     public void updateMissionTemplate(Long missionTemplateId, UpdateMissionTemplateRequestDto updateMissionTemplateRequestDto) {
-        missionTemplateHelper.updateMissionTemplate(missionTemplateId, updateMissionTemplateRequestDto);
+        MissionTemplate missionTemplate = missionTemplateHelper.findMissionTemplateByIdOrThrow(missionTemplateId);
+        missionTemplate.updateMissionTemplate(updateMissionTemplateRequestDto);
     }
 
     @Override
     public void deleteMissionTemplate(Long missionTemplateId) {
-
+        MissionTemplate missionTemplate = missionTemplateHelper.findMissionTemplateByIdOrThrow(missionTemplateId);
+        missionTemplateHelper.deleteMissionTemplate(missionTemplate);
     }
 
     @Override

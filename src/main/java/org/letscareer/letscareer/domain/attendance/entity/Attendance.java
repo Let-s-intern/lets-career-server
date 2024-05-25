@@ -23,7 +23,7 @@ import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUti
 public class Attendance extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "challenge_id")
+    @Column(name = "attendance_id")
     private Long id;
     private String link;
     @Convert(converter = AttendanceStatusConverter.class)
