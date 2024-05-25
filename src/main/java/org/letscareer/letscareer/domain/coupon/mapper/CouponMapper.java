@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.coupon.mapper;
 
 import org.letscareer.letscareer.domain.coupon.dto.request.CreateCouponRequestDto;
+import org.letscareer.letscareer.domain.coupon.dto.response.CouponApplyResponseDto;
 import org.letscareer.letscareer.domain.coupon.dto.response.GetCouponDetailResponseDto;
 import org.letscareer.letscareer.domain.coupon.dto.response.GetCouponsResponseDto;
 import org.letscareer.letscareer.domain.coupon.entity.Coupon;
@@ -22,5 +23,9 @@ public class CouponMapper {
 
     public GetCouponDetailResponseDto toGetCouponDetailResponseDto(AdminCouponDetailVo couponDetailVo) {
         return GetCouponDetailResponseDto.of(couponDetailVo);
+    }
+
+    public CouponApplyResponseDto toCouponApplyResponseDto(Integer discount) {
+        return CouponApplyResponseDto.of(discount);
     }
 }

@@ -29,4 +29,9 @@ public class CouponProgramHelper {
     public void deleteCouponProgramsByCouponId(Long couponId) {
         couponProgramRepository.deleteAllByCouponId(couponId);
     }
+
+    public boolean existsCouponProgramType(Long couponId, CouponProgramType couponProgramType) {
+        return couponProgramRepository.existsByCouponIdAndCouponProgramType(couponId, CouponProgramType.ALL)
+                || couponProgramRepository.existsByCouponIdAndCouponProgramType(couponId, couponProgramType);
+    }
 }

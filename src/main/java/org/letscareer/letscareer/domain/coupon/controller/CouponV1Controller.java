@@ -5,11 +5,14 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeDetailResponseDto;
 import org.letscareer.letscareer.domain.coupon.dto.request.CreateCouponRequestDto;
+import org.letscareer.letscareer.domain.coupon.dto.response.CouponApplyResponseDto;
 import org.letscareer.letscareer.domain.coupon.dto.response.GetCouponDetailResponseDto;
 import org.letscareer.letscareer.domain.coupon.dto.response.GetCouponsResponseDto;
 import org.letscareer.letscareer.domain.coupon.service.CouponService;
+import org.letscareer.letscareer.domain.coupon.type.CouponProgramType;
+import org.letscareer.letscareer.domain.user.entity.User;
+import org.letscareer.letscareer.global.common.annotation.CurrentUser;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,10 +23,19 @@ import org.springframework.web.bind.annotation.*;
 public class CouponV1Controller {
     private final CouponService couponService;
 
+    @Operation(summary = "쿠폰 적용")
+    @GetMapping
+    public ResponseEntity<SuccessResponse<?>> applyCoupon(@CurrentUser final User user,
+                                                          @RequestParam("code") final String code,
+                                                          @RequestParam("programType") final CouponProgramType programType) {
+        CouponApplyResponseDto responseDto = couponService.applyCoupon(user, code, programType);
+        return SuccessResponse.ok(responseDto);
+    }
+
     @Operation(summary = "쿠폰 목록 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetCouponsResponseDto.class)))
     })
-    @GetMapping
+    @GetMapping("/admin")
     public ResponseEntity<SuccessResponse<?>> getCoupons() {
         GetCouponsResponseDto responseDto = couponService.getCoupons();
         return SuccessResponse.ok(responseDto);
@@ -32,7 +44,7 @@ public class CouponV1Controller {
     @Operation(summary = "쿠폰 상세 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetCouponDetailResponseDto.class)))
     })
-    @GetMapping("/{id}")
+    @GetMapping("/admin/{id}")
     public ResponseEntity<SuccessResponse<?>> getCouponDetail(@PathVariable("id") final Long couponId) {
         GetCouponDetailResponseDto responseDto = couponService.getCouponDetail(couponId);
         return SuccessResponse.ok(responseDto);

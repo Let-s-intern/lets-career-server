@@ -10,4 +10,6 @@ public interface CouponProgramRepository extends JpaRepository<CouponProgram, Lo
     Optional<CouponProgram> findByCouponProgramTypeAndCouponId(CouponProgramType programType, Long couponId);
 
     void deleteAllByCouponId(Long couponId);
+
+    boolean existsByCouponIdAndCouponProgramType(Long couponId, CouponProgramType couponProgramType);
 }
