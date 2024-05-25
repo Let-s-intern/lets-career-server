@@ -11,4 +11,6 @@ public interface ChallengeNoticeService {
     ChallengeNoticeAdminListResponseDto getChallengeNoticesForAdmin(Long challengeId);
 
     void updateChallengeNotice(Long challengeNoticeId, CreateChallengeNoticeRequestDto updateChallengeNoticeRequestDto);
+
+    void deleteChallengeNotice(Long challengeNoticeId);
 }

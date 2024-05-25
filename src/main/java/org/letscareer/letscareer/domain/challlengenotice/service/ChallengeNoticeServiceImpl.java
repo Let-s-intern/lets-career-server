@@ -41,4 +41,10 @@ public class ChallengeNoticeServiceImpl implements ChallengeNoticeService {
         ChallengeNotice challengeNotice = challengeNoticeHelper.findChallengeNoticeOrThrow(challengeNoticeId);
         challengeNotice.updateChallengeNotice(updateChallengeNoticeRequestDto);
     }
+
+    @Override
+    public void deleteChallengeNotice(Long challengeNoticeId) {
+        ChallengeNotice challengeNotice = challengeNoticeHelper.findChallengeNoticeOrThrow(challengeNoticeId);
+        challengeNoticeHelper.deleteChallengeNotice(challengeNotice);
+    }
 }
