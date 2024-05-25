@@ -6,8 +6,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Optional;
-
 import static org.letscareer.letscareer.domain.coupon.entity.QCoupon.coupon;
 import static org.letscareer.letscareer.domain.payment.entity.QPayment.payment;
 import static org.letscareer.letscareer.domain.user.entity.QUser.user;
@@ -18,20 +16,17 @@ public class PaymentQueryRepositoryImpl implements PaymentQueryRepository {
 
 
     @Override
-    public Optional<Integer> findCouponRemainTime(Long userId, Long couponId) {
-        return Optional.ofNullable(
-                queryFactory
-                        .select(payment.couponRemainTime)
-                        .from(payment)
-                        .where(
-                                eqUserId(userId),
-                                eqCouponId(couponId)
-                        )
-                        .leftJoin(payment.application.user, user)
-                        .leftJoin(payment.coupon, coupon)
-                        .orderBy(payment.id.desc())
-                        .fetchFirst()
-        );
+    public long countCouponAppliedTime(Long userId, Long couponId) {
+        return queryFactory
+                .select(payment.count())
+                .from(payment)
+                .where(
+                        eqUserId(userId),
+                        eqCouponId(couponId)
+                )
+                .leftJoin(payment.application.user, user)
+                .leftJoin(payment.coupon, coupon)
+                .fetchFirst();
     }
 
     private Predicate eqCouponId(Long couponId) {

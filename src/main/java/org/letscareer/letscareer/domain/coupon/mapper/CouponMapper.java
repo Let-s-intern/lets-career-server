@@ -25,7 +25,7 @@ public class CouponMapper {
         return GetCouponDetailResponseDto.of(couponDetailVo);
     }
 
-    public CouponApplyResponseDto toCouponApplyResponseDto(Integer discount) {
-        return CouponApplyResponseDto.of(discount);
+    public CouponApplyResponseDto toCouponApplyResponseDto(Long couponId, Integer discount) {
+        return CouponApplyResponseDto.of(couponId, discount);
     }
 }

@@ -30,7 +30,7 @@ public class PaymentHelper {
                 .orElseThrow(() -> new EntityNotFoundException(PAYMENT_NOT_FOUND));
     }
 
-    public int findCouponRemainTime(Long userId, Long couponId, Integer couponTime) {
-        return paymentRepository.findCouponRemainTime(userId, couponId).orElse(couponTime);
+    public long countCouponAppliedTime(Long userId, Long couponId) {
+        return paymentRepository.countCouponAppliedTime(userId, couponId);
     }
 }

@@ -21,8 +21,6 @@ public class Payment extends BaseTimeEntity {
     @Builder.Default
     private Integer finalPrice = 0;
 
-    private Integer couponRemainTime;
-
     @Builder.Default
     private Boolean isConfirmed = false;
 
@@ -49,7 +47,6 @@ public class Payment extends BaseTimeEntity {
                                         Price price) {
         return Payment.builder()
                 .finalPrice(paymentInfo.finalPrice())
-                .couponRemainTime(paymentInfo.couponRemainTime())
                 .coupon(coupon)
                 .application(application)
                 .price(price)

@@ -24,7 +24,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static org.letscareer.letscareer.domain.coupon.error.CouponErrorCode.COUPON_NOT_AVAILABLE_PROGRAM_TYPE;
-import static org.letscareer.letscareer.domain.coupon.error.CouponErrorCode.COUPON_NOT_AVAILABLE_REMAIN_TIME;
+import static org.letscareer.letscareer.domain.coupon.error.CouponErrorCode.COUPON_NOT_AVAILABLE_TIME;
 
 @RequiredArgsConstructor
 @Transactional
@@ -40,8 +40,8 @@ public class CouponServiceImpl implements CouponService {
         Coupon coupon = couponHelper.findCouponByCodeOrThrow(code);
         couponHelper.validateDateOfCoupon(coupon.getStartDate(), coupon.getEndDate());
         validateProgramTypeOfCoupon(coupon.getId(), programType);
-        validateRemainTypeOfCoupon(user.getId(), coupon.getId(), coupon.getTime());
-        return couponMapper.toCouponApplyResponseDto(coupon.getDiscount());
+        validateRemainTimeOfCoupon(user.getId(), coupon.getId(), coupon.getTime());
+        return couponMapper.toCouponApplyResponseDto(coupon.getId(), coupon.getDiscount());
     }
 
     @Override
@@ -94,10 +94,11 @@ public class CouponServiceImpl implements CouponService {
         }
     }
 
-    private void validateRemainTypeOfCoupon(Long userId, Long couponId, Integer couponTime) {
-        int couponRemainTime = paymentHelper.findCouponRemainTime(userId, couponId, couponTime);
-        if(couponRemainTime <= 0) {
-            throw new InvalidValueException(COUPON_NOT_AVAILABLE_REMAIN_TIME);
+    private void validateRemainTimeOfCoupon(Long userId, Long couponId, Integer couponTime) {
+        if(couponTime < 0) return;
+        long couponAppliedTime = paymentHelper.countCouponAppliedTime(userId, couponId);
+        if(couponAppliedTime >= couponTime) {
+            throw new InvalidValueException(COUPON_NOT_AVAILABLE_TIME);
         }
     }
 }
