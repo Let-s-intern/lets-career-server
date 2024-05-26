@@ -25,6 +25,7 @@ import org.letscareer.letscareer.domain.faq.vo.FaqDetailVo;
 import org.letscareer.letscareer.domain.price.dto.request.CreateChallengePriceRequestDto;
 import org.letscareer.letscareer.domain.price.helper.ChallengePriceHelper;
 import org.letscareer.letscareer.domain.price.vo.ChallengePriceDetailVo;
+import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.domain.review.helper.ReviewHelper;
 import org.letscareer.letscareer.domain.review.vo.ReviewVo;
 import org.springframework.data.domain.Page;
@@ -50,8 +51,8 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final FaqHelper faqHelper;
 
     @Override
-    public GetChallengesResponseDto getChallengeList(ProgramClassification type, Pageable pageable) {
-        Page<ChallengeProfileVo> challengeProfileVos = challengeHelper.findChallengeProfiles(type, pageable);
+    public GetChallengesResponseDto getChallengeList(List<ProgramClassification> typeList, List<ProgramStatusType> statusList, Pageable pageable) {
+        Page<ChallengeProfileVo> challengeProfileVos = challengeHelper.findChallengeProfiles(typeList, statusList, pageable);
         return challengeMapper.toGetChallengesResponseDto(challengeProfileVos);
     }
 

@@ -4,9 +4,10 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.domain.program.entity.QVWProgram;
+import org.letscareer.letscareer.domain.program.dto.request.GetProgramsForDurationRequestDto;
 import org.letscareer.letscareer.domain.program.entity.VWProgram;
 import org.letscareer.letscareer.domain.program.vo.AdminProgramVo;
+import org.letscareer.letscareer.domain.program.vo.ProgramForDurationVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
@@ -44,5 +45,23 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                 .selectFrom(vWProgram);
 
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
+    }
+
+    @Override
+    public List<ProgramForDurationVo> findProgramForDurationVos(GetProgramsForDurationRequestDto requestDto) {
+        return queryFactory
+                .select(Projections.constructor(ProgramForDurationVo.class,
+                        vWProgram.programId,
+                        vWProgram.programType,
+                        vWProgram.title,
+                        vWProgram.thumnail,
+                        vWProgram.shortDesc,
+                        vWProgram.startDate,
+                        vWProgram.endDate,
+                        vWProgram.deadline
+                ))
+                .from(vWProgram)
+                .orderBy(vWProgram.createDate.desc())
+                .fetch();
     }
 }

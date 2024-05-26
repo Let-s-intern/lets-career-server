@@ -8,10 +8,13 @@ import org.letscareer.letscareer.domain.challenge.repository.ChallengeRepository
 import org.letscareer.letscareer.domain.challenge.vo.ChallengeDetailVo;
 import org.letscareer.letscareer.domain.challenge.vo.ChallengeProfileVo;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
+import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Component
@@ -33,8 +36,8 @@ public class ChallengeHelper {
                 .orElseThrow(() -> new EntityNotFoundException(ChallengeErrorCode.CHALLENGE_NOT_FOUND));
     }
 
-    public Page<ChallengeProfileVo> findChallengeProfiles(ProgramClassification type, Pageable pageable) {
-        return challengeRepository.findChallengeProfiles(type, pageable);
+    public Page<ChallengeProfileVo> findChallengeProfiles(List<ProgramClassification> typeList, List<ProgramStatusType> statusList, Pageable pageable) {
+        return challengeRepository.findChallengeProfiles(typeList, statusList, pageable);
     }
 
     public void deleteChallengeById(Long challengeId) {

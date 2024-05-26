@@ -12,10 +12,13 @@ import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeRevie
 import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengesResponseDto;
 import org.letscareer.letscareer.domain.challenge.service.ChallengeService;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
+import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/challenge")
@@ -27,9 +30,10 @@ public class ChallengeV1Controller {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengesResponseDto.class)))
     })
     @GetMapping
-    public ResponseEntity<SuccessResponse<?>> getChallengeList(@RequestParam(required = false) final ProgramClassification type,
+    public ResponseEntity<SuccessResponse<?>> getChallengeList(@RequestParam(required = false) final List<ProgramClassification> typeList,
+                                                               @RequestParam(required = false) final List<ProgramStatusType> statusList,
                                                                final Pageable pageable) {
-        final GetChallengesResponseDto responseDto = challengeService.getChallengeList(type, pageable);
+        final GetChallengesResponseDto responseDto = challengeService.getChallengeList(typeList, statusList, pageable);
         return SuccessResponse.ok(responseDto);
     }
 

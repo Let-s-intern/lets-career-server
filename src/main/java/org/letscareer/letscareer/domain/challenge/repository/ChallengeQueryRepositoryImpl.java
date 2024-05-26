@@ -1,5 +1,6 @@
 package org.letscareer.letscareer.domain.challenge.repository;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -9,10 +10,12 @@ import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challenge.vo.ChallengeDetailVo;
 import org.letscareer.letscareer.domain.challenge.vo.ChallengeProfileVo;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
+import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,7 +52,7 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
     }
 
     @Override
-    public Page<ChallengeProfileVo> findChallengeProfiles(ProgramClassification type, Pageable pageable) {
+    public Page<ChallengeProfileVo> findChallengeProfiles(List<ProgramClassification> typeList, List<ProgramStatusType> statusList, Pageable pageable) {
         List<ChallengeProfileVo> contents = queryFactory
                 .select(Projections.constructor(ChallengeProfileVo.class,
                         challenge.id,
@@ -64,7 +67,8 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
                 .leftJoin(challenge.classificationList, challengeClassification)
                 .orderBy(challenge.id.desc())
                 .where(
-                        eqChallengeClassification(type)
+                        inChallengeClassification(typeList),
+                        inChallengeStatus(statusList)
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -73,7 +77,8 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
         JPAQuery<Challenge> countQuery = queryFactory
                 .selectFrom(challenge)
                 .where(
-                        eqChallengeClassification(type)
+                        inChallengeClassification(typeList),
+                        inChallengeStatus(statusList)
                 );
 
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
@@ -83,7 +88,38 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
         return challengeId != null ? challenge.id.eq(challengeId) : null;
     }
 
-    private BooleanExpression eqChallengeClassification(ProgramClassification type) {
-        return type != null ? challengeClassification.programClassification.eq(type) : null;
+    private BooleanExpression inChallengeClassification(List<ProgramClassification> typeList) {
+        return (typeList == null || typeList.isEmpty()) ? null : challengeClassification.programClassification.in(typeList);
+    }
+
+    private BooleanBuilder inChallengeStatus(List<ProgramStatusType> statusList) {
+        if (statusList == null || statusList.isEmpty())
+            return null;
+        LocalDateTime now = LocalDateTime.now();
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        statusList.forEach(status -> booleanBuilder.or(addBooleanExpression(status, now)));
+        return booleanBuilder;
+    }
+
+    private BooleanExpression addBooleanExpression(ProgramStatusType programStatusType, LocalDateTime now) {
+        if (ProgramStatusType.PREV.equals(programStatusType))
+            return challengePrevStatus(now);
+        else if (ProgramStatusType.PROCEEDING.equals(programStatusType))
+            return challengeProceedingStatus(now);
+        else if (ProgramStatusType.POST.equals(programStatusType))
+            return challengePostStatus(now);
+        return null;
+    }
+
+    private BooleanExpression challengePrevStatus(LocalDateTime now) {
+        return challenge.startDate.lt(now);
+    }
+
+    private BooleanExpression challengeProceedingStatus(LocalDateTime now) {
+        return challenge.startDate.loe(now).and(challenge.endDate.goe(now));
+    }
+
+    private BooleanExpression challengePostStatus(LocalDateTime now) {
+        return challenge.endDate.lt(now);
     }
 }
