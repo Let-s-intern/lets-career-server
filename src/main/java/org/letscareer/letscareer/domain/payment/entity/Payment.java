@@ -37,7 +37,7 @@ public class Payment extends BaseTimeEntity {
     @JoinColumn(name = "application_id")
     private Application application;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "price_id")
     private Price price;
 
