@@ -6,6 +6,8 @@ import lombok.*;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.missiontemplate.dto.request.CreateMissionTemplateRequestDto;
 import org.letscareer.letscareer.domain.missiontemplate.dto.request.UpdateMissionTemplateRequestDto;
+import org.letscareer.letscareer.domain.missiontemplate.type.MissionTemplateType;
+import org.letscareer.letscareer.domain.missiontemplate.type.converter.MissionTemplateTypeConverter;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 import java.util.ArrayList;
@@ -27,6 +29,10 @@ public class MissionTemplate extends BaseTimeEntity {
     private Long id;
 
     @NotNull
+    @Convert(converter = MissionTemplateTypeConverter.class)
+    private MissionTemplateType type;
+
+    @NotNull
     private String title;
 
     @NotNull
@@ -44,6 +50,7 @@ public class MissionTemplate extends BaseTimeEntity {
 
     public static MissionTemplate createMissionTemplate(CreateMissionTemplateRequestDto createMissionTemplateRequestDto) {
         return MissionTemplate.builder()
+                .type(createMissionTemplateRequestDto.type())
                 .title(createMissionTemplateRequestDto.title())
                 .description(createMissionTemplateRequestDto.description())
                 .guide(createMissionTemplateRequestDto.guide())
@@ -52,6 +59,7 @@ public class MissionTemplate extends BaseTimeEntity {
     }
 
     public void updateMissionTemplate(UpdateMissionTemplateRequestDto updateMissionTemplateRequestDto) {
+        this.type = updateValue(this.type, updateMissionTemplateRequestDto.type());
         this.title = updateValue(this.title, updateMissionTemplateRequestDto.title());
         this.description = updateValue(this.description, updateMissionTemplateRequestDto.description());
         this.guide = updateValue(this.guide, updateMissionTemplateRequestDto.guide());

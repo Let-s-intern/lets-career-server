@@ -7,12 +7,13 @@ import org.letscareer.letscareer.domain.coupon.entity.Coupon;
 import org.letscareer.letscareer.domain.coupon.vo.AdminCouponDetailVo;
 import org.letscareer.letscareer.domain.coupon.vo.AdminCouponVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
+import org.letscareer.letscareer.global.error.exception.InvalidValueException;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
-import static org.letscareer.letscareer.domain.coupon.error.CouponErrorCode.COUPON_NOT_FOUND;
+import static org.letscareer.letscareer.domain.coupon.error.CouponErrorCode.*;
 
 @RequiredArgsConstructor
 @Component
@@ -21,6 +22,11 @@ public class CouponHelper {
 
     public Coupon findCouponByIdOrThrow(Long couponId) {
         return couponRepository.findById(couponId)
+                .orElseThrow(() -> new EntityNotFoundException(COUPON_NOT_FOUND));
+    }
+
+    public Coupon findCouponByCodeOrThrow(String couponCode) {
+        return couponRepository.findByCode(couponCode)
                 .orElseThrow(() -> new EntityNotFoundException(COUPON_NOT_FOUND));
     }
 
@@ -40,5 +46,16 @@ public class CouponHelper {
     public AdminCouponDetailVo getCouponDetail(Long couponId) {
         return couponRepository.findAdminCouponDetailVo(couponId)
                 .orElseThrow(() -> new EntityNotFoundException(COUPON_NOT_FOUND));
+    }
+
+    public void deleteCoupon(Coupon coupon) {
+        couponRepository.delete(coupon);
+    }
+
+    public void validateDateOfCoupon(LocalDateTime startDate, LocalDateTime endDate) {
+        LocalDateTime now = LocalDateTime.now();
+        if(now.isBefore(startDate) || now.isAfter(endDate)) {
+            throw new InvalidValueException(COUPON_NOT_AVAILABLE_DATE);
+        }
     }
 }

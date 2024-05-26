@@ -29,4 +29,8 @@ public class PaymentHelper {
         return paymentRepository.findById(paymentId)
                 .orElseThrow(() -> new EntityNotFoundException(PAYMENT_NOT_FOUND));
     }
+
+    public long countCouponAppliedTime(Long userId, Long couponId) {
+        return paymentRepository.countCouponAppliedTime(userId, couponId);
+    }
 }

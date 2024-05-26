@@ -45,4 +45,13 @@ public class ChallengeNoticeV1Controller {
         challengeNoticeService.updateChallengeNotice(challengeNoticeId, updateChallengeNoticeRequestDto);
         return SuccessResponse.ok(null);
     }
+
+    @Operation(summary = "챌린지 공지사항 삭제", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<SuccessResponse<?>> deleteChallengeNotice(@PathVariable(name = "id") final Long challengeNoticeId) {
+        challengeNoticeService.deleteChallengeNotice(challengeNoticeId);
+        return SuccessResponse.ok(null);
+    }
 }

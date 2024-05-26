@@ -25,4 +25,8 @@ public class ChallengeNoticeHelper {
     public List<ChallengeNoticeAdminVo> findAllChallengeNoticeAdminVos(Long challengeId) {
         return challengeNoticeRepository.findAllChallengeNoticeAdminVos(challengeId);
     }
+
+    public void deleteChallengeNotice(ChallengeNotice challengeNotice) {
+        challengeNoticeRepository.delete(challengeNotice);
+    }
 }

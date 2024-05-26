@@ -20,6 +20,7 @@ public class ChallengeNoticeQueryRepositoryImpl implements ChallengeNoticeQueryR
                 .select(Projections.constructor(ChallengeNoticeAdminVo.class,
                         challengeNotice.id,
                         challengeNotice.type,
+                        challengeNotice.title,
                         challengeNotice.link,
                         challengeNotice.createDate))
                 .from(challengeNotice)
