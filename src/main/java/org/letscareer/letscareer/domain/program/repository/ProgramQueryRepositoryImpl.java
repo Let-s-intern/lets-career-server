@@ -54,7 +54,7 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                         vWProgram.programId,
                         vWProgram.programType,
                         vWProgram.title,
-                        vWProgram.thumnail,
+                        vWProgram.thumbnail,
                         vWProgram.shortDesc,
                         vWProgram.startDate,
                         vWProgram.endDate,
