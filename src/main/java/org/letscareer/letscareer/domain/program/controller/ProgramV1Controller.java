@@ -36,7 +36,7 @@ public class ProgramV1Controller {
     @Operation(summary = "프로그램 통합 조회 - 기간별", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetProgramsForDurationResponseDto.class)))
     })
-    @GetMapping
+    @GetMapping("/duration")
     public ResponseEntity<SuccessResponse<?>> getProgramsForDuration(@RequestParam final GetProgramsForDurationRequestDto requestDto) {
         final GetProgramsForDurationResponseDto responseDto = programService.getProgramsForDuration(requestDto);
         return SuccessResponse.ok(responseDto);
