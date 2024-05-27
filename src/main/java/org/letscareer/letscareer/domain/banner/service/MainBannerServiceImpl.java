@@ -3,13 +3,14 @@ package org.letscareer.letscareer.domain.banner.service;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.banner.dto.request.CreateBannerRequestDto;
 import org.letscareer.letscareer.domain.banner.dto.request.UpdateBannerRequestDto;
-import org.letscareer.letscareer.domain.banner.dto.response.BannerAdminListResponseDto;
+import org.letscareer.letscareer.domain.banner.dto.response.BannerListResponseDto;
 import org.letscareer.letscareer.domain.banner.entity.MainBanner;
 import org.letscareer.letscareer.domain.banner.helper.MainBannerHelper;
 import org.letscareer.letscareer.domain.banner.mapper.BannerMapper;
 import org.letscareer.letscareer.domain.banner.mapper.MainBannerMapper;
 import org.letscareer.letscareer.domain.banner.type.BannerType;
 import org.letscareer.letscareer.domain.banner.vo.BannerAdminVo;
+import org.letscareer.letscareer.domain.banner.vo.BannerUserVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +31,13 @@ public class MainBannerServiceImpl implements BannerService {
     }
 
     @Override
-    public BannerAdminListResponseDto getBannersForAdmin() {
+    public BannerListResponseDto getBanners() {
+        List<BannerUserVo> bannerUserVos = mainBannerHelper.findAllUserBannerAdminVos();
+        return bannerMapper.toBannerAdminListResponseDto(bannerUserVos);
+    }
+
+    @Override
+    public BannerListResponseDto getBannersForAdmin() {
         List<BannerAdminVo> mainBannerAdminList = mainBannerHelper.findAllMainBannerAdminVos();
         return bannerMapper.toBannerAdminListResponseDto(mainBannerAdminList);
     }
