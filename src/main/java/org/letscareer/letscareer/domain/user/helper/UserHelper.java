@@ -77,4 +77,8 @@ public class UserHelper {
     public Page<UserAdminVo> findAllUserAdminVos(Pageable pageable) {
         return userRepository.findAllUserAdminVos(pageable);
     }
+
+    public void deleteUser(User user) {
+        userRepository.delete(user);
+    }
 }

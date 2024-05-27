@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public void deleteUser(User user) {
-
+        userHelper.deleteUser(user);
     }
 
     public Boolean isAdmin(User user) {
