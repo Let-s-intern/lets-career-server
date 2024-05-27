@@ -1,75 +1,32 @@
 package org.letscareer.letscareer.domain.user.service;
 
-import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.domain.user.dto.request.UserUpdateRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UserPwSignInRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UserPwSignUpRequestDto;
+import org.letscareer.letscareer.domain.user.dto.request.UserUpdateRequestDto;
 import org.letscareer.letscareer.domain.user.dto.response.TokenResponseDto;
 import org.letscareer.letscareer.domain.user.dto.response.UserAdminListResponseDto;
 import org.letscareer.letscareer.domain.user.dto.response.UserInfoResponseDto;
 import org.letscareer.letscareer.domain.user.entity.User;
-import org.letscareer.letscareer.domain.user.helper.UserHelper;
-import org.letscareer.letscareer.domain.user.mapper.UserMapper;
 import org.letscareer.letscareer.domain.user.type.AuthProvider;
-import org.letscareer.letscareer.domain.user.type.UserRole;
-import org.letscareer.letscareer.domain.user.vo.UserAdminVo;
-import org.letscareer.letscareer.global.security.jwt.TokenProvider;
 import org.letscareer.letscareer.global.security.oauth2.userinfo.OAuth2UserInfo;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-@Service
-@Transactional
-@RequiredArgsConstructor
-public class UserService {
+public interface UserService {
+    User createUserFromOAuth2(OAuth2UserInfo oAuth2UserInfo, AuthProvider authProvider);
 
-    private final UserHelper userHelper;
-    private final UserMapper userMapper;
-    private final TokenProvider tokenProvider;
+    User updateUserFromOAuth2(User user, OAuth2UserInfo oAuth2UserInfo);
 
-    public User createUserFromOAuth2(OAuth2UserInfo oAuth2UserInfo, AuthProvider authProvider) {
-        User newUser = userMapper.toEntityFromOAuth2(oAuth2UserInfo, authProvider);
-        return userHelper.saveUser(newUser);
-    }
+    void pwSignUp(UserPwSignUpRequestDto pwSignUpRequestDto);
 
-    public User updateUserFromOAuth2(User user, OAuth2UserInfo oAuth2UserInfo) {
-        return user.updateUserFromOAuth2(oAuth2UserInfo);
-    }
+    TokenResponseDto pwSignIn(UserPwSignInRequestDto pwSignInRequestDto);
 
-    public void pwSignUp(UserPwSignUpRequestDto pwSignUpRequestDto) {
-        userHelper.validateExistingUser(pwSignUpRequestDto.phoneNum());
-        String encodedPassword = userHelper.encodePassword(pwSignUpRequestDto.password());
-        User newUser = userMapper.toEntity(pwSignUpRequestDto, encodedPassword);
-        userHelper.saveUser(newUser);
-    }
+    void updateUser(Long id, UserUpdateRequestDto userUpdateRequestDto);
 
-    public TokenResponseDto pwSignIn(UserPwSignInRequestDto pwSignInRequestDto) {
-        final User user = userHelper.findUserByEmailOrThrow(pwSignInRequestDto.email());
-        userHelper.validatePassword(user, pwSignInRequestDto.password());
-        final Authentication authentication = userHelper.userAuthorizationInput(user);
-        final String accessToken = tokenProvider.createAccessToken(user.getId(), authentication);
-        final String refreshToken = tokenProvider.createRefreshToken(user.getId(), authentication);
-        return userMapper.toTokenResponseDto(accessToken, refreshToken);
-    }
+    UserInfoResponseDto getUserInfo(User user);
 
-    public void updateUser(Long userId, UserUpdateRequestDto userUpdateRequestDto) {
-        User user = userHelper.findUserByIdOrThrow(userId);
-        userHelper.updateUser(user, userUpdateRequestDto);
-    }
+    void deleteUser(User user);
 
-    public UserAdminListResponseDto getUsers(Pageable pageable) {
-        Page<UserAdminVo> userAdminList = userHelper.findAllUserAdminVos(pageable);
-        return userMapper.toUserAdminListResponseDto(userAdminList);
-    }
+    Boolean isAdmin(User user);
 
-    public UserInfoResponseDto getUserInfo(User user) {
-        return userMapper.toUserInfoResponseDto(user);
-    }
-
-    public Boolean isAdmin(User user) {
-        return user.getRole().equals(UserRole.ADMIN);
-    }
+    UserAdminListResponseDto getUsers(Pageable pageable);
 }

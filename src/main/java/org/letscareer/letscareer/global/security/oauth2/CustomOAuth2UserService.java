@@ -1,10 +1,10 @@
 package org.letscareer.letscareer.global.security.oauth2;
 
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.user.service.UserService;
 import org.letscareer.letscareer.domain.user.type.AuthProvider;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.helper.UserHelper;
-import org.letscareer.letscareer.domain.user.service.UserService;
 import org.letscareer.letscareer.global.security.oauth2.userinfo.OAuth2UserInfo;
 import org.letscareer.letscareer.global.security.user.PrincipalDetails;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;

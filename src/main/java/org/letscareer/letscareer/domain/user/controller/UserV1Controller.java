@@ -61,6 +61,15 @@ public class UserV1Controller {
         return SuccessResponse.ok(userService.getUserInfo(user));
     }
 
+    @Operation(summary = "유저 탈퇴", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    })
+    @DeleteMapping
+    public ResponseEntity<SuccessResponse<?>> deleteUser(@CurrentUser User user) {
+        userService.deleteUser(user);
+        return SuccessResponse.ok(null);
+    }
+
     @Operation(summary = "유저 관리자 여부", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Boolean.class)))
     })
