@@ -8,8 +8,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.live.entity.Live;
-import org.letscareer.letscareer.domain.live.vo.LiveDetailVo;
-import org.letscareer.letscareer.domain.live.vo.LiveProfileVo;
+import org.letscareer.letscareer.domain.live.vo.*;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -84,6 +83,50 @@ public class LiveQueryRepositoryImpl implements LiveQueryRepository {
                 );
 
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
+    }
+
+    @Override
+    public Optional<LiveThumbnailVo> findLiveThumbnailVo(Long liveId) {
+        return Optional.ofNullable(jpaQueryFactory
+                .select(Projections.constructor(LiveThumbnailVo.class,
+                        live.thumbnail
+                ))
+                .from(live)
+                .where(
+                        eqLiveId(liveId)
+                )
+                .fetchOne()
+        );
+    }
+
+    @Override
+    public Optional<LiveContentVo> findLiveContentVo(Long liveId) {
+        return Optional.ofNullable(jpaQueryFactory
+                .select(Projections.constructor(LiveContentVo.class,
+                        live.description
+                ))
+                .from(live)
+                .where(
+                        eqLiveId(liveId)
+                )
+                .fetchOne()
+        );
+    }
+
+    @Override
+    public Optional<LiveApplicationFormVo> findLiveApplicationFormVo(Long liveId) {
+        return Optional.ofNullable(jpaQueryFactory
+                .select(Projections.constructor(LiveApplicationFormVo.class,
+                        live.startDate,
+                        live.endDate,
+                        live.deadline
+                ))
+                .from(live)
+                .where(
+                        eqLiveId(liveId)
+                )
+                .fetchOne()
+        );
     }
 
     private BooleanExpression eqLiveId(Long liveId) {
