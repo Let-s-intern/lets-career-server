@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static org.letscareer.letscareer.domain.classification.error.ChallengeErrorCode.CHALLENGE_CLASSIFICATION_NOT_FOUND;
+import static org.letscareer.letscareer.domain.classification.error.ChallengeClassificationErrorCode.CHALLENGE_CLASSIFICATION_NOT_FOUND;
 
 @RequiredArgsConstructor
 @Component
