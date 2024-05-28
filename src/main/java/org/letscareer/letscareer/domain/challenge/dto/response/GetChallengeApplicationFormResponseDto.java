@@ -17,7 +17,7 @@ public record GetChallengeApplicationFormResponseDto(
         LocalDateTime startDate,
         LocalDateTime endDate,
         LocalDateTime deadline,
-        List<ChallengePriceDetailVo> challengePriceDetailVos
+        List<ChallengePriceDetailVo> priceList
 ) {
     public static GetChallengeApplicationFormResponseDto of(User user,
                                                             ChallengeApplicationFormVo programInfo,
@@ -29,7 +29,7 @@ public record GetChallengeApplicationFormResponseDto(
                 .startDate(programInfo.startDate())
                 .endDate(programInfo.endDate())
                 .deadline(programInfo.deadline())
-                .challengePriceDetailVos(challengePriceDetailVos)
+                .priceList(challengePriceDetailVos)
                 .build();
     }
 }
