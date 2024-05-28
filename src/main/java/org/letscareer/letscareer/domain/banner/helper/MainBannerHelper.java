@@ -25,7 +25,7 @@ public class MainBannerHelper {
     }
 
     public List<BannerUserVo> findAllUserBannerAdminVos() {
-        return mainBannerRepository.findAllUserBannerAdminVos();
+        return mainBannerRepository.findAllMainBannerUserVos();
     }
 
     public MainBanner findByIdOrThrow(Long bannerId) {
