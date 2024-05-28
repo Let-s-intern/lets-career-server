@@ -5,6 +5,7 @@ import org.letscareer.letscareer.domain.banner.entity.MainBanner;
 import org.letscareer.letscareer.domain.banner.error.BannerErrorCode;
 import org.letscareer.letscareer.domain.banner.repository.MainBannerRepository;
 import org.letscareer.letscareer.domain.banner.vo.BannerAdminVo;
+import org.letscareer.letscareer.domain.banner.vo.BannerUserVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +22,10 @@ public class MainBannerHelper {
 
     public List<BannerAdminVo> findAllMainBannerAdminVos() {
         return mainBannerRepository.findAllMainBannerAdminVos();
+    }
+
+    public List<BannerUserVo> findAllUserBannerAdminVos() {
+        return mainBannerRepository.findAllUserBannerAdminVos();
     }
 
     public MainBanner findByIdOrThrow(Long bannerId) {

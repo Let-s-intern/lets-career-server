@@ -7,12 +7,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.dto.response.GetChallengeApplicationsResponseDto;
 import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeRequestDto;
-import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeDetailResponseDto;
-import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeReviewResponseDto;
-import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengesResponseDto;
+import org.letscareer.letscareer.domain.challenge.dto.response.*;
 import org.letscareer.letscareer.domain.challenge.service.ChallengeService;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
+import org.letscareer.letscareer.domain.faq.dto.response.GetFaqResponseDto;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
+import org.letscareer.letscareer.domain.user.entity.User;
+import org.letscareer.letscareer.global.common.annotation.CurrentUser;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +47,43 @@ public class ChallengeV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
+    @Operation(summary = "챌린지 섬네일 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeThumbnailResponseDto.class)))
+    })
+    @GetMapping("/{id}/thumbnail")
+    public ResponseEntity<SuccessResponse<?>> getChallengeThumbnail(@PathVariable("id") final Long challengeId) {
+        final GetChallengeThumbnailResponseDto responseDto = challengeService.getChallengeThumbnail(challengeId);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "챌린지 상세정보 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeContentResponseDto.class)))
+    })
+    @GetMapping("/{id}/content")
+    public ResponseEntity<SuccessResponse<?>> getChallengeDetailContent(@PathVariable("id") final Long challengeId) {
+        final GetChallengeContentResponseDto responseDto = challengeService.getChallengeDetailContent(challengeId);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "챌린지 faqs 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetFaqResponseDto.class)))
+    })
+    @GetMapping("/{id}/faqs")
+    public ResponseEntity<SuccessResponse<?>> getChallengeFaqs(@PathVariable("id") final Long challengeId) {
+        final GetFaqResponseDto responseDto = challengeService.getChallengeFaqs(challengeId);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "챌린지 신청폼 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeApplicationFormResponseDto.class)))
+    })
+    @GetMapping("/{id}/application")
+    public ResponseEntity<SuccessResponse<?>> getChallengeApplicationForm(@PathVariable("id") final Long challengeId,
+                                                                          @CurrentUser User user) {
+        final GetChallengeApplicationFormResponseDto responseDto = challengeService.getChallengeApplicationForm(user, challengeId);
+        return SuccessResponse.ok(responseDto);
+    }
+
     @Operation(summary = "프로그램 신청자 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeApplicationsResponseDto.class)))
     })
@@ -59,7 +97,7 @@ public class ChallengeV1Controller {
     @Operation(summary = "신청자 리뷰 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeReviewResponseDto.class)))
     })
-    @GetMapping("/{id}/review")
+    @GetMapping("/{id}/reviews")
     public ResponseEntity<SuccessResponse<?>> getReviews(@PathVariable("id") final Long challengeId,
                                                          final Pageable pageable) {
         final GetChallengeReviewResponseDto responseDto = challengeService.getReviews(challengeId, pageable);

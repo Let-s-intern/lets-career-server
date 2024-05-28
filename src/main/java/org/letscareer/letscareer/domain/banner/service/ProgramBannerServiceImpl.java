@@ -3,7 +3,7 @@ package org.letscareer.letscareer.domain.banner.service;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.banner.dto.request.CreateBannerRequestDto;
 import org.letscareer.letscareer.domain.banner.dto.request.UpdateBannerRequestDto;
-import org.letscareer.letscareer.domain.banner.dto.response.BannerAdminListResponseDto;
+import org.letscareer.letscareer.domain.banner.dto.response.BannerListResponseDto;
 import org.letscareer.letscareer.domain.banner.entity.ProgramBanner;
 import org.letscareer.letscareer.domain.banner.helper.ProgramBannerHelper;
 import org.letscareer.letscareer.domain.banner.mapper.BannerMapper;
@@ -30,7 +30,12 @@ public class ProgramBannerServiceImpl implements BannerService {
     }
 
     @Override
-    public BannerAdminListResponseDto getBannersForAdmin() {
+    public BannerListResponseDto getBanners() {
+        return null;
+    }
+
+    @Override
+    public BannerListResponseDto getBannersForAdmin() {
         List<BannerAdminVo> programBannerAdminList = programBannerHelper.findAllProgramBannerAdminVos();
         return bannerMapper.toBannerAdminListResponseDto(programBannerAdminList);
     }

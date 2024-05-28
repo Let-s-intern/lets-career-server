@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.banner.dto.request.CreateBannerRequestDto;
 import org.letscareer.letscareer.domain.banner.dto.request.UpdateBannerRequestDto;
-import org.letscareer.letscareer.domain.banner.dto.response.BannerAdminListResponseDto;
+import org.letscareer.letscareer.domain.banner.dto.response.BannerListResponseDto;
 import org.letscareer.letscareer.domain.banner.service.BannerServiceFactory;
 import org.letscareer.letscareer.domain.banner.type.BannerType;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
@@ -19,6 +19,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class BannerV1Controller {
     private final BannerServiceFactory bannerServiceFactory;
+
+    @Operation(summary = "노출 배너 목록 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = BannerListResponseDto.class)))
+    })
+    public ResponseEntity<SuccessResponse<?>> getBanners(@RequestParam(name = "type") final BannerType bannerType) {
+        final BannerListResponseDto responseDto = bannerServiceFactory.getBannerService(bannerType).getBanners();
+        return SuccessResponse.ok(responseDto);
+    }
 
     @Operation(summary = "타입별 배너 생성", responses = {
             @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
@@ -42,11 +50,11 @@ public class BannerV1Controller {
     }
 
     @Operation(summary = "배너 타입별 전체 목록", responses = {
-            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = BannerAdminListResponseDto.class)))
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = BannerListResponseDto.class)))
     })
     @GetMapping("/admin")
     public ResponseEntity<SuccessResponse<?>> getBannersForAdmin(@RequestParam(name = "type") final BannerType bannerType) {
-        final BannerAdminListResponseDto responseDto = bannerServiceFactory.getBannerService(bannerType).getBannersForAdmin();
+        final BannerListResponseDto responseDto = bannerServiceFactory.getBannerService(bannerType).getBannersForAdmin();
         return SuccessResponse.ok(responseDto);
     }
 

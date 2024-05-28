@@ -3,7 +3,7 @@ package org.letscareer.letscareer.domain.banner.service;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.banner.dto.request.CreateBannerRequestDto;
 import org.letscareer.letscareer.domain.banner.dto.request.UpdateBannerRequestDto;
-import org.letscareer.letscareer.domain.banner.dto.response.BannerAdminListResponseDto;
+import org.letscareer.letscareer.domain.banner.dto.response.BannerListResponseDto;
 import org.letscareer.letscareer.domain.banner.entity.Popup;
 import org.letscareer.letscareer.domain.banner.helper.PopupHelper;
 import org.letscareer.letscareer.domain.banner.mapper.BannerMapper;
@@ -30,7 +30,12 @@ public class PopupServiceImpl implements BannerService {
     }
 
     @Override
-    public BannerAdminListResponseDto getBannersForAdmin() {
+    public BannerListResponseDto getBanners() {
+        return null;
+    }
+
+    @Override
+    public BannerListResponseDto getBannersForAdmin() {
         List<BannerAdminVo> popupAdminList = popupHelper.findAllPopupAdminVos();
         return bannerMapper.toBannerAdminListResponseDto(popupAdminList);
     }

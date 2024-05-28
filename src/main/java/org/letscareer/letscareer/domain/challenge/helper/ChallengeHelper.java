@@ -5,8 +5,7 @@ import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeReq
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challenge.error.ChallengeErrorCode;
 import org.letscareer.letscareer.domain.challenge.repository.ChallengeRepository;
-import org.letscareer.letscareer.domain.challenge.vo.ChallengeDetailVo;
-import org.letscareer.letscareer.domain.challenge.vo.ChallengeProfileVo;
+import org.letscareer.letscareer.domain.challenge.vo.*;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
@@ -38,6 +37,21 @@ public class ChallengeHelper {
 
     public Page<ChallengeProfileVo> findChallengeProfiles(List<ProgramClassification> typeList, List<ProgramStatusType> statusList, Pageable pageable) {
         return challengeRepository.findChallengeProfiles(typeList, statusList, pageable);
+    }
+
+    public ChallengeApplicationFormVo findChallengeApplicationFormVoOrThrow(Long challengeId) {
+        return challengeRepository.findChallengeApplicationFormVo(challengeId)
+                .orElseThrow(() -> new EntityNotFoundException(ChallengeErrorCode.CHALLENGE_NOT_FOUND));
+    }
+
+    public ChallengeThumbnailVo findChallengeThumbnailOrThrow(Long challengeId) {
+        return challengeRepository.findChallengeThumbnailVo(challengeId)
+                .orElseThrow(() -> new EntityNotFoundException(ChallengeErrorCode.CHALLENGE_NOT_FOUND));
+    }
+
+    public ChallengeContentVo findChallengeContentOrThrow(Long challengeId) {
+        return challengeRepository.findChallengeContentVo(challengeId)
+                .orElseThrow(() -> new EntityNotFoundException(ChallengeErrorCode.CHALLENGE_NOT_FOUND));
     }
 
     public void deleteChallengeById(Long challengeId) {
