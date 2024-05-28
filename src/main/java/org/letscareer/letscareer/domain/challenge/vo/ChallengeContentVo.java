@@ -4,6 +4,6 @@ import lombok.Builder;
 
 @Builder
 public record ChallengeContentVo(
-        String content
+        String description
 ) {
 }

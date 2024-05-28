@@ -8,5 +8,5 @@ import java.util.List;
 public interface MainBannerQueryRepository {
     List<BannerAdminVo> findAllMainBannerAdminVos();
 
-    List<BannerUserVo> findAllUserBannerAdminVos();
+    List<BannerUserVo> findAllMainBannerUserVos();
 }

@@ -34,7 +34,7 @@ public class MainBannerQueryRepositoryImpl implements MainBannerQueryRepository 
     }
 
     @Override
-    public List<BannerUserVo> findAllUserBannerAdminVos() {
+    public List<BannerUserVo> findAllMainBannerUserVos() {
         return queryFactory
                 .select(Projections.constructor(BannerUserVo.class,
                         mainBanner.id,
