@@ -7,8 +7,7 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
-import org.letscareer.letscareer.domain.challenge.vo.ChallengeDetailVo;
-import org.letscareer.letscareer.domain.challenge.vo.ChallengeProfileVo;
+import org.letscareer.letscareer.domain.challenge.vo.*;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.springframework.data.domain.Page;
@@ -82,6 +81,50 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
                 );
 
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
+    }
+
+    @Override
+    public Optional<ChallengeThumbnailVo> findChallengeThumbnailVo(Long challengeId) {
+        return Optional.ofNullable(queryFactory
+                .select(Projections.constructor(ChallengeThumbnailVo.class,
+                        challenge.thumbnail
+                ))
+                .from(challenge)
+                .where(
+                        eqChallengeId(challengeId)
+                )
+                .fetchOne()
+        );
+    }
+
+    @Override
+    public Optional<ChallengeContentVo> findChallengeContentVo(Long challengeId) {
+        return Optional.ofNullable(queryFactory
+                .select(Projections.constructor(ChallengeContentVo.class,
+                        challenge.description
+                ))
+                .from(challenge)
+                .where(
+                        eqChallengeId(challengeId)
+                )
+                .fetchOne()
+        );
+    }
+
+    @Override
+    public Optional<ChallengeApplicationFormVo> findChallengeApplicationFormVo(Long challengeId) {
+        return Optional.ofNullable(queryFactory
+                .select(Projections.constructor(ChallengeApplicationFormVo.class,
+                        challenge.startDate,
+                        challenge.endDate,
+                        challenge.deadline
+                ))
+                .from(challenge)
+                .where(
+                        eqChallengeId(challengeId)
+                )
+                .fetchOne()
+        );
     }
 
     private BooleanExpression eqChallengeId(Long challengeId) {

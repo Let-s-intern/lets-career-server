@@ -6,21 +6,20 @@ import org.letscareer.letscareer.domain.application.helper.ChallengeApplicationH
 import org.letscareer.letscareer.domain.application.mapper.ChallengeApplicationMapper;
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
 import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeRequestDto;
-import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeDetailResponseDto;
-import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeReviewResponseDto;
-import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengesResponseDto;
+import org.letscareer.letscareer.domain.challenge.dto.response.*;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
 import org.letscareer.letscareer.domain.challenge.mapper.ChallengeMapper;
-import org.letscareer.letscareer.domain.challenge.vo.ChallengeDetailVo;
-import org.letscareer.letscareer.domain.challenge.vo.ChallengeProfileVo;
+import org.letscareer.letscareer.domain.challenge.vo.*;
 import org.letscareer.letscareer.domain.classification.dto.request.CreateChallengeClassificationRequestDto;
 import org.letscareer.letscareer.domain.classification.helper.ChallengeClassificationHelper;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.classification.vo.ChallengeClassificationDetailVo;
 import org.letscareer.letscareer.domain.faq.dto.request.CreateProgramFaqRequestDto;
+import org.letscareer.letscareer.domain.faq.dto.response.GetFaqResponseDto;
 import org.letscareer.letscareer.domain.faq.entity.Faq;
 import org.letscareer.letscareer.domain.faq.helper.FaqHelper;
+import org.letscareer.letscareer.domain.faq.mapper.FaqMapper;
 import org.letscareer.letscareer.domain.faq.vo.FaqDetailVo;
 import org.letscareer.letscareer.domain.price.dto.request.CreateChallengePriceRequestDto;
 import org.letscareer.letscareer.domain.price.helper.ChallengePriceHelper;
@@ -28,6 +27,7 @@ import org.letscareer.letscareer.domain.price.vo.ChallengePriceDetailVo;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.domain.review.helper.ReviewHelper;
 import org.letscareer.letscareer.domain.review.vo.ReviewVo;
+import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -49,6 +49,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final ChallengePriceHelper challengePriceHelper;
     private final ReviewHelper reviewHelper;
     private final FaqHelper faqHelper;
+    private final FaqMapper faqMapper;
 
     @Override
     public GetChallengesResponseDto getChallengeList(List<ProgramClassification> typeList, List<ProgramStatusType> statusList, Pageable pageable) {
@@ -69,6 +70,31 @@ public class ChallengeServiceImpl implements ChallengeService {
     public GetChallengeApplicationsResponseDto getApplications(Long challengeId, Boolean isConfirmed) {
         List<AdminChallengeApplicationVo> applicationVos = challengeApplicationHelper.findAdminChallengeApplicationVos(challengeId, isConfirmed);
         return challengeApplicationMapper.toGetChallengeApplicationsResponseDto(applicationVos);
+    }
+
+    @Override
+    public GetChallengeApplicationFormResponseDto getChallengeApplicationForm(User user, Long challengeId) {
+        ChallengeApplicationFormVo applicationFormVo = challengeHelper.findChallengeApplicationFormVoOrThrow(challengeId);
+        List<ChallengePriceDetailVo> challengePriceDetailVos = challengePriceHelper.findChallengePriceDetailVos(challengeId);
+        return challengeMapper.toGetChallengeApplicationFormResponseDto(user, applicationFormVo, challengePriceDetailVos);
+    }
+
+    @Override
+    public GetChallengeThumbnailResponseDto getChallengeThumbnail(Long challengeId) {
+        ChallengeThumbnailVo thumbnailVo = challengeHelper.findChallengeThumbnailOrThrow(challengeId);
+        return challengeMapper.toChallengeThumbnailVo(thumbnailVo);
+    }
+
+    @Override
+    public GetChallengeContentResponseDto getChallengeDetailContent(Long challengeId) {
+        ChallengeContentVo contentVo = challengeHelper.findChallengeContentOrThrow(challengeId);
+        return challengeMapper.toGetChallengeContentResponseDto(contentVo);
+    }
+
+    @Override
+    public GetFaqResponseDto getChallengeFaqs(Long challengeId) {
+        List<FaqDetailVo> faqDetailVos = faqHelper.findChallengeFaqDetailVos(challengeId);
+        return faqMapper.toGetFaqResponseDto(faqDetailVos);
     }
 
     @Override

@@ -2,11 +2,12 @@ package org.letscareer.letscareer.domain.challenge.service;
 
 import org.letscareer.letscareer.domain.application.dto.response.GetChallengeApplicationsResponseDto;
 import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeRequestDto;
-import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeDetailResponseDto;
-import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeReviewResponseDto;
-import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengesResponseDto;
+import org.letscareer.letscareer.domain.challenge.dto.response.*;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
+import org.letscareer.letscareer.domain.faq.dto.response.GetFaqResponseDto;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
+import org.letscareer.letscareer.domain.user.entity.User;
+import org.letscareer.letscareer.global.common.annotation.CurrentUser;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,14 @@ public interface ChallengeService {
     GetChallengeDetailResponseDto getChallengeDetail(Long challengeId);
 
     GetChallengeApplicationsResponseDto getApplications(Long challengeId, Boolean isConfirmed);
+
+    GetChallengeApplicationFormResponseDto getChallengeApplicationForm(User user, Long challengeId);
+
+    GetChallengeThumbnailResponseDto getChallengeThumbnail(Long challengeId);
+
+    GetChallengeContentResponseDto getChallengeDetailContent(Long challengeId);
+
+    GetFaqResponseDto getChallengeFaqs(Long challengeId);
 
     GetChallengeReviewResponseDto getReviews(Long challengeId, Pageable pageable);
 
