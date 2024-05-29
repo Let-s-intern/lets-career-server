@@ -11,8 +11,10 @@ import org.letscareer.letscareer.domain.user.dto.response.UserAdminListResponseD
 import org.letscareer.letscareer.domain.user.dto.response.UserInfoResponseDto;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.service.UserService;
+import org.letscareer.letscareer.global.common.annotation.ApiErrorCode;
 import org.letscareer.letscareer.global.common.annotation.CurrentUser;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
+import org.letscareer.letscareer.global.common.entity.SwaggerEnum;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -62,6 +64,7 @@ public class UserV1Controller {
     @Operation(summary = "비밀번호 변경", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
+    @ApiErrorCode({SwaggerEnum.USER_NOT_FOUND, SwaggerEnum.MISMATCH_PASSWORD})
     @PatchMapping("/password")
     public ResponseEntity<SuccessResponse<?>> updateUserPassword(@CurrentUser User user,
                                                                  @RequestBody final PasswordUpdateRequestDto passwordUpdateRequestDto) {
@@ -72,6 +75,7 @@ public class UserV1Controller {
     @Operation(summary = "비밀번호 재설정 메일 전송", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
+    @ApiErrorCode({SwaggerEnum.USER_NOT_FOUND})
     @PostMapping("/password")
     public ResponseEntity<SuccessResponse<?>> passwordReset(@RequestBody final PasswordResetRequestDto passwordResetRequestDto) {
         userService.resetPassword(passwordResetRequestDto);
