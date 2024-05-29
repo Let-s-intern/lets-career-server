@@ -1,5 +1,6 @@
 package org.letscareer.letscareer.domain.user.service;
 
+import org.letscareer.letscareer.domain.user.dto.request.PasswordResetRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UserPwSignInRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UserPwSignUpRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UserUpdateRequestDto;
@@ -29,4 +30,6 @@ public interface UserService {
     Boolean isAdmin(User user);
 
     UserAdminListResponseDto getUsers(Pageable pageable);
+
+    void resetPassword(org.letscareer.letscareer.domain.user.dto.request.PasswordResetRequestDto passwordResetRequestDto);
 }

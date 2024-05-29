@@ -150,4 +150,8 @@ public class User extends BaseTimeEntity {
         this.accountNum = updateValue(this.accountNum, addInfoRequestDto.accountNum());
         this.accountOwner = updateValue(this.accountOwner, addInfoRequestDto.accountOwner());
     }
+
+    public void updateUserPassword(String encodedPassword) {
+        this.password = updateValue(this.password, encodedPassword);
+    }
 }

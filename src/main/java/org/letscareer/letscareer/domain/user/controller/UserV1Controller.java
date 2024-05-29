@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.user.dto.request.PasswordResetRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UserUpdateRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UserPwSignInRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UserPwSignUpRequestDto;
@@ -59,6 +60,15 @@ public class UserV1Controller {
     @GetMapping
     public ResponseEntity<SuccessResponse<?>> getUserInfo(@CurrentUser User user) {
         return SuccessResponse.ok(userService.getUserInfo(user));
+    }
+
+    @Operation(summary = "비밀번호 재설정 메일 전송", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    })
+    @PostMapping("/password")
+    public ResponseEntity<SuccessResponse<?>> passwordReset(@RequestBody final PasswordResetRequestDto passwordResetRequestDto) {
+        userService.resetPassword(passwordResetRequestDto);
+        return SuccessResponse.ok(null);
     }
 
     @Operation(summary = "유저 탈퇴", responses = {

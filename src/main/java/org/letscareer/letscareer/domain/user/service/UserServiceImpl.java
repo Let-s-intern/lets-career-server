@@ -1,6 +1,8 @@
 package org.letscareer.letscareer.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.letscareer.letscareer.domain.user.dto.request.PasswordResetRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UserUpdateRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UserPwSignInRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UserPwSignUpRequestDto;
@@ -13,6 +15,7 @@ import org.letscareer.letscareer.domain.user.mapper.UserMapper;
 import org.letscareer.letscareer.domain.user.type.AuthProvider;
 import org.letscareer.letscareer.domain.user.type.UserRole;
 import org.letscareer.letscareer.domain.user.vo.UserAdminVo;
+import org.letscareer.letscareer.global.common.utils.EmailUtils;
 import org.letscareer.letscareer.global.security.jwt.TokenProvider;
 import org.letscareer.letscareer.global.security.oauth2.userinfo.OAuth2UserInfo;
 import org.springframework.data.domain.Page;
@@ -29,6 +32,7 @@ public class UserServiceImpl implements UserService {
     private final UserHelper userHelper;
     private final UserMapper userMapper;
     private final TokenProvider tokenProvider;
+    private final EmailUtils emailUtils;
 
     public User createUserFromOAuth2(OAuth2UserInfo oAuth2UserInfo, AuthProvider authProvider) {
         User newUser = userMapper.toEntityFromOAuth2(oAuth2UserInfo, authProvider);
@@ -63,6 +67,14 @@ public class UserServiceImpl implements UserService {
     public UserAdminListResponseDto getUsers(Pageable pageable) {
         Page<UserAdminVo> userAdminList = userHelper.findAllUserAdminVos(pageable);
         return userMapper.toUserAdminListResponseDto(userAdminList);
+    }
+
+    @Override
+    public void resetPassword(PasswordResetRequestDto passwordResetRequestDto) {
+        User user = userHelper.findUserByNameAndEmailOrThrow(passwordResetRequestDto.name(), passwordResetRequestDto.email());
+        String randomPassword = RandomStringUtils.randomAlphanumeric(8);
+        userHelper.updatePassword(user, randomPassword);
+        emailUtils.sendPasswordResetEmail(user.getEmail(), randomPassword);
     }
 
     public UserInfoResponseDto getUserInfo(User user) {
