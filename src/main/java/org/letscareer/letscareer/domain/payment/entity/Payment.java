@@ -23,6 +23,9 @@ public class Payment extends BaseTimeEntity {
     @Builder.Default
     private Boolean isConfirmed = false;
 
+    @Builder.Default
+    private Boolean isRefunded = false;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "payment_id")
@@ -54,5 +57,6 @@ public class Payment extends BaseTimeEntity {
 
     public void updatePayment(UpdatePaymentRequestDto updatePaymentRequestDto) {
         this.isConfirmed = updateValue(this.isConfirmed, updatePaymentRequestDto.isConfirmed());
+        this.isRefunded = updateValue(this.isRefunded, updatePaymentRequestDto.isRefunded());
     }
 }
