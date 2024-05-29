@@ -43,6 +43,15 @@ public class UserV1Controller {
         return SuccessResponse.ok(userService.pwSignIn(pwSignInRequestDto));
     }
 
+    @Operation(summary = "유저 로그아웃", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    })
+    @GetMapping("/signout")
+    public ResponseEntity<SuccessResponse<?>> signOut(@CurrentUser User user) {
+        userService.signOut(user);
+        return SuccessResponse.ok(null);
+    }
+
     @Operation(summary = "유저 정보 업데이트", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })

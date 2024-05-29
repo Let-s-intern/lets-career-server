@@ -81,6 +81,11 @@ public class UserServiceImpl implements UserService {
         userHelper.updatePassword(user, passwordUpdateRequestDto.newPassword());
     }
 
+    @Override
+    public void signOut(User user) {
+        tokenProvider.deleteRefreshToken(user.getId());
+    }
+
     public UserInfoResponseDto getUserInfo(User user) {
         return userMapper.toUserInfoResponseDto(user);
     }

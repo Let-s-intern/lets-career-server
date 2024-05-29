@@ -31,4 +31,6 @@ public interface UserService {
     void resetPassword(PasswordResetRequestDto passwordResetRequestDto);
 
     void updatePassword(Long id, PasswordUpdateRequestDto passwordUpdateRequestDto);
+
+    void signOut(User user);
 }
