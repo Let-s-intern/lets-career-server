@@ -3,7 +3,6 @@ package org.letscareer.letscareer.domain.payment.helper;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.entity.Application;
 import org.letscareer.letscareer.domain.coupon.entity.Coupon;
-import org.letscareer.letscareer.domain.payment.dto.request.CreatePaymentRequestDto;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.payment.repository.PaymentRepository;
 import org.letscareer.letscareer.domain.price.entity.Price;
@@ -17,11 +16,11 @@ import static org.letscareer.letscareer.domain.payment.error.PaymentErrorCode.PA
 public class PaymentHelper {
     private final PaymentRepository paymentRepository;
 
-    public Payment createPaymentAndSave(CreatePaymentRequestDto paymentInfo,
-                                        Application application,
+    public Payment createPaymentAndSave(Application application,
                                         Coupon coupon,
                                         Price price) {
-        Payment newPayment = Payment.createPayment(paymentInfo, coupon, application, price);
+        int finalPrice = calculateFinalPrice(price, coupon);
+        Payment newPayment = Payment.createPayment(finalPrice, coupon, application, price);
         return paymentRepository.save(newPayment);
     }
 
@@ -32,5 +31,11 @@ public class PaymentHelper {
 
     public long countCouponAppliedTime(Long userId, Long couponId) {
         return paymentRepository.countCouponAppliedTime(userId, couponId);
+    }
+
+    private int calculateFinalPrice(Price price, Coupon coupon) {
+        int finalPrice = price.getPrice() - price.getDiscount();
+        if(coupon != null) finalPrice -= coupon.getDiscount();
+        return finalPrice;
     }
 }

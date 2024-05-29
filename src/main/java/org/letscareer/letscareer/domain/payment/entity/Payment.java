@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.letscareer.letscareer.domain.application.entity.Application;
 import org.letscareer.letscareer.domain.coupon.entity.Coupon;
-import org.letscareer.letscareer.domain.payment.dto.request.CreatePaymentRequestDto;
 import org.letscareer.letscareer.domain.payment.dto.request.UpdatePaymentRequestDto;
 import org.letscareer.letscareer.domain.price.entity.Price;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
@@ -41,12 +40,12 @@ public class Payment extends BaseTimeEntity {
     @JoinColumn(name = "price_id")
     private Price price;
 
-    public static Payment createPayment(CreatePaymentRequestDto paymentInfo,
+    public static Payment createPayment(int finalPrice,
                                         Coupon coupon,
                                         Application application,
                                         Price price) {
         return Payment.builder()
-                .finalPrice(paymentInfo.finalPrice())
+                .finalPrice(finalPrice)
                 .coupon(coupon)
                 .application(application)
                 .price(price)
