@@ -6,10 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.domain.user.dto.request.PasswordResetRequestDto;
-import org.letscareer.letscareer.domain.user.dto.request.UserUpdateRequestDto;
-import org.letscareer.letscareer.domain.user.dto.request.UserPwSignInRequestDto;
-import org.letscareer.letscareer.domain.user.dto.request.UserPwSignUpRequestDto;
+import org.letscareer.letscareer.domain.user.dto.request.*;
 import org.letscareer.letscareer.domain.user.dto.response.UserAdminListResponseDto;
 import org.letscareer.letscareer.domain.user.dto.response.UserInfoResponseDto;
 import org.letscareer.letscareer.domain.user.entity.User;
@@ -60,6 +57,16 @@ public class UserV1Controller {
     @GetMapping
     public ResponseEntity<SuccessResponse<?>> getUserInfo(@CurrentUser User user) {
         return SuccessResponse.ok(userService.getUserInfo(user));
+    }
+
+    @Operation(summary = "비밀번호 변경", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    })
+    @PatchMapping("/password")
+    public ResponseEntity<SuccessResponse<?>> updateUserPassword(@CurrentUser User user,
+                                                                 @RequestBody final PasswordUpdateRequestDto passwordUpdateRequestDto) {
+        userService.updatePassword(user.getId(), passwordUpdateRequestDto);
+        return SuccessResponse.ok(null);
     }
 
     @Operation(summary = "비밀번호 재설정 메일 전송", responses = {

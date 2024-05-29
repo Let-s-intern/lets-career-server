@@ -2,10 +2,7 @@ package org.letscareer.letscareer.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.letscareer.letscareer.domain.user.dto.request.PasswordResetRequestDto;
-import org.letscareer.letscareer.domain.user.dto.request.UserUpdateRequestDto;
-import org.letscareer.letscareer.domain.user.dto.request.UserPwSignInRequestDto;
-import org.letscareer.letscareer.domain.user.dto.request.UserPwSignUpRequestDto;
+import org.letscareer.letscareer.domain.user.dto.request.*;
 import org.letscareer.letscareer.domain.user.dto.response.TokenResponseDto;
 import org.letscareer.letscareer.domain.user.dto.response.UserAdminListResponseDto;
 import org.letscareer.letscareer.domain.user.dto.response.UserInfoResponseDto;
@@ -75,6 +72,13 @@ public class UserServiceImpl implements UserService {
         String randomPassword = RandomStringUtils.randomAlphanumeric(8);
         userHelper.updatePassword(user, randomPassword);
         emailUtils.sendPasswordResetEmail(user.getEmail(), randomPassword);
+    }
+
+    @Override
+    public void updatePassword(Long userId, PasswordUpdateRequestDto passwordUpdateRequestDto) {
+        User user = userHelper.findUserByIdOrThrow(userId);
+        userHelper.validatePassword(user, passwordUpdateRequestDto.password());
+        userHelper.updatePassword(user, passwordUpdateRequestDto.newPassword());
     }
 
     public UserInfoResponseDto getUserInfo(User user) {

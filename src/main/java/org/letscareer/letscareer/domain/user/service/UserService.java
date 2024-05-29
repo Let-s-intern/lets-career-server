@@ -1,9 +1,6 @@
 package org.letscareer.letscareer.domain.user.service;
 
-import org.letscareer.letscareer.domain.user.dto.request.PasswordResetRequestDto;
-import org.letscareer.letscareer.domain.user.dto.request.UserPwSignInRequestDto;
-import org.letscareer.letscareer.domain.user.dto.request.UserPwSignUpRequestDto;
-import org.letscareer.letscareer.domain.user.dto.request.UserUpdateRequestDto;
+import org.letscareer.letscareer.domain.user.dto.request.*;
 import org.letscareer.letscareer.domain.user.dto.response.TokenResponseDto;
 import org.letscareer.letscareer.domain.user.dto.response.UserAdminListResponseDto;
 import org.letscareer.letscareer.domain.user.dto.response.UserInfoResponseDto;
@@ -31,5 +28,7 @@ public interface UserService {
 
     UserAdminListResponseDto getUsers(Pageable pageable);
 
-    void resetPassword(org.letscareer.letscareer.domain.user.dto.request.PasswordResetRequestDto passwordResetRequestDto);
+    void resetPassword(PasswordResetRequestDto passwordResetRequestDto);
+
+    void updatePassword(Long id, PasswordUpdateRequestDto passwordUpdateRequestDto);
 }
