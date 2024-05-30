@@ -3,7 +3,6 @@ package org.letscareer.letscareer.domain.application.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
-import org.letscareer.letscareer.domain.review.entity.Review;
 import org.letscareer.letscareer.domain.user.entity.User;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -12,7 +11,7 @@ import org.letscareer.letscareer.domain.user.entity.User;
 @Getter
 @Entity
 public class ChallengeApplication extends Application {
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "challenge_id")
     private Challenge challenge;
 

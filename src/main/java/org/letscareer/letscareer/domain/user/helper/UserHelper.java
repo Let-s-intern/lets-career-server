@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.user.helper;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.letscareer.letscareer.domain.user.dto.request.UserUpdateRequestDto;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.repository.UserRepository;
@@ -19,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import static org.letscareer.letscareer.domain.user.error.UserErrorCode.USER_NOT_FOUND;
 import static org.letscareer.letscareer.global.error.GlobalErrorCode.MISMATCH_PASSWORD;
 
 @Component
@@ -76,5 +78,19 @@ public class UserHelper {
 
     public Page<UserAdminVo> findAllUserAdminVos(Pageable pageable) {
         return userRepository.findAllUserAdminVos(pageable);
+    }
+
+    public void deleteUser(User user) {
+        userRepository.delete(user);
+    }
+
+    public User findUserByNameAndEmailOrThrow(String name, String email) {
+        return userRepository.findByNameAndEmail(name, email)
+                .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND));
+    }
+
+    public void updatePassword(User user, String randomPassword) {
+        String encodedRandomPassword = encodePassword(randomPassword);
+        user.updateUserPassword(encodedRandomPassword);
     }
 }

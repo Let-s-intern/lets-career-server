@@ -37,7 +37,7 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
         ChallengeApplication challengeApplication = challengeApplicationHelper.createChallengeApplicationAndSave(challenge, user);
         Coupon coupon = couponHelper.findCouponByIdOrNull(createApplicationRequestDto.paymentInfo().couponId());
         Price price = priceHelper.findPriceByIdOrThrow(createApplicationRequestDto.paymentInfo().priceId());
-        Payment payment = paymentHelper.createPaymentAndSave(createApplicationRequestDto.paymentInfo(), challengeApplication, coupon, price);
+        Payment payment = paymentHelper.createPaymentAndSave(challengeApplication, coupon, price);
         challengeApplication.setPayment(payment);
     }
 
