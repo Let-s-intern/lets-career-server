@@ -6,6 +6,7 @@ import org.letscareer.letscareer.domain.application.entity.LiveApplication;
 import org.letscareer.letscareer.domain.application.repository.LiveApplicationRepository;
 import org.letscareer.letscareer.domain.application.vo.AdminLiveApplicationVo;
 import org.letscareer.letscareer.domain.live.entity.Live;
+import org.letscareer.letscareer.domain.live.vo.LiveConfirmedEmailVo;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.error.exception.ConflictException;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
@@ -43,5 +44,9 @@ public class LiveApplicationHelper {
 
     public void deleteLiveApplication(LiveApplication liveApplication) {
         liveApplicationRepository.delete(liveApplication);
+    }
+
+    public LiveConfirmedEmailVo findLiveConfirmedEmailVo(Long applicationId) {
+        return liveApplicationRepository.findLiveConfirmedEmailVoByApplicationId(applicationId);
     }
 }
