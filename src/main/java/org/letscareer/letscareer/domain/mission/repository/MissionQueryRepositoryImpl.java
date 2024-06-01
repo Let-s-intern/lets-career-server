@@ -21,6 +21,7 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
         return queryFactory
                 .select(Projections.constructor(MissionForChallengeVo.class,
                         mission.id,
+                        mission.th,
                         mission.missionStatusType,
                         mission.attendanceCount,
                         mission.lateAttendanceCount,
@@ -32,7 +33,7 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
                 .where(
                         eqChallengeId(challengeId)
                 )
-                .orderBy(challenge.startDate.asc())
+                .orderBy(mission.th.asc())
                 .fetch();
     }
 

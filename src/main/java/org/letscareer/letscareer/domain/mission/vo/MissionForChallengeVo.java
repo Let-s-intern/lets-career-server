@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @Builder
 public record MissionForChallengeVo(
         Long id,
+        Integer th,
         MissionStatusType missionStatusType,
         Integer attendanceCount,
         Integer lateAttendanceCount,
