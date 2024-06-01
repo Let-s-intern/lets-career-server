@@ -9,8 +9,7 @@ import org.letscareer.letscareer.global.common.utils.EnumField;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum ContentsType implements EnumField {
     ESSENTIAL(1, "필수"),
-    ADDITIONAL(2, "추가"),
-    LIMITED(3, "제한");
+    ADDITIONAL(2, "추가");
 
     private final Integer code;
     private final String desc;

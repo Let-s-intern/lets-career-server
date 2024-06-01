@@ -37,7 +37,6 @@ public class MissionServiceImpl implements MissionService{
         Mission newMission = missionMapper.toEntity(createMissionRequestDto, challenge, missionTemplate);
         findContentsAndAdd(ContentsType.ESSENTIAL, createMissionRequestDto.essentialContentsIdList(), newMission);
         findContentsAndAdd(ContentsType.ADDITIONAL, createMissionRequestDto.additionalContentsIdList(), newMission);
-        findContentsAndAdd(ContentsType.LIMITED, createMissionRequestDto.limitedContentsIdList(), newMission);
         missionHelper.saveMission(newMission);
     }
 
@@ -60,7 +59,6 @@ public class MissionServiceImpl implements MissionService{
         switch (contentsType) {
             case ESSENTIAL -> newMission.setEssentialContentsList(contentsList);
             case ADDITIONAL -> newMission.setAdditionalContents(contentsList);
-            case LIMITED -> newMission.setLimitedContents(contentsList);
         }
     }
 }
