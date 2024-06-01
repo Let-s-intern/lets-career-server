@@ -60,7 +60,8 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
                         challenge.thumbnail,
                         challenge.startDate,
                         challenge.endDate,
-                        challenge.deadline
+                        challenge.deadline,
+                        challenge.createDate
                 ))
                 .from(challenge)
                 .leftJoin(challenge.classificationList, challengeClassification)

@@ -60,7 +60,8 @@ public class LiveQueryRepositoryImpl implements LiveQueryRepository {
                         live.thumbnail,
                         live.startDate,
                         live.endDate,
-                        live.deadline
+                        live.deadline,
+                        live.createDate
                 ))
                 .from(live)
                 .leftJoin(
