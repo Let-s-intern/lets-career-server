@@ -120,6 +120,14 @@ public class ChallengeV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
+    @Operation(summary = "챌린지 공지사항 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeNoticesResponseDto.class)))
+    })
+    @GetMapping("/{id}/notices")
+    public ResponseEntity<SuccessResponse<?>> getNotices(@PathVariable(name = "id") final Long challengeId) {
+        return SuccessResponse.ok(challengeService.getNotices(challengeId));
+    }
+
     @Operation(summary = "챌린지 생성", responses = {
             @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
     })

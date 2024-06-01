@@ -4,15 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
 import org.letscareer.letscareer.domain.challlengenotice.dto.request.CreateChallengeNoticeRequestDto;
-import org.letscareer.letscareer.domain.challlengenotice.dto.response.ChallengeNoticeAdminListResponseDto;
 import org.letscareer.letscareer.domain.challlengenotice.entity.ChallengeNotice;
 import org.letscareer.letscareer.domain.challlengenotice.helper.ChallengeNoticeHelper;
 import org.letscareer.letscareer.domain.challlengenotice.mapper.ChallengeNoticeMapper;
-import org.letscareer.letscareer.domain.challlengenotice.vo.ChallengeNoticeAdminVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Transactional
@@ -27,13 +23,6 @@ public class ChallengeNoticeServiceImpl implements ChallengeNoticeService {
         Challenge challenge = challengeHelper.findChallengeByIdOrThrow(challengeId);
         ChallengeNotice newChallengeNotice = challengeNoticeMapper.toEntity(createChallengeNoticeRequestDto, challenge);
         challengeNoticeHelper.saveChallengeNotice(newChallengeNotice);
-    }
-
-    @Override
-    public ChallengeNoticeAdminListResponseDto getChallengeNoticesForAdmin(Long challengeId) {
-        Challenge challenge = challengeHelper.findChallengeByIdOrThrow(challengeId);
-        List<ChallengeNoticeAdminVo> challengeNoticeAdminList = challengeNoticeHelper.findAllChallengeNoticeAdminVos(challenge.getId());
-        return challengeNoticeMapper.toChallengeNoticeAdminListResponseDto(challengeNoticeAdminList);
     }
 
     @Override

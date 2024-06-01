@@ -13,6 +13,8 @@ import org.letscareer.letscareer.domain.challenge.mapper.ChallengeMapper;
 import org.letscareer.letscareer.domain.challenge.vo.*;
 import org.letscareer.letscareer.domain.challengeguide.helper.ChallengeGuideHelper;
 import org.letscareer.letscareer.domain.challengeguide.vo.ChallengeGuideVo;
+import org.letscareer.letscareer.domain.challlengenotice.helper.ChallengeNoticeHelper;
+import org.letscareer.letscareer.domain.challlengenotice.vo.ChallengeNoticeVo;
 import org.letscareer.letscareer.domain.classification.dto.request.CreateChallengeClassificationRequestDto;
 import org.letscareer.letscareer.domain.classification.helper.ChallengeClassificationHelper;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
@@ -50,6 +52,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final ChallengeApplicationMapper challengeApplicationMapper;
     private final ChallengePriceHelper challengePriceHelper;
     private final ChallengeGuideHelper challengeGuideHelper;
+    private final ChallengeNoticeHelper challengeNoticeHelper;
     private final ReviewHelper reviewHelper;
     private final FaqHelper faqHelper;
     private final FaqMapper faqMapper;
@@ -110,6 +113,12 @@ public class ChallengeServiceImpl implements ChallengeService {
     public GetChallengeGuidesResponseDto getGuides(Long challengeId) {
         List<ChallengeGuideVo> challengeGuideAdminList = challengeGuideHelper.findAllChallengeGuideAdminVos(challengeId);
         return challengeMapper.toChallengeGuideAdminListResponseDto(challengeGuideAdminList);
+    }
+
+    @Override
+    public GetChallengeNoticesResponseDto getNotices(Long challengeId) {
+        List<ChallengeNoticeVo> challengeNoticeList = challengeNoticeHelper.findAllChallengeNoticeVos(challengeId);
+        return challengeMapper.toGetChallengeNoticesResponseDto(challengeNoticeList);
     }
 
     @Override

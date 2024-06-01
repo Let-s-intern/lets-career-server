@@ -1,9 +1,9 @@
 package org.letscareer.letscareer.domain.challlengenotice.repository;
 
-import org.letscareer.letscareer.domain.challlengenotice.vo.ChallengeNoticeAdminVo;
+import org.letscareer.letscareer.domain.challlengenotice.vo.ChallengeNoticeVo;
 
 import java.util.List;
 
 public interface ChallengeNoticeQueryRepository {
-    List<ChallengeNoticeAdminVo> findAllChallengeNoticeAdminVos(Long challengeId);
+    List<ChallengeNoticeVo> findAllChallengeNoticeVos(Long challengeId);
 }

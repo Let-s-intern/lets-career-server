@@ -3,6 +3,7 @@ package org.letscareer.letscareer.domain.challenge.mapper;
 import org.letscareer.letscareer.domain.challenge.dto.response.*;
 import org.letscareer.letscareer.domain.challenge.vo.*;
 import org.letscareer.letscareer.domain.challengeguide.vo.ChallengeGuideVo;
+import org.letscareer.letscareer.domain.challlengenotice.vo.ChallengeNoticeVo;
 import org.letscareer.letscareer.domain.classification.vo.ChallengeClassificationDetailVo;
 import org.letscareer.letscareer.domain.faq.vo.FaqDetailVo;
 import org.letscareer.letscareer.domain.price.vo.ChallengePriceDetailVo;
@@ -47,5 +48,9 @@ public class ChallengeMapper {
 
     public GetChallengeGuidesResponseDto toChallengeGuideAdminListResponseDto(List<ChallengeGuideVo> challengeGuideAdminList) {
         return GetChallengeGuidesResponseDto.of(challengeGuideAdminList);
+    }
+
+    public GetChallengeNoticesResponseDto toGetChallengeNoticesResponseDto(List<ChallengeNoticeVo> challengeNoticeList) {
+        return GetChallengeNoticesResponseDto.of(challengeNoticeList);
     }
 }
