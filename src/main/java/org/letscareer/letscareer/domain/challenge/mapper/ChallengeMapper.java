@@ -2,6 +2,8 @@ package org.letscareer.letscareer.domain.challenge.mapper;
 
 import org.letscareer.letscareer.domain.challenge.dto.response.*;
 import org.letscareer.letscareer.domain.challenge.vo.*;
+import org.letscareer.letscareer.domain.challengeguide.vo.ChallengeGuideVo;
+import org.letscareer.letscareer.domain.challlengenotice.vo.ChallengeNoticeVo;
 import org.letscareer.letscareer.domain.classification.vo.ChallengeClassificationDetailVo;
 import org.letscareer.letscareer.domain.faq.vo.FaqDetailVo;
 import org.letscareer.letscareer.domain.price.vo.ChallengePriceDetailVo;
@@ -22,8 +24,8 @@ public class ChallengeMapper {
         return GetChallengeDetailResponseDto.of(challengeInfo, classificationInfo, priceInfo, faqInfo);
     }
 
-    public GetChallengesResponseDto toGetChallengesResponseDto(Page<ChallengeProfileVo> challengeProfileVos) {
-        return GetChallengesResponseDto.of(challengeProfileVos);
+    public GetChallengeResponseDto toGetChallengesResponseDto(Page<ChallengeProfileVo> challengeProfileVos) {
+        return GetChallengeResponseDto.of(challengeProfileVos);
     }
 
     public GetChallengeReviewResponseDto toGetChallengeReviewResponseDto(Page<ReviewVo> challengeReviewVos) {
@@ -42,5 +44,13 @@ public class ChallengeMapper {
                                                                                            ChallengeApplicationFormVo applicationFormVo,
                                                                                            List<ChallengePriceDetailVo> challengePriceDetailVos) {
         return GetChallengeApplicationFormResponseDto.of(user, applicationFormVo, challengePriceDetailVos);
+    }
+
+    public GetChallengeGuidesResponseDto toChallengeGuideAdminListResponseDto(List<ChallengeGuideVo> challengeGuideAdminList) {
+        return GetChallengeGuidesResponseDto.of(challengeGuideAdminList);
+    }
+
+    public GetChallengeNoticesResponseDto toGetChallengeNoticesResponseDto(List<ChallengeNoticeVo> challengeNoticeList) {
+        return GetChallengeNoticesResponseDto.of(challengeNoticeList);
     }
 }

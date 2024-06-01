@@ -10,6 +10,7 @@ import org.letscareer.letscareer.domain.classification.entity.ChallengeClassific
 import org.letscareer.letscareer.domain.faq.entity.FaqChallenge;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.price.entity.ChallengePrice;
+import org.letscareer.letscareer.domain.program.dto.response.ZoomMeetingResponseDto;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 import java.time.LocalDateTime;
@@ -64,7 +65,7 @@ public class Challenge extends BaseTimeEntity {
     @Builder.Default
     private List<ChallengeGuide> challengeGuideList = new ArrayList<>();
 
-    public static Challenge createChallenge(CreateChallengeRequestDto requestDto) {
+    public static Challenge createChallenge(CreateChallengeRequestDto requestDto, ZoomMeetingResponseDto zoomMeetingInfo) {
         return Challenge.builder()
                 .title(requestDto.title())
                 .shortDesc(requestDto.shortDesc())
@@ -77,6 +78,8 @@ public class Challenge extends BaseTimeEntity {
                 .chatLink(requestDto.chatLink())
                 .chatPassword(requestDto.chatPassword())
                 .challengeType(requestDto.challengeType())
+                .zoomLink(zoomMeetingInfo.join_url())
+                .zoomPassword(zoomMeetingInfo.password())
                 .build();
     }
 

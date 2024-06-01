@@ -5,7 +5,7 @@ import lombok.Builder;
 import java.time.LocalDateTime;
 
 @Builder
-public record ChallengeGuideAdminVo(
+public record ChallengeGuideVo(
         Long id,
         String title,
         String link,

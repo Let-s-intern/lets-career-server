@@ -7,13 +7,13 @@ import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.vo.AdminLiveApplicationVo;
+import org.letscareer.letscareer.domain.live.vo.LiveConfirmedEmailVo;
 
 import java.util.List;
 
 import static org.letscareer.letscareer.domain.application.entity.QLiveApplication.liveApplication;
 import static org.letscareer.letscareer.domain.coupon.entity.QCoupon.coupon;
 import static org.letscareer.letscareer.domain.live.entity.QLive.live;
-import static org.letscareer.letscareer.domain.price.entity.QChallengePrice.challengePrice;
 import static org.letscareer.letscareer.domain.price.entity.QLivePrice.livePrice;
 import static org.letscareer.letscareer.domain.payment.entity.QPayment.payment;
 import static org.letscareer.letscareer.domain.user.entity.QUser.user;
@@ -53,6 +53,26 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
                 .fetch();
     }
 
+    @Override
+    public LiveConfirmedEmailVo findLiveConfirmedEmailVoByApplicationId(Long applicationId) {
+        return queryFactory
+                .select(Projections.constructor(LiveConfirmedEmailVo.class,
+                        live.title,
+                        live.startDate,
+                        live.endDate,
+                        live.progressType,
+                        live.place,
+                        live.zoomLink,
+                        live.zoomPassword))
+                .from(liveApplication)
+                .leftJoin(liveApplication.live, live)
+                .where(
+                        eqApplicationId(applicationId)
+                )
+                .fetchFirst();
+    }
+
+
     private NumberExpression<Integer> calculateTotalCost() {
         NumberExpression<Integer> safePrice = new CaseBuilder()
                 .when(livePrice.price.isNull())
@@ -70,6 +90,10 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
                 .otherwise(coupon.discount);
 
         return safePrice.subtract(safeDiscount).subtract(safeCouponDiscount);
+    }
+
+    private BooleanExpression eqApplicationId(Long applicationId) {
+        return applicationId != null ? liveApplication.id.eq(applicationId) : null;
     }
 
     private BooleanExpression eqLiveId(Long liveId) {

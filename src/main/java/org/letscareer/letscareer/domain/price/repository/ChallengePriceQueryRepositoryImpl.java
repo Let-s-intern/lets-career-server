@@ -18,6 +18,7 @@ public class ChallengePriceQueryRepositoryImpl implements ChallengePriceQueryRep
     public List<ChallengePriceDetailVo> findChallengePriceDetailVos(Long challengeId) {
         return jpaQueryFactory
                 .select(Projections.constructor(ChallengePriceDetailVo.class,
+                        challengePrice.id,
                         challengePrice.price,
                         challengePrice.discount,
                         challengePrice.accountNumber,

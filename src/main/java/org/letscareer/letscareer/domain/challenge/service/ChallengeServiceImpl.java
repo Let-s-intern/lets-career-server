@@ -11,6 +11,10 @@ import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
 import org.letscareer.letscareer.domain.challenge.mapper.ChallengeMapper;
 import org.letscareer.letscareer.domain.challenge.vo.*;
+import org.letscareer.letscareer.domain.challengeguide.helper.ChallengeGuideHelper;
+import org.letscareer.letscareer.domain.challengeguide.vo.ChallengeGuideVo;
+import org.letscareer.letscareer.domain.challlengenotice.helper.ChallengeNoticeHelper;
+import org.letscareer.letscareer.domain.challlengenotice.vo.ChallengeNoticeVo;
 import org.letscareer.letscareer.domain.classification.dto.request.CreateChallengeClassificationRequestDto;
 import org.letscareer.letscareer.domain.classification.helper.ChallengeClassificationHelper;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
@@ -24,10 +28,12 @@ import org.letscareer.letscareer.domain.faq.vo.FaqDetailVo;
 import org.letscareer.letscareer.domain.price.dto.request.CreateChallengePriceRequestDto;
 import org.letscareer.letscareer.domain.price.helper.ChallengePriceHelper;
 import org.letscareer.letscareer.domain.price.vo.ChallengePriceDetailVo;
+import org.letscareer.letscareer.domain.program.dto.response.ZoomMeetingResponseDto;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.domain.review.helper.ReviewHelper;
 import org.letscareer.letscareer.domain.review.vo.ReviewVo;
 import org.letscareer.letscareer.domain.user.entity.User;
+import org.letscareer.letscareer.global.common.utils.ZoomUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -47,12 +53,15 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final ChallengeApplicationHelper challengeApplicationHelper;
     private final ChallengeApplicationMapper challengeApplicationMapper;
     private final ChallengePriceHelper challengePriceHelper;
+    private final ChallengeGuideHelper challengeGuideHelper;
+    private final ChallengeNoticeHelper challengeNoticeHelper;
     private final ReviewHelper reviewHelper;
     private final FaqHelper faqHelper;
     private final FaqMapper faqMapper;
+    private final ZoomUtils zoomUtils;
 
     @Override
-    public GetChallengesResponseDto getChallengeList(List<ProgramClassification> typeList, List<ProgramStatusType> statusList, Pageable pageable) {
+    public GetChallengeResponseDto getChallengeList(List<ProgramClassification> typeList, List<ProgramStatusType> statusList, Pageable pageable) {
         Page<ChallengeProfileVo> challengeProfileVos = challengeHelper.findChallengeProfiles(typeList, statusList, pageable);
         return challengeMapper.toGetChallengesResponseDto(challengeProfileVos);
     }
@@ -104,8 +113,21 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
+    public GetChallengeGuidesResponseDto getGuides(Long challengeId) {
+        List<ChallengeGuideVo> challengeGuideAdminList = challengeGuideHelper.findAllChallengeGuideAdminVos(challengeId);
+        return challengeMapper.toChallengeGuideAdminListResponseDto(challengeGuideAdminList);
+    }
+
+    @Override
+    public GetChallengeNoticesResponseDto getNotices(Long challengeId) {
+        List<ChallengeNoticeVo> challengeNoticeList = challengeNoticeHelper.findAllChallengeNoticeVos(challengeId);
+        return challengeMapper.toGetChallengeNoticesResponseDto(challengeNoticeList);
+    }
+
+    @Override
     public void createChallenge(CreateChallengeRequestDto createChallengeRequestDto) {
-        Challenge challenge = challengeHelper.createChallengeAndSave(createChallengeRequestDto);
+        ZoomMeetingResponseDto zoomMeetingInfo = zoomUtils.createZoomMeeting(createChallengeRequestDto.title(), createChallengeRequestDto.startDate());
+        Challenge challenge = challengeHelper.createChallengeAndSave(createChallengeRequestDto, zoomMeetingInfo);
         createClassificationListAndSave(createChallengeRequestDto.programTypeInfo(), challenge);
         createPriceListAndSave(createChallengeRequestDto.priceInfo(), challenge);
         createFaqListAndSave(createChallengeRequestDto.faqInfo(), challenge);

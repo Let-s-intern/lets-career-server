@@ -6,7 +6,7 @@ import org.letscareer.letscareer.domain.challlengenotice.type.ChallengeNoticeTyp
 import java.time.LocalDateTime;
 
 @Builder
-public record ChallengeNoticeAdminVo(
+public record ChallengeNoticeVo(
         Long id,
         ChallengeNoticeType type,
         String title,

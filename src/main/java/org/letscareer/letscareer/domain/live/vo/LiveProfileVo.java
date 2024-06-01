@@ -12,6 +12,7 @@ public record LiveProfileVo(
         String thumbnail,
         LocalDateTime startDate,
         LocalDateTime endDate,
-        LocalDateTime deadline
+        LocalDateTime deadline,
+        LocalDateTime createDate
 ) {
 }

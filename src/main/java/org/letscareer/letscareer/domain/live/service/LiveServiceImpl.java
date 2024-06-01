@@ -25,10 +25,12 @@ import org.letscareer.letscareer.domain.live.vo.*;
 import org.letscareer.letscareer.domain.price.dto.request.CreateLivePriceRequestDto;
 import org.letscareer.letscareer.domain.price.helper.LivePriceHelper;
 import org.letscareer.letscareer.domain.price.vo.LivePriceDetailVo;
+import org.letscareer.letscareer.domain.program.dto.response.ZoomMeetingResponseDto;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.domain.review.helper.ReviewHelper;
 import org.letscareer.letscareer.domain.review.vo.ReviewVo;
 import org.letscareer.letscareer.domain.user.entity.User;
+import org.letscareer.letscareer.global.common.utils.ZoomUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -51,6 +53,7 @@ public class LiveServiceImpl implements LiveService {
     private final ReviewHelper reviewHelper;
     private final FaqHelper faqHelper;
     private final FaqMapper faqMapper;
+    private final ZoomUtils zoomUtils;
 
     @Override
     public GetLivesResponseDto getLiveList(List<ProgramClassification> typeList, List<ProgramStatusType> statusList, Pageable pageable) {
@@ -106,7 +109,8 @@ public class LiveServiceImpl implements LiveService {
 
     @Override
     public void createLive(CreateLiveRequestDto requestDto) {
-        Live live = liveHelper.createLiveAndSave(requestDto);
+        ZoomMeetingResponseDto zoomMeetingInfo = zoomUtils.createZoomMeeting(requestDto.title(), requestDto.startDate());
+        Live live = liveHelper.createLiveAndSave(requestDto, zoomMeetingInfo);
         createClassificationListAndSave(requestDto.programTypeInfo(), live);
         createPriceListAndSave(requestDto.priceInfo(), live);
         createFaqListAndSave(requestDto.faqInfo(), live);

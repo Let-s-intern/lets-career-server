@@ -7,6 +7,7 @@ import org.letscareer.letscareer.domain.challenge.error.ChallengeErrorCode;
 import org.letscareer.letscareer.domain.challenge.repository.ChallengeRepository;
 import org.letscareer.letscareer.domain.challenge.vo.*;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
+import org.letscareer.letscareer.domain.program.dto.response.ZoomMeetingResponseDto;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.data.domain.Page;
@@ -20,8 +21,8 @@ import java.util.List;
 public class ChallengeHelper {
     private final ChallengeRepository challengeRepository;
 
-    public Challenge createChallengeAndSave(CreateChallengeRequestDto challengeRequestDto) {
-        Challenge newChallenge = Challenge.createChallenge(challengeRequestDto);
+    public Challenge createChallengeAndSave(CreateChallengeRequestDto challengeRequestDto, ZoomMeetingResponseDto zoomMeetingInfo) {
+        Challenge newChallenge = Challenge.createChallenge(challengeRequestDto, zoomMeetingInfo);
         return challengeRepository.save(newChallenge);
     }
 

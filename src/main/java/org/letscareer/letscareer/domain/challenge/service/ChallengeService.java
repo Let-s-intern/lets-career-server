@@ -7,7 +7,6 @@ import org.letscareer.letscareer.domain.classification.type.ProgramClassificatio
 import org.letscareer.letscareer.domain.faq.dto.response.GetFaqResponseDto;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.domain.user.entity.User;
-import org.letscareer.letscareer.global.common.annotation.CurrentUser;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +14,7 @@ import java.util.List;
 
 @Service
 public interface ChallengeService {
-    GetChallengesResponseDto getChallengeList(List<ProgramClassification> typeList, List<ProgramStatusType> statusList, Pageable pageable);
+    GetChallengeResponseDto getChallengeList(List<ProgramClassification> typeList, List<ProgramStatusType> statusList, Pageable pageable);
 
     GetChallengeDetailResponseDto getChallengeDetail(Long challengeId);
 
@@ -30,6 +29,10 @@ public interface ChallengeService {
     GetFaqResponseDto getChallengeFaqs(Long challengeId);
 
     GetChallengeReviewResponseDto getReviews(Long challengeId, Pageable pageable);
+
+    GetChallengeGuidesResponseDto getGuides(Long challengeId);
+
+    GetChallengeNoticesResponseDto getNotices(Long challengeId);
 
     void createChallenge(CreateChallengeRequestDto createChallengeRequestDto);
 

@@ -4,7 +4,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.domain.challengeguide.vo.ChallengeGuideAdminVo;
+import org.letscareer.letscareer.domain.challengeguide.vo.ChallengeGuideVo;
 
 import java.util.List;
 
@@ -15,9 +15,9 @@ public class ChallengeGuideQueryRepositoryImpl implements ChallengeGuideQueryRep
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<ChallengeGuideAdminVo> findAllChallengeGuideAdminVos(Long challengeId) {
+    public List<ChallengeGuideVo> findAllChallengeGuideAdminVos(Long challengeId) {
         return queryFactory
-                .select(Projections.constructor(ChallengeGuideAdminVo.class,
+                .select(Projections.constructor(ChallengeGuideVo.class,
                         challengeGuide.id,
                         challengeGuide.title,
                         challengeGuide.link,
