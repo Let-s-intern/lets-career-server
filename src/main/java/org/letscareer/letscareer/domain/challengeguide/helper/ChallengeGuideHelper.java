@@ -3,7 +3,7 @@ package org.letscareer.letscareer.domain.challengeguide.helper;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.challengeguide.entity.ChallengeGuide;
 import org.letscareer.letscareer.domain.challengeguide.repository.ChallengeGuideRepository;
-import org.letscareer.letscareer.domain.challengeguide.vo.ChallengeGuideAdminVo;
+import org.letscareer.letscareer.domain.challengeguide.vo.ChallengeGuideVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +20,7 @@ public class ChallengeGuideHelper {
         challengeGuideRepository.save(challengeGuide);
     }
 
-    public List<ChallengeGuideAdminVo> findAllChallengeGuideAdminVos(Long challengeId) {
+    public List<ChallengeGuideVo> findAllChallengeGuideAdminVos(Long challengeId) {
         return challengeGuideRepository.findAllChallengeGuideAdminVos(challengeId);
     }
 

@@ -11,6 +11,8 @@ import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
 import org.letscareer.letscareer.domain.challenge.mapper.ChallengeMapper;
 import org.letscareer.letscareer.domain.challenge.vo.*;
+import org.letscareer.letscareer.domain.challengeguide.helper.ChallengeGuideHelper;
+import org.letscareer.letscareer.domain.challengeguide.vo.ChallengeGuideVo;
 import org.letscareer.letscareer.domain.classification.dto.request.CreateChallengeClassificationRequestDto;
 import org.letscareer.letscareer.domain.classification.helper.ChallengeClassificationHelper;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
@@ -47,6 +49,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final ChallengeApplicationHelper challengeApplicationHelper;
     private final ChallengeApplicationMapper challengeApplicationMapper;
     private final ChallengePriceHelper challengePriceHelper;
+    private final ChallengeGuideHelper challengeGuideHelper;
     private final ReviewHelper reviewHelper;
     private final FaqHelper faqHelper;
     private final FaqMapper faqMapper;
@@ -101,6 +104,12 @@ public class ChallengeServiceImpl implements ChallengeService {
     public GetChallengeReviewResponseDto getReviews(Long challengeId, Pageable pageable) {
         Page<ReviewVo> challengeReviewVos = reviewHelper.findChallengeReviewVos(challengeId, pageable);
         return challengeMapper.toGetChallengeReviewResponseDto(challengeReviewVos);
+    }
+
+    @Override
+    public GetChallengeGuidesResponseDto getGuides(Long challengeId) {
+        List<ChallengeGuideVo> challengeGuideAdminList = challengeGuideHelper.findAllChallengeGuideAdminVos(challengeId);
+        return challengeMapper.toChallengeGuideAdminListResponseDto(challengeGuideAdminList);
     }
 
     @Override

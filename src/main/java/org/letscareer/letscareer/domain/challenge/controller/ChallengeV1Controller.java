@@ -111,6 +111,15 @@ public class ChallengeV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
+    @Operation(summary = "챌린지 가이드 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeGuidesResponseDto.class)))
+    })
+    @GetMapping("/{id}/guides")
+    public ResponseEntity<SuccessResponse<?>> getGuides(@PathVariable(name = "id") final Long challengeId) {
+        final GetChallengeGuidesResponseDto responseDto = challengeService.getGuides(challengeId);
+        return SuccessResponse.ok(responseDto);
+    }
+
     @Operation(summary = "챌린지 생성", responses = {
             @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
     })
