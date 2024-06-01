@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum GlobalErrorCode implements ErrorCode {
@@ -21,6 +24,7 @@ public enum GlobalErrorCode implements ErrorCode {
      */
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "리소스 접근 권한이 없습니다."),
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "토큰이 유효하지 않습니다"),
+    ZOOM_CREATE_TOKEN_ERROR(HttpStatus.UNAUTHORIZED, "zoom Token 생성에 실패했습니다."),
 
     /**
      * 403 Forbidden
@@ -45,6 +49,7 @@ public enum GlobalErrorCode implements ErrorCode {
     /**
      * 500 Internal Server Error
      */
+    ZOOM_CREATE_INTERNAL_SERVER(HttpStatus.INTERNAL_SERVER_ERROR, "zoom 미팅방 생성에 실패했습니다."),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류입니다.");
 
     private final HttpStatus httpStatus;

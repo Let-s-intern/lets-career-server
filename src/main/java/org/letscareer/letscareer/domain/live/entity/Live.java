@@ -8,6 +8,7 @@ import org.letscareer.letscareer.domain.live.dto.request.CreateLiveRequestDto;
 import org.letscareer.letscareer.domain.live.type.ProgressType;
 import org.letscareer.letscareer.domain.live.type.converter.ProgressTypeConverter;
 import org.letscareer.letscareer.domain.price.entity.LivePrice;
+import org.letscareer.letscareer.domain.program.dto.response.ZoomMeetingResponseDto;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 import java.time.LocalDateTime;
@@ -57,7 +58,7 @@ public class Live extends BaseTimeEntity {
     @Builder.Default
     private List<FaqLive> faqList = new ArrayList<>();
 
-    public static Live createLive(CreateLiveRequestDto requestDto) {
+    public static Live createLive(CreateLiveRequestDto requestDto, ZoomMeetingResponseDto zoomMeetingInfo) {
         return Live.builder()
                 .title(requestDto.title())
                 .shortDesc(requestDto.shortDesc())
@@ -71,6 +72,8 @@ public class Live extends BaseTimeEntity {
                 .endDate(requestDto.endDate())
                 .deadline(requestDto.deadline())
                 .progressType(requestDto.progressType())
+                .zoomLink(zoomMeetingInfo.join_url())
+                .zoomPassword(zoomMeetingInfo.password())
                 .build();
     }
 

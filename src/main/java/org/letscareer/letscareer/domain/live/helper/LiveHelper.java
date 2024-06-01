@@ -7,6 +7,7 @@ import org.letscareer.letscareer.domain.live.entity.Live;
 import org.letscareer.letscareer.domain.live.error.LiveErrorCode;
 import org.letscareer.letscareer.domain.live.repository.LiveRepository;
 import org.letscareer.letscareer.domain.live.vo.*;
+import org.letscareer.letscareer.domain.program.dto.response.ZoomMeetingResponseDto;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.data.domain.Page;
@@ -20,8 +21,8 @@ import java.util.List;
 public class LiveHelper {
     private final LiveRepository liveRepository;
 
-    public Live createLiveAndSave(CreateLiveRequestDto requestDto) {
-        Live live = Live.createLive(requestDto);
+    public Live createLiveAndSave(CreateLiveRequestDto requestDto, ZoomMeetingResponseDto zoomMeetingInfo) {
+        Live live = Live.createLive(requestDto, zoomMeetingInfo);
         return liveRepository.save(live);
     }
 
