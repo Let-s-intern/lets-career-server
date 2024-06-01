@@ -3,7 +3,6 @@ package org.letscareer.letscareer.domain.application.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +34,9 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                         coupon.name,
                         calculateTotalCost(),
                         payment.isConfirmed,
+                        challengeApplication.desiredCompany,
+                        challengeApplication.desiredPosition,
+                        challengeApplication.entryPoint,
                         challengeApplication.createDate
                 ))
                 .from(challengeApplication)

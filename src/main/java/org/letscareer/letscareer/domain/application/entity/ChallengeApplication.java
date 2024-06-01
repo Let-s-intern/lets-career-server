@@ -11,6 +11,10 @@ import org.letscareer.letscareer.domain.user.entity.User;
 @Getter
 @Entity
 public class ChallengeApplication extends Application {
+    private String desiredCompany;
+    private String desiredPosition;
+    private String entryPoint;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "challenge_id")
     private Challenge challenge;
