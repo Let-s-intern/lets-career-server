@@ -16,9 +16,6 @@ public record AdminChallengeApplicationVo(
         String couponName,
         Integer totalCost,
         Boolean isConfirmed,
-        String desiredCompany,
-        String desiredPosition,
-        String entryPoint,
         LocalDateTime createDate
 ) {
 }
