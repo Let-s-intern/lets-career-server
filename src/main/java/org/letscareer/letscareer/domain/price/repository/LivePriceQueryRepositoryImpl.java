@@ -18,6 +18,7 @@ public class LivePriceQueryRepositoryImpl implements LivePriceQueryRepository {
     public Optional<LivePriceDetailVo> findLivePriceDetailVo(Long liveId) {
         return Optional.ofNullable(jpaQueryFactory
                 .select(Projections.constructor(LivePriceDetailVo.class,
+                        livePrice.id,
                         livePrice.price,
                         livePrice.discount,
                         livePrice.accountNumber,

@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 
 @Builder
 public record LivePriceDetailVo(
+        Long priceId,
         Integer price,
         Integer discount,
         String accountNumber,
