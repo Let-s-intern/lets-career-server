@@ -9,13 +9,13 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 @Builder(access = AccessLevel.PRIVATE)
-public record GetChallengesResponseDto(
+public record GetChallengeResponseDto(
         List<ChallengeProfileVo> programList,
         PageInfo pageInfo
 ) {
-    public static GetChallengesResponseDto of(Page<ChallengeProfileVo> programList) {
+    public static GetChallengeResponseDto of(Page<ChallengeProfileVo> programList) {
         PageInfo pageInfo = PageInfo.of(programList);
-        return GetChallengesResponseDto.builder()
+        return GetChallengeResponseDto.builder()
                 .programList(programList.getContent())
                 .pageInfo(pageInfo)
                 .build();

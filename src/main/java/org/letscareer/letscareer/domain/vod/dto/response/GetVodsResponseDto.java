@@ -10,13 +10,13 @@ import java.util.List;
 
 @Builder(access = AccessLevel.PRIVATE)
 public record GetVodsResponseDto(
-        List<VodProfileVo> progrmList,
+        List<VodProfileVo> programList,
         PageInfo pageInfo
 ) {
     public static GetVodsResponseDto of(Page<VodProfileVo> programList) {
         PageInfo pageInfo = PageInfo.of(programList);
         return GetVodsResponseDto.builder()
-                .progrmList(programList.getContent())
+                .programList(programList.getContent())
                 .pageInfo(pageInfo)
                 .build();
     }

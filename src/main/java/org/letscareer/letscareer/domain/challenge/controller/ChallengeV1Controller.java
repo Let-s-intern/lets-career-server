@@ -30,13 +30,13 @@ public class ChallengeV1Controller {
     private final ChallengeService challengeService;
 
     @Operation(summary = "챌린지 목록 조회", responses = {
-            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengesResponseDto.class)))
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeResponseDto.class)))
     })
     @GetMapping
     public ResponseEntity<SuccessResponse<?>> getChallengeList(@RequestParam(required = false) final List<ProgramClassification> typeList,
                                                                @RequestParam(required = false) final List<ProgramStatusType> statusList,
                                                                final Pageable pageable) {
-        final GetChallengesResponseDto responseDto = challengeService.getChallengeList(typeList, statusList, pageable);
+        final GetChallengeResponseDto responseDto = challengeService.getChallengeList(typeList, statusList, pageable);
         return SuccessResponse.ok(responseDto);
     }
 
