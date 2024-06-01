@@ -16,6 +16,9 @@ public record AdminChallengeApplicationVo(
         String couponName,
         Integer totalCost,
         Boolean isConfirmed,
+        String wishJob,
+        String wishCompany,
+        String inflowPath,
         LocalDateTime createDate
 ) {
 }

@@ -34,6 +34,9 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                         coupon.name,
                         calculateTotalCost(),
                         payment.isConfirmed,
+                        user.wishJob,
+                        user.wishCompany,
+                        user.inflowPath,
                         challengeApplication.createDate
                 ))
                 .from(challengeApplication)
