@@ -7,6 +7,9 @@ import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.letscareer.letscareer.domain.user.dto.request.TokenReissueRequestDto;
+import org.letscareer.letscareer.domain.user.entity.User;
+import org.letscareer.letscareer.domain.user.helper.UserHelper;
 import org.letscareer.letscareer.global.common.utils.RedisUtils;
 import org.letscareer.letscareer.global.error.exception.InvalidValueException;
 import org.letscareer.letscareer.global.security.user.PrincipalDetails;
@@ -23,6 +26,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.stream.Collectors;
 
+import static org.letscareer.letscareer.global.error.GlobalErrorCode.INVALID_TOKEN;
 import static org.letscareer.letscareer.global.error.GlobalErrorCode.NOT_REFRESH_TOKEN;
 
 @Slf4j
@@ -35,6 +39,7 @@ public class TokenProvider implements InitializingBean {
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String BEARER_PREFIX = "Bearer ";
     private final PrincipalDetailsService principalDetailsService;
+    private final UserHelper userHelper;
     private final RedisUtils redisUtils;
 
     @Value("${spring.jwt.secret}")
@@ -49,7 +54,7 @@ public class TokenProvider implements InitializingBean {
     private Key key;
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         byte keyBytes[] = Decoders.BASE64.decode(secret);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
@@ -98,6 +103,14 @@ public class TokenProvider implements InitializingBean {
         return token;
     }
 
+    public String reissueAccessToken(TokenReissueRequestDto tokenReissueRequestDto) {
+        String refreshToken = tokenReissueRequestDto.refreshToken();
+        validateRefreshToken(refreshToken);
+        User user = userHelper.findUserByIdOrThrow(Long.parseLong(getTokenUserId(refreshToken)));
+        Authentication authentication = userHelper.userAuthorizationInput(user);
+        return createAccessToken(user.getId(), authentication);
+    }
+
     public void deleteRefreshToken(Long id) {
         redisUtils.delete(id.toString());
     }
@@ -123,7 +136,6 @@ public class TokenProvider implements InitializingBean {
         } catch (SecurityException | MalformedJwtException e) {
             log.info("잘못된 JWT 서명입니다");
         } catch (ExpiredJwtException e) {
-            log.info(e.toString());
             log.info("만료된 JWT 토큰입니다");
         } catch (UnsupportedJwtException e) {
             log.info("지원되지 않는 JWT 토큰입니다");
@@ -142,16 +154,21 @@ public class TokenProvider implements InitializingBean {
     }
 
     public void validateRefreshToken(String token) {
-        Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
-        String typeValue = claims.get("type", String.class);
-        if(!typeValue.equals(REFRESH_KEY)) {
-            throw new InvalidValueException(NOT_REFRESH_TOKEN);
+        try {
+            Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+            String typeValue = claims.get("type", String.class);
+            if(!typeValue.equals(REFRESH_KEY)) {
+                throw new InvalidValueException(NOT_REFRESH_TOKEN);
+            }
         }
-    }
-
-    public long getExpiration(String token) {
-        Date expiration = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getExpiration();
-        Long now = new Date().getTime();
-        return (expiration.getTime() - now);
+        catch (SecurityException | MalformedJwtException e) {
+            log.info("잘못된 JWT 서명입니다");
+        } catch (ExpiredJwtException e) {
+            log.info("만료된 JWT 토큰입니다");
+        } catch (UnsupportedJwtException e) {
+            log.info("지원되지 않는 JWT 토큰입니다");
+        } catch (IllegalArgumentException e) {
+            log.info("JWT 토큰이 잘못되었습니다");
+        }
     }
 }

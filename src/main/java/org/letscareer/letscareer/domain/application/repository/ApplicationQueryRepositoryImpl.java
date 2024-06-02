@@ -21,6 +21,7 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
         return queryFactory.select(Projections.constructor(MyApplicationVo.class,
                         vWApplication.applicationId,
                         vWApplication.paymentIsConfirmed,
+                        vWApplication.programType,
                         vWApplication.programTitle,
                         vWApplication.programStartDate,
                         vWApplication.programEndDate))
