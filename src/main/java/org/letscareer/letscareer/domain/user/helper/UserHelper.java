@@ -1,7 +1,6 @@
 package org.letscareer.letscareer.domain.user.helper;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.letscareer.letscareer.domain.user.dto.request.UserUpdateRequestDto;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.repository.UserRepository;
@@ -20,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import static org.letscareer.letscareer.domain.user.error.UserErrorCode.USER_CONFLICT;
 import static org.letscareer.letscareer.domain.user.error.UserErrorCode.USER_NOT_FOUND;
 import static org.letscareer.letscareer.global.error.GlobalErrorCode.MISMATCH_PASSWORD;
 
@@ -47,8 +47,9 @@ public class UserHelper {
     }
 
     public void validateExistingUser(String phoneNum) {
+        if(phoneNum == null) return;
         User user = userRepository.findByPhoneNum(phoneNum).orElse(null);
-        if (user != null) throw new ConflictException();
+        if (user != null) throw new ConflictException(USER_CONFLICT);
     }
 
     public String encodePassword(String rawPassword) {

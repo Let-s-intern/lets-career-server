@@ -4,6 +4,9 @@ import org.letscareer.letscareer.domain.user.type.AccountType;
 import org.letscareer.letscareer.domain.user.type.UserGrade;
 
 public record UserUpdateRequestDto(
+        String email,
+        String name,
+        String phoneNum,
         String university,
         UserGrade grade,
         String major,

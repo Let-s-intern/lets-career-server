@@ -138,17 +138,20 @@ public class User extends BaseTimeEntity {
         return this;
     }
 
-    public void updateUser(UserUpdateRequestDto addInfoRequestDto) {
-        this.university = updateValue(this.university, addInfoRequestDto.university());
-        this.major = updateValue(this.major, addInfoRequestDto.major());
-        this.grade = updateValue(this.grade, addInfoRequestDto.grade());
-        this.wishJob = updateValue(this.wishJob, addInfoRequestDto.wishJob());
-        this.wishCompany = updateValue(this.wishCompany, addInfoRequestDto.wishCompany());
-        this.marketingAgree = updateValue(this.marketingAgree, addInfoRequestDto.marketingAgree());
-        this.contactEmail = updateValue(this.contactEmail, addInfoRequestDto.contactEmail());
-        this.accountType = updateValue(this.accountType, addInfoRequestDto.accountType());
-        this.accountNum = updateValue(this.accountNum, addInfoRequestDto.accountNum());
-        this.accountOwner = updateValue(this.accountOwner, addInfoRequestDto.accountOwner());
+    public void updateUser(UserUpdateRequestDto userUpdateRequestDto) {
+        this.email = updateValue(this.email, userUpdateRequestDto.email());
+        this.name = updateValue(this.name, userUpdateRequestDto.name());
+        this.phoneNum = updateValue(this.phoneNum, userUpdateRequestDto.phoneNum());
+        this.university = updateValue(this.university, userUpdateRequestDto.university());
+        this.major = updateValue(this.major, userUpdateRequestDto.major());
+        this.grade = updateValue(this.grade, userUpdateRequestDto.grade());
+        this.wishJob = updateValue(this.wishJob, userUpdateRequestDto.wishJob());
+        this.wishCompany = updateValue(this.wishCompany, userUpdateRequestDto.wishCompany());
+        this.marketingAgree = updateValue(this.marketingAgree, userUpdateRequestDto.marketingAgree());
+        this.contactEmail = updateValue(this.contactEmail, userUpdateRequestDto.contactEmail());
+        this.accountType = updateValue(this.accountType, userUpdateRequestDto.accountType());
+        this.accountNum = updateValue(this.accountNum, userUpdateRequestDto.accountNum());
+        this.accountOwner = updateValue(this.accountOwner, userUpdateRequestDto.accountOwner());
     }
 
     public void updateUserPassword(String encodedPassword) {

@@ -58,6 +58,7 @@ public class UserServiceImpl implements UserService {
 
     public void updateUser(Long userId, UserUpdateRequestDto userUpdateRequestDto) {
         User user = userHelper.findUserByIdOrThrow(userId);
+        userHelper.validateExistingUser(userUpdateRequestDto.phoneNum());
         userHelper.updateUser(user, userUpdateRequestDto);
     }
 

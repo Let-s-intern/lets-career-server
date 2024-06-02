@@ -68,6 +68,7 @@ public enum SwaggerEnum {
 
     // user
     USER_NOT_FOUND(UserErrorCode.USER_NOT_FOUND),
+    USER_CONFLICT(UserErrorCode.USER_CONFLICT),
 
     // global
     MISMATCH_PASSWORD(GlobalErrorCode.MISMATCH_PASSWORD),
