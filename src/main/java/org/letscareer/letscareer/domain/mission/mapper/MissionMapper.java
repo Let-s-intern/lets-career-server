@@ -2,13 +2,21 @@ package org.letscareer.letscareer.domain.mission.mapper;
 
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.mission.dto.request.CreateMissionRequestDto;
+import org.letscareer.letscareer.domain.mission.dto.response.MissionAdminListResponseDto;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
+import org.letscareer.letscareer.domain.mission.vo.MissionForChallengeVo;
 import org.letscareer.letscareer.domain.missiontemplate.entity.MissionTemplate;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class MissionMapper {
     public Mission toEntity(CreateMissionRequestDto createMissionRequestDto, Challenge challenge, MissionTemplate missionTemplate) {
         return Mission.createMission(createMissionRequestDto, challenge, missionTemplate);
+    }
+
+    public MissionAdminListResponseDto toMissionAdminListResponseDto(List<MissionForChallengeVo> missionForChallengeVos) {
+        return MissionAdminListResponseDto.of(missionForChallengeVos);
     }
 }

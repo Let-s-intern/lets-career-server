@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 
 @Builder
 public record AdminChallengeApplicationVo(
+        Long paymentId,
         String name,
         String email,
         String phoneNum,
@@ -16,6 +17,9 @@ public record AdminChallengeApplicationVo(
         String couponName,
         Integer totalCost,
         Boolean isConfirmed,
+        String wishJob,
+        String wishCompany,
+        String inflowPath,
         LocalDateTime createDate
 ) {
 }

@@ -31,6 +31,9 @@ public class Mission extends BaseTimeEntity {
     private Long id;
 
     @NotNull
+    private Integer th;
+
+    @NotNull
     private String title;
 
     @NotNull
@@ -43,7 +46,8 @@ public class Mission extends BaseTimeEntity {
     private MissionStatusType missionStatusType = MissionStatusType.WAITING;
 
     @NotNull
-    private Integer refund;
+    @Builder.Default
+    private Integer refund = 0;
 
     @NotNull
     @Builder.Default
@@ -82,6 +86,7 @@ public class Mission extends BaseTimeEntity {
 
     public static Mission createMission(CreateMissionRequestDto createMissionRequestDto, Challenge challenge, MissionTemplate missionTemplate) {
         return Mission.builder()
+                .th(createMissionRequestDto.th())
                 .title(createMissionRequestDto.title())
                 .type(createMissionRequestDto.type())
                 .refund(createMissionRequestDto.refund())

@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public record CreateMissionRequestDto(
+        @NotNull Integer th,
         @NotEmpty String title,
         @NotNull MissionType type,
         @Nullable Integer refund,

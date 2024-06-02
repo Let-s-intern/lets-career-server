@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.global.error.ErrorCode;
-import org.letscareer.letscareer.global.error.GlobalErrorCode;
 import org.letscareer.letscareer.global.error.entity.ErrorResponse;
 import org.letscareer.letscareer.global.error.exception.UnauthorizedException;
 import org.springframework.http.MediaType;
@@ -23,10 +22,7 @@ public class JwtExceptionHandlerFilter extends OncePerRequestFilter {
     private final ObjectMapper objectMapper;
 
     @Override
-    protected void doFilterInternal(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             filterChain.doFilter(request, response);
         } catch (UnauthorizedException e) {

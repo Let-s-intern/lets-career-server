@@ -3,11 +3,11 @@ package org.letscareer.letscareer.domain.application.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
+import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
 
 import java.util.List;
 
@@ -26,6 +26,7 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
     public List<AdminChallengeApplicationVo> findAdminChallengeApplicationVos(Long challengeId, Boolean isConfirmed) {
         return queryFactory
                 .select(Projections.constructor(AdminChallengeApplicationVo.class,
+                        payment.id,
                         user.name,
                         user.email,
                         user.phoneNum,
@@ -35,6 +36,9 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                         coupon.name,
                         calculateTotalCost(),
                         payment.isConfirmed,
+                        user.wishJob,
+                        user.wishCompany,
+                        user.inflowPath,
                         challengeApplication.createDate
                 ))
                 .from(challengeApplication)
@@ -47,6 +51,26 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                 .where(
                         eqChallengeId(challengeId),
                         eqIsConfirmed(isConfirmed)
+                )
+                .fetch();
+    }
+
+    @Override
+    public List<UserChallengeApplicationVo> findUserChallengeApplicationVo(Long challengeId) {
+        return queryFactory
+                .select(Projections.constructor(UserChallengeApplicationVo.class,
+                        user.id,
+                        user.name,
+                        user.contactEmail,
+                        user.phoneNum,
+                        user.accountType,
+                        user.accountNum
+                ))
+                .from(challengeApplication)
+                .leftJoin(challengeApplication.challenge, challenge)
+                .leftJoin(challengeApplication.user, user)
+                .where(
+                        eqChallengeId(challengeId)
                 )
                 .fetch();
     }

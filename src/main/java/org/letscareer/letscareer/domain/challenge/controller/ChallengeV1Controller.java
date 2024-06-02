@@ -128,6 +128,16 @@ public class ChallengeV1Controller {
         return SuccessResponse.ok(challengeService.getNotices(challengeId));
     }
 
+    @Operation(summary = "[대기]::챌린지 참가자 페이백 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeApplicationsPaybackResponseDto.class)))
+    })
+    @ApiErrorCode({SwaggerEnum.APPLICATION_NOT_FOUND})
+    @GetMapping("/{id}/applications/payback")
+    public ResponseEntity<SuccessResponse<?>> getApplicationsPayback(@PathVariable(name = "id") final Long challengeId) {
+        final GetChallengeApplicationsPaybackResponseDto responseDto = challengeService.getApplicationsPayback(challengeId);
+        return SuccessResponse.ok(responseDto);
+    }
+
     @Operation(summary = "챌린지 생성", responses = {
             @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
     })

@@ -4,22 +4,22 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.classification.helper.ChallengeClassificationHelper;
 import org.letscareer.letscareer.domain.classification.helper.LiveClassificationHelper;
 import org.letscareer.letscareer.domain.classification.helper.VodClassificationHelper;
-import org.letscareer.letscareer.domain.program.dto.request.GetProgramsForDurationRequestDto;
-import org.letscareer.letscareer.domain.program.dto.response.GetProgramForDurationResponseDto;
-import org.letscareer.letscareer.domain.program.dto.response.GetProgramResponseDto;
-import org.letscareer.letscareer.domain.program.dto.response.GetProgramsForDurationResponseDto;
-import org.letscareer.letscareer.domain.program.dto.response.GetProgramsResponseDto;
+import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
+import org.letscareer.letscareer.domain.program.dto.response.GetProgramForConditionResponseDto;
+import org.letscareer.letscareer.domain.program.dto.response.GetProgramsForConditionResponseDto;
+import org.letscareer.letscareer.domain.program.entity.SearchCondition;
 import org.letscareer.letscareer.domain.program.helper.ProgramHelper;
 import org.letscareer.letscareer.domain.program.mapper.ProgramMapper;
+import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
-import org.letscareer.letscareer.domain.program.vo.AdminProgramVo;
-import org.letscareer.letscareer.domain.program.vo.ProgramForDurationVo;
+import org.letscareer.letscareer.domain.program.vo.ProgramForConditionVo;
 import org.letscareer.letscareer.global.common.entity.PageInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,40 +34,27 @@ public class ProgramServiceImpl implements ProgramService {
     private final VodClassificationHelper vodClassificationHelper;
 
     @Override
-    public GetProgramsResponseDto getPrograms(Pageable pageable) {
-        Page<AdminProgramVo> adminProgramVos = programHelper.findAdminProgramVos(pageable);
-        List<GetProgramResponseDto<?>> contents = composeProgramVosAndClassifications(adminProgramVos);
-        PageInfo pageInfo = PageInfo.of(adminProgramVos);
-        return programMapper.toGetProgramsResponseDto(contents, pageInfo);
+    public GetProgramsForConditionResponseDto getProgramsForCondition(List<ProgramType> type,
+                                                                      List<ProgramClassification> typeList,
+                                                                      List<ProgramStatusType> statusList,
+                                                                      LocalDateTime startDate,
+                                                                      LocalDateTime endDate,
+                                                                      Pageable pageable) {
+        SearchCondition condition = SearchCondition.of(type, typeList, statusList, startDate, endDate, pageable);
+        Page<ProgramForConditionVo> programForConditionVo = programHelper.findProgramForConditionVos(condition);
+        List<GetProgramForConditionResponseDto<?>> conditionResponseDtoList
+                = composeProgramForConditionVosAndClassifications(programForConditionVo.getContent());
+        PageInfo pageInfo = PageInfo.of(programForConditionVo);
+        return programMapper.toGetProgramsForConditionResponseDto(conditionResponseDtoList, pageInfo);
     }
 
-    @Override
-    public GetProgramsForDurationResponseDto getProgramsForDuration(GetProgramsForDurationRequestDto requestDto) {
-        List<ProgramForDurationVo> programForDurationVo = programHelper.findProgramForDurationVos(requestDto);
-        List<GetProgramForDurationResponseDto<?>> programForDurationResponseDtoList
-                = composeProgramForDurationVosAndClassifications(programForDurationVo);
-        return programMapper.toGetProgramsForDurationResponseDto(programForDurationResponseDtoList);
-    }
-
-    private List<GetProgramResponseDto<?>> composeProgramVosAndClassifications(Page<AdminProgramVo> adminProgramVos) {
-        List<AdminProgramVo> contents = adminProgramVos.getContent();
-        return contents.stream()
-                .map(this::createGetProgramResponseDto)
-                .collect(Collectors.toList());
-    }
-
-    private List<GetProgramForDurationResponseDto<?>> composeProgramForDurationVosAndClassifications(List<ProgramForDurationVo> programForDurationVo) {
-        return programForDurationVo.stream()
+    private List<GetProgramForConditionResponseDto<?>> composeProgramForConditionVosAndClassifications(List<ProgramForConditionVo> programForConditionVo) {
+        return programForConditionVo.stream()
                 .map(this::createGetProgramForDurationResponseDto)
                 .collect(Collectors.toList());
     }
 
-    private GetProgramResponseDto<?> createGetProgramResponseDto(AdminProgramVo content) {
-        List<?> classificationList = getProgramClassificationsForType(content.programType(), content.id());
-        return programMapper.toGetProgramResponseDto(content, classificationList);
-    }
-
-    private GetProgramForDurationResponseDto<?> createGetProgramForDurationResponseDto(ProgramForDurationVo programVo) {
+    private GetProgramForConditionResponseDto<?> createGetProgramForDurationResponseDto(ProgramForConditionVo programVo) {
         List<?> classificationList = getProgramClassificationsForType(programVo.programType(), programVo.id());
         return programMapper.toGetProgramForDurationResponseDto(programVo, classificationList);
     }

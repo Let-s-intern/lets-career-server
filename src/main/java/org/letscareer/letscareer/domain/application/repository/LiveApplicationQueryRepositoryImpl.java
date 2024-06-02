@@ -14,8 +14,8 @@ import java.util.List;
 import static org.letscareer.letscareer.domain.application.entity.QLiveApplication.liveApplication;
 import static org.letscareer.letscareer.domain.coupon.entity.QCoupon.coupon;
 import static org.letscareer.letscareer.domain.live.entity.QLive.live;
-import static org.letscareer.letscareer.domain.price.entity.QLivePrice.livePrice;
 import static org.letscareer.letscareer.domain.payment.entity.QPayment.payment;
+import static org.letscareer.letscareer.domain.price.entity.QLivePrice.livePrice;
 import static org.letscareer.letscareer.domain.user.entity.QUser.user;
 
 @RequiredArgsConstructor
@@ -26,6 +26,7 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
     public List<AdminLiveApplicationVo> findAdminLiveApplicationVos(Long liveId, Boolean isConfirmed) {
         return queryFactory
                 .select(Projections.constructor(AdminLiveApplicationVo.class,
+                        payment.id,
                         user.name,
                         user.email,
                         user.phoneNum,
