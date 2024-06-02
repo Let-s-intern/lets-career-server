@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 public record GetLiveApplicationFormResponseDto(
         String name,
         String email,
+        String contactEmail,
         String phoneNumber,
         LocalDateTime startDate,
         LocalDateTime endDate,
@@ -24,6 +25,7 @@ public record GetLiveApplicationFormResponseDto(
         return GetLiveApplicationFormResponseDto.builder()
                 .name(user.getName())
                 .email(user.getEmail())
+                .contactEmail(user.getContactEmail())
                 .phoneNumber(user.getPhoneNum())
                 .startDate(liveApplicationFormVo.startDate())
                 .endDate(liveApplicationFormVo.endDate())
