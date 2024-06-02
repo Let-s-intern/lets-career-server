@@ -31,7 +31,7 @@ public record MyApplicationVo(
                 id,
                 ApplicationStatus.of(paymentIsConfirmed, programEndDate),
                 programType,
-                ProgramStatusType.of(programStartDate, programEndDate),
+                ProgramStatusType.of(programType, programStartDate, programEndDate),
                 programTitle,
                 programShortDesc,
                 programThumbnail,

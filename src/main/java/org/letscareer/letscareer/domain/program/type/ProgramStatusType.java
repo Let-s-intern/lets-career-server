@@ -7,7 +7,9 @@ public enum ProgramStatusType {
     PROCEEDING,
     POST;
 
-    public static ProgramStatusType of(LocalDateTime startDate, LocalDateTime endDate) {
+    public static ProgramStatusType of(ProgramType programType, LocalDateTime startDate, LocalDateTime endDate) {
+        if(programType.equals(ProgramType.VOD)) return PROCEEDING;
+
         LocalDateTime now = LocalDateTime.now();
         if(startDate.isAfter(now))
             return PREV;
