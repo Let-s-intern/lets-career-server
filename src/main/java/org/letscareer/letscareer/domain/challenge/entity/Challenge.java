@@ -3,6 +3,7 @@ package org.letscareer.letscareer.domain.challenge.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeRequestDto;
+import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeRequestDto;
 import org.letscareer.letscareer.domain.challenge.type.ChallengeType;
 import org.letscareer.letscareer.domain.challenge.type.converter.ChallengeTypeConverter;
 import org.letscareer.letscareer.domain.challengeguide.entity.ChallengeGuide;
@@ -43,6 +44,7 @@ public class Challenge extends BaseTimeEntity {
     private String zoomPassword;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    private LocalDateTime beginning;
     private LocalDateTime deadline;
     @Builder.Default
     private Boolean isVisible = false;
@@ -74,6 +76,7 @@ public class Challenge extends BaseTimeEntity {
                 .thumbnail(requestDto.thumbnail())
                 .startDate(requestDto.startDate())
                 .endDate(requestDto.endDate())
+                .beginning(requestDto.beginning())
                 .deadline(requestDto.deadline())
                 .chatLink(requestDto.chatLink())
                 .chatPassword(requestDto.chatPassword())
@@ -83,7 +86,7 @@ public class Challenge extends BaseTimeEntity {
                 .build();
     }
 
-    public void updateChallenge(CreateChallengeRequestDto requestDto) {
+    public void updateChallenge(UpdateChallengeRequestDto requestDto) {
         this.title = updateValue(this.title, requestDto.title());
         this.shortDesc = updateValue(this.shortDesc, requestDto.shortDesc());
         this.description = updateValue(this.description, requestDto.desc());
@@ -91,10 +94,12 @@ public class Challenge extends BaseTimeEntity {
         this.thumbnail = updateValue(this.thumbnail, requestDto.thumbnail());
         this.startDate = updateValue(this.startDate, requestDto.startDate());
         this.endDate = updateValue(this.endDate, requestDto.endDate());
+        this.beginning = updateValue(this.beginning, requestDto.beginning());
         this.deadline = updateValue(this.deadline, requestDto.deadline());
         this.chatLink = updateValue(this.chatLink, requestDto.chatLink());
         this.chatPassword = updateValue(this.chatPassword, requestDto.chatPassword());
         this.challengeType = updateValue(this.challengeType, requestDto.challengeType());
+        this.isVisible = updateValue(this.isVisible, requestDto.isVisible());
     }
 
     public void addChallengeClassification(ChallengeClassification challengeClassification) {

@@ -5,6 +5,7 @@ import lombok.*;
 import org.letscareer.letscareer.domain.classification.entity.LiveClassification;
 import org.letscareer.letscareer.domain.faq.entity.FaqLive;
 import org.letscareer.letscareer.domain.live.dto.request.CreateLiveRequestDto;
+import org.letscareer.letscareer.domain.live.dto.request.UpdateLiveRequestDto;
 import org.letscareer.letscareer.domain.live.type.ProgressType;
 import org.letscareer.letscareer.domain.live.type.converter.ProgressTypeConverter;
 import org.letscareer.letscareer.domain.price.entity.LivePrice;
@@ -42,6 +43,7 @@ public class Live extends BaseTimeEntity {
     private String zoomPassword;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    private LocalDateTime beginning;
     private LocalDateTime deadline;
     @Builder.Default
     private Boolean isVisible = false;
@@ -70,6 +72,7 @@ public class Live extends BaseTimeEntity {
                 .place(requestDto.place())
                 .startDate(requestDto.startDate())
                 .endDate(requestDto.endDate())
+                .beginning(requestDto.beginning())
                 .deadline(requestDto.deadline())
                 .progressType(requestDto.progressType())
                 .zoomLink(zoomMeetingInfo.join_url())
@@ -77,7 +80,7 @@ public class Live extends BaseTimeEntity {
                 .build();
     }
 
-    public void updateLive(CreateLiveRequestDto requestDto) {
+    public void updateLive(UpdateLiveRequestDto requestDto) {
         this.title = updateValue(this.title, requestDto.title());
         this.shortDesc = updateValue(this.shortDesc, requestDto.shortDesc());
         this.description = updateValue(this.description, requestDto.desc());
@@ -88,8 +91,10 @@ public class Live extends BaseTimeEntity {
         this.place = updateValue(this.place, requestDto.place());
         this.startDate = updateValue(this.startDate, requestDto.startDate());
         this.endDate = updateValue(this.endDate, requestDto.endDate());
+        this.beginning = updateValue(this.beginning, requestDto.beginning());
         this.deadline = updateValue(this.deadline, requestDto.deadline());
         this.progressType = updateValue(this.progressType, requestDto.progressType());
+        this.isVisible = updateValue(this.isVisible, requestDto.isVisible());
     }
 
 

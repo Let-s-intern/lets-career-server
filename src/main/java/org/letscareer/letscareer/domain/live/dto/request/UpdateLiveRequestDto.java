@@ -8,7 +8,7 @@ import org.letscareer.letscareer.domain.price.dto.request.CreateLivePriceRequest
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record CreateLiveRequestDto(
+public record UpdateLiveRequestDto(
         String title,
         String shortDesc,
         String desc,
@@ -22,6 +22,7 @@ public record CreateLiveRequestDto(
         LocalDateTime beginning,
         LocalDateTime deadline,
         ProgressType progressType,
+        Boolean isVisible,
         List<CreateLiveClassificationRequestDto> programTypeInfo,
         CreateLivePriceRequestDto priceInfo,
         List<CreateProgramFaqRequestDto> faqInfo

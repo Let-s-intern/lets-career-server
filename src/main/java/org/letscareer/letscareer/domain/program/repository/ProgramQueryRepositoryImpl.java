@@ -70,6 +70,7 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                         vWProgram.shortDesc,
                         vWProgram.startDate,
                         vWProgram.endDate,
+                        vWProgram.beginning,
                         vWProgram.deadline
                 ))
                 .from(vWProgram)

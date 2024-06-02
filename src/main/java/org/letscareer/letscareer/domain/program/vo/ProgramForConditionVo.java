@@ -15,6 +15,7 @@ public record ProgramForConditionVo(
         String shortDesc,
         LocalDateTime startDate,
         LocalDateTime endDate,
+        LocalDateTime beginning,
         LocalDateTime deadline
 ) {
 }

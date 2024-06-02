@@ -8,7 +8,7 @@ import org.letscareer.letscareer.domain.price.dto.request.CreateChallengePriceRe
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record CreateChallengeRequestDto(
+public record UpdateChallengeRequestDto(
         String title,
         String shortDesc,
         String desc,
@@ -21,6 +21,7 @@ public record CreateChallengeRequestDto(
         String chatLink,
         String chatPassword,
         ChallengeType challengeType,
+        Boolean isVisible,
         List<CreateChallengeClassificationRequestDto> programTypeInfo,
         List<CreateChallengePriceRequestDto> priceInfo,
         List<CreateProgramFaqRequestDto> faqInfo

@@ -5,6 +5,7 @@ import org.letscareer.letscareer.domain.application.dto.response.GetLiveApplicat
 import org.letscareer.letscareer.domain.application.helper.LiveApplicationHelper;
 import org.letscareer.letscareer.domain.application.mapper.LiveApplicationMapper;
 import org.letscareer.letscareer.domain.application.vo.AdminLiveApplicationVo;
+import org.letscareer.letscareer.domain.live.dto.request.UpdateLiveRequestDto;
 import org.letscareer.letscareer.domain.live.dto.response.GetLiveApplicationFormResponseDto;
 import org.letscareer.letscareer.domain.classification.dto.request.CreateLiveClassificationRequestDto;
 import org.letscareer.letscareer.domain.classification.helper.LiveClassificationHelper;
@@ -117,7 +118,7 @@ public class LiveServiceImpl implements LiveService {
     }
 
     @Override
-    public void updateLive(Long liveId, CreateLiveRequestDto requestDto) {
+    public void updateLive(Long liveId, UpdateLiveRequestDto requestDto) {
         Live live = liveHelper.findLiveByIdOrThrow(liveId);
         live.updateLive(requestDto);
         updateClassifications(live, requestDto.programTypeInfo());
