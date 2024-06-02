@@ -16,6 +16,7 @@ public record CreateChallengeRequestDto(
         String thumbnail,
         LocalDateTime startDate,
         LocalDateTime endDate,
+        LocalDateTime beginning,
         LocalDateTime deadline,
         String chatLink,
         String chatPassword,

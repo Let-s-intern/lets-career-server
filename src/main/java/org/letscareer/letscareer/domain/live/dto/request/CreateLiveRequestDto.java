@@ -19,6 +19,7 @@ public record CreateLiveRequestDto(
         String place,
         LocalDateTime startDate,
         LocalDateTime endDate,
+        LocalDateTime beginning,
         LocalDateTime deadline,
         ProgressType progressType,
         List<CreateLiveClassificationRequestDto> programTypeInfo,

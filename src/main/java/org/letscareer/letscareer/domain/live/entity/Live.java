@@ -42,6 +42,7 @@ public class Live extends BaseTimeEntity {
     private String zoomPassword;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    private LocalDateTime beginning;
     private LocalDateTime deadline;
     @Builder.Default
     private Boolean isVisible = false;
@@ -70,6 +71,7 @@ public class Live extends BaseTimeEntity {
                 .place(requestDto.place())
                 .startDate(requestDto.startDate())
                 .endDate(requestDto.endDate())
+                .beginning(requestDto.beginning())
                 .deadline(requestDto.deadline())
                 .progressType(requestDto.progressType())
                 .zoomLink(zoomMeetingInfo.join_url())
@@ -88,6 +90,7 @@ public class Live extends BaseTimeEntity {
         this.place = updateValue(this.place, requestDto.place());
         this.startDate = updateValue(this.startDate, requestDto.startDate());
         this.endDate = updateValue(this.endDate, requestDto.endDate());
+        this.beginning = updateValue(this.beginning, requestDto.beginning());
         this.deadline = updateValue(this.deadline, requestDto.deadline());
         this.progressType = updateValue(this.progressType, requestDto.progressType());
     }
