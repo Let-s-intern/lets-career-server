@@ -12,6 +12,7 @@ import org.letscareer.letscareer.domain.mission.dto.response.MissionAdminListRes
 import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.mission.helper.MissionHelper;
 import org.letscareer.letscareer.domain.mission.mapper.MissionMapper;
+import org.letscareer.letscareer.domain.mission.vo.MissionForChallengeVo;
 import org.letscareer.letscareer.domain.missiontemplate.entity.MissionTemplate;
 import org.letscareer.letscareer.domain.missiontemplate.helper.MissionTemplateHelper;
 import org.springframework.stereotype.Service;
@@ -32,8 +33,8 @@ public class MissionServiceImpl implements MissionService{
 
     @Override
     public void createMission(Long challengeId, CreateMissionRequestDto createMissionRequestDto) {
-        final Challenge challenge = challengeHelper.findChallengeByIdOrThrow(challengeId);
-        final MissionTemplate missionTemplate = missionTemplateHelper.findMissionTemplateByIdOrThrow(createMissionRequestDto.missionTemplateId());
+        Challenge challenge = challengeHelper.findChallengeByIdOrThrow(challengeId);
+        MissionTemplate missionTemplate = missionTemplateHelper.findMissionTemplateByIdOrThrow(createMissionRequestDto.missionTemplateId());
         Mission newMission = missionMapper.toEntity(createMissionRequestDto, challenge, missionTemplate);
         findContentsAndAdd(ContentsType.ESSENTIAL, createMissionRequestDto.essentialContentsIdList(), newMission);
         findContentsAndAdd(ContentsType.ADDITIONAL, createMissionRequestDto.additionalContentsIdList(), newMission);
@@ -42,7 +43,8 @@ public class MissionServiceImpl implements MissionService{
 
     @Override
     public MissionAdminListResponseDto getMissionsForAdmin(Long challengeId) {
-        return null;
+        List<MissionForChallengeVo> missionForChallengeVos = missionHelper.findMissionForChallengeVos(challengeId);
+        return missionMapper.toMissionAdminListResponseDto(missionForChallengeVos);
     }
 
     @Override

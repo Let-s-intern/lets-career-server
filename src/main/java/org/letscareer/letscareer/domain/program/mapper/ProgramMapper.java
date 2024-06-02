@@ -1,12 +1,11 @@
 package org.letscareer.letscareer.domain.program.mapper;
 
-import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
-import org.letscareer.letscareer.domain.program.dto.response.GetProgramForDurationResponseDto;
+import org.letscareer.letscareer.domain.program.dto.response.GetProgramForConditionResponseDto;
 import org.letscareer.letscareer.domain.program.dto.response.GetProgramResponseDto;
-import org.letscareer.letscareer.domain.program.dto.response.GetProgramsForDurationResponseDto;
+import org.letscareer.letscareer.domain.program.dto.response.GetProgramsForConditionResponseDto;
 import org.letscareer.letscareer.domain.program.dto.response.GetProgramsResponseDto;
 import org.letscareer.letscareer.domain.program.vo.AdminProgramVo;
-import org.letscareer.letscareer.domain.program.vo.ProgramForDurationVo;
+import org.letscareer.letscareer.domain.program.vo.ProgramForConditionVo;
 import org.letscareer.letscareer.global.common.entity.PageInfo;
 import org.springframework.stereotype.Component;
 
@@ -22,11 +21,12 @@ public class ProgramMapper {
         return GetProgramResponseDto.of(content, classificationList);
     }
 
-    public GetProgramsForDurationResponseDto toGetProgramsForDurationResponseDto(List<GetProgramForDurationResponseDto<?>> programList) {
-        return GetProgramsForDurationResponseDto.of(programList);
+    public GetProgramsForConditionResponseDto toGetProgramsForConditionResponseDto(List<GetProgramForConditionResponseDto<?>> programList,
+                                                                                   PageInfo pageInfo) {
+        return GetProgramsForConditionResponseDto.of(programList, pageInfo);
     }
 
-    public GetProgramForDurationResponseDto<?> toGetProgramForDurationResponseDto(ProgramForDurationVo programVo, List<?> classificationList) {
-        return GetProgramForDurationResponseDto.of(programVo, classificationList);
+    public GetProgramForConditionResponseDto<?> toGetProgramForDurationResponseDto(ProgramForConditionVo programVo, List<?> classificationList) {
+        return GetProgramForConditionResponseDto.of(programVo, classificationList);
     }
 }

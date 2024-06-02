@@ -17,28 +17,23 @@ import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUti
 @Getter
 @Entity
 public class Payment extends BaseTimeEntity {
-    @Builder.Default
-    private Integer finalPrice = 0;
-
-    @Builder.Default
-    private Boolean isConfirmed = false;
-
-    @Builder.Default
-    private Boolean isRefunded = false;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "payment_id")
     private Long id;
+    @Builder.Default
+    private Integer finalPrice = 0;
+    @Builder.Default
+    private Boolean isConfirmed = false;
+    @Builder.Default
+    private Boolean isRefunded = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "coupon_id")
     private Coupon coupon;
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id")
     private Application application;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "price_id")
     private Price price;
