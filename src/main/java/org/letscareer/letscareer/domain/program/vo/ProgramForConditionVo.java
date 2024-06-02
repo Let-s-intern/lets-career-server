@@ -7,7 +7,7 @@ import org.letscareer.letscareer.domain.program.type.ProgramType;
 import java.time.LocalDateTime;
 
 @Builder(access = AccessLevel.PRIVATE)
-public record ProgramForDurationVo(
+public record ProgramForConditionVo(
         Long id,
         ProgramType programType,
         String title,
