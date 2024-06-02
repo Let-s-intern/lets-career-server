@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.dto.response.GetChallengeApplicationsResponseDto;
 import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeRequestDto;
+import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.response.*;
 import org.letscareer.letscareer.domain.challenge.service.ChallengeService;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
@@ -153,7 +154,7 @@ public class ChallengeV1Controller {
     @ApiErrorCode({SwaggerEnum.CHALLENGE_NOT_FOUND})
     @PatchMapping("/{id}")
     public ResponseEntity<SuccessResponse<?>> updateChallengeProgram(@PathVariable("id") final Long challengeId,
-                                                                     @RequestBody final CreateChallengeRequestDto requestDto) {
+                                                                     @RequestBody final UpdateChallengeRequestDto requestDto) {
         challengeService.updateChallenge(challengeId, requestDto);
         return SuccessResponse.ok(null);
     }

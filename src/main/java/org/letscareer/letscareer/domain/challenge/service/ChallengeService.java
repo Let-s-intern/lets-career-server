@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.challenge.service;
 
 import org.letscareer.letscareer.domain.application.dto.response.GetChallengeApplicationsResponseDto;
 import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeRequestDto;
+import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.response.*;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.faq.dto.response.GetFaqResponseDto;
@@ -38,7 +39,7 @@ public interface ChallengeService {
 
     void createChallenge(CreateChallengeRequestDto createChallengeRequestDto);
 
-    void updateChallenge(Long challengeId, CreateChallengeRequestDto createChallengeRequestDto);
+    void updateChallenge(Long challengeId, UpdateChallengeRequestDto createChallengeRequestDto);
 
     void deleteChallenge(Long challengeId);
 }

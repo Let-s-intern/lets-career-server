@@ -7,10 +7,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.dto.response.GetLiveApplicationsResponseDto;
-import org.letscareer.letscareer.domain.live.dto.response.GetLiveApplicationFormResponseDto;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.faq.dto.response.GetFaqResponseDto;
 import org.letscareer.letscareer.domain.live.dto.request.CreateLiveRequestDto;
+import org.letscareer.letscareer.domain.live.dto.request.UpdateLiveRequestDto;
 import org.letscareer.letscareer.domain.live.dto.response.*;
 import org.letscareer.letscareer.domain.live.service.LiveService;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
@@ -120,7 +120,7 @@ public class LiveV1Controller {
     })
     @PatchMapping("/{id}")
     public ResponseEntity<SuccessResponse<?>> updateChallengeProgram(@PathVariable("id") final Long liveId,
-                                                                     @RequestBody final CreateLiveRequestDto requestDto) {
+                                                                     @RequestBody final UpdateLiveRequestDto requestDto) {
         liveService.updateLive(liveId, requestDto);
         return SuccessResponse.ok(null);
     }
