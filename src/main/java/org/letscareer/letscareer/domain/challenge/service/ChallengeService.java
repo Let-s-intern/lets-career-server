@@ -34,6 +34,8 @@ public interface ChallengeService {
 
     GetChallengeNoticesResponseDto getNotices(Long challengeId);
 
+    GetChallengeApplicationsPaybackResponseDto getApplicationsPayback(Long challengeId);
+
     void createChallenge(CreateChallengeRequestDto createChallengeRequestDto);
 
     void updateChallenge(Long challengeId, CreateChallengeRequestDto createChallengeRequestDto);

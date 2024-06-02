@@ -5,6 +5,7 @@ import org.letscareer.letscareer.domain.application.dto.response.GetChallengeApp
 import org.letscareer.letscareer.domain.application.helper.ChallengeApplicationHelper;
 import org.letscareer.letscareer.domain.application.mapper.ChallengeApplicationMapper;
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
+import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
 import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.response.*;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
@@ -122,6 +123,12 @@ public class ChallengeServiceImpl implements ChallengeService {
     public GetChallengeNoticesResponseDto getNotices(Long challengeId) {
         List<ChallengeNoticeVo> challengeNoticeList = challengeNoticeHelper.findAllChallengeNoticeVos(challengeId);
         return challengeMapper.toGetChallengeNoticesResponseDto(challengeNoticeList);
+    }
+
+    @Override
+    public GetChallengeApplicationsPaybackResponseDto getApplicationsPayback(Long challengeId) {
+        List<UserChallengeApplicationVo> challengeApplicationVo = challengeApplicationHelper.findUserChallengeApplicationVo(challengeId);
+        return null;
     }
 
     @Override
