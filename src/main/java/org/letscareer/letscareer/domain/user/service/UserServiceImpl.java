@@ -86,6 +86,12 @@ public class UserServiceImpl implements UserService {
         tokenProvider.deleteRefreshToken(user.getId());
     }
 
+    @Override
+    public TokenResponseDto reissueToken(TokenReissueRequestDto tokenReissueRequestDto) {
+        String newAccessToken = tokenProvider.reissueAccessToken(tokenReissueRequestDto);
+        return TokenResponseDto.of(newAccessToken, tokenReissueRequestDto.refreshToken());
+    }
+
     public UserInfoResponseDto getUserInfo(User user) {
         return userMapper.toUserInfoResponseDto(user);
     }

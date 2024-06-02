@@ -33,4 +33,6 @@ public interface UserService {
     void updatePassword(Long id, PasswordUpdateRequestDto passwordUpdateRequestDto);
 
     void signOut(User user);
+
+    TokenResponseDto reissueToken(TokenReissueRequestDto tokenReissueRequestDto);
 }

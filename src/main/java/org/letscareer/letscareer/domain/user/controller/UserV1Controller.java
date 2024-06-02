@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.user.dto.request.*;
+import org.letscareer.letscareer.domain.user.dto.response.TokenResponseDto;
 import org.letscareer.letscareer.domain.user.dto.response.UserAdminListResponseDto;
 import org.letscareer.letscareer.domain.user.dto.response.UserInfoResponseDto;
 import org.letscareer.letscareer.domain.user.entity.User;
@@ -50,6 +51,16 @@ public class UserV1Controller {
     public ResponseEntity<SuccessResponse<?>> signOut(@CurrentUser User user) {
         userService.signOut(user);
         return SuccessResponse.ok(null);
+    }
+
+    @Operation(summary = "유저 토큰 재발급", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = TokenResponseDto.class)))
+    })
+    @ApiErrorCode({SwaggerEnum.INVALID_TOKEN, SwaggerEnum.NOT_REFRESH_TOKEN})
+    @PatchMapping("/token")
+    public ResponseEntity<SuccessResponse<?>> reissueToken(@RequestBody @Valid TokenReissueRequestDto tokenReissueRequestDto) {
+        TokenResponseDto responseDto = userService.reissueToken(tokenReissueRequestDto);
+        return SuccessResponse.ok(responseDto);
     }
 
     @Operation(summary = "유저 정보 업데이트", responses = {
