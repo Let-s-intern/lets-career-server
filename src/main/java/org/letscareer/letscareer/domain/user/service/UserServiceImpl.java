@@ -97,6 +97,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public void deleteUser(User user) {
+        tokenProvider.deleteRefreshToken(user.getId());
         userHelper.deleteUser(user);
     }
 
