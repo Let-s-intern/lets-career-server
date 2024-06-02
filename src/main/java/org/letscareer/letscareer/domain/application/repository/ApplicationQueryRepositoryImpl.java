@@ -23,6 +23,8 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
                         vWApplication.paymentIsConfirmed,
                         vWApplication.programType,
                         vWApplication.programTitle,
+                        vWApplication.programShortDesc,
+                        vWApplication.programThumbnail,
                         vWApplication.programStartDate,
                         vWApplication.programEndDate))
                 .from(vWApplication)

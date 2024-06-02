@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Subselect(
         "SELECT a.application_id, a.user_id, " +
                 "1 as program_type, ca.challenge_id as program_id, " +
-                "c.title as program_title, c.start_date as program_start_date, c.end_date as program_end_date, " +
+                "c.title as program_title, c.short_desc as program_short_desc, c.thumbnail as program_thumbnail, c.start_date as program_start_date, c.end_date as program_end_date, " +
                 "p.is_confirmed as payment_is_confirmed, p.is_refunded as payment_is_refunded " +
                 "FROM application as a " +
                 "INNER JOIN challenge_application as ca ON ca.application_id = a.application_id " +
@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
                 "UNION ALL " +
                 "SELECT a.application_id, a.user_id, " +
                 "2 as program_type, la.live_id as program_id, " +
-                "l.title as program_title, l.start_date as program_start_date, l.end_date as program_end_date, " +
+                "l.title as program_title, l.short_desc as program_short_desc, l.thumbnail as program_thumbnail, l.start_date as program_start_date, l.end_date as program_end_date, " +
                 "p.is_confirmed as payment_is_confirmed, p.is_refunded as payment_is_refunded " +
                 "FROM application as a " +
                 "INNER JOIN live_application as la ON la.application_id = a.application_id " +
@@ -47,6 +47,8 @@ public class VWApplication extends BaseTimeEntity {
     private ProgramType programType;
     private Long programId;
     private String programTitle;
+    private String programShortDesc;
+    private String programThumbnail;
     private LocalDateTime programStartDate;
     private LocalDateTime programEndDate;
 }
