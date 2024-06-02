@@ -4,6 +4,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.*;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.application.type.ApplicationReviewStatus;
 import org.letscareer.letscareer.domain.application.type.ApplicationStatus;
 import org.letscareer.letscareer.domain.application.vo.MyApplicationVo;
 
@@ -17,7 +18,7 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<MyApplicationVo> findMyApplications(Long userId, ApplicationStatus status) {
+    public List<MyApplicationVo> findMyApplications(Long userId, ApplicationStatus status, ApplicationReviewStatus reviewStatus) {
         return queryFactory.select(Projections.constructor(MyApplicationVo.class,
                         vWApplication.applicationId,
                         vWApplication.paymentIsConfirmed,
@@ -26,12 +27,14 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
                         vWApplication.programShortDesc,
                         vWApplication.programThumbnail,
                         vWApplication.programStartDate,
-                        vWApplication.programEndDate))
+                        vWApplication.programEndDate,
+                        vWApplication.reviewId))
                 .from(vWApplication)
                 .where(
                         eqUserId(userId),
                         eqPaymentIsRefunded(false),
-                        eqStatus(status)
+                        eqStatus(status),
+                        eqReviewStatus(reviewStatus)
                 )
                 .fetch();
     }
@@ -78,5 +81,14 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
             }
         }
         return null;
+    }
+
+    private BooleanExpression eqReviewStatus(ApplicationReviewStatus reviewStatus) {
+        if(reviewStatus != null && reviewStatus.equals(ApplicationReviewStatus.YET))
+            return vWApplication.reviewId.isNull();
+        else if(reviewStatus != null && reviewStatus.equals(ApplicationReviewStatus.DONE))
+            return vWApplication.reviewId.isNotNull();
+        else
+            return null;
     }
 }

@@ -3,6 +3,7 @@ package org.letscareer.letscareer.domain.application.helper;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.entity.Application;
 import org.letscareer.letscareer.domain.application.repository.ApplicationRepository;
+import org.letscareer.letscareer.domain.application.type.ApplicationReviewStatus;
 import org.letscareer.letscareer.domain.application.type.ApplicationStatus;
 import org.letscareer.letscareer.domain.application.vo.MyApplicationVo;
 import org.letscareer.letscareer.domain.user.entity.User;
@@ -28,8 +29,8 @@ public class ApplicationHelper {
         }
     }
 
-    public List<MyApplicationVo> getMyApplications(Long userId, ApplicationStatus status) {
-        return applicationRepository.findMyApplications(userId, status);
+    public List<MyApplicationVo> getMyApplications(Long userId, ApplicationStatus status, ApplicationReviewStatus reviewStatus) {
+        return applicationRepository.findMyApplications(userId, status, reviewStatus);
     }
 
 

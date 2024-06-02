@@ -9,6 +9,7 @@ import org.letscareer.letscareer.domain.application.dto.request.CreateApplicatio
 import org.letscareer.letscareer.domain.application.dto.response.GetMyApplicationsResponseDto;
 import org.letscareer.letscareer.domain.application.service.ApplicationServiceFactory;
 import org.letscareer.letscareer.domain.application.service.ApplicationSpecificService;
+import org.letscareer.letscareer.domain.application.type.ApplicationReviewStatus;
 import org.letscareer.letscareer.domain.application.type.ApplicationStatus;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.user.entity.User;
@@ -41,8 +42,9 @@ public class ApplicationV1Controller {
     })
     @GetMapping
     public ResponseEntity<SuccessResponse<?>> getMyApplications(@CurrentUser User user,
-                                                                @RequestParam(required = false) final ApplicationStatus status) {
-        GetMyApplicationsResponseDto responseDto = applicationSpecificService.getMyApplications(user, status);
+                                                                @RequestParam(required = false) final ApplicationStatus status,
+                                                                @RequestParam(required = false) final ApplicationReviewStatus reviewStatus) {
+        GetMyApplicationsResponseDto responseDto = applicationSpecificService.getMyApplications(user, status, reviewStatus);
         return SuccessResponse.ok(responseDto);
     }
 

@@ -17,7 +17,8 @@ public record MyApplicationVo(
         String programShortDesc,
         String programThumbnail,
         LocalDateTime programStartDate,
-        LocalDateTime programEndDate
+        LocalDateTime programEndDate,
+        Long reviewId
 ) {
     public MyApplicationVo(Long id,
                            Boolean paymentIsConfirmed,
@@ -26,7 +27,8 @@ public record MyApplicationVo(
                            String programShortDesc,
                            String programThumbnail,
                            LocalDateTime programStartDate,
-                           LocalDateTime programEndDate) {
+                           LocalDateTime programEndDate,
+                           Long reviewId) {
         this(
                 id,
                 ApplicationStatus.of(paymentIsConfirmed, programEndDate),
@@ -36,6 +38,7 @@ public record MyApplicationVo(
                 programShortDesc,
                 programThumbnail,
                 programStartDate,
-                programEndDate);
+                programEndDate,
+                reviewId);
     }
 }
