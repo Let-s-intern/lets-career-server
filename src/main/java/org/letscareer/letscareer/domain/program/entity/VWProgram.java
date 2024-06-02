@@ -1,7 +1,10 @@
 package org.letscareer.letscareer.domain.program.entity;
 
 import com.amazonaws.annotation.Immutable;
-import jakarta.persistence.*;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import org.hibernate.annotations.Subselect;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.program.type.converter.ProgramTypeConverter;
@@ -27,8 +30,6 @@ import java.time.LocalDateTime;
 @Entity
 public class VWProgram extends BaseTimeEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     private Long programId;
     @Convert(converter = ProgramTypeConverter.class)
     private ProgramType programType;

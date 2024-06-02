@@ -42,7 +42,8 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                 .fetch();
 
         JPAQuery<VWProgram> countQuery = queryFactory
-                .selectFrom(vWProgram);
+                .selectFrom(vWProgram)
+                .orderBy(vWProgram.createDate.desc());
 
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
     }
