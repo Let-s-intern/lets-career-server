@@ -11,10 +11,9 @@ import org.letscareer.letscareer.domain.program.entity.SearchCondition;
 import org.letscareer.letscareer.domain.program.entity.VWProgram;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
-import org.letscareer.letscareer.domain.program.vo.AdminProgramVo;
+import org.letscareer.letscareer.domain.program.vo.ProgramForAdminVo;
 import org.letscareer.letscareer.domain.program.vo.ProgramForConditionVo;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
 import java.time.LocalDateTime;
@@ -31,34 +30,6 @@ import static org.letscareer.letscareer.domain.program.entity.QVWProgram.vWProgr
 public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
     private final JPAQueryFactory queryFactory;
 
-
-    @Override
-    public Page<AdminProgramVo> findAdminProgramVos(Pageable pageable) {
-        List<AdminProgramVo> contents = queryFactory
-                .select(Projections.constructor(AdminProgramVo.class,
-                        vWProgram.programId,
-                        vWProgram.programType,
-                        vWProgram.title,
-                        vWProgram.currentCount,
-                        vWProgram.participationCount,
-                        vWProgram.startDate,
-                        vWProgram.endDate,
-                        vWProgram.deadline,
-                        vWProgram.isVisible,
-                        vWProgram.zoomLink,
-                        vWProgram.zoomPassword
-                ))
-                .from(vWProgram)
-                .orderBy(vWProgram.createDate.desc())
-                .fetch();
-
-        JPAQuery<VWProgram> countQuery = queryFactory
-                .selectFrom(vWProgram)
-                .orderBy(vWProgram.createDate.desc());
-
-        return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
-    }
-
     @Override
     public Page<ProgramForConditionVo> findProgramForConditionVos(SearchCondition condition) {
         List<ProgramForConditionVo> contents = queryFactory
@@ -68,6 +39,51 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                         vWProgram.title,
                         vWProgram.thumbnail,
                         vWProgram.shortDesc,
+                        vWProgram.startDate,
+                        vWProgram.endDate,
+                        vWProgram.beginning,
+                        vWProgram.deadline
+                ))
+                .from(vWProgram)
+                .leftJoin(challengeClassification).on(vWProgram.programType.eq(ProgramType.CHALLENGE).and(vWProgram.programId.eq(challengeClassification.challenge.id)))
+                .leftJoin(liveClassification).on(vWProgram.programType.eq(ProgramType.LIVE).and(vWProgram.programId.eq(liveClassification.live.id)))
+                .leftJoin(vodClassification).on(vWProgram.programType.eq(ProgramType.VOD).and(vWProgram.programId.eq(vodClassification.vod.id)))
+                .where(
+                        eqProgramType(condition.type()),
+                        containDuration(condition.startDate(), condition.endDate()),
+                        inProgramClassification(condition.typeList()),
+                        inProgramStatus(condition.statusList())
+                )
+                .orderBy(vWProgram.startDate.desc())
+                .limit(condition.pageable().getPageSize())
+                .offset(condition.pageable().getOffset())
+                .fetch();
+
+        JPAQuery<VWProgram> countQuery = queryFactory
+                .selectFrom(vWProgram)
+                .where(
+                        eqProgramType(condition.type()),
+                        containDuration(condition.startDate(), condition.endDate()),
+                        inProgramClassification(condition.typeList()),
+                        inProgramStatus(condition.statusList())
+                )
+                .orderBy(vWProgram.startDate.desc());
+
+        return PageableExecutionUtils.getPage(contents, condition.pageable(), countQuery::fetchCount);
+    }
+
+    @Override
+    public Page<ProgramForAdminVo> findProgramForAdminVos(SearchCondition condition) {
+        List<ProgramForAdminVo> contents = queryFactory
+                .select(Projections.constructor(ProgramForAdminVo.class,
+                        vWProgram.programId,
+                        vWProgram.programType,
+                        vWProgram.title,
+                        vWProgram.currentCount,
+                        vWProgram.participationCount,
+                        vWProgram.zoomLink,
+                        vWProgram.zoomPassword,
+                        vWProgram.isVisible,
                         vWProgram.startDate,
                         vWProgram.endDate,
                         vWProgram.beginning,
