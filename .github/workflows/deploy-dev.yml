@@ -101,7 +101,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_KEY_DEV }}
           script: |
+            sudo docker stop -f $(docker ps -qa)
             sudo docker rm -f $(docker ps -qa)
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/letsintern-server-dev
             sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/letsintern-server-dev
             sudo docker image prune -f
