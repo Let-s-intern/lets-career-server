@@ -13,6 +13,7 @@ import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
 
+import static org.letscareer.letscareer.domain.application.entity.QApplication.application;
 import static org.letscareer.letscareer.domain.application.entity.QChallengeApplication.challengeApplication;
 import static org.letscareer.letscareer.domain.application.entity.QLiveApplication.liveApplication;
 import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
@@ -36,7 +37,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                         review.score
                 ))
                 .from(review)
-                .leftJoin(review, challengeApplication.review)
+                .leftJoin(review.application, challengeApplication._super)
                 .leftJoin(challengeApplication.challenge, challenge)
                 .leftJoin(review.application.user, user)
                 .where(
@@ -49,7 +50,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 
         JPAQuery<Review> countQuery = queryFactory
                 .selectFrom(review)
-                .leftJoin(review, challengeApplication.review)
+                .leftJoin(review.application, challengeApplication._super)
                 .leftJoin(challengeApplication.challenge, challenge)
                 .leftJoin(review.application.user, user)
                 .where(
@@ -66,11 +67,12 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                         user.name,
                         review.nps,
                         review.npsAns,
+                        review.npsCheckAns,
                         review.content,
                         review.score
                 ))
                 .from(review)
-                .leftJoin(review, liveApplication.review)
+                .leftJoin(review.application, liveApplication._super)
                 .leftJoin(liveApplication.live, live)
                 .leftJoin(review.application.user, user)
                 .where(
@@ -83,12 +85,13 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 
         JPAQuery<Review> countQuery = queryFactory
                 .selectFrom(review)
-                .leftJoin(review, liveApplication.review)
+                .leftJoin(review.application, liveApplication._super)
                 .leftJoin(liveApplication.live, live)
                 .leftJoin(review.application.user, user)
                 .where(
                         eqLiveId(liveId)
-                );
+                )
+                .orderBy(review.id.desc());
 
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
     }

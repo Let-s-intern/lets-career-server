@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.live.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.letscareer.letscareer.domain.application.entity.LiveApplication;
 import org.letscareer.letscareer.domain.classification.entity.LiveClassification;
 import org.letscareer.letscareer.domain.faq.entity.FaqLive;
 import org.letscareer.letscareer.domain.live.dto.request.CreateLiveRequestDto;
@@ -52,6 +53,9 @@ public class Live extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "live", cascade = CascadeType.ALL)
     @Builder.Default
+    private List<LiveApplication> applicationList = new ArrayList<>();
+    @OneToMany(mappedBy = "live", cascade = CascadeType.ALL)
+    @Builder.Default
     private List<LiveClassification> classificationList = new ArrayList<>();
     @OneToMany(mappedBy = "live", cascade = CascadeType.ALL)
     @Builder.Default
@@ -97,6 +101,9 @@ public class Live extends BaseTimeEntity {
         this.isVisible = updateValue(this.isVisible, requestDto.isVisible());
     }
 
+    public void addLiveApplication(LiveApplication liveApplication) {
+        this.applicationList.add(liveApplication);
+    }
 
     public void addLiveClassification(LiveClassification liveClassification) {
         this.classificationList.add(liveClassification);
