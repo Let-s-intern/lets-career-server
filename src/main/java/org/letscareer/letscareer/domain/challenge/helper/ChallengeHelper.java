@@ -31,6 +31,11 @@ public class ChallengeHelper {
                 .orElseThrow(() -> new EntityNotFoundException(ChallengeErrorCode.CHALLENGE_NOT_FOUND));
     }
 
+    public ChallengeTitleVo findChallengeTitleVoOrThrow(Long challengeId) {
+        return challengeRepository.findChallengeTitleVo(challengeId)
+                .orElseThrow(() -> new EntityNotFoundException(ChallengeErrorCode.CHALLENGE_NOT_FOUND));
+    }
+
     public ChallengeDetailVo findChallengeDetailByIdOrThrow(Long challengeId) {
         return challengeRepository.findChallengeDetailById(challengeId)
                 .orElseThrow(() -> new EntityNotFoundException(ChallengeErrorCode.CHALLENGE_NOT_FOUND));

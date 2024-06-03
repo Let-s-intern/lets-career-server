@@ -19,6 +19,8 @@ public interface ChallengeService {
 
     GetChallengeDetailResponseDto getChallengeDetail(Long challengeId);
 
+    GetChallengeTitleResponseDto getChallengeTitle(Long challengeId);
+
     GetChallengeApplicationsResponseDto getApplications(Long challengeId, Boolean isConfirmed);
 
     GetChallengeApplicationFormResponseDto getChallengeApplicationForm(User user, Long challengeId);

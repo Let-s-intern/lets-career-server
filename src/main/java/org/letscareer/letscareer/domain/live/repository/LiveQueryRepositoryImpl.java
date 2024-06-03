@@ -87,6 +87,20 @@ public class LiveQueryRepositoryImpl implements LiveQueryRepository {
     }
 
     @Override
+    public Optional<LiveTitleVo> findLiveTitleVo(Long liveId) {
+        return Optional.ofNullable(jpaQueryFactory
+                .select(Projections.constructor(LiveTitleVo.class,
+                        live.title
+                ))
+                .from(live)
+                .where(
+                        eqLiveId(liveId)
+                )
+                .fetchOne()
+        );
+    }
+
+    @Override
     public Optional<LiveThumbnailVo> findLiveThumbnailVo(Long liveId) {
         return Optional.ofNullable(jpaQueryFactory
                 .select(Projections.constructor(LiveThumbnailVo.class,

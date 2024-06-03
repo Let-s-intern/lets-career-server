@@ -85,6 +85,20 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
     }
 
     @Override
+    public Optional<ChallengeTitleVo> findChallengeTitleVo(Long challengeId) {
+        return Optional.ofNullable(queryFactory
+                .select(Projections.constructor(ChallengeTitleVo.class,
+                        challenge.title
+                ))
+                .from(challenge)
+                .where(
+                        eqChallengeId(challengeId)
+                )
+                .fetchOne()
+        );
+    }
+
+    @Override
     public Optional<ChallengeThumbnailVo> findChallengeThumbnailVo(Long challengeId) {
         return Optional.ofNullable(queryFactory
                 .select(Projections.constructor(ChallengeThumbnailVo.class,

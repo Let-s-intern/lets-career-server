@@ -40,6 +40,11 @@ public class LiveHelper {
         return liveRepository.findLiveProfileVos(typeList, statusList, pageable);
     }
 
+    public LiveTitleVo findLiveTitleVoOrThrow(Long liveId) {
+        return liveRepository.findLiveTitleVo(liveId)
+                .orElseThrow(() -> new EntityNotFoundException(LiveErrorCode.LIVE_NOT_FOUND));
+    }
+
     public LiveThumbnailVo findLiveThumbnailVoOrThrow(Long liveId) {
         return liveRepository.findLiveThumbnailVo(liveId)
                 .orElseThrow(() -> new EntityNotFoundException(LiveErrorCode.LIVE_NOT_FOUND));

@@ -78,6 +78,12 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
+    public GetChallengeTitleResponseDto getChallengeTitle(Long challengeId) {
+        ChallengeTitleVo titleVo = challengeHelper.findChallengeTitleVoOrThrow(challengeId);
+        return challengeMapper.toGetChallengeTitleResponseDto(titleVo);
+    }
+
+    @Override
     public GetChallengeApplicationsResponseDto getApplications(Long challengeId, Boolean isConfirmed) {
         List<AdminChallengeApplicationVo> applicationVos = challengeApplicationHelper.findAdminChallengeApplicationVos(challengeId, isConfirmed);
         return challengeApplicationMapper.toGetChallengeApplicationsResponseDto(applicationVos);

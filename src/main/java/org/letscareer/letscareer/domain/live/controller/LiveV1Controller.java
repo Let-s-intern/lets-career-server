@@ -49,6 +49,15 @@ public class LiveV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
+    @Operation(summary = "라이브 title 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetLiveTitleResponseDto.class)))
+    })
+    @GetMapping("/{id}/title")
+    public ResponseEntity<SuccessResponse<?>> getLiveTitle(@PathVariable("id") final Long liveId) {
+        final GetLiveTitleResponseDto responseDto = liveService.getLiveTitle(liveId);
+        return SuccessResponse.ok(responseDto);
+    }
+
     @Operation(summary = "라이브 섬네일 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetLiveThumbnailResponseDto.class)))
     })

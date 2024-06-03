@@ -20,6 +20,8 @@ public interface LiveService {
 
     GetLiveDetailResponseDto getLiveDetail(Long liveId);
 
+    GetLiveTitleResponseDto getLiveTitle(Long liveId);
+
     GetLiveThumbnailResponseDto getLiveThumbnail(Long liveId);
 
     GetLiveContentResponseDto getLiveDetailContent(Long liveId);

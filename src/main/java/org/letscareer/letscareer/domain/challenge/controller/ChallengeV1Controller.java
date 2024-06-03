@@ -51,6 +51,16 @@ public class ChallengeV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
+    @Operation(summary = "챌린지 title 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeTitleResponseDto.class)))
+    })
+    @ApiErrorCode({SwaggerEnum.CHALLENGE_NOT_FOUND})
+    @GetMapping("/{id}/title")
+    public ResponseEntity<SuccessResponse<?>> getChallengeTitle(@PathVariable("id") final Long challengeId) {
+        final GetChallengeTitleResponseDto responseDto = challengeService.getChallengeTitle(challengeId);
+        return SuccessResponse.ok(responseDto);
+    }
+
     @Operation(summary = "챌린지 섬네일 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeThumbnailResponseDto.class)))
     })

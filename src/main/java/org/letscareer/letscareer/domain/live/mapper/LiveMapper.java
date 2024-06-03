@@ -29,6 +29,10 @@ public class LiveMapper {
         return GetLiveReviewsResponseDto.of(reviewVos);
     }
 
+    public GetLiveTitleResponseDto toGetLiveTitleResponseDto(LiveTitleVo titleVo) {
+        return GetLiveTitleResponseDto.of(titleVo);
+    }
+
     public GetLiveThumbnailResponseDto toGetLiveThumbnailResponseDto(LiveThumbnailVo thumbnailVo) {
         return GetLiveThumbnailResponseDto.of(thumbnailVo);
     }
