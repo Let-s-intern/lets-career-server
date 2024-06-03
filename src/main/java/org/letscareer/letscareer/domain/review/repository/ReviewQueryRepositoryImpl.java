@@ -6,14 +6,15 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.review.entity.Review;
+import org.letscareer.letscareer.domain.review.vo.ReviewDetailVo;
 import org.letscareer.letscareer.domain.review.vo.ReviewVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
+import java.util.Optional;
 
-import static org.letscareer.letscareer.domain.application.entity.QApplication.application;
 import static org.letscareer.letscareer.domain.application.entity.QChallengeApplication.challengeApplication;
 import static org.letscareer.letscareer.domain.application.entity.QLiveApplication.liveApplication;
 import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
@@ -24,6 +25,26 @@ import static org.letscareer.letscareer.domain.user.entity.QUser.user;
 @RequiredArgsConstructor
 public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
     private final JPAQueryFactory queryFactory;
+
+    @Override
+    public Optional<ReviewDetailVo> findReviewVo(Long reviewId) {
+        return Optional.ofNullable(queryFactory
+                .select(Projections.constructor(ReviewDetailVo.class,
+                        review.id,
+                        review.nps,
+                        review.npsAns,
+                        review.npsCheckAns,
+                        review.content,
+                        review.score,
+                        review.createDate
+                ))
+                .from(review)
+                .where(
+                        eqReviewId(reviewId)
+                )
+                .fetchOne()
+        );
+    }
 
     @Override
     public Page<ReviewVo> findChallengeReviewVos(Long challengeId, Pageable pageable) {
@@ -96,6 +117,10 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                 .orderBy(review.id.desc());
 
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
+    }
+
+    public BooleanExpression eqReviewId(Long reviewId) {
+        return reviewId != null ? review.id.eq(reviewId) : null;
     }
 
     private BooleanExpression eqChallengeId(Long challengeId) {

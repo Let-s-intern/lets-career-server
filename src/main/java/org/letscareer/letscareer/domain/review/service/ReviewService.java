@@ -1,9 +1,15 @@
 package org.letscareer.letscareer.domain.review.service;
 
 import org.letscareer.letscareer.domain.review.dto.request.CreateReviewRequestDto;
+import org.letscareer.letscareer.domain.review.dto.request.UpdateReviewRequestDto;
+import org.letscareer.letscareer.domain.review.dto.response.GetReviewDetailResponseDto;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface ReviewService {
+    GetReviewDetailResponseDto getReviewDetail(Long reviewId);
+
     void createReview(Long applicationId, CreateReviewRequestDto responseDto);
+
+    void updateReview(Long reviewId, UpdateReviewRequestDto requestDto);
 }

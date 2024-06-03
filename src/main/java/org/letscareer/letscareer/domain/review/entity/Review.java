@@ -4,7 +4,10 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.letscareer.letscareer.domain.application.entity.Application;
 import org.letscareer.letscareer.domain.review.dto.request.CreateReviewRequestDto;
+import org.letscareer.letscareer.domain.review.dto.request.UpdateReviewRequestDto;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
+
+import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils.updateValue;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -37,5 +40,13 @@ public class Review extends BaseTimeEntity {
                 .build();
         application.setReview(review);
         return review;
+    }
+
+    public void updateReview(UpdateReviewRequestDto requestDto) {
+        this.nps = updateValue(this.nps, requestDto.nps());
+        this.npsAns = updateValue(this.npsAns, requestDto.npsAns());
+        this.npsCheckAns = updateValue(this.npsCheckAns, requestDto.npsCheckAns());
+        this.content = updateValue(this.content, requestDto.content());
+        this.score = updateValue(this.score, requestDto.score());
     }
 }
