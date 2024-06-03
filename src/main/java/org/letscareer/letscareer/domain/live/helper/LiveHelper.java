@@ -63,4 +63,8 @@ public class LiveHelper {
     public void deleteLiveById(Long liveId) {
         liveRepository.deleteById(liveId);
     }
+
+    public void updateCurrentCount(Live live, int currenCount) {
+        live.updateLiveCurrentCount(currenCount);
+    }
 }

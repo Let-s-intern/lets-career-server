@@ -39,12 +39,14 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
         Price price = priceHelper.findPriceByIdOrThrow(createApplicationRequestDto.paymentInfo().priceId());
         Payment payment = paymentHelper.createPaymentAndSave(challengeApplication, coupon, price);
         challengeApplication.setPayment(payment);
+        challengeHelper.updateCurrentCount(challenge, challenge.getCurrentCount() + 1);
     }
 
     @Override
     public void deleteApplication(Long applicationId, User user) {
         ChallengeApplication challengeApplication = challengeApplicationHelper.findChallengeApplicationByIdOrThrow(applicationId);
         applicationHelper.validateAuthorizedUser(challengeApplication.getUser(), user);
+        challengeHelper.updateCurrentCount(challengeApplication.getChallenge(), challengeApplication.getChallenge().getCurrentCount() - 1);
         challengeApplicationHelper.deleteChallengeApplication(challengeApplication);
     }
 }

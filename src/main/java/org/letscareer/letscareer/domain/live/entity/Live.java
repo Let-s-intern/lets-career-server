@@ -124,4 +124,8 @@ public class Live extends BaseTimeEntity {
     public void setInitFaqList() {
         this.faqList = new ArrayList<>();
     }
+
+    public void updateLiveCurrentCount(int currenCount) {
+        this.currentCount = updateValue(this.currentCount, currentCount);
+    }
 }

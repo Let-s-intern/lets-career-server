@@ -64,4 +64,7 @@ public class ChallengeHelper {
         challengeRepository.deleteById(challengeId);
     }
 
+    public void updateCurrentCount(Challenge challenge, int currenCount) {
+        challenge.updateChallengeCurrentCount(currenCount);
+    }
 }

@@ -106,6 +106,10 @@ public class Challenge extends BaseTimeEntity {
         this.isVisible = updateValue(this.isVisible, requestDto.isVisible());
     }
 
+    public void updateChallengeCurrentCount(int currentCount) {
+        this.currentCount = updateValue(this.currentCount, currentCount);
+    }
+
     public void addChallengeClassification(ChallengeClassification challengeClassification) {
         this.classificationList.add(challengeClassification);
     }
@@ -133,4 +137,6 @@ public class Challenge extends BaseTimeEntity {
     public void setInitFaqList() {
         this.faqList = new ArrayList<>();
     }
+
+
 }

@@ -43,12 +43,14 @@ public class LiveApplicationServiceImpl implements ApplicationService {
         Price price = priceHelper.findPriceByIdOrThrow(createApplicationRequestDto.paymentInfo().priceId());
         Payment payment = paymentHelper.createPaymentAndSave(liveApplication, coupon, price);
         liveApplication.setPayment(payment);
+        liveHelper.updateCurrentCount(live, live.getCurrentCount() + 1);
     }
 
     @Override
     public void deleteApplication(Long applicationId, User user) {
         LiveApplication liveApplication = liveApplicationHelper.findLiveApplicationByIdOrThrow(applicationId);
         applicationHelper.validateAuthorizedUser(liveApplication.getUser(), user);
+        liveHelper.updateCurrentCount(liveApplication.getLive(), liveApplication.getLive().getCurrentCount() - 1);
         liveApplicationHelper.deleteLiveApplication(liveApplication);
     }
 
