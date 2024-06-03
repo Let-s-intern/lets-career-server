@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 public record MyApplicationVo(
         Long id,
         ApplicationStatus status,
+        Long programId,
         ProgramType programType,
         ProgramStatusType programStatusType,
         String programTitle,
@@ -22,6 +23,7 @@ public record MyApplicationVo(
 ) {
     public MyApplicationVo(Long id,
                            Boolean paymentIsConfirmed,
+                           Long programId,
                            ProgramType programType,
                            String programTitle,
                            String programShortDesc,
@@ -32,6 +34,7 @@ public record MyApplicationVo(
         this(
                 id,
                 ApplicationStatus.of(paymentIsConfirmed, programEndDate),
+                programId,
                 programType,
                 ProgramStatusType.of(programType, programStartDate, programEndDate),
                 programTitle,
