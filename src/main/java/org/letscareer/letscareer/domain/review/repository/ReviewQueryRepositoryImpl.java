@@ -34,7 +34,8 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                         review.npsAns,
                         review.npsCheckAns,
                         review.content,
-                        review.score
+                        review.score,
+                        review.createDate
                 ))
                 .from(review)
                 .leftJoin(review.application, challengeApplication._super)
@@ -69,7 +70,8 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                         review.npsAns,
                         review.npsCheckAns,
                         review.content,
-                        review.score
+                        review.score,
+                        review.createDate
                 ))
                 .from(review)
                 .leftJoin(review.application, liveApplication._super)
