@@ -40,6 +40,7 @@ public class LiveQueryRepositoryImpl implements LiveQueryRepository {
                         live.place,
                         live.startDate,
                         live.endDate,
+                        live.beginning,
                         live.deadline,
                         live.progressType))
                 .from(live)

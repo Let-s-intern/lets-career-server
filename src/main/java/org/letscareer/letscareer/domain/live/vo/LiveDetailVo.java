@@ -16,6 +16,7 @@ public record LiveDetailVo(
         String place,
         LocalDateTime startDate,
         LocalDateTime endDate,
+        LocalDateTime beginning,
         LocalDateTime deadline,
         ProgressType progressType
 ) {

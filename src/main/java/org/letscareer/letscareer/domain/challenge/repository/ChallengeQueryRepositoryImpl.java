@@ -37,6 +37,7 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
                         challenge.thumbnail,
                         challenge.startDate,
                         challenge.endDate,
+                        challenge.beginning,
                         challenge.deadline,
                         challenge.chatLink,
                         challenge.chatPassword,
