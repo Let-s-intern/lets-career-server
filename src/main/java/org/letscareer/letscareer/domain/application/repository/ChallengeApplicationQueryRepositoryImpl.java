@@ -26,6 +26,7 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
     public List<AdminChallengeApplicationVo> findAdminChallengeApplicationVos(Long challengeId, Boolean isConfirmed) {
         return queryFactory
                 .select(Projections.constructor(AdminChallengeApplicationVo.class,
+                        challengeApplication.id,
                         payment.id,
                         user.name,
                         user.email,

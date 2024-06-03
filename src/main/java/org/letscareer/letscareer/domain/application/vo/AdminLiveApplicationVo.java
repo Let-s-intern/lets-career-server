@@ -5,6 +5,7 @@ import org.letscareer.letscareer.domain.user.type.UserGrade;
 import java.time.LocalDateTime;
 
 public record AdminLiveApplicationVo(
+        Long id,
         Long paymentId,
         String name,
         String email,

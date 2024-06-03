@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 
 @Builder
 public record AdminChallengeApplicationVo(
+        Long id,
         Long paymentId,
         String name,
         String email,
