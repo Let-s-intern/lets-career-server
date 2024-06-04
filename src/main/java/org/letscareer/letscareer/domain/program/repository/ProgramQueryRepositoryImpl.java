@@ -53,10 +53,10 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                         eqProgramType(condition.type()),
                         containDuration(condition.startDate(), condition.endDate()),
                         inProgramClassification(condition.typeList()),
-                        inProgramStatus(condition.statusList())
+                        inProgramStatus(condition.statusList(), condition.type())
                 )
                 .orderBy(
-                        combinedOrderBy()
+                        combinedOrderBy(condition.type())
                 )
                 .limit(condition.pageable().getPageSize())
                 .offset(condition.pageable().getOffset())
@@ -68,7 +68,7 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                         eqProgramType(condition.type()),
                         containDuration(condition.startDate(), condition.endDate()),
                         inProgramClassification(condition.typeList()),
-                        inProgramStatus(condition.statusList())
+                        inProgramStatus(condition.statusList(), condition.type())
                 );
 
         return PageableExecutionUtils.getPage(contents, condition.pageable(), countQuery::fetchCount);
@@ -99,7 +99,7 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                         eqProgramType(condition.type()),
                         containDuration(condition.startDate(), condition.endDate()),
                         inProgramClassification(condition.typeList()),
-                        inProgramStatus(condition.statusList())
+                        inProgramStatus(condition.statusList(), condition.type())
                 )
                 .orderBy(vWProgram.startDate.desc())
                 .limit(condition.pageable().getPageSize())
@@ -112,7 +112,7 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                         eqProgramType(condition.type()),
                         containDuration(condition.startDate(), condition.endDate()),
                         inProgramClassification(condition.typeList()),
-                        inProgramStatus(condition.statusList())
+                        inProgramStatus(condition.statusList(), condition.type())
                 )
                 .orderBy(vWProgram.startDate.desc());
 
@@ -143,17 +143,17 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
         return challengeCondition.or(liveCondition).or(vodCondition);
     }
 
-    private BooleanBuilder inProgramStatus(List<ProgramStatusType> statusList) {
+    private BooleanBuilder inProgramStatus(List<ProgramStatusType> statusList, List<ProgramType> type) {
         if (statusList == null || statusList.isEmpty()) return null;
         LocalDateTime now = LocalDateTime.now();
         BooleanBuilder booleanBuilder = new BooleanBuilder();
-        statusList.forEach(status -> booleanBuilder.or(addBooleanExpression(status, now)));
+        statusList.forEach(status -> booleanBuilder.or(addBooleanExpression(status, now, type)));
         return booleanBuilder;
     }
 
-    public OrderSpecifier<?>[] combinedOrderBy() {
+    public OrderSpecifier<?>[] combinedOrderBy(List<ProgramType> type) {
         return new OrderSpecifier<?>[]{
-                orderByProgramStatus(),
+                orderByProgramStatus(type),
                 orderByProgramType()
         };
     }
@@ -168,10 +168,10 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                 .asc();
     }
 
-    public OrderSpecifier<Integer> orderByProgramStatus() {
+    private OrderSpecifier<Integer> orderByProgramStatus(List<ProgramType> type) {
         LocalDateTime now = LocalDateTime.now();
         // PROCEEDING 상태인 프로그램
-        BooleanExpression proceedingStatus = programProceedingStatus(now);
+        BooleanExpression proceedingStatus = programProceedingStatus(now, type);
         // PREV 상태인 프로그램
         BooleanExpression prevStatus = programPrevStatus(now).and(proceedingStatus.not());
         // POST 상태인 프로그램
@@ -185,17 +185,21 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                 .asc();
     }
 
-    private BooleanExpression addBooleanExpression(ProgramStatusType programStatusType, LocalDateTime now) {
+    private BooleanExpression addBooleanExpression(ProgramStatusType programStatusType, LocalDateTime now, List<ProgramType> type) {
         if (ProgramStatusType.PREV.equals(programStatusType))
             return programPrevStatus(now);
         else if (ProgramStatusType.PROCEEDING.equals(programStatusType))
-            return programProceedingStatus(now);
+            return programProceedingStatus(now, type);
         else if (ProgramStatusType.POST.equals(programStatusType))
             return programPostStatus(now);
         return null;
     }
 
-    private BooleanExpression programProceedingStatus(LocalDateTime now) {
+    private BooleanExpression programProceedingStatus(LocalDateTime now, List<ProgramType> type) {
+        if (type == null || type.isEmpty())
+            return vWProgram.startDate.loe(now).and(vWProgram.endDate.goe(now));
+        if (type.contains(ProgramType.VOD))
+            return vWProgram.programType.eq(ProgramType.VOD).or(vWProgram.startDate.loe(now).and(vWProgram.endDate.goe(now)));
         return vWProgram.startDate.loe(now).and(vWProgram.endDate.goe(now));
     }
 
