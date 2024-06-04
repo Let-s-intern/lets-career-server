@@ -67,7 +67,7 @@ public class UserHelper {
     public void validateUpdatedPhoneNumber(User user, UserUpdateRequestDto userUpdateRequestDto) {
         String phoneNum = userUpdateRequestDto.phoneNum();
         if (Objects.isNull(phoneNum)) return;
-        if (user.getPhoneNum().equals(phoneNum)) return;
+        if (matchPassword(user.getPassword(), phoneNum)) return;
         if (userRepository.existsByPhoneNum(phoneNum))
             throw new ConflictException(USER_CONFLICT);
     }
