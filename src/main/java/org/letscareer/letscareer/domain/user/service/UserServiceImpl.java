@@ -57,8 +57,6 @@ public class UserServiceImpl implements UserService {
     }
 
     public void updateUser(User user, UserUpdateRequestDto userUpdateRequestDto) {
-        System.out.println("findUser " + user.getPhoneNum());
-        System.out.println("findUser " + userUpdateRequestDto.phoneNum());
         userHelper.validateUpdatedPhoneNumber(user, userUpdateRequestDto);
         userHelper.updateUser(user, userUpdateRequestDto);
     }
