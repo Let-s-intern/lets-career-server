@@ -37,6 +37,9 @@ jobs:
       - name: 🍃 gradle build 를 위한 권한을 부여합니다.
         run: chmod +x gradlew
 
+      - name: Clean Gradle cache
+        run: ./gradlew clean
+
       - name: 🍃 gradle build 합니다.
         run: ./gradlew clean build -x test
 
