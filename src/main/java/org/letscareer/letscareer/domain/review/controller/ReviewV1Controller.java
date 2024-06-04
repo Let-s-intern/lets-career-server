@@ -31,16 +31,16 @@ public class ReviewV1Controller {
         return SuccessResponse.ok(requestDto);
     }
 
-//    @Operation(summary = "리뷰 생성", responses = {
-//            @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
-//    })
-//    @ApiErrorCode({SwaggerEnum.BAD_REQUEST})
-//    @PostMapping
-//    public ResponseEntity<SuccessResponse<?>> createReview(@RequestParam final Long applicationId,
-//                                                           @Valid @RequestBody final CreateReviewRequestDto requestDto) {
-//        reviewService.createReview(applicationId, requestDto);
-//        return SuccessResponse.created(null);
-//    }
+    @Operation(summary = "리뷰 생성", responses = {
+            @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
+    })
+    @ApiErrorCode({SwaggerEnum.BAD_REQUEST})
+    @PostMapping
+    public ResponseEntity<SuccessResponse<?>> createReview(@RequestParam final Long applicationId,
+                                                           @Valid @RequestBody final CreateReviewRequestDto requestDto) {
+        reviewService.createReview(applicationId, requestDto);
+        return SuccessResponse.created(null);
+    }
 
     @Operation(summary = "리뷰 수정", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
