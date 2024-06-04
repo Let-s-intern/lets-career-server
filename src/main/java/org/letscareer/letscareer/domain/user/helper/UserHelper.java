@@ -19,6 +19,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 import static org.letscareer.letscareer.domain.user.error.UserErrorCode.USER_CONFLICT;
 import static org.letscareer.letscareer.domain.user.error.UserErrorCode.USER_NOT_FOUND;
 import static org.letscareer.letscareer.global.error.GlobalErrorCode.MISMATCH_PASSWORD;
@@ -47,9 +49,18 @@ public class UserHelper {
     }
 
     public void validateExistingUser(String phoneNum) {
-        if(phoneNum == null) return;
-        User user = userRepository.findByPhoneNum(phoneNum).orElse(null);
-        if (user != null) throw new ConflictException(USER_CONFLICT);
+        if (phoneNum == null)
+            return;
+        if (userRepository.existsByPhoneNum(phoneNum))
+            throw new ConflictException(USER_CONFLICT);
+    }
+
+    public void validateUpdatedPhoneNumber(User user, UserUpdateRequestDto userUpdateRequestDto) {
+        String phoneNum = userUpdateRequestDto.phoneNum();
+        if (Objects.isNull(phoneNum)) return;
+        if (user.getPhoneNum().equals(phoneNum)) return;
+        if (userRepository.existsByPhoneNum(phoneNum))
+            throw new ConflictException(USER_CONFLICT);
     }
 
     public String encodePassword(String rawPassword) {

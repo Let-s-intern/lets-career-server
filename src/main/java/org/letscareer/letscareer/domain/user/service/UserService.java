@@ -18,7 +18,7 @@ public interface UserService {
 
     TokenResponseDto pwSignIn(UserPwSignInRequestDto pwSignInRequestDto);
 
-    void updateUser(Long id, UserUpdateRequestDto userUpdateRequestDto);
+    void updateUser(User user, UserUpdateRequestDto userUpdateRequestDto);
 
     UserInfoResponseDto getUserInfo(User user);
 

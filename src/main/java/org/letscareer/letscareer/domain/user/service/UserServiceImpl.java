@@ -56,10 +56,10 @@ public class UserServiceImpl implements UserService {
         return userMapper.toTokenResponseDto(accessToken, refreshToken);
     }
 
-    public void updateUser(Long userId, UserUpdateRequestDto userUpdateRequestDto) {
-        User user = userHelper.findUserByIdOrThrow(userId);
-        userHelper.validateExistingUser(userUpdateRequestDto.phoneNum());
-        userHelper.updateUser(user, userUpdateRequestDto);
+    public void updateUser(User user, UserUpdateRequestDto userUpdateRequestDto) {
+        User findUser = userHelper.findUserByIdOrThrow(user.getId());
+        userHelper.validateUpdatedPhoneNumber(user, userUpdateRequestDto);
+        userHelper.updateUser(findUser, userUpdateRequestDto);
     }
 
     public UserAdminListResponseDto getUsers(Pageable pageable) {

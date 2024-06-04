@@ -70,10 +70,10 @@ public class UserV1Controller {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @ApiErrorCode({SwaggerEnum.USER_NOT_FOUND, SwaggerEnum.USER_CONFLICT})
-    @PatchMapping()
+    @PatchMapping
     public ResponseEntity<SuccessResponse<?>> updateUser(@CurrentUser User user,
                                                          @RequestBody final UserUpdateRequestDto userUpdateRequestDto) {
-        userService.updateUser(user.getId(), userUpdateRequestDto);
+        userService.updateUser(user, userUpdateRequestDto);
         return SuccessResponse.ok(null);
     }
 
