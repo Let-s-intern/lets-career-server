@@ -30,7 +30,7 @@ public class UserV1Controller {
     @Operation(summary = "유저 이메일 회원가입", responses = {
             @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
     })
-    @ApiErrorCode({SwaggerEnum.USER_CONFLICT, SwaggerEnum.INVALID_PASSWORD, SwaggerEnum.INVALID_PHONE_NUMBER})
+    @ApiErrorCode({SwaggerEnum.USER_CONFLICT, SwaggerEnum.INVALID_PASSWORD, SwaggerEnum.INVALID_PHONE_NUMBER, SwaggerEnum.INVALID_EMAIL})
     @PostMapping("/signup")
     public ResponseEntity<SuccessResponse<?>> pwSignUp(@RequestBody @Valid final UserPwSignUpRequestDto pwSignUpRequestDto) {
         userService.pwSignUp(pwSignUpRequestDto);
@@ -69,7 +69,7 @@ public class UserV1Controller {
     @Operation(summary = "유저 정보 업데이트", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
-    @ApiErrorCode({SwaggerEnum.USER_NOT_FOUND, SwaggerEnum.USER_CONFLICT, SwaggerEnum.INVALID_PHONE_NUMBER})
+    @ApiErrorCode({SwaggerEnum.USER_NOT_FOUND, SwaggerEnum.USER_CONFLICT, SwaggerEnum.INVALID_PHONE_NUMBER, SwaggerEnum.INVALID_EMAIL})
     @PatchMapping
     public ResponseEntity<SuccessResponse<?>> updateUser(@CurrentUser User user,
                                                          @RequestBody final UserUpdateRequestDto userUpdateRequestDto) {

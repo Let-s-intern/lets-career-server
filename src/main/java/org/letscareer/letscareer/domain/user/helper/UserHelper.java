@@ -31,6 +31,7 @@ import static org.letscareer.letscareer.global.error.GlobalErrorCode.MISMATCH_PA
 public class UserHelper {
     private final static String PASSWORD_REGEX = "^(?=.*[^a-zA-Z0-9]).{8,}$";
     private final static String PHONE_NUMBER_REGEX = "010-[0-9]{4}-[0-9]{4}";
+    private final static String EMAIL_REGEX = " /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\\.[A-Za-z]{2,3}$/i";
     private final UserRepository userRepository;
     private final PrincipalDetailsService principalDetailsService;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -56,6 +57,13 @@ public class UserHelper {
             return;
         if (userRepository.existsByPhoneNum(phoneNum))
             throw new ConflictException(USER_CONFLICT);
+    }
+
+    public void validateRegexEmail(String email) {
+        Pattern pattern = Pattern.compile(EMAIL_REGEX);
+        Matcher matcher = pattern.matcher(email);
+        if (!matcher.matches())
+            throw new InvalidValueException(INVALID_EMAIL);
     }
 
     public void validateRegexPassword(String password) {

@@ -41,6 +41,7 @@ public class UserServiceImpl implements UserService {
 
     public void pwSignUp(UserPwSignUpRequestDto pwSignUpRequestDto) {
         userHelper.validateExistingUser(pwSignUpRequestDto.phoneNum());
+        userHelper.validateRegexEmail(pwSignUpRequestDto.email());
         userHelper.validateRegexPhoneNumber(pwSignUpRequestDto.phoneNum());
         userHelper.validateRegexPassword(pwSignUpRequestDto.password());
         String encodedPassword = userHelper.encodePassword(pwSignUpRequestDto.password());
@@ -58,6 +59,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public void updateUser(User user, UserUpdateRequestDto userUpdateRequestDto) {
+        userHelper.validateRegexEmail(userUpdateRequestDto.email());
         userHelper.validateRegexPhoneNumber(userUpdateRequestDto.phoneNum());
         userHelper.validateUpdatedPhoneNumber(user, userUpdateRequestDto);
         userHelper.updateUser(user, userUpdateRequestDto);

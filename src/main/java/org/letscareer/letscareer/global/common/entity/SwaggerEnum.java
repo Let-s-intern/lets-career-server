@@ -17,7 +17,6 @@ import org.letscareer.letscareer.domain.user.error.UserErrorCode;
 import org.letscareer.letscareer.domain.vod.error.VodErrorCode;
 import org.letscareer.letscareer.global.error.ErrorCode;
 import org.letscareer.letscareer.global.error.GlobalErrorCode;
-import org.springframework.http.HttpStatus;
 
 public enum SwaggerEnum {
     // attendance
@@ -67,6 +66,7 @@ public enum SwaggerEnum {
     VOD_NOT_FOUND(VodErrorCode.VOD_NOT_FOUND),
 
     // user
+    INVALID_EMAIL(UserErrorCode.INVALID_EMAIL),
     INVALID_PASSWORD(UserErrorCode.INVALID_PASSWORD),
     INVALID_PHONE_NUMBER(UserErrorCode.INVALID_PHONE_NUMBER),
     USER_NOT_FOUND(UserErrorCode.USER_NOT_FOUND),
