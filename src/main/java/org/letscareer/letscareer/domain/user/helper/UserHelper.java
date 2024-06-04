@@ -67,7 +67,7 @@ public class UserHelper {
     public void validateUpdatedPhoneNumber(User user, UserUpdateRequestDto userUpdateRequestDto) {
         String phoneNum = userUpdateRequestDto.phoneNum();
         System.out.println("phoneNumber::" +  user.getPhoneNum());
-        System.out.println(phoneNum);
+        System.out.println("userPhone::" + phoneNum);
         if (Objects.isNull(phoneNum)) return;
         if (user.getPhoneNum().equals(phoneNum)) return;
         if (userRepository.existsByPhoneNum(phoneNum))
