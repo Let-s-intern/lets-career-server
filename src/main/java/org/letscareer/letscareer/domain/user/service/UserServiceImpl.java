@@ -57,11 +57,11 @@ public class UserServiceImpl implements UserService {
     }
 
     public void updateUser(User user, UserUpdateRequestDto userUpdateRequestDto) {
-        User findUser = userHelper.findUserByIdOrThrow(user.getId());
-        System.out.println("findUser " + findUser.getPhoneNum());
+//        User findUser = userHelper.findUserByIdOrThrow(user.getId());
+        System.out.println("findUser " + user.getPhoneNum());
         System.out.println("findUser " + userUpdateRequestDto.phoneNum());
         userHelper.validateUpdatedPhoneNumber(user, userUpdateRequestDto);
-        userHelper.updateUser(findUser, userUpdateRequestDto);
+        userHelper.updateUser(user, userUpdateRequestDto);
     }
 
     public UserAdminListResponseDto getUsers(Pageable pageable) {
