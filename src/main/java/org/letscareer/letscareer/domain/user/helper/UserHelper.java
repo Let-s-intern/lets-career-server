@@ -66,7 +66,7 @@ public class UserHelper {
 
     public void validateUpdatedPhoneNumber(User user, UserUpdateRequestDto userUpdateRequestDto) {
         String phoneNum = userUpdateRequestDto.phoneNum();
-        System.out.println(user.getPhoneNum());
+        System.out.println("phoneNumber::" +  user.getPhoneNum());
         System.out.println(phoneNum);
         if (Objects.isNull(phoneNum)) return;
         if (user.getPhoneNum().equals(phoneNum)) return;
