@@ -20,14 +20,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import static org.letscareer.letscareer.domain.user.error.UserErrorCode.USER_CONFLICT;
-import static org.letscareer.letscareer.domain.user.error.UserErrorCode.USER_NOT_FOUND;
+import static org.letscareer.letscareer.domain.user.error.UserErrorCode.*;
 import static org.letscareer.letscareer.global.error.GlobalErrorCode.MISMATCH_PASSWORD;
 
 @Component
 @RequiredArgsConstructor
 public class UserHelper {
+    private final static String REGEX = "^(?=.*[^a-zA-Z0-9]).{8,}$";
     private final UserRepository userRepository;
     private final PrincipalDetailsService principalDetailsService;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -53,6 +55,13 @@ public class UserHelper {
             return;
         if (userRepository.existsByPhoneNum(phoneNum))
             throw new ConflictException(USER_CONFLICT);
+    }
+
+    public void validateRegexPassword(String password) {
+        Pattern pattern = Pattern.compile(REGEX);
+        Matcher matcher = pattern.matcher(password);
+        if (!matcher.matches())
+            throw new InvalidValueException(INVALID_PASSWORD);
     }
 
     public void validateUpdatedPhoneNumber(User user, UserUpdateRequestDto userUpdateRequestDto) {
