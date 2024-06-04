@@ -26,21 +26,6 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # Gradlew Permission
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-
-      # Gradle Caching
-      - name: Gradle Caching
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-
       ## Make application-secret.yml
       - name: Make application-secret.yml
         run: |
