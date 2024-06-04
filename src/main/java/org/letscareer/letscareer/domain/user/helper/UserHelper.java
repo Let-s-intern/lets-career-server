@@ -68,8 +68,10 @@ public class UserHelper {
         String phoneNum = userUpdateRequestDto.phoneNum();
         System.out.println("phoneNumber::" +  user.getPhoneNum());
         System.out.println("userPhone::" + phoneNum);
-        if (Objects.isNull(phoneNum)) return;
-        if (user.getPhoneNum().equals(phoneNum)) return;
+        if (Objects.isNull(phoneNum))
+            return;
+        if (user.getPhoneNum().equals(phoneNum))
+            return;
         if (userRepository.existsByPhoneNum(phoneNum))
             throw new ConflictException(USER_CONFLICT);
     }

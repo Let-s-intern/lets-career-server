@@ -7,8 +7,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.letscareer.letscareer.domain.application.entity.Application;
 import org.letscareer.letscareer.domain.attendance.entity.Attendance;
-import org.letscareer.letscareer.domain.user.dto.request.UserUpdateRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UserPwSignUpRequestDto;
+import org.letscareer.letscareer.domain.user.dto.request.UserUpdateRequestDto;
 import org.letscareer.letscareer.domain.user.type.AccountType;
 import org.letscareer.letscareer.domain.user.type.AuthProvider;
 import org.letscareer.letscareer.domain.user.type.UserGrade;
@@ -139,6 +139,7 @@ public class User extends BaseTimeEntity {
     }
 
     public void updateUser(UserUpdateRequestDto userUpdateRequestDto) {
+        System.out.println(userUpdateRequestDto.phoneNum());
         this.email = updateValue(this.email, userUpdateRequestDto.email());
         this.name = updateValue(this.name, userUpdateRequestDto.name());
         this.phoneNum = updateValue(this.phoneNum, userUpdateRequestDto.phoneNum());
