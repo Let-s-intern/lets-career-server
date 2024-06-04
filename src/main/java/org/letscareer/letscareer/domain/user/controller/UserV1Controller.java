@@ -73,6 +73,8 @@ public class UserV1Controller {
     @PatchMapping
     public ResponseEntity<SuccessResponse<?>> updateUser(@CurrentUser User user,
                                                          @RequestBody final UserUpdateRequestDto userUpdateRequestDto) {
+        System.out.println("userController" + user.getPhoneNum());
+        System.out.println("userController" + userUpdateRequestDto.phoneNum());
         userService.updateUser(user, userUpdateRequestDto);
         return SuccessResponse.ok(null);
     }
