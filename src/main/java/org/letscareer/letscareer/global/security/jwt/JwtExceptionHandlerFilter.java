@@ -34,8 +34,7 @@ public class JwtExceptionHandlerFilter extends OncePerRequestFilter {
         return ErrorResponse.of(errorCode);
     }
 
-    private void responseToClient(HttpServletResponse response, ErrorResponse errorResponse)
-            throws IOException {
+    private void responseToClient(HttpServletResponse response, ErrorResponse errorResponse) throws IOException {
         response.setCharacterEncoding("UTF-8");
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(errorResponse.getStatus());
