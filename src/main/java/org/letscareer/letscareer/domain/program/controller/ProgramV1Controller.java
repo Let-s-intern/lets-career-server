@@ -30,15 +30,6 @@ import java.util.List;
 public class ProgramV1Controller {
     private final ProgramService programService;
 
-//    @Operation(summary = "프로그램 통합 조회", responses = {
-//            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetProgramsResponseDto.class)))
-//    })
-//    @GetMapping
-//    public ResponseEntity<SuccessResponse<?>> getPrograms(final Pageable pageable) {
-//        final GetProgramsResponseDto responseDto = programService.getPrograms(pageable);
-//        return SuccessResponse.ok(responseDto);
-//    }
-
     @Operation(summary = "프로그램 통합 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetProgramsForConditionResponseDto.class)))
     })

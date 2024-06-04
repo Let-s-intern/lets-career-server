@@ -1,8 +1,10 @@
 package org.letscareer.letscareer.domain.program.repository;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +22,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
-import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
 import static org.letscareer.letscareer.domain.classification.entity.QChallengeClassification.challengeClassification;
 import static org.letscareer.letscareer.domain.classification.entity.QLiveClassification.liveClassification;
 import static org.letscareer.letscareer.domain.classification.entity.QVodClassification.vodClassification;
@@ -54,7 +55,9 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                         inProgramClassification(condition.typeList()),
                         inProgramStatus(condition.statusList())
                 )
-                .orderBy(vWProgram.startDate.desc())
+                .orderBy(
+                        combinedOrderBy()
+                )
                 .limit(condition.pageable().getPageSize())
                 .offset(condition.pageable().getOffset())
                 .fetch();
@@ -66,8 +69,7 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                         containDuration(condition.startDate(), condition.endDate()),
                         inProgramClassification(condition.typeList()),
                         inProgramStatus(condition.statusList())
-                )
-                .orderBy(vWProgram.startDate.desc());
+                );
 
         return PageableExecutionUtils.getPage(contents, condition.pageable(), countQuery::fetchCount);
     }
@@ -149,6 +151,40 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
         return booleanBuilder;
     }
 
+    public OrderSpecifier<?>[] combinedOrderBy() {
+        return new OrderSpecifier<?>[]{
+                orderByProgramStatus(),
+                orderByProgramType()
+        };
+    }
+
+
+    public OrderSpecifier<Integer> orderByProgramType() {
+        return new CaseBuilder()
+                .when(vWProgram.programType.eq(ProgramType.CHALLENGE)).then(0)
+                .when(vWProgram.programType.eq(ProgramType.LIVE)).then(1)
+                .when(vWProgram.programType.eq(ProgramType.VOD)).then(2)
+                .otherwise(3)
+                .asc();
+    }
+
+    public OrderSpecifier<Integer> orderByProgramStatus() {
+        LocalDateTime now = LocalDateTime.now();
+        // PROCEEDING 상태인 프로그램
+        BooleanExpression proceedingStatus = programProceedingStatus(now);
+        // PREV 상태인 프로그램
+        BooleanExpression prevStatus = programPrevStatus(now).and(proceedingStatus.not());
+        // POST 상태인 프로그램
+        BooleanExpression postStatus = programPostStatus(now).and(proceedingStatus.not()).and(prevStatus.not());
+        // PROCEEDING -> PREV -> POST 순으로 정렬
+        return new CaseBuilder()
+                .when(proceedingStatus).then(0)
+                .when(prevStatus).then(2)
+                .when(postStatus).then(3)
+                .otherwise(0)
+                .asc();
+    }
+
     private BooleanExpression addBooleanExpression(ProgramStatusType programStatusType, LocalDateTime now) {
         if (ProgramStatusType.PREV.equals(programStatusType))
             return programPrevStatus(now);
@@ -159,15 +195,15 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
         return null;
     }
 
-    private BooleanExpression programPrevStatus(LocalDateTime now) {
-        return challenge.startDate.lt(now);
+    private BooleanExpression programProceedingStatus(LocalDateTime now) {
+        return vWProgram.startDate.loe(now).and(vWProgram.endDate.goe(now));
     }
 
-    private BooleanExpression programProceedingStatus(LocalDateTime now) {
-        return challenge.startDate.loe(now).and(challenge.endDate.goe(now));
+    private BooleanExpression programPrevStatus(LocalDateTime now) {
+        return vWProgram.startDate.gt(now);
     }
 
     private BooleanExpression programPostStatus(LocalDateTime now) {
-        return challenge.endDate.lt(now);
+        return vWProgram.endDate.lt(now);
     }
 }
