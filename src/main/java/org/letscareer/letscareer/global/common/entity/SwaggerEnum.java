@@ -71,6 +71,7 @@ public enum SwaggerEnum {
     USER_CONFLICT(UserErrorCode.USER_CONFLICT),
 
     // global
+    BAD_REQUEST(GlobalErrorCode.BAD_REQUEST),
     MISMATCH_PASSWORD(GlobalErrorCode.MISMATCH_PASSWORD),
     NOT_REFRESH_TOKEN(GlobalErrorCode.NOT_REFRESH_TOKEN),
     INVALID_TOKEN(GlobalErrorCode.INVALID_TOKEN);
