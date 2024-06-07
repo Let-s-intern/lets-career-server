@@ -32,10 +32,12 @@ public class LiveApplication extends Application {
     public static LiveApplication createLiveApplication(CreateApplicationRequestDto createApplicationRequestDto,
                                                         Live live,
                                                         User user) {
-        return LiveApplication.builder()
+        LiveApplication liveApplication = LiveApplication.builder()
                 .createApplicationRequestDto(createApplicationRequestDto)
                 .live(live)
                 .user(user)
                 .build();
+        live.addLiveApplication(liveApplication);
+        return liveApplication;
     }
 }

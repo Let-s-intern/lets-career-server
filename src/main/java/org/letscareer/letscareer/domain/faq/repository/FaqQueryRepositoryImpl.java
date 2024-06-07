@@ -27,7 +27,7 @@ public class FaqQueryRepositoryImpl implements FaqQueryRepository {
                         faq.faqProgramType
                 ))
                 .from(faq)
-                .leftJoin(faq, faqChallenge.faq)
+                .leftJoin(faq.faqChallengeList, faqChallenge)
                 .where(
                         eqChallengeId(challengeId)
                 )
@@ -44,7 +44,7 @@ public class FaqQueryRepositoryImpl implements FaqQueryRepository {
                         faq.faqProgramType
                 ))
                 .from(faq)
-                .leftJoin(faq, faqLive.faq)
+                .leftJoin(faq.faqLiveList, faqLive)
                 .where(
                         eqLiveId(liveId)
                 )

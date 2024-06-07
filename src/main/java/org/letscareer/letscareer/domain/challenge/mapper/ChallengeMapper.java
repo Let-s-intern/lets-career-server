@@ -28,6 +28,10 @@ public class ChallengeMapper {
         return GetChallengeResponseDto.of(challengeProfileVos);
     }
 
+    public GetChallengeTitleResponseDto toGetChallengeTitleResponseDto(ChallengeTitleVo titleVo) {
+        return GetChallengeTitleResponseDto.of(titleVo);
+    }
+
     public GetChallengeReviewResponseDto toGetChallengeReviewResponseDto(Page<ReviewVo> challengeReviewVos) {
         return GetChallengeReviewResponseDto.of(challengeReviewVos);
     }

@@ -37,6 +37,7 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
                         challenge.thumbnail,
                         challenge.startDate,
                         challenge.endDate,
+                        challenge.beginning,
                         challenge.deadline,
                         challenge.chatLink,
                         challenge.chatPassword,
@@ -82,6 +83,20 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
                 );
 
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
+    }
+
+    @Override
+    public Optional<ChallengeTitleVo> findChallengeTitleVo(Long challengeId) {
+        return Optional.ofNullable(queryFactory
+                .select(Projections.constructor(ChallengeTitleVo.class,
+                        challenge.title
+                ))
+                .from(challenge)
+                .where(
+                        eqChallengeId(challengeId)
+                )
+                .fetchOne()
+        );
     }
 
     @Override

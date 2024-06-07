@@ -1,7 +1,6 @@
 package org.letscareer.letscareer.domain.user.helper;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.letscareer.letscareer.domain.user.dto.request.UserUpdateRequestDto;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.repository.UserRepository;
@@ -20,12 +19,19 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import static org.letscareer.letscareer.domain.user.error.UserErrorCode.USER_NOT_FOUND;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static org.letscareer.letscareer.domain.user.error.UserErrorCode.*;
 import static org.letscareer.letscareer.global.error.GlobalErrorCode.MISMATCH_PASSWORD;
 
 @Component
 @RequiredArgsConstructor
 public class UserHelper {
+    private final static String PASSWORD_REGEX = "^(?=.*[^a-zA-Z0-9]).{8,}$";
+    private final static String PHONE_NUMBER_REGEX = "010-[0-9]{4}-[0-9]{4}";
+    private final static String EMAIL_REGEX = " /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\\.[A-Za-z]{2,3}$/i";
     private final UserRepository userRepository;
     private final PrincipalDetailsService principalDetailsService;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -47,8 +53,41 @@ public class UserHelper {
     }
 
     public void validateExistingUser(String phoneNum) {
-        User user = userRepository.findByPhoneNum(phoneNum).orElse(null);
-        if (user != null) throw new ConflictException();
+        if (phoneNum == null)
+            return;
+        if (userRepository.existsByPhoneNum(phoneNum))
+            throw new ConflictException(USER_CONFLICT);
+    }
+
+    public void validateRegexEmail(String email) {
+        Pattern pattern = Pattern.compile(EMAIL_REGEX);
+        Matcher matcher = pattern.matcher(email);
+        if (!matcher.matches())
+            throw new InvalidValueException(INVALID_EMAIL);
+    }
+
+    public void validateRegexPassword(String password) {
+        Pattern pattern = Pattern.compile(PASSWORD_REGEX);
+        Matcher matcher = pattern.matcher(password);
+        if (!matcher.matches())
+            throw new InvalidValueException(INVALID_PASSWORD);
+    }
+
+    public void validateRegexPhoneNumber(String phoneNumber) {
+        Pattern pattern = Pattern.compile(PHONE_NUMBER_REGEX);
+        Matcher matcher = pattern.matcher(phoneNumber);
+        if (!matcher.matches())
+            throw new InvalidValueException(INVALID_PHONE_NUMBER);
+    }
+
+    public void validateUpdatedPhoneNumber(User user, UserUpdateRequestDto userUpdateRequestDto) {
+        String phoneNum = userUpdateRequestDto.phoneNum();
+        if (Objects.isNull(phoneNum))
+            return;
+        if (user.getPhoneNum().equals(phoneNum))
+            return;
+        if (userRepository.existsByPhoneNum(phoneNum))
+            throw new ConflictException(USER_CONFLICT);
     }
 
     public String encodePassword(String rawPassword) {

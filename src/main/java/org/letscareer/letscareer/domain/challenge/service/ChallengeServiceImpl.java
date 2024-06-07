@@ -7,6 +7,7 @@ import org.letscareer.letscareer.domain.application.mapper.ChallengeApplicationM
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
 import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
 import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeRequestDto;
+import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.response.*;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
@@ -77,6 +78,12 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
+    public GetChallengeTitleResponseDto getChallengeTitle(Long challengeId) {
+        ChallengeTitleVo titleVo = challengeHelper.findChallengeTitleVoOrThrow(challengeId);
+        return challengeMapper.toGetChallengeTitleResponseDto(titleVo);
+    }
+
+    @Override
     public GetChallengeApplicationsResponseDto getApplications(Long challengeId, Boolean isConfirmed) {
         List<AdminChallengeApplicationVo> applicationVos = challengeApplicationHelper.findAdminChallengeApplicationVos(challengeId, isConfirmed);
         return challengeApplicationMapper.toGetChallengeApplicationsResponseDto(applicationVos);
@@ -141,7 +148,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
-    public void updateChallenge(Long challengeId, CreateChallengeRequestDto createChallengeRequestDto) {
+    public void updateChallenge(Long challengeId, UpdateChallengeRequestDto createChallengeRequestDto) {
         Challenge challenge = challengeHelper.findChallengeByIdOrThrow(challengeId);
         challenge.updateChallenge(createChallengeRequestDto);
         updateChallengeClassifications(challenge, createChallengeRequestDto.programTypeInfo());

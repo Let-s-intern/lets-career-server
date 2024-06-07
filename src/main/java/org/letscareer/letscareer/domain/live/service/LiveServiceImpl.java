@@ -5,7 +5,6 @@ import org.letscareer.letscareer.domain.application.dto.response.GetLiveApplicat
 import org.letscareer.letscareer.domain.application.helper.LiveApplicationHelper;
 import org.letscareer.letscareer.domain.application.mapper.LiveApplicationMapper;
 import org.letscareer.letscareer.domain.application.vo.AdminLiveApplicationVo;
-import org.letscareer.letscareer.domain.live.dto.response.GetLiveApplicationFormResponseDto;
 import org.letscareer.letscareer.domain.classification.dto.request.CreateLiveClassificationRequestDto;
 import org.letscareer.letscareer.domain.classification.helper.LiveClassificationHelper;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
@@ -17,6 +16,7 @@ import org.letscareer.letscareer.domain.faq.helper.FaqHelper;
 import org.letscareer.letscareer.domain.faq.mapper.FaqMapper;
 import org.letscareer.letscareer.domain.faq.vo.FaqDetailVo;
 import org.letscareer.letscareer.domain.live.dto.request.CreateLiveRequestDto;
+import org.letscareer.letscareer.domain.live.dto.request.UpdateLiveRequestDto;
 import org.letscareer.letscareer.domain.live.dto.response.*;
 import org.letscareer.letscareer.domain.live.entity.Live;
 import org.letscareer.letscareer.domain.live.helper.LiveHelper;
@@ -71,6 +71,12 @@ public class LiveServiceImpl implements LiveService {
     }
 
     @Override
+    public GetLiveTitleResponseDto getLiveTitle(Long liveId) {
+        LiveTitleVo titleVo = liveHelper.findLiveTitleVoOrThrow(liveId);
+        return liveMapper.toGetLiveTitleResponseDto(titleVo);
+    }
+
+    @Override
     public GetLiveThumbnailResponseDto getLiveThumbnail(Long liveId) {
         LiveThumbnailVo thumbnailVo = liveHelper.findLiveThumbnailVoOrThrow(liveId);
         return liveMapper.toGetLiveThumbnailResponseDto(thumbnailVo);
@@ -117,7 +123,7 @@ public class LiveServiceImpl implements LiveService {
     }
 
     @Override
-    public void updateLive(Long liveId, CreateLiveRequestDto requestDto) {
+    public void updateLive(Long liveId, UpdateLiveRequestDto requestDto) {
         Live live = liveHelper.findLiveByIdOrThrow(liveId);
         live.updateLive(requestDto);
         updateClassifications(live, requestDto.programTypeInfo());

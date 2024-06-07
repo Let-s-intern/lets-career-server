@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.dto.response.GetChallengeApplicationsResponseDto;
 import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeRequestDto;
+import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.response.*;
 import org.letscareer.letscareer.domain.challenge.service.ChallengeService;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
@@ -47,6 +48,16 @@ public class ChallengeV1Controller {
     @GetMapping("/{id}")
     public ResponseEntity<SuccessResponse<?>> getChallengeDetail(@PathVariable("id") final Long challengeId) {
         final GetChallengeDetailResponseDto responseDto = challengeService.getChallengeDetail(challengeId);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "챌린지 title 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeTitleResponseDto.class)))
+    })
+    @ApiErrorCode({SwaggerEnum.CHALLENGE_NOT_FOUND})
+    @GetMapping("/{id}/title")
+    public ResponseEntity<SuccessResponse<?>> getChallengeTitle(@PathVariable("id") final Long challengeId) {
+        final GetChallengeTitleResponseDto responseDto = challengeService.getChallengeTitle(challengeId);
         return SuccessResponse.ok(responseDto);
     }
 
@@ -153,7 +164,7 @@ public class ChallengeV1Controller {
     @ApiErrorCode({SwaggerEnum.CHALLENGE_NOT_FOUND})
     @PatchMapping("/{id}")
     public ResponseEntity<SuccessResponse<?>> updateChallengeProgram(@PathVariable("id") final Long challengeId,
-                                                                     @RequestBody final CreateChallengeRequestDto requestDto) {
+                                                                     @RequestBody final UpdateChallengeRequestDto requestDto) {
         challengeService.updateChallenge(challengeId, requestDto);
         return SuccessResponse.ok(null);
     }

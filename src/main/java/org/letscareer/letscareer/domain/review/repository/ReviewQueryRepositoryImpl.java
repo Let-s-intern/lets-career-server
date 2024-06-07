@@ -6,12 +6,14 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.review.entity.Review;
+import org.letscareer.letscareer.domain.review.vo.ReviewDetailVo;
 import org.letscareer.letscareer.domain.review.vo.ReviewVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.letscareer.letscareer.domain.application.entity.QChallengeApplication.challengeApplication;
 import static org.letscareer.letscareer.domain.application.entity.QLiveApplication.liveApplication;
@@ -25,6 +27,26 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
+    public Optional<ReviewDetailVo> findReviewVo(Long reviewId) {
+        return Optional.ofNullable(queryFactory
+                .select(Projections.constructor(ReviewDetailVo.class,
+                        review.id,
+                        review.nps,
+                        review.npsAns,
+                        review.npsCheckAns,
+                        review.content,
+                        review.score,
+                        review.createDate
+                ))
+                .from(review)
+                .where(
+                        eqReviewId(reviewId)
+                )
+                .fetchOne()
+        );
+    }
+
+    @Override
     public Page<ReviewVo> findChallengeReviewVos(Long challengeId, Pageable pageable) {
         List<ReviewVo> contents = queryFactory
                 .select(Projections.constructor(ReviewVo.class,
@@ -33,10 +55,11 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                         review.npsAns,
                         review.npsCheckAns,
                         review.content,
-                        review.score
+                        review.score,
+                        review.createDate
                 ))
                 .from(review)
-                .leftJoin(review, challengeApplication.review)
+                .leftJoin(review.application, challengeApplication._super)
                 .leftJoin(challengeApplication.challenge, challenge)
                 .leftJoin(review.application.user, user)
                 .where(
@@ -49,7 +72,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 
         JPAQuery<Review> countQuery = queryFactory
                 .selectFrom(review)
-                .leftJoin(review, challengeApplication.review)
+                .leftJoin(review.application, challengeApplication._super)
                 .leftJoin(challengeApplication.challenge, challenge)
                 .leftJoin(review.application.user, user)
                 .where(
@@ -66,11 +89,13 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                         user.name,
                         review.nps,
                         review.npsAns,
+                        review.npsCheckAns,
                         review.content,
-                        review.score
+                        review.score,
+                        review.createDate
                 ))
                 .from(review)
-                .leftJoin(review, liveApplication.review)
+                .leftJoin(review.application, liveApplication._super)
                 .leftJoin(liveApplication.live, live)
                 .leftJoin(review.application.user, user)
                 .where(
@@ -83,14 +108,19 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 
         JPAQuery<Review> countQuery = queryFactory
                 .selectFrom(review)
-                .leftJoin(review, liveApplication.review)
+                .leftJoin(review.application, liveApplication._super)
                 .leftJoin(liveApplication.live, live)
                 .leftJoin(review.application.user, user)
                 .where(
                         eqLiveId(liveId)
-                );
+                )
+                .orderBy(review.id.desc());
 
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
+    }
+
+    public BooleanExpression eqReviewId(Long reviewId) {
+        return reviewId != null ? review.id.eq(reviewId) : null;
     }
 
     private BooleanExpression eqChallengeId(Long challengeId) {

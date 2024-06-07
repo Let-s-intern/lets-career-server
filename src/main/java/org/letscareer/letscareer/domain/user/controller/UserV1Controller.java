@@ -30,6 +30,7 @@ public class UserV1Controller {
     @Operation(summary = "유저 이메일 회원가입", responses = {
             @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
     })
+    @ApiErrorCode({SwaggerEnum.USER_CONFLICT, SwaggerEnum.INVALID_PASSWORD, SwaggerEnum.INVALID_PHONE_NUMBER, SwaggerEnum.INVALID_EMAIL})
     @PostMapping("/signup")
     public ResponseEntity<SuccessResponse<?>> pwSignUp(@RequestBody @Valid final UserPwSignUpRequestDto pwSignUpRequestDto) {
         userService.pwSignUp(pwSignUpRequestDto);
@@ -39,6 +40,7 @@ public class UserV1Controller {
     @Operation(summary = "유저 이메일 로그인", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
+    @ApiErrorCode({SwaggerEnum.USER_NOT_FOUND, SwaggerEnum.MISMATCH_PASSWORD})
     @PostMapping("/signin")
     public ResponseEntity<SuccessResponse<?>> pwSignIn(@RequestBody @Valid final UserPwSignInRequestDto pwSignInRequestDto) {
         return SuccessResponse.ok(userService.pwSignIn(pwSignInRequestDto));
@@ -47,6 +49,7 @@ public class UserV1Controller {
     @Operation(summary = "유저 로그아웃", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
+    @ApiErrorCode(SwaggerEnum.USER_NOT_FOUND)
     @GetMapping("/signout")
     public ResponseEntity<SuccessResponse<?>> signOut(@CurrentUser User user) {
         userService.signOut(user);
@@ -66,16 +69,18 @@ public class UserV1Controller {
     @Operation(summary = "유저 정보 업데이트", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
-    @PatchMapping()
+    @ApiErrorCode({SwaggerEnum.USER_NOT_FOUND, SwaggerEnum.USER_CONFLICT, SwaggerEnum.INVALID_PHONE_NUMBER, SwaggerEnum.INVALID_EMAIL})
+    @PatchMapping
     public ResponseEntity<SuccessResponse<?>> updateUser(@CurrentUser User user,
                                                          @RequestBody final UserUpdateRequestDto userUpdateRequestDto) {
-        userService.updateUser(user.getId(), userUpdateRequestDto);
+        userService.updateUser(user, userUpdateRequestDto);
         return SuccessResponse.ok(null);
     }
 
     @Operation(summary = "유저 마이페이지 정보", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserInfoResponseDto.class)))
     })
+    @ApiErrorCode(SwaggerEnum.USER_NOT_FOUND)
     @GetMapping
     public ResponseEntity<SuccessResponse<?>> getUserInfo(@CurrentUser User user) {
         return SuccessResponse.ok(userService.getUserInfo(user));
@@ -84,7 +89,7 @@ public class UserV1Controller {
     @Operation(summary = "비밀번호 변경", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
-    @ApiErrorCode({SwaggerEnum.USER_NOT_FOUND, SwaggerEnum.MISMATCH_PASSWORD})
+    @ApiErrorCode({SwaggerEnum.USER_NOT_FOUND, SwaggerEnum.MISMATCH_PASSWORD, SwaggerEnum.INVALID_PASSWORD})
     @PatchMapping("/password")
     public ResponseEntity<SuccessResponse<?>> updateUserPassword(@CurrentUser User user,
                                                                  @RequestBody final PasswordUpdateRequestDto passwordUpdateRequestDto) {
@@ -105,6 +110,7 @@ public class UserV1Controller {
     @Operation(summary = "유저 탈퇴", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
+    @ApiErrorCode(SwaggerEnum.USER_NOT_FOUND)
     @DeleteMapping
     public ResponseEntity<SuccessResponse<?>> deleteUser(@CurrentUser User user) {
         userService.deleteUser(user);
@@ -114,6 +120,7 @@ public class UserV1Controller {
     @Operation(summary = "유저 관리자 여부", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Boolean.class)))
     })
+    @ApiErrorCode(SwaggerEnum.USER_NOT_FOUND)
     @GetMapping("/is-admin")
     public ResponseEntity<SuccessResponse<?>> isAdmin(@CurrentUser User user) {
         return SuccessResponse.ok(userService.isAdmin(user));

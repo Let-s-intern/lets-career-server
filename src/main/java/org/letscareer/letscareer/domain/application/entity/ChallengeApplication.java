@@ -22,9 +22,11 @@ public class ChallengeApplication extends Application {
     }
 
     public static ChallengeApplication createChallengeApplication(Challenge challenge, User user) {
-        return ChallengeApplication.builder()
+        ChallengeApplication challengeApplication = ChallengeApplication.builder()
                 .challenge(challenge)
                 .user(user)
                 .build();
+        challenge.addChallengeApplicationList(challengeApplication);
+        return challengeApplication;
     }
 }

@@ -40,6 +40,7 @@ public class LiveQueryRepositoryImpl implements LiveQueryRepository {
                         live.place,
                         live.startDate,
                         live.endDate,
+                        live.beginning,
                         live.deadline,
                         live.progressType))
                 .from(live)
@@ -84,6 +85,20 @@ public class LiveQueryRepositoryImpl implements LiveQueryRepository {
                 );
 
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
+    }
+
+    @Override
+    public Optional<LiveTitleVo> findLiveTitleVo(Long liveId) {
+        return Optional.ofNullable(jpaQueryFactory
+                .select(Projections.constructor(LiveTitleVo.class,
+                        live.title
+                ))
+                .from(live)
+                .where(
+                        eqLiveId(liveId)
+                )
+                .fetchOne()
+        );
     }
 
     @Override

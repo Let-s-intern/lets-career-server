@@ -27,6 +27,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     @Value("${spring.security.oauth2.authorizedRedirectUri}")
     private String redirectUri;
+
+    @Value("${spring.security.oauth2.authorizedRedirectUri-test}")
+    private String redirectTestUri;
+
     @Value("${spring.security.oauth2.authorizedRedirectUri-local}")
     private String redirectLocalUri;
     private final TokenProvider tokenProvider;
@@ -99,8 +103,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private boolean isAuthorizedRedirectUri(String uri) {
         URI clientRedirectUri = URI.create(uri);
         URI authorizedUri = URI.create(redirectUri);
+        URI authorizedTestUri = URI.create(redirectTestUri);
         URI authorizedLocalUri = URI.create(redirectLocalUri);
-        return isAuthorized(authorizedUri, clientRedirectUri) || isAuthorized(authorizedLocalUri, clientRedirectUri);
+        return isAuthorized(authorizedUri, clientRedirectUri) || isAuthorized(authorizedTestUri, clientRedirectUri) || isAuthorized(authorizedLocalUri, clientRedirectUri);
     }
 
     private boolean isAuthorized(URI authorizedUri, URI redirectUri) {

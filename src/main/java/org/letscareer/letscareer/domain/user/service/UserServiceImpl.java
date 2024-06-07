@@ -25,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-
     private final UserHelper userHelper;
     private final UserMapper userMapper;
     private final TokenProvider tokenProvider;
@@ -42,6 +41,9 @@ public class UserServiceImpl implements UserService {
 
     public void pwSignUp(UserPwSignUpRequestDto pwSignUpRequestDto) {
         userHelper.validateExistingUser(pwSignUpRequestDto.phoneNum());
+        userHelper.validateRegexEmail(pwSignUpRequestDto.email());
+        userHelper.validateRegexPhoneNumber(pwSignUpRequestDto.phoneNum());
+        userHelper.validateRegexPassword(pwSignUpRequestDto.password());
         String encodedPassword = userHelper.encodePassword(pwSignUpRequestDto.password());
         User newUser = userMapper.toEntity(pwSignUpRequestDto, encodedPassword);
         userHelper.saveUser(newUser);
@@ -56,8 +58,10 @@ public class UserServiceImpl implements UserService {
         return userMapper.toTokenResponseDto(accessToken, refreshToken);
     }
 
-    public void updateUser(Long userId, UserUpdateRequestDto userUpdateRequestDto) {
-        User user = userHelper.findUserByIdOrThrow(userId);
+    public void updateUser(User user, UserUpdateRequestDto userUpdateRequestDto) {
+        userHelper.validateRegexEmail(userUpdateRequestDto.email());
+        userHelper.validateRegexPhoneNumber(userUpdateRequestDto.phoneNum());
+        userHelper.validateUpdatedPhoneNumber(user, userUpdateRequestDto);
         userHelper.updateUser(user, userUpdateRequestDto);
     }
 
@@ -77,6 +81,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updatePassword(Long userId, PasswordUpdateRequestDto passwordUpdateRequestDto) {
         User user = userHelper.findUserByIdOrThrow(userId);
+        userHelper.validateRegexPassword(passwordUpdateRequestDto.newPassword());
         userHelper.validatePassword(user, passwordUpdateRequestDto.password());
         userHelper.updatePassword(user, passwordUpdateRequestDto.newPassword());
     }

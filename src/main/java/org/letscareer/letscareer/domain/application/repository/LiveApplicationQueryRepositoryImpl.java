@@ -26,6 +26,7 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
     public List<AdminLiveApplicationVo> findAdminLiveApplicationVos(Long liveId, Boolean isConfirmed) {
         return queryFactory
                 .select(Projections.constructor(AdminLiveApplicationVo.class,
+                        liveApplication.id,
                         payment.id,
                         user.name,
                         user.email,

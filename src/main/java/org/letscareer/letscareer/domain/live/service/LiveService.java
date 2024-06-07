@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.live.service;
 
 import org.letscareer.letscareer.domain.application.dto.response.GetLiveApplicationsResponseDto;
+import org.letscareer.letscareer.domain.live.dto.request.UpdateLiveRequestDto;
 import org.letscareer.letscareer.domain.live.dto.response.GetLiveApplicationFormResponseDto;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.faq.dto.response.GetFaqResponseDto;
@@ -19,6 +20,8 @@ public interface LiveService {
 
     GetLiveDetailResponseDto getLiveDetail(Long liveId);
 
+    GetLiveTitleResponseDto getLiveTitle(Long liveId);
+
     GetLiveThumbnailResponseDto getLiveThumbnail(Long liveId);
 
     GetLiveContentResponseDto getLiveDetailContent(Long liveId);
@@ -33,7 +36,7 @@ public interface LiveService {
 
     void createLive(CreateLiveRequestDto requestDto);
 
-    void updateLive(Long liveId, CreateLiveRequestDto requestDto);
+    void updateLive(Long liveId, UpdateLiveRequestDto requestDto);
 
     void deleteLive(Long liveId);
 }

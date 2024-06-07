@@ -13,6 +13,7 @@ import java.util.List;
 public record GetChallengeApplicationFormResponseDto(
         String name,
         String email,
+        String contactEmail,
         String phoneNumber,
         LocalDateTime startDate,
         LocalDateTime endDate,
@@ -25,6 +26,7 @@ public record GetChallengeApplicationFormResponseDto(
         return GetChallengeApplicationFormResponseDto.builder()
                 .name(user.getName())
                 .email(user.getEmail())
+                .contactEmail(user.getContactEmail())
                 .phoneNumber(user.getPhoneNum())
                 .startDate(programInfo.startDate())
                 .endDate(programInfo.endDate())

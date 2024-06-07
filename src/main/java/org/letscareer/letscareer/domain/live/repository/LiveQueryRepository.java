@@ -14,6 +14,8 @@ public interface LiveQueryRepository {
 
     Page<LiveProfileVo> findLiveProfileVos(List<ProgramClassification> typeList, List<ProgramStatusType> statusList, Pageable pageable);
 
+    Optional<LiveTitleVo> findLiveTitleVo(Long liveId);
+
     Optional<LiveThumbnailVo> findLiveThumbnailVo(Long liveId);
 
     Optional<LiveContentVo> findLiveContentVo(Long liveId);

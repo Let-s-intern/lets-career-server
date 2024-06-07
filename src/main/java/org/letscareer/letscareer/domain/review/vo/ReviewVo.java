@@ -2,6 +2,8 @@ package org.letscareer.letscareer.domain.review.vo;
 
 import lombok.Builder;
 
+import java.time.LocalDateTime;
+
 @Builder
 public record ReviewVo(
         String name,
@@ -9,6 +11,7 @@ public record ReviewVo(
         String npsAns,
         Boolean npsCheckAns,
         String content,
-        Integer score
+        Integer score,
+        LocalDateTime createdDate
 ) {
 }
