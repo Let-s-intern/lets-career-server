@@ -40,7 +40,7 @@ public class LiveMailScheduler {
         }
     }
 
-    @Scheduled(fixedDelay = 1000000)
+    @Scheduled(cron = "0 0 10 * * ?")
     public void sendReviewMail() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
         List<Long> liveIdList = liveHelper.findReviewMailLiveIdList();
         for(Long liveId : liveIdList) {
