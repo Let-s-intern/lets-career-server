@@ -32,6 +32,11 @@ public class EmailUtils {
         javaMailSender.send(mailMessage);
     }
 
+    public void sendReviewMail(List<String> emailAddressList, LiveEmailVo liveEmailVo) {
+        SimpleMailMessage mailMessage = createReviewMessage(emailAddressList, liveEmailVo);
+        javaMailSender.send(mailMessage);
+    }
+
     private SimpleMailMessage createPasswordResetMessage(String emailAddress, String randomPassword) {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setTo(emailAddress);
@@ -70,6 +75,21 @@ public class EmailUtils {
                         createLiveDateInfo(liveEmailVo) +
                         createProgressTypeInfo(liveEmailVo) +
                         messageSource.getMessage("mail.live.cancel", null, Locale.KOREA) +
+                        messageSource.getMessage("mail.footer", null, Locale.KOREA));
+        return simpleMailMessage;
+    }
+
+    private SimpleMailMessage createReviewMessage(List<String> emailAddressList, LiveEmailVo liveEmailVo) {
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setBcc(emailAddressList.toArray(String[]::new));
+        simpleMailMessage.setSubject("[렛츠커리어] 만족도 조사: " + liveEmailVo.title());
+        simpleMailMessage.setText(
+                messageSource.getMessage("mail.header", null, Locale.KOREA) +
+                        "시간 내어 Live 클래스 [" + liveEmailVo.title() + "] 에 참여해주셔서 감사합니다!\n\n" +
+                        "Live 클래스 후기를 작성해주세요!\n" +
+                        "- 작성 링크 : https://www.letsintern.co.kr/" + liveEmailVo.id() + "\n" +
+                        "- 모든 후기는 강연자님께 전달되고 있습니다. 후기를 작성해주시면 시간 내어 세션을 진행해주신 멘토님께 큰 힘이 될 수 있습니다 :)\n\n" +
+                        messageSource.getMessage("mail.live.more", null, Locale.KOREA) +
                         messageSource.getMessage("mail.footer", null, Locale.KOREA));
         return simpleMailMessage;
     }

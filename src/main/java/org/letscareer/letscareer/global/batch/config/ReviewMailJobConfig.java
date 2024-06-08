@@ -1,7 +1,7 @@
 package org.letscareer.letscareer.global.batch.config;
 
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.global.batch.tasklet.SendRemindMailTasklet;
+import org.letscareer.letscareer.global.batch.tasklet.SendReviewMailTasklet;
 import org.letscareer.letscareer.global.batch.tasklet.UpdateMailStatusTasklet;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -16,30 +16,30 @@ import org.springframework.transaction.PlatformTransactionManager;
 @EnableBatchProcessing
 @Configuration
 @RequiredArgsConstructor
-public class RemindMailJobConfig {
+public class ReviewMailJobConfig {
     private final JobRepository jobRepository;
     private final PlatformTransactionManager transactionManager;
-    private final SendRemindMailTasklet sendRemindMailTasklet;
+    private final SendReviewMailTasklet sendReviewMailTasklet;
     private final UpdateMailStatusTasklet updateMailStatusTasklet;
 
     @Bean
-    public Job remindMailJob() {
-        return new JobBuilder("remindMailJob", jobRepository)
-                .start(sendRemindMailStep())
-                .next(updateRemindMailStatusStep())
+    public Job reviewMailJob() {
+        return new JobBuilder("reviewMailJob", jobRepository)
+                .start(sendReviewMailStep())
+                .next(updateReviewMailStatusStep())
                 .build();
     }
 
     @Bean
-    protected Step sendRemindMailStep() {
-        return new StepBuilder("sendRemindMailStep", jobRepository)
-                .tasklet(sendRemindMailTasklet, transactionManager)
+    protected Step sendReviewMailStep() {
+        return new StepBuilder("sendReviewMailStep", jobRepository)
+                .tasklet(sendReviewMailTasklet, transactionManager)
                 .build();
     }
 
     @Bean
-    protected Step updateRemindMailStatusStep() {
-        return new StepBuilder("updateRemindMailStatusStep", jobRepository)
+    protected Step updateReviewMailStatusStep() {
+        return new StepBuilder("updateReviewMailStatusStep", jobRepository)
                 .tasklet(updateMailStatusTasklet, transactionManager)
                 .build();
     }

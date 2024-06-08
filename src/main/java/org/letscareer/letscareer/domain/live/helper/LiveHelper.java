@@ -68,6 +68,10 @@ public class LiveHelper {
         return liveRepository.findRemindMailLiveIdList();
     }
 
+    public List<Long> findReviewMailLiveIdList() {
+        return liveRepository.findReviewMailLiveIdList();
+    }
+
     public void deleteLiveById(Long liveId) {
         liveRepository.deleteById(liveId);
     }
@@ -75,6 +79,4 @@ public class LiveHelper {
     public void updateCurrentCount(Live live, int currenCount) {
         live.updateLiveCurrentCount(currenCount);
     }
-
-
 }

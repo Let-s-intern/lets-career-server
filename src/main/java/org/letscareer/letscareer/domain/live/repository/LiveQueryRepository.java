@@ -25,4 +25,6 @@ public interface LiveQueryRepository {
     Optional<LiveEmailVo> findLiveEmailVoByLiveId(Long liveId);
 
     List<Long> findRemindMailLiveIdList();
+
+    List<Long> findReviewMailLiveIdList();
 }

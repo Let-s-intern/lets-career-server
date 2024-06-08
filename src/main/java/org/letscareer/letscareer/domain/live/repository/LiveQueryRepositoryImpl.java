@@ -152,6 +152,7 @@ public class LiveQueryRepositoryImpl implements LiveQueryRepository {
     public Optional<LiveEmailVo> findLiveEmailVoByLiveId(Long liveId) {
         return Optional.ofNullable(jpaQueryFactory
                 .select(Projections.constructor(LiveEmailVo.class,
+                        live.id,
                         live.title,
                         live.startDate,
                         live.endDate,
@@ -182,6 +183,20 @@ public class LiveQueryRepositoryImpl implements LiveQueryRepository {
                 .fetch();
     }
 
+    @Override
+    public List<Long> findReviewMailLiveIdList() {
+        return jpaQueryFactory
+                .select(
+                        live.id
+                )
+                .from(live)
+                .where(
+                        eqMailStatus(MailStatus.REVIEW),
+                        afterEndDate()
+                )
+                .fetch();
+    }
+
     private BooleanExpression eqLiveId(Long liveId) {
         return liveId != null ? live.id.eq(liveId) : null;
     }
@@ -193,6 +208,11 @@ public class LiveQueryRepositoryImpl implements LiveQueryRepository {
     private BooleanExpression eqStartDate() {
         int now = LocalDate.now().getDayOfYear();
         return live.startDate.dayOfYear().eq(now);
+    }
+
+    private BooleanExpression afterEndDate() {
+        LocalDateTime now = LocalDateTime.now();
+        return live.endDate.before(now);
     }
 
     private BooleanExpression inLiveClassification(List<ProgramClassification> typeList) {

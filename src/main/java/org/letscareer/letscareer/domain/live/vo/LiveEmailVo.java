@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 
 @Builder
 public record LiveEmailVo(
+        Long id,
         String title,
         LocalDateTime startDate,
         LocalDateTime endDate,

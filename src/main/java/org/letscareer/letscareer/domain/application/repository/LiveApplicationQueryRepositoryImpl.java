@@ -61,6 +61,7 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
     public LiveEmailVo findLiveEmailVoByApplicationId(Long applicationId) {
         return queryFactory
                 .select(Projections.constructor(LiveEmailVo.class,
+                        live.id,
                         live.title,
                         live.startDate,
                         live.endDate,
