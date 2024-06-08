@@ -167,7 +167,7 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
     private OrderSpecifier<?> orderByProgramStatus(List<ProgramType> type) {
         LocalDateTime now = LocalDateTime.now();
         // PROCEEDING 상태인 프로그램
-        BooleanExpression proceedingStatus = programProceedingStatus(now, type);
+        BooleanExpression proceedingStatus = orderProceedingStatus(now, type);
         // PREV 상태인 프로그램
         BooleanExpression prevStatus = programPrevStatus(now).and(proceedingStatus.not());
         // POST 상태인 프로그램
@@ -185,18 +185,22 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
         if (ProgramStatusType.PREV.equals(programStatusType))
             return programPrevStatus(now);
         else if (ProgramStatusType.PROCEEDING.equals(programStatusType))
-            return programProceedingStatus(now, type);
+            return programProceedingStatus(now);
         else if (ProgramStatusType.POST.equals(programStatusType))
             return programPostStatus(now);
         return null;
     }
 
-    private BooleanExpression programProceedingStatus(LocalDateTime now, List<ProgramType> type) {
+    private BooleanExpression orderProceedingStatus(LocalDateTime now, List<ProgramType> type) {
         if (type == null || type.isEmpty())
             return vWProgram.startDate.loe(now).and(vWProgram.endDate.goe(now));
         if (type.contains(ProgramType.VOD))
             return vWProgram.programType.eq(ProgramType.VOD).or(vWProgram.startDate.loe(now).and(vWProgram.endDate.goe(now)));
         return vWProgram.startDate.loe(now).and(vWProgram.endDate.goe(now));
+    }
+
+    private BooleanExpression programProceedingStatus(LocalDateTime now) {
+        return vWProgram.programType.eq(ProgramType.VOD).or(vWProgram.startDate.loe(now).and(vWProgram.endDate.goe(now)));
     }
 
     private BooleanExpression programPrevStatus(LocalDateTime now) {
