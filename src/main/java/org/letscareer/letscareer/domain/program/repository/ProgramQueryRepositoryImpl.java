@@ -60,7 +60,8 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                         vWProgram.programType
                 )
                 .orderBy(
-                        combinedOrderBy(condition.type())
+                        orderByProgramStatus(condition.type()),
+                        orderByProgramType()
                 )
                 .limit(condition.pageable().getPageSize())
                 .offset(condition.pageable().getOffset())
@@ -154,15 +155,7 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
         return booleanBuilder;
     }
 
-    public OrderSpecifier<?>[] combinedOrderBy(List<ProgramType> type) {
-        return new OrderSpecifier<?>[]{
-                orderByProgramStatus(type),
-                orderByProgramType()
-        };
-    }
-
-
-    public OrderSpecifier<Integer> orderByProgramType() {
+    public OrderSpecifier<?> orderByProgramType() {
         return new CaseBuilder()
                 .when(vWProgram.programType.eq(ProgramType.CHALLENGE)).then(0)
                 .when(vWProgram.programType.eq(ProgramType.LIVE)).then(1)
@@ -171,7 +164,7 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                 .asc();
     }
 
-    private OrderSpecifier<Integer> orderByProgramStatus(List<ProgramType> type) {
+    private OrderSpecifier<?> orderByProgramStatus(List<ProgramType> type) {
         LocalDateTime now = LocalDateTime.now();
         // PROCEEDING 상태인 프로그램
         BooleanExpression proceedingStatus = programProceedingStatus(now, type);
@@ -182,8 +175,8 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
         // PROCEEDING -> PREV -> POST 순으로 정렬
         return new CaseBuilder()
                 .when(proceedingStatus).then(0)
-                .when(prevStatus).then(2)
-                .when(postStatus).then(3)
+                .when(prevStatus).then(1)
+                .when(postStatus).then(2)
                 .otherwise(0)
                 .asc();
     }
