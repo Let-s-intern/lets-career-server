@@ -67,13 +67,21 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                 .offset(condition.pageable().getOffset())
                 .fetch();
 
-        JPAQuery<VWProgram> countQuery = queryFactory
-                .selectFrom(vWProgram)
+        JPAQuery<Long> countQuery = queryFactory
+                .select(vWProgram.programId.countDistinct())  // 고유한 programId의 개수를 셈
+                .from(vWProgram)
+                .leftJoin(challengeClassification).on(vWProgram.programType.eq(ProgramType.CHALLENGE).and(vWProgram.programId.eq(challengeClassification.challenge.id)))
+                .leftJoin(liveClassification).on(vWProgram.programType.eq(ProgramType.LIVE).and(vWProgram.programId.eq(liveClassification.live.id)))
+                .leftJoin(vodClassification).on(vWProgram.programType.eq(ProgramType.VOD).and(vWProgram.programId.eq(vodClassification.vod.id)))
                 .where(
                         eqProgramType(condition.type()),
                         containDuration(condition.startDate(), condition.endDate()),
                         inProgramClassification(condition.typeList()),
                         inProgramStatus(condition.statusList(), condition.type())
+                )
+                .groupBy(
+                        vWProgram.programId,
+                        vWProgram.programType
                 );
 
         return PageableExecutionUtils.getPage(contents, condition.pageable(), countQuery::fetchCount);
