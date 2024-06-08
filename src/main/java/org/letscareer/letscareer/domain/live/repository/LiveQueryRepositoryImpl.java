@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.live.repository;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -8,12 +9,14 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.live.entity.Live;
+import org.letscareer.letscareer.domain.live.type.MailStatus;
 import org.letscareer.letscareer.domain.live.vo.*;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -145,8 +148,51 @@ public class LiveQueryRepositoryImpl implements LiveQueryRepository {
         );
     }
 
+    @Override
+    public Optional<LiveEmailVo> findLiveEmailVoByLiveId(Long liveId) {
+        return Optional.ofNullable(jpaQueryFactory
+                .select(Projections.constructor(LiveEmailVo.class,
+                        live.title,
+                        live.startDate,
+                        live.endDate,
+                        live.progressType,
+                        live.place,
+                        live.zoomLink,
+                        live.zoomPassword
+                ))
+                .from(live)
+                .where(
+                        eqLiveId(liveId)
+                )
+                .fetchOne()
+        );
+    }
+
+    @Override
+    public List<Long> findRemindMailLiveIdList() {
+        return jpaQueryFactory
+                .select(
+                        live.id
+                )
+                .from(live)
+                .where(
+                        eqMailStatus(MailStatus.REMIND),
+                        eqStartDate()
+                )
+                .fetch();
+    }
+
     private BooleanExpression eqLiveId(Long liveId) {
         return liveId != null ? live.id.eq(liveId) : null;
+    }
+
+    private BooleanExpression eqMailStatus(MailStatus mailStatus) {
+        return mailStatus != null ? live.mailStatus.eq(mailStatus) : null;
+    }
+
+    private BooleanExpression eqStartDate() {
+        int now = LocalDate.now().getDayOfYear();
+        return live.startDate.dayOfYear().eq(now);
     }
 
     private BooleanExpression inLiveClassification(List<ProgramClassification> typeList) {

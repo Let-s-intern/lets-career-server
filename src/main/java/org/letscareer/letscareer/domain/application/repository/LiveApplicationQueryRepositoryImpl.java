@@ -7,16 +7,18 @@ import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.vo.AdminLiveApplicationVo;
-import org.letscareer.letscareer.domain.live.vo.LiveConfirmedEmailVo;
+import org.letscareer.letscareer.domain.live.vo.LiveEmailVo;
 
 import java.util.List;
 
 import static org.letscareer.letscareer.domain.application.entity.QLiveApplication.liveApplication;
+import static org.letscareer.letscareer.domain.attendance.entity.QAttendance.attendance;
 import static org.letscareer.letscareer.domain.coupon.entity.QCoupon.coupon;
 import static org.letscareer.letscareer.domain.live.entity.QLive.live;
 import static org.letscareer.letscareer.domain.payment.entity.QPayment.payment;
 import static org.letscareer.letscareer.domain.price.entity.QLivePrice.livePrice;
 import static org.letscareer.letscareer.domain.user.entity.QUser.user;
+import static org.letscareer.letscareer.domain.user.repository.UserRepositoryImpl.activeEmail;
 
 @RequiredArgsConstructor
 public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryRepository {
@@ -56,9 +58,9 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
     }
 
     @Override
-    public LiveConfirmedEmailVo findLiveConfirmedEmailVoByApplicationId(Long applicationId) {
+    public LiveEmailVo findLiveEmailVoByApplicationId(Long applicationId) {
         return queryFactory
-                .select(Projections.constructor(LiveConfirmedEmailVo.class,
+                .select(Projections.constructor(LiveEmailVo.class,
                         live.title,
                         live.startDate,
                         live.endDate,
@@ -72,6 +74,23 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
                         eqApplicationId(applicationId)
                 )
                 .fetchFirst();
+    }
+
+    @Override
+    public List<String> findEmailListByLiveId(Long liveId) {
+        return queryFactory
+                .select(
+                        activeEmail(liveApplication.user)
+                )
+                .from(liveApplication)
+                .leftJoin(liveApplication.user, user)
+                .leftJoin(liveApplication.payment, payment)
+                .where(
+                        eqLiveId(liveId),
+                        eqIsConfirmed(true),
+                        eqIsRefunded(false)
+                )
+                .fetch();
     }
 
 
@@ -104,5 +123,9 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
 
     private BooleanExpression eqIsConfirmed(Boolean isConfirmed) {
         return isConfirmed != null ? payment.isConfirmed.eq(isConfirmed) : null;
+    }
+
+    private BooleanExpression eqIsRefunded(Boolean isRefunded) {
+        return isRefunded != null ? payment.isRefunded.eq(isRefunded) : null;
     }
 }

@@ -60,6 +60,14 @@ public class LiveHelper {
                 .orElseThrow(() -> new EntityNotFoundException(LiveErrorCode.LIVE_NOT_FOUND));
     }
 
+    public LiveEmailVo findLiveEmailVoByLiveId(Long liveId) {
+        return liveRepository.findLiveEmailVoByLiveId(liveId)
+                .orElseThrow(() -> new EntityNotFoundException(LiveErrorCode.LIVE_NOT_FOUND));
+    }
+    public List<Long> findRemindMailLiveIdList() {
+        return liveRepository.findRemindMailLiveIdList();
+    }
+
     public void deleteLiveById(Long liveId) {
         liveRepository.deleteById(liveId);
     }
@@ -67,4 +75,6 @@ public class LiveHelper {
     public void updateCurrentCount(Live live, int currenCount) {
         live.updateLiveCurrentCount(currenCount);
     }
+
+
 }

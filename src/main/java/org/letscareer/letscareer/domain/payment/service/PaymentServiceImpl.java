@@ -1,9 +1,8 @@
 package org.letscareer.letscareer.domain.payment.service;
 
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.domain.application.entity.Application;
 import org.letscareer.letscareer.domain.application.helper.LiveApplicationHelper;
-import org.letscareer.letscareer.domain.live.vo.LiveConfirmedEmailVo;
+import org.letscareer.letscareer.domain.live.vo.LiveEmailVo;
 import org.letscareer.letscareer.domain.payment.dto.request.UpdatePaymentRequestDto;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.payment.helper.PaymentHelper;
@@ -38,7 +37,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     private void sendConfirmedEmail(Payment payment) {
-        LiveConfirmedEmailVo liveConfirmedEmailVo = liveApplicationHelper.findLiveConfirmedEmailVo(payment.getApplication().getId());
-        emailUtils.sendConfirmedEmail(payment.getApplication().getUser().getEmail(), liveConfirmedEmailVo);
+        LiveEmailVo liveEmailVo = liveApplicationHelper.findLiveEmailVo(payment.getApplication().getId());
+        emailUtils.sendConfirmedEmail(payment.getApplication().getUser().getEmail(), liveEmailVo);
     }
 }
