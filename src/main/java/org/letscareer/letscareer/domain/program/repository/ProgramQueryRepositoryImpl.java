@@ -55,6 +55,10 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                         inProgramClassification(condition.typeList()),
                         inProgramStatus(condition.statusList(), condition.type())
                 )
+                .groupBy(
+                        vWProgram.programId,
+                        vWProgram.programType
+                )
                 .orderBy(
                         combinedOrderBy(condition.type())
                 )
@@ -113,8 +117,7 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                         containDuration(condition.startDate(), condition.endDate()),
                         inProgramClassification(condition.typeList()),
                         inProgramStatus(condition.statusList(), condition.type())
-                )
-                .orderBy(vWProgram.startDate.desc());
+                );
 
         return PageableExecutionUtils.getPage(contents, condition.pageable(), countQuery::fetchCount);
     }

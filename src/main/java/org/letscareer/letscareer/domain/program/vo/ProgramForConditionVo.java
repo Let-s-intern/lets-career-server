@@ -29,17 +29,6 @@ public record ProgramForConditionVo(
                                  LocalDateTime endDate,
                                  LocalDateTime beginning,
                                  LocalDateTime deadline) {
-        this(
-                id,
-                programType,
-                ProgramStatusType.of(programType, startDate, endDate),
-                title,
-                thumbnail,
-                shortDesc,
-                startDate,
-                endDate,
-                beginning,
-                deadline
-        );
+        this(id, programType, ProgramStatusType.of(programType, startDate, endDate), title, thumbnail, shortDesc, startDate, endDate, beginning, deadline);
     }
 }
