@@ -42,8 +42,9 @@ public class LiveMapper {
     }
 
     public GetLiveApplicationFormResponseDto toGetLiveApplicationFormResponseDto(User user,
+                                                                                 Boolean applied,
                                                                                  LiveApplicationFormVo applicationFormVo,
                                                                                  LivePriceDetailVo livePriceDetailVo) {
-        return GetLiveApplicationFormResponseDto.of(user, applicationFormVo, livePriceDetailVo);
+        return GetLiveApplicationFormResponseDto.of(user, applied, applicationFormVo, livePriceDetailVo);
     }
 }

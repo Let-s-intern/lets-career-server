@@ -46,6 +46,10 @@ public class LiveApplicationHelper {
         liveApplicationRepository.delete(liveApplication);
     }
 
+    public Boolean checkExistingLiveApplication(Long userId, Long liveId) {
+        return liveApplicationRepository.findLiveApplicationIdByUserIdAndLiveId(userId, liveId).isPresent();
+    }
+
     public LiveEmailVo findLiveEmailVo(Long applicationId) {
         return liveApplicationRepository.findLiveEmailVoByApplicationId(applicationId);
     }

@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 
 @Builder(access = AccessLevel.PRIVATE)
 public record GetLiveApplicationFormResponseDto(
+        Boolean applied,
         String name,
         String email,
         String contactEmail,
@@ -20,9 +21,11 @@ public record GetLiveApplicationFormResponseDto(
         LivePriceDetailVo price
 ) {
     public static GetLiveApplicationFormResponseDto of(User user,
+                                                       Boolean applied,
                                                        LiveApplicationFormVo liveApplicationFormVo,
                                                        LivePriceDetailVo livePriceDetailVo) {
         return GetLiveApplicationFormResponseDto.builder()
+                .applied(applied)
                 .name(user.getName())
                 .email(user.getEmail())
                 .contactEmail(user.getContactEmail())

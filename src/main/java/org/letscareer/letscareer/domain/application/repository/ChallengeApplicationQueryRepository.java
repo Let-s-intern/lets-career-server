@@ -10,4 +10,6 @@ public interface ChallengeApplicationQueryRepository {
     List<AdminChallengeApplicationVo> findAdminChallengeApplicationVos(Long challengeId, Boolean isConfirmed);
 
     List<UserChallengeApplicationVo> findUserChallengeApplicationVo(Long challengeId);
+
+    Optional<Long> findChallengeApplicationIdByUserIdAndChallengeId(Long userId, Long challengeId);
 }

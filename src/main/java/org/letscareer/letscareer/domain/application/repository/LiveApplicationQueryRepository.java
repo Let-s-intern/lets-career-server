@@ -4,6 +4,7 @@ import org.letscareer.letscareer.domain.application.vo.AdminLiveApplicationVo;
 import org.letscareer.letscareer.domain.live.vo.LiveEmailVo;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface LiveApplicationQueryRepository {
     List<AdminLiveApplicationVo> findAdminLiveApplicationVos(Long liveId, Boolean isConfirmed);
@@ -11,4 +12,6 @@ public interface LiveApplicationQueryRepository {
     LiveEmailVo findLiveEmailVoByApplicationId(Long applicationId);
 
     List<String> findEmailListByLiveId(Long liveId);
+
+    Optional<Long> findLiveApplicationIdByUserIdAndLiveId(Long userId, Long liveId);
 }

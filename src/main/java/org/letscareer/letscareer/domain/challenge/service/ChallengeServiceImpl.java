@@ -93,7 +93,8 @@ public class ChallengeServiceImpl implements ChallengeService {
     public GetChallengeApplicationFormResponseDto getChallengeApplicationForm(User user, Long challengeId) {
         ChallengeApplicationFormVo applicationFormVo = challengeHelper.findChallengeApplicationFormVoOrThrow(challengeId);
         List<ChallengePriceDetailVo> challengePriceDetailVos = challengePriceHelper.findChallengePriceDetailVos(challengeId);
-        return challengeMapper.toGetChallengeApplicationFormResponseDto(user, applicationFormVo, challengePriceDetailVos);
+        Boolean applied = challengeApplicationHelper.checkExistingChallengeApplication(user.getId(), challengeId);
+        return challengeMapper.toGetChallengeApplicationFormResponseDto(user, applied, applicationFormVo, challengePriceDetailVos);
     }
 
     @Override

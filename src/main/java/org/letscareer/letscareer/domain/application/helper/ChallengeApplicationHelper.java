@@ -48,4 +48,8 @@ public class ChallengeApplicationHelper {
     public void deleteChallengeApplication(ChallengeApplication challengeApplication) {
         challengeApplicationRepository.delete(challengeApplication);
     }
+
+    public Boolean checkExistingChallengeApplication(Long userId, Long challengeId) {
+        return challengeApplicationRepository.findChallengeApplicationIdByUserIdAndChallengeId(userId, challengeId).isPresent();
+    }
 }

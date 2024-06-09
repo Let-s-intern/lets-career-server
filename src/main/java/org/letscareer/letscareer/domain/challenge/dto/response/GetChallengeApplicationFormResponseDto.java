@@ -11,6 +11,7 @@ import java.util.List;
 
 @Builder(access = AccessLevel.PRIVATE)
 public record GetChallengeApplicationFormResponseDto(
+        Boolean applied,
         String name,
         String email,
         String contactEmail,
@@ -21,9 +22,11 @@ public record GetChallengeApplicationFormResponseDto(
         List<ChallengePriceDetailVo> priceList
 ) {
     public static GetChallengeApplicationFormResponseDto of(User user,
+                                                            Boolean applied,
                                                             ChallengeApplicationFormVo programInfo,
                                                             List<ChallengePriceDetailVo> challengePriceDetailVos) {
         return GetChallengeApplicationFormResponseDto.builder()
+                .applied(applied)
                 .name(user.getName())
                 .email(user.getEmail())
                 .contactEmail(user.getContactEmail())

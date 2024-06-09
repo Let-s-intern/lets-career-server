@@ -10,6 +10,7 @@ import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplication
 import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.letscareer.letscareer.domain.application.entity.QChallengeApplication.challengeApplication;
 import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
@@ -76,6 +77,22 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                 .fetch();
     }
 
+    @Override
+    public Optional<Long> findChallengeApplicationIdByUserIdAndChallengeId(Long userId, Long challengeId) {
+        return Optional.ofNullable(queryFactory
+                .select(
+                        challengeApplication.id
+                )
+                .from(challengeApplication)
+                .leftJoin(challengeApplication.user, user)
+                .leftJoin(challengeApplication.challenge, challenge)
+                .where(
+                        eqUserId(userId),
+                        eqChallengeId(challengeId)
+                )
+                .fetchFirst());
+    }
+
     private NumberExpression<Integer> calculateTotalCost() {
         NumberExpression<Integer> safePrice = new CaseBuilder()
                 .when(challengePrice.price.isNull())
@@ -93,6 +110,10 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                 .otherwise(coupon.discount);
 
         return safePrice.subtract(safeDiscount).subtract(safeCouponDiscount);
+    }
+
+    private BooleanExpression eqUserId(Long userId) {
+        return userId != null ? user.id.eq(userId) : null;
     }
 
     private BooleanExpression eqChallengeId(Long challengeId) {

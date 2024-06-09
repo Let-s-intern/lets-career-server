@@ -45,9 +45,10 @@ public class ChallengeMapper {
     }
 
     public GetChallengeApplicationFormResponseDto toGetChallengeApplicationFormResponseDto(User user,
+                                                                                           Boolean applied,
                                                                                            ChallengeApplicationFormVo applicationFormVo,
                                                                                            List<ChallengePriceDetailVo> challengePriceDetailVos) {
-        return GetChallengeApplicationFormResponseDto.of(user, applicationFormVo, challengePriceDetailVos);
+        return GetChallengeApplicationFormResponseDto.of(user, applied, applicationFormVo, challengePriceDetailVos);
     }
 
     public GetChallengeGuidesResponseDto toChallengeGuideAdminListResponseDto(List<ChallengeGuideVo> challengeGuideAdminList) {
