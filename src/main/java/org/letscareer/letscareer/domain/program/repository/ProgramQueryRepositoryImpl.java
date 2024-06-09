@@ -201,21 +201,21 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
 
     private BooleanExpression orderProceedingStatus(LocalDateTime now, List<ProgramType> type) {
         if (type == null || type.isEmpty())
-            return vWProgram.startDate.loe(now).and(vWProgram.endDate.goe(now));
+            return vWProgram.beginning.loe(now).and(vWProgram.deadline.goe(now));
         if (type.contains(ProgramType.VOD))
-            return vWProgram.programType.eq(ProgramType.VOD).or(vWProgram.startDate.loe(now).and(vWProgram.endDate.goe(now)));
-        return vWProgram.startDate.loe(now).and(vWProgram.endDate.goe(now));
+            return vWProgram.programType.eq(ProgramType.VOD).or(vWProgram.beginning.loe(now).and(vWProgram.deadline.goe(now)));
+        return vWProgram.beginning.loe(now).and(vWProgram.deadline.goe(now));
     }
 
     private BooleanExpression programProceedingStatus(LocalDateTime now) {
-        return vWProgram.programType.eq(ProgramType.VOD).or(vWProgram.startDate.loe(now).and(vWProgram.endDate.goe(now)));
+        return vWProgram.programType.eq(ProgramType.VOD).or(vWProgram.beginning.loe(now).and(vWProgram.deadline.goe(now)));
     }
 
     private BooleanExpression programPrevStatus(LocalDateTime now) {
-        return vWProgram.startDate.gt(now);
+        return vWProgram.beginning.gt(now);
     }
 
     private BooleanExpression programPostStatus(LocalDateTime now) {
-        return vWProgram.endDate.lt(now);
+        return vWProgram.deadline.lt(now);
     }
 }
