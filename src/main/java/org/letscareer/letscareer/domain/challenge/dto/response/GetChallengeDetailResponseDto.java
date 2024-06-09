@@ -44,6 +44,7 @@ public record GetChallengeDetailResponseDto(
                 .beginning(challengeInfo.beginning())
                 .deadline(challengeInfo.deadline())
                 .chatLink(challengeInfo.chatLink())
+                .chatPassword(challengeInfo.chatPassword())
                 .challengeType(challengeInfo.challengeType())
                 .classificationInfo(classificationInfo)
                 .priceInfo(priceInfo)
