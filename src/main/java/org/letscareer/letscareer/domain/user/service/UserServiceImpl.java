@@ -60,6 +60,7 @@ public class UserServiceImpl implements UserService {
 
     public void updateUser(User user, UserUpdateRequestDto userUpdateRequestDto) {
         userHelper.validateRegexEmail(userUpdateRequestDto.email());
+        userHelper.validateRegexEmail(userUpdateRequestDto.contactEmail());
         userHelper.validateRegexPhoneNumber(userUpdateRequestDto.phoneNum());
         userHelper.validateUpdatedPhoneNumber(user, userUpdateRequestDto);
         userHelper.updateUser(user, userUpdateRequestDto);
