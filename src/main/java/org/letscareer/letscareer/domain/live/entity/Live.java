@@ -7,7 +7,9 @@ import org.letscareer.letscareer.domain.classification.entity.LiveClassification
 import org.letscareer.letscareer.domain.faq.entity.FaqLive;
 import org.letscareer.letscareer.domain.live.dto.request.CreateLiveRequestDto;
 import org.letscareer.letscareer.domain.live.dto.request.UpdateLiveRequestDto;
+import org.letscareer.letscareer.domain.live.type.MailStatus;
 import org.letscareer.letscareer.domain.live.type.ProgressType;
+import org.letscareer.letscareer.domain.live.type.converter.MailStatusConverter;
 import org.letscareer.letscareer.domain.live.type.converter.ProgressTypeConverter;
 import org.letscareer.letscareer.domain.price.entity.LivePrice;
 import org.letscareer.letscareer.domain.program.dto.response.ZoomMeetingResponseDto;
@@ -50,6 +52,10 @@ public class Live extends BaseTimeEntity {
     private Boolean isVisible = false;
     @Convert(converter = ProgressTypeConverter.class)
     private ProgressType progressType;
+
+    @Builder.Default
+    @Convert(converter = MailStatusConverter.class)
+    private MailStatus mailStatus = MailStatus.REMIND;
 
     @OneToMany(mappedBy = "live", cascade = CascadeType.ALL)
     @Builder.Default
@@ -101,6 +107,14 @@ public class Live extends BaseTimeEntity {
         this.isVisible = updateValue(this.isVisible, requestDto.isVisible());
     }
 
+    public void updateLiveCurrentCount(int currenCount) {
+        this.currentCount = updateValue(this.currentCount, currentCount);
+    }
+
+    public void updateMailStatus(MailStatus mailStatus) {
+        this.mailStatus = updateValue(this.mailStatus, mailStatus);
+    }
+
     public void addLiveApplication(LiveApplication liveApplication) {
         this.applicationList.add(liveApplication);
     }
@@ -123,9 +137,5 @@ public class Live extends BaseTimeEntity {
 
     public void setInitFaqList() {
         this.faqList = new ArrayList<>();
-    }
-
-    public void updateLiveCurrentCount(int currenCount) {
-        this.currentCount = updateValue(this.currentCount, currentCount);
     }
 }

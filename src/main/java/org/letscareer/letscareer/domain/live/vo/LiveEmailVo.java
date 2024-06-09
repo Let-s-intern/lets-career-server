@@ -6,7 +6,8 @@ import org.letscareer.letscareer.domain.live.type.ProgressType;
 import java.time.LocalDateTime;
 
 @Builder
-public record LiveConfirmedEmailVo(
+public record LiveEmailVo(
+        Long id,
         String title,
         LocalDateTime startDate,
         LocalDateTime endDate,
