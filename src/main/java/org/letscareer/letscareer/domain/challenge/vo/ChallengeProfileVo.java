@@ -12,6 +12,7 @@ public record ChallengeProfileVo(
         String thumbnail,
         LocalDateTime startDate,
         LocalDateTime endDate,
+        LocalDateTime beginning,
         LocalDateTime deadline,
         LocalDateTime createDate
 ) {
