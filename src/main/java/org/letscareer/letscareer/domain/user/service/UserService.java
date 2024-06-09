@@ -8,7 +8,9 @@ import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.type.AuthProvider;
 import org.letscareer.letscareer.global.security.oauth2.userinfo.OAuth2UserInfo;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
+@Service
 public interface UserService {
     User createUserFromOAuth2(OAuth2UserInfo oAuth2UserInfo, AuthProvider authProvider);
 
@@ -18,7 +20,7 @@ public interface UserService {
 
     TokenResponseDto pwSignIn(UserPwSignInRequestDto pwSignInRequestDto);
 
-    void updateUser(User user, UserUpdateRequestDto userUpdateRequestDto);
+    void updateUser(Long userId, UserUpdateRequestDto userUpdateRequestDto);
 
     UserInfoResponseDto getUserInfo(User user);
 

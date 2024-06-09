@@ -73,7 +73,7 @@ public class UserV1Controller {
     @PatchMapping
     public ResponseEntity<SuccessResponse<?>> updateUser(@CurrentUser User user,
                                                          @RequestBody final UserUpdateRequestDto userUpdateRequestDto) {
-        userService.updateUser(user, userUpdateRequestDto);
+        userService.updateUser(user.getId(), userUpdateRequestDto);
         return SuccessResponse.ok(null);
     }
 
