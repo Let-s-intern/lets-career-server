@@ -16,11 +16,9 @@ import static org.letscareer.letscareer.domain.payment.error.PaymentErrorCode.PA
 public class PaymentHelper {
     private final PaymentRepository paymentRepository;
 
-    public Payment createPaymentAndSave(Application application,
-                                        Coupon coupon,
-                                        Price price) {
+    public Payment createPaymentAndSave(Application application, Coupon coupon, Price price) {
         int finalPrice = calculateFinalPrice(price, coupon);
-        Payment newPayment = Payment.createPayment(finalPrice, coupon, application, price);
+        Payment newPayment = Payment.createPayment(finalPrice, coupon, application);
         return paymentRepository.save(newPayment);
     }
 
