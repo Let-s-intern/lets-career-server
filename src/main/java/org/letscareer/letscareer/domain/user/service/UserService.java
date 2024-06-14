@@ -1,5 +1,7 @@
 package org.letscareer.letscareer.domain.user.service;
 
+import org.letscareer.letscareer.domain.application.dto.response.GetMyApplicationsResponseDto;
+import org.letscareer.letscareer.domain.application.type.ApplicationStatus;
 import org.letscareer.letscareer.domain.user.dto.request.*;
 import org.letscareer.letscareer.domain.user.dto.response.TokenResponseDto;
 import org.letscareer.letscareer.domain.user.dto.response.UserAdminListResponseDto;
@@ -16,25 +18,27 @@ public interface UserService {
 
     User updateUserFromOAuth2(User user, OAuth2UserInfo oAuth2UserInfo);
 
-    void pwSignUp(UserPwSignUpRequestDto pwSignUpRequestDto);
-
     TokenResponseDto pwSignIn(UserPwSignInRequestDto pwSignInRequestDto);
 
-    void updateUser(Long userId, UserUpdateRequestDto userUpdateRequestDto);
-
     UserInfoResponseDto getUserInfo(User user);
-
-    void deleteUser(User user);
 
     Boolean isAdmin(User user);
 
     UserAdminListResponseDto getUsers(Pageable pageable);
+
+    TokenResponseDto reissueToken(TokenReissueRequestDto tokenReissueRequestDto);
+
+    GetMyApplicationsResponseDto getMyApplications(User user, ApplicationStatus status);
+
+    void pwSignUp(UserPwSignUpRequestDto pwSignUpRequestDto);
+
+    void updateUser(Long userId, UserUpdateRequestDto userUpdateRequestDto);
+
+    void deleteUser(User user);
 
     void resetPassword(PasswordResetRequestDto passwordResetRequestDto);
 
     void updatePassword(Long id, PasswordUpdateRequestDto passwordUpdateRequestDto);
 
     void signOut(User user);
-
-    TokenResponseDto reissueToken(TokenReissueRequestDto tokenReissueRequestDto);
 }

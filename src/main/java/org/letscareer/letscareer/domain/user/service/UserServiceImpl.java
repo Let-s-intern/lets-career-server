@@ -2,6 +2,11 @@ package org.letscareer.letscareer.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.letscareer.letscareer.domain.application.dto.response.GetMyApplicationsResponseDto;
+import org.letscareer.letscareer.domain.application.helper.ApplicationHelper;
+import org.letscareer.letscareer.domain.application.mapper.ApplicationMapper;
+import org.letscareer.letscareer.domain.application.type.ApplicationStatus;
+import org.letscareer.letscareer.domain.application.vo.MyApplicationVo;
 import org.letscareer.letscareer.domain.user.dto.request.*;
 import org.letscareer.letscareer.domain.user.dto.response.TokenResponseDto;
 import org.letscareer.letscareer.domain.user.dto.response.UserAdminListResponseDto;
@@ -21,12 +26,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Transactional
 @Service
 public class UserServiceImpl implements UserService {
     private final UserHelper userHelper;
     private final UserMapper userMapper;
+    private final ApplicationHelper applicationHelper;
+    private final ApplicationMapper applicationMapper;
     private final TokenProvider tokenProvider;
     private final EmailUtils emailUtils;
 
@@ -103,6 +112,12 @@ public class UserServiceImpl implements UserService {
     public TokenResponseDto reissueToken(TokenReissueRequestDto tokenReissueRequestDto) {
         String newAccessToken = tokenProvider.reissueAccessToken(tokenReissueRequestDto);
         return TokenResponseDto.of(newAccessToken, tokenReissueRequestDto.refreshToken());
+    }
+
+    @Override
+    public GetMyApplicationsResponseDto getMyApplications(User user, ApplicationStatus status) {
+        List<MyApplicationVo> applicationList = applicationHelper.getMyApplications(user.getId(), status);
+        return applicationMapper.toGetMyApplicationsResponseDto(applicationList);
     }
 
     @Override
