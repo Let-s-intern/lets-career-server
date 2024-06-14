@@ -7,7 +7,6 @@ public record AttendanceUpdateRequestDto(
         String link,
         AttendanceStatus status,
         AttendanceResult result,
-        String comments,
-        Boolean isRefunded
+        String comments
 ) {
 }

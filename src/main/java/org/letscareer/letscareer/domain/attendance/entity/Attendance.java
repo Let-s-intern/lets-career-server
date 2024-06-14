@@ -31,7 +31,6 @@ public class Attendance extends BaseTimeEntity {
     @Convert(converter = AttendanceResultConverter.class)
     private AttendanceResult result;
     private String comments;
-    private Boolean isRefunded;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mission_id")
@@ -45,6 +44,5 @@ public class Attendance extends BaseTimeEntity {
         this.status = updateValue(this.status, attendanceUpdateRequestDto.status());
         this.result = updateValue(this.result, attendanceUpdateRequestDto.result());
         this.comments = updateValue(this.comments, attendanceUpdateRequestDto.comments());
-        this.isRefunded = updateValue(this.isRefunded, attendanceUpdateRequestDto.isRefunded());
     }
 }
