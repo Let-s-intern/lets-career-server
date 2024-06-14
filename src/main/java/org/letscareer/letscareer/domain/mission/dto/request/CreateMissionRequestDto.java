@@ -13,6 +13,8 @@ public record CreateMissionRequestDto(
         @NotEmpty String title,
         @NotNull MissionType type,
         @Nullable Integer refund,
+        @Nullable Integer score,
+        @Nullable Integer lateScore,
         @NotNull LocalDate startDate,
         @NotNull Long missionTemplateId,
         List<Long> essentialContentsIdList,
