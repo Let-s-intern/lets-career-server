@@ -112,6 +112,16 @@ public class ChallengeV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
+
+    @Operation(summary = "[대기]::챌린지 미션 참가자 점수 목록", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeApplicationsScoreResponseDto.class)))
+    })
+    @GetMapping("/{id}/applications/score")
+    public ResponseEntity<SuccessResponse<?>> getApplicationsScore(@PathVariable(name = "id") Long challengeId) {
+//        GetChallengeApplicationsScoreResponseDto responseDto = challengeService.getApplicationsScore(challengeId);
+        return SuccessResponse.ok(null);
+    }
+
     @Operation(summary = "신청자 리뷰 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeReviewResponseDto.class)))
     })
@@ -137,16 +147,6 @@ public class ChallengeV1Controller {
     @GetMapping("/{id}/notices")
     public ResponseEntity<SuccessResponse<?>> getNotices(@PathVariable(name = "id") final Long challengeId) {
         return SuccessResponse.ok(challengeService.getNotices(challengeId));
-    }
-
-    @Operation(summary = "[대기]::챌린지 참가자 페이백 조회", responses = {
-            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeApplicationsPaybackResponseDto.class)))
-    })
-    @ApiErrorCode({SwaggerEnum.APPLICATION_NOT_FOUND})
-    @GetMapping("/{id}/applications/payback")
-    public ResponseEntity<SuccessResponse<?>> getApplicationsPayback(@PathVariable(name = "id") final Long challengeId) {
-        final GetChallengeApplicationsPaybackResponseDto responseDto = challengeService.getApplicationsPayback(challengeId);
-        return SuccessResponse.ok(responseDto);
     }
 
     @Operation(summary = "챌린지 생성", responses = {

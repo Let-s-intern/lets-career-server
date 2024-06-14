@@ -5,7 +5,6 @@ import org.letscareer.letscareer.domain.application.dto.request.CreateApplicatio
 import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
 import org.letscareer.letscareer.domain.application.helper.ApplicationHelper;
 import org.letscareer.letscareer.domain.application.helper.ChallengeApplicationHelper;
-import org.letscareer.letscareer.domain.application.mapper.ChallengeApplicationMapper;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
 import org.letscareer.letscareer.domain.coupon.entity.Coupon;
@@ -23,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service("CHALLENGE")
 public class ChallengeApplicationServiceImpl implements ApplicationService {
     private final ChallengeApplicationHelper challengeApplicationHelper;
-    private final ChallengeApplicationMapper challengeApplicationMapper;
     private final ApplicationHelper applicationHelper;
     private final ChallengeHelper challengeHelper;
     private final PaymentHelper paymentHelper;
