@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 public class MissionTemplateV1Controller {
     private final MissionTemplateService missionTemplateService;
 
-    @Operation(summary = "미션 템플릿 생성", responses = {
+    @Operation(summary = "[어드민] 미션 템플릿 생성", responses = {
             @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
     })
     @PostMapping
@@ -31,7 +31,7 @@ public class MissionTemplateV1Controller {
         return SuccessResponse.created(null);
     }
 
-    @Operation(summary = "미션 템플릿 전체 목록", responses = {
+    @Operation(summary = "[어드민] 미션 템플릿 전체 목록", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = MissionTemplateAdminListResponseDto.class)))
     })
     @GetMapping("/admin")
@@ -40,7 +40,7 @@ public class MissionTemplateV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "미션 템플릿 간단 목록", responses = {
+    @Operation(summary = "[어드민] 미션 템플릿 간단 목록", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = MissionTemplateAdminSimpleListResponseDto.class)))
     })
     @GetMapping("/admin/simple")
@@ -49,7 +49,7 @@ public class MissionTemplateV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "미션 템플릿 수정", responses = {
+    @Operation(summary = "[어드민] 미션 템플릿 수정", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @PatchMapping("/{id}")
@@ -59,7 +59,7 @@ public class MissionTemplateV1Controller {
         return SuccessResponse.ok(null);
     }
 
-    @Operation(summary = "미션 템플릿 삭제", responses = {
+    @Operation(summary = "[어드민] 미션 템플릿 삭제", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @DeleteMapping("/{id}")

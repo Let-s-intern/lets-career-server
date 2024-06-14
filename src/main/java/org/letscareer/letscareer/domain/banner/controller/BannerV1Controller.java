@@ -28,7 +28,7 @@ public class BannerV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "타입별 배너 생성", responses = {
+    @Operation(summary = "[어드민] 타입별 배너 생성", responses = {
             @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
     })
     @PostMapping
@@ -38,7 +38,7 @@ public class BannerV1Controller {
         return SuccessResponse.created(null);
     }
 
-    @Operation(summary = "타입별 배너 수정", responses = {
+    @Operation(summary = "[어드민] 타입별 배너 수정", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @PatchMapping("/{id}")
@@ -49,7 +49,7 @@ public class BannerV1Controller {
         return SuccessResponse.ok(null);
     }
 
-    @Operation(summary = "배너 타입별 전체 목록", responses = {
+    @Operation(summary = "[어드민] 배너 타입별 전체 목록", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = BannerListResponseDto.class)))
     })
     @GetMapping("/admin")
@@ -58,7 +58,7 @@ public class BannerV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "배너 삭제", responses = {
+    @Operation(summary = "[어드민] 배너 삭제", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @DeleteMapping("/{id}")

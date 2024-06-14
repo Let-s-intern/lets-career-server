@@ -42,7 +42,7 @@ public class VodV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "vod 생성", responses = {
+    @Operation(summary = "[어드민] vod 생성", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @PostMapping
@@ -51,7 +51,7 @@ public class VodV1Controller {
         return SuccessResponse.created(null);
     }
 
-    @Operation(summary = "vod 수정", responses = {
+    @Operation(summary = "[어드민] vod 수정", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @PatchMapping("/{id}")
@@ -61,7 +61,7 @@ public class VodV1Controller {
         return SuccessResponse.ok(null);
     }
 
-    @Operation(summary = "vod 삭제", responses = {
+    @Operation(summary = "[어드민] vod 삭제", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @DeleteMapping("/{id}")

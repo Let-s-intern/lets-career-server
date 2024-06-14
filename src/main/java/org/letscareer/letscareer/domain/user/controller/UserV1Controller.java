@@ -57,7 +57,7 @@ public class UserV1Controller {
         return SuccessResponse.ok(userService.isAdmin(user));
     }
 
-    @Operation(summary = "유저 전체 목록", responses = {
+    @Operation(summary = "[어드민] 유저 전체 목록", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserAdminListResponseDto.class)))
     })
     @GetMapping("/admin")

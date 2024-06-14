@@ -44,7 +44,7 @@ public class ProgramV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "프로그램 통합 조회 - 어드민", responses = {
+    @Operation(summary = "[어드민] 프로그램 통합 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetProgramForAdminResponseDto.class)))
     })
     @GetMapping("/admin")

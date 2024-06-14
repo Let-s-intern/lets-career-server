@@ -95,7 +95,7 @@ public class LiveV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "프로그램 신청자 조회", responses = {
+    @Operation(summary = "[어드민] 프로그램 신청자 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetLiveApplicationsResponseDto.class)))
     })
     @GetMapping("/{id}/applications")
@@ -115,7 +115,7 @@ public class LiveV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "라이브 생성", responses = {
+    @Operation(summary = "[어드민] 라이브 생성", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @PostMapping
@@ -124,7 +124,7 @@ public class LiveV1Controller {
         return SuccessResponse.created(null);
     }
 
-    @Operation(summary = "라이브 수정", responses = {
+    @Operation(summary = "[어드민] 라이브 수정", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @PatchMapping("/{id}")
@@ -134,7 +134,7 @@ public class LiveV1Controller {
         return SuccessResponse.ok(null);
     }
 
-    @Operation(summary = "라이브 삭제", responses = {
+    @Operation(summary = "[어드민] 라이브 삭제", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @DeleteMapping("/{id}")

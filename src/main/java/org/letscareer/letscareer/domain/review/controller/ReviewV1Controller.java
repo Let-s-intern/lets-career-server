@@ -52,7 +52,7 @@ public class ReviewV1Controller {
         return SuccessResponse.ok(null);
     }
 
-    @Operation(summary = "리뷰 노출 여부 수정", responses = {
+    @Operation(summary = "[어드민] 리뷰 노출 여부 수정", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @PatchMapping("/{id}/status")

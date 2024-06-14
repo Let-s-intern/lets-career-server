@@ -102,7 +102,7 @@ public class ChallengeV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "프로그램 신청자 조회", responses = {
+    @Operation(summary = "[어드민] 프로그램 신청자 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeApplicationsResponseDto.class)))
     })
     @GetMapping("/{id}/applications")
@@ -149,7 +149,7 @@ public class ChallengeV1Controller {
         return SuccessResponse.ok(challengeService.getNotices(challengeId));
     }
 
-    @Operation(summary = "챌린지 생성", responses = {
+    @Operation(summary = "[어드민] 챌린지 생성", responses = {
             @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
     })
     @PostMapping
@@ -158,7 +158,7 @@ public class ChallengeV1Controller {
         return SuccessResponse.created(null);
     }
 
-    @Operation(summary = "챌린지 수정", responses = {
+    @Operation(summary = "[어드민] 챌린지 수정", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @ApiErrorCode({SwaggerEnum.CHALLENGE_NOT_FOUND})
@@ -169,7 +169,7 @@ public class ChallengeV1Controller {
         return SuccessResponse.ok(null);
     }
 
-    @Operation(summary = "챌린지 삭제", responses = {
+    @Operation(summary = "[어드민] 챌린지 삭제", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @ApiErrorCode({SwaggerEnum.CHALLENGE_NOT_FOUND})

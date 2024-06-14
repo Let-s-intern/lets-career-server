@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class AttendanceV1Controller {
     private final AttendanceService attendanceService;
 
-    @Operation(summary = "챌린지 1개의 출석 전체 목록", responses = {
+    @Operation(summary = "[어드민] 챌린지 1개의 출석 전체 목록", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = AttendanceAdminListResponseDto.class)))
     })
     @GetMapping("/admin/{id}")
@@ -27,7 +27,7 @@ public class AttendanceV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "어드민 출석 업데이트", responses = {
+    @Operation(summary = "[어드민] 출석 업데이트", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @PatchMapping("/admin")

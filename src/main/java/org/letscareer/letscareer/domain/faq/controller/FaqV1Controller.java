@@ -28,7 +28,7 @@ public class FaqV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "Faq 생성", responses = {
+    @Operation(summary = "[어드민] Faq 생성", responses = {
             @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
     })
     @PostMapping
@@ -37,7 +37,7 @@ public class FaqV1Controller {
         return SuccessResponse.created(null);
     }
 
-    @Operation(summary = "Faq 수정", responses = {
+    @Operation(summary = "[어드민] Faq 수정", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @PatchMapping("/{faqId}")
@@ -47,7 +47,7 @@ public class FaqV1Controller {
         return SuccessResponse.ok(null);
     }
 
-    @Operation(summary = "Faq 삭제", responses = {
+    @Operation(summary = "[어드민] Faq 삭제", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @DeleteMapping("/{faqId}")

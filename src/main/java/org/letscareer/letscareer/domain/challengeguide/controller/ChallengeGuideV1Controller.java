@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class ChallengeGuideV1Controller {
     private final ChallengeGuideService challengeGuideService;
 
-    @Operation(summary = "챌린지 가이드 생성", responses = {
+    @Operation(summary = "[어드민] 챌린지 가이드 생성", responses = {
             @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
     })
     @PostMapping("/{id}")
@@ -26,7 +26,7 @@ public class ChallengeGuideV1Controller {
         return SuccessResponse.created(null);
     }
 
-    @Operation(summary = "챌린지 가이드 수정", responses = {
+    @Operation(summary = "[어드민] 챌린지 가이드 수정", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @PatchMapping("/{id}")
@@ -36,7 +36,7 @@ public class ChallengeGuideV1Controller {
         return SuccessResponse.ok(null);
     }
 
-    @Operation(summary = "챌린지 가이드 삭제", responses = {
+    @Operation(summary = "[어드민] 챌린지 가이드 삭제", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @DeleteMapping("/{id}")
