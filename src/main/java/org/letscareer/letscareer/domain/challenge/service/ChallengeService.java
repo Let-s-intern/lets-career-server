@@ -23,6 +23,8 @@ public interface ChallengeService {
 
     GetChallengeApplicationsResponseDto getApplications(Long challengeId, Boolean isConfirmed);
 
+    GetChallengeApplicationsScoreResponseDto getApplicationsScore(Long challengeId);
+
     GetChallengeApplicationFormResponseDto getChallengeApplicationForm(User user, Long challengeId);
 
     GetChallengeThumbnailResponseDto getChallengeThumbnail(Long challengeId);
@@ -36,8 +38,6 @@ public interface ChallengeService {
     GetChallengeGuidesResponseDto getGuides(Long challengeId);
 
     GetChallengeNoticesResponseDto getNotices(Long challengeId);
-
-    GetChallengeApplicationsPaybackResponseDto getApplicationsPayback(Long challengeId);
 
     void createChallenge(CreateChallengeRequestDto createChallengeRequestDto);
 

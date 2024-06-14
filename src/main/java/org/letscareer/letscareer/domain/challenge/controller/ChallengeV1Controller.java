@@ -113,13 +113,13 @@ public class ChallengeV1Controller {
     }
 
 
-    @Operation(summary = "[대기]::챌린지 미션 참가자 점수 목록", responses = {
+    @Operation(summary = "챌린지 미션 참가자 점수 목록", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeApplicationsScoreResponseDto.class)))
     })
     @GetMapping("/{id}/applications/score")
     public ResponseEntity<SuccessResponse<?>> getApplicationsScore(@PathVariable(name = "id") Long challengeId) {
-//        GetChallengeApplicationsScoreResponseDto responseDto = challengeService.getApplicationsScore(challengeId);
-        return SuccessResponse.ok(null);
+        GetChallengeApplicationsScoreResponseDto responseDto = challengeService.getApplicationsScore(challengeId);
+        return SuccessResponse.ok(responseDto);
     }
 
     @Operation(summary = "신청자 리뷰 조회", responses = {

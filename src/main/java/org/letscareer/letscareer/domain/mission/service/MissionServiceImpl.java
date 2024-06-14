@@ -38,9 +38,9 @@ public class MissionServiceImpl implements MissionService{
         Challenge challenge = challengeHelper.findChallengeByIdOrThrow(challengeId);
         MissionTemplate missionTemplate = missionTemplateHelper.findMissionTemplateByIdOrThrow(createMissionRequestDto.missionTemplateId());
         Mission newMission = missionMapper.toEntity(createMissionRequestDto, challenge, missionTemplate);
+        missionHelper.saveMission(newMission);
         findContentsAndAdd(ContentsType.ESSENTIAL, createMissionRequestDto.essentialContentsIdList(), newMission);
         findContentsAndAdd(ContentsType.ADDITIONAL, createMissionRequestDto.additionalContentsIdList(), newMission);
-        missionHelper.saveMission(newMission);
         missionScoreHelper.createMissionScore(createMissionRequestDto, newMission);
     }
 

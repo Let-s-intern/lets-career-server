@@ -61,7 +61,7 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
     public List<UserChallengeApplicationVo> findUserChallengeApplicationVo(Long challengeId) {
         return queryFactory
                 .select(Projections.constructor(UserChallengeApplicationVo.class,
-                        user.id,
+                        challengeApplication._super.id,
                         user.name,
                         user.contactEmail,
                         user.phoneNum,

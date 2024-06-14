@@ -20,7 +20,7 @@ public class MissionScore extends Score {
 
     @Builder(access = AccessLevel.PRIVATE)
     public MissionScore(CreateMissionRequestDto createMissionRequestDto, Mission mission) {
-        super(createMissionRequestDto);
+        super();
         this.successScore = createMissionRequestDto.score();
         this.lateScore = createMissionRequestDto.lateScore();
         this.mission = mission;

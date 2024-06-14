@@ -27,13 +27,18 @@ public class PaymentHelper {
                 .orElseThrow(() -> new EntityNotFoundException(PAYMENT_NOT_FOUND));
     }
 
+    public Payment findPaymentByApplicationIdOrThrow(Long applicationId) {
+        return paymentRepository.findPaymentByApplicationId(applicationId)
+                .orElseThrow(() -> new EntityNotFoundException(PAYMENT_NOT_FOUND));
+    }
+
     public long countCouponAppliedTime(Long userId, Long couponId) {
         return paymentRepository.countCouponAppliedTime(userId, couponId);
     }
 
     private int calculateFinalPrice(Price price, Coupon coupon) {
         int finalPrice = price.getPrice() - price.getDiscount();
-        if(coupon != null) finalPrice -= coupon.getDiscount();
+        if (coupon != null) finalPrice -= coupon.getDiscount();
         return finalPrice;
     }
 }
