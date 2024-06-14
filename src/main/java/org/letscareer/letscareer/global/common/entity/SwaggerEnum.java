@@ -13,6 +13,7 @@ import org.letscareer.letscareer.domain.missiontemplate.error.MissionTemplateErr
 import org.letscareer.letscareer.domain.payment.error.PaymentErrorCode;
 import org.letscareer.letscareer.domain.price.error.ChallengePriceErrorCode;
 import org.letscareer.letscareer.domain.price.error.PriceErrorCode;
+import org.letscareer.letscareer.domain.score.error.ScoreErrorCode;
 import org.letscareer.letscareer.domain.user.error.UserErrorCode;
 import org.letscareer.letscareer.domain.vod.error.VodErrorCode;
 import org.letscareer.letscareer.global.error.ErrorCode;
@@ -61,6 +62,9 @@ public enum SwaggerEnum {
     CHALLENGE_PRICE_NOT_FOUND(ChallengePriceErrorCode.CHALLENGE_PRICE_NOT_FOUND),
     PRICE_NOT_FOUND(PriceErrorCode.PRICE_NOT_FOUND),
     LIVE_PRICE_NOT_FOUND(PriceErrorCode.LIVE_PRICE_NOT_FOUND),
+
+    // score
+    ATTENDANCE_SCORE_NOT_FOUND(ScoreErrorCode.ATTENDANCE_SCORE_NOT_FOUND),
 
     // vod
     VOD_NOT_FOUND(VodErrorCode.VOD_NOT_FOUND),

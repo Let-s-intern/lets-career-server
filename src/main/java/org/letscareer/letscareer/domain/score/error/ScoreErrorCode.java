@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public enum ScoreErrorException implements ErrorCode {
+public enum ScoreErrorCode implements ErrorCode {
     ATTENDANCE_SCORE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 참가자 입니다.");
 
     private final HttpStatus httpStatus;

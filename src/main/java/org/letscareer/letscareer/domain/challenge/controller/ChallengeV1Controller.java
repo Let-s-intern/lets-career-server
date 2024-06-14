@@ -117,6 +117,7 @@ public class ChallengeV1Controller {
     @Operation(summary = "챌린지 미션 참가자 패이백 목록", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeApplicationsPaybackResponseDto.class)))
     })
+    @ApiErrorCode({SwaggerEnum.PAYMENT_NOT_FOUND})
     @GetMapping("/{id}/applications/payback")
     public ResponseEntity<SuccessResponse<?>> getApplicationsScore(@PathVariable(name = "id") final Long challengeId,
                                                                    final Pageable pageable) {
@@ -174,6 +175,7 @@ public class ChallengeV1Controller {
     @Operation(summary = "챌린지 미션 참가자 패이백 정보 수정", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
+    @ApiErrorCode({SwaggerEnum.PAYMENT_NOT_FOUND, SwaggerEnum.ATTENDANCE_SCORE_NOT_FOUND})
     @PatchMapping("/{challengeId}/application/{applicationId}/payback")
     public ResponseEntity<SuccessResponse<?>> updateApplicationsScore(@PathVariable final Long challengeId,
                                                                       @PathVariable final Long applicationId,
