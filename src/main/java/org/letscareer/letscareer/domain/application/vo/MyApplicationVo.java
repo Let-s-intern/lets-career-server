@@ -42,6 +42,7 @@ public record MyApplicationVo(
                 programThumbnail,
                 programStartDate,
                 programEndDate,
-                reviewId);
+                reviewId
+        );
     }
 }
