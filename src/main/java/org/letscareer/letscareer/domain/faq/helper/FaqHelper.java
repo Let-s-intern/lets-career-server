@@ -26,14 +26,12 @@ public class FaqHelper {
     private final FaqChallengeRepository faqChallengeRepository;
     private final FaqLiveRepository faqLiveRepository;
 
-    public FaqChallenge createFaqChallengeAndSave(Faq faq,
-                                                  Challenge challenge) {
+    public FaqChallenge createFaqChallengeAndSave(Faq faq, Challenge challenge) {
         FaqChallenge faqChallenge = FaqChallenge.createFaqChallenge(faq, challenge);
         return faqChallengeRepository.save(faqChallenge);
     }
 
-    public FaqLive createFaqLiveAndSave(Faq faq,
-                                        Live live) {
+    public FaqLive createFaqLiveAndSave(Faq faq, Live live) {
         FaqLive faqLive = FaqLive.createFaqLive(faq, live);
         return faqLiveRepository.save(faqLive);
     }
