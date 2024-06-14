@@ -15,6 +15,7 @@ import org.letscareer.letscareer.domain.mission.mapper.MissionMapper;
 import org.letscareer.letscareer.domain.mission.vo.MissionForChallengeVo;
 import org.letscareer.letscareer.domain.missiontemplate.entity.MissionTemplate;
 import org.letscareer.letscareer.domain.missiontemplate.helper.MissionTemplateHelper;
+import org.letscareer.letscareer.domain.score.helper.MissionScoreHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +28,7 @@ import java.util.Objects;
 public class MissionServiceImpl implements MissionService{
     private final MissionHelper missionHelper;
     private final MissionMapper missionMapper;
+    private final MissionScoreHelper missionScoreHelper;
     private final MissionTemplateHelper missionTemplateHelper;
     private final ChallengeHelper challengeHelper;
     private final ContentsHelper contentsHelper;
@@ -39,6 +41,7 @@ public class MissionServiceImpl implements MissionService{
         findContentsAndAdd(ContentsType.ESSENTIAL, createMissionRequestDto.essentialContentsIdList(), newMission);
         findContentsAndAdd(ContentsType.ADDITIONAL, createMissionRequestDto.additionalContentsIdList(), newMission);
         missionHelper.saveMission(newMission);
+        missionScoreHelper.createMissionScore(createMissionRequestDto, newMission);
     }
 
     @Override
