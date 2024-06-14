@@ -1,7 +1,7 @@
 package org.letscareer.letscareer.domain.application.repository;
 
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.*;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.type.ApplicationReviewStatus;
@@ -18,7 +18,7 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<MyApplicationVo> findMyApplications(Long userId, ApplicationStatus status, ApplicationReviewStatus reviewStatus) {
+    public List<MyApplicationVo> findMyApplications(Long userId, ApplicationStatus status) {
         return queryFactory.select(Projections.constructor(MyApplicationVo.class,
                         vWApplication.applicationId,
                         vWApplication.paymentIsConfirmed,
@@ -34,8 +34,7 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
                 .where(
                         eqUserId(userId),
                         eqPaymentIsRefunded(false),
-                        eqStatus(status),
-                        eqReviewStatus(reviewStatus)
+                        eqStatus(status)
                 )
                 .fetch();
     }
@@ -68,7 +67,7 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
     }
 
     private BooleanExpression eqStatus(ApplicationStatus status) {
-        if(status != null) {
+        if (status != null) {
             switch (status) {
                 case WAITING -> {
                     return beforeStart().and(eqPaymentIsConfirmed(false));
@@ -85,9 +84,9 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
     }
 
     private BooleanExpression eqReviewStatus(ApplicationReviewStatus reviewStatus) {
-        if(reviewStatus != null && reviewStatus.equals(ApplicationReviewStatus.YET))
+        if (reviewStatus != null && reviewStatus.equals(ApplicationReviewStatus.YET))
             return vWApplication.reviewId.isNull();
-        else if(reviewStatus != null && reviewStatus.equals(ApplicationReviewStatus.DONE))
+        else if (reviewStatus != null && reviewStatus.equals(ApplicationReviewStatus.DONE))
             return vWApplication.reviewId.isNotNull();
         else
             return null;
