@@ -24,7 +24,7 @@ public interface ChallengeService {
 
     GetChallengeApplicationsResponseDto getApplications(Long challengeId, Boolean isConfirmed);
 
-    GetChallengeApplicationsPaybackResponseDto getApplicationsScore(Long challengeId);
+    GetChallengeApplicationsPaybackResponseDto getApplicationsScore(Long challengeId, Pageable pageable);
 
     GetChallengeApplicationFormResponseDto getChallengeApplicationForm(User user, Long challengeId);
 

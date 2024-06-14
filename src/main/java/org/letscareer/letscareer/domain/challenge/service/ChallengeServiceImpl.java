@@ -103,10 +103,10 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
-    public GetChallengeApplicationsPaybackResponseDto getApplicationsScore(Long challengeId) {
-        List<UserChallengeApplicationVo> challengeApplicationVo = challengeApplicationHelper.findUserChallengeApplicationVo(challengeId);
-        List<MissionApplicationScoreResponseDto> missionApplications = createMissionApplications(challengeApplicationVo, challengeId);
-        return challengeApplicationMapper.toGetChallengeApplicationsScoreResponseDto(missionApplications);
+    public GetChallengeApplicationsPaybackResponseDto getApplicationsScore(Long challengeId, Pageable pageable) {
+        Page<UserChallengeApplicationVo> challengeApplicationVos = challengeApplicationHelper.findUserChallengeApplicationVo(challengeId, pageable);
+        List<MissionApplicationScoreResponseDto> missionApplications = createMissionApplications(challengeApplicationVos.getContent(), challengeId);
+        return challengeApplicationMapper.toGetChallengeApplicationsScoreResponseDto(missionApplications, challengeApplicationVos);
     }
 
     private List<MissionApplicationScoreResponseDto> createMissionApplications(List<UserChallengeApplicationVo> challengeApplicationVos, Long challengeId) {

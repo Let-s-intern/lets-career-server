@@ -118,8 +118,9 @@ public class ChallengeV1Controller {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeApplicationsPaybackResponseDto.class)))
     })
     @GetMapping("/{id}/applications/payback")
-    public ResponseEntity<SuccessResponse<?>> getApplicationsScore(@PathVariable(name = "id") final Long challengeId) {
-        GetChallengeApplicationsPaybackResponseDto responseDto = challengeService.getApplicationsScore(challengeId);
+    public ResponseEntity<SuccessResponse<?>> getApplicationsScore(@PathVariable(name = "id") final Long challengeId,
+                                                                   final Pageable pageable) {
+        GetChallengeApplicationsPaybackResponseDto responseDto = challengeService.getApplicationsScore(challengeId, pageable);
         return SuccessResponse.ok(responseDto);
     }
 
