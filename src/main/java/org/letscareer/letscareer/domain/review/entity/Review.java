@@ -24,6 +24,8 @@ public class Review extends BaseTimeEntity {
     private Boolean npsCheckAns;
     private String content;
     private Integer score;
+    @Builder.Default
+    private Boolean isVisible = false;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id")
@@ -48,5 +50,9 @@ public class Review extends BaseTimeEntity {
         this.npsCheckAns = updateValue(this.npsCheckAns, requestDto.npsCheckAns());
         this.content = updateValue(this.content, requestDto.content());
         this.score = updateValue(this.score, requestDto.score());
+    }
+
+    public void updateIsVisibleStatus(Boolean isVisible) {
+        this.isVisible = updateValue(this.isVisible, isVisible);
     }
 }

@@ -38,4 +38,10 @@ public class ReviewServiceImpl implements ReviewService {
         Review review = reviewHelper.findReviewOrThrow(reviewId);
         review.updateReview(requestDto);
     }
+
+    @Override
+    public void updateReviewVisibleStatus(Long reviewId, Boolean isVisible) {
+        Review review = reviewHelper.findReviewOrThrow(reviewId);
+        review.updateIsVisibleStatus(isVisible);
+    }
 }
