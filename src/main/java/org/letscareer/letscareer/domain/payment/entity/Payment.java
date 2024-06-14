@@ -3,6 +3,7 @@ package org.letscareer.letscareer.domain.payment.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.letscareer.letscareer.domain.application.entity.Application;
+import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApplicationPaybackRequestDto;
 import org.letscareer.letscareer.domain.coupon.entity.Coupon;
 import org.letscareer.letscareer.domain.payment.dto.request.UpdatePaymentRequestDto;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
@@ -44,8 +45,12 @@ public class Payment extends BaseTimeEntity {
                 .build();
     }
 
-    public void updatePayment(UpdatePaymentRequestDto updatePaymentRequestDto) {
-        this.isConfirmed = updateValue(this.isConfirmed, updatePaymentRequestDto.isConfirmed());
-        this.isRefunded = updateValue(this.isRefunded, updatePaymentRequestDto.isRefunded());
+    public void updatePayment(UpdatePaymentRequestDto requestDto) {
+        this.isConfirmed = updateValue(this.isConfirmed, requestDto.isConfirmed());
+        this.isRefunded = updateValue(this.isRefunded, requestDto.isRefunded());
+    }
+
+    public void updateRefund(UpdateChallengeApplicationPaybackRequestDto requestDto) {
+        this.isRefunded = updateValue(this.isRefunded, requestDto.isRefunded());
     }
 }

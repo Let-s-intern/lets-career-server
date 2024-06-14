@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.challenge.service;
 
 import org.letscareer.letscareer.domain.application.dto.response.GetChallengeApplicationsResponseDto;
 import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeRequestDto;
+import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApplicationPaybackRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.response.*;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
@@ -23,7 +24,7 @@ public interface ChallengeService {
 
     GetChallengeApplicationsResponseDto getApplications(Long challengeId, Boolean isConfirmed);
 
-    GetChallengeApplicationsScoreResponseDto getApplicationsScore(Long challengeId);
+    GetChallengeApplicationsPaybackResponseDto getApplicationsScore(Long challengeId);
 
     GetChallengeApplicationFormResponseDto getChallengeApplicationForm(User user, Long challengeId);
 
@@ -42,6 +43,8 @@ public interface ChallengeService {
     void createChallenge(CreateChallengeRequestDto createChallengeRequestDto);
 
     void updateChallenge(Long challengeId, UpdateChallengeRequestDto createChallengeRequestDto);
+
+    void updateApplicationsScore(Long challengeId, Long applicationId, UpdateChallengeApplicationPaybackRequestDto requestDto);
 
     void deleteChallenge(Long challengeId);
 }

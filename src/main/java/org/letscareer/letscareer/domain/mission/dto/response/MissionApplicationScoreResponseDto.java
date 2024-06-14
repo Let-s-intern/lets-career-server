@@ -11,6 +11,7 @@ import java.util.List;
 
 @Builder(access = AccessLevel.PRIVATE)
 public record MissionApplicationScoreResponseDto(
+        Long applicationId,
         String name,
         String email,
         String phoneNum,
@@ -23,6 +24,7 @@ public record MissionApplicationScoreResponseDto(
                                                         List<AttendanceScoreVo> scores,
                                                         Payment payment) {
         return MissionApplicationScoreResponseDto.builder()
+                .applicationId(userChallengeApplicationVo.id())
                 .name(userChallengeApplicationVo.name())
                 .email(userChallengeApplicationVo.contactEmail())
                 .phoneNum(userChallengeApplicationVo.phoneNum())

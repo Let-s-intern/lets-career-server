@@ -9,6 +9,7 @@ import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationV
 import org.letscareer.letscareer.domain.attendance.helper.AttendanceHelper;
 import org.letscareer.letscareer.domain.attendance.vo.AttendanceScoreVo;
 import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeRequestDto;
+import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApplicationPaybackRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.response.*;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
@@ -40,6 +41,8 @@ import org.letscareer.letscareer.domain.program.dto.response.ZoomMeetingResponse
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.domain.review.helper.ReviewHelper;
 import org.letscareer.letscareer.domain.review.vo.ReviewVo;
+import org.letscareer.letscareer.domain.score.entity.AttendanceScore;
+import org.letscareer.letscareer.domain.score.helper.AttendanceScoreHelper;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.utils.ZoomUtils;
 import org.springframework.data.domain.Page;
@@ -63,6 +66,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final ChallengePriceHelper challengePriceHelper;
     private final ChallengeGuideHelper challengeGuideHelper;
     private final ChallengeNoticeHelper challengeNoticeHelper;
+    private final AttendanceScoreHelper attendanceScoreHelper;
     private final AttendanceHelper attendanceHelper;
     private final PaymentHelper paymentHelper;
     private final MissionMapper missionMapper;
@@ -99,7 +103,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
-    public GetChallengeApplicationsScoreResponseDto getApplicationsScore(Long challengeId) {
+    public GetChallengeApplicationsPaybackResponseDto getApplicationsScore(Long challengeId) {
         List<UserChallengeApplicationVo> challengeApplicationVo = challengeApplicationHelper.findUserChallengeApplicationVo(challengeId);
         List<MissionApplicationScoreResponseDto> missionApplications = createMissionApplications(challengeApplicationVo, challengeId);
         return challengeApplicationMapper.toGetChallengeApplicationsScoreResponseDto(missionApplications);
@@ -177,6 +181,14 @@ public class ChallengeServiceImpl implements ChallengeService {
         updateChallengeClassifications(challenge, createChallengeRequestDto.programTypeInfo());
         updateChallengePrices(challenge, createChallengeRequestDto.priceInfo());
         updateChallengeFaqs(challenge, createChallengeRequestDto.faqInfo());
+    }
+
+    @Override
+    public void updateApplicationsScore(Long challengeId, Long applicationId, UpdateChallengeApplicationPaybackRequestDto requestDto) {
+        AttendanceScore attendanceScore = attendanceScoreHelper.findAttendanceScoreByChallengeIdAndApplicationIdOrThrow(challengeId, applicationId);
+        Payment payment = paymentHelper.findPaymentByApplicationIdOrThrow(applicationId);
+        attendanceScore.updateAdminScore(requestDto.adminScore());
+        payment.updateRefund(requestDto);
     }
 
     @Override

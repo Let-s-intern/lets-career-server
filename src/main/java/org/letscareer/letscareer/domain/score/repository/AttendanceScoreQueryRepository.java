@@ -1,5 +1,9 @@
 package org.letscareer.letscareer.domain.score.repository;
 
-public interface AttendanceScoreQueryRepository {
+import org.letscareer.letscareer.domain.score.entity.AttendanceScore;
 
+import java.util.Optional;
+
+public interface AttendanceScoreQueryRepository {
+    Optional<AttendanceScore> findAttendanceScoreByChallengeIdAndApplicationId(Long challengeId, Long applicationId);
 }

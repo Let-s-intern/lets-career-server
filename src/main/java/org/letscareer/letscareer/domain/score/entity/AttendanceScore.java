@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.letscareer.letscareer.domain.attendance.entity.Attendance;
 
+import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils.updateValue;
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DiscriminatorValue("attendance_score")
 @Getter
@@ -35,5 +37,9 @@ public class AttendanceScore extends Score {
                 .build();
         attendance.setAttendanceScore(attendanceScore);
         return attendanceScore;
+    }
+
+    public void updateAdminScore(Integer adminScore) {
+        this.adminScore = updateValue(this.adminScore, adminScore);
     }
 }
