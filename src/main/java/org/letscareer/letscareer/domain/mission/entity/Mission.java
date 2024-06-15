@@ -15,7 +15,6 @@ import org.letscareer.letscareer.domain.mission.type.converter.MissionTypeConver
 import org.letscareer.letscareer.domain.missiontemplate.entity.MissionTemplate;
 import org.letscareer.letscareer.domain.score.entity.MissionScore;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
-import org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -88,6 +87,7 @@ public class Mission extends BaseTimeEntity {
     }
 
     public void updateMission(UpdateMissionRequestDto requestDto) {
+        this.th = updateValue(this.th, requestDto.th());
         this.title = updateValue(this.title, requestDto.title());
         this.type = updateValue(this.type, requestDto.type());
         this.startDate = updateValue(this.startDate, requestDto.startDate().atTime(6, 0));
