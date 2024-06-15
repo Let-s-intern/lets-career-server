@@ -46,6 +46,7 @@ public class Faq extends BaseTimeEntity {
     public void updateFaq(CreateFaqRequestDto requestDto) {
         this.question = updateValue(this.question, requestDto.question());
         this.answer = updateValue(this.answer, requestDto.answer());
+        this.faqProgramType = updateValue(this.faqProgramType, requestDto.type());
     }
 
     public void addFaqChallengeList(FaqChallenge faqChallenge) {
