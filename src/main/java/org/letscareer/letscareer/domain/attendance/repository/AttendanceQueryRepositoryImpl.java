@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.attendance.type.AttendanceResult;
 import org.letscareer.letscareer.domain.attendance.vo.AttendanceAdminVo;
 import org.letscareer.letscareer.domain.attendance.vo.AttendanceScoreVo;
+import org.letscareer.letscareer.domain.attendance.vo.MissionAttendanceVo;
 
 import java.util.List;
 
@@ -91,12 +92,43 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
         return contents;
     }
 
+    @Override
+    public List<MissionAttendanceVo> findMissionAttendanceVo(Long challengeId, Long missionId) {
+        return queryFactory
+                .select(Projections.constructor(MissionAttendanceVo.class,
+                        attendance.id,
+                        attendance.user.name,
+                        activeEmail(attendance.user),
+                        attendance.status,
+                        attendance.link,
+                        attendance.result,
+                        attendance.comments,
+                        attendance.sendDate
+                ))
+                .from(attendance)
+                .leftJoin(attendance.mission, mission)
+                .leftJoin(attendance.mission.challenge, challenge)
+                .where(
+                        eqChallenge(challengeId),
+                        eqMissionId(missionId)
+                )
+                .orderBy(
+                        resultOrder().asc(),
+                        attendance.id.desc()
+                )
+                .fetch();
+    }
+
     private BooleanExpression eqChallenge(Long challengeId) {
         return challengeId != null ? attendance.mission.challenge.id.eq(challengeId) : null;
     }
 
     private BooleanExpression eqApplication(Long applicationId) {
         return applicationId != null ? application.id.eq(applicationId) : null;
+    }
+
+    private BooleanExpression eqMissionId(Long missionId) {
+        return missionId != null ? mission.id.eq(missionId) : null;
     }
 
     private NumberExpression<Integer> resultOrder() {

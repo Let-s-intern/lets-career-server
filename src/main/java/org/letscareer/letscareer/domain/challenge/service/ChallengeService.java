@@ -34,6 +34,8 @@ public interface ChallengeService {
 
     GetFaqResponseDto getChallengeFaqs(Long challengeId);
 
+    GetChallengeMissionAttendancesResponseDto getMissionAttendances(Long challengeId, Long missionId);
+
     GetChallengeReviewResponseDto getReviews(Long challengeId, Pageable pageable);
 
     GetChallengeGuidesResponseDto getGuides(Long challengeId);

@@ -125,6 +125,17 @@ public class ChallengeV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
+    @Operation(summary = "챌린지 미션별 제출 목록 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeMissionAttendancesResponseDto.class)))
+    })
+    @ApiErrorCode({SwaggerEnum.PAYMENT_NOT_FOUND})
+    @GetMapping("/{challengeId}/mission/{missionId}/attendances")
+    public ResponseEntity<SuccessResponse<?>> getMissionAttendances(@PathVariable final Long challengeId,
+                                                                    @PathVariable final Long missionId) {
+        GetChallengeMissionAttendancesResponseDto responseDto = challengeService.getMissionAttendances(challengeId, missionId);
+        return SuccessResponse.ok(responseDto);
+    }
+
     @Operation(summary = "신청자 리뷰 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeReviewResponseDto.class)))
     })

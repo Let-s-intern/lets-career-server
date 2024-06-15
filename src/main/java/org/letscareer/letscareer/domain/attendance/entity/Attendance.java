@@ -12,6 +12,8 @@ import org.letscareer.letscareer.domain.score.entity.AttendanceScore;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
+import java.time.LocalDateTime;
+
 import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils.updateValue;
 
 
@@ -32,6 +34,7 @@ public class Attendance extends BaseTimeEntity {
     @Convert(converter = AttendanceResultConverter.class)
     private AttendanceResult result;
     private String comments;
+    private LocalDateTime sendDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mission_id")
@@ -48,6 +51,7 @@ public class Attendance extends BaseTimeEntity {
         this.status = updateValue(this.status, attendanceUpdateRequestDto.status());
         this.result = updateValue(this.result, attendanceUpdateRequestDto.result());
         this.comments = updateValue(this.comments, attendanceUpdateRequestDto.comments());
+        this.sendDate = LocalDateTime.now();
     }
 
     public void setAttendanceScore(AttendanceScore attendanceScore) {

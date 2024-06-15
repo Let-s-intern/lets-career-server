@@ -6,6 +6,7 @@ import org.letscareer.letscareer.domain.attendance.error.AttendanceErrorCode;
 import org.letscareer.letscareer.domain.attendance.repository.AttendanceRepository;
 import org.letscareer.letscareer.domain.attendance.vo.AttendanceAdminVo;
 import org.letscareer.letscareer.domain.attendance.vo.AttendanceScoreVo;
+import org.letscareer.letscareer.domain.attendance.vo.MissionAttendanceVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -27,5 +28,9 @@ public class AttendanceHelper {
 
     public List<AttendanceScoreVo> findAttendanceScoreVos(Long applicationId, Long challengeId) {
         return attendanceRepository.findAttendanceScoreVos(applicationId, challengeId);
+    }
+
+    public List<MissionAttendanceVo> findMissionAttendanceVo(Long challengeId, Long missionId) {
+        return attendanceRepository.findMissionAttendanceVo(challengeId, missionId);
     }
 }

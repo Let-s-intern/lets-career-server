@@ -1,21 +1,19 @@
 package org.letscareer.letscareer.domain.attendance.vo;
 
-import lombok.Builder;
 import org.letscareer.letscareer.domain.attendance.type.AttendanceResult;
 import org.letscareer.letscareer.domain.attendance.type.AttendanceStatus;
 import org.letscareer.letscareer.domain.user.type.AccountType;
 
-@Builder
-public record AttendanceAdminVo(
+import java.time.LocalDateTime;
+
+public record MissionAttendanceVo(
         Long id,
         String name,
         String email,
-        AccountType accountType,
-        String accountNum,
-        String accountOwner,
         AttendanceStatus status,
         String link,
         AttendanceResult result,
-        String comment
+        String comment,
+        LocalDateTime sendDate
 ) {
 }

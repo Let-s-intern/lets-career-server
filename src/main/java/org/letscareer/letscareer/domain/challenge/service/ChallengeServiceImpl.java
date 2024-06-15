@@ -7,7 +7,9 @@ import org.letscareer.letscareer.domain.application.mapper.ChallengeApplicationM
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
 import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
 import org.letscareer.letscareer.domain.attendance.helper.AttendanceHelper;
+import org.letscareer.letscareer.domain.attendance.mapper.AttendanceMapper;
 import org.letscareer.letscareer.domain.attendance.vo.AttendanceScoreVo;
+import org.letscareer.letscareer.domain.attendance.vo.MissionAttendanceVo;
 import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApplicationPaybackRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeRequestDto;
@@ -68,6 +70,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final ChallengeNoticeHelper challengeNoticeHelper;
     private final AttendanceScoreHelper attendanceScoreHelper;
     private final AttendanceHelper attendanceHelper;
+    private final AttendanceMapper attendanceMapper;
     private final PaymentHelper paymentHelper;
     private final MissionMapper missionMapper;
     private final ReviewHelper reviewHelper;
@@ -145,6 +148,12 @@ public class ChallengeServiceImpl implements ChallengeService {
     public GetFaqResponseDto getChallengeFaqs(Long challengeId) {
         List<FaqDetailVo> faqDetailVos = faqHelper.findChallengeFaqDetailVos(challengeId);
         return faqMapper.toGetFaqResponseDto(faqDetailVos);
+    }
+
+    @Override
+    public GetChallengeMissionAttendancesResponseDto getMissionAttendances(Long challengeId, Long missionId) {
+        List<MissionAttendanceVo> attendanceVos = attendanceHelper.findMissionAttendanceVo(challengeId, missionId);
+        return attendanceMapper.toGetChallengeMissionAttendancesResponseDto(attendanceVos);
     }
 
     @Override
