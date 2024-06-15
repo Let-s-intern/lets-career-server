@@ -45,7 +45,9 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                         user.wishJob,
                         user.wishCompany,
                         user.inflowPath,
-                        challengeApplication.createDate
+                        challengeApplication.createDate,
+                        user.accountType,
+                        user.accountNum
                 ))
                 .from(challengeApplication)
                 .leftJoin(challengeApplication.challenge, challenge)

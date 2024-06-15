@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.application.vo;
 
 import lombok.Builder;
+import org.letscareer.letscareer.domain.user.type.AccountType;
 import org.letscareer.letscareer.domain.user.type.UserGrade;
 
 import java.time.LocalDateTime;
@@ -21,6 +22,8 @@ public record AdminChallengeApplicationVo(
         String wishJob,
         String wishCompany,
         String inflowPath,
-        LocalDateTime createDate
+        LocalDateTime createDate,
+        AccountType accountType,
+        String accountNum
 ) {
 }
