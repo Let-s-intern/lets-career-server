@@ -66,6 +66,7 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
                         eqApplication(applicationId)
                 )
                 .groupBy(attendance.id)
+                .orderBy(mission.th.asc())
                 .fetch();
 
         AttendanceScoreVo adminScore = queryFactory
