@@ -11,6 +11,7 @@ import java.util.List;
 
 import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
 import static org.letscareer.letscareer.domain.mission.entity.QMission.mission;
+import static org.letscareer.letscareer.domain.score.entity.QMissionScore.missionScore;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class MissionQueryRepositoryImpl implements MissionQueryRepository {
@@ -25,11 +26,14 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
                         mission.missionStatusType,
                         mission.attendanceCount,
                         mission.lateAttendanceCount,
+                        missionScore.successScore,
+                        missionScore.lateScore,
                         mission.startDate,
                         mission.endDate
                 ))
                 .from(mission)
                 .leftJoin(mission.challenge, challenge)
+                .leftJoin(mission.missionScore, missionScore)
                 .where(
                         eqChallengeId(challengeId)
                 )

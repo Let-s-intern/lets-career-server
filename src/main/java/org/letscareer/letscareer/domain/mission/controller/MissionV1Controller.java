@@ -43,7 +43,7 @@ public class MissionV1Controller {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @PatchMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> updateMission(@PathVariable(name = "id") final String missionId,
+    public ResponseEntity<SuccessResponse<?>> updateMission(@PathVariable(name = "id") final Long missionId,
                                                             @RequestBody final UpdateMissionRequestDto updateMissionRequestDto) {
         missionService.updateMission(missionId, updateMissionRequestDto);
         return SuccessResponse.ok(null);
