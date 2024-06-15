@@ -63,8 +63,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                 .leftJoin(challengeApplication.challenge, challenge)
                 .leftJoin(review.application.user, user)
                 .where(
-                        eqChallengeId(challengeId),
-                        eqIsVisible()
+                        eqChallengeId(challengeId)
                 )
                 .orderBy(review.id.desc())
                 .offset(pageable.getOffset())
@@ -100,8 +99,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                 .leftJoin(liveApplication.live, live)
                 .leftJoin(review.application.user, user)
                 .where(
-                        eqLiveId(liveId),
-                        eqIsVisible()
+                        eqLiveId(liveId)
                 )
                 .orderBy(review.id.desc())
                 .offset(pageable.getOffset())

@@ -136,7 +136,7 @@ public class ChallengeV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "신청자 리뷰 조회", responses = {
+    @Operation(summary = "[어드민] 신청자 리뷰 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeReviewResponseDto.class)))
     })
     @GetMapping("/{id}/reviews")
