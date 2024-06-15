@@ -28,11 +28,13 @@ public interface LiveService {
 
     GetFaqResponseDto getLiveFaqs(Long liveId);
 
+    GetLiveReviewsResponseDto getLiveReviews(Pageable pageable);
+
     GetLiveApplicationFormResponseDto getLiveApplicationForm(User user, Long liveId);
 
     GetLiveApplicationsResponseDto getApplications(Long liveId, Boolean isConfirmed);
 
-    GetLiveReviewsResponseDto getReviews(Long liveId, Pageable pageable);
+    GetLiveAdminReviewsResponseDto getReviewsForAdmin(Long liveId, Pageable pageable);
 
     void createLive(CreateLiveRequestDto requestDto);
 

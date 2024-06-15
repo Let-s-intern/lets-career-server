@@ -1,12 +1,15 @@
 package org.letscareer.letscareer.domain.review.repository;
 
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.review.entity.Review;
 import org.letscareer.letscareer.domain.review.vo.ReviewDetailVo;
+import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
 import org.letscareer.letscareer.domain.review.vo.ReviewVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -47,15 +50,17 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
     }
 
     @Override
-    public Page<ReviewVo> findChallengeReviewVos(Long challengeId, Pageable pageable) {
-        List<ReviewVo> contents = queryFactory
-                .select(Projections.constructor(ReviewVo.class,
+    public Page<ReviewAdminVo> findChallengeReviewAdminVos(Long challengeId, Pageable pageable) {
+        List<ReviewAdminVo> contents = queryFactory
+                .select(Projections.constructor(ReviewAdminVo.class,
+                        review.id,
                         user.name,
                         review.nps,
                         review.npsAns,
                         review.npsCheckAns,
                         review.content,
                         review.score,
+                        review.isVisible,
                         review.createDate
                 ))
                 .from(review)
@@ -83,15 +88,84 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
     }
 
     @Override
-    public Page<ReviewVo> findLiveReviewVos(Long liveId, Pageable pageable) {
+    public Page<ReviewVo> findChallengeReviewVos(Pageable pageable) {
         List<ReviewVo> contents = queryFactory
                 .select(Projections.constructor(ReviewVo.class,
+                        user.name,
+                        review.content,
+                        review.score,
+                        review.createDate
+                ))
+                .from(review)
+                .leftJoin(review.application, challengeApplication._super)
+                .leftJoin(challengeApplication.challenge, challenge)
+                .leftJoin(review.application.user, user)
+                .where(
+                        eqIsVisible()
+                )
+                .orderBy(review.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Review> countQuery = queryFactory
+                .selectFrom(review)
+                .leftJoin(review.application, challengeApplication._super)
+                .leftJoin(challengeApplication.challenge, challenge)
+                .leftJoin(review.application.user, user)
+                .where(
+                        eqIsVisible()
+                );
+
+        return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
+    }
+
+    @Override
+    public Page<ReviewVo> findLiveReviewVos(Pageable pageable) {
+        List<ReviewVo> contents = queryFactory
+                .select(Projections.constructor(ReviewVo.class,
+                        user.name,
+                        review.content,
+                        review.score,
+                        review.createDate
+                ))
+                .from(review)
+                .leftJoin(review.application, liveApplication._super)
+                .leftJoin(liveApplication.live, live)
+                .leftJoin(review.application.user, user)
+                .where(
+                        eqIsVisible()
+                )
+                .orderBy(review.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Review> countQuery = queryFactory
+                .selectFrom(review)
+                .leftJoin(review.application, liveApplication._super)
+                .leftJoin(liveApplication.live, live)
+                .leftJoin(review.application.user, user)
+                .where(
+                        eqIsVisible()
+                )
+                .orderBy(review.id.desc());
+
+        return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
+    }
+
+    @Override
+    public Page<ReviewAdminVo> findLiveReviewAdminVos(Long liveId, Pageable pageable) {
+        List<ReviewAdminVo> contents = queryFactory
+                .select(Projections.constructor(ReviewAdminVo.class,
+                        review.id,
                         user.name,
                         review.nps,
                         review.npsAns,
                         review.npsCheckAns,
                         review.content,
                         review.score,
+                        review.isVisible,
                         review.createDate
                 ))
                 .from(review)
@@ -113,8 +187,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                 .leftJoin(review.application.user, user)
                 .where(
                         eqLiveId(liveId)
-                )
-                .orderBy(review.id.desc());
+                );
 
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
     }

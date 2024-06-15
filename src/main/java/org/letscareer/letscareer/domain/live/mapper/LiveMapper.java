@@ -5,6 +5,7 @@ import org.letscareer.letscareer.domain.faq.vo.FaqDetailVo;
 import org.letscareer.letscareer.domain.live.dto.response.*;
 import org.letscareer.letscareer.domain.live.vo.*;
 import org.letscareer.letscareer.domain.price.vo.LivePriceDetailVo;
+import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
 import org.letscareer.letscareer.domain.review.vo.ReviewVo;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.data.domain.Page;
@@ -27,6 +28,10 @@ public class LiveMapper {
 
     public GetLiveReviewsResponseDto toGetLiveReviewsResponseDto(Page<ReviewVo> reviewVos) {
         return GetLiveReviewsResponseDto.of(reviewVos);
+    }
+
+    public GetLiveAdminReviewsResponseDto toGetLiveAdminReviewsResponseDto(Page<ReviewAdminVo> reviewVos) {
+        return GetLiveAdminReviewsResponseDto.of(reviewVos);
     }
 
     public GetLiveTitleResponseDto toGetLiveTitleResponseDto(LiveTitleVo titleVo) {

@@ -85,6 +85,15 @@ public class LiveV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
+    @Operation(summary = "라이브 리뷰 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetLiveReviewsResponseDto.class)))
+    })
+    @GetMapping("/reviews")
+    public ResponseEntity<SuccessResponse<?>> getReviews(final Pageable pageable) {
+        final GetLiveReviewsResponseDto responseDto = liveService.getLiveReviews(pageable);
+        return SuccessResponse.ok(responseDto);
+    }
+
     @Operation(summary = "라이브 신청폼 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetLiveApplicationFormResponseDto.class)))
     })
@@ -105,13 +114,13 @@ public class LiveV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "신청자 리뷰 조회", responses = {
-            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetLiveReviewsResponseDto.class)))
+    @Operation(summary = "[어드민] 신청자 리뷰 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetLiveAdminReviewsResponseDto.class)))
     })
     @GetMapping("/{id}/reviews")
-    public ResponseEntity<SuccessResponse<?>> getReviews(@PathVariable("id") final Long liveId,
-                                                         final Pageable pageable) {
-        final GetLiveReviewsResponseDto responseDto = liveService.getReviews(liveId, pageable);
+    public ResponseEntity<SuccessResponse<?>> getReviewsForAdmin(@PathVariable("id") final Long liveId,
+                                                                 final Pageable pageable) {
+        final GetLiveAdminReviewsResponseDto responseDto = liveService.getReviewsForAdmin(liveId, pageable);
         return SuccessResponse.ok(responseDto);
     }
 

@@ -92,6 +92,15 @@ public class ChallengeV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
+    @Operation(summary = "챌린지 리뷰 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeReviewResponseDto.class)))
+    })
+    @GetMapping("/reviews")
+    public ResponseEntity<SuccessResponse<?>> getReviews(final Pageable pageable) {
+        final GetChallengeReviewResponseDto responseDto = challengeService.getReviews(pageable);
+        return SuccessResponse.ok(responseDto);
+    }
+
     @Operation(summary = "챌린지 신청폼 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeApplicationFormResponseDto.class)))
     })
@@ -113,8 +122,17 @@ public class ChallengeV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
+    @Operation(summary = "[어드민] 신청자 리뷰 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeAdminReviewResponseDto.class)))
+    })
+    @GetMapping("/{id}/reviews")
+    public ResponseEntity<SuccessResponse<?>> getReviewsForAdmin(@PathVariable("id") final Long challengeId,
+                                                                 final Pageable pageable) {
+        final GetChallengeAdminReviewResponseDto responseDto = challengeService.getReviewsForAdmin(challengeId, pageable);
+        return SuccessResponse.ok(responseDto);
+    }
 
-    @Operation(summary = "챌린지 미션 참가자 패이백 목록", responses = {
+    @Operation(summary = "[어드민] 챌린지 미션 참가자 패이백 목록", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeApplicationsPaybackResponseDto.class)))
     })
     @ApiErrorCode({SwaggerEnum.PAYMENT_NOT_FOUND})
@@ -125,7 +143,7 @@ public class ChallengeV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "챌린지 미션별 제출 목록 조회", responses = {
+    @Operation(summary = "[어드민] 챌린지 미션별 제출 목록 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeMissionAttendancesResponseDto.class)))
     })
     @ApiErrorCode({SwaggerEnum.PAYMENT_NOT_FOUND})
@@ -133,16 +151,6 @@ public class ChallengeV1Controller {
     public ResponseEntity<SuccessResponse<?>> getMissionAttendances(@PathVariable final Long challengeId,
                                                                     @PathVariable final Long missionId) {
         GetChallengeMissionAttendancesResponseDto responseDto = challengeService.getMissionAttendances(challengeId, missionId);
-        return SuccessResponse.ok(responseDto);
-    }
-
-    @Operation(summary = "[어드민] 신청자 리뷰 조회", responses = {
-            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeReviewResponseDto.class)))
-    })
-    @GetMapping("/{id}/reviews")
-    public ResponseEntity<SuccessResponse<?>> getReviews(@PathVariable("id") final Long challengeId,
-                                                         final Pageable pageable) {
-        final GetChallengeReviewResponseDto responseDto = challengeService.getReviews(challengeId, pageable);
         return SuccessResponse.ok(responseDto);
     }
 

@@ -42,6 +42,7 @@ import org.letscareer.letscareer.domain.price.vo.ChallengePriceDetailVo;
 import org.letscareer.letscareer.domain.program.dto.response.ZoomMeetingResponseDto;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.domain.review.helper.ReviewHelper;
+import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
 import org.letscareer.letscareer.domain.review.vo.ReviewVo;
 import org.letscareer.letscareer.domain.score.entity.AttendanceScore;
 import org.letscareer.letscareer.domain.score.helper.AttendanceScoreHelper;
@@ -157,8 +158,14 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
-    public GetChallengeReviewResponseDto getReviews(Long challengeId, Pageable pageable) {
-        Page<ReviewVo> challengeReviewVos = reviewHelper.findChallengeReviewVos(challengeId, pageable);
+    public GetChallengeAdminReviewResponseDto getReviewsForAdmin(Long challengeId, Pageable pageable) {
+        Page<ReviewAdminVo> challengeReviewVos = reviewHelper.findChallengeReviewAdminVos(challengeId, pageable);
+        return challengeMapper.toGetChallengeAdminReviewResponseDto(challengeReviewVos);
+    }
+
+    @Override
+    public GetChallengeReviewResponseDto getReviews(Pageable pageable) {
+        Page<ReviewVo> challengeReviewVos = reviewHelper.findChallengeReviewVos(pageable);
         return challengeMapper.toGetChallengeReviewResponseDto(challengeReviewVos);
     }
 

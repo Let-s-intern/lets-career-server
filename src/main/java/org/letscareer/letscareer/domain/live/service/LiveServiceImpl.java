@@ -28,6 +28,7 @@ import org.letscareer.letscareer.domain.price.vo.LivePriceDetailVo;
 import org.letscareer.letscareer.domain.program.dto.response.ZoomMeetingResponseDto;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.domain.review.helper.ReviewHelper;
+import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
 import org.letscareer.letscareer.domain.review.vo.ReviewVo;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.utils.ZoomUtils;
@@ -95,6 +96,12 @@ public class LiveServiceImpl implements LiveService {
     }
 
     @Override
+    public GetLiveReviewsResponseDto getLiveReviews(Pageable pageable) {
+        Page<ReviewVo> reviewVos = reviewHelper.findLiveReviewVos(pageable);
+        return liveMapper.toGetLiveReviewsResponseDto(reviewVos);
+    }
+
+    @Override
     public GetLiveApplicationFormResponseDto getLiveApplicationForm(User user, Long liveId) {
         LiveApplicationFormVo LiveApplicationFormVo = liveHelper.findLiveApplicationFormVoOrThrow(liveId);
         LivePriceDetailVo livePriceDetailVo = livePriceHelper.findLivePriceDetailVos(liveId);
@@ -109,9 +116,9 @@ public class LiveServiceImpl implements LiveService {
     }
 
     @Override
-    public GetLiveReviewsResponseDto getReviews(Long liveId, Pageable pageable) {
-        Page<ReviewVo> reviewVos = reviewHelper.findLiveReviewVos(liveId, pageable);
-        return liveMapper.toGetLiveReviewsResponseDto(reviewVos);
+    public GetLiveAdminReviewsResponseDto getReviewsForAdmin(Long liveId, Pageable pageable) {
+        Page<ReviewAdminVo> reviewVos = reviewHelper.findLiveReviewAdminVos(liveId, pageable);
+        return liveMapper.toGetLiveAdminReviewsResponseDto(reviewVos);
     }
 
     @Override
