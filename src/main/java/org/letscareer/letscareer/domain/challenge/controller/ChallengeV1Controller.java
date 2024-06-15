@@ -159,8 +159,9 @@ public class ChallengeV1Controller {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeNoticesResponseDto.class)))
     })
     @GetMapping("/{id}/notices")
-    public ResponseEntity<SuccessResponse<?>> getNotices(@PathVariable(name = "id") final Long challengeId) {
-        return SuccessResponse.ok(challengeService.getNotices(challengeId));
+    public ResponseEntity<SuccessResponse<?>> getNotices(@PathVariable(name = "id") final Long challengeId,
+                                                         final Pageable pageable) {
+        return SuccessResponse.ok(challengeService.getNotices(challengeId, pageable));
     }
 
     @Operation(summary = "[어드민] 챌린지 생성", responses = {

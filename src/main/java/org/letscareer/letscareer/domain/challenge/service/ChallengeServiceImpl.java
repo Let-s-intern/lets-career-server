@@ -169,8 +169,8 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
-    public GetChallengeNoticesResponseDto getNotices(Long challengeId) {
-        List<ChallengeNoticeVo> challengeNoticeList = challengeNoticeHelper.findAllChallengeNoticeVos(challengeId);
+    public GetChallengeNoticesResponseDto getNotices(Long challengeId, Pageable pageable) {
+        Page<ChallengeNoticeVo> challengeNoticeList = challengeNoticeHelper.findAllChallengeNoticeVos(challengeId, pageable);
         return challengeMapper.toGetChallengeNoticesResponseDto(challengeNoticeList);
     }
 

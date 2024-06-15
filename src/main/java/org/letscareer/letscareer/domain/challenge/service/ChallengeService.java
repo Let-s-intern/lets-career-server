@@ -40,7 +40,7 @@ public interface ChallengeService {
 
     GetChallengeGuidesResponseDto getGuides(Long challengeId);
 
-    GetChallengeNoticesResponseDto getNotices(Long challengeId);
+    GetChallengeNoticesResponseDto getNotices(Long challengeId, Pageable pageable);
 
     void createChallenge(CreateChallengeRequestDto createChallengeRequestDto);
 

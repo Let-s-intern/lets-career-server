@@ -55,7 +55,7 @@ public class ChallengeMapper {
         return GetChallengeGuidesResponseDto.of(challengeGuideAdminList);
     }
 
-    public GetChallengeNoticesResponseDto toGetChallengeNoticesResponseDto(List<ChallengeNoticeVo> challengeNoticeList) {
+    public GetChallengeNoticesResponseDto toGetChallengeNoticesResponseDto(Page<ChallengeNoticeVo> challengeNoticeList) {
         return GetChallengeNoticesResponseDto.of(challengeNoticeList);
     }
 }
