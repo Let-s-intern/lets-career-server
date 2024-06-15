@@ -6,7 +6,10 @@ import org.letscareer.letscareer.domain.application.helper.ChallengeApplicationH
 import org.letscareer.letscareer.domain.application.mapper.ChallengeApplicationMapper;
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
 import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
+import org.letscareer.letscareer.domain.attendance.helper.AttendanceHelper;
+import org.letscareer.letscareer.domain.attendance.vo.AttendanceScoreVo;
 import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeRequestDto;
+import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApplicationPaybackRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.response.*;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
@@ -27,6 +30,10 @@ import org.letscareer.letscareer.domain.faq.entity.Faq;
 import org.letscareer.letscareer.domain.faq.helper.FaqHelper;
 import org.letscareer.letscareer.domain.faq.mapper.FaqMapper;
 import org.letscareer.letscareer.domain.faq.vo.FaqDetailVo;
+import org.letscareer.letscareer.domain.mission.dto.response.MissionApplicationScoreResponseDto;
+import org.letscareer.letscareer.domain.mission.mapper.MissionMapper;
+import org.letscareer.letscareer.domain.payment.entity.Payment;
+import org.letscareer.letscareer.domain.payment.helper.PaymentHelper;
 import org.letscareer.letscareer.domain.price.dto.request.CreateChallengePriceRequestDto;
 import org.letscareer.letscareer.domain.price.helper.ChallengePriceHelper;
 import org.letscareer.letscareer.domain.price.vo.ChallengePriceDetailVo;
@@ -34,6 +41,8 @@ import org.letscareer.letscareer.domain.program.dto.response.ZoomMeetingResponse
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.domain.review.helper.ReviewHelper;
 import org.letscareer.letscareer.domain.review.vo.ReviewVo;
+import org.letscareer.letscareer.domain.score.entity.AttendanceScore;
+import org.letscareer.letscareer.domain.score.helper.AttendanceScoreHelper;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.utils.ZoomUtils;
 import org.springframework.data.domain.Page;
@@ -57,6 +66,10 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final ChallengePriceHelper challengePriceHelper;
     private final ChallengeGuideHelper challengeGuideHelper;
     private final ChallengeNoticeHelper challengeNoticeHelper;
+    private final AttendanceScoreHelper attendanceScoreHelper;
+    private final AttendanceHelper attendanceHelper;
+    private final PaymentHelper paymentHelper;
+    private final MissionMapper missionMapper;
     private final ReviewHelper reviewHelper;
     private final FaqHelper faqHelper;
     private final FaqMapper faqMapper;
@@ -87,6 +100,25 @@ public class ChallengeServiceImpl implements ChallengeService {
     public GetChallengeApplicationsResponseDto getApplications(Long challengeId, Boolean isConfirmed) {
         List<AdminChallengeApplicationVo> applicationVos = challengeApplicationHelper.findAdminChallengeApplicationVos(challengeId, isConfirmed);
         return challengeApplicationMapper.toGetChallengeApplicationsResponseDto(applicationVos);
+    }
+
+    @Override
+    public GetChallengeApplicationsPaybackResponseDto getApplicationsScore(Long challengeId, Pageable pageable) {
+        Page<UserChallengeApplicationVo> challengeApplicationVos = challengeApplicationHelper.findUserChallengeApplicationVo(challengeId, pageable);
+        List<MissionApplicationScoreResponseDto> missionApplications = createMissionApplications(challengeApplicationVos.getContent(), challengeId);
+        return challengeApplicationMapper.toGetChallengeApplicationsScoreResponseDto(missionApplications, challengeApplicationVos);
+    }
+
+    private List<MissionApplicationScoreResponseDto> createMissionApplications(List<UserChallengeApplicationVo> challengeApplicationVos, Long challengeId) {
+        return challengeApplicationVos.stream()
+                .map(challengeApplicationVo -> createMissionApplicationScoreForUser(challengeApplicationVo, challengeId))
+                .collect(Collectors.toList());
+    }
+
+    private MissionApplicationScoreResponseDto createMissionApplicationScoreForUser(UserChallengeApplicationVo challengeApplication, Long challengeId) {
+        List<AttendanceScoreVo> scores = attendanceHelper.findAttendanceScoreVos(challengeApplication.id(), challengeId);
+        Payment payment = paymentHelper.findPaymentByApplicationIdOrThrow(challengeApplication.id());
+        return missionMapper.toMissionApplicationScoreResponseDto(challengeApplication, scores, payment);
     }
 
     @Override
@@ -134,12 +166,6 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
-    public GetChallengeApplicationsPaybackResponseDto getApplicationsPayback(Long challengeId) {
-        List<UserChallengeApplicationVo> challengeApplicationVo = challengeApplicationHelper.findUserChallengeApplicationVo(challengeId);
-        return null;
-    }
-
-    @Override
     public void createChallenge(CreateChallengeRequestDto createChallengeRequestDto) {
         ZoomMeetingResponseDto zoomMeetingInfo = zoomUtils.createZoomMeeting(createChallengeRequestDto.title(), createChallengeRequestDto.startDate());
         Challenge challenge = challengeHelper.createChallengeAndSave(createChallengeRequestDto, zoomMeetingInfo);
@@ -155,6 +181,14 @@ public class ChallengeServiceImpl implements ChallengeService {
         updateChallengeClassifications(challenge, createChallengeRequestDto.programTypeInfo());
         updateChallengePrices(challenge, createChallengeRequestDto.priceInfo());
         updateChallengeFaqs(challenge, createChallengeRequestDto.faqInfo());
+    }
+
+    @Override
+    public void updateApplicationsScore(Long challengeId, Long applicationId, UpdateChallengeApplicationPaybackRequestDto requestDto) {
+        AttendanceScore attendanceScore = attendanceScoreHelper.findAttendanceScoreByChallengeIdAndApplicationIdOrThrow(challengeId, applicationId);
+        Payment payment = paymentHelper.findPaymentByApplicationIdOrThrow(applicationId);
+        attendanceScore.updateAdminScore(requestDto.adminScore());
+        payment.updateRefund(requestDto);
     }
 
     @Override

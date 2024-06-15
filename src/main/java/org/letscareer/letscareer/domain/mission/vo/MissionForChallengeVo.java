@@ -12,6 +12,8 @@ public record MissionForChallengeVo(
         MissionStatusType missionStatusType,
         Integer attendanceCount,
         Integer lateAttendanceCount,
+        Integer score,
+        Integer lateScore,
         LocalDateTime startDate,
         LocalDateTime endDate
 ) {

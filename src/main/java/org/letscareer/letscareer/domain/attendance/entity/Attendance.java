@@ -8,6 +8,7 @@ import org.letscareer.letscareer.domain.attendance.type.AttendanceStatus;
 import org.letscareer.letscareer.domain.attendance.type.converter.AttendanceResultConverter;
 import org.letscareer.letscareer.domain.attendance.type.converter.AttendanceStatusConverter;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
+import org.letscareer.letscareer.domain.score.entity.AttendanceScore;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
@@ -38,11 +39,18 @@ public class Attendance extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "score_id")
+    private AttendanceScore attendanceScore;
 
     public void updateAttendanceAdmin(AttendanceUpdateRequestDto attendanceUpdateRequestDto) {
         this.link = updateValue(this.link, attendanceUpdateRequestDto.link());
         this.status = updateValue(this.status, attendanceUpdateRequestDto.status());
         this.result = updateValue(this.result, attendanceUpdateRequestDto.result());
         this.comments = updateValue(this.comments, attendanceUpdateRequestDto.comments());
+    }
+
+    public void setAttendanceScore(AttendanceScore attendanceScore) {
+        this.attendanceScore = attendanceScore;
     }
 }

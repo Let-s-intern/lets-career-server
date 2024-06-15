@@ -9,6 +9,8 @@ import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.error.exception.ConflictException;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -41,8 +43,8 @@ public class ChallengeApplicationHelper {
                 .orElseThrow(() -> new EntityNotFoundException(APPLICATION_NOT_FOUND));
     }
 
-    public List<UserChallengeApplicationVo> findUserChallengeApplicationVo(Long challengeId) {
-        return challengeApplicationRepository.findUserChallengeApplicationVo(challengeId);
+    public Page<UserChallengeApplicationVo> findUserChallengeApplicationVo(Long challengeId, Pageable pageable) {
+        return challengeApplicationRepository.findUserChallengeApplicationVo(challengeId, pageable);
     }
 
     public void deleteChallengeApplication(ChallengeApplication challengeApplication) {

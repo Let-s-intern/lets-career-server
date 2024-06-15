@@ -11,5 +11,5 @@ public interface MissionService {
 
     MissionAdminListResponseDto getMissionsForAdmin(Long challengeId);
 
-    void updateMission(String missionId, UpdateMissionRequestDto updateMissionRequestDto);
+    void updateMission(Long missionId, UpdateMissionRequestDto updateMissionRequestDto);
 }

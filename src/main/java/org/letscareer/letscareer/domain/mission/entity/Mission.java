@@ -7,6 +7,7 @@ import org.letscareer.letscareer.domain.attendance.entity.Attendance;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.contents.entity.Contents;
 import org.letscareer.letscareer.domain.mission.dto.request.CreateMissionRequestDto;
+import org.letscareer.letscareer.domain.mission.dto.request.UpdateMissionRequestDto;
 import org.letscareer.letscareer.domain.mission.type.MissionStatusType;
 import org.letscareer.letscareer.domain.mission.type.MissionType;
 import org.letscareer.letscareer.domain.mission.type.converter.MissionStatusConverter;
@@ -18,6 +19,8 @@ import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils.updateValue;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -81,6 +84,14 @@ public class Mission extends BaseTimeEntity {
                 .challenge(challenge)
                 .missionTemplate(missionTemplate)
                 .build();
+    }
+
+    public void updateMission(UpdateMissionRequestDto requestDto) {
+        this.th = updateValue(this.th, requestDto.th());
+        this.title = updateValue(this.title, requestDto.title());
+        this.type = updateValue(this.type, requestDto.type());
+        this.startDate = updateValue(this.startDate, requestDto.startDate().atTime(6, 0));
+        this.endDate = updateValue(this.endDate, requestDto.startDate().atTime(23, 59, 59));
     }
 
     public void setMissionScore(MissionScore missionScore) {

@@ -1,4 +1,4 @@
-package org.letscareer.letscareer.domain.attendance.error;
+package org.letscareer.letscareer.domain.score.error;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -8,8 +8,8 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public enum AttendanceErrorCode implements ErrorCode {
-    ATTENDANCE_NOT_FOUND(HttpStatus.NOT_FOUND, "출석 정보를 찾을 수 없습니다.");
+public enum ScoreErrorCode implements ErrorCode {
+    ATTENDANCE_SCORE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 참가자 입니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

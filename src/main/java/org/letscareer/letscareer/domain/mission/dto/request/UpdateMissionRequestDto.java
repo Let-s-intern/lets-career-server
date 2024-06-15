@@ -6,9 +6,11 @@ import java.time.LocalDate;
 import java.util.List;
 
 public record UpdateMissionRequestDto(
+        Integer th,
         String title,
         MissionType type,
-        Integer refund,
+        Integer score,
+        Integer lateScore,
         LocalDate startDate,
         Long missionTemplateId,
         List<Long> essentialContentsIdList,

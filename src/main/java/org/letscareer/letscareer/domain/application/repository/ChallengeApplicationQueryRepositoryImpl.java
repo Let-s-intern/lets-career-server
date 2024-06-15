@@ -4,10 +4,14 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.NumberExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
 import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -58,10 +62,10 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
     }
 
     @Override
-    public List<UserChallengeApplicationVo> findUserChallengeApplicationVo(Long challengeId) {
-        return queryFactory
+    public Page<UserChallengeApplicationVo> findUserChallengeApplicationVo(Long challengeId, Pageable pageable) {
+        List<UserChallengeApplicationVo> contents = queryFactory
                 .select(Projections.constructor(UserChallengeApplicationVo.class,
-                        user.id,
+                        challengeApplication._super.id,
                         user.name,
                         user.contactEmail,
                         user.phoneNum,
@@ -74,7 +78,20 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                 .where(
                         eqChallengeId(challengeId)
                 )
+                .limit(pageable.getPageSize())
+                .offset(pageable.getOffset())
                 .fetch();
+
+        JPAQuery<Long> countQuery = queryFactory
+                .select(challengeApplication.id.countDistinct())
+                .from(challengeApplication)
+                .leftJoin(challengeApplication.challenge, challenge)
+                .leftJoin(challengeApplication.user, user)
+                .where(
+                        eqChallengeId(challengeId)
+                );
+
+        return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
     }
 
     @Override

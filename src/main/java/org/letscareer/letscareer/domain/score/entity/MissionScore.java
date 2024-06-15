@@ -3,7 +3,10 @@ package org.letscareer.letscareer.domain.score.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.letscareer.letscareer.domain.mission.dto.request.CreateMissionRequestDto;
+import org.letscareer.letscareer.domain.mission.dto.request.UpdateMissionRequestDto;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
+
+import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils.updateValue;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -20,7 +23,7 @@ public class MissionScore extends Score {
 
     @Builder(access = AccessLevel.PRIVATE)
     public MissionScore(CreateMissionRequestDto createMissionRequestDto, Mission mission) {
-        super(createMissionRequestDto);
+        super();
         this.successScore = createMissionRequestDto.score();
         this.lateScore = createMissionRequestDto.lateScore();
         this.mission = mission;
@@ -33,5 +36,10 @@ public class MissionScore extends Score {
                 .build();
         mission.setMissionScore(missionScore);
         return missionScore;
+    }
+
+    public void updateMissionScore(UpdateMissionRequestDto requestDto) {
+        this.successScore = updateValue(this.successScore, requestDto.score());
+        this.lateScore = updateValue(this.lateScore, requestDto.lateScore());
     }
 }

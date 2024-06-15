@@ -15,6 +15,7 @@ import org.letscareer.letscareer.domain.mission.mapper.MissionMapper;
 import org.letscareer.letscareer.domain.mission.vo.MissionForChallengeVo;
 import org.letscareer.letscareer.domain.missiontemplate.entity.MissionTemplate;
 import org.letscareer.letscareer.domain.missiontemplate.helper.MissionTemplateHelper;
+import org.letscareer.letscareer.domain.score.entity.MissionScore;
 import org.letscareer.letscareer.domain.score.helper.MissionScoreHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +26,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Transactional
 @Service
-public class MissionServiceImpl implements MissionService{
+public class MissionServiceImpl implements MissionService {
     private final MissionHelper missionHelper;
     private final MissionMapper missionMapper;
     private final MissionScoreHelper missionScoreHelper;
@@ -38,9 +39,9 @@ public class MissionServiceImpl implements MissionService{
         Challenge challenge = challengeHelper.findChallengeByIdOrThrow(challengeId);
         MissionTemplate missionTemplate = missionTemplateHelper.findMissionTemplateByIdOrThrow(createMissionRequestDto.missionTemplateId());
         Mission newMission = missionMapper.toEntity(createMissionRequestDto, challenge, missionTemplate);
+        missionHelper.saveMission(newMission);
         findContentsAndAdd(ContentsType.ESSENTIAL, createMissionRequestDto.essentialContentsIdList(), newMission);
         findContentsAndAdd(ContentsType.ADDITIONAL, createMissionRequestDto.additionalContentsIdList(), newMission);
-        missionHelper.saveMission(newMission);
         missionScoreHelper.createMissionScore(createMissionRequestDto, newMission);
     }
 
@@ -51,8 +52,13 @@ public class MissionServiceImpl implements MissionService{
     }
 
     @Override
-    public void updateMission(String missionId, UpdateMissionRequestDto updateMissionRequestDto) {
-
+    public void updateMission(Long missionId, UpdateMissionRequestDto updateMissionRequestDto) {
+        Mission mission = missionHelper.findMissionByIdOrThrow(missionId);
+        mission.updateMission(updateMissionRequestDto);
+        findContentsAndAdd(ContentsType.ESSENTIAL, updateMissionRequestDto.essentialContentsIdList(), mission);
+        findContentsAndAdd(ContentsType.ADDITIONAL, updateMissionRequestDto.additionalContentsIdList(), mission);
+        MissionScore missionScore = mission.getMissionScore();
+        missionScore.updateMissionScore(updateMissionRequestDto);
     }
 
     private void findContentsAndAdd(ContentsType contentsType, List<Long> contentsIdList, Mission newMission) {

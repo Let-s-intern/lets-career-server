@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.dto.response.GetChallengeApplicationsResponseDto;
 import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeRequestDto;
+import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApplicationPaybackRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.response.*;
 import org.letscareer.letscareer.domain.challenge.service.ChallengeService;
@@ -113,13 +114,15 @@ public class ChallengeV1Controller {
     }
 
 
-    @Operation(summary = "[대기]::챌린지 미션 참가자 점수 목록", responses = {
-            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeApplicationsScoreResponseDto.class)))
+    @Operation(summary = "챌린지 미션 참가자 패이백 목록", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeApplicationsPaybackResponseDto.class)))
     })
-    @GetMapping("/{id}/applications/score")
-    public ResponseEntity<SuccessResponse<?>> getApplicationsScore(@PathVariable(name = "id") Long challengeId) {
-//        GetChallengeApplicationsScoreResponseDto responseDto = challengeService.getApplicationsScore(challengeId);
-        return SuccessResponse.ok(null);
+    @ApiErrorCode({SwaggerEnum.PAYMENT_NOT_FOUND})
+    @GetMapping("/{id}/applications/payback")
+    public ResponseEntity<SuccessResponse<?>> getApplicationsScore(@PathVariable(name = "id") final Long challengeId,
+                                                                   final Pageable pageable) {
+        GetChallengeApplicationsPaybackResponseDto responseDto = challengeService.getApplicationsScore(challengeId, pageable);
+        return SuccessResponse.ok(responseDto);
     }
 
     @Operation(summary = "신청자 리뷰 조회", responses = {
@@ -166,6 +169,18 @@ public class ChallengeV1Controller {
     public ResponseEntity<SuccessResponse<?>> updateChallengeProgram(@PathVariable("id") final Long challengeId,
                                                                      @RequestBody final UpdateChallengeRequestDto requestDto) {
         challengeService.updateChallenge(challengeId, requestDto);
+        return SuccessResponse.ok(null);
+    }
+
+    @Operation(summary = "[어드민] 챌린지 미션 참가자 패이백 정보 수정", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    })
+    @ApiErrorCode({SwaggerEnum.PAYMENT_NOT_FOUND, SwaggerEnum.ATTENDANCE_SCORE_NOT_FOUND})
+    @PatchMapping("/{challengeId}/application/{applicationId}/payback")
+    public ResponseEntity<SuccessResponse<?>> updateApplicationsScore(@PathVariable final Long challengeId,
+                                                                      @PathVariable final Long applicationId,
+                                                                      @RequestBody final UpdateChallengeApplicationPaybackRequestDto requestDto) {
+        challengeService.updateApplicationsScore(challengeId, applicationId, requestDto);
         return SuccessResponse.ok(null);
     }
 

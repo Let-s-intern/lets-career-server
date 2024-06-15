@@ -72,16 +72,20 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
                         inChallengeClassification(typeList),
                         inChallengeStatus(statusList)
                 )
+                .groupBy(challenge.id)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        JPAQuery<Challenge> countQuery = queryFactory
-                .selectFrom(challenge)
+        JPAQuery<Long> countQuery = queryFactory
+                .select(challenge.id.countDistinct())
+                .from(challenge)
+                .leftJoin(challenge.classificationList, challengeClassification)
                 .where(
                         inChallengeClassification(typeList),
                         inChallengeStatus(statusList)
-                );
+                )
+                .groupBy(challenge.id);
 
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
     }
