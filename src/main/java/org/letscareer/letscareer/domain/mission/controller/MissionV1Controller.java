@@ -10,7 +10,9 @@ import org.letscareer.letscareer.domain.mission.dto.request.CreateMissionRequest
 import org.letscareer.letscareer.domain.mission.dto.request.UpdateMissionRequestDto;
 import org.letscareer.letscareer.domain.mission.dto.response.MissionAdminListResponseDto;
 import org.letscareer.letscareer.domain.mission.service.MissionService;
+import org.letscareer.letscareer.global.common.annotation.ApiErrorCode;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
+import org.letscareer.letscareer.global.common.entity.SwaggerEnum;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +35,7 @@ public class MissionV1Controller {
     @Operation(summary = "어드민 챌린지 1개의 미션 전체 목록", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = MissionAdminListResponseDto.class)))
     })
+    @ApiErrorCode({SwaggerEnum.MISSION_NOT_FOUND})
     @GetMapping("/admin/{id}")
     public ResponseEntity<SuccessResponse<?>> getMissionsForAdmin(@PathVariable(name = "id") Long challengeId) {
         MissionAdminListResponseDto responseDto = missionService.getMissionsForAdmin(challengeId);

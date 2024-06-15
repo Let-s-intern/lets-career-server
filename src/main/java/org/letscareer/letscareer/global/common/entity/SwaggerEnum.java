@@ -9,6 +9,7 @@ import org.letscareer.letscareer.domain.classification.error.ChallengeClassifica
 import org.letscareer.letscareer.domain.coupon.error.CouponErrorCode;
 import org.letscareer.letscareer.domain.faq.error.FaqErrorCode;
 import org.letscareer.letscareer.domain.live.error.LiveErrorCode;
+import org.letscareer.letscareer.domain.mission.error.MissionErrorCode;
 import org.letscareer.letscareer.domain.missiontemplate.error.MissionTemplateErrorCode;
 import org.letscareer.letscareer.domain.payment.error.PaymentErrorCode;
 import org.letscareer.letscareer.domain.price.error.ChallengePriceErrorCode;
@@ -53,6 +54,7 @@ public enum SwaggerEnum {
     LIVE_NOT_FOUND(LiveErrorCode.LIVE_NOT_FOUND),
 
     // mission
+    MISSION_NOT_FOUND(MissionErrorCode.MISSION_NOT_FOUND),
     MISSION_TEMPLATE_NOT_FOUND(MissionTemplateErrorCode.MISSION_TEMPLATE_NOT_FOUND),
 
     // payment
