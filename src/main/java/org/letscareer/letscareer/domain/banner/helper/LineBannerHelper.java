@@ -4,8 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.banner.entity.LineBanner;
 import org.letscareer.letscareer.domain.banner.error.BannerErrorCode;
 import org.letscareer.letscareer.domain.banner.repository.LineBannerRepository;
-import org.letscareer.letscareer.domain.banner.vo.LineBannerAdminVo;
-import org.letscareer.letscareer.domain.banner.vo.LineBannerUserVo;
+import org.letscareer.letscareer.domain.banner.vo.*;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -30,6 +29,10 @@ public class LineBannerHelper {
 
     public LineBanner findLineBannerByIdOrThrow(Long bannerId) {
         return lineBannerRepository.findById(bannerId).orElseThrow(() -> new EntityNotFoundException(BannerErrorCode.BANNER_NOT_FOUND));
+    }
+    public LineBannerAdminDetailVo findLineBannerAdminDetailVoByIdOrThrow(Long bannerId) {
+        return lineBannerRepository.findLineBannerAdminDetailVo(bannerId)
+                .orElseThrow(() -> new EntityNotFoundException(BannerErrorCode.BANNER_NOT_FOUND));
     }
 
     public void deleteLineBanner(LineBanner lineBanner) {

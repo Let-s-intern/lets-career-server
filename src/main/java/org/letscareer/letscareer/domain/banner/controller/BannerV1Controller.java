@@ -7,9 +7,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.banner.dto.request.CreateBannerRequestDto;
 import org.letscareer.letscareer.domain.banner.dto.request.UpdateBannerRequestDto;
+import org.letscareer.letscareer.domain.banner.dto.response.BannerDetailResponseDto;
 import org.letscareer.letscareer.domain.banner.dto.response.BannerListResponseDto;
 import org.letscareer.letscareer.domain.banner.service.BannerServiceFactory;
 import org.letscareer.letscareer.domain.banner.type.BannerType;
+import org.letscareer.letscareer.domain.banner.vo.BannerAdminVo;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,10 +25,22 @@ public class BannerV1Controller {
     @Operation(summary = "노출 배너 목록 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = BannerListResponseDto.class)))
     })
+    @GetMapping
     public ResponseEntity<SuccessResponse<?>> getBanners(@RequestParam(name = "type") final BannerType bannerType) {
         final BannerListResponseDto responseDto = bannerServiceFactory.getBannerService(bannerType).getBanners();
         return SuccessResponse.ok(responseDto);
     }
+
+    @Operation(summary = "[어드민] 배너 상세 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = BannerDetailResponseDto.class)))
+    })
+    @GetMapping("/admin/{id}")
+    public ResponseEntity<SuccessResponse<?>> getBannerDetail(@PathVariable(name = "id") final Long bannerId,
+                                                              @RequestParam(name = "type") final BannerType bannerType) {
+        final BannerDetailResponseDto responseDto = bannerServiceFactory.getBannerService(bannerType).getBannerDetail(bannerId);
+        return SuccessResponse.ok(responseDto);
+    }
+
 
     @Operation(summary = "[어드민] 타입별 배너 생성", responses = {
             @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
