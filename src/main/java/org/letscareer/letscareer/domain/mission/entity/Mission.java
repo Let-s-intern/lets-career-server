@@ -5,13 +5,14 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.letscareer.letscareer.domain.attendance.entity.Attendance;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
-import org.letscareer.letscareer.domain.contents.entity.Contents;
+import org.letscareer.letscareer.domain.contents.type.ContentsType;
 import org.letscareer.letscareer.domain.mission.dto.request.CreateMissionRequestDto;
 import org.letscareer.letscareer.domain.mission.dto.request.UpdateMissionRequestDto;
 import org.letscareer.letscareer.domain.mission.type.MissionStatusType;
 import org.letscareer.letscareer.domain.mission.type.MissionType;
 import org.letscareer.letscareer.domain.mission.type.converter.MissionStatusConverter;
 import org.letscareer.letscareer.domain.mission.type.converter.MissionTypeConverter;
+import org.letscareer.letscareer.domain.missioncontents.entity.MissionContents;
 import org.letscareer.letscareer.domain.missiontemplate.entity.MissionTemplate;
 import org.letscareer.letscareer.domain.score.entity.MissionScore;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
@@ -55,12 +56,10 @@ public class Mission extends BaseTimeEntity {
     @NotNull
     private LocalDateTime endDate;
 
-    @OneToMany(mappedBy = "missionEssential", fetch = FetchType.LAZY)
-    private List<Contents> essentialContentsList;
-    @OneToMany(mappedBy = "missionAdditional", fetch = FetchType.LAZY)
-    private List<Contents> additionalContentsList;
-    @OneToMany(mappedBy = "missionLimited", fetch = FetchType.LAZY)
-    private List<Contents> limitedContentsList;
+    @OneToMany(mappedBy = "mission", fetch = FetchType.LAZY)
+    private List<MissionContents> essentialContentsList;
+    @OneToMany(mappedBy = "mission", fetch = FetchType.LAZY)
+    private List<MissionContents> additionalContentsList;
     @OneToMany(mappedBy = "mission", cascade = CascadeType.ALL)
     @Builder.Default
     private List<Attendance> attendanceList = new ArrayList<>();
@@ -98,15 +97,18 @@ public class Mission extends BaseTimeEntity {
         this.missionScore = missionScore;
     }
 
-    public void setEssentialContentsList(List<Contents> contentsList) {
-        this.essentialContentsList = contentsList;
+    public void setEssentialContentsList(List<MissionContents> missionContentsList) {
+        this.essentialContentsList = missionContentsList;
     }
 
-    public void setAdditionalContents(List<Contents> contentsList) {
-        this.additionalContentsList = contentsList;
+    public void setAdditionalContentsList(List<MissionContents> missionContentsList) {
+        this.additionalContentsList = missionContentsList;
     }
 
-    public void setLimitedContents(List<Contents> contentsList) {
-        this.limitedContentsList = contentsList;
+    public void setInitMissionContentsList(ContentsType contentsType) {
+        switch (contentsType) {
+            case ESSENTIAL -> this.essentialContentsList = new ArrayList<>();
+            case ADDITIONAL -> this.additionalContentsList = new ArrayList<>();
+        }
     }
 }

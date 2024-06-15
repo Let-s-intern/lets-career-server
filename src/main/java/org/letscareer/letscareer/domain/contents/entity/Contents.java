@@ -8,7 +8,11 @@ import org.letscareer.letscareer.domain.contents.dto.request.UpdateContentsReque
 import org.letscareer.letscareer.domain.contents.type.ContentsType;
 import org.letscareer.letscareer.domain.contents.type.converter.ContentsTypeConverter;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
+import org.letscareer.letscareer.domain.missioncontents.entity.MissionContents;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils.updateValue;
 
@@ -34,15 +38,8 @@ public class Contents extends BaseTimeEntity {
     @NotNull
     private String link;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "essential_contents_id")
-    private Mission missionEssential;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "additional_contents_id")
-    private Mission missionAdditional;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "limited_contents_id")
-    private Mission missionLimited;
+    @OneToMany(mappedBy = "contents")
+    private List<MissionContents> missionContentsList = new ArrayList<>();
 
     public static Contents createContents(CreateContentsRequestDto createContentsRequestDto) {
         return Contents.builder()

@@ -3,7 +3,6 @@ package org.letscareer.letscareer.domain.mission.service;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
-import org.letscareer.letscareer.domain.contents.entity.Contents;
 import org.letscareer.letscareer.domain.contents.helper.ContentsHelper;
 import org.letscareer.letscareer.domain.contents.type.ContentsType;
 import org.letscareer.letscareer.domain.mission.dto.request.CreateMissionRequestDto;
@@ -13,6 +12,8 @@ import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.mission.helper.MissionHelper;
 import org.letscareer.letscareer.domain.mission.mapper.MissionMapper;
 import org.letscareer.letscareer.domain.mission.vo.MissionForChallengeVo;
+import org.letscareer.letscareer.domain.missioncontents.entity.MissionContents;
+import org.letscareer.letscareer.domain.missioncontents.helper.MissionContentsHelper;
 import org.letscareer.letscareer.domain.missiontemplate.entity.MissionTemplate;
 import org.letscareer.letscareer.domain.missiontemplate.helper.MissionTemplateHelper;
 import org.letscareer.letscareer.domain.score.entity.MissionScore;
@@ -29,6 +30,7 @@ import java.util.Objects;
 public class MissionServiceImpl implements MissionService {
     private final MissionHelper missionHelper;
     private final MissionMapper missionMapper;
+    private final MissionContentsHelper missionContentsHelper;
     private final MissionScoreHelper missionScoreHelper;
     private final MissionTemplateHelper missionTemplateHelper;
     private final ChallengeHelper challengeHelper;
@@ -40,8 +42,8 @@ public class MissionServiceImpl implements MissionService {
         MissionTemplate missionTemplate = missionTemplateHelper.findMissionTemplateByIdOrThrow(createMissionRequestDto.missionTemplateId());
         Mission newMission = missionMapper.toEntity(createMissionRequestDto, challenge, missionTemplate);
         missionHelper.saveMission(newMission);
-        findContentsAndAdd(ContentsType.ESSENTIAL, createMissionRequestDto.essentialContentsIdList(), newMission);
-        findContentsAndAdd(ContentsType.ADDITIONAL, createMissionRequestDto.additionalContentsIdList(), newMission);
+        findContentsAndCreateMissionContents(ContentsType.ESSENTIAL, createMissionRequestDto.essentialContentsIdList(), newMission);
+        findContentsAndCreateMissionContents(ContentsType.ADDITIONAL, createMissionRequestDto.additionalContentsIdList(), newMission);
         missionScoreHelper.createMissionScore(createMissionRequestDto, newMission);
     }
 
@@ -55,21 +57,28 @@ public class MissionServiceImpl implements MissionService {
     public void updateMission(Long missionId, UpdateMissionRequestDto updateMissionRequestDto) {
         Mission mission = missionHelper.findMissionByIdOrThrow(missionId);
         mission.updateMission(updateMissionRequestDto);
-        findContentsAndAdd(ContentsType.ESSENTIAL, updateMissionRequestDto.essentialContentsIdList(), mission);
-        findContentsAndAdd(ContentsType.ADDITIONAL, updateMissionRequestDto.additionalContentsIdList(), mission);
+        updateMissionContents(mission, ContentsType.ESSENTIAL, updateMissionRequestDto.essentialContentsIdList());
+        updateMissionContents(mission, ContentsType.ADDITIONAL, updateMissionRequestDto.additionalContentsIdList());
         MissionScore missionScore = mission.getMissionScore();
         missionScore.updateMissionScore(updateMissionRequestDto);
     }
 
-    private void findContentsAndAdd(ContentsType contentsType, List<Long> contentsIdList, Mission newMission) {
-        List<Contents> contentsList = contentsIdList.stream()
-                .map(contentsHelper::findContentsByIdOrNull)
-                .filter(Objects::nonNull)
+    private void updateMissionContents(Mission mission, ContentsType contentsType, List<Long> contentsIdList) {
+        if(contentsIdList == null || contentsIdList.isEmpty()) return;
+        missionContentsHelper.deleteAllMissionContentsByMissionIdAndContentsType(mission.getId(), contentsType);
+        mission.setInitMissionContentsList(contentsType);
+        findContentsAndCreateMissionContents(contentsType, contentsIdList, mission);
+    }
+
+    private void findContentsAndCreateMissionContents(ContentsType contentsType, List<Long> contentsIdList, Mission mission) {
+        if(contentsIdList == null || contentsIdList.isEmpty()) return;
+        List<MissionContents> missionContentsList = contentsIdList.stream()
+                .map(contentsId -> missionContentsHelper.createMissionContentsAndSave(mission, contentsHelper.findContentsByIdOrThrow(contentsId)))
                 .toList();
 
         switch (contentsType) {
-            case ESSENTIAL -> newMission.setEssentialContentsList(contentsList);
-            case ADDITIONAL -> newMission.setAdditionalContents(contentsList);
+            case ESSENTIAL -> mission.setEssentialContentsList(missionContentsList);
+            case ADDITIONAL -> mission.setAdditionalContentsList(missionContentsList);
         }
     }
 }
