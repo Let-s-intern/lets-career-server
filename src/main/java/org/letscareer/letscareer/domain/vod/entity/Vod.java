@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.letscareer.letscareer.domain.classification.entity.VodClassification;
 import org.letscareer.letscareer.domain.vod.dto.request.CreateVodRequestDto;
+import org.letscareer.letscareer.domain.vod.dto.request.UpdateVodRequestDto;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 import java.util.ArrayList;
@@ -44,12 +45,13 @@ public class Vod extends BaseTimeEntity {
                 .build();
     }
 
-    public void updateVod(CreateVodRequestDto requestDto) {
+    public void updateVod(UpdateVodRequestDto requestDto) {
         this.title = updateValue(this.title, requestDto.title());
         this.shortDesc = updateValue(this.shortDesc, requestDto.shortDesc());
         this.thumbnail = updateValue(this.thumbnail, requestDto.thumbnail());
         this.job = updateValue(this.job, requestDto.job());
         this.link = updateValue(this.link, requestDto.link());
+        this.isVisible = updateValue(this.isVisible, requestDto.isVisible());
     }
 
     public void addClassification(VodClassification vodClassification) {

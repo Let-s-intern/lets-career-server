@@ -6,6 +6,7 @@ import org.letscareer.letscareer.domain.classification.helper.VodClassificationH
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.classification.vo.VodClassificationDetailVo;
 import org.letscareer.letscareer.domain.vod.dto.request.CreateVodRequestDto;
+import org.letscareer.letscareer.domain.vod.dto.request.UpdateVodRequestDto;
 import org.letscareer.letscareer.domain.vod.dto.response.GetVodDetailResponseDto;
 import org.letscareer.letscareer.domain.vod.dto.response.GetVodsResponseDto;
 import org.letscareer.letscareer.domain.vod.entity.Vod;
@@ -50,10 +51,10 @@ public class VodServiceImpl implements VodService {
     }
 
     @Override
-    public void updateVod(Long vodId, CreateVodRequestDto createVodRequestDto) {
+    public void updateVod(Long vodId, UpdateVodRequestDto updateVodRequestDto) {
         Vod vod = vodHelper.findVodByIdOrThrow(vodId);
-        vod.updateVod(createVodRequestDto);
-        updateVodClassification(vod, createVodRequestDto.programTypeInfo());
+        vod.updateVod(updateVodRequestDto);
+        updateVodClassification(vod, updateVodRequestDto.programTypeInfo());
     }
 
     @Override

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.live.dto.response.GetLivesResponseDto;
 import org.letscareer.letscareer.domain.vod.dto.request.CreateVodRequestDto;
+import org.letscareer.letscareer.domain.vod.dto.request.UpdateVodRequestDto;
 import org.letscareer.letscareer.domain.vod.dto.response.GetVodDetailResponseDto;
 import org.letscareer.letscareer.domain.vod.dto.response.GetVodsResponseDto;
 import org.letscareer.letscareer.domain.vod.service.VodService;
@@ -56,7 +57,7 @@ public class VodV1Controller {
     })
     @PatchMapping("/{id}")
     public ResponseEntity<SuccessResponse<?>> updateVodProgram(@PathVariable("id") final Long vodId,
-                                                               @RequestBody final CreateVodRequestDto requestDto) {
+                                                               @RequestBody final UpdateVodRequestDto requestDto) {
         vodService.updateVod(vodId, requestDto);
         return SuccessResponse.ok(null);
     }
