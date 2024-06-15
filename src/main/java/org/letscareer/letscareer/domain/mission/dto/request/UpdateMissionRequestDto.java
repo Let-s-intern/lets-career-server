@@ -14,7 +14,6 @@ public record UpdateMissionRequestDto(
         LocalDate startDate,
         Long missionTemplateId,
         List<Long> essentialContentsIdList,
-        List<Long> additionalContentsIdList,
-        List<Long> limitedContentsIdList
+        List<Long> additionalContentsIdList
 ) {
 }
