@@ -140,6 +140,7 @@ public class UserV1Controller {
     @Operation(summary = "회원가입-추가 정보 업데이트", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
+    @ApiErrorCode(SwaggerEnum.USER_NOT_FOUND)
     @PatchMapping("/{email}")
     public ResponseEntity<SuccessResponse<?>> updateUserForSign(@PathVariable String email,
                                                                 @RequestBody final UpdateUserSignInfoRequestDto requestDto) {
