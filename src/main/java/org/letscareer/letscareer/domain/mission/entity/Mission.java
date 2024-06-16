@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.letscareer.letscareer.domain.attendance.entity.Attendance;
+import org.letscareer.letscareer.domain.attendance.type.AttendanceStatus;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.contents.type.ContentsType;
 import org.letscareer.letscareer.domain.mission.dto.request.CreateMissionRequestDto;
@@ -102,6 +103,13 @@ public class Mission extends BaseTimeEntity {
         switch (contentsType) {
             case ESSENTIAL -> this.essentialContentsList = new ArrayList<>();
             case ADDITIONAL -> this.additionalContentsList = new ArrayList<>();
+        }
+    }
+
+    public void updateAttendanceCount(AttendanceStatus attendanceStatus) {
+        switch (attendanceStatus) {
+            case PRESENT -> updateValue(this.attendanceCount, this.attendanceCount + 1);
+            case LATE -> updateValue(this.lateAttendanceCount,this.lateAttendanceCount + 1);
         }
     }
 }
