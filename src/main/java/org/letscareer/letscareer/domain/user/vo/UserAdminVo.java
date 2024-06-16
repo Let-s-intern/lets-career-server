@@ -14,6 +14,7 @@ public record UserAdminVo(
         LocalDateTime createdDate,
         AccountType accountType,
         String accountNum,
-        String accountOwner
+        String accountOwner,
+        Boolean marketingAgree
 ) {
 }
