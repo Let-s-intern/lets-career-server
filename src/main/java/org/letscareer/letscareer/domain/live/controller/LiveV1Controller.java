@@ -95,7 +95,11 @@ public class LiveV1Controller {
     }
 
     @Operation(summary = "라이브 신청폼 조회", responses = {
-            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetLiveApplicationFormResponseDto.class)))
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "비회원 유저시 유저 정보와 applied null 값 반환",
+                    content = @Content(schema = @Schema(implementation = GetLiveApplicationFormResponseDto.class))
+            )
     })
     @GetMapping("/{id}/application")
     public ResponseEntity<SuccessResponse<?>> getLiveApplicationForm(@PathVariable("id") final Long liveId,
