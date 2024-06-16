@@ -173,7 +173,7 @@ public class ChallengeV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "챌린지 대시보드 오늘의 미션", responses = {
+    @Operation(summary = "챌린지 대시보드 데일리 미션", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeDashboardDailyMissionResponseDto.class)))
     })
     @GetMapping("/{id}/daily-mission")
