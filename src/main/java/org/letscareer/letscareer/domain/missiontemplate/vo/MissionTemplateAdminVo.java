@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 public record MissionTemplateAdminVo(
         Long id,
         LocalDateTime createDate,
-        MissionTemplateType type,
+        String missionTag,
         String title,
         String description,
         String guide,
