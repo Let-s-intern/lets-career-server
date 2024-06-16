@@ -5,12 +5,14 @@ import org.letscareer.letscareer.domain.attendance.entity.Attendance;
 import org.letscareer.letscareer.domain.attendance.error.AttendanceErrorCode;
 import org.letscareer.letscareer.domain.attendance.repository.AttendanceRepository;
 import org.letscareer.letscareer.domain.attendance.vo.AttendanceAdminVo;
+import org.letscareer.letscareer.domain.attendance.vo.AttendanceDailyMissionVo;
 import org.letscareer.letscareer.domain.attendance.vo.AttendanceScoreVo;
 import org.letscareer.letscareer.domain.attendance.vo.MissionAttendanceVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Component
@@ -32,5 +34,11 @@ public class AttendanceHelper {
 
     public List<MissionAttendanceVo> findMissionAttendanceVo(Long challengeId, Long missionId) {
         return attendanceRepository.findMissionAttendanceVo(challengeId, missionId);
+    }
+
+    public AttendanceDailyMissionVo findAttendanceDailyMissionVoOrNull(Long missionId, Long userId) {
+        AttendanceDailyMissionVo attendanceDailyMissionVo = attendanceRepository.findAttendanceDailyMissionVo(missionId, userId);
+        if(Objects.isNull(attendanceDailyMissionVo)) return new AttendanceDailyMissionVo(null);
+        return attendanceDailyMissionVo;
     }
 }

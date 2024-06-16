@@ -5,12 +5,16 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.mission.vo.DailyMissionVo;
 import org.letscareer.letscareer.domain.mission.vo.MissionForChallengeVo;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
 import static org.letscareer.letscareer.domain.mission.entity.QMission.mission;
+import static org.letscareer.letscareer.domain.missiontemplate.entity.QMissionTemplate.missionTemplate;
 import static org.letscareer.letscareer.domain.score.entity.QMissionScore.missionScore;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -39,6 +43,39 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
                 )
                 .orderBy(mission.th.asc())
                 .fetch();
+    }
+
+    @Override
+    public Optional<DailyMissionVo> findDailyMissionVoByChallengeId(Long challengeId) {
+        return Optional.ofNullable(
+                queryFactory
+                        .select(Projections.constructor(DailyMissionVo.class,
+                                mission.id,
+                                mission.th,
+                                mission.title,
+                                mission.type,
+                                mission.startDate,
+                                mission.endDate,
+//                                mission.essentialContentsList,
+//                                mission.additionalContentsList,
+                                mission.missionStatusType,
+                                missionTemplate.type,
+                                missionTemplate.description,
+                                missionTemplate.guide,
+                                missionTemplate.templateLink))
+                        .from(mission)
+                        .leftJoin(mission.missionTemplate, missionTemplate)
+                        .where(
+                                eqChallengeId(challengeId),
+                                inProgress()
+                        )
+                        .fetchFirst()
+        );
+    }
+
+    private BooleanExpression inProgress() {
+        LocalDateTime now = LocalDateTime.now();
+        return mission.startDate.before(now).and(mission.endDate.after(now));
     }
 
     private BooleanExpression eqChallengeId(Long challengeId) {

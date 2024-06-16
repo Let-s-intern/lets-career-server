@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
 import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
 import org.springframework.data.domain.Page;
@@ -110,6 +111,20 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                         eqChallengeId(challengeId)
                 )
                 .fetchFirst());
+    }
+
+    @Override
+    public Optional<Long> findChallengeApplicationIdByChallengeIdAndUserIdAndIsConfirmed(Long challengeId, Long userId, Boolean isConfirmed) {
+        return Optional.ofNullable(queryFactory
+                .select(challengeApplication.id)
+                        .from(challengeApplication)
+                        .leftJoin(challengeApplication.user, user)
+                        .leftJoin(challengeApplication.payment, payment)
+                        .where(
+                                eqUserId(userId),
+                                eqIsConfirmed(isConfirmed)
+                        )
+                        .fetchFirst());
     }
 
     private NumberExpression<Integer> calculateTotalCost() {

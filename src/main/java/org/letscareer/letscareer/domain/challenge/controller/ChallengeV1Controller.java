@@ -169,7 +169,18 @@ public class ChallengeV1Controller {
     @GetMapping("/{id}/notices")
     public ResponseEntity<SuccessResponse<?>> getNotices(@PathVariable(name = "id") final Long challengeId,
                                                          final Pageable pageable) {
-        return SuccessResponse.ok(challengeService.getNotices(challengeId, pageable));
+        final GetChallengeNoticesResponseDto responseDto = challengeService.getNotices(challengeId, pageable);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "챌린지 대시보드 오늘의 미션", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeDashboardDailyMissionResponseDto.class)))
+    })
+    @GetMapping("/{id}/daily-mission")
+    public ResponseEntity<SuccessResponse<?>> getDashboardDailyMission(@PathVariable(name = "id") final Long challengeId,
+                                                                       @CurrentUser User user) {
+        final GetChallengeDashboardDailyMissionResponseDto responseDto = challengeService.getDashboardDailyMission(challengeId, user);
+        return SuccessResponse.ok(responseDto);
     }
 
     @Operation(summary = "[어드민] 챌린지 생성", responses = {

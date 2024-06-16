@@ -8,6 +8,7 @@ import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplication
 import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
 import org.letscareer.letscareer.domain.attendance.helper.AttendanceHelper;
 import org.letscareer.letscareer.domain.attendance.mapper.AttendanceMapper;
+import org.letscareer.letscareer.domain.attendance.vo.AttendanceDailyMissionVo;
 import org.letscareer.letscareer.domain.attendance.vo.AttendanceScoreVo;
 import org.letscareer.letscareer.domain.attendance.vo.MissionAttendanceVo;
 import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeRequestDto;
@@ -33,7 +34,9 @@ import org.letscareer.letscareer.domain.faq.helper.FaqHelper;
 import org.letscareer.letscareer.domain.faq.mapper.FaqMapper;
 import org.letscareer.letscareer.domain.faq.vo.FaqDetailVo;
 import org.letscareer.letscareer.domain.mission.dto.response.MissionApplicationScoreResponseDto;
+import org.letscareer.letscareer.domain.mission.helper.MissionHelper;
 import org.letscareer.letscareer.domain.mission.mapper.MissionMapper;
+import org.letscareer.letscareer.domain.mission.vo.DailyMissionVo;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.payment.helper.PaymentHelper;
 import org.letscareer.letscareer.domain.price.dto.request.CreateChallengePriceRequestDto;
@@ -67,13 +70,14 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final ChallengeApplicationHelper challengeApplicationHelper;
     private final ChallengeApplicationMapper challengeApplicationMapper;
     private final ChallengePriceHelper challengePriceHelper;
+    private final MissionHelper missionHelper;
+    private final MissionMapper missionMapper;
     private final ChallengeGuideHelper challengeGuideHelper;
     private final ChallengeNoticeHelper challengeNoticeHelper;
     private final AttendanceScoreHelper attendanceScoreHelper;
     private final AttendanceHelper attendanceHelper;
     private final AttendanceMapper attendanceMapper;
     private final PaymentHelper paymentHelper;
-    private final MissionMapper missionMapper;
     private final ReviewHelper reviewHelper;
     private final FaqHelper faqHelper;
     private final FaqMapper faqMapper;
@@ -179,6 +183,15 @@ public class ChallengeServiceImpl implements ChallengeService {
     public GetChallengeNoticesResponseDto getNotices(Long challengeId, Pageable pageable) {
         Page<ChallengeNoticeVo> challengeNoticeList = challengeNoticeHelper.findAllChallengeNoticeVos(challengeId, pageable);
         return challengeMapper.toGetChallengeNoticesResponseDto(challengeNoticeList);
+    }
+
+    @Override
+    public GetChallengeDashboardDailyMissionResponseDto getDashboardDailyMission(Long challengeId, User user) {
+        challengeApplicationHelper.validateChallengeDashboardAccessibleUser(challengeId, user);
+        Challenge challenge = challengeHelper.findChallengeByIdOrThrow(challengeId);
+        DailyMissionVo dailyMissionVo = missionHelper.findDailyMissionVoOrNull(challenge.getId());
+        AttendanceDailyMissionVo attendanceVo = attendanceHelper.findAttendanceDailyMissionVoOrNull(dailyMissionVo.id(), user.getId());
+        return missionMapper.toGetChallengeDashboardDailyMissionResponseDto(dailyMissionVo, attendanceVo);
     }
 
     @Override

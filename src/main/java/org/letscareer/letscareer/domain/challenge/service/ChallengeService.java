@@ -44,6 +44,8 @@ public interface ChallengeService {
 
     GetChallengeNoticesResponseDto getNotices(Long challengeId, Pageable pageable);
 
+    GetChallengeDashboardDailyMissionResponseDto getDashboardDailyMission(Long challengeId, User user);
+
     void createChallenge(CreateChallengeRequestDto createChallengeRequestDto);
 
     void updateChallenge(Long challengeId, UpdateChallengeRequestDto createChallengeRequestDto);

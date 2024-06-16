@@ -1,5 +1,6 @@
 package org.letscareer.letscareer.domain.attendance.repository;
 
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
@@ -9,6 +10,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.attendance.type.AttendanceResult;
 import org.letscareer.letscareer.domain.attendance.vo.AttendanceAdminVo;
+import org.letscareer.letscareer.domain.attendance.vo.AttendanceDailyMissionVo;
 import org.letscareer.letscareer.domain.attendance.vo.AttendanceScoreVo;
 import org.letscareer.letscareer.domain.attendance.vo.MissionAttendanceVo;
 
@@ -19,6 +21,7 @@ import static org.letscareer.letscareer.domain.attendance.entity.QAttendance.att
 import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
 import static org.letscareer.letscareer.domain.mission.entity.QMission.mission;
 import static org.letscareer.letscareer.domain.score.entity.QAttendanceScore.attendanceScore;
+import static org.letscareer.letscareer.domain.user.entity.QUser.user;
 import static org.letscareer.letscareer.domain.user.repository.UserRepositoryImpl.activeEmail;
 
 @RequiredArgsConstructor
@@ -117,6 +120,25 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
                         attendance.id.desc()
                 )
                 .fetch();
+    }
+
+    @Override
+    public AttendanceDailyMissionVo findAttendanceDailyMissionVo(Long missionId, Long userId) {
+        return queryFactory
+                .select(Projections.constructor(AttendanceDailyMissionVo.class,
+                        attendance))
+                .from(attendance)
+                .leftJoin(attendance.mission, mission)
+                .leftJoin(attendance.user, user)
+                .where(
+                        eqMissionId(missionId),
+                        eqUserId(userId)
+                )
+                .fetchFirst();
+    }
+
+    private BooleanExpression eqUserId(Long userId) {
+        return userId != null ? attendance.user.id.eq(userId) : null;
     }
 
     private BooleanExpression eqChallenge(Long challengeId) {

@@ -9,8 +9,7 @@ import org.letscareer.letscareer.global.common.utils.EnumField;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum MissionType implements EnumField {
     GENERAL(1, "일반"),
-    REWARD(2, "제한 컨텐츠 제공"),
-    REFUND(3, "보증금 반환");
+    REWARD(2, "제한 컨텐츠 제공");
 
     private final Integer code;
     private final String desc;

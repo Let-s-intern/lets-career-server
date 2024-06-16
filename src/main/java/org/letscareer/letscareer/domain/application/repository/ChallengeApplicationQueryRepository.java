@@ -14,4 +14,6 @@ public interface ChallengeApplicationQueryRepository {
     Page<UserChallengeApplicationVo> findUserChallengeApplicationVo(Long challengeId, Pageable pageable);
 
     Optional<Long> findChallengeApplicationIdByUserIdAndChallengeId(Long userId, Long challengeId);
+
+    Optional<Long> findChallengeApplicationIdByChallengeIdAndUserIdAndIsConfirmed(Long challengeId, Long userId, Boolean isConfirmed);
 }

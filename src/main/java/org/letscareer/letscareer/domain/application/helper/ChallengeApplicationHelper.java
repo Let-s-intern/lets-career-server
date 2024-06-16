@@ -7,6 +7,7 @@ import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplication
 import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.user.entity.User;
+import org.letscareer.letscareer.domain.user.type.UserRole;
 import org.letscareer.letscareer.global.error.exception.ConflictException;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.data.domain.Page;
@@ -53,5 +54,11 @@ public class ChallengeApplicationHelper {
 
     public Boolean checkExistingChallengeApplication(Long userId, Long challengeId) {
         return challengeApplicationRepository.findChallengeApplicationIdByUserIdAndChallengeId(userId, challengeId).isPresent();
+    }
+
+    public void validateChallengeDashboardAccessibleUser(Long challengeId, User user) {
+        if(user.getRole().equals(UserRole.ADMIN)) return;
+        challengeApplicationRepository.findChallengeApplicationIdByChallengeIdAndUserIdAndIsConfirmed(challengeId, user.getId(), true)
+                .orElseThrow(() -> new EntityNotFoundException(APPLICATION_NOT_FOUND));
     }
 }
