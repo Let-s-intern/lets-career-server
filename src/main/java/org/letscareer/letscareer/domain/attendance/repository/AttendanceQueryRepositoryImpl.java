@@ -105,8 +105,7 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
                         attendance.status,
                         attendance.link,
                         attendance.result,
-                        attendance.comments,
-                        attendance.sendDate
+                        attendance.comments
                 ))
                 .from(attendance)
                 .leftJoin(attendance.mission, mission)

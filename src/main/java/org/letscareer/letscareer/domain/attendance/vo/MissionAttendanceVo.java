@@ -13,7 +13,6 @@ public record MissionAttendanceVo(
         AttendanceStatus status,
         String link,
         AttendanceResult result,
-        String comment,
-        LocalDateTime sendDate
+        String comment
 ) {
 }
