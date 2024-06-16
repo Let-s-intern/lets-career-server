@@ -61,7 +61,6 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
                                 mission.id,
                                 mission.th,
                                 mission.title,
-                                mission.type,
                                 mission.startDate,
                                 mission.endDate,
                                 missionTemplate.missionTag,

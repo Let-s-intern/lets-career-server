@@ -9,9 +9,7 @@ import org.letscareer.letscareer.domain.contents.type.ContentsType;
 import org.letscareer.letscareer.domain.mission.dto.request.CreateMissionRequestDto;
 import org.letscareer.letscareer.domain.mission.dto.request.UpdateMissionRequestDto;
 import org.letscareer.letscareer.domain.mission.type.MissionStatusType;
-import org.letscareer.letscareer.domain.mission.type.MissionType;
 import org.letscareer.letscareer.domain.mission.type.converter.MissionStatusConverter;
-import org.letscareer.letscareer.domain.mission.type.converter.MissionTypeConverter;
 import org.letscareer.letscareer.domain.missioncontents.entity.MissionContents;
 import org.letscareer.letscareer.domain.missiontemplate.entity.MissionTemplate;
 import org.letscareer.letscareer.domain.score.entity.MissionScore;
@@ -38,9 +36,6 @@ public class Mission extends BaseTimeEntity {
     private Integer th;
     @NotNull
     private String title;
-    @NotNull
-    @Convert(converter = MissionTypeConverter.class)
-    private MissionType type;
     @NotNull
     @Convert(converter = MissionStatusConverter.class)
     @Builder.Default
@@ -77,7 +72,6 @@ public class Mission extends BaseTimeEntity {
         return Mission.builder()
                 .th(createMissionRequestDto.th())
                 .title(createMissionRequestDto.title())
-                .type(createMissionRequestDto.type())
                 .startDate(createMissionRequestDto.startDate().atTime(6, 0))
                 .endDate(createMissionRequestDto.startDate().atTime(23, 59, 59))
                 .challenge(challenge)
@@ -88,7 +82,6 @@ public class Mission extends BaseTimeEntity {
     public void updateMission(UpdateMissionRequestDto requestDto) {
         this.th = updateValue(this.th, requestDto.th());
         this.title = updateValue(this.title, requestDto.title());
-        this.type = updateValue(this.type, requestDto.type());
         this.startDate = updateValue(this.startDate, requestDto.startDate().atTime(6, 0));
         this.endDate = updateValue(this.endDate, requestDto.startDate().atTime(23, 59, 59));
     }
