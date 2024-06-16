@@ -15,6 +15,7 @@ import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.chall
 import static org.letscareer.letscareer.domain.contents.entity.QContents.contents;
 import static org.letscareer.letscareer.domain.mission.entity.QMission.mission;
 import static org.letscareer.letscareer.domain.missioncontents.entity.QMissionContents.missionContents;
+import static org.letscareer.letscareer.domain.missiontemplate.entity.QMissionTemplate.missionTemplate;
 import static org.letscareer.letscareer.domain.score.entity.QMissionScore.missionScore;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -27,6 +28,7 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
                 .select(Projections.constructor(MissionForChallengeVo.class,
                         mission.id,
                         mission.th,
+                        missionTemplate.type,
                         mission.missionStatusType,
                         mission.attendanceCount,
                         mission.lateAttendanceCount,
@@ -38,6 +40,7 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
                 .from(mission)
                 .leftJoin(mission.challenge, challenge)
                 .leftJoin(mission.missionScore, missionScore)
+                .leftJoin(mission.missionTemplate, missionTemplate)
                 .where(
                         eqChallengeId(challengeId)
                 )

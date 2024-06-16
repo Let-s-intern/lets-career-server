@@ -3,6 +3,7 @@ package org.letscareer.letscareer.domain.mission.vo;
 import lombok.Builder;
 import org.letscareer.letscareer.domain.contents.vo.ContentsMissionVo;
 import org.letscareer.letscareer.domain.mission.type.MissionStatusType;
+import org.letscareer.letscareer.domain.missiontemplate.type.MissionTemplateType;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 public record MissionForChallengeVo(
         Long id,
         Integer th,
+        MissionTemplateType missionType,
         MissionStatusType missionStatusType,
         Integer attendanceCount,
         Integer lateAttendanceCount,
