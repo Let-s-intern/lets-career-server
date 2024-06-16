@@ -30,7 +30,7 @@ public class AttendanceV1Controller {
     @Operation(summary = "출석 업데이트", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
-    @PatchMapping("/{id}/admin")
+    @PatchMapping("/{id}")
     public ResponseEntity<SuccessResponse<?>> updateAttendanceAdmin(@PathVariable(name = "id") final Long attendanceId,
                                                                     @RequestBody final AttendanceUpdateRequestDto attendanceUpdateRequestDto) {
         attendanceService.updateAttendanceAdmin(attendanceId, attendanceUpdateRequestDto);
