@@ -2,7 +2,8 @@ package org.letscareer.letscareer.domain.mission.mapper;
 
 import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
 import org.letscareer.letscareer.domain.attendance.vo.AttendanceDailyMissionVo;
-import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeDashboardDailyMissionResponseDto;
+import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeDailyMissionResponseDto;
+import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeMyDailyMissionResponseDto;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.contents.vo.ContentsMissionVo;
 import org.letscareer.letscareer.domain.mission.dto.request.CreateMissionRequestDto;
@@ -11,6 +12,7 @@ import org.letscareer.letscareer.domain.mission.dto.response.MissionAdminRespons
 import org.letscareer.letscareer.domain.mission.dto.response.MissionApplicationScoreResponseDto;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.mission.vo.DailyMissionVo;
+import org.letscareer.letscareer.domain.mission.vo.MyDailyMissionVo;
 import org.letscareer.letscareer.domain.mission.vo.MissionForChallengeVo;
 import org.letscareer.letscareer.domain.missiontemplate.entity.MissionTemplate;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
@@ -41,8 +43,12 @@ public class MissionMapper {
         return MissionApplicationScoreResponseDto.of(userChallengeApplicationVo, scores, payment);
     }
 
-    public GetChallengeDashboardDailyMissionResponseDto toGetChallengeDashboardDailyMissionResponseDto(DailyMissionVo dailyMissionVo,
-                                                                                                       AttendanceDailyMissionVo attendanceInfo) {
-        return GetChallengeDashboardDailyMissionResponseDto.of(dailyMissionVo, attendanceInfo);
+    public GetChallengeDailyMissionResponseDto toGetChallengeDailyMissionResponseDto(DailyMissionVo dailyMissionVo) {
+        return GetChallengeDailyMissionResponseDto.of(dailyMissionVo);
+    }
+
+    public GetChallengeMyDailyMissionResponseDto toGetChallengeMyDailyMissionResponseDto(MyDailyMissionVo myDailyMissionVo,
+                                                                                         AttendanceDailyMissionVo attendanceInfo) {
+        return GetChallengeMyDailyMissionResponseDto.of(myDailyMissionVo, attendanceInfo);
     }
 }

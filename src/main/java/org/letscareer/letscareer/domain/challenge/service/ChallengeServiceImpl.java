@@ -37,6 +37,7 @@ import org.letscareer.letscareer.domain.mission.dto.response.MissionApplicationS
 import org.letscareer.letscareer.domain.mission.helper.MissionHelper;
 import org.letscareer.letscareer.domain.mission.mapper.MissionMapper;
 import org.letscareer.letscareer.domain.mission.vo.DailyMissionVo;
+import org.letscareer.letscareer.domain.mission.vo.MyDailyMissionVo;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.payment.helper.PaymentHelper;
 import org.letscareer.letscareer.domain.price.dto.request.CreateChallengePriceRequestDto;
@@ -174,12 +175,20 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
-    public GetChallengeDashboardDailyMissionResponseDto getDashboardDailyMission(Long challengeId, User user) {
+    public GetChallengeDailyMissionResponseDto getDailyMission(Long challengeId, User user) {
         challengeApplicationHelper.validateChallengeDashboardAccessibleUser(challengeId, user);
         Challenge challenge = challengeHelper.findChallengeByIdOrThrow(challengeId);
         DailyMissionVo dailyMissionVo = missionHelper.findDailyMissionVoOrNull(challenge.getId());
-        AttendanceDailyMissionVo attendanceVo = attendanceHelper.findAttendanceDailyMissionVoOrNull(dailyMissionVo.id(), user.getId());
-        return missionMapper.toGetChallengeDashboardDailyMissionResponseDto(dailyMissionVo, attendanceVo);
+        return missionMapper.toGetChallengeDailyMissionResponseDto(dailyMissionVo);
+    }
+
+    @Override
+    public GetChallengeMyDailyMissionResponseDto getDashboardDailyMission(Long challengeId, User user) {
+        challengeApplicationHelper.validateChallengeDashboardAccessibleUser(challengeId, user);
+        Challenge challenge = challengeHelper.findChallengeByIdOrThrow(challengeId);
+        MyDailyMissionVo myDailyMissionVo = missionHelper.findMyDailyMissionVoOrNull(challenge.getId());
+        AttendanceDailyMissionVo attendanceVo = attendanceHelper.findAttendanceDailyMissionVoOrNull(myDailyMissionVo.id(), user.getId());
+        return missionMapper.toGetChallengeMyDailyMissionResponseDto(myDailyMissionVo, attendanceVo);
     }
 
     @Override

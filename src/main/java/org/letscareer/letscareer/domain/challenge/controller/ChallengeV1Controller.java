@@ -178,12 +178,22 @@ public class ChallengeV1Controller {
     }
 
     @Operation(summary = "챌린지 대시보드 데일리 미션", responses = {
-            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeDashboardDailyMissionResponseDto.class)))
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeDailyMissionResponseDto.class)))
     })
     @GetMapping("/{id}/daily-mission")
-    public ResponseEntity<SuccessResponse<?>> getDashboardDailyMission(@PathVariable(name = "id") final Long challengeId,
+    public ResponseEntity<SuccessResponse<?>> getDailyMission(@PathVariable(name = "id") final Long challengeId,
                                                                        @CurrentUser User user) {
-        final GetChallengeDashboardDailyMissionResponseDto responseDto = challengeService.getDashboardDailyMission(challengeId, user);
+        final GetChallengeDailyMissionResponseDto responseDto = challengeService.getDailyMission(challengeId, user);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "챌린지 나의 기록장 데일리 미션", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeMyDailyMissionResponseDto.class)))
+    })
+    @GetMapping("/{id}/my/daily-mission")
+    public ResponseEntity<SuccessResponse<?>> getMyDailyMission(@PathVariable(name = "id") final Long challengeId,
+                                                                         @CurrentUser User user) {
+        final GetChallengeMyDailyMissionResponseDto responseDto = challengeService.getDashboardDailyMission(challengeId, user);
         return SuccessResponse.ok(responseDto);
     }
 

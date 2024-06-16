@@ -6,6 +6,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.mission.vo.DailyMissionVo;
+import org.letscareer.letscareer.domain.mission.vo.MyDailyMissionVo;
 import org.letscareer.letscareer.domain.contents.type.ContentsType;
 import org.letscareer.letscareer.domain.contents.vo.ContentsMissionVo;
 import org.letscareer.letscareer.domain.mission.vo.MissionForChallengeVo;
@@ -56,6 +57,29 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
         return Optional.ofNullable(
                 queryFactory
                         .select(Projections.constructor(DailyMissionVo.class,
+                                mission.id,
+                                mission.th,
+                                mission.title,
+                                mission.type,
+                                mission.startDate,
+                                mission.endDate,
+                                missionTemplate.missionTag,
+                                missionTemplate.description))
+                        .from(mission)
+                        .leftJoin(mission.missionTemplate, missionTemplate)
+                        .where(
+                                eqChallengeId(challengeId),
+                                inProgress()
+                        )
+                        .fetchFirst()
+        );
+    }
+
+    @Override
+    public Optional<MyDailyMissionVo> findMyDailyMissionVoByChallengeId(Long challengeId) {
+        return Optional.ofNullable(
+                queryFactory
+                        .select(Projections.constructor(MyDailyMissionVo.class,
                                 mission,
                                 missionTemplate.missionTag,
                                 missionTemplate.description,

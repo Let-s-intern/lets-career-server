@@ -6,6 +6,7 @@ import org.letscareer.letscareer.domain.contents.vo.ContentsMissionVo;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.mission.repository.MissionRepository;
 import org.letscareer.letscareer.domain.mission.vo.DailyMissionVo;
+import org.letscareer.letscareer.domain.mission.vo.MyDailyMissionVo;
 import org.letscareer.letscareer.domain.mission.vo.MissionForChallengeVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
@@ -39,4 +40,9 @@ public class MissionHelper {
     public DailyMissionVo findDailyMissionVoOrNull(Long challengeId) {
         return missionRepository.findDailyMissionVoByChallengeId(challengeId).orElse(null);
     }
+
+    public MyDailyMissionVo findMyDailyMissionVoOrNull(Long challengeId) {
+        return missionRepository.findMyDailyMissionVoByChallengeId(challengeId).orElse(null);
+    }
+
 }
