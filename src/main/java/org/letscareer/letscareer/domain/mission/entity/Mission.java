@@ -108,8 +108,8 @@ public class Mission extends BaseTimeEntity {
 
     public void updateAttendanceCount(AttendanceStatus attendanceStatus) {
         switch (attendanceStatus) {
-            case PRESENT -> updateValue(this.attendanceCount, this.attendanceCount + 1);
-            case LATE -> updateValue(this.lateAttendanceCount,this.lateAttendanceCount + 1);
+            case PRESENT -> this.attendanceCount = updateValue(this.attendanceCount, this.attendanceCount + 1);
+            case LATE -> this.lateAttendanceCount = updateValue(this.lateAttendanceCount,this.lateAttendanceCount + 1);
         }
     }
 }
