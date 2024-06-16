@@ -102,7 +102,11 @@ public class ChallengeV1Controller {
     }
 
     @Operation(summary = "챌린지 신청폼 조회", responses = {
-            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeApplicationFormResponseDto.class)))
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "비회원 유저시 유저 정보와 applied null 값 반환",
+                    content = @Content(schema = @Schema(implementation = GetChallengeApplicationFormResponseDto.class))
+            )
     })
     @ApiErrorCode({SwaggerEnum.CHALLENGE_NOT_FOUND})
     @GetMapping("/{id}/application")

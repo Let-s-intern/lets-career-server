@@ -8,6 +8,7 @@ import org.letscareer.letscareer.domain.user.entity.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Builder(access = AccessLevel.PRIVATE)
 public record GetChallengeApplicationFormResponseDto(
@@ -27,10 +28,10 @@ public record GetChallengeApplicationFormResponseDto(
                                                             List<ChallengePriceDetailVo> challengePriceDetailVos) {
         return GetChallengeApplicationFormResponseDto.builder()
                 .applied(applied)
-                .name(user.getName())
-                .email(user.getEmail())
-                .contactEmail(user.getContactEmail())
-                .phoneNumber(user.getPhoneNum())
+                .name(Objects.isNull(user) ? null : user.getName())
+                .email(Objects.isNull(user) ? null : user.getEmail())
+                .contactEmail(Objects.isNull(user) ? null : user.getContactEmail())
+                .phoneNumber(Objects.isNull(user) ? null : user.getPhoneNum())
                 .startDate(programInfo.startDate())
                 .endDate(programInfo.endDate())
                 .deadline(programInfo.deadline())

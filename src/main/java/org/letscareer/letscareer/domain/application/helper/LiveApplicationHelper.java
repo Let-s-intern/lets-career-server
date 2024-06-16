@@ -13,6 +13,7 @@ import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.letscareer.letscareer.domain.application.error.ApplicationErrorCode.APPLICATION_NOT_FOUND;
@@ -46,8 +47,9 @@ public class LiveApplicationHelper {
         liveApplicationRepository.delete(liveApplication);
     }
 
-    public Boolean checkExistingLiveApplication(Long userId, Long liveId) {
-        return liveApplicationRepository.findLiveApplicationIdByUserIdAndLiveId(userId, liveId).isPresent();
+    public Boolean checkExistingLiveApplication(User user, Long liveId) {
+        if (Objects.isNull(user)) return null;
+        return liveApplicationRepository.findLiveApplicationIdByUserIdAndLiveId(user.getId(), liveId).isPresent();
     }
 
     public LiveEmailVo findLiveEmailVo(Long applicationId) {

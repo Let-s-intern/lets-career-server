@@ -7,6 +7,7 @@ import org.letscareer.letscareer.domain.price.vo.LivePriceDetailVo;
 import org.letscareer.letscareer.domain.user.entity.User;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Builder(access = AccessLevel.PRIVATE)
 public record GetLiveApplicationFormResponseDto(
@@ -26,10 +27,10 @@ public record GetLiveApplicationFormResponseDto(
                                                        LivePriceDetailVo livePriceDetailVo) {
         return GetLiveApplicationFormResponseDto.builder()
                 .applied(applied)
-                .name(user.getName())
-                .email(user.getEmail())
-                .contactEmail(user.getContactEmail())
-                .phoneNumber(user.getPhoneNum())
+                .name(Objects.isNull(user) ? null : user.getName())
+                .email(Objects.isNull(user) ? null : user.getEmail())
+                .contactEmail(Objects.isNull(user) ? null : user.getContactEmail())
+                .phoneNumber(Objects.isNull(user) ? null : user.getPhoneNum())
                 .startDate(liveApplicationFormVo.startDate())
                 .endDate(liveApplicationFormVo.endDate())
                 .deadline(liveApplicationFormVo.deadline())

@@ -117,23 +117,11 @@ public class ChallengeServiceImpl implements ChallengeService {
         return challengeApplicationMapper.toGetChallengeApplicationsScoreResponseDto(missionApplications, challengeApplicationVos);
     }
 
-    private List<MissionApplicationScoreResponseDto> createMissionApplications(List<UserChallengeApplicationVo> challengeApplicationVos, Long challengeId) {
-        return challengeApplicationVos.stream()
-                .map(challengeApplicationVo -> createMissionApplicationScoreForUser(challengeApplicationVo, challengeId))
-                .collect(Collectors.toList());
-    }
-
-    private MissionApplicationScoreResponseDto createMissionApplicationScoreForUser(UserChallengeApplicationVo challengeApplication, Long challengeId) {
-        List<AttendanceScoreVo> scores = attendanceHelper.findAttendanceScoreVos(challengeApplication.id(), challengeId);
-        Payment payment = paymentHelper.findPaymentByApplicationIdOrThrow(challengeApplication.id());
-        return missionMapper.toMissionApplicationScoreResponseDto(challengeApplication, scores, payment);
-    }
-
     @Override
     public GetChallengeApplicationFormResponseDto getChallengeApplicationForm(User user, Long challengeId) {
         ChallengeApplicationFormVo applicationFormVo = challengeHelper.findChallengeApplicationFormVoOrThrow(challengeId);
         List<ChallengePriceDetailVo> challengePriceDetailVos = challengePriceHelper.findChallengePriceDetailVos(challengeId);
-        Boolean applied = challengeApplicationHelper.checkExistingChallengeApplication(user.getId(), challengeId);
+        Boolean applied = challengeApplicationHelper.checkExistingChallengeApplication(user, challengeId);
         return challengeMapper.toGetChallengeApplicationFormResponseDto(user, applied, applicationFormVo, challengePriceDetailVos);
     }
 
@@ -230,6 +218,18 @@ public class ChallengeServiceImpl implements ChallengeService {
         requestDtoList.stream()
                 .map(requestDto -> challengeClassificationHelper.createChallengeClassificationAndSave(requestDto, challenge))
                 .collect(Collectors.toList());
+    }
+
+    private List<MissionApplicationScoreResponseDto> createMissionApplications(List<UserChallengeApplicationVo> challengeApplicationVos, Long challengeId) {
+        return challengeApplicationVos.stream()
+                .map(challengeApplicationVo -> createMissionApplicationScoreForUser(challengeApplicationVo, challengeId))
+                .collect(Collectors.toList());
+    }
+
+    private MissionApplicationScoreResponseDto createMissionApplicationScoreForUser(UserChallengeApplicationVo challengeApplication, Long challengeId) {
+        List<AttendanceScoreVo> scores = attendanceHelper.findAttendanceScoreVos(challengeApplication.id(), challengeId);
+        Payment payment = paymentHelper.findPaymentByApplicationIdOrThrow(challengeApplication.id());
+        return missionMapper.toMissionApplicationScoreResponseDto(challengeApplication, scores, payment);
     }
 
     private void createPriceListAndSave(List<CreateChallengePriceRequestDto> requestDtoList,
