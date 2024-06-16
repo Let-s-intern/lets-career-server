@@ -72,7 +72,7 @@ public class FaqQueryRepositoryImpl implements FaqQueryRepository {
     }
 
     private BooleanExpression eqLiveId(Long liveId) {
-        return liveId != null ? faqLive.id.eq(liveId) : null;
+        return liveId != null ? faqLive.live.id.eq(liveId) : null;
     }
 
     private BooleanExpression eqFaqProgramType(FaqProgramType type) {
