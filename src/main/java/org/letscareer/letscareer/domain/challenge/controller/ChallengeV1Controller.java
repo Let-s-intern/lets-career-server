@@ -212,7 +212,7 @@ public class ChallengeV1Controller {
     })
     @GetMapping("/{id}/my/daily-mission")
     public ResponseEntity<SuccessResponse<?>> getMyDailyMission(@PathVariable(name = "id") final Long challengeId,
-                                                                         @CurrentUser User user) {
+                                                                @CurrentUser User user) {
         final GetChallengeMyDailyMissionResponseDto responseDto = challengeService.getDashboardDailyMission(challengeId, user);
         return SuccessResponse.ok(responseDto);
     }

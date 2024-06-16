@@ -1,7 +1,7 @@
 package org.letscareer.letscareer.domain.mission.mapper;
 
 import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
-import org.letscareer.letscareer.domain.attendance.vo.AttendanceDailyMissionVo;
+import org.letscareer.letscareer.domain.attendance.vo.AttendanceDashboardVo;
 import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeDailyMissionResponseDto;
 import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeMyDailyMissionResponseDto;
 import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeScheduleResponseDto;
@@ -14,7 +14,6 @@ import org.letscareer.letscareer.domain.mission.dto.response.MissionAdminRespons
 import org.letscareer.letscareer.domain.mission.dto.response.MissionApplicationScoreResponseDto;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.mission.vo.DailyMissionVo;
-import org.letscareer.letscareer.domain.mission.vo.MissionScheduleVo;
 import org.letscareer.letscareer.domain.mission.vo.MyDailyMissionVo;
 import org.letscareer.letscareer.domain.mission.vo.MissionForChallengeVo;
 import org.letscareer.letscareer.domain.missiontemplate.entity.MissionTemplate;
@@ -51,7 +50,7 @@ public class MissionMapper {
     }
 
     public GetChallengeMyDailyMissionResponseDto toGetChallengeMyDailyMissionResponseDto(MyDailyMissionVo myDailyMissionVo,
-                                                                                         AttendanceDailyMissionVo attendanceInfo) {
+                                                                                         AttendanceDashboardVo attendanceInfo) {
         return GetChallengeMyDailyMissionResponseDto.of(myDailyMissionVo, attendanceInfo);
     }
 
