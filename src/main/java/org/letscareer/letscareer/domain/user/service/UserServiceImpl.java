@@ -82,6 +82,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void updateUserForSign(String email, UpdateUserSignInfoRequestDto requestDto) {
+        User user = userHelper.findUserByEmailOrThrow(email);
+        user.updateUserAdditionInfo(requestDto);
+    }
+
+    @Override
     public UserAdminListResponseDto getUsers(Pageable pageable) {
         Page<UserAdminVo> userAdminList = userHelper.findAllUserAdminVos(pageable);
         return userMapper.toUserAdminListResponseDto(userAdminList);
