@@ -50,6 +50,7 @@ import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
 import org.letscareer.letscareer.domain.review.vo.ReviewVo;
 import org.letscareer.letscareer.domain.score.entity.AttendanceScore;
 import org.letscareer.letscareer.domain.score.helper.AttendanceScoreHelper;
+import org.letscareer.letscareer.domain.score.mapper.AttendanceScoreMapper;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.utils.ZoomUtils;
 import org.springframework.data.domain.Page;
@@ -76,6 +77,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final ChallengeGuideHelper challengeGuideHelper;
     private final ChallengeNoticeHelper challengeNoticeHelper;
     private final AttendanceScoreHelper attendanceScoreHelper;
+    private final AttendanceScoreMapper attendanceScoreMapper;
     private final AttendanceHelper attendanceHelper;
     private final AttendanceMapper attendanceMapper;
     private final PaymentHelper paymentHelper;
@@ -172,6 +174,12 @@ public class ChallengeServiceImpl implements ChallengeService {
     public GetChallengeNoticesResponseDto getNotices(Long challengeId, Pageable pageable) {
         Page<ChallengeNoticeVo> challengeNoticeList = challengeNoticeHelper.findAllChallengeNoticeVos(challengeId, pageable);
         return challengeMapper.toGetChallengeNoticesResponseDto(challengeNoticeList);
+    }
+
+    @Override
+    public GetChallengeTotalScoreResponseDto getTotalScore(Long challengeId, Long userId) {
+        Integer totalScore = attendanceScoreHelper.getSumOfAttendanceScoreByChallengeIdAndUserId(challengeId, userId);
+        return attendanceScoreMapper.toGetChallengeTotalScoreResponseDto(totalScore);
     }
 
     @Override

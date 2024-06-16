@@ -177,6 +177,17 @@ public class ChallengeV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
+    @Operation(summary = "챌린지 대시보드 미션 점수 현황", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeTotalScoreResponseDto.class)))
+    })
+    @GetMapping("/{id}/score")
+    public ResponseEntity<SuccessResponse<?>> getTotalScore(@PathVariable(name = "id") final Long challengeId,
+                                                            @CurrentUser User user) {
+        final GetChallengeTotalScoreResponseDto responseDto = challengeService.getTotalScore(challengeId, user.getId());
+        return SuccessResponse.ok(responseDto);
+    }
+
+
     @Operation(summary = "챌린지 대시보드 데일리 미션", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeDailyMissionResponseDto.class)))
     })
