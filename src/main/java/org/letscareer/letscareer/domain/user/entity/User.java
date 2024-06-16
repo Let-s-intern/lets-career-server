@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.letscareer.letscareer.domain.application.entity.Application;
 import org.letscareer.letscareer.domain.attendance.entity.Attendance;
+import org.letscareer.letscareer.domain.user.dto.request.UpdateUserSignInfoRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UserPwSignUpRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UserUpdateRequestDto;
 import org.letscareer.letscareer.domain.user.type.AccountType;
@@ -111,6 +112,7 @@ public class User extends BaseTimeEntity {
                 .phoneNum(pwSignUpRequestDto.phoneNum())
                 .password(encodedPassword)
                 .marketingAgree(pwSignUpRequestDto.marketingAgree())
+                .inflowPath(pwSignUpRequestDto.inflowPath())
                 .build();
     }
 
@@ -140,5 +142,13 @@ public class User extends BaseTimeEntity {
 
     public void updateUserPassword(String encodedPassword) {
         this.password = updateValue(this.password, encodedPassword);
+    }
+
+    public void updateUserAdditionInfo(UpdateUserSignInfoRequestDto requestDto) {
+        this.university = updateValue(this.university, requestDto.university());
+        this.major = updateValue(this.major, requestDto.major());
+        this.grade = updateValue(this.grade, requestDto.grade());
+        this.wishJob = updateValue(this.wishJob, requestDto.wishJob());
+        this.wishCompany = updateValue(this.wishCompany, requestDto.wishCompany());
     }
 }

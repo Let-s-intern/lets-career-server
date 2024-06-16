@@ -132,8 +132,19 @@ public class UserV1Controller {
     @ApiErrorCode({SwaggerEnum.USER_NOT_FOUND, SwaggerEnum.USER_CONFLICT, SwaggerEnum.INVALID_PHONE_NUMBER, SwaggerEnum.INVALID_EMAIL})
     @PatchMapping
     public ResponseEntity<SuccessResponse<?>> updateUser(@CurrentUser User user,
-                                                         @RequestBody final UserUpdateRequestDto userUpdateRequestDto) {
-        userService.updateUser(user.getId(), userUpdateRequestDto);
+                                                         @RequestBody final UserUpdateRequestDto requestDto) {
+        userService.updateUser(user.getId(), requestDto);
+        return SuccessResponse.ok(null);
+    }
+
+    @Operation(summary = "회원가입-추가 정보 업데이트", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    })
+    @ApiErrorCode(SwaggerEnum.USER_NOT_FOUND)
+    @PatchMapping("/additional-info")
+    public ResponseEntity<SuccessResponse<?>> updateUserForSign(@RequestParam String email,
+                                                                @RequestBody final UpdateUserSignInfoRequestDto requestDto) {
+        userService.updateUserForSign(email, requestDto);
         return SuccessResponse.ok(null);
     }
 
