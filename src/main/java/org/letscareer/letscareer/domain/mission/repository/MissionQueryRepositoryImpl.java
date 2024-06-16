@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static org.letscareer.letscareer.domain.attendance.entity.QAttendance.attendance;
 import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
 import static org.letscareer.letscareer.domain.contents.entity.QContents.contents;
 import static org.letscareer.letscareer.domain.mission.entity.QMission.mission;
@@ -114,17 +113,15 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
     }
 
     @Override
-    public List<MissionScheduleVo> findMissionScheduleVosByChallengeIdAndUserId(Long challengeId, Long userId) {
+    public List<MissionScheduleVo> findMissionScheduleVosByChallengeId(Long challengeId) {
         return queryFactory
                 .select(Projections.constructor(MissionScheduleVo.class,
                         mission.id,
                         mission.th,
                         mission.startDate,
                         mission.endDate,
-                        mission.missionStatusType,
-                        attendance))
+                        mission.missionStatusType))
                 .from(mission)
-                .leftJoin(mission.attendanceList, attendance)
                 .where(
                         eqChallengeId(challengeId)
                 )

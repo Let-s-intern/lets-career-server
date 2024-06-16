@@ -60,4 +60,8 @@ public class AttendanceHelper {
         Attendance newAttendance = Attendance.createAttendance(mission, createRequestDto, status, user);
         return attendanceRepository.save(newAttendance);
     }
+
+    public Attendance findAttendanceByMissionIdAndUserIdOrNull(Long missionId, Long userId) {
+        return attendanceRepository.findAttendanceByMissionIdAndUserId(missionId, userId).orElse(null);
+    }
 }

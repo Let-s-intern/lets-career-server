@@ -185,8 +185,13 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     @Override
     public GetChallengeScheduleResponseDto getSchedule(Long challengeId, Long userId) {
-        List<MissionScheduleVo> missionScheduleVoList = missionHelper.findMissionScheduleVosByChallengeIdAndUserId(challengeId, userId);
-        return missionMapper.toGetChallengeScheduleResponseDto(missionScheduleVoList);
+        List<MissionScheduleVo> missionScheduleVoList = missionHelper.findMissionScheduleVosByChallengeId(challengeId);
+        List<ChallengeScheduleVo> challengeScheduleVoList = missionScheduleVoList.stream()
+                .map(missionScheduleVo -> new ChallengeScheduleVo(
+                        missionScheduleVo,
+                        attendanceHelper.findAttendanceDailyMissionVoOrNull(missionScheduleVo.id(), userId))
+                ).toList();
+        return missionMapper.toGetChallengeScheduleResponseDto(challengeScheduleVoList);
     }
 
     @Override

@@ -46,7 +46,7 @@ public class MissionHelper {
         return missionRepository.findMyDailyMissionVoByChallengeId(challengeId).orElse(null);
     }
 
-    public List<MissionScheduleVo> findMissionScheduleVosByChallengeIdAndUserId(Long challengeId, Long userId) {
-        return missionRepository.findMissionScheduleVosByChallengeIdAndUserId(challengeId, userId);
+    public List<MissionScheduleVo> findMissionScheduleVosByChallengeId(Long challengeId) {
+        return missionRepository.findMissionScheduleVosByChallengeId(challengeId);
     }
 }
