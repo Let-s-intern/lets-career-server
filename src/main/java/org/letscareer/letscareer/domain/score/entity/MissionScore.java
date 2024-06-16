@@ -17,7 +17,7 @@ public class MissionScore extends Score {
     private Integer successScore = 0;
     private Integer lateScore = 0;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "mission_id")
     private Mission mission;
 

@@ -105,7 +105,7 @@ public class LiveServiceImpl implements LiveService {
     public GetLiveApplicationFormResponseDto getLiveApplicationForm(User user, Long liveId) {
         LiveApplicationFormVo LiveApplicationFormVo = liveHelper.findLiveApplicationFormVoOrThrow(liveId);
         LivePriceDetailVo livePriceDetailVo = livePriceHelper.findLivePriceDetailVos(liveId);
-        Boolean applied = liveApplicationHelper.checkExistingLiveApplication(user.getId(), liveId);
+        Boolean applied = liveApplicationHelper.checkExistingLiveApplication(user, liveId);
         return liveMapper.toGetLiveApplicationFormResponseDto(user, applied, LiveApplicationFormVo, livePriceDetailVo);
     }
 

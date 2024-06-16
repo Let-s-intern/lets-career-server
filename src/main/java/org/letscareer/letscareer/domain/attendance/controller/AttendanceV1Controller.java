@@ -35,16 +35,16 @@ public class AttendanceV1Controller {
     @Operation(summary = "[어드민] 챌린지 1개의 출석 전체 목록", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = AttendanceAdminListResponseDto.class)))
     })
-    @GetMapping("/admin/{id}")
+    @GetMapping("/{id}/admin")
     public ResponseEntity<SuccessResponse<?>> getAttendancesOfChallenge(@PathVariable(name = "id") final Long challengeId) {
         AttendanceAdminListResponseDto responseDto = attendanceService.getAttendancesOfChallenge(challengeId);
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "[어드민] 출석 업데이트", responses = {
+    @Operation(summary = "출석 업데이트", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
-    @PatchMapping("/admin")
+    @PatchMapping("/{id}")
     public ResponseEntity<SuccessResponse<?>> updateAttendanceAdmin(@PathVariable(name = "id") final Long attendanceId,
                                                                     @RequestBody final AttendanceUpdateRequestDto attendanceUpdateRequestDto) {
         attendanceService.updateAttendanceAdmin(attendanceId, attendanceUpdateRequestDto);

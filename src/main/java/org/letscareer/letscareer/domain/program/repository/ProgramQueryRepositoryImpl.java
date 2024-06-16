@@ -10,7 +10,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.program.entity.SearchCondition;
-import org.letscareer.letscareer.domain.program.entity.VWProgram;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.program.vo.ProgramForAdminVo;
@@ -138,7 +137,8 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                 .groupBy(
                         vWProgram.programId,
                         vWProgram.programType
-                );;
+                );
+        ;
 
         return PageableExecutionUtils.getPage(contents, condition.pageable(), countQuery::fetchCount);
     }

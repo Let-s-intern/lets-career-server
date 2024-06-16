@@ -102,7 +102,11 @@ public class ChallengeV1Controller {
     }
 
     @Operation(summary = "챌린지 신청폼 조회", responses = {
-            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeApplicationFormResponseDto.class)))
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "비회원 유저시 유저 정보와 applied null 값 반환",
+                    content = @Content(schema = @Schema(implementation = GetChallengeApplicationFormResponseDto.class))
+            )
     })
     @ApiErrorCode({SwaggerEnum.CHALLENGE_NOT_FOUND})
     @GetMapping("/{id}/application")
@@ -139,7 +143,7 @@ public class ChallengeV1Controller {
     @GetMapping("/{id}/applications/payback")
     public ResponseEntity<SuccessResponse<?>> getApplicationsScore(@PathVariable(name = "id") final Long challengeId,
                                                                    final Pageable pageable) {
-        GetChallengeApplicationsPaybackResponseDto responseDto = challengeService.getApplicationsScore(challengeId, pageable);
+        final GetChallengeApplicationsPaybackResponseDto responseDto = challengeService.getApplicationsScore(challengeId, pageable);
         return SuccessResponse.ok(responseDto);
     }
 
@@ -150,7 +154,7 @@ public class ChallengeV1Controller {
     @GetMapping("/{challengeId}/mission/{missionId}/attendances")
     public ResponseEntity<SuccessResponse<?>> getMissionAttendances(@PathVariable final Long challengeId,
                                                                     @PathVariable final Long missionId) {
-        GetChallengeMissionAttendancesResponseDto responseDto = challengeService.getMissionAttendances(challengeId, missionId);
+        final GetChallengeMissionAttendancesResponseDto responseDto = challengeService.getMissionAttendances(challengeId, missionId);
         return SuccessResponse.ok(responseDto);
     }
 

@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.letscareer.letscareer.domain.application.error.ApplicationErrorCode.APPLICATION_NOT_FOUND;
@@ -52,8 +53,9 @@ public class ChallengeApplicationHelper {
         challengeApplicationRepository.delete(challengeApplication);
     }
 
-    public Boolean checkExistingChallengeApplication(Long userId, Long challengeId) {
-        return challengeApplicationRepository.findChallengeApplicationIdByUserIdAndChallengeId(userId, challengeId).isPresent();
+    public Boolean checkExistingChallengeApplication(User user, Long challengeId) {
+        if (Objects.isNull(user)) return null;
+        return challengeApplicationRepository.findChallengeApplicationIdByUserIdAndChallengeId(user.getId(), challengeId).isPresent();
     }
 
     public void validateChallengeDashboardAccessibleUser(Long challengeId, User user) {

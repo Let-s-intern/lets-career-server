@@ -10,9 +10,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface ContentsService {
-    void createContents(CreateContentsRequestDto createContentsRequestDto);
     ContentsAdminListResponseDto getAllContents(Pageable pageable);
-    void updateContents(Long contentsId, UpdateContentsRequestDto updateContentsRequestDto);
 
     ContentsAdminSimpleListResponseDto getAllSimpleContents(ContentsType contentsType);
+
+    void createContents(CreateContentsRequestDto createContentsRequestDto);
+
+    void updateContents(Long contentsId, UpdateContentsRequestDto updateContentsRequestDto);
+
+    void deleteContents(Long contentsId);
 }
