@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.letscareer.letscareer.domain.banner.entity.QProgramBanner.programBanner;
+import static org.letscareer.letscareer.domain.file.entity.QFile.file;
 
 @RequiredArgsConstructor
 public class ProgramBannerQueryRepositoryImpl implements ProgramBannerQueryRepository {
@@ -27,8 +28,9 @@ public class ProgramBannerQueryRepositoryImpl implements ProgramBannerQueryRepos
                         programBanner.endDate,
                         programBanner.isValid,
                         programBanner.isVisible,
-                        programBanner.imgUrl))
+                        file.url))
                 .from(programBanner)
+                .leftJoin(programBanner.file, file)
                 .orderBy(programBanner.id.desc())
                 .fetch();
     }
@@ -45,8 +47,9 @@ public class ProgramBannerQueryRepositoryImpl implements ProgramBannerQueryRepos
                                 programBanner.endDate,
                                 programBanner.isValid,
                                 programBanner.isVisible,
-                                programBanner.imgUrl))
+                                file.url))
                         .from(programBanner)
+                        .leftJoin(programBanner.file, file)
                         .where(
                                 eqBannerId(bannerId)
                         )

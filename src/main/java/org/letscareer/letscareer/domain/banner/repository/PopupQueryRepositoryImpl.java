@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.letscareer.letscareer.domain.banner.entity.QPopup.popup;
+import static org.letscareer.letscareer.domain.file.entity.QFile.file;
 
 @RequiredArgsConstructor
 public class PopupQueryRepositoryImpl implements PopupQueryRepository {
@@ -27,8 +28,9 @@ public class PopupQueryRepositoryImpl implements PopupQueryRepository {
                         popup.endDate,
                         popup.isValid,
                         popup.isVisible,
-                        popup.imgUrl))
+                        file.url))
                 .from(popup)
+                .leftJoin(popup.file, file)
                 .orderBy(popup.id.desc())
                 .fetch();
     }
@@ -45,8 +47,9 @@ public class PopupQueryRepositoryImpl implements PopupQueryRepository {
                             popup.endDate,
                             popup.isValid,
                             popup.isVisible,
-                            popup.imgUrl))
+                            file.url))
                         .from(popup)
+                        .leftJoin(popup.file, file)
                         .where(
                                 eqBannerId(bannerId)
                         )

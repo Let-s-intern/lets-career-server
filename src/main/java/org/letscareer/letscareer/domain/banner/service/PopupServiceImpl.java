@@ -12,10 +12,14 @@ import org.letscareer.letscareer.domain.banner.mapper.PopupMapper;
 import org.letscareer.letscareer.domain.banner.type.BannerType;
 import org.letscareer.letscareer.domain.banner.vo.BannerAdminDetailVo;
 import org.letscareer.letscareer.domain.banner.vo.BannerAdminVo;
+import org.letscareer.letscareer.domain.file.entity.File;
+import org.letscareer.letscareer.domain.file.helper.FileHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Transactional
@@ -24,10 +28,13 @@ public class PopupServiceImpl implements BannerService {
     private final PopupHelper popupHelper;
     private final PopupMapper popupMapper;
     private final BannerMapper bannerMapper;
+    private final FileHelper fileHelper;
+    private static final String POPUP_BANNER_S3_PATH = "banner/popup/";
 
     @Override
-    public void createBanner(BannerType type, CreateBannerRequestDto createBannerRequestDto) {
-        Popup newPopup = popupMapper.toEntity(type, createBannerRequestDto);
+    public void createBanner(BannerType type, CreateBannerRequestDto createBannerRequestDto, MultipartFile file) {
+        File newFile = fileHelper.createFileAndSave(POPUP_BANNER_S3_PATH, file);
+        Popup newPopup = popupMapper.toEntity(type, createBannerRequestDto, newFile);
         popupHelper.savePopup(newPopup);
     }
 
@@ -49,8 +56,9 @@ public class PopupServiceImpl implements BannerService {
     }
 
     @Override
-    public void updateBanner(Long bannerId, UpdateBannerRequestDto updateBannerRequestDto) {
+    public void updateBanner(Long bannerId, UpdateBannerRequestDto updateBannerRequestDto, MultipartFile file) {
         Popup popup = popupHelper.findByIdOrThrow(bannerId);
+        updateFile(popup, file);
         popup.updatePopup(updateBannerRequestDto);
     }
 
@@ -60,4 +68,10 @@ public class PopupServiceImpl implements BannerService {
         popupHelper.deletePopup(popup);
     }
 
+    private void updateFile(Popup popup, MultipartFile file) {
+        if (Objects.isNull(file)) return;
+        if (popup.getFile() != null) fileHelper.deleteFile(popup.getFile());
+        File newFile = fileHelper.createFileAndSave(POPUP_BANNER_S3_PATH, file);
+        popup.updateFile(newFile);
+    }
 }

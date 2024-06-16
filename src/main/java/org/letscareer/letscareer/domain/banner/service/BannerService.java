@@ -5,6 +5,7 @@ import org.letscareer.letscareer.domain.banner.dto.request.UpdateBannerRequestDt
 import org.letscareer.letscareer.domain.banner.dto.response.BannerDetailResponseDto;
 import org.letscareer.letscareer.domain.banner.dto.response.BannerListResponseDto;
 import org.letscareer.letscareer.domain.banner.type.BannerType;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface BannerService {
     BannerListResponseDto getBanners();
@@ -13,9 +14,9 @@ public interface BannerService {
 
     BannerDetailResponseDto getBannerDetail(Long bannerId);
 
-    void createBanner(BannerType type, CreateBannerRequestDto createBannerRequestDto);
+    void createBanner(BannerType type, CreateBannerRequestDto createBannerRequestDto, MultipartFile file);
 
-    void updateBanner(Long bannerId, UpdateBannerRequestDto updateBannerRequestDto);
+    void updateBanner(Long bannerId, UpdateBannerRequestDto updateBannerRequestDto, MultipartFile file);
 
     void deleteBanner(Long bannerId);
 }

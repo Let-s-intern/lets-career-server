@@ -13,10 +13,14 @@ import org.letscareer.letscareer.domain.banner.type.BannerType;
 import org.letscareer.letscareer.domain.banner.vo.BannerAdminDetailVo;
 import org.letscareer.letscareer.domain.banner.vo.BannerAdminVo;
 import org.letscareer.letscareer.domain.banner.vo.BannerUserVo;
+import org.letscareer.letscareer.domain.file.entity.File;
+import org.letscareer.letscareer.domain.file.helper.FileHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Transactional
@@ -25,10 +29,13 @@ public class MainBannerServiceImpl implements BannerService {
     private final MainBannerHelper mainBannerHelper;
     private final MainBannerMapper mainBannerMapper;
     private final BannerMapper bannerMapper;
+    private final FileHelper fileHelper;
+    private static final String MAIN_BANNER_S3_PATH = "banner/main/";
 
     @Override
-    public void createBanner(BannerType type, CreateBannerRequestDto createBannerRequestDto) {
-        MainBanner newMainBanner = mainBannerMapper.toEntity(type, createBannerRequestDto);
+    public void createBanner(BannerType type, CreateBannerRequestDto createBannerRequestDto, MultipartFile file) {
+        File newFile = fileHelper.createFileAndSave(MAIN_BANNER_S3_PATH, file);
+        MainBanner newMainBanner = mainBannerMapper.toEntity(type, createBannerRequestDto, newFile);
         mainBannerHelper.saveMainBanner(newMainBanner);
     }
 
@@ -51,8 +58,9 @@ public class MainBannerServiceImpl implements BannerService {
     }
 
     @Override
-    public void updateBanner(Long bannerId, UpdateBannerRequestDto updateBannerRequestDto) {
+    public void updateBanner(Long bannerId, UpdateBannerRequestDto updateBannerRequestDto, MultipartFile file) {
         MainBanner mainBanner = mainBannerHelper.findByIdOrThrow(bannerId);
+        updateFile(mainBanner, file);
         mainBanner.updateMainBanner(updateBannerRequestDto);
     }
 
@@ -62,4 +70,10 @@ public class MainBannerServiceImpl implements BannerService {
         mainBannerHelper.deleteMainBanner(mainBanner);
     }
 
+    private void updateFile(MainBanner mainBanner, MultipartFile file) {
+        if (Objects.isNull(file)) return;
+        if (mainBanner.getFile() != null) fileHelper.deleteFile(mainBanner.getFile());
+        File newFile = fileHelper.createFileAndSave(MAIN_BANNER_S3_PATH, file);
+        mainBanner.updateFile(newFile);
+    }
 }

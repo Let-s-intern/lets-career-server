@@ -15,6 +15,7 @@ import org.letscareer.letscareer.domain.banner.vo.BannerAdminVo;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/banner")
@@ -47,8 +48,9 @@ public class BannerV1Controller {
     })
     @PostMapping
     public ResponseEntity<SuccessResponse<?>> createBanner(@RequestParam(name = "type") final BannerType bannerType,
-                                                           @RequestBody final CreateBannerRequestDto createBannerRequestDto) {
-        bannerServiceFactory.getBannerService(bannerType).createBanner(bannerType, createBannerRequestDto);
+                                                           @RequestPart final CreateBannerRequestDto createBannerRequestDto,
+                                                           @RequestPart final MultipartFile file) {
+        bannerServiceFactory.getBannerService(bannerType).createBanner(bannerType, createBannerRequestDto, file);
         return SuccessResponse.created(null);
     }
 
@@ -58,8 +60,9 @@ public class BannerV1Controller {
     @PatchMapping("/{id}")
     public ResponseEntity<SuccessResponse<?>> updateBanner(@PathVariable(name = "id") final Long bannerId,
                                                            @RequestParam(name = "type") final BannerType bannerType,
-                                                           @RequestBody final UpdateBannerRequestDto updateBannerRequestDto) {
-        bannerServiceFactory.getBannerService(bannerType).updateBanner(bannerId, updateBannerRequestDto);
+                                                           @RequestPart final UpdateBannerRequestDto updateBannerRequestDto,
+                                                           @RequestPart final MultipartFile file) {
+        bannerServiceFactory.getBannerService(bannerType).updateBanner(bannerId, updateBannerRequestDto, file);
         return SuccessResponse.ok(null);
     }
 

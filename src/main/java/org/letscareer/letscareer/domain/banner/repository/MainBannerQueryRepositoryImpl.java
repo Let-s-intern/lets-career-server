@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.letscareer.letscareer.domain.banner.entity.QMainBanner.mainBanner;
+import static org.letscareer.letscareer.domain.file.entity.QFile.file;
 
 @RequiredArgsConstructor
 public class MainBannerQueryRepositoryImpl implements MainBannerQueryRepository {
@@ -29,8 +30,9 @@ public class MainBannerQueryRepositoryImpl implements MainBannerQueryRepository 
                         mainBanner.endDate,
                         mainBanner.isValid,
                         mainBanner.isVisible,
-                        mainBanner.imgUrl))
+                        file.url))
                 .from(mainBanner)
+                .leftJoin(mainBanner.file, file)
                 .orderBy(mainBanner.id.desc())
                 .fetch();
     }
@@ -45,8 +47,9 @@ public class MainBannerQueryRepositoryImpl implements MainBannerQueryRepository 
                         mainBanner.startDate,
                         mainBanner.endDate,
                         mainBanner.isValid,
-                        mainBanner.imgUrl))
+                        file.url))
                 .from(mainBanner)
+                .leftJoin(mainBanner.file, file)
                 .where(
                         isVisible(),
                         isWithinDateRange()
@@ -66,8 +69,9 @@ public class MainBannerQueryRepositoryImpl implements MainBannerQueryRepository 
                         mainBanner.endDate,
                         mainBanner.isValid,
                         mainBanner.isVisible,
-                        mainBanner.imgUrl))
+                        file.url))
                 .from(mainBanner)
+                .leftJoin(mainBanner.file, file)
                 .where(
                         eqBannerId(bannerId)
                 )
