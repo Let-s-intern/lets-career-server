@@ -187,6 +187,15 @@ public class ChallengeV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
+    @Operation(summary = "챌린지 대시보드 일정 및 미션 제출 현황", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeScheduleResponseDto.class)))
+    })
+    @GetMapping("/{id}/schedule")
+    public ResponseEntity<SuccessResponse<?>> getSchedule(@PathVariable(name = "id") final Long challengeId,
+                                                          @CurrentUser User user) {
+        final GetChallengeScheduleResponseDto responseDto = challengeService.getSchedule(challengeId, user.getId());
+        return SuccessResponse.ok(responseDto);
+    }
 
     @Operation(summary = "챌린지 대시보드 데일리 미션", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeDailyMissionResponseDto.class)))

@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.mission.repository;
 
 import org.letscareer.letscareer.domain.mission.vo.DailyMissionVo;
+import org.letscareer.letscareer.domain.mission.vo.MissionScheduleVo;
 import org.letscareer.letscareer.domain.mission.vo.MyDailyMissionVo;
 import org.letscareer.letscareer.domain.contents.type.ContentsType;
 import org.letscareer.letscareer.domain.contents.vo.ContentsMissionVo;
@@ -14,4 +15,5 @@ public interface MissionQueryRepository {
     Optional<DailyMissionVo> findDailyMissionVoByChallengeId(Long challengeId);
     Optional<MyDailyMissionVo> findMyDailyMissionVoByChallengeId(Long challengeId);
     List<ContentsMissionVo> findMissionContentsVos(Long missionId, ContentsType contentsType);
+    List<MissionScheduleVo> findMissionScheduleVosByChallengeIdAndUserId(Long challengeId, Long userId);
 }

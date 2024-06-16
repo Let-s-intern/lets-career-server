@@ -37,6 +37,7 @@ import org.letscareer.letscareer.domain.mission.dto.response.MissionApplicationS
 import org.letscareer.letscareer.domain.mission.helper.MissionHelper;
 import org.letscareer.letscareer.domain.mission.mapper.MissionMapper;
 import org.letscareer.letscareer.domain.mission.vo.DailyMissionVo;
+import org.letscareer.letscareer.domain.mission.vo.MissionScheduleVo;
 import org.letscareer.letscareer.domain.mission.vo.MyDailyMissionVo;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.payment.helper.PaymentHelper;
@@ -180,6 +181,12 @@ public class ChallengeServiceImpl implements ChallengeService {
     public GetChallengeTotalScoreResponseDto getTotalScore(Long challengeId, Long userId) {
         Integer totalScore = attendanceScoreHelper.getSumOfAttendanceScoreByChallengeIdAndUserId(challengeId, userId);
         return attendanceScoreMapper.toGetChallengeTotalScoreResponseDto(totalScore);
+    }
+
+    @Override
+    public GetChallengeScheduleResponseDto getSchedule(Long challengeId, Long userId) {
+        List<MissionScheduleVo> missionScheduleVoList = missionHelper.findMissionScheduleVosByChallengeIdAndUserId(challengeId, userId);
+        return missionMapper.toGetChallengeScheduleResponseDto(missionScheduleVoList);
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.mission.vo.DailyMissionVo;
+import org.letscareer.letscareer.domain.mission.vo.MissionScheduleVo;
 import org.letscareer.letscareer.domain.mission.vo.MyDailyMissionVo;
 import org.letscareer.letscareer.domain.contents.type.ContentsType;
 import org.letscareer.letscareer.domain.contents.vo.ContentsMissionVo;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static org.letscareer.letscareer.domain.attendance.entity.QAttendance.attendance;
 import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
 import static org.letscareer.letscareer.domain.contents.entity.QContents.contents;
 import static org.letscareer.letscareer.domain.mission.entity.QMission.mission;
@@ -108,6 +110,25 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
                         missionContents.mission.id.eq(missionIdPath),
                         missionContents.contentsType.eq(contentsType)
                 )
+                .fetch();
+    }
+
+    @Override
+    public List<MissionScheduleVo> findMissionScheduleVosByChallengeIdAndUserId(Long challengeId, Long userId) {
+        return queryFactory
+                .select(Projections.constructor(MissionScheduleVo.class,
+                        mission.id,
+                        mission.th,
+                        mission.startDate,
+                        mission.endDate,
+                        mission.missionStatusType,
+                        attendance))
+                .from(mission)
+                .leftJoin(mission.attendanceList, attendance)
+                .where(
+                        eqChallengeId(challengeId)
+                )
+                .orderBy(mission.th.asc())
                 .fetch();
     }
 

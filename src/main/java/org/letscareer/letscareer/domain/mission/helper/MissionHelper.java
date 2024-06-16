@@ -6,6 +6,7 @@ import org.letscareer.letscareer.domain.contents.vo.ContentsMissionVo;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.mission.repository.MissionRepository;
 import org.letscareer.letscareer.domain.mission.vo.DailyMissionVo;
+import org.letscareer.letscareer.domain.mission.vo.MissionScheduleVo;
 import org.letscareer.letscareer.domain.mission.vo.MyDailyMissionVo;
 import org.letscareer.letscareer.domain.mission.vo.MissionForChallengeVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
@@ -45,4 +46,7 @@ public class MissionHelper {
         return missionRepository.findMyDailyMissionVoByChallengeId(challengeId).orElse(null);
     }
 
+    public List<MissionScheduleVo> findMissionScheduleVosByChallengeIdAndUserId(Long challengeId, Long userId) {
+        return missionRepository.findMissionScheduleVosByChallengeIdAndUserId(challengeId, userId);
+    }
 }

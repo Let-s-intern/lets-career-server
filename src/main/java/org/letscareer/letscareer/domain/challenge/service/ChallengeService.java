@@ -46,6 +46,8 @@ public interface ChallengeService {
 
     GetChallengeTotalScoreResponseDto getTotalScore(Long challengeId, Long userId);
 
+    GetChallengeScheduleResponseDto getSchedule(Long challengeId, Long userId);
+
     GetChallengeDailyMissionResponseDto getDailyMission(Long challengeId, User user);
 
     GetChallengeMyDailyMissionResponseDto getDashboardDailyMission(Long challengeId, User user);
