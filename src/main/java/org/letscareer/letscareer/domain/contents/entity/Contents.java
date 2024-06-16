@@ -7,7 +7,6 @@ import org.letscareer.letscareer.domain.contents.dto.request.CreateContentsReque
 import org.letscareer.letscareer.domain.contents.dto.request.UpdateContentsRequestDto;
 import org.letscareer.letscareer.domain.contents.type.ContentsType;
 import org.letscareer.letscareer.domain.contents.type.converter.ContentsTypeConverter;
-import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.missioncontents.entity.MissionContents;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
@@ -22,24 +21,20 @@ import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUti
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Contents extends BaseTimeEntity {
-
     @Id
     @Column(name = "contents_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @NotNull
     @Convert(converter = ContentsTypeConverter.class)
     private ContentsType type;
-
     @NotNull
     private String title;
-
     @NotNull
     private String link;
 
     @Builder.Default
-    @OneToMany(mappedBy = "contents")
+    @OneToMany(mappedBy = "contents", cascade = CascadeType.ALL)
     private List<MissionContents> missionContentsList = new ArrayList<>();
 
     public static Contents createContents(CreateContentsRequestDto createContentsRequestDto) {

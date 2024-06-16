@@ -37,9 +37,7 @@ public class ContentsHelper {
         return contentsRepository.findAllContentsAdminSimpleVos(contentsType);
     }
 
-    public void updateContents(Long contentsId, UpdateContentsRequestDto updateContentsRequestDto) {
-        Contents contents = findContentsByIdOrThrow(contentsId);
-        contents.updateContents(updateContentsRequestDto);
+    public void deleteContentsById(Long contentsId) {
+        contentsRepository.deleteById(contentsId);
     }
-
 }

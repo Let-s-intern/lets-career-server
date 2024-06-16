@@ -45,7 +45,12 @@ public class ContentsServiceImpl implements ContentsService {
 
     @Override
     public void updateContents(Long contentsId, UpdateContentsRequestDto updateContentsRequestDto) {
-        contentsHelper.updateContents(contentsId, updateContentsRequestDto);
+        Contents contents = contentsHelper.findContentsByIdOrThrow(contentsId);
+        contents.updateContents(updateContentsRequestDto);
     }
 
+    @Override
+    public void deleteContents(Long contentsId) {
+        contentsHelper.deleteContentsById(contentsId);
+    }
 }

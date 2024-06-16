@@ -21,10 +21,10 @@ public class MissionContents {
     @Convert(converter = ContentsTypeConverter.class)
     private ContentsType contentsType;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mission_id")
     private Mission mission;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "contents_id")
     private Contents contents;
 

@@ -139,7 +139,7 @@ public class ChallengeV1Controller {
     @GetMapping("/{id}/applications/payback")
     public ResponseEntity<SuccessResponse<?>> getApplicationsScore(@PathVariable(name = "id") final Long challengeId,
                                                                    final Pageable pageable) {
-        GetChallengeApplicationsPaybackResponseDto responseDto = challengeService.getApplicationsScore(challengeId, pageable);
+        final GetChallengeApplicationsPaybackResponseDto responseDto = challengeService.getApplicationsScore(challengeId, pageable);
         return SuccessResponse.ok(responseDto);
     }
 
