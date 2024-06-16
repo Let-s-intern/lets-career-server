@@ -6,6 +6,8 @@ import org.letscareer.letscareer.domain.banner.error.BannerErrorCode;
 import org.letscareer.letscareer.domain.banner.repository.PopupRepository;
 import org.letscareer.letscareer.domain.banner.vo.BannerAdminDetailVo;
 import org.letscareer.letscareer.domain.banner.vo.BannerAdminVo;
+import org.letscareer.letscareer.domain.banner.vo.BannerUserVo;
+import org.letscareer.letscareer.domain.banner.vo.LineBannerUserVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -31,6 +33,10 @@ public class PopupHelper {
     public BannerAdminDetailVo findBannerAdminDetailVoOrThrow(Long bannerId) {
         return popupRepository.findBannerAdminDetailVo(bannerId)
                 .orElseThrow(() -> new EntityNotFoundException(BannerErrorCode.BANNER_NOT_FOUND));
+    }
+
+    public List<BannerUserVo> findAllPopBannerUserVos() {
+        return popupRepository.findAllPopBannerUserVos();
     }
 
     public void deletePopup(Popup popup) {
