@@ -55,6 +55,8 @@ public interface ChallengeService {
 
     GetChallengeMyMissionsResponseDto getMyMissions(Long challengeId, MissionQueryType queryType, User user);
 
+    GetChallengeMyMissionDetailResponseDto getMyMissionDetail(Long challengeId, Long missionId, User user);
+
     void createChallenge(CreateChallengeRequestDto createChallengeRequestDto);
 
     void updateChallenge(Long challengeId, UpdateChallengeRequestDto createChallengeRequestDto);
@@ -62,5 +64,4 @@ public interface ChallengeService {
     void updateApplicationsScore(Long challengeId, Long applicationId, UpdateChallengeApplicationPaybackRequestDto requestDto);
 
     void deleteChallenge(Long challengeId);
-
 }

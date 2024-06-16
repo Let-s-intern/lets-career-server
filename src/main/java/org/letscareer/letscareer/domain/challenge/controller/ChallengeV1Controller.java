@@ -229,6 +229,17 @@ public class ChallengeV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
+    @Operation(summary = "챌린지 나의 기록장 미션 상세 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeMyMissionDetailResponseDto.class)))
+    })
+    @GetMapping("/{challengeId}/missions/{missionId}")
+    public ResponseEntity<SuccessResponse<?>> getMyMissionDetail(@PathVariable final Long challengeId,
+                                                                 @PathVariable final Long missionId,
+                                                                 @CurrentUser User user) {
+        GetChallengeMyMissionDetailResponseDto responseDto = challengeService.getMyMissionDetail(challengeId, missionId, user);
+        return SuccessResponse.ok(responseDto);
+    }
+
     @Operation(summary = "[어드민] 챌린지 생성", responses = {
             @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
     })

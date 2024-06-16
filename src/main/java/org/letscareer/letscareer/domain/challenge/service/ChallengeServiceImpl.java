@@ -221,6 +221,13 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
+    public GetChallengeMyMissionDetailResponseDto getMyMissionDetail(Long challengeId, Long missionId, User user) {
+        challengeApplicationHelper.validateChallengeDashboardAccessibleUser(challengeId, user);
+        MyDailyMissionVo missionInfo = missionHelper.findMyDailyMissionVoByMissionId(missionId);
+        return missionMapper.toGetChallengeMyMissionDetailResponseDto(missionInfo);
+    }
+
+    @Override
     public void createChallenge(CreateChallengeRequestDto createChallengeRequestDto) {
         ZoomMeetingResponseDto zoomMeetingInfo = zoomUtils.createZoomMeeting(createChallengeRequestDto.title(), createChallengeRequestDto.startDate());
         Challenge challenge = challengeHelper.createChallengeAndSave(createChallengeRequestDto, zoomMeetingInfo);

@@ -2,10 +2,7 @@ package org.letscareer.letscareer.domain.mission.mapper;
 
 import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
 import org.letscareer.letscareer.domain.attendance.vo.AttendanceDashboardVo;
-import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeDailyMissionResponseDto;
-import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeMyDailyMissionResponseDto;
-import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeMyMissionsResponseDto;
-import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeScheduleResponseDto;
+import org.letscareer.letscareer.domain.challenge.dto.response.*;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challenge.vo.ChallengeScheduleVo;
 import org.letscareer.letscareer.domain.contents.vo.ContentsMissionVo;
@@ -62,5 +59,9 @@ public class MissionMapper {
 
     public GetChallengeMyMissionsResponseDto toGetChallengeMyMissionsResponseDto(List<?> missionVoList) {
         return GetChallengeMyMissionsResponseDto.of(missionVoList);
+    }
+
+    public GetChallengeMyMissionDetailResponseDto toGetChallengeMyMissionDetailResponseDto(MyDailyMissionVo missionInfo) {
+        return GetChallengeMyMissionDetailResponseDto.of(missionInfo);
     }
 }

@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.mission.repository;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -165,6 +166,29 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
                 )
                 .orderBy(mission.th.asc())
                 .fetch();
+    }
+
+    @Override
+    public Optional<MyDailyMissionVo> findMyDailyMissionVoByMissionId(Long missionId) {
+        return Optional.ofNullable(
+                queryFactory
+                        .select(Projections.constructor(MyDailyMissionVo.class,
+                                mission,
+                                missionTemplate.missionTag,
+                                missionTemplate.description,
+                                missionTemplate.guide,
+                                missionTemplate.templateLink))
+                        .from(mission)
+                        .leftJoin(mission.missionTemplate, missionTemplate)
+                        .where(
+                                eqMissionId(missionId)
+                        )
+                        .fetchFirst()
+        );
+    }
+
+    private BooleanExpression eqMissionId(Long missionId) {
+        return missionId != null ? mission.id.eq(missionId) : null;
     }
 
     private BooleanBuilder eqQueryType(MissionQueryType queryType) {

@@ -44,6 +44,11 @@ public class MissionHelper {
         return missionRepository.findMyDailyMissionVoByChallengeId(challengeId).orElse(null);
     }
 
+    public MyDailyMissionVo findMyDailyMissionVoByMissionId(Long missionId) {
+        return missionRepository.findMyDailyMissionVoByMissionId(missionId)
+                .orElseThrow(() -> new EntityNotFoundException(MISSION_NOT_FOUND));
+    }
+
     public List<MissionScheduleVo> findMissionScheduleVosByChallengeId(Long challengeId) {
         return missionRepository.findMissionScheduleVosByChallengeId(challengeId);
     }
