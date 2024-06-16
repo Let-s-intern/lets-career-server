@@ -1,16 +1,30 @@
 package org.letscareer.letscareer.domain.attendance.service;
 
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.application.helper.ChallengeApplicationHelper;
+import org.letscareer.letscareer.domain.attendance.dto.request.AttendanceCreateRequestDto;
 import org.letscareer.letscareer.domain.attendance.dto.request.AttendanceUpdateRequestDto;
 import org.letscareer.letscareer.domain.attendance.dto.response.AttendanceAdminListResponseDto;
 import org.letscareer.letscareer.domain.attendance.entity.Attendance;
 import org.letscareer.letscareer.domain.attendance.helper.AttendanceHelper;
 import org.letscareer.letscareer.domain.attendance.mapper.AttendanceMapper;
+import org.letscareer.letscareer.domain.attendance.type.AttendanceStatus;
 import org.letscareer.letscareer.domain.attendance.vo.AttendanceAdminVo;
+import org.letscareer.letscareer.domain.challenge.entity.Challenge;
+import org.letscareer.letscareer.domain.mission.entity.Mission;
+import org.letscareer.letscareer.domain.mission.helper.MissionHelper;
+import org.letscareer.letscareer.domain.score.entity.AttendanceScore;
+import org.letscareer.letscareer.domain.score.helper.AttendanceScoreHelper;
+import org.letscareer.letscareer.domain.user.entity.User;
+import org.letscareer.letscareer.domain.user.helper.UserHelper;
+import org.letscareer.letscareer.global.error.exception.InvalidValueException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
+
+import static org.letscareer.letscareer.domain.attendance.error.AttendanceErrorCode.ATTENDANCE_NOT_AVAILABLE_DATE;
 
 @RequiredArgsConstructor
 @Transactional
@@ -18,6 +32,23 @@ import java.util.List;
 public class AttendanceServiceImpl implements AttendanceService {
     private final AttendanceHelper attendanceHelper;
     private final AttendanceMapper attendanceMapper;
+    private final MissionHelper missionHelper;
+    private final ChallengeApplicationHelper challengeApplicationHelper;
+    private final UserHelper userHelper;
+    private final AttendanceScoreHelper attendanceScoreHelper;
+
+    @Override
+    public void createAttendance(Long missionId, AttendanceCreateRequestDto createRequestDto, Long userId) {
+        Mission mission = missionHelper.findMissionByIdOrThrow(missionId);
+        Challenge challenge = mission.getChallenge();
+        User user = userHelper.findUserByIdOrThrow(userId);
+        challengeApplicationHelper.validateChallengeDashboardAccessibleUser(challenge.getId(), user);
+        attendanceHelper.checkExistingAttendance(mission.getId(), user.getId());
+        AttendanceStatus status = getAttendanceStatus(mission.getStartDate(), mission.getEndDate(), challenge.getEndDate());
+        Attendance attendance = attendanceHelper.createAttendanceAndSave(mission, createRequestDto, status, user);
+        AttendanceScore attendanceScore = attendanceScoreHelper.createAttendanceScoreAndSave(status, mission.getMissionScore(), attendance);
+        attendance.setAttendanceScore(attendanceScore);
+    }
 
     @Override
     public AttendanceAdminListResponseDto getAttendancesOfChallenge(Long challengeId) {
@@ -29,5 +60,18 @@ public class AttendanceServiceImpl implements AttendanceService {
     public void updateAttendanceAdmin(Long attendanceId, AttendanceUpdateRequestDto attendanceUpdateRequestDto) {
         Attendance attendance = attendanceHelper.findAttendanceByIdOrThrow(attendanceId);
         attendance.updateAttendanceAdmin(attendanceUpdateRequestDto);
+    }
+
+    private AttendanceStatus getAttendanceStatus(LocalDateTime missionStartDate, LocalDateTime missionEndDate, LocalDateTime challengeEndDate) {
+        LocalDateTime now = LocalDateTime.now();
+        if(now.isBefore(missionStartDate)) {
+            throw new InvalidValueException(ATTENDANCE_NOT_AVAILABLE_DATE);
+        } else if(now.isBefore(missionEndDate)) {
+            return AttendanceStatus.PRESENT;
+        } else if(now.isBefore(challengeEndDate.plusDays(2))) {
+            return AttendanceStatus.LATE;
+        } else {
+            throw new InvalidValueException(ATTENDANCE_NOT_AVAILABLE_DATE);
+        }
     }
 }

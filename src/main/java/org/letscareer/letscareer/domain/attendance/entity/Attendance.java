@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.attendance.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.letscareer.letscareer.domain.attendance.dto.request.AttendanceCreateRequestDto;
 import org.letscareer.letscareer.domain.attendance.dto.request.AttendanceUpdateRequestDto;
 import org.letscareer.letscareer.domain.attendance.type.AttendanceResult;
 import org.letscareer.letscareer.domain.attendance.type.AttendanceStatus;
@@ -31,10 +32,10 @@ public class Attendance extends BaseTimeEntity {
     private String link;
     @Convert(converter = AttendanceStatusConverter.class)
     private AttendanceStatus status;
+    @Builder.Default
     @Convert(converter = AttendanceResultConverter.class)
-    private AttendanceResult result;
+    private AttendanceResult result = AttendanceResult.WAITING;
     private String comments;
-    private LocalDateTime sendDate;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "mission_id")
@@ -46,12 +47,23 @@ public class Attendance extends BaseTimeEntity {
     @JoinColumn(name = "score_id")
     private AttendanceScore attendanceScore;
 
+    public static Attendance createAttendance(Mission mission,
+                                              AttendanceCreateRequestDto createRequestDto,
+                                              AttendanceStatus status,
+                                              User user) {
+        return Attendance.builder()
+                .link(createRequestDto.link())
+                .status(status)
+                .mission(mission)
+                .user(user)
+                .build();
+    }
+
     public void updateAttendanceAdmin(AttendanceUpdateRequestDto attendanceUpdateRequestDto) {
         this.link = updateValue(this.link, attendanceUpdateRequestDto.link());
         this.status = updateValue(this.status, attendanceUpdateRequestDto.status());
         this.result = updateValue(this.result, attendanceUpdateRequestDto.result());
         this.comments = updateValue(this.comments, attendanceUpdateRequestDto.comments());
-        this.sendDate = LocalDateTime.now();
     }
 
     public void setAttendanceScore(AttendanceScore attendanceScore) {

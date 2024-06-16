@@ -56,15 +56,7 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
         return Optional.ofNullable(
                 queryFactory
                         .select(Projections.constructor(DailyMissionVo.class,
-                                mission.id,
-                                mission.th,
-                                mission.title,
-                                mission.type,
-                                mission.startDate,
-                                mission.endDate,
-//                                mission.essentialContentsList,
-//                                mission.additionalContentsList,
-                                mission.missionStatusType,
+                                mission,
                                 missionTemplate.missionTag,
                                 missionTemplate.description,
                                 missionTemplate.guide,
