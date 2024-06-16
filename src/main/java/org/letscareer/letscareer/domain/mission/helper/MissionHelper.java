@@ -1,6 +1,8 @@
 package org.letscareer.letscareer.domain.mission.helper;
 
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.contents.type.ContentsType;
+import org.letscareer.letscareer.domain.contents.vo.ContentsMissionVo;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.mission.repository.MissionRepository;
 import org.letscareer.letscareer.domain.mission.vo.MissionForChallengeVo;
@@ -23,6 +25,10 @@ public class MissionHelper {
     public Mission findMissionByIdOrThrow(Long missionId) {
         return missionRepository.findById(missionId)
                 .orElseThrow(() -> new EntityNotFoundException(MISSION_NOT_FOUND));
+    }
+
+    public List<ContentsMissionVo> findContentsMissionVos(Long missionId, ContentsType contentsType) {
+        return missionRepository.findMissionContentsVos(missionId, contentsType);
     }
 
     public void saveMission(Mission mission) {

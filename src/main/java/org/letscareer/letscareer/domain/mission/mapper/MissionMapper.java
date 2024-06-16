@@ -2,8 +2,10 @@ package org.letscareer.letscareer.domain.mission.mapper;
 
 import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
+import org.letscareer.letscareer.domain.contents.vo.ContentsMissionVo;
 import org.letscareer.letscareer.domain.mission.dto.request.CreateMissionRequestDto;
 import org.letscareer.letscareer.domain.mission.dto.response.MissionAdminListResponseDto;
+import org.letscareer.letscareer.domain.mission.dto.response.MissionAdminResponseDto;
 import org.letscareer.letscareer.domain.mission.dto.response.MissionApplicationScoreResponseDto;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.mission.vo.MissionForChallengeVo;
@@ -20,8 +22,14 @@ public class MissionMapper {
         return Mission.createMission(createMissionRequestDto, challenge, missionTemplate);
     }
 
-    public MissionAdminListResponseDto toMissionAdminListResponseDto(List<MissionForChallengeVo> missionForChallengeVos) {
-        return MissionAdminListResponseDto.of(missionForChallengeVos);
+    public MissionAdminListResponseDto toMissionAdminListResponseDto(List<MissionAdminResponseDto> missionAdminResponseDtoList) {
+        return MissionAdminListResponseDto.of(missionAdminResponseDtoList);
+    }
+
+    public MissionAdminResponseDto toMissionAdminResponseDto(MissionForChallengeVo vo,
+                                                             List<ContentsMissionVo> essentialContentsList,
+                                                             List<ContentsMissionVo> additionalContentsList) {
+        return MissionAdminResponseDto.of(vo, essentialContentsList, additionalContentsList);
     }
 
     public MissionApplicationScoreResponseDto toMissionApplicationScoreResponseDto(UserChallengeApplicationVo userChallengeApplicationVo,

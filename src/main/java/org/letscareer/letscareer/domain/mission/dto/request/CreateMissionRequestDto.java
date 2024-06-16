@@ -18,7 +18,6 @@ public record CreateMissionRequestDto(
         @NotNull LocalDate startDate,
         @NotNull Long missionTemplateId,
         List<Long> essentialContentsIdList,
-        List<Long> additionalContentsIdList,
-        List<Long> limitedContentsIdList
+        List<Long> additionalContentsIdList
 ) {
 }

@@ -36,7 +36,7 @@ public class MissionV1Controller {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = MissionAdminListResponseDto.class)))
     })
     @ApiErrorCode({SwaggerEnum.MISSION_NOT_FOUND})
-    @GetMapping("/admin/{id}")
+    @GetMapping("/{id}/admin")
     public ResponseEntity<SuccessResponse<?>> getMissionsForAdmin(@PathVariable(name = "id") Long challengeId) {
         MissionAdminListResponseDto responseDto = missionService.getMissionsForAdmin(challengeId);
         return SuccessResponse.ok(responseDto);
