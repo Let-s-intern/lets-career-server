@@ -1,9 +1,7 @@
 package org.letscareer.letscareer.domain.missiontemplate.dto.request;
 
-import org.letscareer.letscareer.domain.missiontemplate.type.MissionTemplateType;
-
 public record UpdateMissionTemplateRequestDto(
-        MissionTemplateType type,
+        String missionTag,
         String title,
         String description,
         String guide,

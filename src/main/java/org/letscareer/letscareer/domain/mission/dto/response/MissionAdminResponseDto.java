@@ -5,7 +5,6 @@ import lombok.Builder;
 import org.letscareer.letscareer.domain.contents.vo.ContentsMissionVo;
 import org.letscareer.letscareer.domain.mission.type.MissionStatusType;
 import org.letscareer.letscareer.domain.mission.vo.MissionForChallengeVo;
-import org.letscareer.letscareer.domain.missiontemplate.type.MissionTemplateType;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,7 +13,7 @@ import java.util.List;
 public record MissionAdminResponseDto(
         Long id,
         Integer th,
-        MissionTemplateType missionType,
+        String missionType,
         MissionStatusType missionStatusType,
         Integer attendanceCount,
         Integer lateAttendanceCount,
@@ -31,7 +30,7 @@ public record MissionAdminResponseDto(
         return MissionAdminResponseDto.builder()
                 .id(vo.id())
                 .th(vo.th())
-                .missionType(vo.missionType())
+                .missionType(vo.missionTag())
                 .missionStatusType(vo.missionStatusType())
                 .attendanceCount(vo.attendanceCount())
                 .lateAttendanceCount(vo.lateAttendanceCount())

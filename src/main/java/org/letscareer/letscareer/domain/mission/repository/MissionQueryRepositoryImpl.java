@@ -28,7 +28,7 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
                 .select(Projections.constructor(MissionForChallengeVo.class,
                         mission.id,
                         mission.th,
-                        missionTemplate.type,
+                        missionTemplate.missionTag,
                         mission.missionStatusType,
                         mission.attendanceCount,
                         mission.lateAttendanceCount,
