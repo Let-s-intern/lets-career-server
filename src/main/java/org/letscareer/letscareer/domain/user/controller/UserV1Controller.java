@@ -141,8 +141,8 @@ public class UserV1Controller {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @ApiErrorCode(SwaggerEnum.USER_NOT_FOUND)
-    @PatchMapping("/{email}")
-    public ResponseEntity<SuccessResponse<?>> updateUserForSign(@PathVariable String email,
+    @PatchMapping("/additional-info")
+    public ResponseEntity<SuccessResponse<?>> updateUserForSign(@RequestParam String email,
                                                                 @RequestBody final UpdateUserSignInfoRequestDto requestDto) {
         userService.updateUserForSign(email, requestDto);
         return SuccessResponse.ok(null);
