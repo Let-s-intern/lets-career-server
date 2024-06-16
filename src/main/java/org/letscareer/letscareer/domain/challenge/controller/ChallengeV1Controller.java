@@ -133,7 +133,7 @@ public class ChallengeV1Controller {
     }
 
     @Operation(summary = "[어드민] 챌린지 미션 참가자 패이백 목록", responses = {
-            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeApplicationsPaybackResponseDto.class)))
+            @ApiResponse(responseCode = "200", description = "[th:99] 운영진 점수", content = @Content(schema = @Schema(implementation = GetChallengeApplicationsPaybackResponseDto.class)))
     })
     @ApiErrorCode({SwaggerEnum.PAYMENT_NOT_FOUND})
     @GetMapping("/{id}/applications/payback")

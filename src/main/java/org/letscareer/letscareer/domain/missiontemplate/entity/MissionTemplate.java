@@ -22,25 +22,18 @@ import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUti
 @Table(name = "mission_template")
 @Entity
 public class MissionTemplate extends BaseTimeEntity {
-
     @Id
     @Column(name = "mission_template_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @NotNull
-    @Convert(converter = MissionTemplateTypeConverter.class)
-    private MissionTemplateType type;
-
+    private String missionTag;
     @NotNull
     private String title;
-
     @NotNull
     private String description;
-
     @NotNull
     private String guide;
-
     @NotNull
     private String templateLink;
 
@@ -50,7 +43,7 @@ public class MissionTemplate extends BaseTimeEntity {
 
     public static MissionTemplate createMissionTemplate(CreateMissionTemplateRequestDto createMissionTemplateRequestDto) {
         return MissionTemplate.builder()
-                .type(createMissionTemplateRequestDto.type())
+                .missionTag(createMissionTemplateRequestDto.missionTag())
                 .title(createMissionTemplateRequestDto.title())
                 .description(createMissionTemplateRequestDto.description())
                 .guide(createMissionTemplateRequestDto.guide())
@@ -59,7 +52,7 @@ public class MissionTemplate extends BaseTimeEntity {
     }
 
     public void updateMissionTemplate(UpdateMissionTemplateRequestDto updateMissionTemplateRequestDto) {
-        this.type = updateValue(this.type, updateMissionTemplateRequestDto.type());
+        this.missionTag = updateValue(this.missionTag, updateMissionTemplateRequestDto.missionTag());
         this.title = updateValue(this.title, updateMissionTemplateRequestDto.title());
         this.description = updateValue(this.description, updateMissionTemplateRequestDto.description());
         this.guide = updateValue(this.guide, updateMissionTemplateRequestDto.guide());

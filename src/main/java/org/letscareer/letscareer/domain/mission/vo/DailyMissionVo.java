@@ -4,7 +4,6 @@ import lombok.Builder;
 import org.letscareer.letscareer.domain.mission.type.MissionStatusType;
 import org.letscareer.letscareer.domain.mission.type.MissionType;
 import org.letscareer.letscareer.domain.missioncontents.entity.MissionContents;
-import org.letscareer.letscareer.domain.missiontemplate.type.MissionTemplateType;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,7 +19,7 @@ public record DailyMissionVo(
 //        List<MissionContents> essentialContentsList,
 //        List<MissionContents> additionalContentsList,
         MissionStatusType status,
-        MissionTemplateType missionTemplateType,
+        String missionTag,
         String description,
         String guide,
         String templateLink

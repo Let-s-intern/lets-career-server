@@ -38,6 +38,7 @@ public class Contents extends BaseTimeEntity {
     @NotNull
     private String link;
 
+    @Builder.Default
     @OneToMany(mappedBy = "contents")
     private List<MissionContents> missionContentsList = new ArrayList<>();
 

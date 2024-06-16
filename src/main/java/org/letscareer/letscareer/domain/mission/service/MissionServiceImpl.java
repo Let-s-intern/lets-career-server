@@ -8,6 +8,7 @@ import org.letscareer.letscareer.domain.contents.type.ContentsType;
 import org.letscareer.letscareer.domain.mission.dto.request.CreateMissionRequestDto;
 import org.letscareer.letscareer.domain.mission.dto.request.UpdateMissionRequestDto;
 import org.letscareer.letscareer.domain.mission.dto.response.MissionAdminListResponseDto;
+import org.letscareer.letscareer.domain.mission.dto.response.MissionAdminResponseDto;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.mission.helper.MissionHelper;
 import org.letscareer.letscareer.domain.mission.mapper.MissionMapper;
@@ -22,7 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional
@@ -50,7 +51,8 @@ public class MissionServiceImpl implements MissionService {
     @Override
     public MissionAdminListResponseDto getMissionsForAdmin(Long challengeId) {
         List<MissionForChallengeVo> missionForChallengeVos = missionHelper.findMissionForChallengeVos(challengeId);
-        return missionMapper.toMissionAdminListResponseDto(missionForChallengeVos);
+        List<MissionAdminResponseDto> missionAdminResponseDtoList = createMissionAdminResponseDtoList(missionForChallengeVos);
+        return missionMapper.toMissionAdminListResponseDto(missionAdminResponseDtoList);
     }
 
     @Override
@@ -63,15 +65,26 @@ public class MissionServiceImpl implements MissionService {
         missionScore.updateMissionScore(updateMissionRequestDto);
     }
 
+    private List<MissionAdminResponseDto> createMissionAdminResponseDtoList(List<MissionForChallengeVo> missionForChallengeVos) {
+        return missionForChallengeVos.stream()
+                .map(missionForChallengeVo ->
+                        missionMapper.toMissionAdminResponseDto(
+                                missionForChallengeVo,
+                                missionHelper.findContentsMissionVos(missionForChallengeVo.id(), ContentsType.ESSENTIAL),
+                                missionHelper.findContentsMissionVos(missionForChallengeVo.id(), ContentsType.ADDITIONAL)
+                        ))
+                .collect(Collectors.toList());
+    }
+
     private void updateMissionContents(Mission mission, ContentsType contentsType, List<Long> contentsIdList) {
-        if(contentsIdList == null || contentsIdList.isEmpty()) return;
+        if (contentsIdList == null || contentsIdList.isEmpty()) return;
         missionContentsHelper.deleteAllMissionContentsByMissionIdAndContentsType(mission.getId(), contentsType);
         mission.setInitMissionContentsList(contentsType);
         findContentsAndCreateMissionContents(contentsType, contentsIdList, mission);
     }
 
     private void findContentsAndCreateMissionContents(ContentsType contentsType, List<Long> contentsIdList, Mission mission) {
-        if(contentsIdList == null || contentsIdList.isEmpty()) return;
+        if (contentsIdList == null || contentsIdList.isEmpty()) return;
         List<MissionContents> missionContentsList = contentsIdList.stream()
                 .map(contentsId -> missionContentsHelper.createMissionContentsAndSave(mission, contentsHelper.findContentsByIdOrThrow(contentsId)))
                 .toList();
