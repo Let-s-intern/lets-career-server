@@ -111,6 +111,7 @@ public class User extends BaseTimeEntity {
                 .phoneNum(pwSignUpRequestDto.phoneNum())
                 .password(encodedPassword)
                 .marketingAgree(pwSignUpRequestDto.marketingAgree())
+                .inflowPath(pwSignUpRequestDto.inflowPath())
                 .build();
     }
 
