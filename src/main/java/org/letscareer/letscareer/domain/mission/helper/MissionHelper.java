@@ -5,10 +5,8 @@ import org.letscareer.letscareer.domain.contents.type.ContentsType;
 import org.letscareer.letscareer.domain.contents.vo.ContentsMissionVo;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.mission.repository.MissionRepository;
-import org.letscareer.letscareer.domain.mission.vo.DailyMissionVo;
-import org.letscareer.letscareer.domain.mission.vo.MissionScheduleVo;
-import org.letscareer.letscareer.domain.mission.vo.MyDailyMissionVo;
-import org.letscareer.letscareer.domain.mission.vo.MissionForChallengeVo;
+import org.letscareer.letscareer.domain.mission.type.MissionQueryType;
+import org.letscareer.letscareer.domain.mission.vo.*;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -48,5 +46,17 @@ public class MissionHelper {
 
     public List<MissionScheduleVo> findMissionScheduleVosByChallengeId(Long challengeId) {
         return missionRepository.findMissionScheduleVosByChallengeId(challengeId);
+    }
+
+    public List<?> findMyMissionVos(Long challengeId, MissionQueryType queryType, Long userId) {
+        switch (queryType) {
+            case SUBMITTED -> {
+                return missionRepository.findMySubmittedMissionVosByChallengeIdAndUserId(challengeId, userId);
+            }
+            case REMAINING, ABSENT -> {
+                return missionRepository.findMyMissionVosByChallengeIdAndUserId(challengeId, queryType, userId);
+            }
+        }
+        return null;
     }
 }

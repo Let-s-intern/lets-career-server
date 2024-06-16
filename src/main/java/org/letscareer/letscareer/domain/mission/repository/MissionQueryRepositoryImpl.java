@@ -1,21 +1,21 @@
 package org.letscareer.letscareer.domain.mission.repository;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.domain.mission.vo.DailyMissionVo;
-import org.letscareer.letscareer.domain.mission.vo.MissionScheduleVo;
-import org.letscareer.letscareer.domain.mission.vo.MyDailyMissionVo;
+import org.letscareer.letscareer.domain.mission.type.MissionQueryType;
+import org.letscareer.letscareer.domain.mission.vo.*;
 import org.letscareer.letscareer.domain.contents.type.ContentsType;
 import org.letscareer.letscareer.domain.contents.vo.ContentsMissionVo;
-import org.letscareer.letscareer.domain.mission.vo.MissionForChallengeVo;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static org.letscareer.letscareer.domain.attendance.entity.QAttendance.attendance;
 import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
 import static org.letscareer.letscareer.domain.contents.entity.QContents.contents;
 import static org.letscareer.letscareer.domain.mission.entity.QMission.mission;
@@ -127,6 +127,61 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
                 )
                 .orderBy(mission.th.asc())
                 .fetch();
+    }
+
+    @Override
+    public List<MySubmittedMissionVo> findMySubmittedMissionVosByChallengeIdAndUserId(Long challengeId, Long userId) {
+        return queryFactory
+                .select(Projections.constructor(MySubmittedMissionVo.class,
+                        mission.id,
+                        mission.th,
+                        mission.title,
+                        attendance.link,
+                        attendance.status,
+                        attendance.result))
+                .from(mission)
+                .leftJoin(mission.attendanceList, attendance)
+                .where(
+                        eqChallengeId(challengeId),
+                        isSubmitted(userId)
+                )
+                .orderBy(mission.th.asc())
+                .fetch();
+    }
+
+    @Override
+    public List<MyMissionVo> findMyMissionVosByChallengeIdAndUserId(Long challengeId, MissionQueryType queryType, Long userId) {
+        return queryFactory
+                .select(Projections.constructor(MyMissionVo.class,
+                        mission.id,
+                        mission.th,
+                        mission.title))
+                .from(mission)
+                .leftJoin(mission.attendanceList, attendance)
+                .on(isSubmitted(userId))
+                .where(
+                        eqChallengeId(challengeId),
+                        eqQueryType(queryType),
+                        attendance.isNull()
+                )
+                .orderBy(mission.th.asc())
+                .fetch();
+    }
+
+    private BooleanBuilder eqQueryType(MissionQueryType queryType) {
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        if(queryType != null) {
+            LocalDateTime now = LocalDateTime.now();
+            switch (queryType) {
+                case REMAINING -> booleanBuilder.and(mission.startDate.after(now));
+                case ABSENT -> booleanBuilder.and(mission.endDate.before(now));
+            }
+        }
+        return booleanBuilder;
+    }
+
+    private BooleanExpression isSubmitted(Long userId) {
+        return userId != null ? attendance.user.id.eq(userId).and(attendance.in(mission.attendanceList)) : null;
     }
 
     private BooleanExpression eqChallengeId(Long challengeId) {

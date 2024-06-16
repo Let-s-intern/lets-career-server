@@ -13,6 +13,7 @@ import org.letscareer.letscareer.domain.challenge.dto.response.*;
 import org.letscareer.letscareer.domain.challenge.service.ChallengeService;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.faq.dto.response.GetFaqResponseDto;
+import org.letscareer.letscareer.domain.mission.type.MissionQueryType;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.annotation.ApiErrorCode;
@@ -214,6 +215,17 @@ public class ChallengeV1Controller {
     public ResponseEntity<SuccessResponse<?>> getMyDailyMission(@PathVariable(name = "id") final Long challengeId,
                                                                 @CurrentUser User user) {
         final GetChallengeMyDailyMissionResponseDto responseDto = challengeService.getDashboardDailyMission(challengeId, user);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "챌린지 나의 기록장 미션 목록", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeMyMissionsResponseDto.class)))
+    })
+    @GetMapping("/{id}/missions")
+    public ResponseEntity<SuccessResponse<?>> getMyMissions(@PathVariable(name = "id") final Long challengeId,
+                                                            @RequestParam(name = "type") final MissionQueryType queryType,
+                                                            @CurrentUser User user) {
+        GetChallengeMyMissionsResponseDto responseDto = challengeService.getMyMissions(challengeId, queryType, user);
         return SuccessResponse.ok(responseDto);
     }
 

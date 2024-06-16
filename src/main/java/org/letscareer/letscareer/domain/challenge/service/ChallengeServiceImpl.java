@@ -36,9 +36,11 @@ import org.letscareer.letscareer.domain.faq.vo.FaqDetailVo;
 import org.letscareer.letscareer.domain.mission.dto.response.MissionApplicationScoreResponseDto;
 import org.letscareer.letscareer.domain.mission.helper.MissionHelper;
 import org.letscareer.letscareer.domain.mission.mapper.MissionMapper;
+import org.letscareer.letscareer.domain.mission.type.MissionQueryType;
 import org.letscareer.letscareer.domain.mission.vo.DailyMissionVo;
 import org.letscareer.letscareer.domain.mission.vo.MissionScheduleVo;
 import org.letscareer.letscareer.domain.mission.vo.MyDailyMissionVo;
+import org.letscareer.letscareer.domain.mission.vo.MyMissionVo;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.payment.helper.PaymentHelper;
 import org.letscareer.letscareer.domain.price.dto.request.CreateChallengePriceRequestDto;
@@ -209,6 +211,13 @@ public class ChallengeServiceImpl implements ChallengeService {
         MyDailyMissionVo myDailyMissionVo = missionHelper.findMyDailyMissionVoOrNull(challenge.getId());
         AttendanceDashboardVo attendanceDashboardVo = attendanceHelper.findAttendanceDashboardVoOrNull(myDailyMissionVo.id(), user.getId());
         return missionMapper.toGetChallengeMyDailyMissionResponseDto(myDailyMissionVo, attendanceDashboardVo);
+    }
+
+    @Override
+    public GetChallengeMyMissionsResponseDto getMyMissions(Long challengeId, MissionQueryType queryType, User user) {
+        challengeApplicationHelper.validateChallengeDashboardAccessibleUser(challengeId, user);
+        List<?> missionVoList = missionHelper.findMyMissionVos(challengeId, queryType, user.getId());
+        return missionMapper.toGetChallengeMyMissionsResponseDto(missionVoList);
     }
 
     @Override

@@ -7,6 +7,7 @@ import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeReq
 import org.letscareer.letscareer.domain.challenge.dto.response.*;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.faq.dto.response.GetFaqResponseDto;
+import org.letscareer.letscareer.domain.mission.type.MissionQueryType;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.data.domain.Pageable;
@@ -52,6 +53,8 @@ public interface ChallengeService {
 
     GetChallengeMyDailyMissionResponseDto getDashboardDailyMission(Long challengeId, User user);
 
+    GetChallengeMyMissionsResponseDto getMyMissions(Long challengeId, MissionQueryType queryType, User user);
+
     void createChallenge(CreateChallengeRequestDto createChallengeRequestDto);
 
     void updateChallenge(Long challengeId, UpdateChallengeRequestDto createChallengeRequestDto);
@@ -59,4 +62,5 @@ public interface ChallengeService {
     void updateApplicationsScore(Long challengeId, Long applicationId, UpdateChallengeApplicationPaybackRequestDto requestDto);
 
     void deleteChallenge(Long challengeId);
+
 }
