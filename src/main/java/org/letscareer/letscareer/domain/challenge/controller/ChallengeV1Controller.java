@@ -232,6 +232,7 @@ public class ChallengeV1Controller {
     @Operation(summary = "챌린지 나의 기록장 미션 상세 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeMyMissionDetailResponseDto.class)))
     })
+    @ApiErrorCode({SwaggerEnum.MISSION_NOT_FOUND})
     @GetMapping("/{challengeId}/missions/{missionId}")
     public ResponseEntity<SuccessResponse<?>> getMyMissionDetail(@PathVariable final Long challengeId,
                                                                  @PathVariable final Long missionId,

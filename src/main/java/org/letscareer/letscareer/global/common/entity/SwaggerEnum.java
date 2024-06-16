@@ -23,6 +23,8 @@ import org.letscareer.letscareer.global.error.GlobalErrorCode;
 public enum SwaggerEnum {
     // attendance
     ATTENDANCE_NOT_FOUND(AttendanceErrorCode.ATTENDANCE_NOT_FOUND),
+    CONFLICT_ATTENDANCE(AttendanceErrorCode.CONFLICT_ATTENDANCE),
+    ATTENDANCE_NOT_AVAILABLE_DATE(AttendanceErrorCode.ATTENDANCE_NOT_AVAILABLE_DATE),
 
     // application
     CONFLICT_APPLICATION(ApplicationErrorCode.CONFLICT_APPLICATION),
