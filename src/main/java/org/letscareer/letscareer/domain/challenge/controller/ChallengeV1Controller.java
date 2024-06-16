@@ -154,7 +154,7 @@ public class ChallengeV1Controller {
     @GetMapping("/{challengeId}/mission/{missionId}/attendances")
     public ResponseEntity<SuccessResponse<?>> getMissionAttendances(@PathVariable final Long challengeId,
                                                                     @PathVariable final Long missionId) {
-        GetChallengeMissionAttendancesResponseDto responseDto = challengeService.getMissionAttendances(challengeId, missionId);
+        final GetChallengeMissionAttendancesResponseDto responseDto = challengeService.getMissionAttendances(challengeId, missionId);
         return SuccessResponse.ok(responseDto);
     }
 

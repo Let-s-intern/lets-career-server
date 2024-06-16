@@ -31,77 +31,59 @@ import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUti
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PRIVATE)
 public class User extends BaseTimeEntity {
-
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @NotNull
     @Column(length = 30)
     private String email;
-
     @Nullable
     @Column(length = 30)
     private String contactEmail;
-
     @Nullable
     @JsonIgnore
     private String password;
-
     @NotNull
     @Column(length = 10)
     private String name;
-
     @NotNull
     @Column(length = 20)
     private String phoneNum;
-
     @Nullable
     @Column(length = 30)
     private String university;
-
     @Nullable
     @Column(length = 30)
     private String major;
-
     @Nullable
     @Convert(converter = UserGradeConverter.class)
     private UserGrade grade;
-
     @Nullable
     @Column(length = 30)
     private String wishJob;
-
     @Nullable
     @Column(length = 30)
     private String wishCompany;
-
     @Nullable
     @Column(length = 30)
     private String inflowPath;
-
     @NotNull
     @Builder.Default
     private Boolean marketingAgree = false;
-
     @Nullable
     @Convert(converter = AuthProviderConverter.class)
     private AuthProvider authProvider;
-
     @NotNull
     @Builder.Default
     @Convert(converter = UserRoleConverter.class)
     private UserRole role = UserRole.USER;
-
     @Nullable
     @Convert(converter = AccountTypeConverter.class)
     private AccountType accountType;
-
     @Nullable
     @Column(length = 30)
     private String accountNum;
-
     @Nullable
     @Column(length = 30)
     private String accountOwner;
