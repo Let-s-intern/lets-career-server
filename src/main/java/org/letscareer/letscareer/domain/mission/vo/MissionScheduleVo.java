@@ -1,17 +1,14 @@
 package org.letscareer.letscareer.domain.mission.vo;
 
-import lombok.Builder;
+import org.letscareer.letscareer.domain.mission.type.MissionStatusType;
 
 import java.time.LocalDateTime;
 
-@Builder
-public record DailyMissionVo(
+public record MissionScheduleVo(
         Long id,
         Integer th,
-        String title,
         LocalDateTime startDate,
         LocalDateTime endDate,
-        String missionTag,
-        String description
+        MissionStatusType status
 ) {
 }

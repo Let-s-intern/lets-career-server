@@ -37,6 +37,26 @@ public class AttendanceScoreQueryRepositoryImpl implements AttendanceScoreQueryR
         );
     }
 
+    @Override
+    public Optional<Integer> getSumOfAttendanceScoreByChallengeIdAndUserId(Long challengeId, Long userId) {
+        return Optional.ofNullable(queryFactory
+                .select(attendanceScore.score.sum())
+                .from(attendanceScore)
+                .leftJoin(attendanceScore.attendance, attendance)
+                .leftJoin(attendance.mission, mission)
+                .leftJoin(mission.challenge, challenge)
+                .leftJoin(attendance.user, user)
+                .where(
+                        eqChallengeId(challengeId),
+                        eqUserId(userId)
+                )
+                .fetchFirst());
+    }
+
+    private BooleanExpression eqUserId(Long userId) {
+        return userId != null ? user.id.eq(userId) : null;
+    }
+
     private BooleanExpression eqChallengeId(Long challengeId) {
         return challengeId != null ? challenge.id.eq(challengeId) : null;
     }

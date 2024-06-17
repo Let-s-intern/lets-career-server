@@ -7,7 +7,7 @@ import org.letscareer.letscareer.domain.attendance.error.AttendanceErrorCode;
 import org.letscareer.letscareer.domain.attendance.repository.AttendanceRepository;
 import org.letscareer.letscareer.domain.attendance.type.AttendanceStatus;
 import org.letscareer.letscareer.domain.attendance.vo.AttendanceAdminVo;
-import org.letscareer.letscareer.domain.attendance.vo.AttendanceDailyMissionVo;
+import org.letscareer.letscareer.domain.attendance.vo.AttendanceDashboardVo;
 import org.letscareer.letscareer.domain.attendance.vo.AttendanceScoreVo;
 import org.letscareer.letscareer.domain.attendance.vo.MissionAttendanceVo;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
@@ -18,7 +18,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import static org.letscareer.letscareer.domain.attendance.error.AttendanceErrorCode.CONFLICT_ATTENDANCE;
 
@@ -44,10 +43,10 @@ public class AttendanceHelper {
         return attendanceRepository.findMissionAttendanceVo(challengeId, missionId);
     }
 
-    public AttendanceDailyMissionVo findAttendanceDailyMissionVoOrNull(Long missionId, Long userId) {
-        AttendanceDailyMissionVo attendanceDailyMissionVo = attendanceRepository.findAttendanceDailyMissionVo(missionId, userId);
-        if(Objects.isNull(attendanceDailyMissionVo)) return new AttendanceDailyMissionVo(null);
-        return attendanceDailyMissionVo;
+    public AttendanceDashboardVo findAttendanceDashboardVoOrNull(Long missionId, Long userId) {
+        AttendanceDashboardVo attendanceDashboardVo = attendanceRepository.findAttendanceDashboardVo(missionId, userId);
+        if(Objects.isNull(attendanceDashboardVo)) return new AttendanceDashboardVo(null);
+        return attendanceDashboardVo;
     }
 
     public void checkExistingAttendance(Long missionId, Long userId) {
@@ -59,5 +58,9 @@ public class AttendanceHelper {
     public Attendance createAttendanceAndSave(Mission mission, AttendanceCreateRequestDto createRequestDto, AttendanceStatus status, User user) {
         Attendance newAttendance = Attendance.createAttendance(mission, createRequestDto, status, user);
         return attendanceRepository.save(newAttendance);
+    }
+
+    public Attendance findAttendanceByMissionIdAndUserIdOrNull(Long missionId, Long userId) {
+        return attendanceRepository.findAttendanceByMissionIdAndUserId(missionId, userId).orElse(null);
     }
 }

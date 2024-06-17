@@ -1,6 +1,5 @@
 package org.letscareer.letscareer.domain.attendance.repository;
 
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
@@ -10,7 +9,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.attendance.type.AttendanceResult;
 import org.letscareer.letscareer.domain.attendance.vo.AttendanceAdminVo;
-import org.letscareer.letscareer.domain.attendance.vo.AttendanceDailyMissionVo;
+import org.letscareer.letscareer.domain.attendance.vo.AttendanceDashboardVo;
 import org.letscareer.letscareer.domain.attendance.vo.AttendanceScoreVo;
 import org.letscareer.letscareer.domain.attendance.vo.MissionAttendanceVo;
 
@@ -122,9 +121,9 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
     }
 
     @Override
-    public AttendanceDailyMissionVo findAttendanceDailyMissionVo(Long missionId, Long userId) {
+    public AttendanceDashboardVo findAttendanceDashboardVo(Long missionId, Long userId) {
         return queryFactory
-                .select(Projections.constructor(AttendanceDailyMissionVo.class,
+                .select(Projections.constructor(AttendanceDashboardVo.class,
                         attendance))
                 .from(attendance)
                 .leftJoin(attendance.mission, mission)

@@ -48,6 +48,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         Attendance attendance = attendanceHelper.createAttendanceAndSave(mission, createRequestDto, status, user);
         AttendanceScore attendanceScore = attendanceScoreHelper.createAttendanceScoreAndSave(status, mission.getMissionScore(), attendance);
         attendance.setAttendanceScore(attendanceScore);
+        mission.updateAttendanceCount(status);
     }
 
     @Override

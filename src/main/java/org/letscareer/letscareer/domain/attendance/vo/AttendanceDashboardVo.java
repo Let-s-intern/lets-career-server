@@ -4,14 +4,14 @@ import org.letscareer.letscareer.domain.attendance.entity.Attendance;
 import org.letscareer.letscareer.domain.attendance.type.AttendanceResult;
 import org.letscareer.letscareer.domain.attendance.type.AttendanceStatus;
 
-public record AttendanceDailyMissionVo(
+public record AttendanceDashboardVo(
         Boolean submitted,
         Long id,
         String link,
         AttendanceStatus status,
         AttendanceResult result
 ) {
-    public AttendanceDailyMissionVo(Attendance attendance) {
+    public AttendanceDashboardVo(Attendance attendance) {
         this(
                 (attendance != null),
                 (attendance != null) ? attendance.getId() : null,

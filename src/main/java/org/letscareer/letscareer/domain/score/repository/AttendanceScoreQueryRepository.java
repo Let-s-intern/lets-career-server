@@ -6,4 +6,6 @@ import java.util.Optional;
 
 public interface AttendanceScoreQueryRepository {
     Optional<AttendanceScore> findAttendanceScoreByChallengeIdAndApplicationId(Long challengeId, Long applicationId);
+
+    Optional<Integer> getSumOfAttendanceScoreByChallengeIdAndUserId(Long challengeId, Long userId);
 }

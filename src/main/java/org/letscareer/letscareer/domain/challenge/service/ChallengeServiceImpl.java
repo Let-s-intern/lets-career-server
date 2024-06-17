@@ -8,7 +8,7 @@ import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplication
 import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
 import org.letscareer.letscareer.domain.attendance.helper.AttendanceHelper;
 import org.letscareer.letscareer.domain.attendance.mapper.AttendanceMapper;
-import org.letscareer.letscareer.domain.attendance.vo.AttendanceDailyMissionVo;
+import org.letscareer.letscareer.domain.attendance.vo.AttendanceDashboardVo;
 import org.letscareer.letscareer.domain.attendance.vo.AttendanceScoreVo;
 import org.letscareer.letscareer.domain.attendance.vo.MissionAttendanceVo;
 import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeRequestDto;
@@ -36,8 +36,11 @@ import org.letscareer.letscareer.domain.faq.vo.FaqDetailVo;
 import org.letscareer.letscareer.domain.mission.dto.response.MissionApplicationScoreResponseDto;
 import org.letscareer.letscareer.domain.mission.helper.MissionHelper;
 import org.letscareer.letscareer.domain.mission.mapper.MissionMapper;
+import org.letscareer.letscareer.domain.mission.type.MissionQueryType;
 import org.letscareer.letscareer.domain.mission.vo.DailyMissionVo;
+import org.letscareer.letscareer.domain.mission.vo.MissionScheduleVo;
 import org.letscareer.letscareer.domain.mission.vo.MyDailyMissionVo;
+import org.letscareer.letscareer.domain.mission.vo.MyMissionVo;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.payment.helper.PaymentHelper;
 import org.letscareer.letscareer.domain.price.dto.request.CreateChallengePriceRequestDto;
@@ -50,6 +53,7 @@ import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
 import org.letscareer.letscareer.domain.review.vo.ReviewVo;
 import org.letscareer.letscareer.domain.score.entity.AttendanceScore;
 import org.letscareer.letscareer.domain.score.helper.AttendanceScoreHelper;
+import org.letscareer.letscareer.domain.score.mapper.AttendanceScoreMapper;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.utils.ZoomUtils;
 import org.springframework.data.domain.Page;
@@ -76,6 +80,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final ChallengeGuideHelper challengeGuideHelper;
     private final ChallengeNoticeHelper challengeNoticeHelper;
     private final AttendanceScoreHelper attendanceScoreHelper;
+    private final AttendanceScoreMapper attendanceScoreMapper;
     private final AttendanceHelper attendanceHelper;
     private final AttendanceMapper attendanceMapper;
     private final PaymentHelper paymentHelper;
@@ -175,6 +180,23 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
+    public GetChallengeTotalScoreResponseDto getTotalScore(Long challengeId, Long userId) {
+        Integer totalScore = attendanceScoreHelper.getSumOfAttendanceScoreByChallengeIdAndUserId(challengeId, userId);
+        return attendanceScoreMapper.toGetChallengeTotalScoreResponseDto(totalScore);
+    }
+
+    @Override
+    public GetChallengeScheduleResponseDto getSchedule(Long challengeId, Long userId) {
+        List<MissionScheduleVo> missionScheduleVoList = missionHelper.findMissionScheduleVosByChallengeId(challengeId);
+        List<ChallengeScheduleVo> challengeScheduleVoList = missionScheduleVoList.stream()
+                .map(missionScheduleVo -> new ChallengeScheduleVo(
+                        missionScheduleVo,
+                        attendanceHelper.findAttendanceDashboardVoOrNull(missionScheduleVo.id(), userId))
+                ).toList();
+        return missionMapper.toGetChallengeScheduleResponseDto(challengeScheduleVoList);
+    }
+
+    @Override
     public GetChallengeDailyMissionResponseDto getDailyMission(Long challengeId, User user) {
         challengeApplicationHelper.validateChallengeDashboardAccessibleUser(challengeId, user);
         Challenge challenge = challengeHelper.findChallengeByIdOrThrow(challengeId);
@@ -187,8 +209,22 @@ public class ChallengeServiceImpl implements ChallengeService {
         challengeApplicationHelper.validateChallengeDashboardAccessibleUser(challengeId, user);
         Challenge challenge = challengeHelper.findChallengeByIdOrThrow(challengeId);
         MyDailyMissionVo myDailyMissionVo = missionHelper.findMyDailyMissionVoOrNull(challenge.getId());
-        AttendanceDailyMissionVo attendanceVo = attendanceHelper.findAttendanceDailyMissionVoOrNull(myDailyMissionVo.id(), user.getId());
-        return missionMapper.toGetChallengeMyDailyMissionResponseDto(myDailyMissionVo, attendanceVo);
+        AttendanceDashboardVo attendanceDashboardVo = attendanceHelper.findAttendanceDashboardVoOrNull(myDailyMissionVo.id(), user.getId());
+        return missionMapper.toGetChallengeMyDailyMissionResponseDto(myDailyMissionVo, attendanceDashboardVo);
+    }
+
+    @Override
+    public GetChallengeMyMissionsResponseDto getMyMissions(Long challengeId, MissionQueryType queryType, User user) {
+        challengeApplicationHelper.validateChallengeDashboardAccessibleUser(challengeId, user);
+        List<?> missionVoList = missionHelper.findMyMissionVos(challengeId, queryType, user.getId());
+        return missionMapper.toGetChallengeMyMissionsResponseDto(missionVoList);
+    }
+
+    @Override
+    public GetChallengeMyMissionDetailResponseDto getMyMissionDetail(Long challengeId, Long missionId, User user) {
+        challengeApplicationHelper.validateChallengeDashboardAccessibleUser(challengeId, user);
+        MyDailyMissionVo missionInfo = missionHelper.findMyDailyMissionVoByMissionId(missionId);
+        return missionMapper.toGetChallengeMyMissionDetailResponseDto(missionInfo);
     }
 
     @Override

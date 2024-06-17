@@ -10,8 +10,10 @@ import org.letscareer.letscareer.domain.attendance.dto.request.AttendanceUpdateR
 import org.letscareer.letscareer.domain.attendance.dto.response.AttendanceAdminListResponseDto;
 import org.letscareer.letscareer.domain.attendance.service.AttendanceService;
 import org.letscareer.letscareer.domain.user.entity.User;
+import org.letscareer.letscareer.global.common.annotation.ApiErrorCode;
 import org.letscareer.letscareer.global.common.annotation.CurrentUser;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
+import org.letscareer.letscareer.global.common.entity.SwaggerEnum;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +26,7 @@ public class AttendanceV1Controller {
     @Operation(summary = "출석 생성", responses = {
             @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
     })
+    @ApiErrorCode({SwaggerEnum.APPLICATION_NOT_FOUND, SwaggerEnum.CONFLICT_ATTENDANCE, SwaggerEnum.ATTENDANCE_NOT_AVAILABLE_DATE})
     @PostMapping("/{id}")
     public ResponseEntity<SuccessResponse<?>> createAttendance(@PathVariable(name = "id") final Long missionId,
                                                                @RequestBody AttendanceCreateRequestDto attendanceCreateRequestDto,

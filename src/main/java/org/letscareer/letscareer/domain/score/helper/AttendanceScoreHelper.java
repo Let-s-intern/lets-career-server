@@ -31,4 +31,8 @@ public class AttendanceScoreHelper {
         AttendanceScore newAttendanceScore = AttendanceScore.creatAttendanceScore(score, attendance);
         return attendanceScoreRepository.save(newAttendanceScore);
     }
+
+    public Integer getSumOfAttendanceScoreByChallengeIdAndUserId(Long challengeId, Long userId) {
+        return attendanceScoreRepository.getSumOfAttendanceScoreByChallengeIdAndUserId(challengeId, userId).orElse(0);
+    }
 }

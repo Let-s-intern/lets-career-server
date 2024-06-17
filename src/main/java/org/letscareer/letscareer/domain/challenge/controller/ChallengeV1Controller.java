@@ -13,6 +13,7 @@ import org.letscareer.letscareer.domain.challenge.dto.response.*;
 import org.letscareer.letscareer.domain.challenge.service.ChallengeService;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.faq.dto.response.GetFaqResponseDto;
+import org.letscareer.letscareer.domain.mission.type.MissionQueryType;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.annotation.ApiErrorCode;
@@ -177,6 +178,26 @@ public class ChallengeV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
+    @Operation(summary = "챌린지 대시보드 미션 점수 현황", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeTotalScoreResponseDto.class)))
+    })
+    @GetMapping("/{id}/score")
+    public ResponseEntity<SuccessResponse<?>> getTotalScore(@PathVariable(name = "id") final Long challengeId,
+                                                            @CurrentUser User user) {
+        final GetChallengeTotalScoreResponseDto responseDto = challengeService.getTotalScore(challengeId, user.getId());
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "챌린지 대시보드 일정 및 미션 제출 현황", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeScheduleResponseDto.class)))
+    })
+    @GetMapping("/{id}/schedule")
+    public ResponseEntity<SuccessResponse<?>> getSchedule(@PathVariable(name = "id") final Long challengeId,
+                                                          @CurrentUser User user) {
+        final GetChallengeScheduleResponseDto responseDto = challengeService.getSchedule(challengeId, user.getId());
+        return SuccessResponse.ok(responseDto);
+    }
+
     @Operation(summary = "챌린지 대시보드 데일리 미션", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeDailyMissionResponseDto.class)))
     })
@@ -192,8 +213,31 @@ public class ChallengeV1Controller {
     })
     @GetMapping("/{id}/my/daily-mission")
     public ResponseEntity<SuccessResponse<?>> getMyDailyMission(@PathVariable(name = "id") final Long challengeId,
-                                                                         @CurrentUser User user) {
+                                                                @CurrentUser User user) {
         final GetChallengeMyDailyMissionResponseDto responseDto = challengeService.getDashboardDailyMission(challengeId, user);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "챌린지 나의 기록장 미션 목록", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeMyMissionsResponseDto.class)))
+    })
+    @GetMapping("/{id}/missions")
+    public ResponseEntity<SuccessResponse<?>> getMyMissions(@PathVariable(name = "id") final Long challengeId,
+                                                            @RequestParam(name = "type") final MissionQueryType queryType,
+                                                            @CurrentUser User user) {
+        GetChallengeMyMissionsResponseDto responseDto = challengeService.getMyMissions(challengeId, queryType, user);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "챌린지 나의 기록장 미션 상세 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeMyMissionDetailResponseDto.class)))
+    })
+    @ApiErrorCode({SwaggerEnum.MISSION_NOT_FOUND})
+    @GetMapping("/{challengeId}/missions/{missionId}")
+    public ResponseEntity<SuccessResponse<?>> getMyMissionDetail(@PathVariable final Long challengeId,
+                                                                 @PathVariable final Long missionId,
+                                                                 @CurrentUser User user) {
+        GetChallengeMyMissionDetailResponseDto responseDto = challengeService.getMyMissionDetail(challengeId, missionId, user);
         return SuccessResponse.ok(responseDto);
     }
 
