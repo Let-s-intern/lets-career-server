@@ -12,5 +12,5 @@ public interface AttendanceService {
 
     AttendanceAdminListResponseDto getAttendancesOfChallenge(Long challengeId);
 
-    void updateAttendanceAdmin(Long attendanceId, AttendanceUpdateRequestDto attendanceUpdateRequestDto);
+    void updateAttendance(Long attendanceId, AttendanceUpdateRequestDto attendanceUpdateRequestDto, User user);
 }

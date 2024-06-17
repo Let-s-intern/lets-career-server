@@ -17,7 +17,9 @@ import org.letscareer.letscareer.domain.score.entity.AttendanceScore;
 import org.letscareer.letscareer.domain.score.helper.AttendanceScoreHelper;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.helper.UserHelper;
+import org.letscareer.letscareer.domain.user.type.UserRole;
 import org.letscareer.letscareer.global.error.exception.InvalidValueException;
+import org.letscareer.letscareer.global.error.exception.UnauthorizedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.letscareer.letscareer.domain.attendance.error.AttendanceErrorCode.ATTENDANCE_NOT_AVAILABLE_DATE;
+import static org.letscareer.letscareer.domain.attendance.error.AttendanceErrorCode.ATTENDANCE_UNAUTHORIZED;
 
 @RequiredArgsConstructor
 @Transactional
@@ -58,9 +61,30 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public void updateAttendanceAdmin(Long attendanceId, AttendanceUpdateRequestDto attendanceUpdateRequestDto) {
+    public void updateAttendance(Long attendanceId, AttendanceUpdateRequestDto updateRequestDto, User user) {
         Attendance attendance = attendanceHelper.findAttendanceByIdOrThrow(attendanceId);
-        attendance.updateAttendanceAdmin(attendanceUpdateRequestDto);
+        validateAuthorizedUser(user, attendance);
+        switch (user.getRole()) {
+            case ADMIN -> updateAttendanceByAdmin(attendance, updateRequestDto);
+            case USER -> updateAttendanceByUser(attendance, updateRequestDto);
+        }
+    }
+
+    private void validateAuthorizedUser(User user, Attendance attendance) {
+        if(user.getRole().equals(UserRole.ADMIN)) return;
+        if(!user.getId().equals(attendance.getUser().getId())) {
+            throw new UnauthorizedException(ATTENDANCE_UNAUTHORIZED);
+        }
+    }
+
+    private void updateAttendanceByUser(Attendance attendance, AttendanceUpdateRequestDto updateRequestDto) {
+        attendance.updateAttendance(updateRequestDto);
+        // AttendanceScore
+    }
+
+    private void updateAttendanceByAdmin(Attendance attendance, AttendanceUpdateRequestDto updateRequestDto) {
+        attendance.updateAttendanceAdmin(updateRequestDto);
+        // AttendanceScore
     }
 
     private AttendanceStatus getAttendanceStatus(LocalDateTime missionStartDate, LocalDateTime missionEndDate, LocalDateTime challengeEndDate) {

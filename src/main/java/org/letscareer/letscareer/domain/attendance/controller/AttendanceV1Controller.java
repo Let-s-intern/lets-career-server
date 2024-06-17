@@ -47,10 +47,12 @@ public class AttendanceV1Controller {
     @Operation(summary = "출석 업데이트", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
+    @ApiErrorCode({SwaggerEnum.ATTENDANCE_UNAUTHORIZED})
     @PatchMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> updateAttendanceAdmin(@PathVariable(name = "id") final Long attendanceId,
-                                                                    @RequestBody final AttendanceUpdateRequestDto attendanceUpdateRequestDto) {
-        attendanceService.updateAttendanceAdmin(attendanceId, attendanceUpdateRequestDto);
+    public ResponseEntity<SuccessResponse<?>> updateAttendance(@PathVariable(name = "id") final Long attendanceId,
+                                                               @RequestBody final AttendanceUpdateRequestDto attendanceUpdateRequestDto,
+                                                               @CurrentUser User user) {
+        attendanceService.updateAttendance(attendanceId, attendanceUpdateRequestDto, user);
         return SuccessResponse.ok(null);
     }
 }
