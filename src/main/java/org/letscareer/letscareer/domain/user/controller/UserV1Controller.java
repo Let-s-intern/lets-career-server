@@ -142,9 +142,8 @@ public class UserV1Controller {
     })
     @ApiErrorCode(SwaggerEnum.USER_NOT_FOUND)
     @PatchMapping("/additional-info")
-    public ResponseEntity<SuccessResponse<?>> updateUserForSign(@RequestParam String email,
-                                                                @RequestBody final UpdateUserSignInfoRequestDto requestDto) {
-        userService.updateUserForSign(email, requestDto);
+    public ResponseEntity<SuccessResponse<?>> updateUserForSign(@RequestBody final UpdateUserSignInfoRequestDto requestDto) {
+        userService.updateUserForSign(requestDto);
         return SuccessResponse.ok(null);
     }
 

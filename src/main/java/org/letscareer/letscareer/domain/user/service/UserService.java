@@ -34,7 +34,7 @@ public interface UserService {
 
     void updateUser(Long userId, UserUpdateRequestDto userUpdateRequestDto);
 
-    void updateUserForSign(String email, UpdateUserSignInfoRequestDto requestDto);
+    void updateUserForSign(UpdateUserSignInfoRequestDto requestDto);
 
     void deleteUser(User user);
 

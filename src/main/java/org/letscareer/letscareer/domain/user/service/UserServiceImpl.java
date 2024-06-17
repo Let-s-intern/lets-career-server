@@ -82,8 +82,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserForSign(String email, UpdateUserSignInfoRequestDto requestDto) {
-        User user = userHelper.findUserByEmailOrThrow(email);
+    public void updateUserForSign(UpdateUserSignInfoRequestDto requestDto) {
+        User user = userHelper.findUserByEmailOrThrow(requestDto.email());
         user.updateUserAdditionInfo(requestDto);
     }
 
