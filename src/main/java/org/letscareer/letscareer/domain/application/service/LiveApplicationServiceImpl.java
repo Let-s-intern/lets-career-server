@@ -26,7 +26,6 @@ import static org.letscareer.letscareer.domain.application.error.ApplicationErro
 @Service("LIVE")
 public class LiveApplicationServiceImpl implements ApplicationService {
     private final LiveApplicationHelper liveApplicationHelper;
-    private final LiveApplicationMapper liveApplicationMapper;
     private final ApplicationHelper applicationHelper;
     private final LiveHelper liveHelper;
     private final PaymentHelper paymentHelper;
@@ -37,6 +36,7 @@ public class LiveApplicationServiceImpl implements ApplicationService {
     public void createApplication(Long programId, User user, CreateApplicationRequestDto createApplicationRequestDto) {
         Live live = liveHelper.findLiveByIdOrThrow(programId);
         liveApplicationHelper.validateExistingApplication(live.getId(), user.getId());
+        liveApplicationHelper.validateLiveDuration(live);
         validateCreateLiveApplicationDto(createApplicationRequestDto);
         LiveApplication liveApplication = liveApplicationHelper.createLiveApplicationAndSave(createApplicationRequestDto, live, user);
         Coupon coupon = couponHelper.findCouponByIdOrNull(createApplicationRequestDto.paymentInfo().couponId());

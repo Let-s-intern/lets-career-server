@@ -10,14 +10,15 @@ import org.letscareer.letscareer.domain.live.vo.LiveEmailVo;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.error.exception.ConflictException;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
+import org.letscareer.letscareer.global.error.exception.InvalidValueException;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static org.letscareer.letscareer.domain.application.error.ApplicationErrorCode.APPLICATION_NOT_FOUND;
-import static org.letscareer.letscareer.domain.application.error.ApplicationErrorCode.CONFLICT_APPLICATION;
+import static org.letscareer.letscareer.domain.application.error.ApplicationErrorCode.*;
 
 @RequiredArgsConstructor
 @Component
@@ -35,7 +36,14 @@ public class LiveApplicationHelper {
 
     public void validateExistingApplication(Long liveId, Long userId) {
         Optional<LiveApplication> liveApplication = liveApplicationRepository.findLiveApplicationByLiveIdAndUserId(liveId, userId);
-        if(liveApplication.isPresent()) throw new ConflictException(CONFLICT_APPLICATION);
+        if (liveApplication.isPresent())
+            throw new ConflictException(CONFLICT_APPLICATION);
+    }
+
+    public void validateLiveDuration(Live live) {
+        LocalDateTime now = LocalDateTime.now();
+        if (now.isAfter(live.getDeadline()))
+            throw new InvalidValueException(INVALID_APPLICATION_TIME);
     }
 
     public LiveApplication findLiveApplicationByIdOrThrow(Long applicationId) {
