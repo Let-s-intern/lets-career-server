@@ -1,6 +1,8 @@
 package org.letscareer.letscareer.domain.mission.service;
 
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.application.helper.ApplicationHelper;
+import org.letscareer.letscareer.domain.application.helper.ChallengeApplicationHelper;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
 import org.letscareer.letscareer.domain.contents.helper.ContentsHelper;
@@ -32,8 +34,9 @@ public class MissionServiceImpl implements MissionService {
     private final MissionHelper missionHelper;
     private final MissionMapper missionMapper;
     private final MissionContentsHelper missionContentsHelper;
-    private final MissionScoreHelper missionScoreHelper;
     private final MissionTemplateHelper missionTemplateHelper;
+    private final MissionScoreHelper missionScoreHelper;
+    private final ChallengeApplicationHelper challengeApplicationHelper;
     private final ChallengeHelper challengeHelper;
     private final ContentsHelper contentsHelper;
 
@@ -51,7 +54,7 @@ public class MissionServiceImpl implements MissionService {
     @Override
     public MissionAdminListResponseDto getMissionsForAdmin(Long challengeId) {
         List<MissionForChallengeVo> missionForChallengeVos = missionHelper.findMissionForChallengeVos(challengeId);
-        List<MissionAdminResponseDto> missionAdminResponseDtoList = createMissionAdminResponseDtoList(missionForChallengeVos);
+        List<MissionAdminResponseDto> missionAdminResponseDtoList = createMissionAdminResponseDtoList(missionForChallengeVos, challengeId);
         return missionMapper.toMissionAdminListResponseDto(missionAdminResponseDtoList);
     }
 
@@ -65,11 +68,13 @@ public class MissionServiceImpl implements MissionService {
         missionScore.updateMissionScore(updateMissionRequestDto);
     }
 
-    private List<MissionAdminResponseDto> createMissionAdminResponseDtoList(List<MissionForChallengeVo> missionForChallengeVos) {
+    private List<MissionAdminResponseDto> createMissionAdminResponseDtoList(List<MissionForChallengeVo> missionForChallengeVos, Long challengeId) {
+        Long totalCount = challengeApplicationHelper.countChallengeApplications(challengeId);
         return missionForChallengeVos.stream()
                 .map(missionForChallengeVo ->
                         missionMapper.toMissionAdminResponseDto(
                                 missionForChallengeVo,
+                                totalCount,
                                 missionHelper.findContentsMissionVos(missionForChallengeVo.id(), ContentsType.ESSENTIAL),
                                 missionHelper.findContentsMissionVos(missionForChallengeVo.id(), ContentsType.ADDITIONAL)
                         ))

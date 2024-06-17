@@ -32,9 +32,10 @@ public class MissionMapper {
     }
 
     public MissionAdminResponseDto toMissionAdminResponseDto(MissionForChallengeVo vo,
+                                                             Long applicationCount,
                                                              List<ContentsMissionVo> essentialContentsList,
                                                              List<ContentsMissionVo> additionalContentsList) {
-        return MissionAdminResponseDto.of(vo, essentialContentsList, additionalContentsList);
+        return MissionAdminResponseDto.of(vo, applicationCount, essentialContentsList, additionalContentsList);
     }
 
     public MissionApplicationScoreResponseDto toMissionApplicationScoreResponseDto(UserChallengeApplicationVo userChallengeApplicationVo,

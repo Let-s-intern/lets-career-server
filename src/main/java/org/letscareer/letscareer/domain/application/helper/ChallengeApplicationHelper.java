@@ -49,6 +49,10 @@ public class ChallengeApplicationHelper {
         return challengeApplicationRepository.findUserChallengeApplicationVo(challengeId, pageable);
     }
 
+    public Long countChallengeApplications(Long challengeId) {
+        return challengeApplicationRepository.countByChallengeId(challengeId);
+    }
+
     public void deleteChallengeApplication(ChallengeApplication challengeApplication) {
         challengeApplicationRepository.delete(challengeApplication);
     }

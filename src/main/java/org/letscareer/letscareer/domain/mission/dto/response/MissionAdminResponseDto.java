@@ -12,11 +12,13 @@ import java.util.List;
 @Builder(access = AccessLevel.PRIVATE)
 public record MissionAdminResponseDto(
         Long id,
+        String title,
         Integer th,
         String missionType,
         MissionStatusType missionStatusType,
         Integer attendanceCount,
         Integer lateAttendanceCount,
+        Long applicationCount,
         Integer score,
         Integer lateScore,
         LocalDateTime startDate,
@@ -25,15 +27,18 @@ public record MissionAdminResponseDto(
         List<ContentsMissionVo> additionalContentsList
 ) {
     public static MissionAdminResponseDto of(MissionForChallengeVo vo,
+                                             Long applicationCount,
                                              List<ContentsMissionVo> essentialContentsList,
                                              List<ContentsMissionVo> additionalContentsList) {
         return MissionAdminResponseDto.builder()
                 .id(vo.id())
+                .title(vo.title())
                 .th(vo.th())
                 .missionType(vo.missionTag())
                 .missionStatusType(vo.missionStatusType())
                 .attendanceCount(vo.attendanceCount())
                 .lateAttendanceCount(vo.lateAttendanceCount())
+                .applicationCount(applicationCount)
                 .score(vo.score())
                 .lateScore(vo.lateScore())
                 .startDate(vo.startDate())
