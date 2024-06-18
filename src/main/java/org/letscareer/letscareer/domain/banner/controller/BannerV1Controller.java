@@ -11,7 +11,6 @@ import org.letscareer.letscareer.domain.banner.dto.response.BannerDetailResponse
 import org.letscareer.letscareer.domain.banner.dto.response.BannerListResponseDto;
 import org.letscareer.letscareer.domain.banner.service.BannerServiceFactory;
 import org.letscareer.letscareer.domain.banner.type.BannerType;
-import org.letscareer.letscareer.domain.banner.vo.BannerAdminVo;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -48,9 +47,10 @@ public class BannerV1Controller {
     })
     @PostMapping
     public ResponseEntity<SuccessResponse<?>> createBanner(@RequestParam(name = "type") final BannerType bannerType,
-                                                           @RequestPart final CreateBannerRequestDto createBannerRequestDto,
-                                                           @RequestPart final MultipartFile file) {
-        bannerServiceFactory.getBannerService(bannerType).createBanner(bannerType, createBannerRequestDto, file);
+                                                           @RequestPart final CreateBannerRequestDto requestDto,
+                                                           @RequestPart final MultipartFile file,
+                                                           @RequestPart(required = false) final MultipartFile mobileFile) {
+        bannerServiceFactory.getBannerService(bannerType).createBanner(bannerType, requestDto, file, mobileFile);
         return SuccessResponse.created(null);
     }
 
@@ -60,9 +60,10 @@ public class BannerV1Controller {
     @PatchMapping("/{id}")
     public ResponseEntity<SuccessResponse<?>> updateBanner(@PathVariable(name = "id") final Long bannerId,
                                                            @RequestParam(name = "type") final BannerType bannerType,
-                                                           @RequestPart(required = false) final UpdateBannerRequestDto updateBannerRequestDto,
-                                                           @RequestPart(required = false) final MultipartFile file) {
-        bannerServiceFactory.getBannerService(bannerType).updateBanner(bannerId, updateBannerRequestDto, file);
+                                                           @RequestPart(required = false) final UpdateBannerRequestDto requestDto,
+                                                           @RequestPart(required = false) final MultipartFile file,
+                                                           @RequestPart(required = false) final MultipartFile mobileFile) {
+        bannerServiceFactory.getBannerService(bannerType).updateBanner(bannerId, requestDto, file, mobileFile);
         return SuccessResponse.ok(null);
     }
 

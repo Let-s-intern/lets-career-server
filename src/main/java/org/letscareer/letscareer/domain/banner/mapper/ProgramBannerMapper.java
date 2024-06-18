@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ProgramBannerMapper {
-    public ProgramBanner toEntity(BannerType type, CreateBannerRequestDto createBannerRequestDto, File file) {
-        return ProgramBanner.createProgramBanner(type, createBannerRequestDto, file);
+    public ProgramBanner toEntity(BannerType type, CreateBannerRequestDto createBannerRequestDto, File file, File newMobileFile) {
+        return ProgramBanner.createProgramBanner(type, createBannerRequestDto, file, newMobileFile);
     }
 }

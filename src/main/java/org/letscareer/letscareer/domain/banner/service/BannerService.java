@@ -14,9 +14,9 @@ public interface BannerService {
 
     BannerDetailResponseDto getBannerDetail(Long bannerId);
 
-    void createBanner(BannerType type, CreateBannerRequestDto createBannerRequestDto, MultipartFile file);
+    void createBanner(BannerType type, CreateBannerRequestDto createBannerRequestDto, MultipartFile file, MultipartFile mobileFile);
 
-    void updateBanner(Long bannerId, UpdateBannerRequestDto updateBannerRequestDto, MultipartFile file);
+    void updateBanner(Long bannerId, UpdateBannerRequestDto updateBannerRequestDto, MultipartFile file, MultipartFile mobileFile);
 
     void deleteBanner(Long bannerId);
 }

@@ -20,27 +20,36 @@ public class MainBanner extends Banner {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "file_id")
     private File file;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "mobile_file_id")
+    private File mobileFile;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private MainBanner(BannerType type, CreateBannerRequestDto createBannerRequestDto, File file) {
+    private MainBanner(BannerType type, CreateBannerRequestDto createBannerRequestDto, File file, File newMobileFile) {
         super(type, createBannerRequestDto);
         this.file = file;
+        this.mobileFile = newMobileFile;
     }
 
-    public static MainBanner createMainBanner(BannerType type, CreateBannerRequestDto createBannerRequestDto, File file) {
+    public static MainBanner createMainBanner(BannerType type, CreateBannerRequestDto createBannerRequestDto, File file, File newMobileFile) {
         return MainBanner.builder()
                 .type(type)
                 .createBannerRequestDto(createBannerRequestDto)
                 .file(file)
+                .newMobileFile(newMobileFile)
                 .build();
     }
 
     public void updateMainBanner(UpdateBannerRequestDto updateBannerRequestDto) {
-        if(Objects.isNull(updateBannerRequestDto)) return;
+        if (Objects.isNull(updateBannerRequestDto)) return;
         super.updateBanner(updateBannerRequestDto);
     }
 
     public void updateFile(File file) {
         this.file = updateValue(this.file, file);
+    }
+
+    public void updateMobilFile(File file) {
+        this.mobileFile = updateValue(this.mobileFile, file);
     }
 }

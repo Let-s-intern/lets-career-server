@@ -33,7 +33,7 @@ public class PopupServiceImpl implements BannerService {
     private static final String POPUP_BANNER_S3_PATH = "banner/popup/";
 
     @Override
-    public void createBanner(BannerType type, CreateBannerRequestDto createBannerRequestDto, MultipartFile file) {
+    public void createBanner(BannerType type, CreateBannerRequestDto createBannerRequestDto, MultipartFile file, MultipartFile mobileFile) {
         File newFile = fileHelper.createFileAndSave(POPUP_BANNER_S3_PATH, file);
         Popup newPopup = popupMapper.toEntity(type, createBannerRequestDto, newFile);
         popupHelper.savePopup(newPopup);
@@ -58,7 +58,7 @@ public class PopupServiceImpl implements BannerService {
     }
 
     @Override
-    public void updateBanner(Long bannerId, UpdateBannerRequestDto updateBannerRequestDto, MultipartFile file) {
+    public void updateBanner(Long bannerId, UpdateBannerRequestDto updateBannerRequestDto, MultipartFile file, MultipartFile mobileFile) {
         Popup popup = popupHelper.findByIdOrThrow(bannerId);
         updateFile(popup, file);
         popup.updatePopup(updateBannerRequestDto);

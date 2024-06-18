@@ -20,32 +20,24 @@ import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUti
 @DiscriminatorColumn(name = "bannerType", discriminatorType = DiscriminatorType.INTEGER)
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Banner extends BaseTimeEntity {
-
     @Id
     @Column(name = "banner_id")
     @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
-
     @NotNull
     @Convert(converter = BannerTypeConverter.class)
     private BannerType type;
-
     @NotNull
     @Column
     private String title;
-
     @NotNull
     private String link;
-
     @NotNull
     private LocalDateTime startDate;
-
     @NotNull
     private LocalDateTime endDate;
-
     @NotNull
     private Boolean isValid;
-
     @NotNull
     private Boolean isVisible;
 

@@ -26,7 +26,7 @@ public class LineBannerServiceImpl implements BannerService {
     private final BannerMapper bannerMapper;
 
     @Override
-    public void createBanner(BannerType type, CreateBannerRequestDto createBannerRequestDto, MultipartFile file) {
+    public void createBanner(BannerType type, CreateBannerRequestDto createBannerRequestDto, MultipartFile file, MultipartFile mobileFile) {
         LineBanner newLineBanner = lineBannerMapper.toEntity(type, createBannerRequestDto);
         lineBannerHelper.saveLineBanner(newLineBanner);
     }
@@ -50,7 +50,7 @@ public class LineBannerServiceImpl implements BannerService {
     }
 
     @Override
-    public void updateBanner(Long bannerId, UpdateBannerRequestDto updateBannerRequestDto, MultipartFile file) {
+    public void updateBanner(Long bannerId, UpdateBannerRequestDto updateBannerRequestDto, MultipartFile file, MultipartFile mobileFile) {
         LineBanner lineBanner = lineBannerHelper.findLineBannerByIdOrThrow(bannerId);
         lineBanner.updateLineBanner(updateBannerRequestDto);
     }

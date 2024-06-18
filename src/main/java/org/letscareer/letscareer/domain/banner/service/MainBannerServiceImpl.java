@@ -26,16 +26,17 @@ import java.util.Objects;
 @Transactional
 @Service("MAIN")
 public class MainBannerServiceImpl implements BannerService {
+    private static final String MAIN_BANNER_S3_PATH = "banner/main/";
     private final MainBannerHelper mainBannerHelper;
     private final MainBannerMapper mainBannerMapper;
     private final BannerMapper bannerMapper;
     private final FileHelper fileHelper;
-    private static final String MAIN_BANNER_S3_PATH = "banner/main/";
 
     @Override
-    public void createBanner(BannerType type, CreateBannerRequestDto createBannerRequestDto, MultipartFile file) {
+    public void createBanner(BannerType type, CreateBannerRequestDto createBannerRequestDto, MultipartFile file, MultipartFile mobileFile) {
         File newFile = fileHelper.createFileAndSave(MAIN_BANNER_S3_PATH, file);
-        MainBanner newMainBanner = mainBannerMapper.toEntity(type, createBannerRequestDto, newFile);
+        File newMobileFile = fileHelper.createFileAndSave(MAIN_BANNER_S3_PATH, mobileFile);
+        MainBanner newMainBanner = mainBannerMapper.toEntity(type, createBannerRequestDto, newFile, newMobileFile);
         mainBannerHelper.saveMainBanner(newMainBanner);
     }
 
@@ -58,9 +59,10 @@ public class MainBannerServiceImpl implements BannerService {
     }
 
     @Override
-    public void updateBanner(Long bannerId, UpdateBannerRequestDto updateBannerRequestDto, MultipartFile file) {
+    public void updateBanner(Long bannerId, UpdateBannerRequestDto updateBannerRequestDto, MultipartFile file, MultipartFile mobileFile) {
         MainBanner mainBanner = mainBannerHelper.findByIdOrThrow(bannerId);
         updateFile(mainBanner, file);
+        updateMobileFile(mainBanner, mobileFile);
         mainBanner.updateMainBanner(updateBannerRequestDto);
     }
 
@@ -75,5 +77,12 @@ public class MainBannerServiceImpl implements BannerService {
         if (mainBanner.getFile() != null) fileHelper.deleteFile(mainBanner.getFile());
         File newFile = fileHelper.createFileAndSave(MAIN_BANNER_S3_PATH, file);
         mainBanner.updateFile(newFile);
+    }
+
+    private void updateMobileFile(MainBanner mainBanner, MultipartFile file) {
+        if (Objects.isNull(file)) return;
+        if (mainBanner.getMobileFile() != null) fileHelper.deleteFile(mainBanner.getMobileFile());
+        File newFile = fileHelper.createFileAndSave(MAIN_BANNER_S3_PATH, file);
+        mainBanner.updateMobilFile(newFile);
     }
 }

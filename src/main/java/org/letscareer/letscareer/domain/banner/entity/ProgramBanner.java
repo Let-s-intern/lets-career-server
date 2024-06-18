@@ -20,18 +20,23 @@ public class ProgramBanner extends Banner {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "file_id")
     private File file;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "mobile_file_id")
+    private File mobileFile;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private ProgramBanner(BannerType type, CreateBannerRequestDto createBannerRequestDto, File file) {
+    private ProgramBanner(BannerType type, CreateBannerRequestDto createBannerRequestDto, File file, File newMobileFile) {
         super(type, createBannerRequestDto);
         this.file = file;
+        this.mobileFile = newMobileFile;
     }
 
-    public static ProgramBanner createProgramBanner(BannerType type, CreateBannerRequestDto createBannerRequestDto, File file) {
+    public static ProgramBanner createProgramBanner(BannerType type, CreateBannerRequestDto createBannerRequestDto, File file, File newMobileFile) {
         return ProgramBanner.builder()
                 .type(type)
                 .createBannerRequestDto(createBannerRequestDto)
                 .file(file)
+                .newMobileFile(newMobileFile)
                 .build();
     }
 
@@ -42,5 +47,9 @@ public class ProgramBanner extends Banner {
 
     public void updateFile(File file) {
         this.file = updateValue(this.file, file);
+    }
+
+    public void updateMobileFile(File file) {
+        this.mobileFile = updateValue(this.mobileFile, file);
     }
 }
