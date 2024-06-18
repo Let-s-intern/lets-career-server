@@ -22,16 +22,6 @@ import org.springframework.web.bind.annotation.*;
 public class MissionV1Controller {
     private final MissionService missionService;
 
-    @Operation(summary = "[어드민] 미션 생성", responses = {
-            @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
-    })
-    @PostMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> createMission(@PathVariable(name = "id") final Long challengeId,
-                                                            @RequestBody @Valid final CreateMissionRequestDto createMissionRequestDto) {
-        missionService.createMission(challengeId, createMissionRequestDto);
-        return SuccessResponse.created(null);
-    }
-
     @Operation(summary = "[어드민] 챌린지 1개의 미션 전체 목록", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = MissionAdminListResponseDto.class)))
     })
@@ -40,6 +30,16 @@ public class MissionV1Controller {
     public ResponseEntity<SuccessResponse<?>> getMissionsForAdmin(@PathVariable(name = "id") Long challengeId) {
         MissionAdminListResponseDto responseDto = missionService.getMissionsForAdmin(challengeId);
         return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "[어드민] 미션 생성", responses = {
+            @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
+    })
+    @PostMapping("/{id}")
+    public ResponseEntity<SuccessResponse<?>> createMission(@PathVariable(name = "id") final Long challengeId,
+                                                            @RequestBody @Valid final CreateMissionRequestDto createMissionRequestDto) {
+        missionService.createMission(challengeId, createMissionRequestDto);
+        return SuccessResponse.created(null);
     }
 
     @Operation(summary = "[어드민] 미션 수정", responses = {

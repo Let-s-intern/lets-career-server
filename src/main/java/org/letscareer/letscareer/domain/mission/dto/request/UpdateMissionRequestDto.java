@@ -1,7 +1,5 @@
 package org.letscareer.letscareer.domain.mission.dto.request;
 
-import org.springframework.cglib.core.Local;
-
 import java.time.LocalDate;
 import java.util.List;
 
