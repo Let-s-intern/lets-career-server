@@ -12,4 +12,6 @@ public interface MissionService {
     MissionAdminListResponseDto getMissionsForAdmin(Long challengeId);
 
     void updateMission(Long missionId, UpdateMissionRequestDto updateMissionRequestDto);
+
+    void deleteMission(Long missionId);
 }

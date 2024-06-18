@@ -52,11 +52,13 @@ public class Mission extends BaseTimeEntity {
     @NotNull
     private LocalDateTime endDate;
 
-    @OneToMany(mappedBy = "mission", fetch = FetchType.LAZY)
-    private List<MissionContents> essentialContentsList;
-    @OneToMany(mappedBy = "mission", fetch = FetchType.LAZY)
-    private List<MissionContents> additionalContentsList;
-    @OneToMany(mappedBy = "mission", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "mission", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<MissionContents> essentialContentsList = new ArrayList<>();
+    @OneToMany(mappedBy = "mission", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<MissionContents> additionalContentsList = new ArrayList<>();
+    @OneToMany(mappedBy = "mission", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Attendance> attendanceList = new ArrayList<>();
     @ManyToOne(fetch = FetchType.LAZY)
@@ -65,7 +67,7 @@ public class Mission extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mission_template_id")
     private MissionTemplate missionTemplate;
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "score_id")
     private MissionScore missionScore;
 

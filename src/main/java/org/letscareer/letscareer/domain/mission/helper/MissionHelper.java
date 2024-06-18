@@ -54,14 +54,13 @@ public class MissionHelper {
     }
 
     public List<?> findMyMissionVos(Long challengeId, MissionQueryType queryType, Long userId) {
-        switch (queryType) {
-            case SUBMITTED -> {
-                return missionRepository.findMySubmittedMissionVosByChallengeIdAndUserId(challengeId, userId);
-            }
-            case REMAINING, ABSENT -> {
-                return missionRepository.findMyMissionVosByChallengeIdAndUserId(challengeId, queryType, userId);
-            }
-        }
-        return null;
+        if (queryType.equals(MissionQueryType.SUBMITTED))
+            return missionRepository.findMySubmittedMissionVosByChallengeIdAndUserId(challengeId, userId);
+        else
+            return missionRepository.findMyMissionVosByChallengeIdAndUserId(challengeId, queryType, userId);
+    }
+
+    public void deleteMission(Long missionId) {
+        missionRepository.deleteById(missionId);
     }
 }

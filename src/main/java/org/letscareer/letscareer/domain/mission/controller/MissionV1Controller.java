@@ -51,4 +51,13 @@ public class MissionV1Controller {
         missionService.updateMission(missionId, updateMissionRequestDto);
         return SuccessResponse.ok(null);
     }
+
+    @Operation(summary = "[어드민] 미션 삭제", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<SuccessResponse<?>> deleteMission(@PathVariable(name = "id") final Long missionId) {
+        missionService.deleteMission(missionId);
+        return SuccessResponse.ok(null);
+    }
 }

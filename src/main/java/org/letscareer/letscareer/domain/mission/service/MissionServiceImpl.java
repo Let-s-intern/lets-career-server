@@ -68,6 +68,11 @@ public class MissionServiceImpl implements MissionService {
         missionScore.updateMissionScore(updateMissionRequestDto);
     }
 
+    @Override
+    public void deleteMission(Long missionId) {
+        missionHelper.deleteMission(missionId);
+    }
+
     private List<MissionAdminResponseDto> createMissionAdminResponseDtoList(List<MissionForChallengeVo> missionForChallengeVos, Long challengeId) {
         Long totalCount = challengeApplicationHelper.countChallengeApplications(challengeId);
         return missionForChallengeVos.stream()
