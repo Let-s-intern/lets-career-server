@@ -63,12 +63,11 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Override
     public void updateAttendance(Long attendanceId, AttendanceUpdateRequestDto updateRequestDto, User user) {
         Attendance attendance = attendanceHelper.findAttendanceByIdOrThrow(attendanceId);
-        updateAttendanceByAdmin(attendance, updateRequestDto);
-//        validateAuthorizedUser(user, attendance);
-//        switch (user.getRole()) {
-//            case ADMIN -> updateAttendanceByAdmin(attendance, updateRequestDto);
-//            case USER -> updateAttendanceByUser(attendance, updateRequestDto);
-//        }
+        validateAuthorizedUser(user, attendance);
+        switch (user.getRole()) {
+            case ADMIN -> updateAttendanceByAdmin(attendance, updateRequestDto);
+            case USER -> updateAttendanceByUser(attendance, updateRequestDto);
+        }
     }
 
     private void validateAuthorizedUser(User user, Attendance attendance) {
