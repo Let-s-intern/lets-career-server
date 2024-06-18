@@ -34,6 +34,7 @@ import org.letscareer.letscareer.domain.faq.helper.FaqHelper;
 import org.letscareer.letscareer.domain.faq.mapper.FaqMapper;
 import org.letscareer.letscareer.domain.faq.vo.FaqDetailVo;
 import org.letscareer.letscareer.domain.mission.dto.response.MissionApplicationScoreResponseDto;
+import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.mission.helper.MissionHelper;
 import org.letscareer.letscareer.domain.mission.mapper.MissionMapper;
 import org.letscareer.letscareer.domain.mission.type.MissionQueryType;

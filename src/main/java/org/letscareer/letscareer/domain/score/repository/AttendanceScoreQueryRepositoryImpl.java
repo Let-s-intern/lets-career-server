@@ -25,6 +25,7 @@ public class AttendanceScoreQueryRepositoryImpl implements AttendanceScoreQueryR
     public Optional<AttendanceScore> findAttendanceScoreByChallengeIdAndApplicationId(Long challengeId, Long applicationId) {
         return Optional.ofNullable(queryFactory
                 .selectFrom(attendanceScore)
+                .leftJoin(attendanceScore.attendance, attendance)
                 .leftJoin(attendance.mission, mission)
                 .leftJoin(mission.challenge, challenge)
                 .leftJoin(challenge.applicationList, challengeApplication)
