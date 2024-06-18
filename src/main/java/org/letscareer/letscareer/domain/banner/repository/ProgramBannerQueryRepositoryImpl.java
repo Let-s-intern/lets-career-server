@@ -28,9 +28,10 @@ public class ProgramBannerQueryRepositoryImpl implements ProgramBannerQueryRepos
                         programBanner.endDate,
                         programBanner.isValid,
                         programBanner.isVisible,
-                        file.url))
+                        programBanner.file.url,
+                        programBanner.mobileFile.url
+                ))
                 .from(programBanner)
-                .leftJoin(programBanner.file, file)
                 .orderBy(programBanner.id.desc())
                 .fetch();
     }
@@ -47,9 +48,10 @@ public class ProgramBannerQueryRepositoryImpl implements ProgramBannerQueryRepos
                                 programBanner.endDate,
                                 programBanner.isValid,
                                 programBanner.isVisible,
-                                file.url))
+                                programBanner.file.url,
+                                programBanner.mobileFile.url
+                        ))
                         .from(programBanner)
-                        .leftJoin(programBanner.file, file)
                         .where(
                                 eqBannerId(bannerId)
                         )

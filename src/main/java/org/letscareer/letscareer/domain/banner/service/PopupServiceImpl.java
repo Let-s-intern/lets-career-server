@@ -10,9 +10,9 @@ import org.letscareer.letscareer.domain.banner.helper.PopupHelper;
 import org.letscareer.letscareer.domain.banner.mapper.BannerMapper;
 import org.letscareer.letscareer.domain.banner.mapper.PopupMapper;
 import org.letscareer.letscareer.domain.banner.type.BannerType;
-import org.letscareer.letscareer.domain.banner.vo.BannerAdminDetailVo;
-import org.letscareer.letscareer.domain.banner.vo.BannerAdminVo;
-import org.letscareer.letscareer.domain.banner.vo.BannerUserVo;
+import org.letscareer.letscareer.domain.banner.vo.PopupBannerAdminDetailVo;
+import org.letscareer.letscareer.domain.banner.vo.PopupBannerAdminVo;
+import org.letscareer.letscareer.domain.banner.vo.PopupUserVo;
 import org.letscareer.letscareer.domain.file.entity.File;
 import org.letscareer.letscareer.domain.file.helper.FileHelper;
 import org.springframework.stereotype.Service;
@@ -41,19 +41,19 @@ public class PopupServiceImpl implements BannerService {
 
     @Override
     public BannerListResponseDto getBanners() {
-        List<BannerUserVo> bannerUserVos = popupHelper.findAllPopBannerUserVos();
+        List<PopupUserVo> bannerUserVos = popupHelper.findAllPopBannerUserVos();
         return bannerMapper.toBannerAdminListResponseDto(bannerUserVos);
     }
 
     @Override
     public BannerListResponseDto getBannersForAdmin() {
-        List<BannerAdminVo> popupAdminList = popupHelper.findAllPopupAdminVos();
+        List<PopupBannerAdminVo> popupAdminList = popupHelper.findAllPopupAdminVos();
         return bannerMapper.toBannerAdminListResponseDto(popupAdminList);
     }
 
     @Override
     public BannerDetailResponseDto getBannerDetail(Long bannerId) {
-        BannerAdminDetailVo bannerAdminDetailVo = popupHelper.findBannerAdminDetailVoOrThrow(bannerId);
+        PopupBannerAdminDetailVo bannerAdminDetailVo = popupHelper.findBannerAdminDetailVoOrThrow(bannerId);
         return bannerMapper.toBannerDetailResponseDto(bannerAdminDetailVo);
     }
 

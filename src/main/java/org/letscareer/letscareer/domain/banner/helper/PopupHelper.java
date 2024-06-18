@@ -4,10 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.banner.entity.Popup;
 import org.letscareer.letscareer.domain.banner.error.BannerErrorCode;
 import org.letscareer.letscareer.domain.banner.repository.PopupRepository;
-import org.letscareer.letscareer.domain.banner.vo.BannerAdminDetailVo;
-import org.letscareer.letscareer.domain.banner.vo.BannerAdminVo;
-import org.letscareer.letscareer.domain.banner.vo.BannerUserVo;
-import org.letscareer.letscareer.domain.banner.vo.LineBannerUserVo;
+import org.letscareer.letscareer.domain.banner.vo.PopupBannerAdminDetailVo;
+import org.letscareer.letscareer.domain.banner.vo.PopupBannerAdminVo;
+import org.letscareer.letscareer.domain.banner.vo.PopupUserVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +21,7 @@ public class PopupHelper {
         popupRepository.save(popup);
     }
 
-    public List<BannerAdminVo> findAllPopupAdminVos() {
+    public List<PopupBannerAdminVo> findAllPopupAdminVos() {
         return popupRepository.findAllPopupAdminVos();
     }
 
@@ -30,12 +29,12 @@ public class PopupHelper {
         return popupRepository.findById(bannerId).orElseThrow(() -> new EntityNotFoundException(BannerErrorCode.BANNER_NOT_FOUND));
     }
 
-    public BannerAdminDetailVo findBannerAdminDetailVoOrThrow(Long bannerId) {
+    public PopupBannerAdminDetailVo findBannerAdminDetailVoOrThrow(Long bannerId) {
         return popupRepository.findBannerAdminDetailVo(bannerId)
                 .orElseThrow(() -> new EntityNotFoundException(BannerErrorCode.BANNER_NOT_FOUND));
     }
 
-    public List<BannerUserVo> findAllPopBannerUserVos() {
+    public List<PopupUserVo> findAllPopBannerUserVos() {
         return popupRepository.findAllPopBannerUserVos();
     }
 

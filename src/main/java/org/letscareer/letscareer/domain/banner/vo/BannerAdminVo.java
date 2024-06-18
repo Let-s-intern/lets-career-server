@@ -10,6 +10,7 @@ public record BannerAdminVo(
         LocalDateTime endDate,
         Boolean isValid,
         Boolean isVisible,
-        String imgUrl
+        String imgUrl,
+        String mobileImgUrl
 ) {
 }

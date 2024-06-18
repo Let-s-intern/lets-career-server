@@ -30,9 +30,10 @@ public class MainBannerQueryRepositoryImpl implements MainBannerQueryRepository 
                         mainBanner.endDate,
                         mainBanner.isValid,
                         mainBanner.isVisible,
-                        file.url))
+                        mainBanner.file.url,
+                        mainBanner.mobileFile.url
+                ))
                 .from(mainBanner)
-                .leftJoin(mainBanner.file, file)
                 .orderBy(mainBanner.id.desc())
                 .fetch();
     }
@@ -47,9 +48,10 @@ public class MainBannerQueryRepositoryImpl implements MainBannerQueryRepository 
                         mainBanner.startDate,
                         mainBanner.endDate,
                         mainBanner.isValid,
-                        file.url))
+                        mainBanner.file.url,
+                        mainBanner.mobileFile.url
+                ))
                 .from(mainBanner)
-                .leftJoin(mainBanner.file, file)
                 .where(
                         isVisible(),
                         isWithinDateRange()
@@ -69,9 +71,10 @@ public class MainBannerQueryRepositoryImpl implements MainBannerQueryRepository 
                         mainBanner.endDate,
                         mainBanner.isValid,
                         mainBanner.isVisible,
-                        file.url))
+                        mainBanner.file.url,
+                        mainBanner.mobileFile.url
+                ))
                 .from(mainBanner)
-                .leftJoin(mainBanner.file, file)
                 .where(
                         eqBannerId(bannerId)
                 )
