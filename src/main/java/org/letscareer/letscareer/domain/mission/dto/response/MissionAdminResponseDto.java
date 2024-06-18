@@ -21,6 +21,7 @@ public record MissionAdminResponseDto(
         Long applicationCount,
         Integer score,
         Integer lateScore,
+        Long missionTemplateId,
         LocalDateTime startDate,
         LocalDateTime endDate,
         List<ContentsMissionVo> essentialContentsList,
@@ -41,6 +42,7 @@ public record MissionAdminResponseDto(
                 .applicationCount(applicationCount)
                 .score(vo.score())
                 .lateScore(vo.lateScore())
+                .missionTemplateId(vo.missionTemplateId())
                 .startDate(vo.startDate())
                 .endDate(vo.endDate())
                 .essentialContentsList(essentialContentsList)

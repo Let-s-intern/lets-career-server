@@ -1,16 +1,15 @@
 package org.letscareer.letscareer.domain.mission.repository;
 
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.domain.mission.type.MissionQueryType;
-import org.letscareer.letscareer.domain.mission.vo.*;
 import org.letscareer.letscareer.domain.contents.type.ContentsType;
 import org.letscareer.letscareer.domain.contents.vo.ContentsMissionVo;
+import org.letscareer.letscareer.domain.mission.type.MissionQueryType;
+import org.letscareer.letscareer.domain.mission.vo.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -41,6 +40,7 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
                         mission.lateAttendanceCount,
                         missionScore.successScore,
                         missionScore.lateScore,
+                        missionTemplate.id,
                         mission.startDate,
                         mission.endDate
                 ))
@@ -194,7 +194,7 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
 
     private BooleanBuilder eqQueryType(MissionQueryType queryType) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
-        if(queryType != null) {
+        if (queryType != null) {
             LocalDateTime now = LocalDateTime.now();
             switch (queryType) {
                 case REMAINING -> booleanBuilder.and(mission.startDate.after(now));
