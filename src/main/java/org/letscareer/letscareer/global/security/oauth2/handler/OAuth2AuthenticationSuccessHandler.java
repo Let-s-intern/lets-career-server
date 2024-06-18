@@ -40,7 +40,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         String targetUrl;
-        if(((PrincipalDetails) authentication.getPrincipal()).isDuplicateEmail()) {
+        if(((PrincipalDetails) authentication.getPrincipal()).isDuplicateUser()) {
             targetUrl = determineTargetUrlException(request, response);
         } else {
             targetUrl = determineTargetUrl(request, response, authentication);
@@ -86,7 +86,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String targetUrl = getRedirectUri(request, response);
 
         try {
-            String error = objectMapper.writeValueAsString("Email_already_signed_up.");
+            String error = objectMapper.writeValueAsString("already_signed_up_user");
             return UriComponentsBuilder.fromHttpUrl(targetUrl)
                     .queryParam("error", error)
                     .build().toUriString();

@@ -16,7 +16,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
     private User user;
 
-    private boolean duplicateEmail = false;
+    private boolean duplicateUser = false;
 
     @Setter
     private Map<String, Object> attributes;
@@ -48,7 +48,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
     @Override
     public String getUsername() {
-        return user.getEmail();
+        return user.getPhoneNum();
     }
 
     @Override

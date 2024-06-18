@@ -32,7 +32,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     protected OAuth2User processOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) {
         AuthProvider authProvider = AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase());
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(authProvider, oAuth2User.getAttributes());
-        validateOAuth2UserInfoEmail(oAuth2UserInfo);
+        validateOAuth2UserInfo(oAuth2UserInfo);
         return validateEmailAndCreateUserIfNeed(oAuth2UserInfo, authProvider);
     }
 
@@ -55,7 +55,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         /* 다른 AuthProvider 에서 가입 이력 존재 */
         else if(!equalAuthProvider(user, authProvider)) {
             principalDetails = new PrincipalDetails(user);
-            principalDetails.setDuplicateEmail(true);
+            principalDetails.setDuplicateUser(true);
         }
 
         return principalDetails;
@@ -66,11 +66,13 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     private boolean equalAuthProvider(User user, AuthProvider authProvider) {
-        return user.getAuthProvider().equals(authProvider);
+        return user.getAuthProvider() != null && user.getAuthProvider().equals(authProvider);
     }
 
-    private void validateOAuth2UserInfoEmail(OAuth2UserInfo oAuth2UserInfo) {
+    private void validateOAuth2UserInfo(OAuth2UserInfo oAuth2UserInfo) {
         if(!StringUtils.hasText(oAuth2UserInfo.getEmail()))
             throw new RuntimeException("Email Not Found From OAuth2 Provider");
+        if(!StringUtils.hasText(oAuth2UserInfo.getPhoneNum()))
+            throw new RuntimeException("PhoneNum Not Found From OAuth2 Provider");
     }
 }
