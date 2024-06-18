@@ -9,6 +9,7 @@ import org.letscareer.letscareer.domain.score.entity.AttendanceScore;
 import java.util.Optional;
 
 import static org.letscareer.letscareer.domain.application.entity.QApplication.application;
+import static org.letscareer.letscareer.domain.application.entity.QChallengeApplication.challengeApplication;
 import static org.letscareer.letscareer.domain.attendance.entity.QAttendance.attendance;
 import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
 import static org.letscareer.letscareer.domain.mission.entity.QMission.mission;
@@ -24,11 +25,10 @@ public class AttendanceScoreQueryRepositoryImpl implements AttendanceScoreQueryR
     public Optional<AttendanceScore> findAttendanceScoreByChallengeIdAndApplicationId(Long challengeId, Long applicationId) {
         return Optional.ofNullable(queryFactory
                 .selectFrom(attendanceScore)
-                .leftJoin(attendanceScore.attendance, attendance)
-                .leftJoin(attendance.user, user)
-                .leftJoin(user.applicationList, application)
                 .leftJoin(attendance.mission, mission)
                 .leftJoin(mission.challenge, challenge)
+                .leftJoin(challenge.applicationList, challengeApplication)
+                .leftJoin(challengeApplication._super, application)
                 .where(
                         eqChallengeId(challengeId),
                         eqApplicationId(applicationId)
