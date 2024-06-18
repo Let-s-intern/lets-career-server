@@ -66,6 +66,10 @@ public class Attendance extends BaseTimeEntity {
         this.comments = updateValue(this.comments, attendanceUpdateRequestDto.comments());
     }
 
+    public void updateAttendance(AttendanceUpdateRequestDto attendanceUpdateRequestDto) {
+        this.link = updateValue(this.link, attendanceUpdateRequestDto.link());
+    }
+
     public void setAttendanceScore(AttendanceScore attendanceScore) {
         this.attendanceScore = attendanceScore;
     }
