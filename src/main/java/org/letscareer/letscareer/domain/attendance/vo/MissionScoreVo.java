@@ -3,8 +3,8 @@ package org.letscareer.letscareer.domain.attendance.vo;
 import lombok.Builder;
 
 @Builder
-public record AttendanceScoreVo(
-        Integer th,
-        Integer score
+public record MissionScoreVo(
+        Long missionId,
+        Integer th
 ) {
 }

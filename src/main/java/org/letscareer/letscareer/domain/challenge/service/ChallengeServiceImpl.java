@@ -9,8 +9,8 @@ import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationV
 import org.letscareer.letscareer.domain.attendance.helper.AttendanceHelper;
 import org.letscareer.letscareer.domain.attendance.mapper.AttendanceMapper;
 import org.letscareer.letscareer.domain.attendance.vo.AttendanceDashboardVo;
-import org.letscareer.letscareer.domain.attendance.vo.AttendanceScoreVo;
 import org.letscareer.letscareer.domain.attendance.vo.MissionAttendanceVo;
+import org.letscareer.letscareer.domain.attendance.vo.MissionScoreVo;
 import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApplicationPaybackRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeRequestDto;
@@ -34,13 +34,13 @@ import org.letscareer.letscareer.domain.faq.helper.FaqHelper;
 import org.letscareer.letscareer.domain.faq.mapper.FaqMapper;
 import org.letscareer.letscareer.domain.faq.vo.FaqDetailVo;
 import org.letscareer.letscareer.domain.mission.dto.response.MissionApplicationScoreResponseDto;
+import org.letscareer.letscareer.domain.mission.dto.response.MissionScoreResponseDto;
 import org.letscareer.letscareer.domain.mission.helper.MissionHelper;
 import org.letscareer.letscareer.domain.mission.mapper.MissionMapper;
 import org.letscareer.letscareer.domain.mission.type.MissionQueryType;
 import org.letscareer.letscareer.domain.mission.vo.DailyMissionVo;
 import org.letscareer.letscareer.domain.mission.vo.MissionScheduleVo;
 import org.letscareer.letscareer.domain.mission.vo.MyDailyMissionVo;
-import org.letscareer.letscareer.domain.mission.vo.MyMissionVo;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.payment.helper.PaymentHelper;
 import org.letscareer.letscareer.domain.price.dto.request.CreateChallengePriceRequestDto;
@@ -51,7 +51,9 @@ import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.domain.review.helper.ReviewHelper;
 import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
 import org.letscareer.letscareer.domain.review.vo.ReviewVo;
+import org.letscareer.letscareer.domain.score.entity.AdminScore;
 import org.letscareer.letscareer.domain.score.entity.AttendanceScore;
+import org.letscareer.letscareer.domain.score.helper.AdminScoreHelper;
 import org.letscareer.letscareer.domain.score.helper.AttendanceScoreHelper;
 import org.letscareer.letscareer.domain.score.mapper.AttendanceScoreMapper;
 import org.letscareer.letscareer.domain.user.entity.User;
@@ -61,6 +63,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -81,6 +84,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final ChallengeNoticeHelper challengeNoticeHelper;
     private final AttendanceScoreHelper attendanceScoreHelper;
     private final AttendanceScoreMapper attendanceScoreMapper;
+    private final AdminScoreHelper adminScoreHelper;
     private final AttendanceHelper attendanceHelper;
     private final AttendanceMapper attendanceMapper;
     private final PaymentHelper paymentHelper;
@@ -247,9 +251,9 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     @Override
     public void updateApplicationsScore(Long challengeId, Long applicationId, UpdateChallengeApplicationPaybackRequestDto requestDto) {
-        AttendanceScore attendanceScore = attendanceScoreHelper.findAttendanceScoreByChallengeIdAndApplicationIdOrThrow(challengeId, applicationId);
+        AdminScore adminScore = adminScoreHelper.findAdminScoreByChallengeIdAndApplicationIdOrThrow(challengeId, applicationId);
+        adminScore.UpdateAdminScore(requestDto.adminScore());
         Payment payment = paymentHelper.findPaymentByApplicationIdOrThrow(applicationId);
-        attendanceScore.updateAdminScore(requestDto.adminScore());
         payment.updateRefund(requestDto);
     }
 
@@ -272,9 +276,27 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     private MissionApplicationScoreResponseDto createMissionApplicationScoreForUser(UserChallengeApplicationVo challengeApplication, Long challengeId) {
-        List<AttendanceScoreVo> scores = attendanceHelper.findAttendanceScoreVos(challengeApplication.id(), challengeId);
+        List<MissionScoreVo> scores = attendanceHelper.findAttendanceScoreVos(challengeApplication.id(), challengeId);
+        List<MissionScoreResponseDto> scoreResponseDtoList = createMissionScoreResponseDtoList(scores, challengeId, challengeApplication.id());
         Payment payment = paymentHelper.findPaymentByApplicationIdOrThrow(challengeApplication.id());
-        return missionMapper.toMissionApplicationScoreResponseDto(challengeApplication, scores, payment);
+        return missionMapper.toMissionApplicationScoreResponseDto(challengeApplication, scoreResponseDtoList, payment);
+    }
+
+    private List<MissionScoreResponseDto> createMissionScoreResponseDtoList(List<MissionScoreVo> scores, Long challengeId, Long applicationId) {
+        List<MissionScoreResponseDto> contents = scores.stream()
+                .map(score -> {
+                    AttendanceScore attendanceScore = attendanceScoreHelper.findAttendanceScoreByMissionIdOrNull(score.missionId(), applicationId);
+                    if (!Objects.isNull(attendanceScore))
+                        return missionMapper.toMissionScoreResponseDto(score.th(), attendanceScore.getScore());
+                    else
+                        return missionMapper.toMissionScoreResponseDto(score.th(), 0);
+                })
+                .collect(Collectors.toList());
+        AdminScore adminScore = adminScoreHelper.findAdminScoreByChallengeIdAndApplicationIdOrThrow(challengeId, applicationId);
+        MissionScoreResponseDto missionScoreResponseDto = missionMapper.toMissionScoreResponseDto(99, adminScore.getScore());
+        contents.add(missionScoreResponseDto);
+        contents.sort(Comparator.comparing(MissionScoreResponseDto::th));
+        return contents;
     }
 
     private void createPriceListAndSave(List<CreateChallengePriceRequestDto> requestDtoList,

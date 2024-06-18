@@ -10,12 +10,12 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.attendance.type.AttendanceResult;
 import org.letscareer.letscareer.domain.attendance.vo.AttendanceAdminVo;
 import org.letscareer.letscareer.domain.attendance.vo.AttendanceDashboardVo;
-import org.letscareer.letscareer.domain.attendance.vo.AttendanceScoreVo;
+import org.letscareer.letscareer.domain.attendance.vo.MissionScoreVo;
 import org.letscareer.letscareer.domain.attendance.vo.MissionAttendanceVo;
 
 import java.util.List;
 
-import static org.letscareer.letscareer.domain.application.entity.QApplication.application;
+import static org.letscareer.letscareer.domain.application.entity.QChallengeApplication.challengeApplication;
 import static org.letscareer.letscareer.domain.attendance.entity.QAttendance.attendance;
 import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
 import static org.letscareer.letscareer.domain.mission.entity.QMission.mission;
@@ -43,7 +43,7 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
                         attendance.comments))
                 .from(attendance)
                 .where(
-                        eqChallenge(challengeId)
+                        eqChallengeId(challengeId)
                 )
                 .orderBy(
                         resultOrder().asc(),
@@ -53,45 +53,19 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
     }
 
     @Override
-    public List<AttendanceScoreVo> findAttendanceScoreVos(Long applicationId, Long challengeId) {
-        List<AttendanceScoreVo> contents = queryFactory
-                .select(Projections.constructor(AttendanceScoreVo.class,
-                        mission.th,
-                        attendanceScore.score
+    public List<MissionScoreVo> findAttendanceScoreVos(Long applicationId, Long challengeId) {
+        return queryFactory
+                .select(Projections.constructor(MissionScoreVo.class,
+                        mission.id,
+                        mission.th
                 ))
-                .from(attendance)
-                .leftJoin(attendance.mission, mission)
-                .leftJoin(attendance.attendanceScore, attendanceScore)
-                .leftJoin(attendance.user.applicationList, application)
-                .leftJoin(attendance.mission.challenge, challenge)
+                .from(mission)
+                .leftJoin(mission.challenge, challenge)
                 .where(
-                        eqChallenge(challengeId),
-                        eqApplication(applicationId)
+                        eqChallengeId(challengeId)
                 )
-                .groupBy(attendance.id)
                 .orderBy(mission.th.asc())
                 .fetch();
-
-        AttendanceScoreVo adminScore = queryFactory
-                .select(Projections.constructor(AttendanceScoreVo.class,
-                        Expressions.constant(99),
-                        attendanceScore.adminScore
-                ))
-                .from(attendance)
-                .leftJoin(attendance.mission, mission)
-                .leftJoin(attendance.attendanceScore, attendanceScore)
-                .leftJoin(attendance.user.applicationList, application)
-                .leftJoin(attendance.mission.challenge, challenge)
-                .where(
-                        eqChallenge(challengeId),
-                        eqApplication(applicationId)
-                )
-                .groupBy(attendance.id)
-                .fetchFirst();
-
-        contents.add(adminScore);
-
-        return contents;
     }
 
     @Override
@@ -110,7 +84,7 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
                 .leftJoin(attendance.mission, mission)
                 .leftJoin(attendance.mission.challenge, challenge)
                 .where(
-                        eqChallenge(challengeId),
+                        eqChallengeId(challengeId),
                         eqMissionId(missionId)
                 )
                 .orderBy(
@@ -139,12 +113,12 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
         return userId != null ? attendance.user.id.eq(userId) : null;
     }
 
-    private BooleanExpression eqChallenge(Long challengeId) {
-        return challengeId != null ? attendance.mission.challenge.id.eq(challengeId) : null;
+    private BooleanExpression eqChallengeId(Long challengeId) {
+        return challengeId != null ? challenge.id.eq(challengeId) : null;
     }
 
-    private BooleanExpression eqApplication(Long applicationId) {
-        return applicationId != null ? application.id.eq(applicationId) : null;
+    private BooleanExpression eqChallengeApplicationId(Long applicationId) {
+        return applicationId != null ? challengeApplication._super.id.eq(applicationId) : null;
     }
 
     private BooleanExpression eqMissionId(Long missionId) {
