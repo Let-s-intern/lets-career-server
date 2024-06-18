@@ -7,6 +7,8 @@ import org.letscareer.letscareer.domain.banner.dto.request.UpdateBannerRequestDt
 import org.letscareer.letscareer.domain.banner.type.BannerType;
 import org.letscareer.letscareer.domain.file.entity.File;
 
+import java.util.Objects;
+
 import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils.updateValue;
 
 @Entity
@@ -34,6 +36,7 @@ public class ProgramBanner extends Banner {
     }
 
     public void updateProgramBanner(UpdateBannerRequestDto updateBannerRequestDto) {
+        if(Objects.isNull(updateBannerRequestDto)) return;
         super.updateBanner(updateBannerRequestDto);
     }
 

@@ -60,8 +60,8 @@ public class BannerV1Controller {
     @PatchMapping("/{id}")
     public ResponseEntity<SuccessResponse<?>> updateBanner(@PathVariable(name = "id") final Long bannerId,
                                                            @RequestParam(name = "type") final BannerType bannerType,
-                                                           @RequestPart final UpdateBannerRequestDto updateBannerRequestDto,
-                                                           @RequestPart final MultipartFile file) {
+                                                           @RequestPart(required = false) final UpdateBannerRequestDto updateBannerRequestDto,
+                                                           @RequestPart(required = false) final MultipartFile file) {
         bannerServiceFactory.getBannerService(bannerType).updateBanner(bannerId, updateBannerRequestDto, file);
         return SuccessResponse.ok(null);
     }
