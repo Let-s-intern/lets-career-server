@@ -73,8 +73,8 @@ public class Mission extends BaseTimeEntity {
         return Mission.builder()
                 .th(createMissionRequestDto.th())
                 .title(createMissionRequestDto.title())
-                .startDate(createMissionRequestDto.startDate().atTime(6, 0))
-                .endDate(createMissionRequestDto.startDate().atTime(23, 59, 59))
+                .startDate(createMissionRequestDto.startDate().atTime(0, 0))
+                .endDate(createMissionRequestDto.endDate().atTime(23, 59, 59))
                 .challenge(challenge)
                 .missionTemplate(missionTemplate)
                 .build();
@@ -109,7 +109,7 @@ public class Mission extends BaseTimeEntity {
     public void updateAttendanceCount(AttendanceStatus attendanceStatus) {
         switch (attendanceStatus) {
             case PRESENT -> this.attendanceCount = updateValue(this.attendanceCount, this.attendanceCount + 1);
-            case LATE -> this.lateAttendanceCount = updateValue(this.lateAttendanceCount,this.lateAttendanceCount + 1);
+            case LATE -> this.lateAttendanceCount = updateValue(this.lateAttendanceCount, this.lateAttendanceCount + 1);
         }
     }
 }

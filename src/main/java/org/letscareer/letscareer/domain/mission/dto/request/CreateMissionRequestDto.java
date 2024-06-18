@@ -13,6 +13,7 @@ public record CreateMissionRequestDto(
         @Nullable Integer score,
         @Nullable Integer lateScore,
         @NotNull LocalDate startDate,
+        @NotNull LocalDate endDate,
         @NotNull Long missionTemplateId,
         List<Long> essentialContentsIdList,
         List<Long> additionalContentsIdList
