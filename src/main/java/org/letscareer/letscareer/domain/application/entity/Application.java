@@ -27,7 +27,7 @@ public abstract class Application extends BaseTimeEntity {
     @JoinColumn(name = "payment_id")
     private Payment payment;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
     @OneToOne(fetch = FetchType.LAZY)
