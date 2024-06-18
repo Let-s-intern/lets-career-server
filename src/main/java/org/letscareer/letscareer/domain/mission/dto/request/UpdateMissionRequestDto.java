@@ -1,5 +1,7 @@
 package org.letscareer.letscareer.domain.mission.dto.request;
 
+import org.springframework.cglib.core.Local;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -9,6 +11,7 @@ public record UpdateMissionRequestDto(
         Integer score,
         Integer lateScore,
         LocalDate startDate,
+        LocalDate endDate,
         Long missionTemplateId,
         List<Long> essentialContentsIdList,
         List<Long> additionalContentsIdList
