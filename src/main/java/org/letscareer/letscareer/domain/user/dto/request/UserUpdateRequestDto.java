@@ -1,5 +1,6 @@
 package org.letscareer.letscareer.domain.user.dto.request;
 
+import jakarta.validation.constraints.NotEmpty;
 import org.letscareer.letscareer.domain.user.type.AccountType;
 import org.letscareer.letscareer.domain.user.type.UserGrade;
 
@@ -16,6 +17,7 @@ public record UserUpdateRequestDto(
         String contactEmail,
         AccountType accountType,
         String accountNum,
-        String accountOwner
+        String accountOwner,
+        String inflowPath
 ) {
 }

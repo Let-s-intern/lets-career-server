@@ -124,7 +124,6 @@ public class User extends BaseTimeEntity {
     }
 
     public void updateUser(UserUpdateRequestDto userUpdateRequestDto) {
-        System.out.println(userUpdateRequestDto.phoneNum());
         this.email = updateValue(this.email, userUpdateRequestDto.email());
         this.name = updateValue(this.name, userUpdateRequestDto.name());
         this.phoneNum = updateValue(this.phoneNum, userUpdateRequestDto.phoneNum());
@@ -138,6 +137,7 @@ public class User extends BaseTimeEntity {
         this.accountType = updateValue(this.accountType, userUpdateRequestDto.accountType());
         this.accountNum = updateValue(this.accountNum, userUpdateRequestDto.accountNum());
         this.accountOwner = updateValue(this.accountOwner, userUpdateRequestDto.accountOwner());
+        this.inflowPath = updateValue(this.inflowPath, userUpdateRequestDto.inflowPath());
     }
 
     public void updateUserPassword(String encodedPassword) {
