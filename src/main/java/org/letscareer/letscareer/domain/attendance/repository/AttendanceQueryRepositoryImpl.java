@@ -10,12 +10,11 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.attendance.type.AttendanceResult;
 import org.letscareer.letscareer.domain.attendance.vo.AttendanceAdminVo;
 import org.letscareer.letscareer.domain.attendance.vo.AttendanceDashboardVo;
-import org.letscareer.letscareer.domain.attendance.vo.AttendanceScoreVo;
+import org.letscareer.letscareer.domain.attendance.vo.MissionScoreVo;
 import org.letscareer.letscareer.domain.attendance.vo.MissionAttendanceVo;
 
 import java.util.List;
 
-import static org.letscareer.letscareer.domain.application.entity.QApplication.application;
 import static org.letscareer.letscareer.domain.application.entity.QChallengeApplication.challengeApplication;
 import static org.letscareer.letscareer.domain.attendance.entity.QAttendance.attendance;
 import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
@@ -54,45 +53,19 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
     }
 
     @Override
-    public List<AttendanceScoreVo> findAttendanceScoreVos(Long applicationId, Long challengeId) {
-        List<AttendanceScoreVo> contents = queryFactory
-                .select(Projections.constructor(AttendanceScoreVo.class,
-                        mission.th,
-                        attendanceScore.score.coalesce(0)
+    public List<MissionScoreVo> findAttendanceScoreVos(Long applicationId, Long challengeId) {
+        return queryFactory
+                .select(Projections.constructor(MissionScoreVo.class,
+                        mission.id,
+                        mission.th
                 ))
                 .from(mission)
                 .leftJoin(mission.challenge, challenge)
-                .leftJoin(mission.challenge.applicationList, challengeApplication)
-                .leftJoin(mission.attendanceList, attendance)
-                .leftJoin(attendance.attendanceScore, attendanceScore)
                 .where(
-                        eqChallengeId(challengeId),
-                        eqChallengeApplicationId(applicationId)
+                        eqChallengeId(challengeId)
                 )
-                .groupBy(mission.th)
                 .orderBy(mission.th.asc())
                 .fetch();
-
-        AttendanceScoreVo adminScore = queryFactory
-                .select(Projections.constructor(AttendanceScoreVo.class,
-                        Expressions.constant(99),
-                        attendanceScore.adminScore.coalesce(0)
-                ))
-                .from(mission)
-                .leftJoin(mission.challenge, challenge)
-                .leftJoin(mission.challenge.applicationList, challengeApplication)
-                .leftJoin(mission.attendanceList, attendance)
-                .leftJoin(attendance.attendanceScore, attendanceScore)
-                .where(
-                        eqChallengeId(challengeId),
-                        eqChallengeApplicationId(applicationId)
-                )
-                .groupBy(mission.th)
-                .fetchFirst();
-
-        contents.add(adminScore);
-
-        return contents;
     }
 
     @Override

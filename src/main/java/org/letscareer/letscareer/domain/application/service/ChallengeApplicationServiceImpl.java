@@ -13,6 +13,8 @@ import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.payment.helper.PaymentHelper;
 import org.letscareer.letscareer.domain.price.entity.Price;
 import org.letscareer.letscareer.domain.price.helper.PriceHelper;
+import org.letscareer.letscareer.domain.score.entity.AdminScore;
+import org.letscareer.letscareer.domain.score.helper.AdminScoreHelper;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,7 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
     private final ChallengeApplicationHelper challengeApplicationHelper;
     private final ApplicationHelper applicationHelper;
     private final ChallengeHelper challengeHelper;
+    private final AdminScoreHelper adminScoreHelper;
     private final PaymentHelper paymentHelper;
     private final CouponHelper couponHelper;
     private final PriceHelper priceHelper;
@@ -38,6 +41,7 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
         Price price = priceHelper.findPriceByIdOrThrow(createApplicationRequestDto.paymentInfo().priceId());
         Payment payment = paymentHelper.createPaymentAndSave(challengeApplication, coupon, price);
         challengeApplication.setPayment(payment);
+        adminScoreHelper.createAdminScoreAndSave(challengeApplication);
         challengeHelper.updateCurrentCount(challenge, challenge.getCurrentCount() + 1);
     }
 

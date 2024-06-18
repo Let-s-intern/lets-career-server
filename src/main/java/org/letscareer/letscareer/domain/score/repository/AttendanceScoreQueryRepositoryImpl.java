@@ -54,6 +54,22 @@ public class AttendanceScoreQueryRepositoryImpl implements AttendanceScoreQueryR
                 .fetchFirst());
     }
 
+    @Override
+    public Optional<AttendanceScore> findAttendanceScoreByMissionId(Long missionId, Long applicationId) {
+        return Optional.ofNullable(queryFactory
+                .selectFrom(attendanceScore)
+                .leftJoin(attendanceScore.attendance, attendance)
+                .leftJoin(attendance.mission, mission)
+                .leftJoin(attendance.user.applicationList, application)
+                .where(
+                        eqMissionId(missionId),
+                        eqApplicationId(applicationId)
+                )
+                .groupBy(application.id)
+                .fetchOne()
+        );
+    }
+
     private BooleanExpression eqUserId(Long userId) {
         return userId != null ? user.id.eq(userId) : null;
     }
@@ -64,5 +80,9 @@ public class AttendanceScoreQueryRepositoryImpl implements AttendanceScoreQueryR
 
     private BooleanExpression eqApplicationId(Long applicationId) {
         return applicationId != null ? application.id.eq(applicationId) : null;
+    }
+
+    private BooleanExpression eqMissionId(Long missionId) {
+        return missionId != null ? mission.id.eq(missionId) : null;
     }
 }

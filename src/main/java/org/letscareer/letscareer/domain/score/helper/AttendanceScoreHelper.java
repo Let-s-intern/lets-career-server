@@ -22,6 +22,11 @@ public class AttendanceScoreHelper {
                 .orElseThrow(() -> new EntityNotFoundException(ATTENDANCE_SCORE_NOT_FOUND));
     }
 
+    public AttendanceScore findAttendanceScoreByMissionIdOrNull(Long missionId, Long applicationId) {
+        return attendanceScoreRepository.findAttendanceScoreByMissionId(missionId, applicationId)
+                .orElse(null);
+    }
+
     public AttendanceScore createAttendanceScoreAndSave(AttendanceStatus status, MissionScore missionScore, Attendance attendance) {
         int score = 0;
         switch (status) {

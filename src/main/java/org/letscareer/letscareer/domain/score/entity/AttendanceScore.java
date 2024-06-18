@@ -16,7 +16,6 @@ import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUti
 @Entity
 public class AttendanceScore extends Score {
     private Integer score = 0;
-    private Integer adminScore = 0;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "attendance_id")
@@ -26,7 +25,6 @@ public class AttendanceScore extends Score {
     public AttendanceScore(Integer score, Attendance attendance) {
         super();
         this.score = score;
-        this.adminScore = 0;
         this.attendance = attendance;
     }
 
@@ -37,9 +35,5 @@ public class AttendanceScore extends Score {
                 .build();
         attendance.setAttendanceScore(attendanceScore);
         return attendanceScore;
-    }
-
-    public void updateAdminScore(Integer adminScore) {
-        this.adminScore = updateValue(this.adminScore, adminScore);
     }
 }

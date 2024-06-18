@@ -10,14 +10,14 @@ import org.letscareer.letscareer.domain.mission.dto.request.CreateMissionRequest
 import org.letscareer.letscareer.domain.mission.dto.response.MissionAdminListResponseDto;
 import org.letscareer.letscareer.domain.mission.dto.response.MissionAdminResponseDto;
 import org.letscareer.letscareer.domain.mission.dto.response.MissionApplicationScoreResponseDto;
+import org.letscareer.letscareer.domain.mission.dto.response.MissionScoreResponseDto;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.mission.vo.DailyMissionVo;
 import org.letscareer.letscareer.domain.mission.vo.MyDailyMissionVo;
 import org.letscareer.letscareer.domain.mission.vo.MissionForChallengeVo;
-import org.letscareer.letscareer.domain.mission.vo.MyMissionVo;
 import org.letscareer.letscareer.domain.missiontemplate.entity.MissionTemplate;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
-import org.letscareer.letscareer.domain.attendance.vo.AttendanceScoreVo;
+import org.letscareer.letscareer.domain.attendance.vo.MissionScoreVo;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -26,6 +26,10 @@ import java.util.List;
 public class MissionMapper {
     public Mission toEntity(CreateMissionRequestDto createMissionRequestDto, Challenge challenge, MissionTemplate missionTemplate) {
         return Mission.createMission(createMissionRequestDto, challenge, missionTemplate);
+    }
+
+    public MissionScoreResponseDto toMissionScoreResponseDto(Integer th, Integer score) {
+        return MissionScoreResponseDto.of(th, score);
     }
 
     public MissionAdminListResponseDto toMissionAdminListResponseDto(List<MissionAdminResponseDto> missionAdminResponseDtoList) {
@@ -40,9 +44,9 @@ public class MissionMapper {
     }
 
     public MissionApplicationScoreResponseDto toMissionApplicationScoreResponseDto(UserChallengeApplicationVo userChallengeApplicationVo,
-                                                                                   List<AttendanceScoreVo> scores,
+                                                                                   List<MissionScoreResponseDto> scoreResponseDtoList,
                                                                                    Payment payment) {
-        return MissionApplicationScoreResponseDto.of(userChallengeApplicationVo, scores, payment);
+        return MissionApplicationScoreResponseDto.of(userChallengeApplicationVo, scoreResponseDtoList, payment);
     }
 
     public GetChallengeDailyMissionResponseDto toGetChallengeDailyMissionResponseDto(DailyMissionVo dailyMissionVo) {

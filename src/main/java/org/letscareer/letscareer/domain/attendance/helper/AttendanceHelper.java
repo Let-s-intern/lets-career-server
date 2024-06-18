@@ -8,7 +8,7 @@ import org.letscareer.letscareer.domain.attendance.repository.AttendanceReposito
 import org.letscareer.letscareer.domain.attendance.type.AttendanceStatus;
 import org.letscareer.letscareer.domain.attendance.vo.AttendanceAdminVo;
 import org.letscareer.letscareer.domain.attendance.vo.AttendanceDashboardVo;
-import org.letscareer.letscareer.domain.attendance.vo.AttendanceScoreVo;
+import org.letscareer.letscareer.domain.attendance.vo.MissionScoreVo;
 import org.letscareer.letscareer.domain.attendance.vo.MissionAttendanceVo;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.user.entity.User;
@@ -35,7 +35,7 @@ public class AttendanceHelper {
                 .orElseThrow(() -> new EntityNotFoundException(AttendanceErrorCode.ATTENDANCE_NOT_FOUND));
     }
 
-    public List<AttendanceScoreVo> findAttendanceScoreVos(Long applicationId, Long challengeId) {
+    public List<MissionScoreVo> findAttendanceScoreVos(Long applicationId, Long challengeId) {
         return attendanceRepository.findAttendanceScoreVos(applicationId, challengeId);
     }
 
