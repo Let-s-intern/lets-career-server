@@ -66,7 +66,7 @@ public class MissionMapper {
         return GetChallengeMyMissionsResponseDto.of(missionVoList);
     }
 
-    public GetChallengeMyMissionDetailResponseDto toGetChallengeMyMissionDetailResponseDto(MyDailyMissionVo missionInfo) {
-        return GetChallengeMyMissionDetailResponseDto.of(missionInfo);
+    public GetChallengeMyMissionDetailResponseDto toGetChallengeMyMissionDetailResponseDto(MyDailyMissionVo missionInfo, AttendanceDashboardVo attendanceInfo) {
+        return GetChallengeMyMissionDetailResponseDto.of(missionInfo, attendanceInfo);
     }
 }

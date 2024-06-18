@@ -8,6 +8,7 @@ public record AttendanceDashboardVo(
         Boolean submitted,
         Long id,
         String link,
+        String comments,
         AttendanceStatus status,
         AttendanceResult result
 ) {
@@ -16,6 +17,7 @@ public record AttendanceDashboardVo(
                 (attendance != null),
                 (attendance != null) ? attendance.getId() : null,
                 (attendance != null) ? attendance.getLink() : null,
+                (attendance != null) ? attendance.getComments() : null,
                 (attendance != null) ? attendance.getStatus() : null,
                 (attendance != null) ? attendance.getResult() : null
         );

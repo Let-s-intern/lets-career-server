@@ -228,7 +228,8 @@ public class ChallengeServiceImpl implements ChallengeService {
     public GetChallengeMyMissionDetailResponseDto getMyMissionDetail(Long challengeId, Long missionId, User user) {
         challengeApplicationHelper.validateChallengeDashboardAccessibleUser(challengeId, user);
         MyDailyMissionVo missionInfo = missionHelper.findMyDailyMissionVoByMissionId(missionId);
-        return missionMapper.toGetChallengeMyMissionDetailResponseDto(missionInfo);
+        AttendanceDashboardVo attendanceInfo = attendanceHelper.findAttendanceDashboardVoOrNull(missionInfo.id(), user.getId());
+        return missionMapper.toGetChallengeMyMissionDetailResponseDto(missionInfo, attendanceInfo);
     }
 
     @Override
