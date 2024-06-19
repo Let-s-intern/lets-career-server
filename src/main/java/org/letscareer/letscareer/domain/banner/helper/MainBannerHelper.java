@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.banner.entity.MainBanner;
 import org.letscareer.letscareer.domain.banner.error.BannerErrorCode;
 import org.letscareer.letscareer.domain.banner.repository.MainBannerRepository;
+import org.letscareer.letscareer.domain.banner.vo.BannerAdminDetailVo;
 import org.letscareer.letscareer.domain.banner.vo.BannerAdminVo;
 import org.letscareer.letscareer.domain.banner.vo.BannerUserVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
@@ -30,6 +31,11 @@ public class MainBannerHelper {
 
     public MainBanner findByIdOrThrow(Long bannerId) {
         return mainBannerRepository.findById(bannerId).orElseThrow(() -> new EntityNotFoundException(BannerErrorCode.BANNER_NOT_FOUND));
+    }
+
+    public BannerAdminDetailVo findBannerAdminDetailVoByIdOrThrow(Long bannerId) {
+        return mainBannerRepository.findBannerAdminDetailVo(bannerId)
+                .orElseThrow(() -> new EntityNotFoundException(BannerErrorCode.BANNER_NOT_FOUND));
     }
 
     public void deleteMainBanner(MainBanner mainBanner) {

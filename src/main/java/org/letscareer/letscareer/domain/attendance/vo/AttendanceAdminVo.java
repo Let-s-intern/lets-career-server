@@ -16,7 +16,6 @@ public record AttendanceAdminVo(
         AttendanceStatus status,
         String link,
         AttendanceResult result,
-        Boolean isRefunded,
         String comment
 ) {
 }

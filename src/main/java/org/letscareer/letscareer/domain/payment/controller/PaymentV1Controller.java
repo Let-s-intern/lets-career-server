@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class PaymentV1Controller {
     private final PaymentService paymentService;
 
-    @Operation(summary = "결제 내역 수정", responses = {
+    @Operation(summary = "[어드민] 결제 내역 수정", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @PatchMapping("/{id}")

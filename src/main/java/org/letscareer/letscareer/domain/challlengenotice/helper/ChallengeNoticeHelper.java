@@ -5,9 +5,9 @@ import org.letscareer.letscareer.domain.challlengenotice.entity.ChallengeNotice;
 import org.letscareer.letscareer.domain.challlengenotice.repository.ChallengeNoticeRepository;
 import org.letscareer.letscareer.domain.challlengenotice.vo.ChallengeNoticeVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Component
@@ -22,8 +22,8 @@ public class ChallengeNoticeHelper {
         return challengeNoticeRepository.findById(challengeNoticeId).orElseThrow(EntityNotFoundException::new);
     }
 
-    public List<ChallengeNoticeVo> findAllChallengeNoticeVos(Long challengeId) {
-        return challengeNoticeRepository.findAllChallengeNoticeVos(challengeId);
+    public Page<ChallengeNoticeVo> findAllChallengeNoticeVos(Long challengeId, Pageable pageable) {
+        return challengeNoticeRepository.findAllChallengeNoticeVos(challengeId, pageable);
     }
 
     public void deleteChallengeNotice(ChallengeNotice challengeNotice) {

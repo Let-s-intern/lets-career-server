@@ -10,7 +10,9 @@ import org.letscareer.letscareer.domain.mission.dto.request.CreateMissionRequest
 import org.letscareer.letscareer.domain.mission.dto.request.UpdateMissionRequestDto;
 import org.letscareer.letscareer.domain.mission.dto.response.MissionAdminListResponseDto;
 import org.letscareer.letscareer.domain.mission.service.MissionService;
+import org.letscareer.letscareer.global.common.annotation.ApiErrorCode;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
+import org.letscareer.letscareer.global.common.entity.SwaggerEnum;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +22,17 @@ import org.springframework.web.bind.annotation.*;
 public class MissionV1Controller {
     private final MissionService missionService;
 
-    @Operation(summary = "미션 생성", responses = {
+    @Operation(summary = "[어드민] 챌린지 1개의 미션 전체 목록", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = MissionAdminListResponseDto.class)))
+    })
+    @ApiErrorCode({SwaggerEnum.MISSION_NOT_FOUND})
+    @GetMapping("/{id}/admin")
+    public ResponseEntity<SuccessResponse<?>> getMissionsForAdmin(@PathVariable(name = "id") Long challengeId) {
+        MissionAdminListResponseDto responseDto = missionService.getMissionsForAdmin(challengeId);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "[어드민] 미션 생성", responses = {
             @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
     })
     @PostMapping("/{id}")
@@ -30,22 +42,22 @@ public class MissionV1Controller {
         return SuccessResponse.created(null);
     }
 
-    @Operation(summary = "어드민 챌린지 1개의 미션 전체 목록", responses = {
-            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = MissionAdminListResponseDto.class)))
-    })
-    @GetMapping("/admin/{id}")
-    public ResponseEntity<SuccessResponse<?>> getMissionsForAdmin(@PathVariable(name = "id") Long challengeId) {
-        MissionAdminListResponseDto responseDto = missionService.getMissionsForAdmin(challengeId);
-        return SuccessResponse.ok(responseDto);
-    }
-
-    @Operation(summary = "미션 수정", responses = {
+    @Operation(summary = "[어드민] 미션 수정", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @PatchMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> updateMission(@PathVariable(name = "id") final String missionId,
+    public ResponseEntity<SuccessResponse<?>> updateMission(@PathVariable(name = "id") final Long missionId,
                                                             @RequestBody final UpdateMissionRequestDto updateMissionRequestDto) {
         missionService.updateMission(missionId, updateMissionRequestDto);
+        return SuccessResponse.ok(null);
+    }
+
+    @Operation(summary = "[어드민] 미션 삭제", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<SuccessResponse<?>> deleteMission(@PathVariable(name = "id") final Long missionId) {
+        missionService.deleteMission(missionId);
         return SuccessResponse.ok(null);
     }
 }

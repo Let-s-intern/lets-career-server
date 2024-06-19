@@ -31,7 +31,7 @@ import static org.letscareer.letscareer.global.error.GlobalErrorCode.MISMATCH_PA
 public class UserHelper {
     private final static String PASSWORD_REGEX = "^(?=.*[^a-zA-Z0-9]).{8,}$";
     private final static String PHONE_NUMBER_REGEX = "010-[0-9]{4}-[0-9]{4}";
-    private final static String EMAIL_REGEX = " /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\\.[A-Za-z]{2,3}$/i";
+    private final static String EMAIL_REGEX = "^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\\.[A-Za-z]{2,3}$";
     private final UserRepository userRepository;
     private final PrincipalDetailsService principalDetailsService;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -60,6 +60,7 @@ public class UserHelper {
     }
 
     public void validateRegexEmail(String email) {
+        if(Objects.isNull(email)) return;
         Pattern pattern = Pattern.compile(EMAIL_REGEX);
         Matcher matcher = pattern.matcher(email);
         if (!matcher.matches())
@@ -67,6 +68,7 @@ public class UserHelper {
     }
 
     public void validateRegexPassword(String password) {
+        if(Objects.isNull(password)) return;
         Pattern pattern = Pattern.compile(PASSWORD_REGEX);
         Matcher matcher = pattern.matcher(password);
         if (!matcher.matches())
@@ -74,6 +76,7 @@ public class UserHelper {
     }
 
     public void validateRegexPhoneNumber(String phoneNumber) {
+        if(Objects.isNull(phoneNumber)) return;
         Pattern pattern = Pattern.compile(PHONE_NUMBER_REGEX);
         Matcher matcher = pattern.matcher(phoneNumber);
         if (!matcher.matches())

@@ -2,6 +2,11 @@ package org.letscareer.letscareer.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.letscareer.letscareer.domain.application.dto.response.GetMyApplicationsResponseDto;
+import org.letscareer.letscareer.domain.application.helper.ApplicationHelper;
+import org.letscareer.letscareer.domain.application.mapper.ApplicationMapper;
+import org.letscareer.letscareer.domain.application.type.ApplicationStatus;
+import org.letscareer.letscareer.domain.application.vo.MyApplicationVo;
 import org.letscareer.letscareer.domain.user.dto.request.*;
 import org.letscareer.letscareer.domain.user.dto.response.TokenResponseDto;
 import org.letscareer.letscareer.domain.user.dto.response.UserAdminListResponseDto;
@@ -21,24 +26,31 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
-@Transactional
+import java.util.List;
+
 @RequiredArgsConstructor
+@Transactional
+@Service
 public class UserServiceImpl implements UserService {
     private final UserHelper userHelper;
     private final UserMapper userMapper;
+    private final ApplicationHelper applicationHelper;
+    private final ApplicationMapper applicationMapper;
     private final TokenProvider tokenProvider;
     private final EmailUtils emailUtils;
 
+    @Override
     public User createUserFromOAuth2(OAuth2UserInfo oAuth2UserInfo, AuthProvider authProvider) {
         User newUser = userMapper.toEntityFromOAuth2(oAuth2UserInfo, authProvider);
         return userHelper.saveUser(newUser);
     }
 
+    @Override
     public User updateUserFromOAuth2(User user, OAuth2UserInfo oAuth2UserInfo) {
         return user.updateUserFromOAuth2(oAuth2UserInfo);
     }
 
+    @Override
     public void pwSignUp(UserPwSignUpRequestDto pwSignUpRequestDto) {
         userHelper.validateExistingUser(pwSignUpRequestDto.phoneNum());
         userHelper.validateRegexEmail(pwSignUpRequestDto.email());
@@ -49,6 +61,7 @@ public class UserServiceImpl implements UserService {
         userHelper.saveUser(newUser);
     }
 
+    @Override
     public TokenResponseDto pwSignIn(UserPwSignInRequestDto pwSignInRequestDto) {
         final User user = userHelper.findUserByEmailOrThrow(pwSignInRequestDto.email());
         userHelper.validatePassword(user, pwSignInRequestDto.password());
@@ -58,13 +71,23 @@ public class UserServiceImpl implements UserService {
         return userMapper.toTokenResponseDto(accessToken, refreshToken);
     }
 
-    public void updateUser(User user, UserUpdateRequestDto userUpdateRequestDto) {
+    @Override
+    public void updateUser(Long userId, UserUpdateRequestDto userUpdateRequestDto) {
+        User user = userHelper.findUserByIdOrThrow(userId);
         userHelper.validateRegexEmail(userUpdateRequestDto.email());
+        userHelper.validateRegexEmail(userUpdateRequestDto.contactEmail());
         userHelper.validateRegexPhoneNumber(userUpdateRequestDto.phoneNum());
         userHelper.validateUpdatedPhoneNumber(user, userUpdateRequestDto);
         userHelper.updateUser(user, userUpdateRequestDto);
     }
 
+    @Override
+    public void updateUserForSign(UpdateUserSignInfoRequestDto requestDto) {
+        User user = userHelper.findUserByEmailOrThrow(requestDto.email());
+        user.updateUserAdditionInfo(requestDto);
+    }
+
+    @Override
     public UserAdminListResponseDto getUsers(Pageable pageable) {
         Page<UserAdminVo> userAdminList = userHelper.findAllUserAdminVos(pageable);
         return userMapper.toUserAdminListResponseDto(userAdminList);
@@ -97,15 +120,24 @@ public class UserServiceImpl implements UserService {
         return TokenResponseDto.of(newAccessToken, tokenReissueRequestDto.refreshToken());
     }
 
+    @Override
+    public GetMyApplicationsResponseDto getMyApplications(User user, ApplicationStatus status) {
+        List<MyApplicationVo> applicationList = applicationHelper.getMyApplications(user.getId(), status);
+        return applicationMapper.toGetMyApplicationsResponseDto(applicationList);
+    }
+
+    @Override
     public UserInfoResponseDto getUserInfo(User user) {
         return userMapper.toUserInfoResponseDto(user);
     }
 
+    @Override
     public void deleteUser(User user) {
         tokenProvider.deleteRefreshToken(user.getId());
         userHelper.deleteUser(user);
     }
 
+    @Override
     public Boolean isAdmin(User user) {
         return user.getRole().equals(UserRole.ADMIN);
     }

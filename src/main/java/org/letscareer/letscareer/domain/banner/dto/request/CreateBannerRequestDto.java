@@ -9,7 +9,6 @@ public record CreateBannerRequestDto(
         @NotNull String link,
         @NotNull LocalDateTime startDate,
         @NotNull LocalDateTime endDate,
-        String imgUrl,
         String contents,
         String colorCode,
         String textColorCode

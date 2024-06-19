@@ -61,6 +61,7 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
                         challenge.thumbnail,
                         challenge.startDate,
                         challenge.endDate,
+                        challenge.beginning,
                         challenge.deadline,
                         challenge.createDate
                 ))
@@ -71,16 +72,20 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
                         inChallengeClassification(typeList),
                         inChallengeStatus(statusList)
                 )
+                .groupBy(challenge.id)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        JPAQuery<Challenge> countQuery = queryFactory
-                .selectFrom(challenge)
+        JPAQuery<Long> countQuery = queryFactory
+                .select(challenge.id.countDistinct())
+                .from(challenge)
+                .leftJoin(challenge.classificationList, challengeClassification)
                 .where(
                         inChallengeClassification(typeList),
                         inChallengeStatus(statusList)
-                );
+                )
+                .groupBy(challenge.id);
 
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
     }
@@ -171,14 +176,14 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
     }
 
     private BooleanExpression challengePrevStatus(LocalDateTime now) {
-        return challenge.startDate.lt(now);
+        return challenge.beginning.lt(now);
     }
 
     private BooleanExpression challengeProceedingStatus(LocalDateTime now) {
-        return challenge.startDate.loe(now).and(challenge.endDate.goe(now));
+        return challenge.beginning.loe(now).and(challenge.deadline.goe(now));
     }
 
     private BooleanExpression challengePostStatus(LocalDateTime now) {
-        return challenge.endDate.lt(now);
+        return challenge.deadline.lt(now);
     }
 }

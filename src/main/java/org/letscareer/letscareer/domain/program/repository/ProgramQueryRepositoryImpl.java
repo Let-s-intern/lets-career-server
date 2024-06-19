@@ -10,7 +10,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.program.entity.SearchCondition;
-import org.letscareer.letscareer.domain.program.entity.VWProgram;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.program.vo.ProgramForAdminVo;
@@ -55,20 +54,33 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                         inProgramClassification(condition.typeList()),
                         inProgramStatus(condition.statusList(), condition.type())
                 )
+                .groupBy(
+                        vWProgram.programId,
+                        vWProgram.programType
+                )
                 .orderBy(
-                        combinedOrderBy(condition.type())
+                        orderByProgramStatus(condition.type()),
+                        orderByProgramType()
                 )
                 .limit(condition.pageable().getPageSize())
                 .offset(condition.pageable().getOffset())
                 .fetch();
 
-        JPAQuery<VWProgram> countQuery = queryFactory
-                .selectFrom(vWProgram)
+        JPAQuery<Long> countQuery = queryFactory
+                .select(vWProgram.programId.countDistinct())  // 고유한 programId의 개수를 셈
+                .from(vWProgram)
+                .leftJoin(challengeClassification).on(vWProgram.programType.eq(ProgramType.CHALLENGE).and(vWProgram.programId.eq(challengeClassification.challenge.id)))
+                .leftJoin(liveClassification).on(vWProgram.programType.eq(ProgramType.LIVE).and(vWProgram.programId.eq(liveClassification.live.id)))
+                .leftJoin(vodClassification).on(vWProgram.programType.eq(ProgramType.VOD).and(vWProgram.programId.eq(vodClassification.vod.id)))
                 .where(
                         eqProgramType(condition.type()),
                         containDuration(condition.startDate(), condition.endDate()),
                         inProgramClassification(condition.typeList()),
                         inProgramStatus(condition.statusList(), condition.type())
+                )
+                .groupBy(
+                        vWProgram.programId,
+                        vWProgram.programType
                 );
 
         return PageableExecutionUtils.getPage(contents, condition.pageable(), countQuery::fetchCount);
@@ -101,20 +113,32 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                         inProgramClassification(condition.typeList()),
                         inProgramStatus(condition.statusList(), condition.type())
                 )
-                .orderBy(vWProgram.startDate.desc())
+                .groupBy(
+                        vWProgram.programId,
+                        vWProgram.programType
+                )
+                .orderBy(vWProgram.programId.desc())
                 .limit(condition.pageable().getPageSize())
                 .offset(condition.pageable().getOffset())
                 .fetch();
 
-        JPAQuery<VWProgram> countQuery = queryFactory
-                .selectFrom(vWProgram)
+        JPAQuery<Long> countQuery = queryFactory
+                .select(vWProgram.programId.countDistinct())
+                .from(vWProgram)
+                .leftJoin(challengeClassification).on(vWProgram.programType.eq(ProgramType.CHALLENGE).and(vWProgram.programId.eq(challengeClassification.challenge.id)))
+                .leftJoin(liveClassification).on(vWProgram.programType.eq(ProgramType.LIVE).and(vWProgram.programId.eq(liveClassification.live.id)))
+                .leftJoin(vodClassification).on(vWProgram.programType.eq(ProgramType.VOD).and(vWProgram.programId.eq(vodClassification.vod.id)))
                 .where(
                         eqProgramType(condition.type()),
                         containDuration(condition.startDate(), condition.endDate()),
                         inProgramClassification(condition.typeList()),
                         inProgramStatus(condition.statusList(), condition.type())
                 )
-                .orderBy(vWProgram.startDate.desc());
+                .groupBy(
+                        vWProgram.programId,
+                        vWProgram.programType
+                );
+        ;
 
         return PageableExecutionUtils.getPage(contents, condition.pageable(), countQuery::fetchCount);
     }
@@ -151,15 +175,7 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
         return booleanBuilder;
     }
 
-    public OrderSpecifier<?>[] combinedOrderBy(List<ProgramType> type) {
-        return new OrderSpecifier<?>[]{
-                orderByProgramStatus(type),
-                orderByProgramType()
-        };
-    }
-
-
-    public OrderSpecifier<Integer> orderByProgramType() {
+    public OrderSpecifier<?> orderByProgramType() {
         return new CaseBuilder()
                 .when(vWProgram.programType.eq(ProgramType.CHALLENGE)).then(0)
                 .when(vWProgram.programType.eq(ProgramType.LIVE)).then(1)
@@ -168,10 +184,10 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                 .asc();
     }
 
-    private OrderSpecifier<Integer> orderByProgramStatus(List<ProgramType> type) {
+    private OrderSpecifier<?> orderByProgramStatus(List<ProgramType> type) {
         LocalDateTime now = LocalDateTime.now();
         // PROCEEDING 상태인 프로그램
-        BooleanExpression proceedingStatus = programProceedingStatus(now, type);
+        BooleanExpression proceedingStatus = orderProceedingStatus(now, type);
         // PREV 상태인 프로그램
         BooleanExpression prevStatus = programPrevStatus(now).and(proceedingStatus.not());
         // POST 상태인 프로그램
@@ -179,8 +195,8 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
         // PROCEEDING -> PREV -> POST 순으로 정렬
         return new CaseBuilder()
                 .when(proceedingStatus).then(0)
-                .when(prevStatus).then(2)
-                .when(postStatus).then(3)
+                .when(prevStatus).then(1)
+                .when(postStatus).then(2)
                 .otherwise(0)
                 .asc();
     }
@@ -189,25 +205,29 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
         if (ProgramStatusType.PREV.equals(programStatusType))
             return programPrevStatus(now);
         else if (ProgramStatusType.PROCEEDING.equals(programStatusType))
-            return programProceedingStatus(now, type);
+            return programProceedingStatus(now);
         else if (ProgramStatusType.POST.equals(programStatusType))
             return programPostStatus(now);
         return null;
     }
 
-    private BooleanExpression programProceedingStatus(LocalDateTime now, List<ProgramType> type) {
+    private BooleanExpression orderProceedingStatus(LocalDateTime now, List<ProgramType> type) {
         if (type == null || type.isEmpty())
-            return vWProgram.startDate.loe(now).and(vWProgram.endDate.goe(now));
+            return vWProgram.beginning.loe(now).and(vWProgram.deadline.goe(now));
         if (type.contains(ProgramType.VOD))
-            return vWProgram.programType.eq(ProgramType.VOD).or(vWProgram.startDate.loe(now).and(vWProgram.endDate.goe(now)));
-        return vWProgram.startDate.loe(now).and(vWProgram.endDate.goe(now));
+            return vWProgram.programType.eq(ProgramType.VOD).or(vWProgram.beginning.loe(now).and(vWProgram.deadline.goe(now)));
+        return vWProgram.beginning.loe(now).and(vWProgram.deadline.goe(now));
+    }
+
+    private BooleanExpression programProceedingStatus(LocalDateTime now) {
+        return vWProgram.programType.eq(ProgramType.VOD).or(vWProgram.beginning.loe(now).and(vWProgram.deadline.goe(now)));
     }
 
     private BooleanExpression programPrevStatus(LocalDateTime now) {
-        return vWProgram.startDate.gt(now);
+        return vWProgram.beginning.gt(now);
     }
 
     private BooleanExpression programPostStatus(LocalDateTime now) {
-        return vWProgram.endDate.lt(now);
+        return vWProgram.deadline.lt(now);
     }
 }

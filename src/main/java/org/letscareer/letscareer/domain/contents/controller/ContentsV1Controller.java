@@ -24,16 +24,7 @@ import org.springframework.web.bind.annotation.*;
 public class ContentsV1Controller {
     private final ContentsService contentsService;
 
-    @Operation(summary = "콘텐츠 생성", responses = {
-            @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
-    })
-    @PostMapping
-    public ResponseEntity<SuccessResponse<?>> createContents(@RequestBody @Valid final CreateContentsRequestDto createContentsRequestDto) {
-        contentsService.createContents(createContentsRequestDto);
-        return SuccessResponse.created(null);
-    }
-
-    @Operation(summary = "콘텐츠 전체 목록", responses = {
+    @Operation(summary = "[어드민] 콘텐츠 전체 목록", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = ContentsAdminListResponseDto.class)))
     })
     @GetMapping("/admin")
@@ -42,7 +33,7 @@ public class ContentsV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "콘텐츠 타입별 간단 목록", responses = {
+    @Operation(summary = "[어드민] 콘텐츠 타입별 간단 목록", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = ContentsAdminSimpleListResponseDto.class)))
     })
     @GetMapping("/admin/simple")
@@ -51,13 +42,31 @@ public class ContentsV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "콘텐츠 수정", responses = {
+    @Operation(summary = "[어드민] 콘텐츠 생성", responses = {
+            @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
+    })
+    @PostMapping
+    public ResponseEntity<SuccessResponse<?>> createContents(@RequestBody @Valid final CreateContentsRequestDto createContentsRequestDto) {
+        contentsService.createContents(createContentsRequestDto);
+        return SuccessResponse.created(null);
+    }
+
+    @Operation(summary = "[어드민] 콘텐츠 수정", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @PatchMapping("/{id}")
     public ResponseEntity<SuccessResponse<?>> updateContents(@PathVariable final Long id,
                                                              @RequestBody final UpdateContentsRequestDto updateContentsRequestDto) {
         contentsService.updateContents(id, updateContentsRequestDto);
+        return SuccessResponse.ok(null);
+    }
+
+    @Operation(summary = "[어드민] 콘텐츠 삭제", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<SuccessResponse<?>> deleteContents(@PathVariable final Long id) {
+        contentsService.deleteContents(id);
         return SuccessResponse.ok(null);
     }
 }

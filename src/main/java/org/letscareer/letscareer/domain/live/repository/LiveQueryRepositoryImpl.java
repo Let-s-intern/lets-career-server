@@ -1,14 +1,12 @@
 package org.letscareer.letscareer.domain.live.repository;
 
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
-import org.letscareer.letscareer.domain.live.entity.Live;
 import org.letscareer.letscareer.domain.live.type.MailStatus;
 import org.letscareer.letscareer.domain.live.vo.*;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
@@ -75,17 +73,20 @@ public class LiveQueryRepositoryImpl implements LiveQueryRepository {
                         inLiveClassification(typeList),
                         inLiveStatus(statusList)
                 )
+                .groupBy(live.id)
                 .orderBy(live.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        JPAQuery<Live> countQuery = jpaQueryFactory
-                .selectFrom(live)
+        JPAQuery<Long> countQuery = jpaQueryFactory
+                .select(live.id.countDistinct())
+                .from(live)
                 .where(
                         inLiveClassification(typeList),
                         inLiveStatus(statusList)
-                );
+                )
+                .groupBy(live.id);
 
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
     }

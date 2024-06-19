@@ -4,12 +4,18 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.NumberExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
 import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.letscareer.letscareer.domain.application.entity.QChallengeApplication.challengeApplication;
 import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
@@ -40,7 +46,9 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                         user.wishJob,
                         user.wishCompany,
                         user.inflowPath,
-                        challengeApplication.createDate
+                        challengeApplication.createDate,
+                        user.accountType,
+                        user.accountNum
                 ))
                 .from(challengeApplication)
                 .leftJoin(challengeApplication.challenge, challenge)
@@ -57,10 +65,10 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
     }
 
     @Override
-    public List<UserChallengeApplicationVo> findUserChallengeApplicationVo(Long challengeId) {
-        return queryFactory
+    public Page<UserChallengeApplicationVo> findUserChallengeApplicationVo(Long challengeId, Pageable pageable) {
+        List<UserChallengeApplicationVo> contents = queryFactory
                 .select(Projections.constructor(UserChallengeApplicationVo.class,
-                        user.id,
+                        challengeApplication._super.id,
                         user.name,
                         user.contactEmail,
                         user.phoneNum,
@@ -73,7 +81,50 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                 .where(
                         eqChallengeId(challengeId)
                 )
+                .limit(pageable.getPageSize())
+                .offset(pageable.getOffset())
                 .fetch();
+
+        JPAQuery<Long> countQuery = queryFactory
+                .select(challengeApplication.id.countDistinct())
+                .from(challengeApplication)
+                .leftJoin(challengeApplication.challenge, challenge)
+                .leftJoin(challengeApplication.user, user)
+                .where(
+                        eqChallengeId(challengeId)
+                );
+
+        return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
+    }
+
+    @Override
+    public Optional<Long> findChallengeApplicationIdByUserIdAndChallengeId(Long userId, Long challengeId) {
+        return Optional.ofNullable(queryFactory
+                .select(
+                        challengeApplication.id
+                )
+                .from(challengeApplication)
+                .leftJoin(challengeApplication.user, user)
+                .leftJoin(challengeApplication.challenge, challenge)
+                .where(
+                        eqUserId(userId),
+                        eqChallengeId(challengeId)
+                )
+                .fetchFirst());
+    }
+
+    @Override
+    public Optional<Long> findChallengeApplicationIdByChallengeIdAndUserIdAndIsConfirmed(Long challengeId, Long userId, Boolean isConfirmed) {
+        return Optional.ofNullable(queryFactory
+                .select(challengeApplication.id)
+                        .from(challengeApplication)
+                        .leftJoin(challengeApplication.user, user)
+                        .leftJoin(challengeApplication.payment, payment)
+                        .where(
+                                eqUserId(userId),
+                                eqIsConfirmed(isConfirmed)
+                        )
+                        .fetchFirst());
     }
 
     private NumberExpression<Integer> calculateTotalCost() {
@@ -93,6 +144,10 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                 .otherwise(coupon.discount);
 
         return safePrice.subtract(safeDiscount).subtract(safeCouponDiscount);
+    }
+
+    private BooleanExpression eqUserId(Long userId) {
+        return userId != null ? user.id.eq(userId) : null;
     }
 
     private BooleanExpression eqChallengeId(Long challengeId) {

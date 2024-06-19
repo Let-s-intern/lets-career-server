@@ -12,6 +12,7 @@ public record BannerUserVo(
         LocalDateTime startDate,
         LocalDateTime endDate,
         Boolean isValid,
-        String imgUrl
+        String imgUrl,
+        String mobileImgUrl
 ) {
 }

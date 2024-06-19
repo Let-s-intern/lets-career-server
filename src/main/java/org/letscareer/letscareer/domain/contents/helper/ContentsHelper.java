@@ -14,17 +14,15 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+import static org.letscareer.letscareer.domain.contents.error.ContentsErrorCode.CONTENTS_NOT_FOUND;
+
 @RequiredArgsConstructor
 @Component
 public class ContentsHelper {
     private final ContentsRepository contentsRepository;
 
     public Contents findContentsByIdOrThrow(Long contentsId) {
-        return contentsRepository.findById(contentsId).orElseThrow(EntityNotFoundException::new);
-    }
-
-    public Contents findContentsByIdOrNull(Long contentsId) {
-        return contentsRepository.findById(contentsId).orElse(null);
+        return contentsRepository.findById(contentsId).orElseThrow(() -> new EntityNotFoundException(CONTENTS_NOT_FOUND));
     }
 
     public void saveContents(Contents contents) {
@@ -39,9 +37,7 @@ public class ContentsHelper {
         return contentsRepository.findAllContentsAdminSimpleVos(contentsType);
     }
 
-    public void updateContents(Long contentsId, UpdateContentsRequestDto updateContentsRequestDto) {
-        Contents contents = findContentsByIdOrThrow(contentsId);
-        contents.updateContents(updateContentsRequestDto);
+    public void deleteContentsById(Long contentsId) {
+        contentsRepository.deleteById(contentsId);
     }
-
 }

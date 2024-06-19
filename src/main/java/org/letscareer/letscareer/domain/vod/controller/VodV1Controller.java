@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.live.dto.response.GetLivesResponseDto;
 import org.letscareer.letscareer.domain.vod.dto.request.CreateVodRequestDto;
+import org.letscareer.letscareer.domain.vod.dto.request.UpdateVodRequestDto;
 import org.letscareer.letscareer.domain.vod.dto.response.GetVodDetailResponseDto;
 import org.letscareer.letscareer.domain.vod.dto.response.GetVodsResponseDto;
 import org.letscareer.letscareer.domain.vod.service.VodService;
@@ -42,7 +43,7 @@ public class VodV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "vod 생성", responses = {
+    @Operation(summary = "[어드민] vod 생성", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @PostMapping
@@ -51,17 +52,17 @@ public class VodV1Controller {
         return SuccessResponse.created(null);
     }
 
-    @Operation(summary = "vod 수정", responses = {
+    @Operation(summary = "[어드민] vod 수정", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @PatchMapping("/{id}")
     public ResponseEntity<SuccessResponse<?>> updateVodProgram(@PathVariable("id") final Long vodId,
-                                                               @RequestBody final CreateVodRequestDto requestDto) {
+                                                               @RequestBody final UpdateVodRequestDto requestDto) {
         vodService.updateVod(vodId, requestDto);
         return SuccessResponse.ok(null);
     }
 
-    @Operation(summary = "vod 삭제", responses = {
+    @Operation(summary = "[어드민] vod 삭제", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @DeleteMapping("/{id}")

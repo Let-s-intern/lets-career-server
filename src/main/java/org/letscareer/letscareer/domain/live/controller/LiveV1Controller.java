@@ -85,8 +85,21 @@ public class LiveV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
+    @Operation(summary = "라이브 리뷰 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetLiveReviewsResponseDto.class)))
+    })
+    @GetMapping("/reviews")
+    public ResponseEntity<SuccessResponse<?>> getReviews(final Pageable pageable) {
+        final GetLiveReviewsResponseDto responseDto = liveService.getLiveReviews(pageable);
+        return SuccessResponse.ok(responseDto);
+    }
+
     @Operation(summary = "라이브 신청폼 조회", responses = {
-            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetLiveApplicationFormResponseDto.class)))
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "비회원 유저시 유저 정보와 applied null 값 반환",
+                    content = @Content(schema = @Schema(implementation = GetLiveApplicationFormResponseDto.class))
+            )
     })
     @GetMapping("/{id}/application")
     public ResponseEntity<SuccessResponse<?>> getLiveApplicationForm(@PathVariable("id") final Long liveId,
@@ -95,7 +108,7 @@ public class LiveV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "프로그램 신청자 조회", responses = {
+    @Operation(summary = "[어드민] 프로그램 신청자 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetLiveApplicationsResponseDto.class)))
     })
     @GetMapping("/{id}/applications")
@@ -105,17 +118,17 @@ public class LiveV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "신청자 리뷰 조회", responses = {
-            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetLiveReviewsResponseDto.class)))
+    @Operation(summary = "[어드민] 신청자 리뷰 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetLiveAdminReviewsResponseDto.class)))
     })
     @GetMapping("/{id}/reviews")
-    public ResponseEntity<SuccessResponse<?>> getReviews(@PathVariable("id") final Long liveId,
-                                                         final Pageable pageable) {
-        final GetLiveReviewsResponseDto responseDto = liveService.getReviews(liveId, pageable);
+    public ResponseEntity<SuccessResponse<?>> getReviewsForAdmin(@PathVariable("id") final Long liveId,
+                                                                 final Pageable pageable) {
+        final GetLiveAdminReviewsResponseDto responseDto = liveService.getReviewsForAdmin(liveId, pageable);
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "라이브 생성", responses = {
+    @Operation(summary = "[어드민] 라이브 생성", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @PostMapping
@@ -124,7 +137,7 @@ public class LiveV1Controller {
         return SuccessResponse.created(null);
     }
 
-    @Operation(summary = "라이브 수정", responses = {
+    @Operation(summary = "[어드민] 라이브 수정", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @PatchMapping("/{id}")
@@ -134,7 +147,7 @@ public class LiveV1Controller {
         return SuccessResponse.ok(null);
     }
 
-    @Operation(summary = "라이브 삭제", responses = {
+    @Operation(summary = "[어드민] 라이브 삭제", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @DeleteMapping("/{id}")

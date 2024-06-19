@@ -31,7 +31,8 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                         user.createDate,
                         user.accountType,
                         user.accountNum,
-                        user.accountOwner))
+                        user.accountOwner,
+                        user.marketingAgree))
                 .from(user)
                 .orderBy(user.id.desc())
                 .offset(pageable.getOffset())

@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.letscareer.letscareer.domain.application.entity.Application;
 import org.letscareer.letscareer.domain.attendance.entity.Attendance;
+import org.letscareer.letscareer.domain.user.dto.request.UpdateUserSignInfoRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UserPwSignUpRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UserUpdateRequestDto;
 import org.letscareer.letscareer.domain.user.type.AccountType;
@@ -31,85 +32,67 @@ import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUti
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PRIVATE)
 public class User extends BaseTimeEntity {
-
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @NotNull
     @Column(length = 30)
     private String email;
-
     @Nullable
     @Column(length = 30)
     private String contactEmail;
-
     @Nullable
     @JsonIgnore
     private String password;
-
     @NotNull
     @Column(length = 10)
     private String name;
-
     @NotNull
     @Column(length = 20)
     private String phoneNum;
-
     @Nullable
     @Column(length = 30)
     private String university;
-
     @Nullable
     @Column(length = 30)
     private String major;
-
     @Nullable
     @Convert(converter = UserGradeConverter.class)
     private UserGrade grade;
-
     @Nullable
     @Column(length = 30)
     private String wishJob;
-
     @Nullable
     @Column(length = 30)
     private String wishCompany;
-
     @Nullable
     @Column(length = 30)
     private String inflowPath;
-
     @NotNull
     @Builder.Default
     private Boolean marketingAgree = false;
-
     @Nullable
     @Convert(converter = AuthProviderConverter.class)
     private AuthProvider authProvider;
-
     @NotNull
     @Builder.Default
     @Convert(converter = UserRoleConverter.class)
     private UserRole role = UserRole.USER;
-
     @Nullable
     @Convert(converter = AccountTypeConverter.class)
     private AccountType accountType;
-
     @Nullable
     @Column(length = 30)
     private String accountNum;
-
     @Nullable
     @Column(length = 30)
     private String accountOwner;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Attendance> attendanceList = new ArrayList<>();
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Application> applicationList = new ArrayList<>();
 
@@ -128,6 +111,8 @@ public class User extends BaseTimeEntity {
                 .name(pwSignUpRequestDto.name())
                 .phoneNum(pwSignUpRequestDto.phoneNum())
                 .password(encodedPassword)
+                .marketingAgree(pwSignUpRequestDto.marketingAgree())
+                .inflowPath(pwSignUpRequestDto.inflowPath())
                 .build();
     }
 
@@ -139,7 +124,6 @@ public class User extends BaseTimeEntity {
     }
 
     public void updateUser(UserUpdateRequestDto userUpdateRequestDto) {
-        System.out.println(userUpdateRequestDto.phoneNum());
         this.email = updateValue(this.email, userUpdateRequestDto.email());
         this.name = updateValue(this.name, userUpdateRequestDto.name());
         this.phoneNum = updateValue(this.phoneNum, userUpdateRequestDto.phoneNum());
@@ -153,9 +137,18 @@ public class User extends BaseTimeEntity {
         this.accountType = updateValue(this.accountType, userUpdateRequestDto.accountType());
         this.accountNum = updateValue(this.accountNum, userUpdateRequestDto.accountNum());
         this.accountOwner = updateValue(this.accountOwner, userUpdateRequestDto.accountOwner());
+        this.inflowPath = updateValue(this.inflowPath, userUpdateRequestDto.inflowPath());
     }
 
     public void updateUserPassword(String encodedPassword) {
         this.password = updateValue(this.password, encodedPassword);
+    }
+
+    public void updateUserAdditionInfo(UpdateUserSignInfoRequestDto requestDto) {
+        this.university = updateValue(this.university, requestDto.university());
+        this.major = updateValue(this.major, requestDto.major());
+        this.grade = updateValue(this.grade, requestDto.grade());
+        this.wishJob = updateValue(this.wishJob, requestDto.wishJob());
+        this.wishCompany = updateValue(this.wishCompany, requestDto.wishCompany());
     }
 }

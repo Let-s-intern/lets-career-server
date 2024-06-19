@@ -2,9 +2,14 @@ package org.letscareer.letscareer.domain.challlengenotice.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.challlengenotice.entity.ChallengeNotice;
 import org.letscareer.letscareer.domain.challlengenotice.vo.ChallengeNoticeVo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
 
@@ -15,8 +20,8 @@ public class ChallengeNoticeQueryRepositoryImpl implements ChallengeNoticeQueryR
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<ChallengeNoticeVo> findAllChallengeNoticeVos(Long challengeId) {
-        return queryFactory
+    public Page<ChallengeNoticeVo> findAllChallengeNoticeVos(Long challengeId, Pageable pageable) {
+        List<ChallengeNoticeVo> challengeNoticeVoList = queryFactory
                 .select(Projections.constructor(ChallengeNoticeVo.class,
                         challengeNotice.id,
                         challengeNotice.type,
@@ -28,7 +33,17 @@ public class ChallengeNoticeQueryRepositoryImpl implements ChallengeNoticeQueryR
                         eqChallenge(challengeId)
                 )
                 .orderBy(challengeNotice.id.desc())
+                .limit(pageable.getPageSize())
+                .offset(pageable.getOffset())
                 .fetch();
+
+        JPAQuery<ChallengeNotice> countQuery = queryFactory
+                .selectFrom(challengeNotice)
+                .where(
+                        eqChallenge(challengeId)
+                );
+
+        return PageableExecutionUtils.getPage(challengeNoticeVoList, pageable, countQuery::fetchCount);
     }
 
     private BooleanExpression eqChallenge(Long challengeId) {

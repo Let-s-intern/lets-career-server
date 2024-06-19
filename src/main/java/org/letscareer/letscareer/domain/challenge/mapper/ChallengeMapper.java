@@ -7,6 +7,7 @@ import org.letscareer.letscareer.domain.challlengenotice.vo.ChallengeNoticeVo;
 import org.letscareer.letscareer.domain.classification.vo.ChallengeClassificationDetailVo;
 import org.letscareer.letscareer.domain.faq.vo.FaqDetailVo;
 import org.letscareer.letscareer.domain.price.vo.ChallengePriceDetailVo;
+import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
 import org.letscareer.letscareer.domain.review.vo.ReviewVo;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.data.domain.Page;
@@ -36,6 +37,10 @@ public class ChallengeMapper {
         return GetChallengeReviewResponseDto.of(challengeReviewVos);
     }
 
+    public GetChallengeAdminReviewResponseDto toGetChallengeAdminReviewResponseDto(Page<ReviewAdminVo> challengeReviewVos) {
+        return GetChallengeAdminReviewResponseDto.of(challengeReviewVos);
+    }
+
     public GetChallengeThumbnailResponseDto toChallengeThumbnailVo(ChallengeThumbnailVo challengeThumbnailVo) {
         return GetChallengeThumbnailResponseDto.of(challengeThumbnailVo);
     }
@@ -45,16 +50,17 @@ public class ChallengeMapper {
     }
 
     public GetChallengeApplicationFormResponseDto toGetChallengeApplicationFormResponseDto(User user,
+                                                                                           Boolean applied,
                                                                                            ChallengeApplicationFormVo applicationFormVo,
                                                                                            List<ChallengePriceDetailVo> challengePriceDetailVos) {
-        return GetChallengeApplicationFormResponseDto.of(user, applicationFormVo, challengePriceDetailVos);
+        return GetChallengeApplicationFormResponseDto.of(user, applied, applicationFormVo, challengePriceDetailVos);
     }
 
     public GetChallengeGuidesResponseDto toChallengeGuideAdminListResponseDto(List<ChallengeGuideVo> challengeGuideAdminList) {
         return GetChallengeGuidesResponseDto.of(challengeGuideAdminList);
     }
 
-    public GetChallengeNoticesResponseDto toGetChallengeNoticesResponseDto(List<ChallengeNoticeVo> challengeNoticeList) {
+    public GetChallengeNoticesResponseDto toGetChallengeNoticesResponseDto(Page<ChallengeNoticeVo> challengeNoticeList) {
         return GetChallengeNoticesResponseDto.of(challengeNoticeList);
     }
 }

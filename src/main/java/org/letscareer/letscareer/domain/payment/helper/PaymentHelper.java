@@ -16,16 +16,19 @@ import static org.letscareer.letscareer.domain.payment.error.PaymentErrorCode.PA
 public class PaymentHelper {
     private final PaymentRepository paymentRepository;
 
-    public Payment createPaymentAndSave(Application application,
-                                        Coupon coupon,
-                                        Price price) {
+    public Payment createPaymentAndSave(Application application, Coupon coupon, Price price) {
         int finalPrice = calculateFinalPrice(price, coupon);
-        Payment newPayment = Payment.createPayment(finalPrice, coupon, application, price);
+        Payment newPayment = Payment.createPayment(finalPrice, coupon, application);
         return paymentRepository.save(newPayment);
     }
 
     public Payment findPaymentByIdOrThrow(Long paymentId) {
         return paymentRepository.findById(paymentId)
+                .orElseThrow(() -> new EntityNotFoundException(PAYMENT_NOT_FOUND));
+    }
+
+    public Payment findPaymentByApplicationIdOrThrow(Long applicationId) {
+        return paymentRepository.findPaymentByApplicationId(applicationId)
                 .orElseThrow(() -> new EntityNotFoundException(PAYMENT_NOT_FOUND));
     }
 
@@ -35,7 +38,7 @@ public class PaymentHelper {
 
     private int calculateFinalPrice(Price price, Coupon coupon) {
         int finalPrice = price.getPrice() - price.getDiscount();
-        if(coupon != null) finalPrice -= coupon.getDiscount();
+        if (coupon != null) finalPrice -= coupon.getDiscount();
         return finalPrice;
     }
 }

@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.application.dto.response.GetMyApplicationsResponseDto;
+import org.letscareer.letscareer.domain.application.type.ApplicationStatus;
 import org.letscareer.letscareer.domain.user.dto.request.*;
 import org.letscareer.letscareer.domain.user.dto.response.TokenResponseDto;
 import org.letscareer.letscareer.domain.user.dto.response.UserAdminListResponseDto;
@@ -27,6 +29,53 @@ import org.springframework.web.bind.annotation.*;
 public class UserV1Controller {
     private final UserService userService;
 
+    @Operation(summary = "유저 마이페이지 정보", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserInfoResponseDto.class)))
+    })
+    @ApiErrorCode(SwaggerEnum.USER_NOT_FOUND)
+    @GetMapping
+    public ResponseEntity<SuccessResponse<?>> getUserInfo(@CurrentUser User user) {
+        return SuccessResponse.ok(userService.getUserInfo(user));
+    }
+
+    @Operation(summary = "유저 로그아웃", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    })
+    @ApiErrorCode(SwaggerEnum.USER_NOT_FOUND)
+    @GetMapping("/signout")
+    public ResponseEntity<SuccessResponse<?>> signOut(@CurrentUser User user) {
+        userService.signOut(user);
+        return SuccessResponse.ok(null);
+    }
+
+    @Operation(summary = "유저 관리자 여부", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Boolean.class)))
+    })
+    @ApiErrorCode(SwaggerEnum.USER_NOT_FOUND)
+    @GetMapping("/isAdmin")
+    public ResponseEntity<SuccessResponse<?>> isAdmin(@CurrentUser User user) {
+        return SuccessResponse.ok(userService.isAdmin(user));
+    }
+
+    @Operation(summary = "[어드민] 유저 전체 목록", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserAdminListResponseDto.class)))
+    })
+    @GetMapping("/admin")
+    public ResponseEntity<SuccessResponse<?>> getUsersForAdmin(@PageableDefault Pageable pageable) {
+        final UserAdminListResponseDto responseDto = userService.getUsers(pageable);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "나의 신청서 전체 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetMyApplicationsResponseDto.class)))
+    })
+    @GetMapping("/applications")
+    public ResponseEntity<SuccessResponse<?>> getMyApplications(@CurrentUser User user,
+                                                                @RequestParam(required = false) final ApplicationStatus status) {
+        GetMyApplicationsResponseDto responseDto = userService.getMyApplications(user, status);
+        return SuccessResponse.ok(responseDto);
+    }
+
     @Operation(summary = "유저 이메일 회원가입", responses = {
             @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
     })
@@ -46,13 +95,24 @@ public class UserV1Controller {
         return SuccessResponse.ok(userService.pwSignIn(pwSignInRequestDto));
     }
 
-    @Operation(summary = "유저 로그아웃", responses = {
+    @Operation(summary = "비밀번호 재설정 메일 전송", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
-    @ApiErrorCode(SwaggerEnum.USER_NOT_FOUND)
-    @GetMapping("/signout")
-    public ResponseEntity<SuccessResponse<?>> signOut(@CurrentUser User user) {
-        userService.signOut(user);
+    @ApiErrorCode({SwaggerEnum.USER_NOT_FOUND})
+    @PostMapping("/password")
+    public ResponseEntity<SuccessResponse<?>> passwordReset(@RequestBody final PasswordResetRequestDto passwordResetRequestDto) {
+        userService.resetPassword(passwordResetRequestDto);
+        return SuccessResponse.ok(null);
+    }
+
+    @Operation(summary = "비밀번호 변경", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    })
+    @ApiErrorCode({SwaggerEnum.USER_NOT_FOUND, SwaggerEnum.MISMATCH_PASSWORD, SwaggerEnum.INVALID_PASSWORD})
+    @PatchMapping("/password")
+    public ResponseEntity<SuccessResponse<?>> updateUserPassword(@CurrentUser User user,
+                                                                 @RequestBody final PasswordUpdateRequestDto passwordUpdateRequestDto) {
+        userService.updatePassword(user.getId(), passwordUpdateRequestDto);
         return SuccessResponse.ok(null);
     }
 
@@ -72,38 +132,18 @@ public class UserV1Controller {
     @ApiErrorCode({SwaggerEnum.USER_NOT_FOUND, SwaggerEnum.USER_CONFLICT, SwaggerEnum.INVALID_PHONE_NUMBER, SwaggerEnum.INVALID_EMAIL})
     @PatchMapping
     public ResponseEntity<SuccessResponse<?>> updateUser(@CurrentUser User user,
-                                                         @RequestBody final UserUpdateRequestDto userUpdateRequestDto) {
-        userService.updateUser(user, userUpdateRequestDto);
+                                                         @RequestBody final UserUpdateRequestDto requestDto) {
+        userService.updateUser(user.getId(), requestDto);
         return SuccessResponse.ok(null);
     }
 
-    @Operation(summary = "유저 마이페이지 정보", responses = {
-            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserInfoResponseDto.class)))
+    @Operation(summary = "회원가입-추가 정보 업데이트", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @ApiErrorCode(SwaggerEnum.USER_NOT_FOUND)
-    @GetMapping
-    public ResponseEntity<SuccessResponse<?>> getUserInfo(@CurrentUser User user) {
-        return SuccessResponse.ok(userService.getUserInfo(user));
-    }
-
-    @Operation(summary = "비밀번호 변경", responses = {
-            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
-    })
-    @ApiErrorCode({SwaggerEnum.USER_NOT_FOUND, SwaggerEnum.MISMATCH_PASSWORD, SwaggerEnum.INVALID_PASSWORD})
-    @PatchMapping("/password")
-    public ResponseEntity<SuccessResponse<?>> updateUserPassword(@CurrentUser User user,
-                                                                 @RequestBody final PasswordUpdateRequestDto passwordUpdateRequestDto) {
-        userService.updatePassword(user.getId(), passwordUpdateRequestDto);
-        return SuccessResponse.ok(null);
-    }
-
-    @Operation(summary = "비밀번호 재설정 메일 전송", responses = {
-            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
-    })
-    @ApiErrorCode({SwaggerEnum.USER_NOT_FOUND})
-    @PostMapping("/password")
-    public ResponseEntity<SuccessResponse<?>> passwordReset(@RequestBody final PasswordResetRequestDto passwordResetRequestDto) {
-        userService.resetPassword(passwordResetRequestDto);
+    @PatchMapping("/additional-info")
+    public ResponseEntity<SuccessResponse<?>> updateUserForSign(@RequestBody final UpdateUserSignInfoRequestDto requestDto) {
+        userService.updateUserForSign(requestDto);
         return SuccessResponse.ok(null);
     }
 
@@ -115,24 +155,6 @@ public class UserV1Controller {
     public ResponseEntity<SuccessResponse<?>> deleteUser(@CurrentUser User user) {
         userService.deleteUser(user);
         return SuccessResponse.ok(null);
-    }
-
-    @Operation(summary = "유저 관리자 여부", responses = {
-            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Boolean.class)))
-    })
-    @ApiErrorCode(SwaggerEnum.USER_NOT_FOUND)
-    @GetMapping("/is-admin")
-    public ResponseEntity<SuccessResponse<?>> isAdmin(@CurrentUser User user) {
-        return SuccessResponse.ok(userService.isAdmin(user));
-    }
-
-    @Operation(summary = "유저 전체 목록", responses = {
-            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserAdminListResponseDto.class)))
-    })
-    @GetMapping("/admin")
-    public ResponseEntity<SuccessResponse<?>> getUsersForAdmin(@PageableDefault Pageable pageable) {
-        final UserAdminListResponseDto responseDto = userService.getUsers(pageable);
-        return SuccessResponse.ok(responseDto);
     }
 
 }

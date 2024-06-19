@@ -32,7 +32,7 @@ public class CouponV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "쿠폰 목록 조회", responses = {
+    @Operation(summary = "[어드민] 쿠폰 목록 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetCouponsResponseDto.class)))
     })
     @GetMapping("/admin")
@@ -41,7 +41,7 @@ public class CouponV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "쿠폰 상세 조회", responses = {
+    @Operation(summary = "[어드민] 쿠폰 상세 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetCouponDetailResponseDto.class)))
     })
     @GetMapping("/admin/{id}")
@@ -50,7 +50,7 @@ public class CouponV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "쿠폰 생성", responses = {
+    @Operation(summary = "[어드민] 쿠폰 생성", responses = {
             @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
     })
     @PostMapping
@@ -59,7 +59,7 @@ public class CouponV1Controller {
         return SuccessResponse.created(null);
     }
 
-    @Operation(summary = "쿠폰 수정", responses = {
+    @Operation(summary = "[어드민] 쿠폰 수정", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @PatchMapping("/{id}")
@@ -69,7 +69,7 @@ public class CouponV1Controller {
         return SuccessResponse.ok(null);
     }
 
-    @Operation(summary = "쿠폰 삭제", responses = {
+    @Operation(summary = "[어드민] 쿠폰 삭제", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @DeleteMapping("/{id}")

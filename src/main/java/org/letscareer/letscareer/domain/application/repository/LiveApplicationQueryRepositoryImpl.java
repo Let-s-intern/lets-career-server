@@ -10,9 +10,9 @@ import org.letscareer.letscareer.domain.application.vo.AdminLiveApplicationVo;
 import org.letscareer.letscareer.domain.live.vo.LiveEmailVo;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.letscareer.letscareer.domain.application.entity.QLiveApplication.liveApplication;
-import static org.letscareer.letscareer.domain.attendance.entity.QAttendance.attendance;
 import static org.letscareer.letscareer.domain.coupon.entity.QCoupon.coupon;
 import static org.letscareer.letscareer.domain.live.entity.QLive.live;
 import static org.letscareer.letscareer.domain.payment.entity.QPayment.payment;
@@ -94,6 +94,22 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
                 .fetch();
     }
 
+    @Override
+    public Optional<Long> findLiveApplicationIdByUserIdAndLiveId(Long userId, Long liveId) {
+        return Optional.ofNullable(queryFactory
+                .select(
+                        liveApplication.id
+                )
+                .from(liveApplication)
+                .leftJoin(liveApplication.user, user)
+                .leftJoin(liveApplication.live, live)
+                .where(
+                        eqUserId(userId),
+                        eqLiveId(liveId)
+                )
+                .fetchFirst());
+    }
+
 
     private NumberExpression<Integer> calculateTotalCost() {
         NumberExpression<Integer> safePrice = new CaseBuilder()
@@ -117,6 +133,11 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
     private BooleanExpression eqApplicationId(Long applicationId) {
         return applicationId != null ? liveApplication.id.eq(applicationId) : null;
     }
+
+    private BooleanExpression eqUserId(Long userId) {
+        return userId != null ? user.id.eq(userId) : null;
+    }
+
 
     private BooleanExpression eqLiveId(Long liveId) {
         return liveId != null ? live.id.eq(liveId) : null;

@@ -12,4 +12,6 @@ public interface ReviewService {
     void createReview(Long applicationId, CreateReviewRequestDto responseDto);
 
     void updateReview(Long reviewId, UpdateReviewRequestDto requestDto);
+
+    void updateReviewVisibleStatus(Long reviewId, Boolean isVisible);
 }

@@ -6,6 +6,7 @@ import org.letscareer.letscareer.domain.review.dto.request.CreateReviewRequestDt
 import org.letscareer.letscareer.domain.review.entity.Review;
 import org.letscareer.letscareer.domain.review.repository.ReviewRepository;
 import org.letscareer.letscareer.domain.review.vo.ReviewDetailVo;
+import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
 import org.letscareer.letscareer.domain.review.vo.ReviewVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.data.domain.Page;
@@ -34,11 +35,19 @@ public class ReviewHelper {
                 .orElseThrow(() -> new EntityNotFoundException(REVIEW_NOT_FOUND));
     }
 
-    public Page<ReviewVo> findChallengeReviewVos(Long challengeId, Pageable pageable) {
-        return reviewRepository.findChallengeReviewVos(challengeId, pageable);
+    public Page<ReviewAdminVo> findChallengeReviewAdminVos(Long challengeId, Pageable pageable) {
+        return reviewRepository.findChallengeReviewAdminVos(challengeId, pageable);
     }
 
-    public Page<ReviewVo> findLiveReviewVos(Long liveId, Pageable pageable) {
-        return reviewRepository.findLiveReviewVos(liveId, pageable);
+    public Page<ReviewVo> findChallengeReviewVos(Pageable pageable) {
+        return reviewRepository.findChallengeReviewVos(pageable);
+    }
+
+    public Page<ReviewAdminVo> findLiveReviewAdminVos(Long liveId, Pageable pageable) {
+        return reviewRepository.findLiveReviewAdminVos(liveId, pageable);
+    }
+
+    public Page<ReviewVo> findLiveReviewVos(Pageable pageable) {
+        return reviewRepository.findLiveReviewVos(pageable);
     }
 }
