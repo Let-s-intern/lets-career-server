@@ -52,7 +52,7 @@ public class UserV1Controller {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Boolean.class)))
     })
     @ApiErrorCode(SwaggerEnum.USER_NOT_FOUND)
-    @GetMapping("/is-admin")
+    @GetMapping("/isAdmin")
     public ResponseEntity<SuccessResponse<?>> isAdmin(@CurrentUser User user) {
         return SuccessResponse.ok(userService.isAdmin(user));
     }
