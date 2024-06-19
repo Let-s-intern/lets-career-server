@@ -118,6 +118,7 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
         return queryFactory
                 .select(Projections.constructor(MissionScheduleVo.class,
                         mission.id,
+                        mission.title,
                         mission.th,
                         mission.startDate,
                         mission.endDate,

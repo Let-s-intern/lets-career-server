@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 public record MissionScheduleVo(
         Long id,
+        String title,
         Integer th,
         LocalDateTime startDate,
         LocalDateTime endDate,
