@@ -1,9 +1,12 @@
 package org.letscareer.letscareer.domain.score.repository;
 
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.attendance.type.AttendanceResult;
+import org.letscareer.letscareer.domain.attendance.type.AttendanceStatus;
 import org.letscareer.letscareer.domain.score.entity.AttendanceScore;
 
 import java.util.Optional;
@@ -49,7 +52,8 @@ public class AttendanceScoreQueryRepositoryImpl implements AttendanceScoreQueryR
                 .leftJoin(attendance.user, user)
                 .where(
                         eqChallengeId(challengeId),
-                        eqUserId(userId)
+                        eqUserId(userId),
+                        isValidAttendance()
                 )
                 .fetchFirst());
     }
@@ -84,5 +88,10 @@ public class AttendanceScoreQueryRepositoryImpl implements AttendanceScoreQueryR
 
     private BooleanExpression eqMissionId(Long missionId) {
         return missionId != null ? mission.id.eq(missionId) : null;
+    }
+
+    private BooleanExpression isValidAttendance() {
+        return attendance.status.in(AttendanceStatus.PRESENT, AttendanceStatus.LATE, AttendanceStatus.UPDATED)
+                .and(attendance.result.in(AttendanceResult.WAITING, AttendanceResult.PASS));
     }
 }
