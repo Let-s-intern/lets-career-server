@@ -41,8 +41,8 @@ public class UserHelper {
         return userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
-    public User findUserByEmailOrThrow(String email) {
-        return userRepository.findByEmailAndAuthProvider(email, AuthProvider.SERVICE)
+    public User findUserByEmailAndAuthProviderOrThrow(String email, AuthProvider authProvider) {
+        return userRepository.findByEmailAndAuthProvider(email, authProvider)
                 .orElseThrow(EntityNotFoundException::new);
     }
 

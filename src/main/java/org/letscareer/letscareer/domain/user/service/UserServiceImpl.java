@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public TokenResponseDto pwSignIn(UserPwSignInRequestDto pwSignInRequestDto) {
-        final User user = userHelper.findUserByEmailOrThrow(pwSignInRequestDto.email());
+        final User user = userHelper.findUserByEmailAndAuthProviderOrThrow(pwSignInRequestDto.email(), AuthProvider.SERVICE);
         userHelper.validatePassword(user, pwSignInRequestDto.password());
         final Authentication authentication = userHelper.userAuthorizationInput(user);
         final String accessToken = tokenProvider.createAccessToken(user.getId(), authentication);
@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUserForSign(UpdateUserSignInfoRequestDto requestDto) {
-        User user = userHelper.findUserByEmailOrThrow(requestDto.email());
+        User user = userHelper.findUserByEmailAndAuthProviderOrThrow(requestDto.email(), AuthProvider.SERVICE);
         user.updateUserAdditionInfo(requestDto);
     }
 
@@ -95,7 +95,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void resetPassword(PasswordResetRequestDto passwordResetRequestDto) {
-        User user = userHelper.findUserByNameAndEmailOrThrow(passwordResetRequestDto.name(), passwordResetRequestDto.email());
+        User user = userHelper.findUserByEmailAndAuthProviderOrThrow(passwordResetRequestDto.email(), AuthProvider.SERVICE);
         String randomPassword = RandomStringUtils.randomAlphanumeric(8);
         userHelper.updatePassword(user, randomPassword);
         emailUtils.sendPasswordResetEmail(user.getEmail(), randomPassword);
