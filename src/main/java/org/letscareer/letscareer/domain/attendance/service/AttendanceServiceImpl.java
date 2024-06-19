@@ -8,6 +8,7 @@ import org.letscareer.letscareer.domain.attendance.dto.response.AttendanceAdminL
 import org.letscareer.letscareer.domain.attendance.entity.Attendance;
 import org.letscareer.letscareer.domain.attendance.helper.AttendanceHelper;
 import org.letscareer.letscareer.domain.attendance.mapper.AttendanceMapper;
+import org.letscareer.letscareer.domain.attendance.type.AttendanceResult;
 import org.letscareer.letscareer.domain.attendance.type.AttendanceStatus;
 import org.letscareer.letscareer.domain.attendance.vo.AttendanceAdminVo;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
@@ -78,13 +79,22 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     private void updateAttendanceByUser(Attendance attendance, AttendanceUpdateRequestDto updateRequestDto) {
-        attendance.updateAttendance(updateRequestDto);
-        // AttendanceScore
+        Mission mission = attendance.getMission();
+        Challenge challenge = mission.getChallenge();
+        AttendanceStatus status = getAttendanceStatus(mission.getStartDate(), mission.getEndDate(), challenge.getEndDate());
+
+        if(isGeneralUpdate(status, attendance)) {
+            attendance.updateAttendanceLink(updateRequestDto.link());
+        }
+        else if(isReSubmit(status, attendance)) {
+            attendance.updateAttendanceLink(updateRequestDto.link());
+            attendance.updateAttendanceStatus(AttendanceStatus.UPDATED);
+            attendance.updateAttendanceResult(AttendanceResult.WAITING);
+        }
     }
 
     private void updateAttendanceByAdmin(Attendance attendance, AttendanceUpdateRequestDto updateRequestDto) {
         attendance.updateAttendanceAdmin(updateRequestDto);
-        // AttendanceScore
     }
 
     private AttendanceStatus getAttendanceStatus(LocalDateTime missionStartDate, LocalDateTime missionEndDate, LocalDateTime challengeEndDate) {
@@ -98,5 +108,13 @@ public class AttendanceServiceImpl implements AttendanceService {
         } else {
             throw new InvalidValueException(ATTENDANCE_NOT_AVAILABLE_DATE);
         }
+    }
+
+    private boolean isGeneralUpdate(AttendanceStatus status, Attendance attendance) {
+        return status.equals(AttendanceStatus.PRESENT) && attendance.getResult().equals(AttendanceResult.WAITING);
+    }
+
+    private boolean isReSubmit(AttendanceStatus status, Attendance attendance) {
+        return (status.equals(AttendanceStatus.PRESENT) || status.equals(AttendanceStatus.LATE)) && attendance.getResult().equals(AttendanceResult.WRONG);
     }
 }

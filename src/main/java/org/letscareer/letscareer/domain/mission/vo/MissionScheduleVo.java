@@ -8,6 +8,7 @@ public record MissionScheduleVo(
         Long id,
         String title,
         Integer th,
+        String title,
         LocalDateTime startDate,
         LocalDateTime endDate,
         MissionStatusType status

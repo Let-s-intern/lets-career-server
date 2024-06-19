@@ -6,8 +6,10 @@ import org.letscareer.letscareer.domain.application.helper.ChallengeApplicationH
 import org.letscareer.letscareer.domain.application.mapper.ChallengeApplicationMapper;
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
 import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
+import org.letscareer.letscareer.domain.attendance.entity.Attendance;
 import org.letscareer.letscareer.domain.attendance.helper.AttendanceHelper;
 import org.letscareer.letscareer.domain.attendance.mapper.AttendanceMapper;
+import org.letscareer.letscareer.domain.attendance.type.AttendanceResult;
 import org.letscareer.letscareer.domain.attendance.vo.AttendanceDashboardVo;
 import org.letscareer.letscareer.domain.attendance.vo.MissionAttendanceVo;
 import org.letscareer.letscareer.domain.attendance.vo.MissionScoreVo;
@@ -228,7 +230,8 @@ public class ChallengeServiceImpl implements ChallengeService {
     public GetChallengeMyMissionDetailResponseDto getMyMissionDetail(Long challengeId, Long missionId, User user) {
         challengeApplicationHelper.validateChallengeDashboardAccessibleUser(challengeId, user);
         MyDailyMissionVo missionInfo = missionHelper.findMyDailyMissionVoByMissionId(missionId);
-        return missionMapper.toGetChallengeMyMissionDetailResponseDto(missionInfo);
+        AttendanceDashboardVo attendanceInfo = attendanceHelper.findAttendanceDashboardVoOrNull(missionInfo.id(), user.getId());
+        return missionMapper.toGetChallengeMyMissionDetailResponseDto(missionInfo, attendanceInfo);
     }
 
     @Override
@@ -286,7 +289,7 @@ public class ChallengeServiceImpl implements ChallengeService {
         List<MissionScoreResponseDto> contents = scores.stream()
                 .map(score -> {
                     AttendanceScore attendanceScore = attendanceScoreHelper.findAttendanceScoreByMissionIdOrNull(score.missionId(), applicationId);
-                    if (!Objects.isNull(attendanceScore))
+                    if (!Objects.isNull(attendanceScore) && isNotWrongAttendance(attendanceScore.getAttendance()))
                         return missionMapper.toMissionScoreResponseDto(score.th(), attendanceScore.getScore());
                     else
                         return missionMapper.toMissionScoreResponseDto(score.th(), 0);
@@ -297,6 +300,10 @@ public class ChallengeServiceImpl implements ChallengeService {
         contents.add(missionScoreResponseDto);
         contents.sort(Comparator.comparing(MissionScoreResponseDto::th));
         return contents;
+    }
+
+    private boolean isNotWrongAttendance(Attendance attendance) {
+        return !attendance.getResult().equals(AttendanceResult.WRONG);
     }
 
     private void createPriceListAndSave(List<CreateChallengePriceRequestDto> requestDtoList,

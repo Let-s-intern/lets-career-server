@@ -120,6 +120,7 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
                         mission.id,
                         mission.title,
                         mission.th,
+                        mission.title,
                         mission.startDate,
                         mission.endDate,
                         mission.missionStatusType))
