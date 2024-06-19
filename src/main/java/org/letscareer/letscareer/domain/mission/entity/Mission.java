@@ -75,8 +75,8 @@ public class Mission extends BaseTimeEntity {
         return Mission.builder()
                 .th(createMissionRequestDto.th())
                 .title(createMissionRequestDto.title())
-                .startDate(createMissionRequestDto.startDate().atTime(0, 0))
-                .endDate(createMissionRequestDto.endDate().atTime(23, 59, 59))
+                .startDate(createMissionRequestDto.startDate())
+                .endDate(createMissionRequestDto.endDate())
                 .challenge(challenge)
                 .missionTemplate(missionTemplate)
                 .build();
@@ -85,8 +85,8 @@ public class Mission extends BaseTimeEntity {
     public void updateMission(UpdateMissionRequestDto requestDto) {
         this.th = updateValue(this.th, requestDto.th());
         this.title = updateValue(this.title, requestDto.title());
-        this.startDate = updateValue(this.startDate, requestDto.startDate().atTime(6, 0));
-        this.endDate = updateValue(this.endDate, requestDto.startDate().atTime(23, 59, 59));
+        this.startDate = updateValue(this.startDate, requestDto.startDate());
+        this.endDate = updateValue(this.endDate, requestDto.startDate());
     }
 
     public void setMissionScore(MissionScore missionScore) {

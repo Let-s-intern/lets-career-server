@@ -1,6 +1,6 @@
 package org.letscareer.letscareer.domain.mission.dto.request;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public record UpdateMissionRequestDto(
@@ -8,8 +8,8 @@ public record UpdateMissionRequestDto(
         String title,
         Integer score,
         Integer lateScore,
-        LocalDate startDate,
-        LocalDate endDate,
+        LocalDateTime startDate,
+        LocalDateTime endDate,
         Long missionTemplateId,
         List<Long> essentialContentsIdList,
         List<Long> additionalContentsIdList

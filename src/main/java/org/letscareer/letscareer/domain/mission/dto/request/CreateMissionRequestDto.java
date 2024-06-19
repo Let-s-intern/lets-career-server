@@ -4,7 +4,7 @@ import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public record CreateMissionRequestDto(
@@ -12,8 +12,8 @@ public record CreateMissionRequestDto(
         @NotEmpty String title,
         @Nullable Integer score,
         @Nullable Integer lateScore,
-        @NotNull LocalDate startDate,
-        @NotNull LocalDate endDate,
+        @NotNull LocalDateTime startDate,
+        @NotNull LocalDateTime endDate,
         @NotNull Long missionTemplateId,
         List<Long> essentialContentsIdList,
         List<Long> additionalContentsIdList
