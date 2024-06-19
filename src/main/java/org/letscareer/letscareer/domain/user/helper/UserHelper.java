@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.user.dto.request.UserUpdateRequestDto;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.repository.UserRepository;
+import org.letscareer.letscareer.domain.user.type.AuthProvider;
 import org.letscareer.letscareer.domain.user.vo.UserAdminVo;
 import org.letscareer.letscareer.global.error.exception.ConflictException;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
@@ -41,7 +42,8 @@ public class UserHelper {
     }
 
     public User findUserByEmailOrThrow(String email) {
-        return userRepository.findByEmail(email).orElseThrow(EntityNotFoundException::new);
+        return userRepository.findByEmailAndAuthProvider(email, AuthProvider.SERVICE)
+                .orElseThrow(EntityNotFoundException::new);
     }
 
     public User findUserByPhoneNumOrNull(String phoneNum) {

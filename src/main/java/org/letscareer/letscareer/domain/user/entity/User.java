@@ -113,6 +113,7 @@ public class User extends BaseTimeEntity {
                 .password(encodedPassword)
                 .marketingAgree(pwSignUpRequestDto.marketingAgree())
                 .inflowPath(pwSignUpRequestDto.inflowPath())
+                .authProvider(AuthProvider.SERVICE)
                 .build();
     }
 
