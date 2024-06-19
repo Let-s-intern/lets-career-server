@@ -42,7 +42,7 @@ public class UserHelper {
     }
 
     public User findUserByEmailAndAuthProviderOrThrow(String email, AuthProvider authProvider) {
-        return userRepository.findByEmailAndAuthProvider(email, authProvider)
+        return userRepository.findFirstByEmailAndAuthProviderOrderByIdDesc(email, authProvider)
                 .orElseThrow(EntityNotFoundException::new);
     }
 

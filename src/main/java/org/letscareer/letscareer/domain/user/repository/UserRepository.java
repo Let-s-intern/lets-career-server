@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long>, UserRepositoryCustom {
-    Optional<User> findByEmailAndAuthProvider(String email, AuthProvider authProvider);
+    Optional<User> findFirstByEmailAndAuthProviderOrderByIdDesc(String email, AuthProvider authProvider);
     Optional<User> findByPhoneNum(String phoneNum);
     Optional<User> findByNameAndEmail(String name, String email);
     boolean existsByPhoneNum(String phoneNum);
