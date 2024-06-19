@@ -52,22 +52,22 @@ public class Challenge extends BaseTimeEntity {
     @Convert(converter = ChallengeTypeConverter.class)
     private ChallengeType challengeType;
 
-    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
     @Builder.Default
     private List<ChallengeApplication> applicationList = new ArrayList<>();
-    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
     @Builder.Default
     private List<ChallengeClassification> classificationList = new ArrayList<>();
-    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
     @Builder.Default
     private List<ChallengePrice> priceList = new ArrayList<>();
-    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
     @Builder.Default
     private List<FaqChallenge> faqList = new ArrayList<>();
-    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
     @Builder.Default
     private List<Mission> missionList = new ArrayList<>();
-    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
     @Builder.Default
     private List<ChallengeGuide> challengeGuideList = new ArrayList<>();
 
