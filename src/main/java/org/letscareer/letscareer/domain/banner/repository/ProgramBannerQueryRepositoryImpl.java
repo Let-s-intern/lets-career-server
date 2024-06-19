@@ -6,12 +6,13 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.banner.vo.BannerAdminDetailVo;
 import org.letscareer.letscareer.domain.banner.vo.BannerAdminVo;
+import org.letscareer.letscareer.domain.banner.vo.BannerUserVo;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import static org.letscareer.letscareer.domain.banner.entity.QProgramBanner.programBanner;
-import static org.letscareer.letscareer.domain.file.entity.QFile.file;
 
 @RequiredArgsConstructor
 public class ProgramBannerQueryRepositoryImpl implements ProgramBannerQueryRepository {
@@ -57,6 +58,37 @@ public class ProgramBannerQueryRepositoryImpl implements ProgramBannerQueryRepos
                         )
                         .fetchFirst()
         );
+    }
+
+    @Override
+    public List<BannerUserVo> findAllProgramBannerUserVos() {
+        return queryFactory
+                .select(Projections.constructor(BannerUserVo.class,
+                        programBanner.id,
+                        programBanner.title,
+                        programBanner.link,
+                        programBanner.startDate,
+                        programBanner.endDate,
+                        programBanner.isValid,
+                        programBanner.file.url,
+                        programBanner.mobileFile.url
+                ))
+                .from(programBanner)
+                .where(
+                        isVisible(),
+                        isWithinDateRange()
+                )
+                .orderBy(programBanner.id.desc())
+                .fetch();
+    }
+
+    private BooleanExpression isVisible() {
+        return programBanner.isVisible.eq(true);
+    }
+
+    private BooleanExpression isWithinDateRange() {
+        LocalDateTime now = LocalDateTime.now();
+        return programBanner.startDate.loe(now).and(programBanner.endDate.goe(now));
     }
 
     private BooleanExpression eqBannerId(Long bannerId) {
