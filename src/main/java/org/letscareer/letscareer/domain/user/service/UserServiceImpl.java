@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void pwSignUp(UserPwSignUpRequestDto pwSignUpRequestDto) {
-        userHelper.validateExistingUser(pwSignUpRequestDto.phoneNum());
+        userHelper.validateExistingUserForServiceLogin(pwSignUpRequestDto, AuthProvider.SERVICE);
         userHelper.validateRegexEmail(pwSignUpRequestDto.email());
         userHelper.validateRegexPhoneNumber(pwSignUpRequestDto.phoneNum());
         userHelper.validateRegexPassword(pwSignUpRequestDto.password());

@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.user.helper;
 
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.user.dto.request.UserPwSignUpRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UserUpdateRequestDto;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.repository.UserRepository;
@@ -54,15 +55,15 @@ public class UserHelper {
         return userRepository.save(user);
     }
 
-    public void validateExistingUser(String phoneNum) {
-        if (phoneNum == null)
-            return;
-        if (userRepository.existsByPhoneNum(phoneNum))
-            throw new ConflictException(USER_CONFLICT);
+    public void validateExistingUserForServiceLogin(UserPwSignUpRequestDto pwSignUpRequestDto, AuthProvider authProvider) {
+        if (userRepository.existsByPhoneNumAndAuthProvider(pwSignUpRequestDto.phoneNum(), authProvider))
+            throw new ConflictException(USER_PHONE_NUMBER_CONFLICT);
+        if (userRepository.existsByEmailAndAuthProvider(pwSignUpRequestDto.email(), authProvider))
+            throw new ConflictException(USER_EMAIL_CONFLICT);
     }
 
     public void validateRegexEmail(String email) {
-        if(Objects.isNull(email)) return;
+        if (Objects.isNull(email)) return;
         Pattern pattern = Pattern.compile(EMAIL_REGEX);
         Matcher matcher = pattern.matcher(email);
         if (!matcher.matches())
@@ -70,7 +71,7 @@ public class UserHelper {
     }
 
     public void validateRegexPassword(String password) {
-        if(Objects.isNull(password)) return;
+        if (Objects.isNull(password)) return;
         Pattern pattern = Pattern.compile(PASSWORD_REGEX);
         Matcher matcher = pattern.matcher(password);
         if (!matcher.matches())
@@ -78,7 +79,7 @@ public class UserHelper {
     }
 
     public void validateRegexPhoneNumber(String phoneNumber) {
-        if(Objects.isNull(phoneNumber)) return;
+        if (Objects.isNull(phoneNumber)) return;
         Pattern pattern = Pattern.compile(PHONE_NUMBER_REGEX);
         Matcher matcher = pattern.matcher(phoneNumber);
         if (!matcher.matches())
@@ -92,7 +93,7 @@ public class UserHelper {
         if (user.getPhoneNum().equals(phoneNum))
             return;
         if (userRepository.existsByPhoneNum(phoneNum))
-            throw new ConflictException(USER_CONFLICT);
+            throw new ConflictException(USER_PHONE_NUMBER_CONFLICT);
     }
 
     public String encodePassword(String rawPassword) {
