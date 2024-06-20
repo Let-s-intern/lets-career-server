@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public record ChallengePriceDetailVo(
         Long priceId,
         Integer price,
+        Integer refund,
         Integer discount,
         String accountNumber,
         LocalDateTime deadline,
