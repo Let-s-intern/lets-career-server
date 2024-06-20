@@ -139,6 +139,7 @@ public class LiveQueryRepositoryImpl implements LiveQueryRepository {
                 .select(Projections.constructor(LiveApplicationFormVo.class,
                         live.startDate,
                         live.endDate,
+                        live.beginning,
                         live.deadline
                 ))
                 .from(live)

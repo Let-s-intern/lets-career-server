@@ -6,7 +6,6 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challenge.vo.*;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
@@ -138,6 +137,7 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
                 .select(Projections.constructor(ChallengeApplicationFormVo.class,
                         challenge.startDate,
                         challenge.endDate,
+                        challenge.beginning,
                         challenge.deadline
                 ))
                 .from(challenge)
