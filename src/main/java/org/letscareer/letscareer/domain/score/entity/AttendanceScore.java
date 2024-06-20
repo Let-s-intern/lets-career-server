@@ -36,4 +36,8 @@ public class AttendanceScore extends Score {
         attendance.setAttendanceScore(attendanceScore);
         return attendanceScore;
     }
+
+    public void updateAttendanceScore(Integer score) {
+        this.score = updateValue(this.score, score);
+    }
 }

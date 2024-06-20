@@ -40,4 +40,8 @@ public class AttendanceScoreHelper {
     public Integer getSumOfAttendanceScoreByChallengeIdAndUserId(Long challengeId, Long userId) {
         return attendanceScoreRepository.getSumOfAttendanceScoreByChallengeIdAndUserId(challengeId, userId).orElse(0);
     }
+
+    public void updateAttendanceScore(AttendanceScore attendanceScore, Integer score) {
+        attendanceScore.updateAttendanceScore(score);
+    }
 }

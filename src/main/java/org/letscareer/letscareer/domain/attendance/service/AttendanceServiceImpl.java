@@ -16,6 +16,7 @@ import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.mission.helper.MissionHelper;
 import org.letscareer.letscareer.domain.score.entity.AttendanceScore;
+import org.letscareer.letscareer.domain.score.entity.MissionScore;
 import org.letscareer.letscareer.domain.score.helper.AttendanceScoreHelper;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.helper.UserHelper;
@@ -66,14 +67,13 @@ public class AttendanceServiceImpl implements AttendanceService {
     public void updateAttendance(Long attendanceId, User user, UpdateAttendanceRequestDto updateRequestDto) {
         Attendance attendance = attendanceHelper.findAttendanceByIdOrThrow(attendanceId);
         validateAuthorizedUser(user, attendance);
-        updateAttendanceByAdmin(attendance, updateRequestDto);
+        if(user.getRole().equals(UserRole.ADMIN)) updateAttendanceByAdmin(attendance, updateRequestDto);
+        else updateAttendanceByUser(attendance, updateRequestDto);
     }
 
     @Override
     public void sendLink(Long attendanceId, User user, UpdateAttendanceUserRequestDto link) {
-        Attendance attendance = attendanceHelper.findAttendanceByIdOrThrow(attendanceId);
-        validateAuthorizedUser(user, attendance);
-        updateAttendanceByUser(attendance, link);
+
     }
 
     private void validateAuthorizedUser(User user, Attendance attendance) {
@@ -83,7 +83,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         }
     }
 
-    private void updateAttendanceByUser(Attendance attendance, UpdateAttendanceUserRequestDto requestDto) {
+    private void updateAttendanceByUser(Attendance attendance, UpdateAttendanceRequestDto requestDto) {
         Mission mission = attendance.getMission();
         Challenge challenge = mission.getChallenge();
         AttendanceStatus status = getAttendanceStatus(mission.getStartDate(), mission.getEndDate(), challenge.getEndDate());
@@ -94,10 +94,26 @@ public class AttendanceServiceImpl implements AttendanceService {
             attendance.updateAttendanceLink(requestDto.link());
             attendance.updateAttendanceStatus(AttendanceStatus.UPDATED);
             attendance.updateAttendanceResult(AttendanceResult.WAITING);
+            updateMissionAttendanceCount(mission, attendance);
+        }
+    }
+
+    private void updateMissionAttendanceCount(Mission mission, Attendance attendance) {
+        if(attendance.getStatus().equals(AttendanceStatus.PRESENT)) {
+            mission.updateMissionAttendanceCount(mission.getAttendanceCount()-1);
+            mission.updateMissionLateAttendanceCount(mission.getLateAttendanceCount()+1);
         }
     }
 
     private void updateAttendanceByAdmin(Attendance attendance, UpdateAttendanceRequestDto updateRequestDto) {
+        MissionScore missionScore = attendance.getMission().getMissionScore();
+        if(isUpdatedAttendance(attendance) && wrongToPass(attendance, updateRequestDto)) {
+            attendance.updateAttendanceStatus(AttendanceStatus.LATE);
+            attendanceScoreHelper.updateAttendanceScore(attendance.getAttendanceScore(), missionScore.getLateScore());
+        } else if(isUpdatedAttendance(attendance) && wrongToWrong(attendance, updateRequestDto)) {
+            attendance.updateAttendanceStatus(AttendanceStatus.ABSENT);
+            attendanceScoreHelper.updateAttendanceScore(attendance.getAttendanceScore(), 0);
+        }
         attendance.updateAttendanceAdmin(updateRequestDto);
     }
 
@@ -120,5 +136,17 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     private boolean isReSubmit(AttendanceStatus status, Attendance attendance) {
         return (status.equals(AttendanceStatus.PRESENT) || status.equals(AttendanceStatus.LATE)) && attendance.getResult().equals(AttendanceResult.WRONG);
+    }
+
+    private boolean isUpdatedAttendance(Attendance attendance) {
+        return attendance.getStatus().equals(AttendanceStatus.UPDATED);
+    }
+
+    private boolean wrongToPass(Attendance attendance, UpdateAttendanceRequestDto updateRequestDto) {
+        return (attendance.getResult().equals(AttendanceResult.WRONG)) && updateRequestDto.result().equals(AttendanceResult.PASS);
+    }
+
+    private boolean wrongToWrong(Attendance attendance, UpdateAttendanceRequestDto updateRequestDto) {
+        return (attendance.getResult().equals(AttendanceResult.WRONG)) && updateRequestDto.result().equals(AttendanceResult.WRONG);
     }
 }

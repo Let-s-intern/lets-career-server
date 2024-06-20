@@ -114,4 +114,19 @@ public class Mission extends BaseTimeEntity {
             case LATE -> this.lateAttendanceCount = updateValue(this.lateAttendanceCount, this.lateAttendanceCount + 1);
         }
     }
+
+    public void updateAttendanceCountByAdmin(AttendanceStatus attendanceStatus, Integer value) {
+        switch (attendanceStatus) {
+            case PRESENT -> this.attendanceCount = updateValue(this.attendanceCount, this.attendanceCount + value);
+            case LATE -> this.lateAttendanceCount = updateValue(this.lateAttendanceCount, this.lateAttendanceCount + value);
+        }
+    }
+
+    public void updateMissionAttendanceCount(Integer attendanceCount) {
+        this.attendanceCount = updateValue(this.attendanceCount, attendanceCount);
+    }
+
+    public void updateMissionLateAttendanceCount(Integer lateAttendanceCount) {
+        this.lateAttendanceCount = updateValue(this.lateAttendanceCount, lateAttendanceCount);
+    }
 }
