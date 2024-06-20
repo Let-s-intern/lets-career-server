@@ -216,7 +216,7 @@ public class ChallengeServiceImpl implements ChallengeService {
         challengeApplicationHelper.validateChallengeDashboardAccessibleUser(challengeId, user);
         Challenge challenge = challengeHelper.findChallengeByIdOrThrow(challengeId);
         MyDailyMissionVo myDailyMissionVo = missionHelper.findMyDailyMissionVoOrNull(challenge.getId());
-        AttendanceDashboardVo attendanceDashboardVo = attendanceHelper.findAttendanceDashboardVoOrNull(myDailyMissionVo.id(), user.getId());
+        AttendanceDashboardVo attendanceDashboardVo = myDailyMissionVo != null ? attendanceHelper.findAttendanceDashboardVoOrNull(myDailyMissionVo.id(), user.getId()) : null;
         return missionMapper.toGetChallengeMyDailyMissionResponseDto(myDailyMissionVo, attendanceDashboardVo);
     }
 
@@ -231,7 +231,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     public GetChallengeMyMissionDetailResponseDto getMyMissionDetail(Long challengeId, Long missionId, User user) {
         challengeApplicationHelper.validateChallengeDashboardAccessibleUser(challengeId, user);
         MyDailyMissionVo missionInfo = missionHelper.findMyDailyMissionVoByMissionId(missionId);
-        AttendanceDashboardVo attendanceInfo = attendanceHelper.findAttendanceDashboardVoOrNull(missionInfo.id(), user.getId());
+        AttendanceDashboardVo attendanceInfo = missionInfo != null ? attendanceHelper.findAttendanceDashboardVoOrNull(missionInfo.id(), user.getId()) : null;
         return missionMapper.toGetChallengeMyMissionDetailResponseDto(missionInfo, attendanceInfo);
     }
 
