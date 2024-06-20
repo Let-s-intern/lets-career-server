@@ -56,16 +56,4 @@ public class AttendanceV1Controller {
         attendanceService.updateAttendance(attendanceId, user, updateAttendanceRequestDto);
         return SuccessResponse.ok(null);
     }
-
-    @Operation(summary = "링크 제출", responses = {
-            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
-    })
-    @ApiErrorCode({SwaggerEnum.ATTENDANCE_UNAUTHORIZED})
-    @PatchMapping("/{id}/link")
-    public ResponseEntity<SuccessResponse<?>> sendLink(@PathVariable(name = "id") final Long attendanceId,
-                                                       @CurrentUser final User user,
-                                                       @RequestParam final UpdateAttendanceUserRequestDto link) {
-        attendanceService.sendLink(attendanceId, user, link);
-        return SuccessResponse.ok(null);
-    }
 }

@@ -203,7 +203,7 @@ public class ChallengeV1Controller {
     })
     @GetMapping("/{id}/daily-mission")
     public ResponseEntity<SuccessResponse<?>> getDailyMission(@PathVariable(name = "id") final Long challengeId,
-                                                                       @CurrentUser User user) {
+                                                              @CurrentUser User user) {
         final GetChallengeDailyMissionResponseDto responseDto = challengeService.getDailyMission(challengeId, user);
         return SuccessResponse.ok(responseDto);
     }
