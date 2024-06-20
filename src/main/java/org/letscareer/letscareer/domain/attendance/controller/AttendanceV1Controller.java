@@ -50,9 +50,9 @@ public class AttendanceV1Controller {
     @ApiErrorCode({SwaggerEnum.ATTENDANCE_UNAUTHORIZED})
     @PatchMapping("/{id}")
     public ResponseEntity<SuccessResponse<?>> updateAttendance(@PathVariable(name = "id") final Long attendanceId,
-                                                               @RequestBody final AttendanceUpdateRequestDto attendanceUpdateRequestDto,
-                                                               @CurrentUser User user) {
-        attendanceService.updateAttendance(attendanceId, attendanceUpdateRequestDto, user);
+                                                               @CurrentUser final User user,
+                                                               @RequestBody final AttendanceUpdateRequestDto attendanceUpdateRequestDto) {
+        attendanceService.updateAttendance(attendanceId, user, attendanceUpdateRequestDto);
         return SuccessResponse.ok(null);
     }
 }

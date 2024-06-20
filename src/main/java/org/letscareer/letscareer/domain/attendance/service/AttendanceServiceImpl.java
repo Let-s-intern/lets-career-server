@@ -62,7 +62,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public void updateAttendance(Long attendanceId, AttendanceUpdateRequestDto updateRequestDto, User user) {
+    public void updateAttendance(Long attendanceId, User user, AttendanceUpdateRequestDto updateRequestDto) {
         Attendance attendance = attendanceHelper.findAttendanceByIdOrThrow(attendanceId);
         validateAuthorizedUser(user, attendance);
         switch (user.getRole()) {
