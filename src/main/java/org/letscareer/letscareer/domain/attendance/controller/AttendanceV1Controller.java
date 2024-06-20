@@ -5,8 +5,9 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.domain.attendance.dto.request.AttendanceCreateRequestDto;
-import org.letscareer.letscareer.domain.attendance.dto.request.AttendanceUpdateRequestDto;
+import org.letscareer.letscareer.domain.attendance.dto.request.CreateAttendanceRequestDto;
+import org.letscareer.letscareer.domain.attendance.dto.request.UpdateAttendanceRequestDto;
+import org.letscareer.letscareer.domain.attendance.dto.request.UpdateAttendanceUserRequestDto;
 import org.letscareer.letscareer.domain.attendance.dto.response.AttendanceAdminListResponseDto;
 import org.letscareer.letscareer.domain.attendance.service.AttendanceService;
 import org.letscareer.letscareer.domain.user.entity.User;
@@ -29,9 +30,9 @@ public class AttendanceV1Controller {
     @ApiErrorCode({SwaggerEnum.APPLICATION_NOT_FOUND, SwaggerEnum.CONFLICT_ATTENDANCE, SwaggerEnum.ATTENDANCE_NOT_AVAILABLE_DATE})
     @PostMapping("/{id}")
     public ResponseEntity<SuccessResponse<?>> createAttendance(@PathVariable(name = "id") final Long missionId,
-                                                               @RequestBody AttendanceCreateRequestDto attendanceCreateRequestDto,
+                                                               @RequestBody CreateAttendanceRequestDto createAttendanceRequestDto,
                                                                @CurrentUser User user) {
-        attendanceService.createAttendance(missionId, attendanceCreateRequestDto, user.getId());
+        attendanceService.createAttendance(missionId, createAttendanceRequestDto, user.getId());
         return SuccessResponse.created(null);
     }
 
@@ -51,8 +52,20 @@ public class AttendanceV1Controller {
     @PatchMapping("/{id}")
     public ResponseEntity<SuccessResponse<?>> updateAttendance(@PathVariable(name = "id") final Long attendanceId,
                                                                @CurrentUser final User user,
-                                                               @RequestBody final AttendanceUpdateRequestDto attendanceUpdateRequestDto) {
-        attendanceService.updateAttendance(attendanceId, user, attendanceUpdateRequestDto);
+                                                               @RequestBody final UpdateAttendanceRequestDto updateAttendanceRequestDto) {
+        attendanceService.updateAttendance(attendanceId, user, updateAttendanceRequestDto);
+        return SuccessResponse.ok(null);
+    }
+
+    @Operation(summary = "링크 제출", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    })
+    @ApiErrorCode({SwaggerEnum.ATTENDANCE_UNAUTHORIZED})
+    @PatchMapping("/{id}")
+    public ResponseEntity<SuccessResponse<?>> sendLink(@PathVariable(name = "id") final Long attendanceId,
+                                                       @CurrentUser final User user,
+                                                       @RequestParam final UpdateAttendanceUserRequestDto link) {
+        attendanceService.sendLink(attendanceId, user, link);
         return SuccessResponse.ok(null);
     }
 }

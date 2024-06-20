@@ -2,8 +2,9 @@ package org.letscareer.letscareer.domain.attendance.service;
 
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.helper.ChallengeApplicationHelper;
-import org.letscareer.letscareer.domain.attendance.dto.request.AttendanceCreateRequestDto;
-import org.letscareer.letscareer.domain.attendance.dto.request.AttendanceUpdateRequestDto;
+import org.letscareer.letscareer.domain.attendance.dto.request.CreateAttendanceRequestDto;
+import org.letscareer.letscareer.domain.attendance.dto.request.UpdateAttendanceRequestDto;
+import org.letscareer.letscareer.domain.attendance.dto.request.UpdateAttendanceUserRequestDto;
 import org.letscareer.letscareer.domain.attendance.dto.response.AttendanceAdminListResponseDto;
 import org.letscareer.letscareer.domain.attendance.entity.Attendance;
 import org.letscareer.letscareer.domain.attendance.helper.AttendanceHelper;
@@ -42,7 +43,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     private final AttendanceScoreHelper attendanceScoreHelper;
 
     @Override
-    public void createAttendance(Long missionId, AttendanceCreateRequestDto createRequestDto, Long userId) {
+    public void createAttendance(Long missionId, CreateAttendanceRequestDto createRequestDto, Long userId) {
         Mission mission = missionHelper.findMissionByIdOrThrow(missionId);
         Challenge challenge = mission.getChallenge();
         User user = userHelper.findUserByIdOrThrow(userId);
@@ -62,48 +63,51 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public void updateAttendance(Long attendanceId, User user, AttendanceUpdateRequestDto updateRequestDto) {
+    public void updateAttendance(Long attendanceId, User user, UpdateAttendanceRequestDto updateRequestDto) {
         Attendance attendance = attendanceHelper.findAttendanceByIdOrThrow(attendanceId);
         validateAuthorizedUser(user, attendance);
-        switch (user.getRole()) {
-            case ADMIN -> updateAttendanceByAdmin(attendance, updateRequestDto);
-            case USER -> updateAttendanceByUser(attendance, updateRequestDto);
-        }
+        updateAttendanceByAdmin(attendance, updateRequestDto);
+    }
+
+    @Override
+    public void sendLink(Long attendanceId, User user, UpdateAttendanceUserRequestDto link) {
+        Attendance attendance = attendanceHelper.findAttendanceByIdOrThrow(attendanceId);
+        validateAuthorizedUser(user, attendance);
+        updateAttendanceByUser(attendance, link);
     }
 
     private void validateAuthorizedUser(User user, Attendance attendance) {
-        if(user.getRole().equals(UserRole.ADMIN)) return;
-        if(!user.getId().equals(attendance.getUser().getId())) {
+        if (user.getRole().equals(UserRole.ADMIN)) return;
+        if (!user.getId().equals(attendance.getUser().getId())) {
             throw new UnauthorizedException(ATTENDANCE_UNAUTHORIZED);
         }
     }
 
-    private void updateAttendanceByUser(Attendance attendance, AttendanceUpdateRequestDto updateRequestDto) {
+    private void updateAttendanceByUser(Attendance attendance, UpdateAttendanceUserRequestDto requestDto) {
         Mission mission = attendance.getMission();
         Challenge challenge = mission.getChallenge();
         AttendanceStatus status = getAttendanceStatus(mission.getStartDate(), mission.getEndDate(), challenge.getEndDate());
 
-        if(isGeneralUpdate(status, attendance)) {
-            attendance.updateAttendanceLink(updateRequestDto.link());
-        }
-        else if(isReSubmit(status, attendance)) {
-            attendance.updateAttendanceLink(updateRequestDto.link());
+        if (isGeneralUpdate(status, attendance)) {
+            attendance.updateAttendanceLink(requestDto.link());
+        } else if (isReSubmit(status, attendance)) {
+            attendance.updateAttendanceLink(requestDto.link());
             attendance.updateAttendanceStatus(AttendanceStatus.UPDATED);
             attendance.updateAttendanceResult(AttendanceResult.WAITING);
         }
     }
 
-    private void updateAttendanceByAdmin(Attendance attendance, AttendanceUpdateRequestDto updateRequestDto) {
+    private void updateAttendanceByAdmin(Attendance attendance, UpdateAttendanceRequestDto updateRequestDto) {
         attendance.updateAttendanceAdmin(updateRequestDto);
     }
 
     private AttendanceStatus getAttendanceStatus(LocalDateTime missionStartDate, LocalDateTime missionEndDate, LocalDateTime challengeEndDate) {
         LocalDateTime now = LocalDateTime.now();
-        if(now.isBefore(missionStartDate)) {
+        if (now.isBefore(missionStartDate)) {
             throw new InvalidValueException(ATTENDANCE_NOT_AVAILABLE_DATE);
-        } else if(now.isBefore(missionEndDate)) {
+        } else if (now.isBefore(missionEndDate)) {
             return AttendanceStatus.PRESENT;
-        } else if(now.isBefore(challengeEndDate.plusDays(2))) {
+        } else if (now.isBefore(challengeEndDate.plusDays(2))) {
             return AttendanceStatus.LATE;
         } else {
             throw new InvalidValueException(ATTENDANCE_NOT_AVAILABLE_DATE);

@@ -1,7 +1,7 @@
 package org.letscareer.letscareer.domain.attendance.helper;
 
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.domain.attendance.dto.request.AttendanceCreateRequestDto;
+import org.letscareer.letscareer.domain.attendance.dto.request.CreateAttendanceRequestDto;
 import org.letscareer.letscareer.domain.attendance.entity.Attendance;
 import org.letscareer.letscareer.domain.attendance.error.AttendanceErrorCode;
 import org.letscareer.letscareer.domain.attendance.repository.AttendanceRepository;
@@ -55,7 +55,7 @@ public class AttendanceHelper {
         }
     }
 
-    public Attendance createAttendanceAndSave(Mission mission, AttendanceCreateRequestDto createRequestDto, AttendanceStatus status, User user) {
+    public Attendance createAttendanceAndSave(Mission mission, CreateAttendanceRequestDto createRequestDto, AttendanceStatus status, User user) {
         Attendance newAttendance = Attendance.createAttendance(mission, createRequestDto, status, user);
         return attendanceRepository.save(newAttendance);
     }
