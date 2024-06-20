@@ -79,16 +79,16 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final ChallengeClassificationHelper challengeClassificationHelper;
     private final ChallengeApplicationHelper challengeApplicationHelper;
     private final ChallengeApplicationMapper challengeApplicationMapper;
-    private final ChallengePriceHelper challengePriceHelper;
-    private final MissionHelper missionHelper;
-    private final MissionMapper missionMapper;
-    private final ChallengeGuideHelper challengeGuideHelper;
     private final ChallengeNoticeHelper challengeNoticeHelper;
+    private final ChallengePriceHelper challengePriceHelper;
+    private final ChallengeGuideHelper challengeGuideHelper;
     private final AttendanceScoreHelper attendanceScoreHelper;
     private final AttendanceScoreMapper attendanceScoreMapper;
-    private final AdminScoreHelper adminScoreHelper;
     private final AttendanceHelper attendanceHelper;
     private final AttendanceMapper attendanceMapper;
+    private final AdminScoreHelper adminScoreHelper;
+    private final MissionHelper missionHelper;
+    private final MissionMapper missionMapper;
     private final PaymentHelper paymentHelper;
     private final ReviewHelper reviewHelper;
     private final FaqHelper faqHelper;
@@ -187,8 +187,9 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     @Override
     public GetChallengeTotalScoreResponseDto getTotalScore(Long challengeId, Long userId) {
-        Integer totalScore = attendanceScoreHelper.getSumOfAttendanceScoreByChallengeIdAndUserId(challengeId, userId);
-        return attendanceScoreMapper.toGetChallengeTotalScoreResponseDto(totalScore);
+        Integer currentScore = attendanceScoreHelper.getSumOfAttendanceScoreByChallengeIdAndUserId(challengeId, userId);
+        Integer totalScore = missionHelper.finsSumOfMissionScoresByChallengeId(challengeId);
+        return attendanceScoreMapper.toGetChallengeTotalScoreResponseDto(currentScore, totalScore);
     }
 
     @Override

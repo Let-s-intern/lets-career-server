@@ -171,6 +171,20 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
     }
 
     @Override
+    public Optional<Integer> finsSumOfMissionScoresByChallengeId(Long challengeId) {
+        return Optional.ofNullable(queryFactory
+                .select(missionScore.successScore.sum())
+                .from(mission)
+                .leftJoin(mission.challenge, challenge)
+                .leftJoin(mission.missionScore, missionScore)
+                .where(
+                        eqChallengeId(challengeId)
+                )
+                .fetchOne()
+        );
+    }
+
+    @Override
     public Optional<MyDailyMissionVo> findMyDailyMissionVoByMissionId(Long missionId) {
         return Optional.ofNullable(
                 queryFactory

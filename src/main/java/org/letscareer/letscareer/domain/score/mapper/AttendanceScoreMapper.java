@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AttendanceScoreMapper {
-    public GetChallengeTotalScoreResponseDto toGetChallengeTotalScoreResponseDto(Integer totalScore) {
-        return GetChallengeTotalScoreResponseDto.of(totalScore);
+    public GetChallengeTotalScoreResponseDto toGetChallengeTotalScoreResponseDto(Integer currentScore, Integer totalScore) {
+        return GetChallengeTotalScoreResponseDto.of(currentScore, totalScore);
     }
 }

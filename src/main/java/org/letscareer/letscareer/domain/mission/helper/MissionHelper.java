@@ -53,6 +53,11 @@ public class MissionHelper {
         return missionRepository.findMissionScheduleVosByChallengeId(challengeId);
     }
 
+    public Integer finsSumOfMissionScoresByChallengeId(Long challengeId) {
+        return missionRepository.finsSumOfMissionScoresByChallengeId(challengeId)
+                .orElse(0);
+    }
+
     public List<?> findMyMissionVos(Long challengeId, MissionQueryType queryType, Long userId) {
         if (queryType.equals(MissionQueryType.SUBMITTED))
             return missionRepository.findMySubmittedMissionVosByChallengeIdAndUserId(challengeId, userId);

@@ -55,7 +55,8 @@ public class AttendanceScoreQueryRepositoryImpl implements AttendanceScoreQueryR
                         eqUserId(userId),
                         isValidAttendance()
                 )
-                .fetchFirst());
+                .fetchFirst()
+        );
     }
 
     @Override
