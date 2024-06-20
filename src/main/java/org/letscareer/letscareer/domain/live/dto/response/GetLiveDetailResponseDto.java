@@ -16,6 +16,7 @@ public record GetLiveDetailResponseDto(
         String title,
         String shortDesc,
         String desc,
+        String criticalNotice,
         Integer participationCount,
         String thumbnail,
         String mentorName,
@@ -38,6 +39,7 @@ public record GetLiveDetailResponseDto(
                 .title(liveInfo.title())
                 .shortDesc(liveInfo.shortDesc())
                 .desc(liveInfo.desc())
+                .criticalNotice(liveInfo.criticalNotice())
                 .participationCount(liveInfo.participationCount())
                 .thumbnail(liveInfo.thumbnail())
                 .mentorName(liveInfo.mentorName())

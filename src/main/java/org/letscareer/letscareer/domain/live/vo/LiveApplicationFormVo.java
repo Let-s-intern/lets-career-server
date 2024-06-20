@@ -9,16 +9,18 @@ import java.time.LocalDateTime;
 
 @Builder(access = AccessLevel.PRIVATE)
 public record LiveApplicationFormVo(
+        String criticalNotice,
         ProgramStatusType statusType,
         LocalDateTime startDate,
         LocalDateTime endDate,
         LocalDateTime beginning,
         LocalDateTime deadline
 ) {
-    public LiveApplicationFormVo(LocalDateTime startDate,
+    public LiveApplicationFormVo(String criticalNotice,
+                                 LocalDateTime startDate,
                                  LocalDateTime endDate,
                                  LocalDateTime beginning,
                                  LocalDateTime deadline) {
-        this(ProgramStatusType.of(ProgramType.LIVE, beginning, deadline), startDate, endDate, beginning, deadline);
+        this(criticalNotice, ProgramStatusType.of(ProgramType.LIVE, beginning, deadline), startDate, endDate, beginning, deadline);
     }
 }

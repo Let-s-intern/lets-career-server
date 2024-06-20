@@ -9,6 +9,7 @@ public record LiveDetailVo(
         String title,
         String shortDesc,
         String desc,
+        String criticalNotice,
         Integer participationCount,
         String thumbnail,
         String mentorName,
