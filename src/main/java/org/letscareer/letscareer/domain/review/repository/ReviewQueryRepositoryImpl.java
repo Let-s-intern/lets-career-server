@@ -18,6 +18,7 @@ import org.springframework.data.support.PageableExecutionUtils;
 import java.util.List;
 import java.util.Optional;
 
+import static org.letscareer.letscareer.domain.application.entity.QApplication.application;
 import static org.letscareer.letscareer.domain.application.entity.QChallengeApplication.challengeApplication;
 import static org.letscareer.letscareer.domain.application.entity.QLiveApplication.liveApplication;
 import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
@@ -98,8 +99,8 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                 ))
                 .from(review)
                 .leftJoin(review.application, challengeApplication._super)
+                .leftJoin(application.user, user)
                 .leftJoin(challengeApplication.challenge, challenge)
-                .leftJoin(review.application.user, user)
                 .where(
                         eqIsVisible()
                 )
@@ -111,8 +112,8 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
         JPAQuery<Review> countQuery = queryFactory
                 .selectFrom(review)
                 .leftJoin(review.application, challengeApplication._super)
+                .leftJoin(application.user, user)
                 .leftJoin(challengeApplication.challenge, challenge)
-                .leftJoin(review.application.user, user)
                 .where(
                         eqIsVisible()
                 );

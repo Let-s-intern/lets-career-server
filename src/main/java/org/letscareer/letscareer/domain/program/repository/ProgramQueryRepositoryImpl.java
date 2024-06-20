@@ -49,6 +49,7 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                 .leftJoin(liveClassification).on(vWProgram.programType.eq(ProgramType.LIVE).and(vWProgram.programId.eq(liveClassification.live.id)))
                 .leftJoin(vodClassification).on(vWProgram.programType.eq(ProgramType.VOD).and(vWProgram.programId.eq(vodClassification.vod.id)))
                 .where(
+                        eqIsVisible(),
                         eqProgramType(condition.type()),
                         containDuration(condition.startDate(), condition.endDate()),
                         inProgramClassification(condition.typeList()),
@@ -73,6 +74,7 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                 .leftJoin(liveClassification).on(vWProgram.programType.eq(ProgramType.LIVE).and(vWProgram.programId.eq(liveClassification.live.id)))
                 .leftJoin(vodClassification).on(vWProgram.programType.eq(ProgramType.VOD).and(vWProgram.programId.eq(vodClassification.vod.id)))
                 .where(
+                        eqIsVisible(),
                         eqProgramType(condition.type()),
                         containDuration(condition.startDate(), condition.endDate()),
                         inProgramClassification(condition.typeList()),
@@ -229,5 +231,9 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
 
     private BooleanExpression programPostStatus(LocalDateTime now) {
         return vWProgram.deadline.lt(now);
+    }
+
+    private BooleanExpression eqIsVisible() {
+        return vWProgram.isVisible.eq(true);
     }
 }
