@@ -61,7 +61,7 @@ public class AttendanceV1Controller {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @ApiErrorCode({SwaggerEnum.ATTENDANCE_UNAUTHORIZED})
-    @PatchMapping("/{id}")
+    @PatchMapping("/{id}/link")
     public ResponseEntity<SuccessResponse<?>> sendLink(@PathVariable(name = "id") final Long attendanceId,
                                                        @CurrentUser final User user,
                                                        @RequestParam final UpdateAttendanceUserRequestDto link) {
