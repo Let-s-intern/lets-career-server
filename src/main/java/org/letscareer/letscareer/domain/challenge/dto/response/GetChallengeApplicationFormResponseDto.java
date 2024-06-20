@@ -18,6 +18,7 @@ public record GetChallengeApplicationFormResponseDto(
         String email,
         String contactEmail,
         String phoneNumber,
+        String criticalNotice,
         LocalDateTime startDate,
         LocalDateTime endDate,
         LocalDateTime deadline,
@@ -34,6 +35,7 @@ public record GetChallengeApplicationFormResponseDto(
                 .email(Objects.isNull(user) ? null : user.getEmail())
                 .contactEmail(Objects.isNull(user) ? null : user.getContactEmail())
                 .phoneNumber(Objects.isNull(user) ? null : user.getPhoneNum())
+                .criticalNotice(programInfo.criticalNotice())
                 .startDate(programInfo.startDate())
                 .endDate(programInfo.endDate())
                 .deadline(programInfo.deadline())

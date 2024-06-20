@@ -32,6 +32,7 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
                         challenge.title,
                         challenge.shortDesc,
                         challenge.description,
+                        challenge.criticalNotice,
                         challenge.participationCount,
                         challenge.thumbnail,
                         challenge.startDate,
@@ -135,6 +136,7 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
     public Optional<ChallengeApplicationFormVo> findChallengeApplicationFormVo(Long challengeId) {
         return Optional.ofNullable(queryFactory
                 .select(Projections.constructor(ChallengeApplicationFormVo.class,
+                        challenge.criticalNotice,
                         challenge.startDate,
                         challenge.endDate,
                         challenge.beginning,
