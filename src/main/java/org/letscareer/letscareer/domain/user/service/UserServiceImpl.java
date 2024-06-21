@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void pwSignUp(UserPwSignUpRequestDto pwSignUpRequestDto) {
-        userHelper.validateExistingUserForServiceLogin(pwSignUpRequestDto, AuthProvider.SERVICE);
+        userHelper.validateExistingUser(pwSignUpRequestDto);
         userHelper.validateRegexEmail(pwSignUpRequestDto.email());
         userHelper.validateRegexPhoneNumber(pwSignUpRequestDto.phoneNum());
         userHelper.validateRegexPassword(pwSignUpRequestDto.password());

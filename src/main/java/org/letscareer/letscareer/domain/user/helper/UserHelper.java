@@ -55,11 +55,9 @@ public class UserHelper {
         return userRepository.save(user);
     }
 
-    public void validateExistingUserForServiceLogin(UserPwSignUpRequestDto pwSignUpRequestDto, AuthProvider authProvider) {
-        if (userRepository.existsByPhoneNumAndAuthProvider(pwSignUpRequestDto.phoneNum(), authProvider))
+    public void validateExistingUser(UserPwSignUpRequestDto pwSignUpRequestDto) {
+        if (userRepository.existsByPhoneNum(pwSignUpRequestDto.phoneNum()))
             throw new ConflictException(USER_PHONE_NUMBER_CONFLICT);
-        if (userRepository.existsByEmailAndAuthProvider(pwSignUpRequestDto.email(), authProvider))
-            throw new ConflictException(USER_EMAIL_CONFLICT);
     }
 
     public void validateRegexEmail(String email) {
