@@ -57,6 +57,8 @@ public interface ChallengeService {
 
     GetChallengeMyMissionDetailResponseDto getMyMissionDetail(Long challengeId, Long missionId, User user);
 
+    GetChallengeApplicationEmailListResponseDto getApplicationEmails(Long challengeId);
+
     void createChallenge(CreateChallengeRequestDto createChallengeRequestDto);
 
     void updateChallenge(Long challengeId, UpdateChallengeRequestDto createChallengeRequestDto);

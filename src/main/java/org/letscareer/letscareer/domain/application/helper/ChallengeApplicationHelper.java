@@ -75,4 +75,8 @@ public class ChallengeApplicationHelper {
         challengeApplicationRepository.findChallengeApplicationIdByChallengeIdAndUserIdAndIsConfirmed(challengeId, user.getId(), true)
                 .orElseThrow(() -> new EntityNotFoundException(APPLICATION_NOT_FOUND));
     }
+
+    public List<String> getValidApplicationEmailList(Long challengeId) {
+        return challengeApplicationRepository.findAllEmailByChallengeIdAndPaymentIsConfirmed(challengeId, true);
+    }
 }

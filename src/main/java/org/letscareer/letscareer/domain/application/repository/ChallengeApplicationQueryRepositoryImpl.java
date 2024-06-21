@@ -7,7 +7,6 @@ import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
 import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
 import org.springframework.data.domain.Page;
@@ -23,6 +22,7 @@ import static org.letscareer.letscareer.domain.coupon.entity.QCoupon.coupon;
 import static org.letscareer.letscareer.domain.payment.entity.QPayment.payment;
 import static org.letscareer.letscareer.domain.price.entity.QChallengePrice.challengePrice;
 import static org.letscareer.letscareer.domain.user.entity.QUser.user;
+import static org.letscareer.letscareer.domain.user.repository.UserRepositoryImpl.activeEmail;
 
 @RequiredArgsConstructor
 public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplicationQueryRepository {
@@ -125,6 +125,21 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                                 eqIsConfirmed(isConfirmed)
                         )
                         .fetchFirst());
+    }
+
+    @Override
+    public List<String> findAllEmailByChallengeIdAndPaymentIsConfirmed(Long challengeId, Boolean isConfirmed) {
+        return queryFactory
+                .select(activeEmail(challengeApplication.user))
+                .from(challengeApplication)
+                .leftJoin(challengeApplication.challenge, challenge)
+                .leftJoin(challengeApplication.user, user)
+                .leftJoin(challengeApplication.payment, payment)
+                .where(
+                        eqChallengeId(challengeId),
+                        eqIsConfirmed(isConfirmed)
+                )
+                .fetch();
     }
 
     private NumberExpression<Integer> calculateTotalCost() {
