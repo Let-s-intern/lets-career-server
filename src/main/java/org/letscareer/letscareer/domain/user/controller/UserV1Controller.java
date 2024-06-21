@@ -32,7 +32,7 @@ public class UserV1Controller {
     @Operation(summary = "유저 마이페이지 정보", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserInfoResponseDto.class)))
     })
-    @ApiErrorCode(SwaggerEnum.USER_NOT_FOUND)
+    @ApiErrorCode({SwaggerEnum.USER_NOT_FOUND})
     @GetMapping
     public ResponseEntity<SuccessResponse<?>> getUserInfo(@CurrentUser User user) {
         return SuccessResponse.ok(userService.getUserInfo(user));
@@ -41,7 +41,7 @@ public class UserV1Controller {
     @Operation(summary = "유저 로그아웃", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
-    @ApiErrorCode(SwaggerEnum.USER_NOT_FOUND)
+    @ApiErrorCode({SwaggerEnum.USER_NOT_FOUND})
     @GetMapping("/signout")
     public ResponseEntity<SuccessResponse<?>> signOut(@CurrentUser User user) {
         userService.signOut(user);
@@ -51,7 +51,7 @@ public class UserV1Controller {
     @Operation(summary = "유저 관리자 여부", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Boolean.class)))
     })
-    @ApiErrorCode(SwaggerEnum.USER_NOT_FOUND)
+    @ApiErrorCode({SwaggerEnum.USER_NOT_FOUND})
     @GetMapping("/isAdmin")
     public ResponseEntity<SuccessResponse<?>> isAdmin(@CurrentUser User user) {
         return SuccessResponse.ok(userService.isAdmin(user));
