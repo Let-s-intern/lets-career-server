@@ -18,7 +18,7 @@ import java.util.List;
 import static org.letscareer.letscareer.domain.user.entity.QUser.user;
 
 @RequiredArgsConstructor
-public class UserRepositoryImpl implements UserRepositoryCustom {
+public class UserQueryQueryRepositoryImpl implements UserQueryRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
