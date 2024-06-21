@@ -138,12 +138,16 @@ public class UserHelper {
     }
 
     public Boolean checkUserChallengeInfo(User user) {
-        return !Objects.isNull(user.getUniversity())
+        return checkStringNotNullAndNotEmpty(user.getUniversity())
                 && !Objects.isNull(user.getGrade())
-                && !Objects.isNull(user.getMajor())
-                && !Objects.isNull(user.getWishJob())
-                && !Objects.isNull(user.getWishCompany())
+                && checkStringNotNullAndNotEmpty(user.getMajor())
+                && checkStringNotNullAndNotEmpty(user.getWishJob())
+                && checkStringNotNullAndNotEmpty(user.getWishCompany())
                 && !Objects.isNull(user.getAccountType())
-                && !Objects.isNull(user.getAccountNum());
+                && checkStringNotNullAndNotEmpty(user.getAccountNum());
+    }
+
+    private Boolean checkStringNotNullAndNotEmpty(String s) {
+        return !(Objects.isNull(s) || s.isEmpty());
     }
 }
