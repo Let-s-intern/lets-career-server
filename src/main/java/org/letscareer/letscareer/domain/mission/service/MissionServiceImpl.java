@@ -1,7 +1,6 @@
 package org.letscareer.letscareer.domain.mission.service;
 
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.domain.application.helper.ApplicationHelper;
 import org.letscareer.letscareer.domain.application.helper.ChallengeApplicationHelper;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
@@ -9,11 +8,13 @@ import org.letscareer.letscareer.domain.contents.helper.ContentsHelper;
 import org.letscareer.letscareer.domain.contents.type.ContentsType;
 import org.letscareer.letscareer.domain.mission.dto.request.CreateMissionRequestDto;
 import org.letscareer.letscareer.domain.mission.dto.request.UpdateMissionRequestDto;
+import org.letscareer.letscareer.domain.mission.dto.response.GetMissionDetailResponseDto;
 import org.letscareer.letscareer.domain.mission.dto.response.MissionAdminListResponseDto;
 import org.letscareer.letscareer.domain.mission.dto.response.MissionAdminResponseDto;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.mission.helper.MissionHelper;
 import org.letscareer.letscareer.domain.mission.mapper.MissionMapper;
+import org.letscareer.letscareer.domain.mission.vo.MissionDetailVo;
 import org.letscareer.letscareer.domain.mission.vo.MissionForChallengeVo;
 import org.letscareer.letscareer.domain.missioncontents.entity.MissionContents;
 import org.letscareer.letscareer.domain.missioncontents.helper.MissionContentsHelper;
@@ -39,6 +40,12 @@ public class MissionServiceImpl implements MissionService {
     private final ChallengeApplicationHelper challengeApplicationHelper;
     private final ChallengeHelper challengeHelper;
     private final ContentsHelper contentsHelper;
+
+    @Override
+    public GetMissionDetailResponseDto getMissionsDetail(Long missionId) {
+        MissionDetailVo missionDetailVo = missionHelper.findMissionDetailVoOrThrow(missionId);
+        return missionMapper.toGetMissionDetailResponseDto(missionDetailVo);
+    }
 
     @Override
     public void createMission(Long challengeId, CreateMissionRequestDto createMissionRequestDto) {

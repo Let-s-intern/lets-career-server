@@ -185,6 +185,26 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
     }
 
     @Override
+    public Optional<MissionDetailVo> findMissionDetailVo(Long missionId) {
+        return Optional.ofNullable(queryFactory
+                .select(Projections.constructor(MissionDetailVo.class,
+                        mission.id,
+                        mission.title,
+                        mission.missionStatusType,
+                        mission.attendanceCount,
+                        mission.lateAttendanceCount,
+                        mission.startDate,
+                        mission.endDate
+                ))
+                .from(mission)
+                .where(
+                        eqMissionId(missionId)
+                )
+                .fetchOne()
+        );
+    }
+
+    @Override
     public Optional<MyDailyMissionVo> findMyDailyMissionVoByMissionId(Long missionId) {
         return Optional.ofNullable(
                 queryFactory
