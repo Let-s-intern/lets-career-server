@@ -13,7 +13,7 @@ public record GetMissionDetailResponseDto(
         String title,
         MissionStatusType missionStatusType,
         Integer attendanceCount,
-        Integer lateAttendanceCount,
+        Long lateAttendanceCount,
         LocalDateTime startDate,
         LocalDateTime endDate
 ) {

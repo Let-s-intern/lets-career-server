@@ -11,7 +11,7 @@ public record MissionDetailVo(
         String title,
         MissionStatusType missionStatusType,
         Integer attendanceCount,
-        Integer lateAttendanceCount,
+        Long lateAttendanceCount,
         LocalDateTime startDate,
         LocalDateTime endDate
 ) {

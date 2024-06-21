@@ -54,7 +54,6 @@ public class AttendanceServiceImpl implements AttendanceService {
         Attendance attendance = attendanceHelper.createAttendanceAndSave(mission, createRequestDto, status, user);
         AttendanceScore attendanceScore = attendanceScoreHelper.createAttendanceScoreAndSave(status, mission.getMissionScore(), attendance);
         attendance.setAttendanceScore(attendanceScore);
-        mission.updateAttendanceCount(status);
     }
 
     @Override
@@ -94,14 +93,6 @@ public class AttendanceServiceImpl implements AttendanceService {
             attendance.updateAttendanceLink(requestDto.link());
             attendance.updateAttendanceStatus(AttendanceStatus.UPDATED);
             attendance.updateAttendanceResult(AttendanceResult.WAITING);
-            updateMissionAttendanceCount(mission, attendance);
-        }
-    }
-
-    private void updateMissionAttendanceCount(Mission mission, Attendance attendance) {
-        if(attendance.getStatus().equals(AttendanceStatus.PRESENT)) {
-            mission.updateMissionAttendanceCount(mission.getAttendanceCount()-1);
-            mission.updateMissionLateAttendanceCount(mission.getLateAttendanceCount()+1);
         }
     }
 

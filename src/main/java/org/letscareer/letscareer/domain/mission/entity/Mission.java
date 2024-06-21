@@ -42,12 +42,6 @@ public class Mission extends BaseTimeEntity {
     @Builder.Default
     private MissionStatusType missionStatusType = MissionStatusType.WAITING;
     @NotNull
-    @Builder.Default
-    private Integer attendanceCount = 0;
-    @NotNull
-    @Builder.Default
-    private Integer lateAttendanceCount = 0;
-    @NotNull
     private LocalDateTime startDate;
     @NotNull
     private LocalDateTime endDate;
@@ -106,27 +100,5 @@ public class Mission extends BaseTimeEntity {
             case ESSENTIAL -> this.essentialContentsList = new ArrayList<>();
             case ADDITIONAL -> this.additionalContentsList = new ArrayList<>();
         }
-    }
-
-    public void updateAttendanceCount(AttendanceStatus attendanceStatus) {
-        switch (attendanceStatus) {
-            case PRESENT -> this.attendanceCount = updateValue(this.attendanceCount, this.attendanceCount + 1);
-            case LATE -> this.lateAttendanceCount = updateValue(this.lateAttendanceCount, this.lateAttendanceCount + 1);
-        }
-    }
-
-    public void updateAttendanceCountByAdmin(AttendanceStatus attendanceStatus, Integer value) {
-        switch (attendanceStatus) {
-            case PRESENT -> this.attendanceCount = updateValue(this.attendanceCount, this.attendanceCount + value);
-            case LATE -> this.lateAttendanceCount = updateValue(this.lateAttendanceCount, this.lateAttendanceCount + value);
-        }
-    }
-
-    public void updateMissionAttendanceCount(Integer attendanceCount) {
-        this.attendanceCount = updateValue(this.attendanceCount, attendanceCount);
-    }
-
-    public void updateMissionLateAttendanceCount(Integer lateAttendanceCount) {
-        this.lateAttendanceCount = updateValue(this.lateAttendanceCount, lateAttendanceCount);
     }
 }

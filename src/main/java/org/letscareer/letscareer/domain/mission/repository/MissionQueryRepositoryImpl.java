@@ -1,11 +1,14 @@
 package org.letscareer.letscareer.domain.mission.repository;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.attendance.type.AttendanceStatus;
 import org.letscareer.letscareer.domain.contents.type.ContentsType;
 import org.letscareer.letscareer.domain.contents.vo.ContentsMissionVo;
 import org.letscareer.letscareer.domain.mission.type.MissionQueryType;
@@ -36,8 +39,8 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
                         mission.th,
                         missionTemplate.missionTag,
                         mission.missionStatusType,
-                        mission.attendanceCount,
-                        mission.lateAttendanceCount,
+                        mission.attendanceList.size(),
+                        getLateAttendanceCount(),
                         missionScore.successScore,
                         missionScore.lateScore,
                         missionTemplate.id,
@@ -191,8 +194,8 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
                         mission.id,
                         mission.title,
                         mission.missionStatusType,
-                        mission.attendanceCount,
-                        mission.lateAttendanceCount,
+                        mission.attendanceList.size(),
+                        getLateAttendanceCount(),
                         mission.startDate,
                         mission.endDate
                 ))
@@ -221,6 +224,15 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
                         )
                         .fetchFirst()
         );
+    }
+
+    private Expression<Long> getLateAttendanceCount() {
+        return JPAExpressions.select(attendance.status.count())
+                .from(attendance)
+                .where(
+                        attendance.mission.eq(mission)
+                                .and(attendance.status.in(AttendanceStatus.LATE))
+                );
     }
 
     private BooleanExpression eqMissionId(Long missionId) {
