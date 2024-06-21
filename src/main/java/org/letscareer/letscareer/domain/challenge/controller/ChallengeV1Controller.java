@@ -146,6 +146,15 @@ public class ChallengeV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
+    @Operation(summary = "[어드민] 챌린지 확정 메일 내용", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeEmailContentsResponseDto.class)))
+    })
+    @GetMapping("/{id}/mail-contents")
+    public ResponseEntity<SuccessResponse<?>> getEmailContents(@PathVariable("id") final Long challengeId) {
+        final GetChallengeEmailContentsResponseDto responseDto = challengeService.getEmailContents(challengeId);
+        return SuccessResponse.ok(responseDto);
+    }
+
     @Operation(summary = "[어드민] 챌린지 미션 참가자 패이백 목록", responses = {
             @ApiResponse(responseCode = "200", description = "[th:99] 운영진 점수", content = @Content(schema = @Schema(implementation = GetChallengeApplicationsPaybackResponseDto.class)))
     })

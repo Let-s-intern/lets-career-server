@@ -63,4 +63,8 @@ public class ChallengeMapper {
     public GetChallengeNoticesResponseDto toGetChallengeNoticesResponseDto(Page<ChallengeNoticeVo> challengeNoticeList) {
         return GetChallengeNoticesResponseDto.of(challengeNoticeList);
     }
+
+    public GetChallengeEmailContentsResponseDto toGetChallengeEmailContentsResponseDto(String title, String contents) {
+        return GetChallengeEmailContentsResponseDto.of(title, contents);
+    }
 }

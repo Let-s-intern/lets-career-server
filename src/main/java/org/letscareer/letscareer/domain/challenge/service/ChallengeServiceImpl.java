@@ -242,6 +242,14 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
+    public GetChallengeEmailContentsResponseDto getEmailContents(Long challengeId) {
+        Challenge challenge = challengeHelper.findChallengeByIdOrThrow(challengeId);
+        String title = challengeHelper.createChallengeMailTitle(challenge);
+        String contents = challengeHelper.createChallengeMailContents(challenge);
+        return challengeMapper.toGetChallengeEmailContentsResponseDto(title, contents);
+    }
+
+    @Override
     public void createChallenge(CreateChallengeRequestDto createChallengeRequestDto) {
         ZoomMeetingResponseDto zoomMeetingInfo = zoomUtils.createZoomMeeting(createChallengeRequestDto.title(), createChallengeRequestDto.startDate());
         Challenge challenge = challengeHelper.createChallengeAndSave(createChallengeRequestDto, zoomMeetingInfo);
