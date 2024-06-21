@@ -136,4 +136,14 @@ public class UserHelper {
         String encodedRandomPassword = encodePassword(randomPassword);
         user.updateUserPassword(encodedRandomPassword);
     }
+
+    public Boolean checkUserChallengeInfo(User user) {
+        return !Objects.isNull(user.getUniversity())
+                && !Objects.isNull(user.getGrade())
+                && !Objects.isNull(user.getMajor())
+                && !Objects.isNull(user.getWishJob())
+                && !Objects.isNull(user.getWishCompany())
+                && !Objects.isNull(user.getAccountType())
+                && !Objects.isNull(user.getAccountNum());
+    }
 }

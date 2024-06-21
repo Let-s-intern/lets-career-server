@@ -5,6 +5,7 @@ import org.letscareer.letscareer.domain.application.type.ApplicationStatus;
 import org.letscareer.letscareer.domain.user.dto.request.*;
 import org.letscareer.letscareer.domain.user.dto.response.TokenResponseDto;
 import org.letscareer.letscareer.domain.user.dto.response.UserAdminListResponseDto;
+import org.letscareer.letscareer.domain.user.dto.response.UserChallengeInfoResponseDto;
 import org.letscareer.letscareer.domain.user.dto.response.UserInfoResponseDto;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.type.AuthProvider;
@@ -43,4 +44,6 @@ public interface UserService {
     void updatePassword(Long id, PasswordUpdateRequestDto passwordUpdateRequestDto);
 
     void signOut(User user);
+
+    UserChallengeInfoResponseDto checkUserChallengeInfo(User user);
 }

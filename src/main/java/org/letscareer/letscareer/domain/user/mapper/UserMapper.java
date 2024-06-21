@@ -3,6 +3,7 @@ package org.letscareer.letscareer.domain.user.mapper;
 import org.letscareer.letscareer.domain.user.dto.request.UserPwSignUpRequestDto;
 import org.letscareer.letscareer.domain.user.dto.response.TokenResponseDto;
 import org.letscareer.letscareer.domain.user.dto.response.UserAdminListResponseDto;
+import org.letscareer.letscareer.domain.user.dto.response.UserChallengeInfoResponseDto;
 import org.letscareer.letscareer.domain.user.dto.response.UserInfoResponseDto;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.type.AuthProvider;
@@ -34,5 +35,9 @@ public class UserMapper {
 
     public UserInfoResponseDto toUserInfoResponseDto(User user) {
         return UserInfoResponseDto.of(user);
+    }
+
+    public UserChallengeInfoResponseDto toUserChallengeInfoResponseDto(Boolean pass) {
+        return UserChallengeInfoResponseDto.of(pass);
     }
 }

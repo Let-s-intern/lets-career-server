@@ -10,6 +10,7 @@ import org.letscareer.letscareer.domain.application.vo.MyApplicationVo;
 import org.letscareer.letscareer.domain.user.dto.request.*;
 import org.letscareer.letscareer.domain.user.dto.response.TokenResponseDto;
 import org.letscareer.letscareer.domain.user.dto.response.UserAdminListResponseDto;
+import org.letscareer.letscareer.domain.user.dto.response.UserChallengeInfoResponseDto;
 import org.letscareer.letscareer.domain.user.dto.response.UserInfoResponseDto;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.helper.UserHelper;
@@ -114,6 +115,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public void signOut(User user) {
         tokenProvider.deleteRefreshToken(user.getId());
+    }
+
+    @Override
+    public UserChallengeInfoResponseDto checkUserChallengeInfo(User user) {
+        Boolean pass = userHelper.checkUserChallengeInfo(user);
+        return userMapper.toUserChallengeInfoResponseDto(pass);
     }
 
     @Override

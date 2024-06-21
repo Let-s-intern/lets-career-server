@@ -11,6 +11,7 @@ import org.letscareer.letscareer.domain.application.type.ApplicationStatus;
 import org.letscareer.letscareer.domain.user.dto.request.*;
 import org.letscareer.letscareer.domain.user.dto.response.TokenResponseDto;
 import org.letscareer.letscareer.domain.user.dto.response.UserAdminListResponseDto;
+import org.letscareer.letscareer.domain.user.dto.response.UserChallengeInfoResponseDto;
 import org.letscareer.letscareer.domain.user.dto.response.UserInfoResponseDto;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.service.UserService;
@@ -75,6 +76,16 @@ public class UserV1Controller {
         GetMyApplicationsResponseDto responseDto = userService.getMyApplications(user, status);
         return SuccessResponse.ok(responseDto);
     }
+
+    @Operation(summary = "유저 챌린지 필수 정보 입력 확인", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserChallengeInfoResponseDto.class)))
+    })
+    @GetMapping("/challenge-info")
+    public ResponseEntity<SuccessResponse<?>> checkUserChallengeInfo(@CurrentUser User user) {
+        UserChallengeInfoResponseDto responseDto = userService.checkUserChallengeInfo(user);
+        return SuccessResponse.ok(responseDto);
+    }
+
 
     @Operation(summary = "유저 이메일 회원가입", responses = {
             @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
