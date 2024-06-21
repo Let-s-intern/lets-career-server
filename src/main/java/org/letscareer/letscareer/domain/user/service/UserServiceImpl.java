@@ -91,8 +91,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserAdminListResponseDto getUsers(Pageable pageable) {
-        Page<UserAdminVo> userAdminList = userHelper.findAllUserAdminVos(pageable);
+    public UserAdminListResponseDto getUsers(String keyword, Pageable pageable) {
+        Page<UserAdminVo> userAdminList = userHelper.findAllUserAdminVos(keyword, pageable);
         return userMapper.toUserAdminListResponseDto(userAdminList);
     }
 

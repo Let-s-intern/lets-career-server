@@ -119,8 +119,8 @@ public class UserHelper {
         user.updateUser(userUpdateRequestDto);
     }
 
-    public Page<UserAdminVo> findAllUserAdminVos(Pageable pageable) {
-        return userRepository.findAllUserAdminVos(pageable);
+    public Page<UserAdminVo> findAllUserAdminVos(String keyword, Pageable pageable) {
+        return userRepository.findAllUserAdminVos(keyword, pageable);
     }
 
     public void deleteUser(User user) {

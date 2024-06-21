@@ -5,5 +5,5 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface UserRepositoryCustom {
-    Page<UserAdminVo> findAllUserAdminVos(Pageable pageable);
+    Page<UserAdminVo> findAllUserAdminVos(String keyword, Pageable pageable);
 }

@@ -62,8 +62,9 @@ public class UserV1Controller {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserAdminListResponseDto.class)))
     })
     @GetMapping("/admin")
-    public ResponseEntity<SuccessResponse<?>> getUsersForAdmin(@PageableDefault Pageable pageable) {
-        final UserAdminListResponseDto responseDto = userService.getUsers(pageable);
+    public ResponseEntity<SuccessResponse<?>> getUsersForAdmin(@RequestParam(required = false) String keyword,
+                                                               @PageableDefault Pageable pageable) {
+        final UserAdminListResponseDto responseDto = userService.getUsers(keyword, pageable);
         return SuccessResponse.ok(responseDto);
     }
 

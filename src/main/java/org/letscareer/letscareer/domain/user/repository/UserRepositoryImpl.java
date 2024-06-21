@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.user.repository;
 
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -21,7 +22,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<UserAdminVo> findAllUserAdminVos(Pageable pageable) {
+    public Page<UserAdminVo> findAllUserAdminVos(String keyword, Pageable pageable) {
         List<UserAdminVo> userAdminVoList = queryFactory
                 .select(Projections.constructor(UserAdminVo.class,
                         user.id,
@@ -34,6 +35,9 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                         user.accountOwner,
                         user.marketingAgree))
                 .from(user)
+                .where(
+                        containsKeyword(keyword)
+                )
                 .orderBy(user.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -49,5 +53,12 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         return new CaseBuilder()
                 .when(user.contactEmail.isNotNull()).then(user.contactEmail)
                 .otherwise(user.email);
+    }
+
+    private BooleanExpression containsKeyword(String keyword) {
+        return keyword != null ? user.email.containsIgnoreCase(keyword)
+                .or(user.contactEmail.containsIgnoreCase(keyword))
+                .or(user.name.containsIgnoreCase(keyword))
+                .or(user.phoneNum.containsIgnoreCase(keyword)) : null;
     }
 }
