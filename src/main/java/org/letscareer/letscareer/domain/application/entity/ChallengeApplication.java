@@ -15,7 +15,6 @@ public class ChallengeApplication extends Application {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "challenge_id")
     private Challenge challenge;
-
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "score_id")
     private AdminScore adminScore;

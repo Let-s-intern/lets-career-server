@@ -17,6 +17,7 @@ import org.letscareer.letscareer.domain.user.mapper.UserMapper;
 import org.letscareer.letscareer.domain.user.type.AuthProvider;
 import org.letscareer.letscareer.domain.user.type.UserRole;
 import org.letscareer.letscareer.domain.user.vo.UserAdminVo;
+import org.letscareer.letscareer.domain.withdraw.helper.WithdrawHelper;
 import org.letscareer.letscareer.global.common.utils.EmailUtils;
 import org.letscareer.letscareer.global.security.jwt.TokenProvider;
 import org.letscareer.letscareer.global.security.oauth2.userinfo.OAuth2UserInfo;
@@ -36,6 +37,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final ApplicationHelper applicationHelper;
     private final ApplicationMapper applicationMapper;
+    private final WithdrawHelper withdrawHelper;
     private final TokenProvider tokenProvider;
     private final EmailUtils emailUtils;
 
@@ -134,6 +136,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(User user) {
         tokenProvider.deleteRefreshToken(user.getId());
+        withdrawHelper.createUserWithdrawalRecordAndSave(user);
         userHelper.deleteUser(user);
     }
 
