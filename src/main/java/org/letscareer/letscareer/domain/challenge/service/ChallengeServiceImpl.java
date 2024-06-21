@@ -280,6 +280,11 @@ public class ChallengeServiceImpl implements ChallengeService {
         challengeHelper.deleteChallengeById(challengeId);
     }
 
+    @Override
+    public void validateChallengeDashboardAccessibleUser(Long challengeId, User user) {
+        challengeApplicationHelper.validateChallengeDashboardAccessibleUser(challengeId, user);
+    }
+
     private void createClassificationListAndSave(List<CreateChallengeClassificationRequestDto> requestDtoList,
                                                  Challenge challenge) {
         requestDtoList.stream()

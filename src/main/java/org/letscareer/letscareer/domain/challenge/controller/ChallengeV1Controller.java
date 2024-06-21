@@ -177,6 +177,16 @@ public class ChallengeV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
+    @Operation(summary = "챌린지 접근 권한 확인", responses = {
+            @ApiResponse(responseCode = "200")
+    })
+    @GetMapping("/{id}/access")
+    public ResponseEntity<SuccessResponse<?>> validateChallengeDashboardAccessibleUser(@PathVariable(name = "id") final Long challengeId,
+                                                                                       @CurrentUser User user) {
+        challengeService.validateChallengeDashboardAccessibleUser(challengeId, user);
+        return SuccessResponse.ok(null);
+    }
+
     @Operation(summary = "챌린지 가이드 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeGuidesResponseDto.class)))
     })

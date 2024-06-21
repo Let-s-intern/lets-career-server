@@ -121,6 +121,7 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                         .leftJoin(challengeApplication.user, user)
                         .leftJoin(challengeApplication.payment, payment)
                         .where(
+                                eqChallengeId(challengeId),
                                 eqUserId(userId),
                                 eqIsConfirmed(isConfirmed)
                         )

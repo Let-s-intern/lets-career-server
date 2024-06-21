@@ -68,4 +68,6 @@ public interface ChallengeService {
     void updateApplicationsScore(Long challengeId, Long applicationId, UpdateChallengeApplicationPaybackRequestDto requestDto);
 
     void deleteChallenge(Long challengeId);
+
+    void validateChallengeDashboardAccessibleUser(Long challengeId, User user);
 }
