@@ -19,7 +19,7 @@ import static org.letscareer.letscareer.domain.attendance.entity.QAttendance.att
 import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
 import static org.letscareer.letscareer.domain.mission.entity.QMission.mission;
 import static org.letscareer.letscareer.domain.user.entity.QUser.user;
-import static org.letscareer.letscareer.domain.user.repository.UserQueryQueryRepositoryImpl.activeEmail;
+import static org.letscareer.letscareer.domain.user.repository.UserQueryRepositoryImpl.activeEmail;
 
 @RequiredArgsConstructor
 public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository {

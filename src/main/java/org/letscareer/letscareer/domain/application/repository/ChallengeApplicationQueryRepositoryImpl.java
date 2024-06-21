@@ -22,7 +22,7 @@ import static org.letscareer.letscareer.domain.coupon.entity.QCoupon.coupon;
 import static org.letscareer.letscareer.domain.payment.entity.QPayment.payment;
 import static org.letscareer.letscareer.domain.price.entity.QChallengePrice.challengePrice;
 import static org.letscareer.letscareer.domain.user.entity.QUser.user;
-import static org.letscareer.letscareer.domain.user.repository.UserQueryQueryRepositoryImpl.activeEmail;
+import static org.letscareer.letscareer.domain.user.repository.UserQueryRepositoryImpl.activeEmail;
 
 @RequiredArgsConstructor
 public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplicationQueryRepository {
