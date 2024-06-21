@@ -8,7 +8,6 @@ import org.letscareer.letscareer.domain.user.type.UserGrade;
 
 @Builder(access = AccessLevel.PRIVATE)
 public record UserInfoResponseDto(
-        Long id,
         String name,
         String email,
         String contactEmail,
@@ -25,7 +24,6 @@ public record UserInfoResponseDto(
 ) {
     public static UserInfoResponseDto of(User user) {
         return UserInfoResponseDto.builder()
-                .id(user.getId())
                 .name(user.getName())
                 .email(user.getEmail())
                 .contactEmail(user.getContactEmail())

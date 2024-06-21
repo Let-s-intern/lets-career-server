@@ -33,7 +33,7 @@ public class PaymentQueryRepositoryImpl implements PaymentQueryRepository {
     @Override
     public long countCouponAppliedTime(Long userId, Long couponId) {
         return queryFactory
-                .select(payment.count())
+                .select(payment.id.countDistinct())
                 .from(payment)
                 .where(
                         eqUserId(userId),
