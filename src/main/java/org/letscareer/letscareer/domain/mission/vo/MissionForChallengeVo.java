@@ -12,7 +12,7 @@ public record MissionForChallengeVo(
         Integer th,
         String missionTag,
         MissionStatusType missionStatusType,
-        Integer attendanceCount,
+        Long attendanceCount,
         Long lateAttendanceCount,
         Integer score,
         Integer lateScore,

@@ -8,6 +8,7 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.attendance.type.AttendanceResult;
 import org.letscareer.letscareer.domain.attendance.type.AttendanceStatus;
 import org.letscareer.letscareer.domain.contents.type.ContentsType;
 import org.letscareer.letscareer.domain.contents.vo.ContentsMissionVo;
@@ -39,7 +40,7 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
                         mission.th,
                         missionTemplate.missionTag,
                         mission.missionStatusType,
-                        mission.attendanceList.size(),
+                        getAttendanceCount(),
                         getLateAttendanceCount(),
                         missionScore.successScore,
                         missionScore.lateScore,
@@ -194,7 +195,7 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
                         mission.id,
                         mission.title,
                         mission.missionStatusType,
-                        mission.attendanceList.size(),
+                        getAttendanceCount(),
                         getLateAttendanceCount(),
                         mission.startDate,
                         mission.endDate
@@ -226,12 +227,23 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
         );
     }
 
+    private Expression<Long> getAttendanceCount() {
+        return JPAExpressions.select(attendance.status.count())
+                .from(attendance)
+                .where(
+                        attendance.mission.eq(mission)
+                                .and(attendance.status.notIn(AttendanceStatus.ABSENT))
+                                .and(attendance.result.notIn(AttendanceResult.WRONG))
+                );
+    }
+
     private Expression<Long> getLateAttendanceCount() {
         return JPAExpressions.select(attendance.status.count())
                 .from(attendance)
                 .where(
                         attendance.mission.eq(mission)
                                 .and(attendance.status.in(AttendanceStatus.LATE))
+                                .and(attendance.result.notIn(AttendanceResult.WRONG))
                 );
     }
 

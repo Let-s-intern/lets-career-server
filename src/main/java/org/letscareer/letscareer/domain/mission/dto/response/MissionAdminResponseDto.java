@@ -16,7 +16,7 @@ public record MissionAdminResponseDto(
         Integer th,
         String missionType,
         MissionStatusType missionStatusType,
-        Integer attendanceCount,
+        Long attendanceCount,
         Long lateAttendanceCount,
         Long applicationCount,
         Integer score,
