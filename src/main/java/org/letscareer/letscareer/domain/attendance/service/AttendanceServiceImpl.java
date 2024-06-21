@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 import static org.letscareer.letscareer.domain.attendance.error.AttendanceErrorCode.ATTENDANCE_NOT_AVAILABLE_DATE;
 import static org.letscareer.letscareer.domain.attendance.error.AttendanceErrorCode.ATTENDANCE_UNAUTHORIZED;
@@ -98,12 +99,15 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     private void updateAttendanceByAdmin(Attendance attendance, UpdateAttendanceRequestDto updateRequestDto) {
         MissionScore missionScore = attendance.getMission().getMissionScore();
-        if(isUpdatedAttendance(attendance) && wrongToPass(attendance, updateRequestDto)) {
-            attendance.updateAttendanceStatus(AttendanceStatus.LATE);
-            attendanceScoreHelper.updateAttendanceScore(attendance.getAttendanceScore(), missionScore.getLateScore());
-        } else if(isUpdatedAttendance(attendance) && wrongToWrong(attendance, updateRequestDto)) {
-            attendance.updateAttendanceStatus(AttendanceStatus.ABSENT);
-            attendanceScoreHelper.updateAttendanceScore(attendance.getAttendanceScore(), 0);
+        if(isUpdatedAttendance(attendance) && !Objects.isNull(updateRequestDto.result())) {
+            if(wrongToPass(attendance, updateRequestDto)) {
+                attendance.updateAttendanceStatus(AttendanceStatus.LATE);
+                attendanceScoreHelper.updateAttendanceScore(attendance.getAttendanceScore(), missionScore.getLateScore());
+            }
+            else if(wrongToWrong(attendance, updateRequestDto)) {
+                attendance.updateAttendanceStatus(AttendanceStatus.ABSENT);
+                attendanceScoreHelper.updateAttendanceScore(attendance.getAttendanceScore(), 0);
+            }
         }
         attendance.updateAttendanceAdmin(updateRequestDto);
     }
