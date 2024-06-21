@@ -28,7 +28,7 @@ public class MissionV1Controller {
     })
     @ApiErrorCode({SwaggerEnum.MISSION_NOT_FOUND})
     @GetMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> getMissionsDetail(@PathVariable(name = "id") Long missionId) {
+    public ResponseEntity<SuccessResponse<?>> getMissionsDetail(@PathVariable(name = "id") final Long missionId) {
         GetMissionDetailResponseDto responseDto = missionService.getMissionsDetail(missionId);
         return SuccessResponse.ok(responseDto);
     }

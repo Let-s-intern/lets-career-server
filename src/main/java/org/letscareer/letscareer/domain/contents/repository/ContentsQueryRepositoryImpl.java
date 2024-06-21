@@ -1,6 +1,5 @@
 package org.letscareer.letscareer.domain.contents.repository;
 
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -9,11 +8,13 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.contents.type.ContentsType;
 import org.letscareer.letscareer.domain.contents.vo.ContentsAdminSimpleVo;
 import org.letscareer.letscareer.domain.contents.vo.ContentsAdminVo;
+import org.letscareer.letscareer.domain.contents.vo.ContentsDetailVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.letscareer.letscareer.domain.contents.entity.QContents.contents;
 
@@ -54,6 +55,26 @@ public class ContentsQueryRepositoryImpl implements ContentsQueryRepository {
                 )
                 .orderBy(contents.id.desc())
                 .fetch();
+    }
+
+    @Override
+    public Optional<ContentsDetailVo> findContentsDetailVo(Long contentsId) {
+        return Optional.ofNullable(queryFactory
+                .select(Projections.constructor(ContentsDetailVo.class,
+                        contents.title,
+                        contents.link,
+                        contents.type
+                ))
+                .from(contents)
+                .where(
+                        eqContentsId(contentsId)
+                )
+                .fetchOne()
+        );
+    }
+
+    private BooleanExpression eqContentsId(Long contentsId) {
+        return contentsId != null ? contents.id.eq(contentsId) : null;
     }
 
     private BooleanExpression eqContentsType(ContentsType contentsType) {
