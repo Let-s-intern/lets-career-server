@@ -7,6 +7,7 @@ import org.letscareer.letscareer.domain.contents.repository.ContentsRepository;
 import org.letscareer.letscareer.domain.contents.type.ContentsType;
 import org.letscareer.letscareer.domain.contents.vo.ContentsAdminSimpleVo;
 import org.letscareer.letscareer.domain.contents.vo.ContentsAdminVo;
+import org.letscareer.letscareer.domain.contents.vo.ContentsDetailVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +24,11 @@ public class ContentsHelper {
 
     public Contents findContentsByIdOrThrow(Long contentsId) {
         return contentsRepository.findById(contentsId).orElseThrow(() -> new EntityNotFoundException(CONTENTS_NOT_FOUND));
+    }
+
+    public ContentsDetailVo findContentsDetailVoOrThrow(Long contentsId) {
+        return contentsRepository.findContentsDetailVo(contentsId)
+                .orElseThrow(() -> new EntityNotFoundException(CONTENTS_NOT_FOUND));
     }
 
     public void saveContents(Contents contents) {

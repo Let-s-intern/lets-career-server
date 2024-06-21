@@ -7,12 +7,10 @@ import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challenge.vo.ChallengeScheduleVo;
 import org.letscareer.letscareer.domain.contents.vo.ContentsMissionVo;
 import org.letscareer.letscareer.domain.mission.dto.request.CreateMissionRequestDto;
-import org.letscareer.letscareer.domain.mission.dto.response.MissionAdminListResponseDto;
-import org.letscareer.letscareer.domain.mission.dto.response.MissionAdminResponseDto;
-import org.letscareer.letscareer.domain.mission.dto.response.MissionApplicationScoreResponseDto;
-import org.letscareer.letscareer.domain.mission.dto.response.MissionScoreResponseDto;
+import org.letscareer.letscareer.domain.mission.dto.response.*;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.mission.vo.DailyMissionVo;
+import org.letscareer.letscareer.domain.mission.vo.MissionDetailVo;
 import org.letscareer.letscareer.domain.mission.vo.MyDailyMissionVo;
 import org.letscareer.letscareer.domain.mission.vo.MissionForChallengeVo;
 import org.letscareer.letscareer.domain.missiontemplate.entity.MissionTemplate;
@@ -26,6 +24,10 @@ import java.util.List;
 public class MissionMapper {
     public Mission toEntity(CreateMissionRequestDto createMissionRequestDto, Challenge challenge, MissionTemplate missionTemplate) {
         return Mission.createMission(createMissionRequestDto, challenge, missionTemplate);
+    }
+
+    public GetMissionDetailResponseDto toGetMissionDetailResponseDto(MissionDetailVo vo) {
+        return GetMissionDetailResponseDto.of(vo);
     }
 
     public MissionScoreResponseDto toMissionScoreResponseDto(Integer th, Integer score) {

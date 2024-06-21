@@ -19,6 +19,11 @@ import static org.letscareer.letscareer.domain.mission.error.MissionErrorCode.MI
 public class MissionHelper {
     private final MissionRepository missionRepository;
 
+    public MissionDetailVo findMissionDetailVoOrThrow(Long missionId) {
+        return missionRepository.findMissionDetailVo(missionId)
+                .orElseThrow(() -> new EntityNotFoundException(MISSION_NOT_FOUND));
+    }
+
     public List<MissionForChallengeVo> findMissionForChallengeVos(Long challengeId) {
         return missionRepository.findMissionForChallengeVos(challengeId);
     }
