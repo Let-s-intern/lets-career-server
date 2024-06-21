@@ -4,6 +4,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.AccessLevel;
@@ -19,6 +20,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static org.letscareer.letscareer.domain.application.entity.QApplication.application;
+import static org.letscareer.letscareer.domain.application.entity.QChallengeApplication.challengeApplication;
 import static org.letscareer.letscareer.domain.attendance.entity.QAttendance.attendance;
 import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
 import static org.letscareer.letscareer.domain.contents.entity.QContents.contents;
@@ -26,6 +29,7 @@ import static org.letscareer.letscareer.domain.mission.entity.QMission.mission;
 import static org.letscareer.letscareer.domain.missioncontents.entity.QMissionContents.missionContents;
 import static org.letscareer.letscareer.domain.missiontemplate.entity.QMissionTemplate.missionTemplate;
 import static org.letscareer.letscareer.domain.score.entity.QMissionScore.missionScore;
+import static org.letscareer.letscareer.domain.user.entity.QUser.user;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class MissionQueryRepositoryImpl implements MissionQueryRepository {
@@ -189,6 +193,41 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
     }
 
     @Override
+    public Optional<Integer> findApplicationScoreByMissionId(Long missionId, Long applicationId) {
+        return Optional.ofNullable(queryFactory
+                .select(getAttendanceScore())
+                .from(mission)
+                .leftJoin(mission.missionScore, missionScore)
+                .leftJoin(mission.attendanceList, attendance)
+                .leftJoin(attendance.user.applicationList, application)
+                .where(
+                        eqMissionId(missionId),
+                        eqApplicationId(applicationId)
+                )
+                .fetchOne()
+        );
+    }
+
+    @Override
+    public Optional<Integer> findSumOfAttendanceScoreByChallengeIdAndUserId(Long challengeId, Long userId) {
+        return Optional.ofNullable(queryFactory
+                .select(getSumOfAttendanceScore())
+                .from(mission)
+                .leftJoin(mission.missionScore, missionScore)
+                .leftJoin(mission.challenge, challenge)
+                .leftJoin(challenge.applicationList, challengeApplication)
+                .leftJoin(challengeApplication._super, application)
+                .leftJoin(mission.attendanceList, attendance)
+                .leftJoin(attendance.user, user)
+                .where(
+                        eqChallengeId(challengeId),
+                        eqUserId(userId)
+                )
+                .fetchOne()
+        );
+    }
+
+    @Override
     public Optional<MissionDetailVo> findMissionDetailVo(Long missionId) {
         return Optional.ofNullable(queryFactory
                 .select(Projections.constructor(MissionDetailVo.class,
@@ -247,8 +286,47 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
                 );
     }
 
+    private Expression<Integer> getAttendanceScore() {
+        return new CaseBuilder()
+                .when(attendance.isNull())
+                .then(0)
+                .when(attendance.status.eq(AttendanceStatus.PRESENT).and(attendance.result.eq(AttendanceResult.PASS)))
+                .then(missionScore.successScore)
+                .when(attendance.status.eq(AttendanceStatus.LATE).and(attendance.result.eq(AttendanceResult.PASS)))
+                .then(missionScore.lateScore)
+                .when(attendance.status.eq(AttendanceStatus.UPDATED).and(attendance.result.eq(AttendanceResult.PASS)))
+                .then(missionScore.lateScore)
+                .otherwise(0);
+    }
+
+    private Expression<Integer> getSumOfAttendanceScore() {
+        return new CaseBuilder()
+                .when(attendance.isNull())
+                .then(0)
+                .when(attendance.status.eq(AttendanceStatus.PRESENT).and(attendance.result.eq(AttendanceResult.PASS)))
+                .then(missionScore.successScore)
+                .when(attendance.status.eq(AttendanceStatus.LATE).and(attendance.result.eq(AttendanceResult.PASS)))
+                .then(missionScore.lateScore)
+                .when(attendance.status.eq(AttendanceStatus.UPDATED).and(attendance.result.eq(AttendanceResult.PASS)))
+                .then(missionScore.lateScore)
+                .otherwise(0)
+                .sum();
+    }
+
     private BooleanExpression eqMissionId(Long missionId) {
         return missionId != null ? mission.id.eq(missionId) : null;
+    }
+
+    private BooleanExpression eqApplicationId(Long applicationId) {
+        return applicationId != null ? application.id.eq(applicationId) : null;
+    }
+
+    private BooleanExpression eqChallengeId(Long challengeId) {
+        return challengeId != null ? challenge.id.eq(challengeId) : null;
+    }
+
+    private BooleanExpression eqUserId(Long userId) {
+        return userId != null ? user.id.eq(userId) : null;
     }
 
     private BooleanBuilder eqQueryType(MissionQueryType queryType) {
@@ -265,10 +343,6 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
 
     private BooleanExpression isSubmitted(Long userId) {
         return userId != null ? attendance.user.id.eq(userId).and(attendance.in(mission.attendanceList)) : null;
-    }
-
-    private BooleanExpression eqChallengeId(Long challengeId) {
-        return challengeId != null ? challenge.id.eq(challengeId) : null;
     }
 
     private BooleanExpression inProgress() {

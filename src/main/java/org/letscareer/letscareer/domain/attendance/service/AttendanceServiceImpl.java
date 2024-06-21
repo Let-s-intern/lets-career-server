@@ -15,9 +15,6 @@ import org.letscareer.letscareer.domain.attendance.vo.AttendanceAdminVo;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.mission.helper.MissionHelper;
-import org.letscareer.letscareer.domain.score.entity.AttendanceScore;
-import org.letscareer.letscareer.domain.score.entity.MissionScore;
-import org.letscareer.letscareer.domain.score.helper.AttendanceScoreHelper;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.helper.UserHelper;
 import org.letscareer.letscareer.domain.user.type.UserRole;
@@ -42,7 +39,6 @@ public class AttendanceServiceImpl implements AttendanceService {
     private final MissionHelper missionHelper;
     private final ChallengeApplicationHelper challengeApplicationHelper;
     private final UserHelper userHelper;
-    private final AttendanceScoreHelper attendanceScoreHelper;
 
     @Override
     public void createAttendance(Long missionId, CreateAttendanceRequestDto createRequestDto, Long userId) {
@@ -52,9 +48,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         challengeApplicationHelper.validateChallengeDashboardAccessibleUser(challenge.getId(), user);
         attendanceHelper.checkExistingAttendance(mission.getId(), user.getId());
         AttendanceStatus status = getAttendanceStatus(mission.getStartDate(), mission.getEndDate(), challenge.getEndDate());
-        Attendance attendance = attendanceHelper.createAttendanceAndSave(mission, createRequestDto, status, user);
-        AttendanceScore attendanceScore = attendanceScoreHelper.createAttendanceScoreAndSave(status, mission.getMissionScore(), attendance);
-        attendance.setAttendanceScore(attendanceScore);
+        attendanceHelper.createAttendanceAndSave(mission, createRequestDto, status, user);
     }
 
     @Override
@@ -67,7 +61,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     public void updateAttendance(Long attendanceId, User user, UpdateAttendanceRequestDto updateRequestDto) {
         Attendance attendance = attendanceHelper.findAttendanceByIdOrThrow(attendanceId);
         validateAuthorizedUser(user, attendance);
-        if(user.getRole().equals(UserRole.ADMIN)) updateAttendanceByAdmin(attendance, updateRequestDto);
+        if (user.getRole().equals(UserRole.ADMIN)) updateAttendanceByAdmin(attendance, updateRequestDto);
         else updateAttendanceByUser(attendance, updateRequestDto);
     }
 
@@ -98,17 +92,12 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     private void updateAttendanceByAdmin(Attendance attendance, UpdateAttendanceRequestDto updateRequestDto) {
-        MissionScore missionScore = attendance.getMission().getMissionScore();
-        if(isUpdatedAttendance(attendance) && !Objects.isNull(updateRequestDto.result())) {
-            if(wrongToPass(attendance, updateRequestDto)) {
-                attendance.updateAttendanceStatus(AttendanceStatus.LATE);
-                attendanceScoreHelper.updateAttendanceScore(attendance.getAttendanceScore(), missionScore.getLateScore());
-            }
-            else if(wrongToWrong(attendance, updateRequestDto)) {
-                attendance.updateAttendanceStatus(AttendanceStatus.ABSENT);
-                attendanceScoreHelper.updateAttendanceScore(attendance.getAttendanceScore(), 0);
-            }
-        }
+        if (!(isUpdatedAttendance(attendance) && !Objects.isNull(updateRequestDto.result())))
+            return;
+        if (wrongToPass(attendance, updateRequestDto))
+            attendance.updateAttendanceStatus(AttendanceStatus.LATE);
+        else if (wrongToWrong(attendance, updateRequestDto))
+            attendance.updateAttendanceStatus(AttendanceStatus.ABSENT);
         attendance.updateAttendanceAdmin(updateRequestDto);
     }
 

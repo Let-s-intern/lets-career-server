@@ -18,5 +18,7 @@ public interface MissionQueryRepository {
     List<MySubmittedMissionVo> findMySubmittedMissionVosByChallengeIdAndUserId(Long challengeId, Long userId);
     List<MyMissionVo> findMyMissionVosByChallengeIdAndUserId(Long challengeId, MissionQueryType queryType, Long userId);
     Optional<Integer> finsSumOfMissionScoresByChallengeId(Long challengeId);
+    Optional<Integer> findApplicationScoreByMissionId(Long missionId, Long applicationId);
+    Optional<Integer> findSumOfAttendanceScoreByChallengeIdAndUserId(Long challengeId, Long userId);
     Optional<MissionDetailVo> findMissionDetailVo(Long missionId);
 }

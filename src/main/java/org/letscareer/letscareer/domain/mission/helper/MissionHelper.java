@@ -37,10 +37,6 @@ public class MissionHelper {
         return missionRepository.findMissionContentsVos(missionId, contentsType);
     }
 
-    public void saveMission(Mission mission) {
-        missionRepository.save(mission);
-    }
-
     public DailyMissionVo findDailyMissionVoOrNull(Long challengeId) {
         return missionRepository.findDailyMissionVoByChallengeId(challengeId).orElse(null);
     }
@@ -63,11 +59,26 @@ public class MissionHelper {
                 .orElse(0);
     }
 
+    public Integer findApplicationScoreByMissionIdOrZero(Long missionId, Long applicationId) {
+        return missionRepository.findApplicationScoreByMissionId(missionId, applicationId)
+                .orElse(0);
+
+    }
+
+    public Integer findSumOfAttendanceScoreByChallengeIdAndUserId(Long challengeId, Long userId) {
+        return missionRepository.findSumOfAttendanceScoreByChallengeIdAndUserId(challengeId, userId)
+                .orElse(0);
+    }
+
     public List<?> findMyMissionVos(Long challengeId, MissionQueryType queryType, Long userId) {
         if (queryType.equals(MissionQueryType.SUBMITTED))
             return missionRepository.findMySubmittedMissionVosByChallengeIdAndUserId(challengeId, userId);
         else
             return missionRepository.findMyMissionVosByChallengeIdAndUserId(challengeId, queryType, userId);
+    }
+
+    public void saveMission(Mission mission) {
+        missionRepository.save(mission);
     }
 
     public void deleteMission(Long missionId) {

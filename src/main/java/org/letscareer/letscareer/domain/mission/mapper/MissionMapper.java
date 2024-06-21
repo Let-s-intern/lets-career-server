@@ -26,6 +26,10 @@ public class MissionMapper {
         return Mission.createMission(createMissionRequestDto, challenge, missionTemplate);
     }
 
+    public GetChallengeTotalScoreResponseDto toGetChallengeTotalScoreResponseDto(Integer currentScore, Integer totalScore) {
+        return GetChallengeTotalScoreResponseDto.of(currentScore, totalScore);
+    }
+
     public GetMissionDetailResponseDto toGetMissionDetailResponseDto(MissionDetailVo vo) {
         return GetMissionDetailResponseDto.of(vo);
     }

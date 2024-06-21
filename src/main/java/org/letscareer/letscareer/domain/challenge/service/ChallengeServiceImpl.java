@@ -54,10 +54,7 @@ import org.letscareer.letscareer.domain.review.helper.ReviewHelper;
 import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
 import org.letscareer.letscareer.domain.review.vo.ReviewVo;
 import org.letscareer.letscareer.domain.score.entity.AdminScore;
-import org.letscareer.letscareer.domain.score.entity.AttendanceScore;
 import org.letscareer.letscareer.domain.score.helper.AdminScoreHelper;
-import org.letscareer.letscareer.domain.score.helper.AttendanceScoreHelper;
-import org.letscareer.letscareer.domain.score.mapper.AttendanceScoreMapper;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.utils.ZoomUtils;
 import org.springframework.data.domain.Page;
@@ -82,8 +79,6 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final ChallengeNoticeHelper challengeNoticeHelper;
     private final ChallengePriceHelper challengePriceHelper;
     private final ChallengeGuideHelper challengeGuideHelper;
-    private final AttendanceScoreHelper attendanceScoreHelper;
-    private final AttendanceScoreMapper attendanceScoreMapper;
     private final AttendanceHelper attendanceHelper;
     private final AttendanceMapper attendanceMapper;
     private final AdminScoreHelper adminScoreHelper;
@@ -187,9 +182,9 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     @Override
     public GetChallengeTotalScoreResponseDto getTotalScore(Long challengeId, Long userId) {
-        Integer currentScore = attendanceScoreHelper.getSumOfAttendanceScoreByChallengeIdAndUserId(challengeId, userId);
+        Integer currentScore = missionHelper.findSumOfAttendanceScoreByChallengeIdAndUserId(challengeId, userId);
         Integer totalScore = missionHelper.finsSumOfMissionScoresByChallengeId(challengeId);
-        return attendanceScoreMapper.toGetChallengeTotalScoreResponseDto(currentScore, totalScore);
+        return missionMapper.toGetChallengeTotalScoreResponseDto(currentScore, totalScore);
     }
 
     @Override
@@ -308,11 +303,8 @@ public class ChallengeServiceImpl implements ChallengeService {
     private List<MissionScoreResponseDto> createMissionScoreResponseDtoList(List<MissionScoreVo> scores, Long challengeId, Long applicationId) {
         List<MissionScoreResponseDto> contents = scores.stream()
                 .map(score -> {
-                    AttendanceScore attendanceScore = attendanceScoreHelper.findAttendanceScoreByMissionIdOrNull(score.missionId(), applicationId);
-                    if (!Objects.isNull(attendanceScore) && isNotWrongAttendance(attendanceScore.getAttendance()))
-                        return missionMapper.toMissionScoreResponseDto(score.th(), attendanceScore.getScore());
-                    else
-                        return missionMapper.toMissionScoreResponseDto(score.th(), 0);
+                    Integer totalScore = missionHelper.findApplicationScoreByMissionIdOrZero(score.missionId(), applicationId);
+                    return missionMapper.toMissionScoreResponseDto(score.th(), totalScore);
                 })
                 .collect(Collectors.toList());
         AdminScore adminScore = adminScoreHelper.findAdminScoreByChallengeIdAndApplicationIdOrThrow(challengeId, applicationId);
