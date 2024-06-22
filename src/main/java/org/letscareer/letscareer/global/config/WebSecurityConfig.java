@@ -164,6 +164,8 @@ public class WebSecurityConfig {
                         "https://lets-intern-client-test.vercel.app",
                         "https://letsintern.co.kr",
                         "https://www.letsintern.co.kr",
+                        "https://letscareer.co.kr",
+                        "https://www.letscareer.co.kr",
                         SERVER_URL
                 )
         );
