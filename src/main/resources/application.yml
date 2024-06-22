@@ -17,8 +17,8 @@ spring:
 
   servlet:
     multipart:
-      maxFileSize: 100MB
-      maxRequestSize: 100MB
+      maxFileSize: 1000MB
+      maxRequestSize: 1000MB
 
   datasource:
     - secret
