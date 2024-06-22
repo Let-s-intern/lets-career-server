@@ -28,6 +28,7 @@ public class UserQueryRepositoryImpl implements UserQueryRepository {
                         user.id,
                         user.name,
                         user.email,
+                        user.contactEmail,
                         user.phoneNum,
                         user.createDate,
                         user.accountType,
