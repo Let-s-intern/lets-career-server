@@ -143,6 +143,20 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                 .fetch();
     }
 
+    @Override
+    public Long findApplicationIdByChallengeIdAndUserId(Long challengeId, Long userId) {
+        return queryFactory
+                .select(challengeApplication.id)
+                .from(challengeApplication)
+                .leftJoin(challengeApplication.challenge, challenge)
+                .leftJoin(challengeApplication.user, user)
+                .where(
+                        eqChallengeId(challengeId),
+                        eqUserId(userId)
+                )
+                .fetchOne();
+    }
+
     private NumberExpression<Integer> calculateTotalCost() {
         NumberExpression<Integer> safePrice = new CaseBuilder()
                 .when(challengePrice.price.isNull())

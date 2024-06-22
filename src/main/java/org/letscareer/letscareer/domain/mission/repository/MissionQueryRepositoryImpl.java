@@ -13,6 +13,7 @@ import org.letscareer.letscareer.domain.attendance.type.AttendanceResult;
 import org.letscareer.letscareer.domain.attendance.type.AttendanceStatus;
 import org.letscareer.letscareer.domain.contents.type.ContentsType;
 import org.letscareer.letscareer.domain.contents.vo.ContentsMissionVo;
+import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.mission.type.MissionQueryType;
 import org.letscareer.letscareer.domain.mission.vo.*;
 
@@ -21,7 +22,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.letscareer.letscareer.domain.application.entity.QApplication.application;
-import static org.letscareer.letscareer.domain.application.entity.QChallengeApplication.challengeApplication;
 import static org.letscareer.letscareer.domain.attendance.entity.QAttendance.attendance;
 import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
 import static org.letscareer.letscareer.domain.contents.entity.QContents.contents;
@@ -60,6 +60,18 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
                         eqChallengeId(challengeId)
                 )
                 .orderBy(mission.th.asc())
+                .fetch();
+    }
+
+    @Override
+    public List<Mission> findMissionsByChallengeId(Long challengeId) {
+        return queryFactory
+                .select(mission)
+                .from(challenge)
+                .leftJoin(challenge.missionList, mission)
+                .where(
+                        eqChallengeId(challengeId)
+                )
                 .fetch();
     }
 
@@ -209,18 +221,15 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
     }
 
     @Override
-    public Optional<Integer> findSumOfAttendanceScoreByChallengeIdAndUserId(Long challengeId, Long userId) {
+    public Optional<Integer> findAttendanceScoreByMissionIdAndUserId(Long missionId, Long userId) {
         return Optional.ofNullable(queryFactory
-                .select(getSumOfAttendanceScore())
+                .select(getAttendanceScore())
                 .from(mission)
                 .leftJoin(mission.missionScore, missionScore)
-                .leftJoin(mission.challenge, challenge)
-                .leftJoin(challenge.applicationList, challengeApplication)
-                .leftJoin(challengeApplication._super, application)
                 .leftJoin(mission.attendanceList, attendance)
                 .leftJoin(attendance.user, user)
                 .where(
-                        eqChallengeId(challengeId),
+                        eqMissionId(missionId),
                         eqUserId(userId)
                 )
                 .fetchOne()

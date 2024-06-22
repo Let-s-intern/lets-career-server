@@ -28,6 +28,10 @@ public class MissionHelper {
         return missionRepository.findMissionForChallengeVos(challengeId);
     }
 
+    public List<Mission> findMissionsByChallengeId(Long challengeId) {
+        return missionRepository.findMissionsByChallengeId(challengeId);
+    }
+
     public Mission findMissionByIdOrThrow(Long missionId) {
         return missionRepository.findById(missionId)
                 .orElseThrow(() -> new EntityNotFoundException(MISSION_NOT_FOUND));
@@ -65,8 +69,8 @@ public class MissionHelper {
 
     }
 
-    public Integer findSumOfAttendanceScoreByChallengeIdAndUserId(Long challengeId, Long userId) {
-        return missionRepository.findSumOfAttendanceScoreByChallengeIdAndUserId(challengeId, userId)
+    public Integer findAttendanceScoreByMissionIdAndUserId(Long missionId, Long userId) {
+        return missionRepository.findAttendanceScoreByMissionIdAndUserId(missionId, userId)
                 .orElse(0);
     }
 

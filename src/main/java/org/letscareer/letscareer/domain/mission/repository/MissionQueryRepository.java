@@ -1,5 +1,6 @@
 package org.letscareer.letscareer.domain.mission.repository;
 
+import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.mission.type.MissionQueryType;
 import org.letscareer.letscareer.domain.mission.vo.*;
 import org.letscareer.letscareer.domain.contents.type.ContentsType;
@@ -10,6 +11,7 @@ import java.util.Optional;
 
 public interface MissionQueryRepository {
     List<MissionForChallengeVo> findMissionForChallengeVos(Long challengeId);
+    List<Mission> findMissionsByChallengeId(Long challengeId);
     Optional<DailyMissionVo> findDailyMissionVoByChallengeId(Long challengeId);
     Optional<MyDailyMissionVo> findMyDailyMissionVoByChallengeId(Long challengeId);
     Optional<MyDailyMissionVo> findMyDailyMissionVoByMissionId(Long missionId);
@@ -19,6 +21,6 @@ public interface MissionQueryRepository {
     List<MyMissionVo> findMyMissionVosByChallengeIdAndUserId(Long challengeId, MissionQueryType queryType, Long userId);
     Optional<Integer> finsSumOfMissionScoresByChallengeId(Long challengeId);
     Optional<Integer> findApplicationScoreByMissionId(Long missionId, Long applicationId);
-    Optional<Integer> findSumOfAttendanceScoreByChallengeIdAndUserId(Long challengeId, Long userId);
+    Optional<Integer> findAttendanceScoreByMissionIdAndUserId(Long challengeId, Long userId);
     Optional<MissionDetailVo> findMissionDetailVo(Long missionId);
 }
