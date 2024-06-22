@@ -30,8 +30,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public GetPaymentDetailResponseDto getPaymentDetail(Long applicationId, Long paymentId) {
-//        Long priceId = priceHelper.findPriceIdByProgramTypeAndProgramId(applicationId);
-        Long priceId = 11L;
+        Long priceId = priceHelper.findPriceIdByProgramTypeAndProgramId(applicationId);
         PriceDetailVo priceInfo = priceHelper.findPriceDetailVoByPriceId(priceId);
         PaymentDetailVo paymentInfo = paymentHelper.findPaymentDetailVoByPaymentId(paymentId);
         return paymentMapper.toGetPaymentDetailResponseDto(priceInfo, paymentInfo);

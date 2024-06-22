@@ -81,6 +81,7 @@ public class Mission extends BaseTimeEntity {
         this.title = updateValue(this.title, requestDto.title());
         this.startDate = updateValue(this.startDate, requestDto.startDate());
         this.endDate = updateValue(this.endDate, requestDto.endDate());
+        this.missionStatusType = updateValue(this.missionStatusType, requestDto.status());
     }
 
     public void setMissionScore(MissionScore missionScore) {
