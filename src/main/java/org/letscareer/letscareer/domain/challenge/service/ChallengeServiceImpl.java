@@ -245,6 +245,12 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
+    public GetChallengeAccessResponseDto checkChallengeDashboardAccessibleUser(Long challengeId, Long userId) {
+        Boolean isAccessible = challengeApplicationHelper.checkChallengeDashboardAccessibleUser(challengeId, userId);
+        return challengeApplicationMapper.toGetChallengeAccessResponseDto(isAccessible);
+    }
+
+    @Override
     public void createChallenge(CreateChallengeRequestDto createChallengeRequestDto) {
         ZoomMeetingResponseDto zoomMeetingInfo = zoomUtils.createZoomMeeting(createChallengeRequestDto.title(), createChallengeRequestDto.startDate());
         Challenge challenge = challengeHelper.createChallengeAndSave(createChallengeRequestDto, zoomMeetingInfo);
@@ -273,11 +279,6 @@ public class ChallengeServiceImpl implements ChallengeService {
     @Override
     public void deleteChallenge(Long challengeId) {
         challengeHelper.deleteChallengeById(challengeId);
-    }
-
-    @Override
-    public void validateChallengeDashboardAccessibleUser(Long challengeId, User user) {
-        challengeApplicationHelper.validateChallengeDashboardAccessibleUser(challengeId, user);
     }
 
     private void createClassificationListAndSave(List<CreateChallengeClassificationRequestDto> requestDtoList,

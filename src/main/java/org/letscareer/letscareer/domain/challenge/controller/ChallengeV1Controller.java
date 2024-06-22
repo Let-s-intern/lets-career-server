@@ -181,10 +181,10 @@ public class ChallengeV1Controller {
             @ApiResponse(responseCode = "200")
     })
     @GetMapping("/{id}/access")
-    public ResponseEntity<SuccessResponse<?>> validateChallengeDashboardAccessibleUser(@PathVariable(name = "id") final Long challengeId,
-                                                                                       @CurrentUser User user) {
-        challengeService.validateChallengeDashboardAccessibleUser(challengeId, user);
-        return SuccessResponse.ok(null);
+    public ResponseEntity<SuccessResponse<?>> checkChallengeDashboardAccessibleUser(@PathVariable(name = "id") final Long challengeId,
+                                                                                    @CurrentUser User user) {
+        GetChallengeAccessResponseDto responseDto = challengeService.checkChallengeDashboardAccessibleUser(challengeId, user.getId());
+        return SuccessResponse.ok(responseDto);
     }
 
     @Operation(summary = "챌린지 가이드 조회", responses = {

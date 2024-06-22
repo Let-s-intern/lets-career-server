@@ -61,6 +61,8 @@ public interface ChallengeService {
 
     GetChallengeEmailContentsResponseDto getEmailContents(Long challengeId);
 
+    GetChallengeAccessResponseDto checkChallengeDashboardAccessibleUser(Long challengeId, Long userId);
+
     void createChallenge(CreateChallengeRequestDto createChallengeRequestDto);
 
     void updateChallenge(Long challengeId, UpdateChallengeRequestDto createChallengeRequestDto);
@@ -68,6 +70,4 @@ public interface ChallengeService {
     void updateApplicationsScore(Long challengeId, Long applicationId, UpdateChallengeApplicationPaybackRequestDto requestDto);
 
     void deleteChallenge(Long challengeId);
-
-    void validateChallengeDashboardAccessibleUser(Long challengeId, User user);
 }

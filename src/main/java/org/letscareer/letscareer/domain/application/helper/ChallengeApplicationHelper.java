@@ -79,4 +79,9 @@ public class ChallengeApplicationHelper {
     public List<String> getValidApplicationEmailList(Long challengeId) {
         return challengeApplicationRepository.findAllEmailByChallengeIdAndPaymentIsConfirmed(challengeId, true);
     }
+
+    public Boolean checkChallengeDashboardAccessibleUser(Long challengeId, Long userId) {
+        ChallengeApplication challengeApplication = challengeApplicationRepository.findChallengeApplicationByChallengeIdAndUserId(challengeId, userId).orElse(null);
+        return !Objects.isNull(challengeApplication);
+    }
 }
