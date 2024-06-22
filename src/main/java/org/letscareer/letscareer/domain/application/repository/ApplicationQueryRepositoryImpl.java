@@ -29,7 +29,8 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
                         vWApplication.programThumbnail,
                         vWApplication.programStartDate,
                         vWApplication.programEndDate,
-                        vWApplication.reviewId))
+                        vWApplication.reviewId,
+                        vWApplication.paymentId))
                 .from(vWApplication)
                 .where(
                         eqUserId(userId),

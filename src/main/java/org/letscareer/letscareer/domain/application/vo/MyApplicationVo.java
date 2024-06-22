@@ -19,7 +19,8 @@ public record MyApplicationVo(
         String programThumbnail,
         LocalDateTime programStartDate,
         LocalDateTime programEndDate,
-        Long reviewId
+        Long reviewId,
+        Long paymentId
 ) {
     public MyApplicationVo(Long id,
                            Boolean paymentIsConfirmed,
@@ -30,7 +31,8 @@ public record MyApplicationVo(
                            String programThumbnail,
                            LocalDateTime programStartDate,
                            LocalDateTime programEndDate,
-                           Long reviewId) {
+                           Long reviewId,
+                           Long paymentId) {
         this(
                 id,
                 ApplicationStatus.of(paymentIsConfirmed, programEndDate),
@@ -42,7 +44,8 @@ public record MyApplicationVo(
                 programThumbnail,
                 programStartDate,
                 programEndDate,
-                reviewId
+                reviewId,
+                paymentId
         );
     }
 }
