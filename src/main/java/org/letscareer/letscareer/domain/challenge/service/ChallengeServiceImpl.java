@@ -246,8 +246,14 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     @Override
     public GetChallengeAccessResponseDto checkChallengeDashboardAccessibleUser(Long challengeId, Long userId) {
-        Boolean isAccessible = challengeApplicationHelper.checkChallengeDashboardAccessibleUser(challengeId, userId);
+        Boolean isAccessible = challengeApplicationHelper.existChallengeApplicationByChallengeIdAndUserId(challengeId, userId);
         return challengeApplicationMapper.toGetChallengeAccessResponseDto(isAccessible);
+    }
+
+    @Override
+    public GetChallengeExisingApplicationResponseDto getChallengeExistingApplication(Long challengeId, Long userId) {
+        Boolean applied = challengeApplicationHelper.existChallengeApplicationByChallengeIdAndUserId(challengeId, userId);
+        return challengeApplicationMapper.toChallengeExistingApplicationResponseDto(applied);
     }
 
     @Override

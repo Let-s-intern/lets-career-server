@@ -63,6 +63,8 @@ public interface ChallengeService {
 
     GetChallengeAccessResponseDto checkChallengeDashboardAccessibleUser(Long challengeId, Long userId);
 
+    GetChallengeExisingApplicationResponseDto getChallengeExistingApplication(Long challengeId, Long userId);
+
     void createChallenge(CreateChallengeRequestDto createChallengeRequestDto);
 
     void updateChallenge(Long challengeId, UpdateChallengeRequestDto createChallengeRequestDto);

@@ -6,6 +6,7 @@ import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationV
 import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeAccessResponseDto;
 import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeApplicationEmailListResponseDto;
 import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeApplicationsPaybackResponseDto;
+import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeExisingApplicationResponseDto;
 import org.letscareer.letscareer.domain.mission.dto.response.MissionApplicationScoreResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -30,5 +31,9 @@ public class ChallengeApplicationMapper {
 
     public GetChallengeAccessResponseDto toGetChallengeAccessResponseDto(Boolean isAccessible) {
         return GetChallengeAccessResponseDto.of(isAccessible);
+    }
+
+    public GetChallengeExisingApplicationResponseDto toChallengeExistingApplicationResponseDto(Boolean applied) {
+        return GetChallengeExisingApplicationResponseDto.of(applied);
     }
 }
