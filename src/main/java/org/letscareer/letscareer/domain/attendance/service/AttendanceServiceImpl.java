@@ -92,12 +92,12 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     private void updateAttendanceByAdmin(Attendance attendance, UpdateAttendanceRequestDto updateRequestDto) {
-        if (!(isUpdatedAttendance(attendance) && !Objects.isNull(updateRequestDto.result())))
-            return;
-        if (wrongToPass(attendance, updateRequestDto))
-            attendance.updateAttendanceStatus(AttendanceStatus.LATE);
-        else if (wrongToWrong(attendance, updateRequestDto))
-            attendance.updateAttendanceStatus(AttendanceStatus.ABSENT);
+        if ((isUpdatedAttendance(attendance) && !Objects.isNull(updateRequestDto.result()))) {
+            if (wrongToPass(attendance, updateRequestDto))
+                attendance.updateAttendanceStatus(AttendanceStatus.LATE);
+            else if (wrongToWrong(attendance, updateRequestDto))
+                attendance.updateAttendanceStatus(AttendanceStatus.ABSENT);
+        }
         attendance.updateAttendanceAdmin(updateRequestDto);
     }
 
