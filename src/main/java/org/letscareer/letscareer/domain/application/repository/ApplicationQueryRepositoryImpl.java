@@ -1,5 +1,6 @@
 package org.letscareer.letscareer.domain.application.repository;
 
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -10,8 +11,10 @@ import org.letscareer.letscareer.domain.application.vo.MyApplicationVo;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.letscareer.letscareer.domain.application.entity.QVWApplication.vWApplication;
+import static org.letscareer.letscareer.domain.program.entity.QVWProgram.vWProgram;
 
 @RequiredArgsConstructor
 public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepository {
@@ -38,6 +41,19 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
                         eqStatus(status)
                 )
                 .fetch();
+    }
+
+    @Override
+    public Optional<Long> findPriceIdByApplicationId(Long applicationId) {
+        return Optional.ofNullable(null);
+    }
+
+    private BooleanExpression eqProgramId() {
+        return vWApplication.programId.eq(vWProgram.programId);
+    }
+
+    private BooleanExpression eqApplicationId(Long applicationId) {
+        return applicationId != null ? vWApplication.applicationId.eq(applicationId) : null;
     }
 
     private BooleanExpression eqUserId(Long userId) {

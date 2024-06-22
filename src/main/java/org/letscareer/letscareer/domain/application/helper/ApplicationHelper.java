@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.letscareer.letscareer.domain.application.error.ApplicationErrorCode.APPLICATION_NOT_FOUND;
+import static org.letscareer.letscareer.domain.price.error.PriceErrorCode.PRICE_NOT_FOUND;
 import static org.letscareer.letscareer.global.error.GlobalErrorCode.UNAUTHORIZED;
 
 @RequiredArgsConstructor
@@ -36,5 +37,10 @@ public class ApplicationHelper {
     public Application findByIdOrThrow(Long applicationId) {
         return applicationRepository.findById(applicationId)
                 .orElseThrow(() -> new EntityNotFoundException(APPLICATION_NOT_FOUND));
+    }
+
+    public Long findPriceIdByApplicationId(Long applicationId) {
+        return applicationRepository.findPriceIdByApplicationId(applicationId)
+                .orElseThrow(() -> new EntityNotFoundException(PRICE_NOT_FOUND));
     }
 }

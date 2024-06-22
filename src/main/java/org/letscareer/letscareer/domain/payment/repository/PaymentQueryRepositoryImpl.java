@@ -11,9 +11,10 @@ import org.letscareer.letscareer.domain.payment.vo.PaymentDetailVo;
 
 import java.util.Optional;
 
-
+import static org.letscareer.letscareer.domain.application.entity.QApplication.application;
 import static org.letscareer.letscareer.domain.coupon.entity.QCoupon.coupon;
 import static org.letscareer.letscareer.domain.payment.entity.QPayment.payment;
+import static org.letscareer.letscareer.domain.price.entity.QPrice.price1;
 import static org.letscareer.letscareer.domain.user.entity.QUser.user;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -49,8 +50,22 @@ public class PaymentQueryRepositoryImpl implements PaymentQueryRepository {
     @Override
     public Optional<PaymentDetailVo> findPaymentDetailVoByPaymentId(Long paymentId) {
         return Optional.ofNullable(
-                null
-        );
+                queryFactory
+                        .select(Projections.constructor(PaymentDetailVo.class,
+                            payment.id,
+                            payment.finalPrice,
+                            coupon.discount))
+                        .from(payment)
+                        .leftJoin(payment.coupon, coupon)
+                        .where(
+                            eqPaymentId(paymentId)
+                        )
+                        .orderBy(payment.id.desc())
+                        .fetchFirst());
+    }
+
+    private BooleanExpression eqPaymentId(Long paymentId) {
+        return paymentId != null ? payment.id.eq(paymentId) : null;
     }
 
     private BooleanExpression eqApplicationId(Long applicationId) {

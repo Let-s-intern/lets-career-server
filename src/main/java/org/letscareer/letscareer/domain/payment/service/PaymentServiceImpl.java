@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.payment.service;
 
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.application.helper.ApplicationHelper;
 import org.letscareer.letscareer.domain.application.helper.LiveApplicationHelper;
 import org.letscareer.letscareer.domain.live.vo.LiveEmailVo;
 import org.letscareer.letscareer.domain.payment.dto.request.UpdatePaymentRequestDto;
@@ -9,6 +10,8 @@ import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.payment.helper.PaymentHelper;
 import org.letscareer.letscareer.domain.payment.mapper.PaymentMapper;
 import org.letscareer.letscareer.domain.payment.vo.PaymentDetailVo;
+import org.letscareer.letscareer.domain.price.helper.PriceHelper;
+import org.letscareer.letscareer.domain.price.vo.PriceDetailVo;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.global.common.utils.EmailUtils;
 import org.springframework.stereotype.Service;
@@ -20,13 +23,18 @@ import org.springframework.transaction.annotation.Transactional;
 public class PaymentServiceImpl implements PaymentService {
     private final PaymentHelper paymentHelper;
     private final PaymentMapper paymentMapper;
+    private final ApplicationHelper applicationHelper;
+    private final PriceHelper priceHelper;
     private final LiveApplicationHelper liveApplicationHelper;
     private final EmailUtils emailUtils;
 
     @Override
-    public GetPaymentDetailResponseDto getPaymentDetail(Long paymentId) {
+    public GetPaymentDetailResponseDto getPaymentDetail(Long applicationId, Long paymentId) {
+//        Long priceId = priceHelper.findPriceIdByProgramTypeAndProgramId(applicationId);
+        Long priceId = 11L;
+        PriceDetailVo priceInfo = priceHelper.findPriceDetailVoByPriceId(priceId);
         PaymentDetailVo paymentInfo = paymentHelper.findPaymentDetailVoByPaymentId(paymentId);
-        return paymentMapper.toGetPaymentDetailResponseDto(paymentInfo);
+        return paymentMapper.toGetPaymentDetailResponseDto(priceInfo, paymentInfo);
     }
 
     @Override
