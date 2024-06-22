@@ -1,16 +1,16 @@
 package org.letscareer.letscareer.domain.payment.dto.response;
 
-import org.letscareer.letscareer.domain.user.type.AccountType;
+import lombok.AccessLevel;
+import lombok.Builder;
+import org.letscareer.letscareer.domain.payment.vo.PaymentDetailVo;
 
-import java.time.LocalDateTime;
-
+@Builder(access = AccessLevel.PRIVATE)
 public record GetPaymentDetailResponseDto(
-        AccountType accountType,
-        String accountNum,
-        LocalDateTime deadline,
-        Integer price,
-        Integer discount,
-        Integer couponDiscount,
-        Integer finalPrice
+        PaymentDetailVo paymentInfo
 ) {
+    public static GetPaymentDetailResponseDto of(PaymentDetailVo paymentInfo) {
+        return GetPaymentDetailResponseDto.builder()
+                .paymentInfo(paymentInfo)
+                .build();
+    }
 }

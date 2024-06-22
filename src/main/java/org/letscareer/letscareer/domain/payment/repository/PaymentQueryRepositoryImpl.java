@@ -1,13 +1,16 @@
 package org.letscareer.letscareer.domain.payment.repository;
 
 import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
+import org.letscareer.letscareer.domain.payment.vo.PaymentDetailVo;
 
 import java.util.Optional;
+
 
 import static org.letscareer.letscareer.domain.coupon.entity.QCoupon.coupon;
 import static org.letscareer.letscareer.domain.payment.entity.QPayment.payment;
@@ -16,7 +19,6 @@ import static org.letscareer.letscareer.domain.user.entity.QUser.user;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class PaymentQueryRepositoryImpl implements PaymentQueryRepository {
     private final JPAQueryFactory queryFactory;
-
 
     @Override
     public Optional<Payment> findPaymentByApplicationId(Long applicationId) {
@@ -42,6 +44,13 @@ public class PaymentQueryRepositoryImpl implements PaymentQueryRepository {
                 .leftJoin(payment.application.user, user)
                 .leftJoin(payment.coupon, coupon)
                 .fetchFirst();
+    }
+
+    @Override
+    public Optional<PaymentDetailVo> findPaymentDetailVoByPaymentId(Long paymentId) {
+        return Optional.ofNullable(
+                null
+        );
     }
 
     private BooleanExpression eqApplicationId(Long applicationId) {

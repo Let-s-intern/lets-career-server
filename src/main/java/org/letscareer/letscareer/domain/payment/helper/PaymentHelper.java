@@ -5,6 +5,7 @@ import org.letscareer.letscareer.domain.application.entity.Application;
 import org.letscareer.letscareer.domain.coupon.entity.Coupon;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.payment.repository.PaymentRepository;
+import org.letscareer.letscareer.domain.payment.vo.PaymentDetailVo;
 import org.letscareer.letscareer.domain.price.entity.Price;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
@@ -40,5 +41,10 @@ public class PaymentHelper {
         int finalPrice = price.getPrice() - price.getDiscount();
         if (coupon != null) finalPrice -= coupon.getDiscount();
         return finalPrice;
+    }
+
+    public PaymentDetailVo findPaymentDetailVoByPaymentId(Long paymentId) {
+        return paymentRepository.findPaymentDetailVoByPaymentId(paymentId)
+                .orElseThrow(() -> new EntityNotFoundException(PAYMENT_NOT_FOUND));
     }
 }
