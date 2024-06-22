@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.type.AccountType;
+import org.letscareer.letscareer.domain.user.type.AuthProvider;
 import org.letscareer.letscareer.domain.user.type.UserGrade;
 
 @Builder(access = AccessLevel.PRIVATE)
@@ -20,7 +21,8 @@ public record UserInfoResponseDto(
         AccountType accountType,
         String accountNum,
         String accountOwner,
-        Boolean marketingAgree
+        Boolean marketingAgree,
+        AuthProvider authProvider
 ) {
     public static UserInfoResponseDto of(User user) {
         return UserInfoResponseDto.builder()
@@ -37,6 +39,7 @@ public record UserInfoResponseDto(
                 .accountNum(user.getAccountNum())
                 .accountOwner(user.getAccountOwner())
                 .marketingAgree(user.getMarketingAgree())
+                .authProvider(user.getAuthProvider())
                 .build();
     }
 }
