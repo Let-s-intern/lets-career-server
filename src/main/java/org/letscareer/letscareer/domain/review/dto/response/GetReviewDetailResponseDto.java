@@ -20,6 +20,7 @@ public record GetReviewDetailResponseDto(
         return GetReviewDetailResponseDto.builder()
                 .id(reviewVo.id())
                 .nps(reviewVo.nps())
+                .npsAns(reviewVo.npsAns())
                 .npsCheckAns(reviewVo.npsCheckAns())
                 .content(reviewVo.content())
                 .score(reviewVo.score())
