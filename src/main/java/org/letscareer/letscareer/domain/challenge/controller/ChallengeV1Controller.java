@@ -117,7 +117,9 @@ public class ChallengeV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "챌린지 신청 여부 조회")
+    @Operation(summary = "챌린지 신청 여부 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeExisingApplicationResponseDto.class)))
+    })
     @GetMapping("/{id}/history")
     public ResponseEntity<SuccessResponse<?>> getChallengeExistingApplication(@PathVariable("id") final Long challengeId,
                                                                               @CurrentUser User user) {
