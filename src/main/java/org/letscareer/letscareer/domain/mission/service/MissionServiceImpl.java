@@ -95,7 +95,7 @@ public class MissionServiceImpl implements MissionService {
     }
 
     private void updateMissionTemplate(Mission mission, Long missionTemplateId) {
-        if(mission == null) return;
+        if(missionTemplateId == null) return;
         MissionTemplate missionTemplate = missionTemplateHelper.findMissionTemplateByIdOrThrow(missionTemplateId);
         mission.updateMissionTemplate(missionTemplate);
     }
