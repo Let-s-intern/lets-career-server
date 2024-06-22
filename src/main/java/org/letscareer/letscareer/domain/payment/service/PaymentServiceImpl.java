@@ -11,7 +11,6 @@ import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.payment.helper.PaymentHelper;
 import org.letscareer.letscareer.domain.payment.mapper.PaymentMapper;
 import org.letscareer.letscareer.domain.payment.vo.PaymentDetailVo;
-import org.letscareer.letscareer.domain.price.entity.Price;
 import org.letscareer.letscareer.domain.price.helper.ChallengePriceHelper;
 import org.letscareer.letscareer.domain.price.helper.LivePriceHelper;
 import org.letscareer.letscareer.domain.price.helper.PriceHelper;
@@ -56,7 +55,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public void updatePayment(Long paymentId, ProgramType programType, UpdatePaymentRequestDto updatePaymentRequestDto) {
         Payment payment = paymentHelper.findPaymentByIdOrThrow(paymentId);
-        if(isConfirmedEmailTarget(programType, payment, updatePaymentRequestDto)) {
+        if (isConfirmedEmailTarget(programType, payment, updatePaymentRequestDto)) {
             sendConfirmedEmail(payment);
         }
         payment.updatePayment(updatePaymentRequestDto);

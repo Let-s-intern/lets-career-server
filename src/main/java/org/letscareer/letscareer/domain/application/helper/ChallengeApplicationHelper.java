@@ -44,6 +44,10 @@ public class ChallengeApplicationHelper {
             throw new InvalidValueException(INVALID_APPLICATION_TIME);
     }
 
+    public Long findApplicationIdByChallengeIdAndUserId(Long challengeId, Long userId) {
+        return challengeApplicationRepository.findApplicationIdByChallengeIdAndUserId(challengeId, userId);
+    }
+
     public List<AdminChallengeApplicationVo> findAdminChallengeApplicationVos(Long challengeId, Boolean isConfirmed) {
         return challengeApplicationRepository.findAdminChallengeApplicationVos(challengeId, isConfirmed);
     }

@@ -37,6 +37,7 @@ import org.letscareer.letscareer.domain.faq.mapper.FaqMapper;
 import org.letscareer.letscareer.domain.faq.vo.FaqDetailVo;
 import org.letscareer.letscareer.domain.mission.dto.response.MissionApplicationScoreResponseDto;
 import org.letscareer.letscareer.domain.mission.dto.response.MissionScoreResponseDto;
+import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.mission.helper.MissionHelper;
 import org.letscareer.letscareer.domain.mission.mapper.MissionMapper;
 import org.letscareer.letscareer.domain.mission.type.MissionQueryType;
@@ -182,9 +183,17 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     @Override
     public GetChallengeTotalScoreResponseDto getTotalScore(Long challengeId, Long userId) {
-        Integer currentScore = missionHelper.findSumOfAttendanceScoreByChallengeIdAndUserId(challengeId, userId);
+        List<Mission> missionList = missionHelper.findMissionsByChallengeId(challengeId);
+        Long applicationId = challengeApplicationHelper.findApplicationIdByChallengeIdAndUserId(challengeId, userId);
+        Integer currentScore = getMissionTotalScoreForUser(missionList, applicationId);
         Integer totalScore = missionHelper.finsSumOfMissionScoresByChallengeId(challengeId);
         return missionMapper.toGetChallengeTotalScoreResponseDto(currentScore, totalScore);
+    }
+
+    private Integer getMissionTotalScoreForUser(List<Mission> missionList, Long applicationId) {
+        return missionList.stream()
+                .mapToInt(mission -> missionHelper.findApplicationScoreByMissionIdOrZero(mission.getId(), applicationId))
+                .sum();
     }
 
     @Override
