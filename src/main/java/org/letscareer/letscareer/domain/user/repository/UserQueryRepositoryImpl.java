@@ -22,7 +22,7 @@ public class UserQueryRepositoryImpl implements UserQueryRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<UserAdminVo> findAllUserAdminVos(String keyword, Pageable pageable) {
+    public Page<UserAdminVo> findAllUserAdminVos(String email, String name, String phoneNum, Pageable pageable) {
         List<UserAdminVo> userAdminVoList = queryFactory
                 .select(Projections.constructor(UserAdminVo.class,
                         user.id,
@@ -37,7 +37,9 @@ public class UserQueryRepositoryImpl implements UserQueryRepository {
                         user.marketingAgree))
                 .from(user)
                 .where(
-                        containsKeyword(keyword)
+                        containsEmail(email),
+                        containsName(name),
+                        containsPhoneNum(phoneNum)
                 )
                 .orderBy(user.id.desc())
                 .offset(pageable.getOffset())
@@ -56,10 +58,15 @@ public class UserQueryRepositoryImpl implements UserQueryRepository {
                 .otherwise(user.email);
     }
 
-    private BooleanExpression containsKeyword(String keyword) {
-        return keyword != null ? user.email.containsIgnoreCase(keyword)
-                .or(user.contactEmail.containsIgnoreCase(keyword))
-                .or(user.name.containsIgnoreCase(keyword))
-                .or(user.phoneNum.containsIgnoreCase(keyword)) : null;
+    private BooleanExpression containsEmail(String email) {
+        return email != null ? user.email.containsIgnoreCase(email).or(user.contactEmail.containsIgnoreCase(email)) : null;
+    }
+
+    private BooleanExpression containsName(String name) {
+        return name != null ? user.name.containsIgnoreCase(name) : null;
+    }
+
+    private BooleanExpression containsPhoneNum(String phoneNum) {
+        return phoneNum != null ? user.phoneNum.containsIgnoreCase(phoneNum) : null;
     }
 }

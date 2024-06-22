@@ -25,7 +25,7 @@ public interface UserService {
 
     Boolean isAdmin(User user);
 
-    UserAdminListResponseDto getUsers(String keyword, Pageable pageable);
+    UserAdminListResponseDto getUsers(String email, String name, String phoneNum, Pageable pageable);
 
     TokenResponseDto reissueToken(TokenReissueRequestDto tokenReissueRequestDto);
 

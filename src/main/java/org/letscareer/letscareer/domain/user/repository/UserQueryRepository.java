@@ -5,5 +5,5 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface UserQueryRepository {
-    Page<UserAdminVo> findAllUserAdminVos(String keyword, Pageable pageable);
+    Page<UserAdminVo> findAllUserAdminVos(String email, String name, String phoneNum, Pageable pageable);
 }
