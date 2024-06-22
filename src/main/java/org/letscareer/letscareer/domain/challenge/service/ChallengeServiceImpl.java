@@ -37,6 +37,7 @@ import org.letscareer.letscareer.domain.faq.mapper.FaqMapper;
 import org.letscareer.letscareer.domain.faq.vo.FaqDetailVo;
 import org.letscareer.letscareer.domain.mission.dto.response.MissionApplicationScoreResponseDto;
 import org.letscareer.letscareer.domain.mission.dto.response.MissionScoreResponseDto;
+import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.mission.helper.MissionHelper;
 import org.letscareer.letscareer.domain.mission.mapper.MissionMapper;
 import org.letscareer.letscareer.domain.mission.type.MissionQueryType;
@@ -54,10 +55,7 @@ import org.letscareer.letscareer.domain.review.helper.ReviewHelper;
 import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
 import org.letscareer.letscareer.domain.review.vo.ReviewVo;
 import org.letscareer.letscareer.domain.score.entity.AdminScore;
-import org.letscareer.letscareer.domain.score.entity.AttendanceScore;
 import org.letscareer.letscareer.domain.score.helper.AdminScoreHelper;
-import org.letscareer.letscareer.domain.score.helper.AttendanceScoreHelper;
-import org.letscareer.letscareer.domain.score.mapper.AttendanceScoreMapper;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.utils.ZoomUtils;
 import org.springframework.data.domain.Page;
@@ -79,16 +77,14 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final ChallengeClassificationHelper challengeClassificationHelper;
     private final ChallengeApplicationHelper challengeApplicationHelper;
     private final ChallengeApplicationMapper challengeApplicationMapper;
-    private final ChallengePriceHelper challengePriceHelper;
-    private final MissionHelper missionHelper;
-    private final MissionMapper missionMapper;
-    private final ChallengeGuideHelper challengeGuideHelper;
     private final ChallengeNoticeHelper challengeNoticeHelper;
-    private final AttendanceScoreHelper attendanceScoreHelper;
-    private final AttendanceScoreMapper attendanceScoreMapper;
-    private final AdminScoreHelper adminScoreHelper;
+    private final ChallengePriceHelper challengePriceHelper;
+    private final ChallengeGuideHelper challengeGuideHelper;
     private final AttendanceHelper attendanceHelper;
     private final AttendanceMapper attendanceMapper;
+    private final AdminScoreHelper adminScoreHelper;
+    private final MissionHelper missionHelper;
+    private final MissionMapper missionMapper;
     private final PaymentHelper paymentHelper;
     private final ReviewHelper reviewHelper;
     private final FaqHelper faqHelper;
@@ -187,8 +183,17 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     @Override
     public GetChallengeTotalScoreResponseDto getTotalScore(Long challengeId, Long userId) {
-        Integer totalScore = attendanceScoreHelper.getSumOfAttendanceScoreByChallengeIdAndUserId(challengeId, userId);
-        return attendanceScoreMapper.toGetChallengeTotalScoreResponseDto(totalScore);
+        List<Mission> missionList = missionHelper.findMissionsByChallengeId(challengeId);
+        Long applicationId = challengeApplicationHelper.findApplicationIdByChallengeIdAndUserId(challengeId, userId);
+        Integer currentScore = getMissionTotalScoreForUser(missionList, applicationId);
+        Integer totalScore = missionHelper.finsSumOfMissionScoresByChallengeId(challengeId);
+        return missionMapper.toGetChallengeTotalScoreResponseDto(currentScore, totalScore);
+    }
+
+    private Integer getMissionTotalScoreForUser(List<Mission> missionList, Long applicationId) {
+        return missionList.stream()
+                .mapToInt(mission -> missionHelper.findApplicationScoreByMissionIdOrZero(mission.getId(), applicationId))
+                .sum();
     }
 
     @Override
@@ -215,7 +220,7 @@ public class ChallengeServiceImpl implements ChallengeService {
         challengeApplicationHelper.validateChallengeDashboardAccessibleUser(challengeId, user);
         Challenge challenge = challengeHelper.findChallengeByIdOrThrow(challengeId);
         MyDailyMissionVo myDailyMissionVo = missionHelper.findMyDailyMissionVoOrNull(challenge.getId());
-        AttendanceDashboardVo attendanceDashboardVo = attendanceHelper.findAttendanceDashboardVoOrNull(myDailyMissionVo.id(), user.getId());
+        AttendanceDashboardVo attendanceDashboardVo = myDailyMissionVo != null ? attendanceHelper.findAttendanceDashboardVoOrNull(myDailyMissionVo.id(), user.getId()) : null;
         return missionMapper.toGetChallengeMyDailyMissionResponseDto(myDailyMissionVo, attendanceDashboardVo);
     }
 
@@ -230,8 +235,34 @@ public class ChallengeServiceImpl implements ChallengeService {
     public GetChallengeMyMissionDetailResponseDto getMyMissionDetail(Long challengeId, Long missionId, User user) {
         challengeApplicationHelper.validateChallengeDashboardAccessibleUser(challengeId, user);
         MyDailyMissionVo missionInfo = missionHelper.findMyDailyMissionVoByMissionId(missionId);
-        AttendanceDashboardVo attendanceInfo = attendanceHelper.findAttendanceDashboardVoOrNull(missionInfo.id(), user.getId());
+        AttendanceDashboardVo attendanceInfo = missionInfo != null ? attendanceHelper.findAttendanceDashboardVoOrNull(missionInfo.id(), user.getId()) : null;
         return missionMapper.toGetChallengeMyMissionDetailResponseDto(missionInfo, attendanceInfo);
+    }
+
+    @Override
+    public GetChallengeApplicationEmailListResponseDto getApplicationEmails(Long challengeId) {
+        List<String> emailList = challengeApplicationHelper.getValidApplicationEmailList(challengeId);
+        return challengeApplicationMapper.toGetChallengeApplicationEmailListResponseDto(emailList);
+    }
+
+    @Override
+    public GetChallengeEmailContentsResponseDto getEmailContents(Long challengeId) {
+        Challenge challenge = challengeHelper.findChallengeByIdOrThrow(challengeId);
+        String title = challengeHelper.createChallengeMailTitle(challenge);
+        String contents = challengeHelper.createChallengeMailContents(challenge);
+        return challengeMapper.toGetChallengeEmailContentsResponseDto(title, contents);
+    }
+
+    @Override
+    public GetChallengeAccessResponseDto checkChallengeDashboardAccessibleUser(Long challengeId, Long userId) {
+        Boolean isAccessible = challengeApplicationHelper.existChallengeApplicationByChallengeIdAndUserId(challengeId, userId);
+        return challengeApplicationMapper.toGetChallengeAccessResponseDto(isAccessible);
+    }
+
+    @Override
+    public GetChallengeExisingApplicationResponseDto getChallengeExistingApplication(Long challengeId, Long userId) {
+        Boolean applied = challengeApplicationHelper.existChallengeApplicationByChallengeIdAndUserId(challengeId, userId);
+        return challengeApplicationMapper.toChallengeExistingApplicationResponseDto(applied);
     }
 
     @Override
@@ -288,11 +319,8 @@ public class ChallengeServiceImpl implements ChallengeService {
     private List<MissionScoreResponseDto> createMissionScoreResponseDtoList(List<MissionScoreVo> scores, Long challengeId, Long applicationId) {
         List<MissionScoreResponseDto> contents = scores.stream()
                 .map(score -> {
-                    AttendanceScore attendanceScore = attendanceScoreHelper.findAttendanceScoreByMissionIdOrNull(score.missionId(), applicationId);
-                    if (!Objects.isNull(attendanceScore) && isNotWrongAttendance(attendanceScore.getAttendance()))
-                        return missionMapper.toMissionScoreResponseDto(score.th(), attendanceScore.getScore());
-                    else
-                        return missionMapper.toMissionScoreResponseDto(score.th(), 0);
+                    Integer totalScore = missionHelper.findApplicationScoreByMissionIdOrZero(score.missionId(), applicationId);
+                    return missionMapper.toMissionScoreResponseDto(score.th(), totalScore);
                 })
                 .collect(Collectors.toList());
         AdminScore adminScore = adminScoreHelper.findAdminScoreByChallengeIdAndApplicationIdOrThrow(challengeId, applicationId);

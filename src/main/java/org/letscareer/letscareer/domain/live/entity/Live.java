@@ -35,6 +35,7 @@ public class Live extends BaseTimeEntity {
     private String title;
     private String shortDesc;
     private String description;
+    private String criticalNotice;
     @Builder.Default
     private Integer currentCount = 0;
     private Integer participationCount;
@@ -75,6 +76,7 @@ public class Live extends BaseTimeEntity {
                 .title(requestDto.title())
                 .shortDesc(requestDto.shortDesc())
                 .description(requestDto.desc())
+                .criticalNotice(requestDto.criticalNotice())
                 .participationCount(requestDto.participationCount())
                 .thumbnail(requestDto.thumbnail())
                 .mentorName(requestDto.mentorName())
@@ -94,6 +96,7 @@ public class Live extends BaseTimeEntity {
         this.title = updateValue(this.title, requestDto.title());
         this.shortDesc = updateValue(this.shortDesc, requestDto.shortDesc());
         this.description = updateValue(this.description, requestDto.desc());
+        this.criticalNotice = updateValue(this.criticalNotice, requestDto.criticalNotice());
         this.participationCount = updateValue(this.participationCount, requestDto.participationCount());
         this.thumbnail = updateValue(this.thumbnail, requestDto.thumbnail());
         this.mentorName = updateValue(this.mentorName, requestDto.mentorName());

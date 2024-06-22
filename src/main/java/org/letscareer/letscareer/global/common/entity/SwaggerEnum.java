@@ -6,6 +6,7 @@ import org.letscareer.letscareer.domain.banner.error.BannerErrorCode;
 import org.letscareer.letscareer.domain.challenge.error.ChallengeErrorCode;
 import org.letscareer.letscareer.domain.challengeguide.error.ChallengeGuideErrorCode;
 import org.letscareer.letscareer.domain.classification.error.ChallengeClassificationErrorCode;
+import org.letscareer.letscareer.domain.contents.error.ContentsErrorCode;
 import org.letscareer.letscareer.domain.coupon.error.CouponErrorCode;
 import org.letscareer.letscareer.domain.faq.error.FaqErrorCode;
 import org.letscareer.letscareer.domain.live.error.LiveErrorCode;
@@ -51,6 +52,9 @@ public enum SwaggerEnum {
     COUPON_NOT_AVAILABLE_PROGRAM_TYPE(CouponErrorCode.COUPON_NOT_AVAILABLE_PROGRAM_TYPE),
     COUPON_NOT_AVAILABLE_TIME(CouponErrorCode.COUPON_NOT_AVAILABLE_TIME),
 
+    // contents
+    CONTENTS_NOT_FOUND(ContentsErrorCode.CONTENTS_NOT_FOUND),
+
     // faq
     FAQ_NOT_FOUND(FaqErrorCode.FAQ_NOT_FOUND),
 
@@ -80,7 +84,8 @@ public enum SwaggerEnum {
     INVALID_PASSWORD(UserErrorCode.INVALID_PASSWORD),
     INVALID_PHONE_NUMBER(UserErrorCode.INVALID_PHONE_NUMBER),
     USER_NOT_FOUND(UserErrorCode.USER_NOT_FOUND),
-    USER_CONFLICT(UserErrorCode.USER_CONFLICT),
+    USER_PHONE_NUMBER_CONFLICT(UserErrorCode.USER_PHONE_NUMBER_CONFLICT),
+    USER_EMAIL_CONFLICT(UserErrorCode.USER_EMAIL_CONFLICT),
 
     // global
     BAD_REQUEST(GlobalErrorCode.BAD_REQUEST),

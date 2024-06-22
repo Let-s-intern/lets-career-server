@@ -34,6 +34,7 @@ public class LiveQueryRepositoryImpl implements LiveQueryRepository {
                         live.title,
                         live.shortDesc,
                         live.description,
+                        live.criticalNotice,
                         live.participationCount,
                         live.thumbnail,
                         live.mentorName,
@@ -137,8 +138,10 @@ public class LiveQueryRepositoryImpl implements LiveQueryRepository {
     public Optional<LiveApplicationFormVo> findLiveApplicationFormVo(Long liveId) {
         return Optional.ofNullable(jpaQueryFactory
                 .select(Projections.constructor(LiveApplicationFormVo.class,
+                        live.criticalNotice,
                         live.startDate,
                         live.endDate,
+                        live.beginning,
                         live.deadline
                 ))
                 .from(live)

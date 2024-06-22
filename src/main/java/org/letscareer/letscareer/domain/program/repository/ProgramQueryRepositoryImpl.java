@@ -49,6 +49,7 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                 .leftJoin(liveClassification).on(vWProgram.programType.eq(ProgramType.LIVE).and(vWProgram.programId.eq(liveClassification.live.id)))
                 .leftJoin(vodClassification).on(vWProgram.programType.eq(ProgramType.VOD).and(vWProgram.programId.eq(vodClassification.vod.id)))
                 .where(
+                        eqIsVisible(),
                         eqProgramType(condition.type()),
                         containDuration(condition.startDate(), condition.endDate()),
                         inProgramClassification(condition.typeList()),
@@ -73,6 +74,7 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                 .leftJoin(liveClassification).on(vWProgram.programType.eq(ProgramType.LIVE).and(vWProgram.programId.eq(liveClassification.live.id)))
                 .leftJoin(vodClassification).on(vWProgram.programType.eq(ProgramType.VOD).and(vWProgram.programId.eq(vodClassification.vod.id)))
                 .where(
+                        eqIsVisible(),
                         eqProgramType(condition.type()),
                         containDuration(condition.startDate(), condition.endDate()),
                         inProgramClassification(condition.typeList()),
@@ -104,40 +106,14 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                         vWProgram.deadline
                 ))
                 .from(vWProgram)
-                .leftJoin(challengeClassification).on(vWProgram.programType.eq(ProgramType.CHALLENGE).and(vWProgram.programId.eq(challengeClassification.challenge.id)))
-                .leftJoin(liveClassification).on(vWProgram.programType.eq(ProgramType.LIVE).and(vWProgram.programId.eq(liveClassification.live.id)))
-                .leftJoin(vodClassification).on(vWProgram.programType.eq(ProgramType.VOD).and(vWProgram.programId.eq(vodClassification.vod.id)))
-                .where(
-                        eqProgramType(condition.type()),
-                        containDuration(condition.startDate(), condition.endDate()),
-                        inProgramClassification(condition.typeList()),
-                        inProgramStatus(condition.statusList(), condition.type())
-                )
-                .groupBy(
-                        vWProgram.programId,
-                        vWProgram.programType
-                )
-                .orderBy(vWProgram.programId.desc())
+                .orderBy(vWProgram.createDate.desc())
                 .limit(condition.pageable().getPageSize())
                 .offset(condition.pageable().getOffset())
                 .fetch();
 
         JPAQuery<Long> countQuery = queryFactory
                 .select(vWProgram.programId.countDistinct())
-                .from(vWProgram)
-                .leftJoin(challengeClassification).on(vWProgram.programType.eq(ProgramType.CHALLENGE).and(vWProgram.programId.eq(challengeClassification.challenge.id)))
-                .leftJoin(liveClassification).on(vWProgram.programType.eq(ProgramType.LIVE).and(vWProgram.programId.eq(liveClassification.live.id)))
-                .leftJoin(vodClassification).on(vWProgram.programType.eq(ProgramType.VOD).and(vWProgram.programId.eq(vodClassification.vod.id)))
-                .where(
-                        eqProgramType(condition.type()),
-                        containDuration(condition.startDate(), condition.endDate()),
-                        inProgramClassification(condition.typeList()),
-                        inProgramStatus(condition.statusList(), condition.type())
-                )
-                .groupBy(
-                        vWProgram.programId,
-                        vWProgram.programType
-                );
+                .from(vWProgram);
         ;
 
         return PageableExecutionUtils.getPage(contents, condition.pageable(), countQuery::fetchCount);
@@ -229,5 +205,9 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
 
     private BooleanExpression programPostStatus(LocalDateTime now) {
         return vWProgram.deadline.lt(now);
+    }
+
+    private BooleanExpression eqIsVisible() {
+        return vWProgram.isVisible.eq(true);
     }
 }

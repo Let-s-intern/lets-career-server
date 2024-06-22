@@ -16,4 +16,8 @@ public interface ChallengeApplicationQueryRepository {
     Optional<Long> findChallengeApplicationIdByUserIdAndChallengeId(Long userId, Long challengeId);
 
     Optional<Long> findChallengeApplicationIdByChallengeIdAndUserIdAndIsConfirmed(Long challengeId, Long userId, Boolean isConfirmed);
+
+    List<String> findAllEmailByChallengeIdAndPaymentIsConfirmed(Long challengeId, Boolean isConfirmed);
+
+    Long findApplicationIdByChallengeIdAndUserId(Long challengeId, Long userId);
 }

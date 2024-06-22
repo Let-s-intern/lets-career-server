@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.mission.dto.request.CreateMissionRequestDto;
 import org.letscareer.letscareer.domain.mission.dto.request.UpdateMissionRequestDto;
+import org.letscareer.letscareer.domain.mission.dto.response.GetMissionDetailResponseDto;
 import org.letscareer.letscareer.domain.mission.dto.response.MissionAdminListResponseDto;
 import org.letscareer.letscareer.domain.mission.service.MissionService;
 import org.letscareer.letscareer.global.common.annotation.ApiErrorCode;
@@ -21,6 +22,17 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class MissionV1Controller {
     private final MissionService missionService;
+
+    @Operation(summary = "챌린지 미션 정보 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetMissionDetailResponseDto.class)))
+    })
+    @ApiErrorCode({SwaggerEnum.MISSION_NOT_FOUND})
+    @GetMapping("/{id}")
+    public ResponseEntity<SuccessResponse<?>> getMissionsDetail(@PathVariable(name = "id") final Long missionId) {
+        GetMissionDetailResponseDto responseDto = missionService.getMissionsDetail(missionId);
+        return SuccessResponse.ok(responseDto);
+    }
+
 
     @Operation(summary = "[어드민] 챌린지 1개의 미션 전체 목록", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = MissionAdminListResponseDto.class)))

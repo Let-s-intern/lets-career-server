@@ -67,4 +67,9 @@ public class LiveApplicationHelper {
     public List<String> findEmailListByLiveId(Long liveId) {
         return liveApplicationRepository.findEmailListByLiveId(liveId);
     }
+
+    public Boolean existLiveApplicationByLiveIdAndUserId(Long liveId, Long userId) {
+        LiveApplication liveApplication = liveApplicationRepository.findLiveApplicationByLiveIdAndUserId(liveId, userId).orElse(null);
+        return !Objects.isNull(liveApplication);
+    }
 }

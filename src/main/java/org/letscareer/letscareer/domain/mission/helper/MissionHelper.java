@@ -19,8 +19,17 @@ import static org.letscareer.letscareer.domain.mission.error.MissionErrorCode.MI
 public class MissionHelper {
     private final MissionRepository missionRepository;
 
+    public MissionDetailVo findMissionDetailVoOrThrow(Long missionId) {
+        return missionRepository.findMissionDetailVo(missionId)
+                .orElseThrow(() -> new EntityNotFoundException(MISSION_NOT_FOUND));
+    }
+
     public List<MissionForChallengeVo> findMissionForChallengeVos(Long challengeId) {
         return missionRepository.findMissionForChallengeVos(challengeId);
+    }
+
+    public List<Mission> findMissionsByChallengeId(Long challengeId) {
+        return missionRepository.findMissionsByChallengeId(challengeId);
     }
 
     public Mission findMissionByIdOrThrow(Long missionId) {
@@ -30,10 +39,6 @@ public class MissionHelper {
 
     public List<ContentsMissionVo> findContentsMissionVos(Long missionId, ContentsType contentsType) {
         return missionRepository.findMissionContentsVos(missionId, contentsType);
-    }
-
-    public void saveMission(Mission mission) {
-        missionRepository.save(mission);
     }
 
     public DailyMissionVo findDailyMissionVoOrNull(Long challengeId) {
@@ -53,11 +58,31 @@ public class MissionHelper {
         return missionRepository.findMissionScheduleVosByChallengeId(challengeId);
     }
 
+    public Integer finsSumOfMissionScoresByChallengeId(Long challengeId) {
+        return missionRepository.finsSumOfMissionScoresByChallengeId(challengeId)
+                .orElse(0);
+    }
+
+    public Integer findApplicationScoreByMissionIdOrZero(Long missionId, Long applicationId) {
+        return missionRepository.findApplicationScoreByMissionId(missionId, applicationId)
+                .orElse(0);
+
+    }
+
+    public Integer findAttendanceScoreByMissionIdAndUserId(Long missionId, Long userId) {
+        return missionRepository.findAttendanceScoreByMissionIdAndUserId(missionId, userId)
+                .orElse(0);
+    }
+
     public List<?> findMyMissionVos(Long challengeId, MissionQueryType queryType, Long userId) {
         if (queryType.equals(MissionQueryType.SUBMITTED))
             return missionRepository.findMySubmittedMissionVosByChallengeIdAndUserId(challengeId, userId);
         else
             return missionRepository.findMyMissionVosByChallengeIdAndUserId(challengeId, queryType, userId);
+    }
+
+    public void saveMission(Mission mission) {
+        missionRepository.save(mission);
     }
 
     public void deleteMission(Long missionId) {

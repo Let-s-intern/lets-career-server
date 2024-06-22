@@ -12,6 +12,7 @@ public record UpdateChallengeRequestDto(
         String title,
         String shortDesc,
         String desc,
+        String criticalNotice,
         Integer participationCount,
         String thumbnail,
         LocalDateTime startDate,

@@ -10,6 +10,7 @@ import org.letscareer.letscareer.domain.application.vo.MyApplicationVo;
 import org.letscareer.letscareer.domain.user.dto.request.*;
 import org.letscareer.letscareer.domain.user.dto.response.TokenResponseDto;
 import org.letscareer.letscareer.domain.user.dto.response.UserAdminListResponseDto;
+import org.letscareer.letscareer.domain.user.dto.response.UserChallengeInfoResponseDto;
 import org.letscareer.letscareer.domain.user.dto.response.UserInfoResponseDto;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.helper.UserHelper;
@@ -17,6 +18,7 @@ import org.letscareer.letscareer.domain.user.mapper.UserMapper;
 import org.letscareer.letscareer.domain.user.type.AuthProvider;
 import org.letscareer.letscareer.domain.user.type.UserRole;
 import org.letscareer.letscareer.domain.user.vo.UserAdminVo;
+import org.letscareer.letscareer.domain.withdraw.helper.WithdrawHelper;
 import org.letscareer.letscareer.global.common.utils.EmailUtils;
 import org.letscareer.letscareer.global.security.jwt.TokenProvider;
 import org.letscareer.letscareer.global.security.oauth2.userinfo.OAuth2UserInfo;
@@ -36,6 +38,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final ApplicationHelper applicationHelper;
     private final ApplicationMapper applicationMapper;
+    private final WithdrawHelper withdrawHelper;
     private final TokenProvider tokenProvider;
     private final EmailUtils emailUtils;
 
@@ -52,7 +55,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void pwSignUp(UserPwSignUpRequestDto pwSignUpRequestDto) {
-        userHelper.validateExistingUser(pwSignUpRequestDto.phoneNum());
+        userHelper.validateExistingUser(pwSignUpRequestDto);
         userHelper.validateRegexEmail(pwSignUpRequestDto.email());
         userHelper.validateRegexPhoneNumber(pwSignUpRequestDto.phoneNum());
         userHelper.validateRegexPassword(pwSignUpRequestDto.password());
@@ -88,8 +91,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserAdminListResponseDto getUsers(Pageable pageable) {
-        Page<UserAdminVo> userAdminList = userHelper.findAllUserAdminVos(pageable);
+    public UserAdminListResponseDto getUsers(String email, String name, String phoneNum, Pageable pageable) {
+        Page<UserAdminVo> userAdminList = userHelper.findAllUserAdminVos(email, name, phoneNum, pageable);
         return userMapper.toUserAdminListResponseDto(userAdminList);
     }
 
@@ -115,6 +118,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserChallengeInfoResponseDto checkUserChallengeInfo(User user) {
+        Boolean pass = userHelper.checkUserChallengeInfo(user);
+        return userMapper.toUserChallengeInfoResponseDto(pass);
+    }
+
+    @Override
     public TokenResponseDto reissueToken(TokenReissueRequestDto tokenReissueRequestDto) {
         String newAccessToken = tokenProvider.reissueAccessToken(tokenReissueRequestDto);
         return TokenResponseDto.of(newAccessToken, tokenReissueRequestDto.refreshToken());
@@ -134,6 +143,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(User user) {
         tokenProvider.deleteRefreshToken(user.getId());
+        withdrawHelper.createUserWithdrawalRecordAndSave(user);
         userHelper.deleteUser(user);
     }
 

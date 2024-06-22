@@ -16,6 +16,7 @@ public record GetChallengeDetailResponseDto(
         String title,
         String shortDesc,
         String desc,
+        String criticalNotice,
         Integer participationCount,
         String thumbnail,
         LocalDateTime startDate,
@@ -37,6 +38,7 @@ public record GetChallengeDetailResponseDto(
                 .title(challengeInfo.title())
                 .shortDesc(challengeInfo.shortDesc())
                 .desc(challengeInfo.desc())
+                .criticalNotice(challengeInfo.criticalNotice())
                 .participationCount(challengeInfo.participationCount())
                 .thumbnail(challengeInfo.thumbnail())
                 .startDate(challengeInfo.startDate())

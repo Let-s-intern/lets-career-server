@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.user.helper;
 
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.user.dto.request.UserPwSignUpRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UserUpdateRequestDto;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.repository.UserRepository;
@@ -42,7 +43,7 @@ public class UserHelper {
     }
 
     public User findUserByEmailAndAuthProviderOrThrow(String email, AuthProvider authProvider) {
-        return userRepository.findByEmailAndAuthProvider(email, authProvider)
+        return userRepository.findFirstByEmailAndAuthProviderOrderByIdDesc(email, authProvider)
                 .orElseThrow(EntityNotFoundException::new);
     }
 
@@ -54,15 +55,13 @@ public class UserHelper {
         return userRepository.save(user);
     }
 
-    public void validateExistingUser(String phoneNum) {
-        if (phoneNum == null)
-            return;
-        if (userRepository.existsByPhoneNum(phoneNum))
-            throw new ConflictException(USER_CONFLICT);
+    public void validateExistingUser(UserPwSignUpRequestDto pwSignUpRequestDto) {
+        if (userRepository.existsByPhoneNum(pwSignUpRequestDto.phoneNum()))
+            throw new ConflictException(USER_PHONE_NUMBER_CONFLICT);
     }
 
     public void validateRegexEmail(String email) {
-        if(Objects.isNull(email)) return;
+        if (Objects.isNull(email)) return;
         Pattern pattern = Pattern.compile(EMAIL_REGEX);
         Matcher matcher = pattern.matcher(email);
         if (!matcher.matches())
@@ -70,7 +69,7 @@ public class UserHelper {
     }
 
     public void validateRegexPassword(String password) {
-        if(Objects.isNull(password)) return;
+        if (Objects.isNull(password)) return;
         Pattern pattern = Pattern.compile(PASSWORD_REGEX);
         Matcher matcher = pattern.matcher(password);
         if (!matcher.matches())
@@ -78,7 +77,7 @@ public class UserHelper {
     }
 
     public void validateRegexPhoneNumber(String phoneNumber) {
-        if(Objects.isNull(phoneNumber)) return;
+        if (Objects.isNull(phoneNumber)) return;
         Pattern pattern = Pattern.compile(PHONE_NUMBER_REGEX);
         Matcher matcher = pattern.matcher(phoneNumber);
         if (!matcher.matches())
@@ -92,7 +91,7 @@ public class UserHelper {
         if (user.getPhoneNum().equals(phoneNum))
             return;
         if (userRepository.existsByPhoneNum(phoneNum))
-            throw new ConflictException(USER_CONFLICT);
+            throw new ConflictException(USER_PHONE_NUMBER_CONFLICT);
     }
 
     public String encodePassword(String rawPassword) {
@@ -120,8 +119,8 @@ public class UserHelper {
         user.updateUser(userUpdateRequestDto);
     }
 
-    public Page<UserAdminVo> findAllUserAdminVos(Pageable pageable) {
-        return userRepository.findAllUserAdminVos(pageable);
+    public Page<UserAdminVo> findAllUserAdminVos(String email, String name, String phoneNum, Pageable pageable) {
+        return userRepository.findAllUserAdminVos(email, name, phoneNum, pageable);
     }
 
     public void deleteUser(User user) {
@@ -136,5 +135,19 @@ public class UserHelper {
     public void updatePassword(User user, String randomPassword) {
         String encodedRandomPassword = encodePassword(randomPassword);
         user.updateUserPassword(encodedRandomPassword);
+    }
+
+    public Boolean checkUserChallengeInfo(User user) {
+        return checkStringNotNullAndNotEmpty(user.getUniversity())
+                && !Objects.isNull(user.getGrade())
+                && checkStringNotNullAndNotEmpty(user.getMajor())
+                && checkStringNotNullAndNotEmpty(user.getWishJob())
+                && checkStringNotNullAndNotEmpty(user.getWishCompany())
+                && !Objects.isNull(user.getAccountType())
+                && checkStringNotNullAndNotEmpty(user.getAccountNum());
+    }
+
+    private Boolean checkStringNotNullAndNotEmpty(String s) {
+        return !(Objects.isNull(s) || s.isEmpty());
     }
 }

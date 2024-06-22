@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.dto.request.CreateApplicationRequestDto;
 import org.letscareer.letscareer.domain.application.service.ApplicationServiceFactory;
+import org.letscareer.letscareer.domain.payment.service.PaymentService;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.annotation.ApiErrorCode;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class ApplicationV1Controller {
     private final ApplicationServiceFactory applicationServiceFactory;
+    private final PaymentService paymentService;
 
     @Operation(summary = "신청서 생성", responses = {
             @ApiResponse(responseCode = "201", useReturnTypeSchema = true)

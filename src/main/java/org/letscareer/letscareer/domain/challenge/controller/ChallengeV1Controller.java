@@ -117,6 +117,16 @@ public class ChallengeV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
+    @Operation(summary = "챌린지 신청 여부 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeExisingApplicationResponseDto.class)))
+    })
+    @GetMapping("/{id}/history")
+    public ResponseEntity<SuccessResponse<?>> getChallengeExistingApplication(@PathVariable("id") final Long challengeId,
+                                                                              @CurrentUser User user) {
+        GetChallengeExisingApplicationResponseDto responseDto = challengeService.getChallengeExistingApplication(challengeId, user.getId());
+        return SuccessResponse.ok(responseDto);
+    }
+
     @Operation(summary = "[어드민] 프로그램 신청자 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeApplicationsResponseDto.class)))
     })
@@ -134,6 +144,24 @@ public class ChallengeV1Controller {
     public ResponseEntity<SuccessResponse<?>> getReviewsForAdmin(@PathVariable("id") final Long challengeId,
                                                                  final Pageable pageable) {
         final GetChallengeAdminReviewResponseDto responseDto = challengeService.getReviewsForAdmin(challengeId, pageable);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "[어드민] 챌린지 확정 메일 대상 목록", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeApplicationEmailListResponseDto.class)))
+    })
+    @GetMapping("/{id}/emails")
+    public ResponseEntity<SuccessResponse<?>> getApplicationEmailList(@PathVariable("id") final Long challengeId) {
+        final GetChallengeApplicationEmailListResponseDto responseDto = challengeService.getApplicationEmails(challengeId);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "[어드민] 챌린지 확정 메일 내용", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeEmailContentsResponseDto.class)))
+    })
+    @GetMapping("/{id}/mail-contents")
+    public ResponseEntity<SuccessResponse<?>> getEmailContents(@PathVariable("id") final Long challengeId) {
+        final GetChallengeEmailContentsResponseDto responseDto = challengeService.getEmailContents(challengeId);
         return SuccessResponse.ok(responseDto);
     }
 
@@ -156,6 +184,16 @@ public class ChallengeV1Controller {
     public ResponseEntity<SuccessResponse<?>> getMissionAttendances(@PathVariable final Long challengeId,
                                                                     @PathVariable final Long missionId) {
         final GetChallengeMissionAttendancesResponseDto responseDto = challengeService.getMissionAttendances(challengeId, missionId);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "챌린지 접근 권한 확인", responses = {
+            @ApiResponse(responseCode = "200")
+    })
+    @GetMapping("/{id}/access")
+    public ResponseEntity<SuccessResponse<?>> checkChallengeDashboardAccessibleUser(@PathVariable(name = "id") final Long challengeId,
+                                                                                    @CurrentUser User user) {
+        GetChallengeAccessResponseDto responseDto = challengeService.checkChallengeDashboardAccessibleUser(challengeId, user.getId());
         return SuccessResponse.ok(responseDto);
     }
 
@@ -203,7 +241,7 @@ public class ChallengeV1Controller {
     })
     @GetMapping("/{id}/daily-mission")
     public ResponseEntity<SuccessResponse<?>> getDailyMission(@PathVariable(name = "id") final Long challengeId,
-                                                                       @CurrentUser User user) {
+                                                              @CurrentUser User user) {
         final GetChallengeDailyMissionResponseDto responseDto = challengeService.getDailyMission(challengeId, user);
         return SuccessResponse.ok(responseDto);
     }

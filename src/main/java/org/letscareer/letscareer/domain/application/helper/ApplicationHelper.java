@@ -5,6 +5,7 @@ import org.letscareer.letscareer.domain.application.entity.Application;
 import org.letscareer.letscareer.domain.application.repository.ApplicationRepository;
 import org.letscareer.letscareer.domain.application.type.ApplicationStatus;
 import org.letscareer.letscareer.domain.application.vo.MyApplicationVo;
+import org.letscareer.letscareer.domain.program.vo.ProgramSimpleVo;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.type.UserRole;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
@@ -36,5 +37,9 @@ public class ApplicationHelper {
     public Application findByIdOrThrow(Long applicationId) {
         return applicationRepository.findById(applicationId)
                 .orElseThrow(() -> new EntityNotFoundException(APPLICATION_NOT_FOUND));
+    }
+
+    public ProgramSimpleVo findVWApplicationProgramIdByIdOrThrow(Long applicationId) {
+        return applicationRepository.findVWApplicationProgramIdById(applicationId);
     }
 }

@@ -11,8 +11,11 @@ import org.springframework.stereotype.Service;
 @Service
 public interface CouponService {
     CouponApplyResponseDto applyCoupon(User user, String code, CouponProgramType programType);
+
     GetCouponsResponseDto getCoupons();
+
     GetCouponDetailResponseDto getCouponDetail(Long couponId);
+
     void createCoupon(CreateCouponRequestDto couponRequestDto);
 
     void updateCoupon(Long couponId, CreateCouponRequestDto couponRequestDto);

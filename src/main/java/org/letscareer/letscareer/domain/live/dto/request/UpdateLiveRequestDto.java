@@ -12,6 +12,7 @@ public record UpdateLiveRequestDto(
         String title,
         String shortDesc,
         String desc,
+        String criticalNotice,
         Integer participationCount,
         String thumbnail,
         String mentorName,

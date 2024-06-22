@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.dto.response.GetLiveApplicationsResponseDto;
+import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeExisingApplicationResponseDto;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.faq.dto.response.GetFaqResponseDto;
 import org.letscareer.letscareer.domain.live.dto.request.CreateLiveRequestDto;
@@ -105,6 +106,16 @@ public class LiveV1Controller {
     public ResponseEntity<SuccessResponse<?>> getLiveApplicationForm(@PathVariable("id") final Long liveId,
                                                                      @CurrentUser User user) {
         final GetLiveApplicationFormResponseDto responseDto = liveService.getLiveApplicationForm(user, liveId);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "라이브 신청 여부 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetLiveExisingApplicationResponseDto.class)))
+    })
+    @GetMapping("/{id}/history")
+    public ResponseEntity<SuccessResponse<?>> getLiveExistingApplication(@PathVariable("id") final Long liveId,
+                                                                         @CurrentUser User user) {
+        GetLiveExisingApplicationResponseDto responseDto = liveService.getLiveExistingApplication(liveId, user.getId());
         return SuccessResponse.ok(responseDto);
     }
 

@@ -5,8 +5,9 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.domain.attendance.dto.request.AttendanceCreateRequestDto;
-import org.letscareer.letscareer.domain.attendance.dto.request.AttendanceUpdateRequestDto;
+import org.letscareer.letscareer.domain.attendance.dto.request.CreateAttendanceRequestDto;
+import org.letscareer.letscareer.domain.attendance.dto.request.UpdateAttendanceRequestDto;
+import org.letscareer.letscareer.domain.attendance.dto.request.UpdateAttendanceUserRequestDto;
 import org.letscareer.letscareer.domain.attendance.dto.response.AttendanceAdminListResponseDto;
 import org.letscareer.letscareer.domain.attendance.service.AttendanceService;
 import org.letscareer.letscareer.domain.user.entity.User;
@@ -29,9 +30,9 @@ public class AttendanceV1Controller {
     @ApiErrorCode({SwaggerEnum.APPLICATION_NOT_FOUND, SwaggerEnum.CONFLICT_ATTENDANCE, SwaggerEnum.ATTENDANCE_NOT_AVAILABLE_DATE})
     @PostMapping("/{id}")
     public ResponseEntity<SuccessResponse<?>> createAttendance(@PathVariable(name = "id") final Long missionId,
-                                                               @RequestBody AttendanceCreateRequestDto attendanceCreateRequestDto,
+                                                               @RequestBody CreateAttendanceRequestDto createAttendanceRequestDto,
                                                                @CurrentUser User user) {
-        attendanceService.createAttendance(missionId, attendanceCreateRequestDto, user.getId());
+        attendanceService.createAttendance(missionId, createAttendanceRequestDto, user.getId());
         return SuccessResponse.created(null);
     }
 
@@ -50,9 +51,9 @@ public class AttendanceV1Controller {
     @ApiErrorCode({SwaggerEnum.ATTENDANCE_UNAUTHORIZED})
     @PatchMapping("/{id}")
     public ResponseEntity<SuccessResponse<?>> updateAttendance(@PathVariable(name = "id") final Long attendanceId,
-                                                               @RequestBody final AttendanceUpdateRequestDto attendanceUpdateRequestDto,
-                                                               @CurrentUser User user) {
-        attendanceService.updateAttendance(attendanceId, attendanceUpdateRequestDto, user);
+                                                               @CurrentUser final User user,
+                                                               @RequestBody final UpdateAttendanceRequestDto updateAttendanceRequestDto) {
+        attendanceService.updateAttendance(attendanceId, user, updateAttendanceRequestDto);
         return SuccessResponse.ok(null);
     }
 }

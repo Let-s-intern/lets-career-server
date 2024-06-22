@@ -12,6 +12,8 @@ import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 import java.time.LocalDateTime;
 
+import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils.updateValue;
+
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -31,8 +33,8 @@ public abstract class Price extends BaseTimeEntity {
     private AccountType accountType;
 
     public Price(CreatePriceRequestDto requestDto) {
-        this.price = requestDto.price();
-        this.discount = requestDto.discount();
+        this.price = updateValue(0, requestDto.price());
+        this.discount = updateValue(0, requestDto.discount());
         this.accountNumber = requestDto.accountNumber();
         this.deadline = requestDto.deadline();
         this.accountType = requestDto.accountType();

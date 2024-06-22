@@ -11,6 +11,7 @@ import org.letscareer.letscareer.domain.application.type.ApplicationStatus;
 import org.letscareer.letscareer.domain.user.dto.request.*;
 import org.letscareer.letscareer.domain.user.dto.response.TokenResponseDto;
 import org.letscareer.letscareer.domain.user.dto.response.UserAdminListResponseDto;
+import org.letscareer.letscareer.domain.user.dto.response.UserChallengeInfoResponseDto;
 import org.letscareer.letscareer.domain.user.dto.response.UserInfoResponseDto;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.service.UserService;
@@ -32,7 +33,7 @@ public class UserV1Controller {
     @Operation(summary = "유저 마이페이지 정보", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserInfoResponseDto.class)))
     })
-    @ApiErrorCode(SwaggerEnum.USER_NOT_FOUND)
+    @ApiErrorCode({SwaggerEnum.USER_NOT_FOUND})
     @GetMapping
     public ResponseEntity<SuccessResponse<?>> getUserInfo(@CurrentUser User user) {
         return SuccessResponse.ok(userService.getUserInfo(user));
@@ -41,7 +42,7 @@ public class UserV1Controller {
     @Operation(summary = "유저 로그아웃", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
-    @ApiErrorCode(SwaggerEnum.USER_NOT_FOUND)
+    @ApiErrorCode({SwaggerEnum.USER_NOT_FOUND})
     @GetMapping("/signout")
     public ResponseEntity<SuccessResponse<?>> signOut(@CurrentUser User user) {
         userService.signOut(user);
@@ -51,7 +52,7 @@ public class UserV1Controller {
     @Operation(summary = "유저 관리자 여부", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Boolean.class)))
     })
-    @ApiErrorCode(SwaggerEnum.USER_NOT_FOUND)
+    @ApiErrorCode({SwaggerEnum.USER_NOT_FOUND})
     @GetMapping("/isAdmin")
     public ResponseEntity<SuccessResponse<?>> isAdmin(@CurrentUser User user) {
         return SuccessResponse.ok(userService.isAdmin(user));
@@ -61,8 +62,11 @@ public class UserV1Controller {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserAdminListResponseDto.class)))
     })
     @GetMapping("/admin")
-    public ResponseEntity<SuccessResponse<?>> getUsersForAdmin(@PageableDefault Pageable pageable) {
-        final UserAdminListResponseDto responseDto = userService.getUsers(pageable);
+    public ResponseEntity<SuccessResponse<?>> getUsersForAdmin(@RequestParam(required = false) String email,
+                                                               @RequestParam(required = false) String name,
+                                                               @RequestParam(required = false) String phoneNum,
+                                                               @PageableDefault Pageable pageable) {
+        final UserAdminListResponseDto responseDto = userService.getUsers(email, name, phoneNum, pageable);
         return SuccessResponse.ok(responseDto);
     }
 
@@ -76,10 +80,20 @@ public class UserV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
+    @Operation(summary = "유저 챌린지 필수 정보 입력 확인", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserChallengeInfoResponseDto.class)))
+    })
+    @GetMapping("/challenge-info")
+    public ResponseEntity<SuccessResponse<?>> checkUserChallengeInfo(@CurrentUser User user) {
+        UserChallengeInfoResponseDto responseDto = userService.checkUserChallengeInfo(user);
+        return SuccessResponse.ok(responseDto);
+    }
+
+
     @Operation(summary = "유저 이메일 회원가입", responses = {
             @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
     })
-    @ApiErrorCode({SwaggerEnum.USER_CONFLICT, SwaggerEnum.INVALID_PASSWORD, SwaggerEnum.INVALID_PHONE_NUMBER, SwaggerEnum.INVALID_EMAIL})
+    @ApiErrorCode({SwaggerEnum.USER_EMAIL_CONFLICT, SwaggerEnum.USER_PHONE_NUMBER_CONFLICT, SwaggerEnum.INVALID_PASSWORD, SwaggerEnum.INVALID_PHONE_NUMBER, SwaggerEnum.INVALID_EMAIL})
     @PostMapping("/signup")
     public ResponseEntity<SuccessResponse<?>> pwSignUp(@RequestBody @Valid final UserPwSignUpRequestDto pwSignUpRequestDto) {
         userService.pwSignUp(pwSignUpRequestDto);
@@ -129,7 +143,7 @@ public class UserV1Controller {
     @Operation(summary = "유저 정보 업데이트", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
-    @ApiErrorCode({SwaggerEnum.USER_NOT_FOUND, SwaggerEnum.USER_CONFLICT, SwaggerEnum.INVALID_PHONE_NUMBER, SwaggerEnum.INVALID_EMAIL})
+    @ApiErrorCode({SwaggerEnum.USER_NOT_FOUND, SwaggerEnum.USER_PHONE_NUMBER_CONFLICT, SwaggerEnum.INVALID_PHONE_NUMBER, SwaggerEnum.INVALID_EMAIL})
     @PatchMapping
     public ResponseEntity<SuccessResponse<?>> updateUser(@CurrentUser User user,
                                                          @RequestBody final UserUpdateRequestDto requestDto) {

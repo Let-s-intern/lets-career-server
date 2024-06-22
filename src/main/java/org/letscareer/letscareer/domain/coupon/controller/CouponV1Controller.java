@@ -12,8 +12,10 @@ import org.letscareer.letscareer.domain.coupon.dto.response.GetCouponsResponseDt
 import org.letscareer.letscareer.domain.coupon.service.CouponService;
 import org.letscareer.letscareer.domain.coupon.type.CouponProgramType;
 import org.letscareer.letscareer.domain.user.entity.User;
+import org.letscareer.letscareer.global.common.annotation.ApiErrorCode;
 import org.letscareer.letscareer.global.common.annotation.CurrentUser;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
+import org.letscareer.letscareer.global.common.entity.SwaggerEnum;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +25,10 @@ import org.springframework.web.bind.annotation.*;
 public class CouponV1Controller {
     private final CouponService couponService;
 
-    @Operation(summary = "쿠폰 적용")
+    @Operation(summary = "쿠폰 적용", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = CouponApplyResponseDto.class)))
+    })
+    @ApiErrorCode({SwaggerEnum.COUPON_NOT_FOUND, SwaggerEnum.COUPON_NOT_AVAILABLE_DATE, SwaggerEnum.COUPON_NOT_AVAILABLE_PROGRAM_TYPE, SwaggerEnum.COUPON_NOT_AVAILABLE_TIME})
     @GetMapping
     public ResponseEntity<SuccessResponse<?>> applyCoupon(@CurrentUser final User user,
                                                           @RequestParam("code") final String code,

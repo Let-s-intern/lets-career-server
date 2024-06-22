@@ -12,6 +12,7 @@ import org.letscareer.letscareer.domain.banner.mapper.ProgramBannerMapper;
 import org.letscareer.letscareer.domain.banner.type.BannerType;
 import org.letscareer.letscareer.domain.banner.vo.BannerAdminDetailVo;
 import org.letscareer.letscareer.domain.banner.vo.BannerAdminVo;
+import org.letscareer.letscareer.domain.banner.vo.BannerUserVo;
 import org.letscareer.letscareer.domain.file.entity.File;
 import org.letscareer.letscareer.domain.file.helper.FileHelper;
 import org.springframework.stereotype.Service;
@@ -41,7 +42,8 @@ public class ProgramBannerServiceImpl implements BannerService {
 
     @Override
     public BannerListResponseDto getBanners() {
-        return null;
+        List<BannerUserVo> bannerUserVos = programBannerHelper.findAllUserBannerAdminVos();
+        return bannerMapper.toBannerAdminListResponseDto(bannerUserVos);
     }
 
     @Override

@@ -122,6 +122,12 @@ public class LiveServiceImpl implements LiveService {
     }
 
     @Override
+    public GetLiveExisingApplicationResponseDto getLiveExistingApplication(Long liveId, Long userId) {
+        Boolean applied = liveApplicationHelper.existLiveApplicationByLiveIdAndUserId(liveId, userId);
+        return liveApplicationMapper.toGetLiveExisingApplicationResponseDto(applied);
+    }
+
+    @Override
     public void createLive(CreateLiveRequestDto requestDto) {
         ZoomMeetingResponseDto zoomMeetingInfo = zoomUtils.createZoomMeeting(requestDto.title(), requestDto.startDate());
         Live live = liveHelper.createLiveAndSave(requestDto, zoomMeetingInfo);

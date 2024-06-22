@@ -42,12 +42,6 @@ public class Mission extends BaseTimeEntity {
     @Builder.Default
     private MissionStatusType missionStatusType = MissionStatusType.WAITING;
     @NotNull
-    @Builder.Default
-    private Integer attendanceCount = 0;
-    @NotNull
-    @Builder.Default
-    private Integer lateAttendanceCount = 0;
-    @NotNull
     private LocalDateTime startDate;
     @NotNull
     private LocalDateTime endDate;
@@ -75,8 +69,8 @@ public class Mission extends BaseTimeEntity {
         return Mission.builder()
                 .th(createMissionRequestDto.th())
                 .title(createMissionRequestDto.title())
-                .startDate(createMissionRequestDto.startDate().atTime(0, 0))
-                .endDate(createMissionRequestDto.endDate().atTime(23, 59, 59))
+                .startDate(createMissionRequestDto.startDate())
+                .endDate(createMissionRequestDto.endDate())
                 .challenge(challenge)
                 .missionTemplate(missionTemplate)
                 .build();
@@ -85,8 +79,9 @@ public class Mission extends BaseTimeEntity {
     public void updateMission(UpdateMissionRequestDto requestDto) {
         this.th = updateValue(this.th, requestDto.th());
         this.title = updateValue(this.title, requestDto.title());
-        this.startDate = updateValue(this.startDate, requestDto.startDate().atTime(6, 0));
-        this.endDate = updateValue(this.endDate, requestDto.startDate().atTime(23, 59, 59));
+        this.startDate = updateValue(this.startDate, requestDto.startDate());
+        this.endDate = updateValue(this.endDate, requestDto.endDate());
+        this.missionStatusType = updateValue(this.missionStatusType, requestDto.status());
     }
 
     public void setMissionScore(MissionScore missionScore) {
@@ -108,10 +103,7 @@ public class Mission extends BaseTimeEntity {
         }
     }
 
-    public void updateAttendanceCount(AttendanceStatus attendanceStatus) {
-        switch (attendanceStatus) {
-            case PRESENT -> this.attendanceCount = updateValue(this.attendanceCount, this.attendanceCount + 1);
-            case LATE -> this.lateAttendanceCount = updateValue(this.lateAttendanceCount, this.lateAttendanceCount + 1);
-        }
+    public void updateMissionTemplate(MissionTemplate missionTemplate) {
+        this.missionTemplate = updateValue(this.missionTemplate, missionTemplate);
     }
 }

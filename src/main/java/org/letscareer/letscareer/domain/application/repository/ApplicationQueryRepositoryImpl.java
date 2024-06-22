@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.type.ApplicationReviewStatus;
 import org.letscareer.letscareer.domain.application.type.ApplicationStatus;
 import org.letscareer.letscareer.domain.application.vo.MyApplicationVo;
+import org.letscareer.letscareer.domain.program.vo.ProgramSimpleVo;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,7 +20,8 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
 
     @Override
     public List<MyApplicationVo> findMyApplications(Long userId, ApplicationStatus status) {
-        return queryFactory.select(Projections.constructor(MyApplicationVo.class,
+        return queryFactory
+                .select(Projections.constructor(MyApplicationVo.class,
                         vWApplication.applicationId,
                         vWApplication.paymentIsConfirmed,
                         vWApplication.programId,
@@ -29,14 +31,31 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
                         vWApplication.programThumbnail,
                         vWApplication.programStartDate,
                         vWApplication.programEndDate,
-                        vWApplication.reviewId))
+                        vWApplication.reviewId,
+                        vWApplication.paymentId))
                 .from(vWApplication)
                 .where(
                         eqUserId(userId),
-                        eqPaymentIsRefunded(false),
                         eqStatus(status)
                 )
                 .fetch();
+    }
+
+    @Override
+    public ProgramSimpleVo findVWApplicationProgramIdById(Long applicationId) {
+        return queryFactory
+                .select(Projections.constructor(ProgramSimpleVo.class,
+                        vWApplication.programId,
+                        vWApplication.programType))
+                .from(vWApplication)
+                .where(
+                        eqApplicationId(applicationId)
+                )
+                .fetchFirst();
+    }
+
+    private BooleanExpression eqApplicationId(Long applicationId) {
+        return applicationId != null ? vWApplication.applicationId.eq(applicationId) : null;
     }
 
     private BooleanExpression eqUserId(Long userId) {
@@ -45,10 +64,6 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
 
     private BooleanExpression eqPaymentIsConfirmed(Boolean isConfirmed) {
         return vWApplication.paymentIsConfirmed.eq(isConfirmed);
-    }
-
-    private BooleanExpression eqPaymentIsRefunded(Boolean isRefunded) {
-        return vWApplication.paymentIsRefunded.eq(isRefunded);
     }
 
     private BooleanExpression beforeStart() {

@@ -44,6 +44,10 @@ public class ChallengeApplicationHelper {
             throw new InvalidValueException(INVALID_APPLICATION_TIME);
     }
 
+    public Long findApplicationIdByChallengeIdAndUserId(Long challengeId, Long userId) {
+        return challengeApplicationRepository.findApplicationIdByChallengeIdAndUserId(challengeId, userId);
+    }
+
     public List<AdminChallengeApplicationVo> findAdminChallengeApplicationVos(Long challengeId, Boolean isConfirmed) {
         return challengeApplicationRepository.findAdminChallengeApplicationVos(challengeId, isConfirmed);
     }
@@ -74,5 +78,14 @@ public class ChallengeApplicationHelper {
         if (user.getRole().equals(UserRole.ADMIN)) return;
         challengeApplicationRepository.findChallengeApplicationIdByChallengeIdAndUserIdAndIsConfirmed(challengeId, user.getId(), true)
                 .orElseThrow(() -> new EntityNotFoundException(APPLICATION_NOT_FOUND));
+    }
+
+    public List<String> getValidApplicationEmailList(Long challengeId) {
+        return challengeApplicationRepository.findAllEmailByChallengeIdAndPaymentIsConfirmed(challengeId, true);
+    }
+
+    public Boolean existChallengeApplicationByChallengeIdAndUserId(Long challengeId, Long userId) {
+        ChallengeApplication challengeApplication = challengeApplicationRepository.findChallengeApplicationByChallengeIdAndUserId(challengeId, userId).orElse(null);
+        return !Objects.isNull(challengeApplication);
     }
 }

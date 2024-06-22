@@ -2,18 +2,15 @@ package org.letscareer.letscareer.domain.attendance.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.letscareer.letscareer.domain.attendance.dto.request.AttendanceCreateRequestDto;
-import org.letscareer.letscareer.domain.attendance.dto.request.AttendanceUpdateRequestDto;
+import org.letscareer.letscareer.domain.attendance.dto.request.CreateAttendanceRequestDto;
+import org.letscareer.letscareer.domain.attendance.dto.request.UpdateAttendanceRequestDto;
 import org.letscareer.letscareer.domain.attendance.type.AttendanceResult;
 import org.letscareer.letscareer.domain.attendance.type.AttendanceStatus;
 import org.letscareer.letscareer.domain.attendance.type.converter.AttendanceResultConverter;
 import org.letscareer.letscareer.domain.attendance.type.converter.AttendanceStatusConverter;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
-import org.letscareer.letscareer.domain.score.entity.AttendanceScore;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
-
-import java.time.LocalDateTime;
 
 import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils.updateValue;
 
@@ -37,18 +34,15 @@ public class Attendance extends BaseTimeEntity {
     private AttendanceResult result = AttendanceResult.WAITING;
     private String comments;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mission_id")
     private Mission mission;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "score_id")
-    private AttendanceScore attendanceScore;
 
     public static Attendance createAttendance(Mission mission,
-                                              AttendanceCreateRequestDto createRequestDto,
+                                              CreateAttendanceRequestDto createRequestDto,
                                               AttendanceStatus status,
                                               User user) {
         return Attendance.builder()
@@ -59,11 +53,11 @@ public class Attendance extends BaseTimeEntity {
                 .build();
     }
 
-    public void updateAttendanceAdmin(AttendanceUpdateRequestDto attendanceUpdateRequestDto) {
-        this.link = updateValue(this.link, attendanceUpdateRequestDto.link());
-        this.status = updateValue(this.status, attendanceUpdateRequestDto.status());
-        this.result = updateValue(this.result, attendanceUpdateRequestDto.result());
-        this.comments = updateValue(this.comments, attendanceUpdateRequestDto.comments());
+    public void updateAttendanceAdmin(UpdateAttendanceRequestDto updateAttendanceRequestDto) {
+        this.link = updateValue(this.link, updateAttendanceRequestDto.link());
+        this.status = updateValue(this.status, updateAttendanceRequestDto.status());
+        this.result = updateValue(this.result, updateAttendanceRequestDto.result());
+        this.comments = updateValue(this.comments, updateAttendanceRequestDto.comments());
     }
 
     public void updateAttendanceLink(String link) {
@@ -78,7 +72,4 @@ public class Attendance extends BaseTimeEntity {
         this.result = updateValue(this.result, result);
     }
 
-    public void setAttendanceScore(AttendanceScore attendanceScore) {
-        this.attendanceScore = attendanceScore;
-    }
 }

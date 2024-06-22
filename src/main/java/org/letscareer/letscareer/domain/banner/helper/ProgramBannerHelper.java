@@ -6,6 +6,7 @@ import org.letscareer.letscareer.domain.banner.error.BannerErrorCode;
 import org.letscareer.letscareer.domain.banner.repository.ProgramBannerRepository;
 import org.letscareer.letscareer.domain.banner.vo.BannerAdminDetailVo;
 import org.letscareer.letscareer.domain.banner.vo.BannerAdminVo;
+import org.letscareer.letscareer.domain.banner.vo.BannerUserVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -35,5 +36,9 @@ public class ProgramBannerHelper {
 
     public void deleteProgramBanner(ProgramBanner programBanner) {
         programBannerRepository.delete(programBanner);
+    }
+
+    public List<BannerUserVo> findAllUserBannerAdminVos() {
+        return programBannerRepository.findAllProgramBannerUserVos();
     }
 }

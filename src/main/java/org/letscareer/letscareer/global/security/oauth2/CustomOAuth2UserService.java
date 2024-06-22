@@ -33,10 +33,10 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         AuthProvider authProvider = AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase());
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(authProvider, oAuth2User.getAttributes());
         validateOAuth2UserInfo(oAuth2UserInfo);
-        return validateEmailAndCreateUserIfNeed(oAuth2UserInfo, authProvider);
+        return validatePhoneNumAndCreateUserIfNeed(oAuth2UserInfo, authProvider);
     }
 
-    private PrincipalDetails validateEmailAndCreateUserIfNeed(OAuth2UserInfo oAuth2UserInfo, AuthProvider authProvider) {
+    private PrincipalDetails validatePhoneNumAndCreateUserIfNeed(OAuth2UserInfo oAuth2UserInfo, AuthProvider authProvider) {
         User user = userHelper.findUserByPhoneNumOrNull(oAuth2UserInfo.getPhoneNum());
         PrincipalDetails principalDetails = null;
 

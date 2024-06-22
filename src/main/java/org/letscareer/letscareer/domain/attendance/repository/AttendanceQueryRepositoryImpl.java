@@ -3,7 +3,6 @@ package org.letscareer.letscareer.domain.attendance.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +18,8 @@ import static org.letscareer.letscareer.domain.application.entity.QChallengeAppl
 import static org.letscareer.letscareer.domain.attendance.entity.QAttendance.attendance;
 import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
 import static org.letscareer.letscareer.domain.mission.entity.QMission.mission;
-import static org.letscareer.letscareer.domain.score.entity.QAttendanceScore.attendanceScore;
 import static org.letscareer.letscareer.domain.user.entity.QUser.user;
-import static org.letscareer.letscareer.domain.user.repository.UserRepositoryImpl.activeEmail;
+import static org.letscareer.letscareer.domain.user.repository.UserQueryRepositoryImpl.activeEmail;
 
 @RequiredArgsConstructor
 public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository {
@@ -36,7 +34,6 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
                         activeEmail(attendance.user),
                         attendance.user.accountType,
                         attendance.user.accountNum,
-                        attendance.user.accountOwner,
                         attendance.status,
                         attendance.link,
                         attendance.result,

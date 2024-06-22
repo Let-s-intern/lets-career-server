@@ -10,6 +10,7 @@ public record UserAdminVo(
         Long id,
         String name,
         String email,
+        String contactEmail,
         String phoneNum,
         LocalDateTime createdDate,
         AccountType accountType,

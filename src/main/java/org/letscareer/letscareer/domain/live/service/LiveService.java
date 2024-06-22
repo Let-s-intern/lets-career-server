@@ -36,6 +36,8 @@ public interface LiveService {
 
     GetLiveAdminReviewsResponseDto getReviewsForAdmin(Long liveId, Pageable pageable);
 
+    GetLiveExisingApplicationResponseDto getLiveExistingApplication(Long liveId, Long userId);
+
     void createLive(CreateLiveRequestDto requestDto);
 
     void updateLive(Long liveId, UpdateLiveRequestDto requestDto);

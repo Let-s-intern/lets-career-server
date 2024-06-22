@@ -57,15 +57,30 @@ public class WebSecurityConfig {
     };
 
     private final String[] AdminGetPatterns = {
+            "/api/v1/attendance/**", "/api/v1/banner/admin/**", "/api/v1/contents/admin/**",
+            "/api/v1/coupon/admin/**", "/api/v1/mission-template/admin/**", "/api/v1/program/admin",
+            "/api/v1/user/admin"
     };
 
     private final String[] AdminPostPatterns = {
+            "/api/v1/banner", "/api/v1/challenge", "/api/v1/challenge-guide/**",
+            "/api/v1/challenge-notice/**", "/api/v1/contents", "/api/v1/coupon",
+            "/api/v1/faq", "/api/v1/file", "/api/v1/live", "/api/v1/mission/**",
+            "/api/v1/mission-template", "/api/v1/vod"
     };
 
     private final String[] AdminPatchPatterns = {
+            "/api/v1/banner/**", "/api/v1/challenge", "/api/v1/challenge-guide/**",
+            "/api/v1/challenge-notice/**", "/api/v1/contents/**", "/api/v1/coupon/**",
+            "/api/v1/faq/**", "/api/v1/live/**", "/api/v1/mission/**", "/api/v1/mission-template/**",
+            "/api/v1/payment/**", "/api/v1/vod/**"
     };
 
     private final String[] AdminDeletePatterns = {
+            "/api/v1/banner/**", "/api/v1/challenge/**", "/api/v1/challenge-guide/**",
+            "/api/v1/challenge-notice/**", "/api/v1/contents/**", "/api/v1/coupon/**",
+            "/api/v1/faq/**", "/api/v1/live/**", "/api/v1/mission/**", "/api/v1/mission-template/**",
+            "/api/v1/vod/**"
     };
 
     private final String[] UserGetPatterns = {
@@ -99,14 +114,14 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(request -> {
                     request.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                             .requestMatchers(SwaggerPatterns).permitAll()
-                            .requestMatchers(HttpMethod.GET, UserGetPatterns).hasAnyRole("USER","ADMIN")
-                            .requestMatchers(HttpMethod.POST, UserPostPatterns).hasAnyRole("USER", "ADMIN")
-                            .requestMatchers(HttpMethod.PATCH, UserPatchPatterns).hasAnyRole("USER", "ADMIN")
-                            .requestMatchers(HttpMethod.DELETE, UserDeletePatterns).hasAnyRole("USER", "ADMIN")
-                            .requestMatchers(HttpMethod.GET, AdminGetPatterns).hasAnyRole("ADMIN")
-                            .requestMatchers(HttpMethod.POST, AdminPostPatterns).hasAnyRole("ADMIN")
-                            .requestMatchers(HttpMethod.PATCH, AdminPatchPatterns).hasAnyRole("ADMIN")
-                            .requestMatchers(HttpMethod.DELETE, AdminDeletePatterns).hasAnyRole("ADMIN")
+                            .requestMatchers(HttpMethod.GET, UserGetPatterns).hasAnyAuthority("USER","ADMIN")
+                            .requestMatchers(HttpMethod.POST, UserPostPatterns).hasAnyAuthority("USER", "ADMIN")
+                            .requestMatchers(HttpMethod.PATCH, UserPatchPatterns).hasAnyAuthority("USER", "ADMIN")
+                            .requestMatchers(HttpMethod.DELETE, UserDeletePatterns).hasAnyAuthority("USER", "ADMIN")
+                            .requestMatchers(HttpMethod.GET, AdminGetPatterns).hasAuthority("ADMIN")
+                            .requestMatchers(HttpMethod.POST, AdminPostPatterns).hasAuthority("ADMIN")
+                            .requestMatchers(HttpMethod.PATCH, AdminPatchPatterns).hasAuthority("ADMIN")
+                            .requestMatchers(HttpMethod.DELETE, AdminDeletePatterns).hasAuthority("ADMIN")
                             .requestMatchers("/oauth2/**").permitAll()
                             .anyRequest().permitAll();
                 })

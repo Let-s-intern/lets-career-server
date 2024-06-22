@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import org.letscareer.letscareer.domain.live.vo.LiveApplicationFormVo;
 import org.letscareer.letscareer.domain.price.vo.LivePriceDetailVo;
+import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.domain.user.entity.User;
 
 import java.time.LocalDateTime;
@@ -16,9 +17,11 @@ public record GetLiveApplicationFormResponseDto(
         String email,
         String contactEmail,
         String phoneNumber,
+        String criticalNotice,
         LocalDateTime startDate,
         LocalDateTime endDate,
         LocalDateTime deadline,
+        ProgramStatusType statusType,
         LivePriceDetailVo price
 ) {
     public static GetLiveApplicationFormResponseDto of(User user,
@@ -31,9 +34,11 @@ public record GetLiveApplicationFormResponseDto(
                 .email(Objects.isNull(user) ? null : user.getEmail())
                 .contactEmail(Objects.isNull(user) ? null : user.getContactEmail())
                 .phoneNumber(Objects.isNull(user) ? null : user.getPhoneNum())
+                .criticalNotice(liveApplicationFormVo.criticalNotice())
                 .startDate(liveApplicationFormVo.startDate())
                 .endDate(liveApplicationFormVo.endDate())
                 .deadline(liveApplicationFormVo.deadline())
+                .statusType(liveApplicationFormVo.statusType())
                 .price(livePriceDetailVo)
                 .build();
     }

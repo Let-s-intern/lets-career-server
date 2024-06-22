@@ -12,7 +12,6 @@ public record AttendanceAdminVo(
         String email,
         AccountType accountType,
         String accountNum,
-        String accountOwner,
         AttendanceStatus status,
         String link,
         AttendanceResult result,

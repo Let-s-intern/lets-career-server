@@ -3,7 +3,6 @@ package org.letscareer.letscareer.domain.score.helper;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.mission.dto.request.CreateMissionRequestDto;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
-import org.letscareer.letscareer.domain.score.entity.AttendanceScore;
 import org.letscareer.letscareer.domain.score.entity.MissionScore;
 import org.letscareer.letscareer.domain.score.repository.MissionScoreRepository;
 import org.springframework.stereotype.Component;
