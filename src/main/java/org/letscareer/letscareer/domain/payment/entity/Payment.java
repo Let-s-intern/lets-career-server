@@ -1,0 +1,56 @@
+package org.letscareer.letscareer.domain.payment.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+import org.letscareer.letscareer.domain.application.entity.Application;
+import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApplicationPaybackRequestDto;
+import org.letscareer.letscareer.domain.coupon.entity.Coupon;
+import org.letscareer.letscareer.domain.payment.dto.request.UpdatePaymentRequestDto;
+import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
+
+import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils.updateValue;
+
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder(access = AccessLevel.PRIVATE)
+@DiscriminatorValue("payment")
+@Getter
+@Entity
+public class Payment extends BaseTimeEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "payment_id")
+    private Long id;
+    @Builder.Default
+    private Integer finalPrice = 0;
+    @Builder.Default
+    private Boolean isConfirmed = false;
+    @Builder.Default
+    private Boolean isRefunded = false;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "coupon_id")
+    private Coupon coupon;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "application_id")
+    private Application application;
+
+    public static Payment createPayment(int finalPrice,
+                                        Coupon coupon,
+                                        Application application) {
+        return Payment.builder()
+                .finalPrice(finalPrice)
+                .coupon(coupon)
+                .application(application)
+                .build();
+    }
+
+    public void updatePayment(UpdatePaymentRequestDto requestDto) {
+        this.isConfirmed = updateValue(this.isConfirmed, requestDto.isConfirmed());
+        this.isRefunded = updateValue(this.isRefunded, requestDto.isRefunded());
+    }
+
+    public void updateRefund(UpdateChallengeApplicationPaybackRequestDto requestDto) {
+        this.isRefunded = updateValue(this.isRefunded, requestDto.isRefunded());
+    }
+}
