@@ -19,7 +19,8 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
 
     @Override
     public List<MyApplicationVo> findMyApplications(Long userId, ApplicationStatus status) {
-        return queryFactory.select(Projections.constructor(MyApplicationVo.class,
+        return queryFactory
+                .select(Projections.constructor(MyApplicationVo.class,
                         vWApplication.applicationId,
                         vWApplication.paymentIsConfirmed,
                         vWApplication.programId,
