@@ -101,4 +101,8 @@ public class Mission extends BaseTimeEntity {
             case ADDITIONAL -> this.additionalContentsList = new ArrayList<>();
         }
     }
+
+    public void updateMissionTemplate(MissionTemplate missionTemplate) {
+        this.missionTemplate = updateValue(this.missionTemplate, missionTemplate);
+    }
 }

@@ -69,6 +69,7 @@ public class MissionServiceImpl implements MissionService {
     public void updateMission(Long missionId, UpdateMissionRequestDto updateMissionRequestDto) {
         Mission mission = missionHelper.findMissionByIdOrThrow(missionId);
         mission.updateMission(updateMissionRequestDto);
+        updateMissionTemplate(mission, updateMissionRequestDto.missionTemplateId());
         updateMissionContents(mission, ContentsType.ESSENTIAL, updateMissionRequestDto.essentialContentsIdList());
         updateMissionContents(mission, ContentsType.ADDITIONAL, updateMissionRequestDto.additionalContentsIdList());
         MissionScore missionScore = mission.getMissionScore();
@@ -91,6 +92,12 @@ public class MissionServiceImpl implements MissionService {
                                 missionHelper.findContentsMissionVos(missionForChallengeVo.id(), ContentsType.ADDITIONAL)
                         ))
                 .collect(Collectors.toList());
+    }
+
+    private void updateMissionTemplate(Mission mission, Long missionTemplateId) {
+        if(mission == null) return;
+        MissionTemplate missionTemplate = missionTemplateHelper.findMissionTemplateByIdOrThrow(missionTemplateId);
+        mission.updateMissionTemplate(missionTemplate);
     }
 
     private void updateMissionContents(Mission mission, ContentsType contentsType, List<Long> contentsIdList) {
