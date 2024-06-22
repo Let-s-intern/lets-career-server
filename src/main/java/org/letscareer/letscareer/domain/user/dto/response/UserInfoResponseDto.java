@@ -20,7 +20,6 @@ public record UserInfoResponseDto(
         String wishCompany,
         AccountType accountType,
         String accountNum,
-        String accountOwner,
         Boolean marketingAgree,
         AuthProvider authProvider
 ) {
@@ -37,7 +36,6 @@ public record UserInfoResponseDto(
                 .wishCompany(user.getWishCompany())
                 .accountType(user.getAccountType())
                 .accountNum(user.getAccountNum())
-                .accountOwner(user.getAccountOwner())
                 .marketingAgree(user.getMarketingAgree())
                 .authProvider(user.getAuthProvider())
                 .build();

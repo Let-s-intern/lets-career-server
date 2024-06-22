@@ -34,7 +34,6 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
                         activeEmail(attendance.user),
                         attendance.user.accountType,
                         attendance.user.accountNum,
-                        attendance.user.accountOwner,
                         attendance.status,
                         attendance.link,
                         attendance.result,

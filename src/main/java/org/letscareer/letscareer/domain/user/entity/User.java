@@ -85,9 +85,6 @@ public class User extends BaseTimeEntity {
     @Nullable
     @Column(length = 30)
     private String accountNum;
-    @Nullable
-    @Column(length = 30)
-    private String accountOwner;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
@@ -137,7 +134,6 @@ public class User extends BaseTimeEntity {
         this.contactEmail = updateValue(this.contactEmail, userUpdateRequestDto.contactEmail());
         this.accountType = updateValue(this.accountType, userUpdateRequestDto.accountType());
         this.accountNum = updateValue(this.accountNum, userUpdateRequestDto.accountNum());
-        this.accountOwner = updateValue(this.accountOwner, userUpdateRequestDto.accountOwner());
         this.inflowPath = updateValue(this.inflowPath, userUpdateRequestDto.inflowPath());
     }
 

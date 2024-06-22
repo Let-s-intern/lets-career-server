@@ -33,7 +33,6 @@ public class UserQueryRepositoryImpl implements UserQueryRepository {
                         user.createDate,
                         user.accountType,
                         user.accountNum,
-                        user.accountOwner,
                         user.marketingAgree))
                 .from(user)
                 .where(
