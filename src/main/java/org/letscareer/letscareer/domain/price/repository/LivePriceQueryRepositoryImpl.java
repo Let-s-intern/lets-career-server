@@ -5,6 +5,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.price.vo.LivePriceDetailVo;
+import org.letscareer.letscareer.domain.price.vo.PriceDetailVo;
 
 import java.util.Optional;
 
@@ -31,6 +32,24 @@ public class LivePriceQueryRepositoryImpl implements LivePriceQueryRepository {
                         eqLiveId(liveId)
                 )
                 .fetchOne()
+        );
+    }
+
+    @Override
+    public Optional<PriceDetailVo> findPriceDetailVoByLiveId(Long programId) {
+        return Optional.ofNullable(
+                jpaQueryFactory.select(Projections.constructor(PriceDetailVo.class,
+                        livePrice.id,
+                        livePrice.price,
+                        livePrice.discount,
+                        livePrice.deadline,
+                        livePrice.accountType,
+                        livePrice.accountNumber))
+                        .from(livePrice)
+                        .where(
+                                livePrice.live.id.eq(programId)
+                        )
+                        .fetchFirst()
         );
     }
 

@@ -1,7 +1,7 @@
 package org.letscareer.letscareer.domain.price.vo;
 
 import lombok.Builder;
-import org.letscareer.letscareer.domain.user.type.AccountType;
+import org.letscareer.letscareer.domain.price.type.AccountType;
 
 import java.time.LocalDateTime;
 
@@ -14,4 +14,5 @@ public record PriceDetailVo(
         AccountType accountType,
         String accountNumber
 ) {
+
 }

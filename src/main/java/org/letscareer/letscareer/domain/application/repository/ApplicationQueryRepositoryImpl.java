@@ -1,6 +1,5 @@
 package org.letscareer.letscareer.domain.application.repository;
 
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -8,13 +7,12 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.type.ApplicationReviewStatus;
 import org.letscareer.letscareer.domain.application.type.ApplicationStatus;
 import org.letscareer.letscareer.domain.application.vo.MyApplicationVo;
+import org.letscareer.letscareer.domain.program.vo.ProgramSimpleVo;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import static org.letscareer.letscareer.domain.application.entity.QVWApplication.vWApplication;
-import static org.letscareer.letscareer.domain.program.entity.QVWProgram.vWProgram;
 
 @RequiredArgsConstructor
 public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepository {
@@ -44,12 +42,16 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
     }
 
     @Override
-    public Optional<Long> findPriceIdByApplicationId(Long applicationId) {
-        return Optional.ofNullable(null);
-    }
-
-    private BooleanExpression eqProgramId() {
-        return vWApplication.programId.eq(vWProgram.programId);
+    public ProgramSimpleVo findVWApplicationProgramIdById(Long applicationId) {
+        return queryFactory
+                .select(Projections.constructor(ProgramSimpleVo.class,
+                        vWApplication.programId,
+                        vWApplication.programType))
+                .from(vWApplication)
+                .where(
+                        eqApplicationId(applicationId)
+                )
+                .fetchFirst();
     }
 
     private BooleanExpression eqApplicationId(Long applicationId) {

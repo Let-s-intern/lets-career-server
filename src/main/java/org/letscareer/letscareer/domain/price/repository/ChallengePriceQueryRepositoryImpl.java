@@ -4,11 +4,15 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.price.entity.Price;
 import org.letscareer.letscareer.domain.price.vo.ChallengePriceDetailVo;
+import org.letscareer.letscareer.domain.price.vo.PriceDetailVo;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.letscareer.letscareer.domain.price.entity.QChallengePrice.challengePrice;
+import static org.letscareer.letscareer.domain.price.entity.QPrice.price1;
 
 @RequiredArgsConstructor
 public class ChallengePriceQueryRepositoryImpl implements ChallengePriceQueryRepository {
@@ -34,6 +38,23 @@ public class ChallengePriceQueryRepositoryImpl implements ChallengePriceQueryRep
                         eqChallengeId(challengeId)
                 )
                 .fetch();
+    }
+
+    @Override
+    public Optional<PriceDetailVo> findPriceDetailVoByChallengeId(Long programId) {
+        return Optional.ofNullable(jpaQueryFactory
+                .select(Projections.constructor(PriceDetailVo.class,
+                        challengePrice.id,
+                        challengePrice.price,
+                        challengePrice.discount,
+                        challengePrice.deadline,
+                        challengePrice.accountType,
+                        challengePrice.accountNumber))
+                .from(challengePrice)
+                .where(
+                        challengePrice.challenge.id.eq(programId)
+                )
+                .fetchFirst());
     }
 
     private BooleanExpression eqChallengeId(Long challengeId) {

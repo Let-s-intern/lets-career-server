@@ -3,7 +3,6 @@ package org.letscareer.letscareer.domain.price.helper;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.price.entity.Price;
 import org.letscareer.letscareer.domain.price.repository.PriceRepository;
-import org.letscareer.letscareer.domain.price.vo.PriceDetailVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -16,11 +15,6 @@ public class PriceHelper {
 
     public Price findPriceByIdOrThrow(Long priceId) {
         return priceRepository.findById(priceId)
-                .orElseThrow(() -> new EntityNotFoundException(PRICE_NOT_FOUND));
-    }
-
-    public PriceDetailVo findPriceDetailVoByPriceId(Long priceId) {
-        return priceRepository.findPriceDetailVoByPriceId(priceId)
                 .orElseThrow(() -> new EntityNotFoundException(PRICE_NOT_FOUND));
     }
 }

@@ -7,6 +7,7 @@ import org.letscareer.letscareer.domain.price.entity.LivePrice;
 import org.letscareer.letscareer.domain.price.error.PriceErrorCode;
 import org.letscareer.letscareer.domain.price.repository.LivePriceRepository;
 import org.letscareer.letscareer.domain.price.vo.LivePriceDetailVo;
+import org.letscareer.letscareer.domain.price.vo.PriceDetailVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -28,5 +29,11 @@ public class LivePriceHelper {
 
     public void deleteLivePriceByLiveId(Long liveId) {
         livePriceRepository.deleteAllByLiveId(liveId);
+    }
+
+    public PriceDetailVo findLivePriceDetailVoByLiveId(Long programId) {
+        return livePriceRepository.findPriceDetailVoByLiveId(programId)
+                .orElseThrow(() -> new EntityNotFoundException(PriceErrorCode.LIVE_PRICE_NOT_FOUND));
+
     }
 }

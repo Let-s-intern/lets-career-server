@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.dto.request.CreateApplicationRequestDto;
 import org.letscareer.letscareer.domain.application.service.ApplicationServiceFactory;
-import org.letscareer.letscareer.domain.payment.dto.response.GetPaymentDetailResponseDto;
 import org.letscareer.letscareer.domain.payment.service.PaymentService;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.user.entity.User;
@@ -45,13 +44,5 @@ public class ApplicationV1Controller {
                                                                 @CurrentUser User user) {
         applicationServiceFactory.getApplicationService(type).deleteApplication(applicationId, user);
         return SuccessResponse.ok(null);
-    }
-
-    @Operation(summary = "결제 내역 상세")
-    @GetMapping("/{applicationId}/{paymentId}")
-    public ResponseEntity<SuccessResponse<?>> getPaymentDetail(@PathVariable final Long applicationId,
-                                                               @PathVariable final Long paymentId) {
-        final GetPaymentDetailResponseDto responseDto = paymentService.getPaymentDetail(applicationId, paymentId);
-        return SuccessResponse.ok(responseDto);
     }
 }

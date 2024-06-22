@@ -5,6 +5,7 @@ import org.letscareer.letscareer.domain.application.entity.Application;
 import org.letscareer.letscareer.domain.application.repository.ApplicationRepository;
 import org.letscareer.letscareer.domain.application.type.ApplicationStatus;
 import org.letscareer.letscareer.domain.application.vo.MyApplicationVo;
+import org.letscareer.letscareer.domain.program.vo.ProgramSimpleVo;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.type.UserRole;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
@@ -15,7 +16,6 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.letscareer.letscareer.domain.application.error.ApplicationErrorCode.APPLICATION_NOT_FOUND;
-import static org.letscareer.letscareer.domain.price.error.PriceErrorCode.PRICE_NOT_FOUND;
 import static org.letscareer.letscareer.global.error.GlobalErrorCode.UNAUTHORIZED;
 
 @RequiredArgsConstructor
@@ -39,8 +39,7 @@ public class ApplicationHelper {
                 .orElseThrow(() -> new EntityNotFoundException(APPLICATION_NOT_FOUND));
     }
 
-    public Long findPriceIdByApplicationId(Long applicationId) {
-        return applicationRepository.findPriceIdByApplicationId(applicationId)
-                .orElseThrow(() -> new EntityNotFoundException(PRICE_NOT_FOUND));
+    public ProgramSimpleVo findVWApplicationProgramIdByIdOrThrow(Long applicationId) {
+        return applicationRepository.findVWApplicationProgramIdById(applicationId);
     }
 }
