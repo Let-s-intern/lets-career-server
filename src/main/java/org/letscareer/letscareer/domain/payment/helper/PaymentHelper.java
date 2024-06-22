@@ -39,7 +39,10 @@ public class PaymentHelper {
 
     private int calculateFinalPrice(Price price, Coupon coupon) {
         int finalPrice = price.getPrice() - price.getDiscount();
-        if (coupon != null) finalPrice -= coupon.getDiscount();
+        if (coupon != null){
+            if (coupon.getDiscount() == -1) return 0;
+            finalPrice -= coupon.getDiscount();
+        }
         return finalPrice;
     }
 
