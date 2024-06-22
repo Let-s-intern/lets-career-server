@@ -16,6 +16,12 @@ import org.springframework.web.bind.annotation.*;
 public class PaymentV1Controller {
     private final PaymentService paymentService;
 
+    @Operation(summary = "결제 내역 상세")
+    @GetMapping("/{id}")
+    public ResponseEntity<SuccessResponse<?>> getPaymentDetail(@PathVariable(name = "id") final Long paymentId) {
+        return SuccessResponse.ok(null);
+    }
+
     @Operation(summary = "[어드민] 결제 내역 수정", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
