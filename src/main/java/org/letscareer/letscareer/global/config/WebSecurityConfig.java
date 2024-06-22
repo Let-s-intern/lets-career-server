@@ -63,11 +63,10 @@ public class WebSecurityConfig {
     };
 
     private final String[] AdminPostPatterns = {
-            "/api/v1/application/**", "/api/v1/banner", "/api/v1/challenge",
-            "/api/v1/challenge-guide/**", "/api/v1/challenge-notice/**",
-            "/api/v1/contents", "/api/v1/coupon", "/api/v1/faq", "/api/v1/file",
-            "/api/v1/live", "/api/v1/mission/**", "/api/v1/mission-template",
-            "/api/v1/vod"
+            "/api/v1/banner", "/api/v1/challenge", "/api/v1/challenge-guide/**",
+            "/api/v1/challenge-notice/**", "/api/v1/contents", "/api/v1/coupon",
+            "/api/v1/faq", "/api/v1/file", "/api/v1/live", "/api/v1/mission/**",
+            "/api/v1/mission-template", "/api/v1/vod"
     };
 
     private final String[] AdminPatchPatterns = {
