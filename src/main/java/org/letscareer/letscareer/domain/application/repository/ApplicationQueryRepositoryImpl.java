@@ -33,7 +33,6 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
                 .from(vWApplication)
                 .where(
                         eqUserId(userId),
-                        eqPaymentIsRefunded(false),
                         eqStatus(status)
                 )
                 .fetch();
@@ -45,10 +44,6 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
 
     private BooleanExpression eqPaymentIsConfirmed(Boolean isConfirmed) {
         return vWApplication.paymentIsConfirmed.eq(isConfirmed);
-    }
-
-    private BooleanExpression eqPaymentIsRefunded(Boolean isRefunded) {
-        return vWApplication.paymentIsRefunded.eq(isRefunded);
     }
 
     private BooleanExpression beforeStart() {
