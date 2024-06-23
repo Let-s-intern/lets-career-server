@@ -48,7 +48,7 @@ public class UserHelper {
     }
 
     public User findUserByPhoneNumOrNull(String phoneNum) {
-        return userRepository.findByPhoneNum(phoneNum).orElse(null);
+        return userRepository.findFirstByPhoneNum(phoneNum).orElse(null);
     }
 
     public User saveUser(User user) {
