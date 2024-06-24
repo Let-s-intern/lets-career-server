@@ -16,7 +16,7 @@ public class EnumValueUtils {
     }
 
     public static <T extends Enum<T> & EnumField> T toEntityCode(Class<T> enumClass, Integer dbCode) {
-        if (dbCode == -1) return null;
+        if (dbCode == -1 || dbCode == 0) return null;
         return EnumSet.allOf(enumClass).stream()
                 .filter(e -> e.getCode().equals(dbCode))
                 .findAny()
