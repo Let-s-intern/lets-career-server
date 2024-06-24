@@ -6,6 +6,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.user.dto.response.OAuth2TokenResponseDto;
 import org.letscareer.letscareer.domain.user.dto.response.TokenResponseDto;
 import org.letscareer.letscareer.global.common.utils.CookieUtils;
 import org.letscareer.letscareer.global.security.jwt.TokenProvider;
@@ -67,9 +68,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         String targetUrl = getRedirectUri(request, response);
-        TokenResponseDto tokenResponse = TokenResponseDto.of(
+        Boolean isNew = ((PrincipalDetails) authentication.getPrincipal()).isNew();
+        OAuth2TokenResponseDto tokenResponse = OAuth2TokenResponseDto.of(
                 tokenProvider.createOAuth2AccessToken(authentication),
-                tokenProvider.createOAuth2RefreshToken(authentication)
+                tokenProvider.createOAuth2RefreshToken(authentication),
+                isNew
         );
 
         try {

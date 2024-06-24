@@ -95,7 +95,6 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                         vWProgram.programId,
                         vWProgram.programType,
                         vWProgram.title,
-                        vWProgram.currentCount,
                         vWProgram.participationCount,
                         vWProgram.zoomLink,
                         vWProgram.zoomPassword,

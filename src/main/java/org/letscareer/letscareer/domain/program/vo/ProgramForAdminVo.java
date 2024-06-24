@@ -13,7 +13,6 @@ public record ProgramForAdminVo(
         ProgramType programType,
         ProgramStatusType programStatusType,
         String title,
-        Integer currentCount,
         Integer participationCount,
         String zoomLink,
         String zoomPassword,
@@ -26,7 +25,6 @@ public record ProgramForAdminVo(
     public ProgramForAdminVo(Long id,
                              ProgramType programType,
                              String title,
-                             Integer currentCount,
                              Integer participationCount,
                              String zoomLink,
                              String zoomPassword,
@@ -35,6 +33,6 @@ public record ProgramForAdminVo(
                              LocalDateTime endDate,
                              LocalDateTime beginning,
                              LocalDateTime deadline) {
-        this(id, programType, ProgramStatusType.of(programType, beginning, deadline), title, currentCount, participationCount, zoomLink, zoomPassword, isVisible, startDate, endDate, beginning, deadline);
+        this(id, programType, ProgramStatusType.of(programType, beginning, deadline), title, participationCount, zoomLink, zoomPassword, isVisible, startDate, endDate, beginning, deadline);
     }
 }

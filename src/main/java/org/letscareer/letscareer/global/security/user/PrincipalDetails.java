@@ -18,6 +18,8 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
     private boolean duplicateUser = false;
 
+    private boolean isNew = false;
+
     @Setter
     private Map<String, Object> attributes;
 

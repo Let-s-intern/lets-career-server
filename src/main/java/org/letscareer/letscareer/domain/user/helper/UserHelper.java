@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.user.helper;
 
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.user.dto.request.PasswordResetRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UserPwSignUpRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UserUpdateRequestDto;
 import org.letscareer.letscareer.domain.user.entity.User;
@@ -45,6 +46,11 @@ public class UserHelper {
     public User findUserByEmailAndAuthProviderOrThrow(String email, AuthProvider authProvider) {
         return userRepository.findFirstByEmailAndAuthProviderOrderByIdDesc(email, authProvider)
                 .orElseThrow(EntityNotFoundException::new);
+    }
+
+    public User findUserByEmailAndNameAndPhoneNumAndAuthProviderOrThrow(PasswordResetRequestDto requestDto, AuthProvider authProvider) {
+        return userRepository.findFirstByEmailAndNameAndPhoneNumAndAuthProviderOrderByIdDesc(requestDto.email(), requestDto.name(), requestDto.phoneNum(), authProvider)
+                .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND));
     }
 
     public User findUserByPhoneNumOrNull(String phoneNum) {

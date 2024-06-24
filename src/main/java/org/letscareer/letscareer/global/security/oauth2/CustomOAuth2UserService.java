@@ -44,6 +44,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         if(!existingUser(user)) {
             user = userService.createUserFromOAuth2(oAuth2UserInfo, authProvider);
             principalDetails = new PrincipalDetails(user);
+            principalDetails.setNew(true);
         }
 
         /* 동일 AuthProvider 에서 가입 이력 존재 */

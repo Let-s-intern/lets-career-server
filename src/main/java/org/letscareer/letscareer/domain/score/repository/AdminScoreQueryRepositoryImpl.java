@@ -21,8 +21,9 @@ public class AdminScoreQueryRepositoryImpl implements AdminScoreQueryRepository{
     @Override
     public Optional<AdminScore> findAdminScoreByChallengeIdAndApplicationId(Long challengeId, Long applicationId) {
         return Optional.ofNullable(queryFactory
-                .selectFrom(adminScore)
-                .leftJoin(adminScore.application, challengeApplication)
+                .select(adminScore)
+                .from(challengeApplication)
+                .leftJoin(challengeApplication.adminScore, adminScore)
                 .where(
                         eqChallengeApplicationId(applicationId)
                 )
@@ -31,6 +32,6 @@ public class AdminScoreQueryRepositoryImpl implements AdminScoreQueryRepository{
     }
 
     private BooleanExpression eqChallengeApplicationId(Long applicationId) {
-        return applicationId != null ? challengeApplication._super.id.eq(applicationId) : null;
+        return applicationId != null ? challengeApplication.id.eq(applicationId) : null;
     }
 }

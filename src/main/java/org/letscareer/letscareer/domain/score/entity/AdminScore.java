@@ -16,13 +16,13 @@ public class AdminScore extends Score {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "challenge_application_id")
-    private ChallengeApplication application;
+    private ChallengeApplication challengeApplication;
 
     @Builder(access = AccessLevel.PRIVATE)
     public AdminScore(ChallengeApplication application) {
         super();
         this.score = 0;
-        this.application = application;
+        this.challengeApplication = application;
     }
 
     public static AdminScore creatAdminScore(ChallengeApplication application) {

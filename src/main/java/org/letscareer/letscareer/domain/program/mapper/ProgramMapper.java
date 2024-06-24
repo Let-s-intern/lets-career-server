@@ -16,7 +16,7 @@ public class ProgramMapper {
         return GetProgramsForAdminResponseDto.of(programList, pageInfo);
     }
 
-    public GetProgramForAdminResponseDto<?> toGetProgramForAdminResponseDto(ProgramForAdminVo programVo, List<?> classificationList) {
+    public GetProgramForAdminResponseDto<?> toGetProgramForAdminResponseDto(GetProgramWithCurrentCountResponseDto programVo, List<?> classificationList) {
         return GetProgramForAdminResponseDto.of(programVo, classificationList);
     }
 
@@ -27,5 +27,9 @@ public class ProgramMapper {
 
     public GetProgramForConditionResponseDto<?> toGetProgramForDurationResponseDto(ProgramForConditionVo programVo, List<?> classificationList) {
         return GetProgramForConditionResponseDto.of(programVo, classificationList);
+    }
+
+    public GetProgramWithCurrentCountResponseDto toGetProgramWithCurrentCountResponseDto(ProgramForAdminVo vo, Long currentCount) {
+        return GetProgramWithCurrentCountResponseDto.of(vo, currentCount);
     }
 }

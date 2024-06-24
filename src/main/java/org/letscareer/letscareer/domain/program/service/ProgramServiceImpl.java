@@ -1,14 +1,13 @@
 package org.letscareer.letscareer.domain.program.service;
 
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.application.helper.ChallengeApplicationHelper;
+import org.letscareer.letscareer.domain.application.helper.LiveApplicationHelper;
 import org.letscareer.letscareer.domain.classification.helper.ChallengeClassificationHelper;
 import org.letscareer.letscareer.domain.classification.helper.LiveClassificationHelper;
 import org.letscareer.letscareer.domain.classification.helper.VodClassificationHelper;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
-import org.letscareer.letscareer.domain.program.dto.response.GetProgramForAdminResponseDto;
-import org.letscareer.letscareer.domain.program.dto.response.GetProgramForConditionResponseDto;
-import org.letscareer.letscareer.domain.program.dto.response.GetProgramsForAdminResponseDto;
-import org.letscareer.letscareer.domain.program.dto.response.GetProgramsForConditionResponseDto;
+import org.letscareer.letscareer.domain.program.dto.response.*;
 import org.letscareer.letscareer.domain.program.entity.SearchCondition;
 import org.letscareer.letscareer.domain.program.helper.ProgramHelper;
 import org.letscareer.letscareer.domain.program.mapper.ProgramMapper;
@@ -33,7 +32,9 @@ public class ProgramServiceImpl implements ProgramService {
     private final ProgramHelper programHelper;
     private final ProgramMapper programMapper;
     private final ChallengeClassificationHelper challengeClassificationHelper;
+    private final ChallengeApplicationHelper challengeApplicationHelper;
     private final LiveClassificationHelper liveClassificationHelper;
+    private final LiveApplicationHelper liveApplicationHelper;
     private final VodClassificationHelper vodClassificationHelper;
 
     @Override
@@ -60,10 +61,24 @@ public class ProgramServiceImpl implements ProgramService {
                                                               Pageable pageable) {
         SearchCondition condition = SearchCondition.of(type, typeList, statusList, startDate, endDate, pageable);
         Page<ProgramForAdminVo> programForAdminVos = programHelper.findProgramForAdminVos(condition);
-        List<GetProgramForAdminResponseDto<?>> conditionResponseDtoList
-                = composeProgramForAdminVosAndClassifications(programForAdminVos.getContent());
+        List<GetProgramWithCurrentCountResponseDto> vos = createGetProgramWithCurrentCountResponseDto(programForAdminVos.getContent());
+        List<GetProgramForAdminResponseDto<?>> conditionResponseDtoList = composeProgramForAdminVosAndClassifications(vos);
         PageInfo pageInfo = PageInfo.of(programForAdminVos);
         return programMapper.toGetProgramsForAdminResponseDto(conditionResponseDtoList, pageInfo);
+    }
+
+    private List<GetProgramWithCurrentCountResponseDto> createGetProgramWithCurrentCountResponseDto(List<ProgramForAdminVo> vos) {
+        return vos.stream()
+                .map(vo -> programMapper.toGetProgramWithCurrentCountResponseDto(vo, getApplicationCount(vo)))
+                .collect(Collectors.toList());
+    }
+
+    private Long getApplicationCount(ProgramForAdminVo vo) {
+        if (vo.programType().equals(ProgramType.CHALLENGE))
+            return challengeApplicationHelper.countChallengeApplications(vo.id());
+        else if (vo.programType().equals(ProgramType.LIVE))
+            return liveApplicationHelper.countLiveApplications(vo.id());
+        return 0L;
     }
 
     private List<GetProgramForConditionResponseDto<?>> composeProgramForConditionVosAndClassifications(List<ProgramForConditionVo> programForConditionVo) {
@@ -72,8 +87,8 @@ public class ProgramServiceImpl implements ProgramService {
                 .collect(Collectors.toList());
     }
 
-    private List<GetProgramForAdminResponseDto<?>> composeProgramForAdminVosAndClassifications(List<ProgramForAdminVo> programForAdminVos) {
-        return programForAdminVos.stream()
+    private List<GetProgramForAdminResponseDto<?>> composeProgramForAdminVosAndClassifications(List<GetProgramWithCurrentCountResponseDto> vos) {
+        return vos.stream()
                 .map(this::createGetProgramForAdminResponseDto)
                 .collect(Collectors.toList());
     }
@@ -83,7 +98,7 @@ public class ProgramServiceImpl implements ProgramService {
         return programMapper.toGetProgramForDurationResponseDto(programVo, classificationList);
     }
 
-    private GetProgramForAdminResponseDto<?> createGetProgramForAdminResponseDto(ProgramForAdminVo programVo) {
+    private GetProgramForAdminResponseDto<?> createGetProgramForAdminResponseDto(GetProgramWithCurrentCountResponseDto programVo) {
         List<?> classificationList = getProgramClassificationsForType(programVo.programType(), programVo.id());
         return programMapper.toGetProgramForAdminResponseDto(programVo, classificationList);
     }
