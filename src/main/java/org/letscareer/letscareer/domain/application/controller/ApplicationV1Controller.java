@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class ApplicationV1Controller {
     private final ApplicationServiceFactory applicationServiceFactory;
-    private final PaymentService paymentService;
 
     @Operation(summary = "신청서 생성", responses = {
             @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
