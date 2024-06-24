@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.letscareer.letscareer.domain.attendance.entity.Attendance;
-import org.letscareer.letscareer.domain.attendance.type.AttendanceStatus;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.contents.type.ContentsType;
 import org.letscareer.letscareer.domain.mission.dto.request.CreateMissionRequestDto;
@@ -68,7 +67,7 @@ public class Mission extends BaseTimeEntity {
     public static Mission createMission(CreateMissionRequestDto createMissionRequestDto, Challenge challenge, MissionTemplate missionTemplate) {
         return Mission.builder()
                 .th(createMissionRequestDto.th())
-                .title(createMissionRequestDto.title())
+                .title(missionTemplate.getTitle())
                 .startDate(createMissionRequestDto.startDate())
                 .endDate(createMissionRequestDto.endDate())
                 .challenge(challenge)
