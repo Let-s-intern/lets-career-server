@@ -114,7 +114,7 @@ public class UserV1Controller {
     })
     @ApiErrorCode({SwaggerEnum.USER_NOT_FOUND})
     @PostMapping("/password")
-    public ResponseEntity<SuccessResponse<?>> passwordReset(@RequestBody final PasswordResetRequestDto passwordResetRequestDto) {
+    public ResponseEntity<SuccessResponse<?>> passwordReset(@RequestBody @Valid final PasswordResetRequestDto passwordResetRequestDto) {
         userService.resetPassword(passwordResetRequestDto);
         return SuccessResponse.ok(null);
     }
