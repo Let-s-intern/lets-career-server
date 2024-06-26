@@ -17,6 +17,9 @@ public class ApplicationWithdrawalRecord extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "application_witdrawal_record_id")
     private Long id;
+    private Long userId;
+    private Long challengeId;
+    private Long liveId;
     private String name;
     private String email;
     private String phoneNum;
@@ -24,8 +27,11 @@ public class ApplicationWithdrawalRecord extends BaseTimeEntity {
     private ProgramType programType;
     private String title;
 
-    public static ApplicationWithdrawalRecord createApplicationWithdrawalRecord(String title, ProgramType programType, User user) {
+    public static ApplicationWithdrawalRecord createApplicationWithdrawalRecord(Long programId, String title, ProgramType programType, User user) {
         return ApplicationWithdrawalRecord.builder()
+                .userId(user.getId())
+                .challengeId(programType.equals(ProgramType.CHALLENGE) ? programId : null)
+                .liveId(programType.equals(ProgramType.LIVE) ? programId : null)
                 .name(user.getName())
                 .email(user.getEmail())
                 .phoneNum(user.getPhoneNum())
