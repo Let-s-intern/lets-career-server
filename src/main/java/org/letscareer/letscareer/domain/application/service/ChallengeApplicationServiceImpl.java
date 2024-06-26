@@ -51,7 +51,7 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
     public void deleteApplication(Long applicationId, User user) {
         ChallengeApplication challengeApplication = challengeApplicationHelper.findChallengeApplicationByIdOrThrow(applicationId);
         Challenge challenge = challengeApplication.getChallenge();
-        withdrawHelper.createApplicationWithdrawalRecordAndSave(challenge.getTitle(), ProgramType.CHALLENGE, user);
+        withdrawHelper.createApplicationWithdrawalRecordAndSave(challenge.getId(), challenge.getTitle(), ProgramType.CHALLENGE, user);
         applicationHelper.validateAuthorizedUser(challengeApplication.getUser(), user);
         challengeHelper.updateCurrentCount(challengeApplication.getChallenge(), challenge.getCurrentCount() - 1);
         challengeApplicationHelper.deleteChallengeApplication(challengeApplication);
