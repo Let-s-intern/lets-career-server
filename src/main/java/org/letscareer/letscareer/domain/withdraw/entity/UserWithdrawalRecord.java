@@ -16,6 +16,7 @@ public class UserWithdrawalRecord extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_witdrawal_record_id")
     private Long id;
+    private Long userId;
     private String name;
     private String email;
     private String phoneNum;
@@ -23,6 +24,7 @@ public class UserWithdrawalRecord extends BaseTimeEntity {
 
     public static UserWithdrawalRecord createUserWithdrawalRecord(User user) {
         return UserWithdrawalRecord.builder()
+                .userId(user.getId())
                 .name(user.getName())
                 .email(user.getEmail())
                 .phoneNum(user.getPhoneNum())
