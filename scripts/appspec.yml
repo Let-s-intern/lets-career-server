@@ -1,15 +1,16 @@
 version: 0.0
-os: ubuntu
+os: linux
 files:
   - source: /
     destination: /home/ubuntu
     overwrite: yes
 
 permissions:
-  - object: /
+  - object: /home/ubuntu
     pattern: "**"
     owner: ubuntu
     group: ubuntu
+    mode: 700
 
 hooks:
   ApplicationStart:
