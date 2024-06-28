@@ -159,12 +159,17 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build -x test
 
+      - name: 🍃 docker image build 후 docker hub 에 push 합니다.
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/blue-green .
+          docker push ${{ secrets.DOCKER_USERNAME }}/blue-green
+
       - name: Make zip file
         run: |
           mkdir deploy
           cp ./scripts/docker-compose.yml ./deploy/
           cp ./scripts/appspec.yml ./deploy/
-          cp ./scripts/Dockerfile ./deploy/
           cp ./scripts/*.sh ./deploy/
           cp ./build/libs/*.jar ./deploy/
           zip -r -qq -j ./spring-build.zip ./deploy
