@@ -35,7 +35,7 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                         challengeApplication.id,
                         payment.id,
                         user.name,
-                        user.email,
+                        user.contactEmail,
                         user.phoneNum,
                         user.university,
                         user.grade,

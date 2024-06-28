@@ -31,7 +31,7 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
                         liveApplication.id,
                         payment.id,
                         user.name,
-                        user.email,
+                        user.contactEmail,
                         user.phoneNum,
                         user.university,
                         user.major,
