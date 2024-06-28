@@ -170,7 +170,7 @@ jobs:
           mkdir deploy
           cp ./scripts/docker-compose.yml ./deploy/
           cp ./scripts/appspec.yml ./deploy/
-          cp ./scripts/*.sh ./deploy/경
+          cp ./scripts/*.sh ./deploy/
           cp ./build/libs/*.jar ./deploy/
           zip -r -qq -j ./spring-build.zip ./deploy
 
