@@ -7,9 +7,11 @@ DEFAULT_CONF=" /etc/nginx/nginx.conf"
 if [ -z $IS_GREEN_EXIST ];then
   echo "### BLUE => GREEN ####"
   echo ">>> green image를 pull합니다."
+  docker pull letsintern/blue-green
   docker-compose pull green
   echo ">>> green container를 up합니다."
-  docker-compose up -d green
+  docker run -d --name green -p 8082:8080 -e TZ=Asia/Seoul letsintern/blue-green
+#  docker-compose up -d green
 #  while [ 1 = 1 ]; do
 #  echo ">>> green health check 중..."
 #  sleep 3
