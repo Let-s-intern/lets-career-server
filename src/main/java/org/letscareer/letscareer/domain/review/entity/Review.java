@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.letscareer.letscareer.domain.application.entity.Application;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
+import org.letscareer.letscareer.domain.program.type.converter.ProgramTypeConverter;
 import org.letscareer.letscareer.domain.review.dto.request.CreateReviewRequestDto;
 import org.letscareer.letscareer.domain.review.dto.request.UpdateReviewRequestDto;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
@@ -25,6 +26,7 @@ public class Review extends BaseTimeEntity {
     private Boolean npsCheckAns;
     private String content;
     private Integer score;
+    @Convert(converter = ProgramTypeConverter.class)
     private ProgramType programType;
     private Long programId;
     @Builder.Default
