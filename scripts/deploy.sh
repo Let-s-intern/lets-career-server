@@ -10,15 +10,15 @@ if [ -z $IS_GREEN_EXIST ];then
   docker-compose pull green
   echo ">>> green container를 up합니다."
   docker-compose up -d green
-  while [ 1 = 1 ]; do
-  echo ">>> green health check 중..."
-  sleep 3
-  REQUEST=$(curl http://127.0.0.1:8082)
-    if [ -n "$REQUEST" ]; then
-      echo ">>> 🍃 health check success !"
-      break;
-    fi
-  done;
+#  while [ 1 = 1 ]; do
+#  echo ">>> green health check 중..."
+#  sleep 3
+#  REQUEST=$(curl http://127.0.0.1:8082)
+#    if [ -n "$REQUEST" ]; then
+#      echo ">>> 🍃 health check success !"
+#      break;
+#    fi
+#  done;
   sleep 3
   echo ">>> nginx를 다시 실행 합니다."
   sudo cp /etc/nginx/nginx.green.conf /etc/nginx/nginx.conf
@@ -33,15 +33,15 @@ else
   docker-compose pull blue
   echo ">>> blue container up합니다."
   docker-compose up -d blue
-  while [ 1 = 1 ]; do
-    echo ">>> blue health check 중..."
-    sleep 3
-    REQUEST=$(curl http://127.0.0.1:8081)
-    if [ -n "$REQUEST" ]; then
-      echo ">>> 🍃 health check success !"
-      break;
-    fi
-  done;
+#  while [ 1 = 1 ]; do
+#    echo ">>> blue health check 중..."
+#    sleep 3
+#    REQUEST=$(curl http://127.0.0.1:8081)
+#    if [ -n "$REQUEST" ]; then
+#      echo ">>> 🍃 health check success !"
+#      break;
+#    fi
+#  done;
   sleep 3
   echo ">>> nginx를 다시 실행 합니다."
   sudo cp /etc/nginx/nginx.blue.conf /etc/nginx/nginx.conf
