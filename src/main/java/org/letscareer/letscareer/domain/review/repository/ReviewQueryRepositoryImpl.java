@@ -6,7 +6,7 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
-import org.letscareer.letscareer.domain.review.entity.Review;
+import org.letscareer.letscareer.domain.review.entity.VWReview;
 import org.letscareer.letscareer.domain.review.vo.ReviewDetailVo;
 import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
 import org.letscareer.letscareer.domain.review.vo.ReviewVo;
@@ -17,13 +17,8 @@ import org.springframework.data.support.PageableExecutionUtils;
 import java.util.List;
 import java.util.Optional;
 
-import static org.letscareer.letscareer.domain.application.entity.QChallengeApplication.challengeApplication;
-import static org.letscareer.letscareer.domain.application.entity.QLiveApplication.liveApplication;
-import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
-import static org.letscareer.letscareer.domain.live.entity.QLive.live;
 import static org.letscareer.letscareer.domain.review.entity.QReview.review;
 import static org.letscareer.letscareer.domain.review.entity.QVWReview.vWReview;
-import static org.letscareer.letscareer.domain.user.entity.QUser.user;
 
 @RequiredArgsConstructor
 public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
@@ -53,33 +48,27 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
     public Page<ReviewAdminVo> findChallengeReviewAdminVos(Long challengeId, Pageable pageable) {
         List<ReviewAdminVo> contents = queryFactory
                 .select(Projections.constructor(ReviewAdminVo.class,
-                        review.id,
-                        user.name,
-                        review.nps,
-                        review.npsAns,
-                        review.npsCheckAns,
-                        review.content,
-                        review.score,
-                        review.isVisible,
-                        review.createDate
+                        vWReview.reviewId,
+                        vWReview.userName,
+                        vWReview.nps,
+                        vWReview.npsAns,
+                        vWReview.npsCheckAns,
+                        vWReview.content,
+                        vWReview.score,
+                        vWReview.isVisible,
+                        vWReview.createDate
                 ))
-                .from(review)
-                .leftJoin(review.application, challengeApplication._super)
-                .leftJoin(challengeApplication.challenge, challenge)
-                .leftJoin(review.application.user, user)
+                .from(vWReview)
                 .where(
                         eqChallengeId(challengeId)
                 )
-                .orderBy(review.id.desc())
+                .orderBy(vWReview.reviewId.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        JPAQuery<Review> countQuery = queryFactory
-                .selectFrom(review)
-                .leftJoin(review.application, challengeApplication._super)
-                .leftJoin(challengeApplication.challenge, challenge)
-                .leftJoin(review.application.user, user)
+        JPAQuery<VWReview> countQuery = queryFactory
+                .selectFrom(vWReview)
                 .where(
                         eqChallengeId(challengeId)
                 );
@@ -98,22 +87,21 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                 ))
                 .from(vWReview)
                 .where(
-                        eqVwIsVisible(),
+                        eqIsVisible(),
                         eqProgramType(ProgramType.CHALLENGE)
                 )
-                .orderBy(vWReview.id.desc())
+                .orderBy(vWReview.reviewId.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
         JPAQuery<Long> countQuery = queryFactory
-                .select(vWReview.id.countDistinct())
+                .select(vWReview.reviewId.countDistinct())
                 .from(vWReview)
                 .where(
-                        eqVwIsVisible(),
+                        eqIsVisible(),
                         eqProgramType(ProgramType.CHALLENGE)
-                )
-                .orderBy(vWReview.id.desc());
+                );
 
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
     }
@@ -129,22 +117,21 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                 ))
                 .from(vWReview)
                 .where(
-                        eqVwIsVisible(),
+                        eqIsVisible(),
                         eqProgramType(ProgramType.LIVE)
                 )
-                .orderBy(vWReview.id.desc())
+                .orderBy(vWReview.reviewId.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
         JPAQuery<Long> countQuery = queryFactory
-                .select(vWReview.id.countDistinct())
+                .select(vWReview.reviewId.countDistinct())
                 .from(vWReview)
                 .where(
-                        eqVwIsVisible(),
+                        eqIsVisible(),
                         eqProgramType(ProgramType.LIVE)
-                )
-                .orderBy(vWReview.id.desc());
+                );
 
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
     }
@@ -153,33 +140,27 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
     public Page<ReviewAdminVo> findLiveReviewAdminVos(Long liveId, Pageable pageable) {
         List<ReviewAdminVo> contents = queryFactory
                 .select(Projections.constructor(ReviewAdminVo.class,
-                        review.id,
-                        user.name,
-                        review.nps,
-                        review.npsAns,
-                        review.npsCheckAns,
-                        review.content,
-                        review.score,
-                        review.isVisible,
-                        review.createDate
+                        vWReview.reviewId,
+                        vWReview.userName,
+                        vWReview.nps,
+                        vWReview.npsAns,
+                        vWReview.npsCheckAns,
+                        vWReview.content,
+                        vWReview.score,
+                        vWReview.isVisible,
+                        vWReview.createDate
                 ))
-                .from(review)
-                .leftJoin(review.application, liveApplication._super)
-                .leftJoin(liveApplication.live, live)
-                .leftJoin(review.application.user, user)
+                .from(vWReview)
                 .where(
                         eqLiveId(liveId)
                 )
-                .orderBy(review.id.desc())
+                .orderBy(vWReview.reviewId.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        JPAQuery<Review> countQuery = queryFactory
-                .selectFrom(review)
-                .leftJoin(review.application, liveApplication._super)
-                .leftJoin(liveApplication.live, live)
-                .leftJoin(review.application.user, user)
+        JPAQuery<VWReview> countQuery = queryFactory
+                .selectFrom(vWReview)
                 .where(
                         eqLiveId(liveId)
                 );
@@ -192,18 +173,14 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
     }
 
     private BooleanExpression eqChallengeId(Long challengeId) {
-        return challengeId != null ? challenge.id.eq(challengeId) : null;
+        return challengeId != null ? vWReview.programType.eq(ProgramType.CHALLENGE).and(vWReview.programId.eq(challengeId)) : null;
     }
 
-    private BooleanExpression eqLiveId(Long challengeId) {
-        return challengeId != null ? live.id.eq(challengeId) : null;
+    private BooleanExpression eqLiveId(Long liveId) {
+        return liveId != null ? vWReview.programType.eq(ProgramType.LIVE).and(vWReview.programId.eq(liveId)) : null;
     }
 
     private BooleanExpression eqIsVisible() {
-        return review.isVisible.eq(true);
-    }
-
-    private BooleanExpression eqVwIsVisible() {
         return vWReview.isVisible.eq(true);
     }
 

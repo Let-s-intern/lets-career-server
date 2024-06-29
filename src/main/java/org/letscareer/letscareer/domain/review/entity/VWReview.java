@@ -11,22 +11,33 @@ import java.time.LocalDateTime;
 
 @Immutable
 @Subselect(
-        "SELECT r.review_id as id, r.application_id, r.program_id, " +
-                "CASE WHEN a.dtype = 'challenge_application' then 1 WHEN a.dtype = 'live_application' then 2 END AS program_type, " +
+        "SELECT r.review_id, r.application_id, " +
+                "ca.challenge_id as program_id, 1 AS program_type, " +
                 "u.name as user_name, " +
                 "r.nps, r.nps_ans, r.nps_check_ans, r.content, r.score, r.is_visible, r.create_date " +
                 "FROM review as r " +
                 "LEFT JOIN application as a ON r.application_id = a.application_id " +
+                "LEFT JOIN challenge_application as ca ON ca.application_id = a.application_id " +
                 "LEFT JOIN user as u ON a.user_id = u.user_id " +
-                "WHERE r.application_id is NOT NULL " +
+                "WHERE r.application_id is NOT NULL AND a.dtype = 'challenge_application' " +
                 "UNION ALL " +
-                "SELECT r.review_id as id, r.application_id, r.program_id, " +
+                "SELECT r.review_id, r.application_id, " +
+                "la.live_id as program_id, 2 AS program_type, " +
+                "u.name as user_name, " +
+                "r.nps, r.nps_ans, r.nps_check_ans, r.content, r.score, r.is_visible, r.create_date " +
+                "FROM review as r " +
+                "LEFT JOIN application as a ON r.application_id = a.application_id " +
+                "LEFT JOIN live_application as la ON la.application_id = a.application_id " +
+                "LEFT JOIN user as u ON a.user_id = u.user_id " +
+                "WHERE r.application_id is NOT NULL AND a.dtype = 'live_application'" +
+                "UNION ALL " +
+                "SELECT r.review_id, r.application_id, r.program_id, " +
                 "r.program_type, " +
                 "null as user_name, " +
                 "r.nps, r.nps_ans, r.nps_check_ans, r.content, r.score, r.is_visible, r.create_date " +
                 "FROM review as r " +
                 "WHERE r.application_id is NULL and r.program_type is NOT NULL " +
-                "ORDER BY id DESC"
+                "ORDER BY review_id DESC"
 )
 @Table(name = "vw_review")
 @Entity
@@ -34,6 +45,7 @@ public class VWReview extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Long reviewId;
     private Long applicationId;
     @Convert(converter = ProgramTypeConverter.class)
     private ProgramType programType;
