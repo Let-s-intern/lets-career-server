@@ -3,6 +3,7 @@ package org.letscareer.letscareer.domain.review.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.letscareer.letscareer.domain.application.entity.Application;
+import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.review.dto.request.CreateReviewRequestDto;
 import org.letscareer.letscareer.domain.review.dto.request.UpdateReviewRequestDto;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
@@ -24,6 +25,8 @@ public class Review extends BaseTimeEntity {
     private Boolean npsCheckAns;
     private String content;
     private Integer score;
+    private ProgramType programType;
+    private Long programId;
     @Builder.Default
     private Boolean isVisible = false;
 
@@ -41,6 +44,19 @@ public class Review extends BaseTimeEntity {
                 .application(application)
                 .build();
         application.setReview(review);
+        return review;
+    }
+
+    public static Review createReviewByLink(Long programId, ProgramType programType, CreateReviewRequestDto reviewRequestDto) {
+        Review review = Review.builder()
+                .nps(reviewRequestDto.nps())
+                .npsAns(reviewRequestDto.npsAns())
+                .npsCheckAns(reviewRequestDto.npsCheckAns())
+                .content(reviewRequestDto.content())
+                .score(reviewRequestDto.score())
+                .programId(programId)
+                .programType(programType)
+                .build();
         return review;
     }
 
