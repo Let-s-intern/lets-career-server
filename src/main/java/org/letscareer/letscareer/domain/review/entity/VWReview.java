@@ -33,7 +33,7 @@ import java.time.LocalDateTime;
                 "UNION ALL " +
                 "SELECT r.review_id, r.application_id, r.program_id, " +
                 "r.program_type, " +
-                "null as user_name, " +
+                "'익명' as user_name, " +
                 "r.nps, r.nps_ans, r.nps_check_ans, r.content, r.score, r.is_visible, r.create_date " +
                 "FROM review as r " +
                 "WHERE r.application_id is NULL and r.program_type is NOT NULL " +
