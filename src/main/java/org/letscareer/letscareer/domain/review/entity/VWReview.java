@@ -29,7 +29,7 @@ import java.time.LocalDateTime;
                 "LEFT JOIN application as a ON r.application_id = a.application_id " +
                 "LEFT JOIN live_application as la ON la.application_id = a.application_id " +
                 "LEFT JOIN user as u ON a.user_id = u.user_id " +
-                "WHERE r.application_id is NOT NULL AND a.dtype = 'live_application'" +
+                "WHERE r.application_id is NOT NULL AND a.dtype = 'live_application' " +
                 "UNION ALL " +
                 "SELECT r.review_id, r.application_id, r.program_id, " +
                 "r.program_type, " +
@@ -43,8 +43,6 @@ import java.time.LocalDateTime;
 @Entity
 public class VWReview extends BaseTimeEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     private Long reviewId;
     private Long applicationId;
     @Convert(converter = ProgramTypeConverter.class)
