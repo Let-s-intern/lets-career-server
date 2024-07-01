@@ -10,6 +10,8 @@ import org.letscareer.letscareer.domain.price.entity.Price;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 import static org.letscareer.letscareer.domain.payment.error.PaymentErrorCode.PAYMENT_NOT_FOUND;
 
 @RequiredArgsConstructor
@@ -33,21 +35,27 @@ public class PaymentHelper {
                 .orElseThrow(() -> new EntityNotFoundException(PAYMENT_NOT_FOUND));
     }
 
+    public PaymentDetailVo findPaymentDetailVoByPaymentId(Long paymentId) {
+        return paymentRepository.findPaymentDetailVoByPaymentId(paymentId)
+                .orElseThrow(() -> new EntityNotFoundException(PAYMENT_NOT_FOUND));
+    }
+
+    public Boolean checkIsRefundedForChallenge(Long challengeId, Long userId) {
+        Payment payment = paymentRepository.findPaymentByChallengeIdAndUserId(challengeId, userId)
+                .orElse(null);
+        return !Objects.isNull(payment) ? payment.getIsRefunded() : Boolean.FALSE;
+    }
+
     public long countCouponAppliedTime(Long userId, Long couponId) {
         return paymentRepository.countCouponAppliedTime(userId, couponId);
     }
 
     private int calculateFinalPrice(Price price, Coupon coupon) {
         int finalPrice = price.getPrice() - price.getDiscount();
-        if (coupon != null){
+        if (coupon != null) {
             if (coupon.getDiscount() == -1) return 0;
             finalPrice -= coupon.getDiscount();
         }
         return finalPrice;
-    }
-
-    public PaymentDetailVo findPaymentDetailVoByPaymentId(Long paymentId) {
-        return paymentRepository.findPaymentDetailVoByPaymentId(paymentId)
-                .orElseThrow(() -> new EntityNotFoundException(PAYMENT_NOT_FOUND));
     }
 }
