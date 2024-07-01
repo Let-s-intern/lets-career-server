@@ -85,7 +85,8 @@ public class ChallengeApplicationHelper {
     }
 
     public Boolean existChallengeApplicationByChallengeIdAndUserId(Long challengeId, Long userId) {
-        ChallengeApplication challengeApplication = challengeApplicationRepository.findChallengeApplicationByChallengeIdAndUserId(challengeId, userId).orElse(null);
+        ChallengeApplication challengeApplication = challengeApplicationRepository.findChallengeApplicationByChallengeIdAndUserId(challengeId, userId)
+                .orElse(null);
         return !Objects.isNull(challengeApplication);
     }
 }

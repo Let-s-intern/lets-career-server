@@ -2,15 +2,12 @@ package org.letscareer.letscareer.domain.challenge.service;
 
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.dto.response.GetChallengeApplicationsResponseDto;
-import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
 import org.letscareer.letscareer.domain.application.helper.ChallengeApplicationHelper;
 import org.letscareer.letscareer.domain.application.mapper.ChallengeApplicationMapper;
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
 import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
-import org.letscareer.letscareer.domain.attendance.entity.Attendance;
 import org.letscareer.letscareer.domain.attendance.helper.AttendanceHelper;
 import org.letscareer.letscareer.domain.attendance.mapper.AttendanceMapper;
-import org.letscareer.letscareer.domain.attendance.type.AttendanceResult;
 import org.letscareer.letscareer.domain.attendance.vo.AttendanceDashboardVo;
 import org.letscareer.letscareer.domain.attendance.vo.MissionAttendanceVo;
 import org.letscareer.letscareer.domain.attendance.vo.MissionScoreVo;
@@ -256,8 +253,9 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     @Override
     public GetChallengeAccessResponseDto checkChallengeDashboardAccessibleUser(Long challengeId, Long userId) {
-        Boolean isAccessible = challengeApplicationHelper.existChallengeApplicationByChallengeIdAndUserId(challengeId, userId);
-        return challengeApplicationMapper.toGetChallengeAccessResponseDto(isAccessible);
+        Boolean applied = challengeApplicationHelper.existChallengeApplicationByChallengeIdAndUserId(challengeId, userId);
+        Boolean isRefunded = paymentHelper.checkIsRefundedForChallenge(challengeId, userId);
+        return challengeApplicationMapper.toGetChallengeAccessResponseDto(applied, isRefunded);
     }
 
     @Override
@@ -319,13 +317,8 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     private List<MissionScoreResponseDto> createMissionScoreResponseDtoList(List<MissionScoreVo> scores, Long challengeId, Long applicationId) {
         List<MissionScoreResponseDto> contents = scores.stream()
-                .map(score -> {
-                    Integer totalScore = missionHelper.findApplicationScoreByMissionIdOrZero(score.missionId(), applicationId);
-                    return missionMapper.toMissionScoreResponseDto(score.th(), totalScore);
-                })
+                .map(score -> createMissionScoreResponseDto(score, applicationId))
                 .collect(Collectors.toList());
-//        ChallengeApplication challengeApplication = challengeApplicationHelper.findChallengeApplicationByIdOrThrow(applicationId);
-//        AdminScore adminScore = challengeApplication.getAdminScore();
         AdminScore adminScore = adminScoreHelper.findAdminScoreByChallengeIdAndApplicationIdOrThrow(challengeId, applicationId);
         MissionScoreResponseDto missionScoreResponseDto = missionMapper.toMissionScoreResponseDto(99, adminScore.getScore());
         contents.add(missionScoreResponseDto);
@@ -333,8 +326,9 @@ public class ChallengeServiceImpl implements ChallengeService {
         return contents;
     }
 
-    private boolean isNotWrongAttendance(Attendance attendance) {
-        return !attendance.getResult().equals(AttendanceResult.WRONG);
+    private MissionScoreResponseDto createMissionScoreResponseDto(MissionScoreVo score, Long applicationId) {
+        Integer totalScore = missionHelper.findApplicationScoreByMissionIdOrZero(score.missionId(), applicationId);
+        return missionMapper.toMissionScoreResponseDto(score.th(), totalScore);
     }
 
     private void createPriceListAndSave(List<CreateChallengePriceRequestDto> requestDtoList,
