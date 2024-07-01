@@ -43,7 +43,7 @@ public class PaymentHelper {
     public Boolean checkIsRefundedForChallenge(Long challengeId, Long userId) {
         Payment payment = paymentRepository.findPaymentByChallengeIdAndUserId(challengeId, userId)
                 .orElse(null);
-        return !Objects.isNull(payment) ? payment.getIsRefunded() : Boolean.FALSE;
+        return !Objects.isNull(payment) ? payment.getIsRefunded() : Boolean.TRUE;
     }
 
     public long countCouponAppliedTime(Long userId, Long couponId) {
