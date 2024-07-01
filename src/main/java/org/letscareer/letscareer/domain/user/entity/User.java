@@ -148,4 +148,8 @@ public class User extends BaseTimeEntity {
         this.wishJob = updateValue(this.wishJob, requestDto.wishJob());
         this.wishCompany = updateValue(this.wishCompany, requestDto.wishCompany());
     }
+
+    public void updateContactEmail(String email) {
+        this.contactEmail = updateValue(this.contactEmail, email);
+    }
 }

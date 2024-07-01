@@ -5,6 +5,7 @@ import org.letscareer.letscareer.domain.payment.dto.request.CreatePaymentRequest
 
 public record CreateApplicationRequestDto(
         @NotNull CreatePaymentRequestDto paymentInfo,
+        String contactEmail,
         String motivate,
         String question
 ) {

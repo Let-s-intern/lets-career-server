@@ -125,17 +125,13 @@ public class UserHelper {
         user.updateUser(userUpdateRequestDto);
     }
 
+    public void updateContactEmail(User user, String email) {
+        user.updateContactEmail(email);
+        userRepository.save(user);
+    }
+
     public Page<UserAdminVo> findAllUserAdminVos(String email, String name, String phoneNum, Pageable pageable) {
         return userRepository.findAllUserAdminVos(email, name, phoneNum, pageable);
-    }
-
-    public void deleteUser(User user) {
-        userRepository.delete(user);
-    }
-
-    public User findUserByNameAndEmailOrThrow(String name, String email) {
-        return userRepository.findByNameAndEmail(name, email)
-                .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND));
     }
 
     public void updatePassword(User user, String randomPassword) {
@@ -155,5 +151,9 @@ public class UserHelper {
 
     private Boolean checkStringNotNullAndNotEmpty(String s) {
         return !(Objects.isNull(s) || s.isEmpty());
+    }
+
+    public void deleteUser(User user) {
+        userRepository.delete(user);
     }
 }
