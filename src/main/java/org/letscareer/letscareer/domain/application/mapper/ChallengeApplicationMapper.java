@@ -30,7 +30,7 @@ public class ChallengeApplicationMapper {
     }
 
     public GetChallengeAccessResponseDto toGetChallengeAccessResponseDto(Boolean applied, Boolean isRefunded) {
-        Boolean isAccessible = applied && isRefunded;
+        Boolean isAccessible = applied && !isRefunded;
         return GetChallengeAccessResponseDto.of(isAccessible);
     }
 
