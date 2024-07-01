@@ -29,7 +29,8 @@ public class ChallengeApplicationMapper {
         return GetChallengeApplicationEmailListResponseDto.of(emailList);
     }
 
-    public GetChallengeAccessResponseDto toGetChallengeAccessResponseDto(Boolean isAccessible) {
+    public GetChallengeAccessResponseDto toGetChallengeAccessResponseDto(Boolean applied, Boolean isRefunded) {
+        Boolean isAccessible = applied && isRefunded;
         return GetChallengeAccessResponseDto.of(isAccessible);
     }
 

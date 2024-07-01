@@ -12,9 +12,10 @@ import org.letscareer.letscareer.domain.payment.vo.PaymentDetailVo;
 import java.util.Optional;
 
 import static org.letscareer.letscareer.domain.application.entity.QApplication.application;
+import static org.letscareer.letscareer.domain.application.entity.QChallengeApplication.challengeApplication;
+import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
 import static org.letscareer.letscareer.domain.coupon.entity.QCoupon.coupon;
 import static org.letscareer.letscareer.domain.payment.entity.QPayment.payment;
-import static org.letscareer.letscareer.domain.price.entity.QPrice.price1;
 import static org.letscareer.letscareer.domain.user.entity.QUser.user;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -52,16 +53,31 @@ public class PaymentQueryRepositoryImpl implements PaymentQueryRepository {
         return Optional.ofNullable(
                 queryFactory
                         .select(Projections.constructor(PaymentDetailVo.class,
-                            payment.id,
-                            payment.finalPrice,
-                            coupon.discount))
+                                payment.id,
+                                payment.finalPrice,
+                                coupon.discount))
                         .from(payment)
                         .leftJoin(payment.coupon, coupon)
                         .where(
-                            eqPaymentId(paymentId)
+                                eqPaymentId(paymentId)
                         )
                         .orderBy(payment.id.desc())
                         .fetchFirst());
+    }
+
+    @Override
+    public Optional<Payment> findPaymentByChallengeIdAndUserId(Long challengeId, Long userId) {
+        return Optional.ofNullable(queryFactory
+                .selectFrom(payment)
+                .leftJoin(payment.application, challengeApplication._super)
+                .leftJoin(challengeApplication.challenge, challenge)
+                .leftJoin(application.user, user)
+                .where(
+                        eqChallengeId(challengeId),
+                        eqUserId(userId)
+                )
+                .fetchOne()
+        );
     }
 
     private BooleanExpression eqPaymentId(Long paymentId) {
@@ -70,6 +86,10 @@ public class PaymentQueryRepositoryImpl implements PaymentQueryRepository {
 
     private BooleanExpression eqApplicationId(Long applicationId) {
         return applicationId != null ? payment.application.id.eq(applicationId) : null;
+    }
+
+    private BooleanExpression eqChallengeId(Long challengeId) {
+        return challengeId != null ? challenge.id.eq(challengeId) : null;
     }
 
     private Predicate eqCouponId(Long couponId) {
