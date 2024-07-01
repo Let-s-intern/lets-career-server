@@ -44,7 +44,7 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
         Payment payment = paymentHelper.createPaymentAndSave(challengeApplication, coupon, price);
         challengeApplication.setPayment(payment);
         adminScoreHelper.createAdminScoreAndSave(challengeApplication);
-        challengeHelper.updateCurrentCount(challenge, challenge.getCurrentCount() + 1);
+        user.updateContactEmail(createApplicationRequestDto.contactEmail());
     }
 
     @Override
