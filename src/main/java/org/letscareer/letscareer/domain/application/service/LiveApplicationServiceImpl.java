@@ -15,6 +15,7 @@ import org.letscareer.letscareer.domain.price.entity.Price;
 import org.letscareer.letscareer.domain.price.helper.PriceHelper;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.user.entity.User;
+import org.letscareer.letscareer.domain.user.helper.UserHelper;
 import org.letscareer.letscareer.domain.withdraw.helper.WithdrawHelper;
 import org.letscareer.letscareer.global.error.exception.InvalidValueException;
 import org.springframework.stereotype.Service;
@@ -29,10 +30,11 @@ public class LiveApplicationServiceImpl implements ApplicationService {
     private final LiveApplicationHelper liveApplicationHelper;
     private final ApplicationHelper applicationHelper;
     private final WithdrawHelper withdrawHelper;
-    private final LiveHelper liveHelper;
     private final PaymentHelper paymentHelper;
     private final CouponHelper couponHelper;
     private final PriceHelper priceHelper;
+    private final LiveHelper liveHelper;
+    private final UserHelper userHelper;
 
     @Override
     public void createApplication(Long programId, User user, CreateApplicationRequestDto createApplicationRequestDto) {
@@ -45,7 +47,7 @@ public class LiveApplicationServiceImpl implements ApplicationService {
         Price price = priceHelper.findPriceByIdOrThrow(createApplicationRequestDto.paymentInfo().priceId());
         Payment payment = paymentHelper.createPaymentAndSave(liveApplication, coupon, price);
         liveApplication.setPayment(payment);
-        liveHelper.updateCurrentCount(live, live.getCurrentCount() + 1);
+        userHelper.updateContactEmail(user, createApplicationRequestDto.contactEmail());
     }
 
     @Override

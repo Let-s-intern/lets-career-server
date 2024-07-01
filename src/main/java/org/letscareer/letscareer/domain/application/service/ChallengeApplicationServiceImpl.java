@@ -16,6 +16,7 @@ import org.letscareer.letscareer.domain.price.helper.PriceHelper;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.score.helper.AdminScoreHelper;
 import org.letscareer.letscareer.domain.user.entity.User;
+import org.letscareer.letscareer.domain.user.helper.UserHelper;
 import org.letscareer.letscareer.domain.withdraw.helper.WithdrawHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +33,7 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
     private final PaymentHelper paymentHelper;
     private final CouponHelper couponHelper;
     private final PriceHelper priceHelper;
+    private final UserHelper userHelper;
 
     @Override
     public void createApplication(Long programId, User user, CreateApplicationRequestDto createApplicationRequestDto) {
@@ -44,7 +46,7 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
         Payment payment = paymentHelper.createPaymentAndSave(challengeApplication, coupon, price);
         challengeApplication.setPayment(payment);
         adminScoreHelper.createAdminScoreAndSave(challengeApplication);
-        challengeHelper.updateCurrentCount(challenge, challenge.getCurrentCount() + 1);
+        userHelper.updateContactEmail(user, createApplicationRequestDto.contactEmail());
     }
 
     @Override
@@ -53,7 +55,7 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
         Challenge challenge = challengeApplication.getChallenge();
         withdrawHelper.createApplicationWithdrawalRecordAndSave(challenge.getId(), challenge.getTitle(), ProgramType.CHALLENGE, user);
         applicationHelper.validateAuthorizedUser(challengeApplication.getUser(), user);
-        challengeHelper.updateCurrentCount(challengeApplication.getChallenge(), challenge.getCurrentCount() - 1);
+//        challengeHelper.updateCurrentCount(challengeApplication.getChallenge(), challenge.getCurrentCount() - 1);
         challengeApplicationHelper.deleteChallengeApplication(challengeApplication);
     }
 }
