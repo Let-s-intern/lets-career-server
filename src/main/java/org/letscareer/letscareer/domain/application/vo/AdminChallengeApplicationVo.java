@@ -18,6 +18,7 @@ public record AdminChallengeApplicationVo(
         String major,
         String couponName,
         Integer totalCost,
+        Boolean isRefunded,
         Boolean isConfirmed,
         String wishJob,
         String wishCompany,
