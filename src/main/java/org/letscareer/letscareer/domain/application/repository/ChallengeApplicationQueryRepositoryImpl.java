@@ -78,8 +78,10 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                 .from(challengeApplication)
                 .leftJoin(challengeApplication.challenge, challenge)
                 .leftJoin(challengeApplication.user, user)
+                .leftJoin(challengeApplication.payment, payment)
                 .where(
-                        eqChallengeId(challengeId)
+                        eqChallengeId(challengeId),
+                        eqIsConfirmed(true)
                 )
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
@@ -90,8 +92,10 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                 .from(challengeApplication)
                 .leftJoin(challengeApplication.challenge, challenge)
                 .leftJoin(challengeApplication.user, user)
+                .leftJoin(challengeApplication.payment, payment)
                 .where(
-                        eqChallengeId(challengeId)
+                        eqChallengeId(challengeId),
+                        eqIsConfirmed(true)
                 );
 
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
