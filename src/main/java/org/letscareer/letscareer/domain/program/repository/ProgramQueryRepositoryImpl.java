@@ -61,7 +61,8 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                 )
                 .orderBy(
                         orderByProgramStatus(condition.type()),
-                        orderByProgramType()
+                        orderByProgramType(),
+                        vWProgram.startDate.desc()
                 )
                 .limit(condition.pageable().getPageSize())
                 .offset(condition.pageable().getOffset())
