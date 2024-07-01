@@ -68,10 +68,6 @@ public class ChallengeHelper {
         challengeRepository.deleteById(challengeId);
     }
 
-    public void updateCurrentCount(Challenge challenge, int currenCount) {
-        challenge.updateChallengeCurrentCount(currenCount);
-    }
-
     public String createChallengeMailTitle(Challenge challenge) {
         return "[렛츠커리어] " + challenge.getTitle() + " 참여 확정 공지";
     }

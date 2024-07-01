@@ -53,7 +53,7 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
         Challenge challenge = challengeApplication.getChallenge();
         withdrawHelper.createApplicationWithdrawalRecordAndSave(challenge.getId(), challenge.getTitle(), ProgramType.CHALLENGE, user);
         applicationHelper.validateAuthorizedUser(challengeApplication.getUser(), user);
-        challengeHelper.updateCurrentCount(challengeApplication.getChallenge(), challenge.getCurrentCount() - 1);
+//        challengeHelper.updateCurrentCount(challengeApplication.getChallenge(), challenge.getCurrentCount() - 1);
         challengeApplicationHelper.deleteChallengeApplication(challengeApplication);
     }
 }
