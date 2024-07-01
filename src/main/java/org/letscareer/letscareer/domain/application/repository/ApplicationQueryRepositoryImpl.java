@@ -1,5 +1,6 @@
 package org.letscareer.letscareer.domain.application.repository;
 
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -36,7 +37,8 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
                 .from(vWApplication)
                 .where(
                         eqUserId(userId),
-                        eqStatus(status)
+                        eqStatus(status),
+                        eqPaymentIsRefunded(false)
                 )
                 .fetch();
     }
@@ -64,6 +66,10 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
 
     private BooleanExpression eqPaymentIsConfirmed(Boolean isConfirmed) {
         return vWApplication.paymentIsConfirmed.eq(isConfirmed);
+    }
+
+    private BooleanExpression eqPaymentIsRefunded(Boolean isRefunded) {
+        return vWApplication.paymentIsRefunded.eq(isRefunded);
     }
 
     private BooleanExpression beforeStart() {

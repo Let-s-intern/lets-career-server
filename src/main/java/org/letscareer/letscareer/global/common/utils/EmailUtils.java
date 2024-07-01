@@ -87,7 +87,7 @@ public class EmailUtils {
                 messageSource.getMessage("mail.header", null, Locale.KOREA) +
                         "시간 내어 Live 클래스 [" + liveEmailVo.title() + "] 에 참여해주셔서 감사합니다!\n\n" +
                         "Live 클래스 후기를 작성해주세요!\n" +
-                        "- 작성 링크 : https://www.letsintern.co.kr/" + liveEmailVo.id() + "\n" +
+                        "- 작성 링크 : https://www.letscareer.co.kr/" + liveEmailVo.id() + "\n" +
                         "- 모든 후기는 강연자님께 전달되고 있습니다. 후기를 작성해주시면 시간 내어 세션을 진행해주신 멘토님께 큰 힘이 될 수 있습니다 :)\n\n" +
                         messageSource.getMessage("mail.live.more", null, Locale.KOREA) +
                         messageSource.getMessage("mail.footer", null, Locale.KOREA));

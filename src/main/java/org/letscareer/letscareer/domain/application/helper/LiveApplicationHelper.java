@@ -51,15 +51,6 @@ public class LiveApplicationHelper {
                 .orElseThrow(() -> new EntityNotFoundException(APPLICATION_NOT_FOUND));
     }
 
-    public void deleteLiveApplication(LiveApplication liveApplication) {
-        liveApplicationRepository.delete(liveApplication);
-    }
-
-    public Boolean checkExistingLiveApplication(User user, Long liveId) {
-        if (Objects.isNull(user)) return null;
-        return liveApplicationRepository.findLiveApplicationIdByUserIdAndLiveId(user.getId(), liveId).isPresent();
-    }
-
     public LiveEmailVo findLiveEmailVo(Long applicationId) {
         return liveApplicationRepository.findLiveEmailVoByApplicationId(applicationId);
     }
@@ -71,5 +62,18 @@ public class LiveApplicationHelper {
     public Boolean existLiveApplicationByLiveIdAndUserId(Long liveId, Long userId) {
         LiveApplication liveApplication = liveApplicationRepository.findLiveApplicationByLiveIdAndUserId(liveId, userId).orElse(null);
         return !Objects.isNull(liveApplication);
+    }
+
+    public Long countLiveApplications(Long liveId) {
+        return liveApplicationRepository.countByLiveId(liveId);
+    }
+
+    public void deleteLiveApplication(LiveApplication liveApplication) {
+        liveApplicationRepository.delete(liveApplication);
+    }
+
+    public Boolean checkExistingLiveApplication(User user, Long liveId) {
+        if (Objects.isNull(user)) return null;
+        return liveApplicationRepository.findLiveApplicationIdByUserIdAndLiveId(user.getId(), liveId).isPresent();
     }
 }

@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.review.helper;
 
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.entity.Application;
+import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.review.dto.request.CreateReviewRequestDto;
 import org.letscareer.letscareer.domain.review.entity.Review;
 import org.letscareer.letscareer.domain.review.repository.ReviewRepository;
@@ -22,6 +23,11 @@ public class ReviewHelper {
 
     public Review createReviewAndSave(Application application, CreateReviewRequestDto reviewRequestDto) {
         Review review = Review.createReview(application, reviewRequestDto);
+        return reviewRepository.save(review);
+    }
+
+    public Review createReviewByLinkAndSave(Long programId, ProgramType programType, CreateReviewRequestDto requestDto) {
+        Review review = Review.createReviewByLink(programId, programType, requestDto);
         return reviewRepository.save(review);
     }
 
@@ -50,4 +56,6 @@ public class ReviewHelper {
     public Page<ReviewVo> findLiveReviewVos(Pageable pageable) {
         return reviewRepository.findLiveReviewVos(pageable);
     }
+
+
 }

@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotEmpty;
 
 public record PasswordResetRequestDto(
         @NotEmpty String name,
-        @NotEmpty String email
+        @NotEmpty String email,
+        @NotEmpty String phoneNum
 ) {
 }

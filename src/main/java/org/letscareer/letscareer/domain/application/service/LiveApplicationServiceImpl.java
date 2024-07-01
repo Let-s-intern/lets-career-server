@@ -52,7 +52,7 @@ public class LiveApplicationServiceImpl implements ApplicationService {
     public void deleteApplication(Long applicationId, User user) {
         LiveApplication liveApplication = liveApplicationHelper.findLiveApplicationByIdOrThrow(applicationId);
         Live live = liveApplication.getLive();
-        withdrawHelper.createApplicationWithdrawalRecordAndSave(live.getTitle(), ProgramType.LIVE, user);
+        withdrawHelper.createApplicationWithdrawalRecordAndSave(live.getId(), live.getTitle(), ProgramType.LIVE, user);
         applicationHelper.validateAuthorizedUser(liveApplication.getUser(), user);
         liveHelper.updateCurrentCount(liveApplication.getLive(), live.getCurrentCount() - 1);
         liveApplicationHelper.deleteLiveApplication(liveApplication);

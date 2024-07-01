@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.challenge.service;
 
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.dto.response.GetChallengeApplicationsResponseDto;
+import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
 import org.letscareer.letscareer.domain.application.helper.ChallengeApplicationHelper;
 import org.letscareer.letscareer.domain.application.mapper.ChallengeApplicationMapper;
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
@@ -323,6 +324,8 @@ public class ChallengeServiceImpl implements ChallengeService {
                     return missionMapper.toMissionScoreResponseDto(score.th(), totalScore);
                 })
                 .collect(Collectors.toList());
+//        ChallengeApplication challengeApplication = challengeApplicationHelper.findChallengeApplicationByIdOrThrow(applicationId);
+//        AdminScore adminScore = challengeApplication.getAdminScore();
         AdminScore adminScore = adminScoreHelper.findAdminScoreByChallengeIdAndApplicationIdOrThrow(challengeId, applicationId);
         MissionScoreResponseDto missionScoreResponseDto = missionMapper.toMissionScoreResponseDto(99, adminScore.getScore());
         contents.add(missionScoreResponseDto);

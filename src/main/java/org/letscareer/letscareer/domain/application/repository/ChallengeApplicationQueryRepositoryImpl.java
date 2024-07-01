@@ -35,7 +35,7 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                         challengeApplication.id,
                         payment.id,
                         user.name,
-                        user.email,
+                        user.contactEmail,
                         user.phoneNum,
                         user.university,
                         user.grade,
@@ -68,7 +68,7 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
     public Page<UserChallengeApplicationVo> findUserChallengeApplicationVo(Long challengeId, Pageable pageable) {
         List<UserChallengeApplicationVo> contents = queryFactory
                 .select(Projections.constructor(UserChallengeApplicationVo.class,
-                        challengeApplication._super.id,
+                        challengeApplication.id,
                         user.name,
                         user.contactEmail,
                         user.phoneNum,

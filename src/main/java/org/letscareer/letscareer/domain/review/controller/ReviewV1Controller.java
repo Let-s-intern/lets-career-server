@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.review.dto.request.CreateReviewRequestDto;
 import org.letscareer.letscareer.domain.review.dto.request.UpdateReviewRequestDto;
 import org.letscareer.letscareer.domain.review.dto.response.GetReviewDetailResponseDto;
@@ -39,6 +40,18 @@ public class ReviewV1Controller {
     public ResponseEntity<SuccessResponse<?>> createReview(@RequestParam final Long applicationId,
                                                            @Valid @RequestBody final CreateReviewRequestDto requestDto) {
         reviewService.createReview(applicationId, requestDto);
+        return SuccessResponse.created(null);
+    }
+
+    @Operation(summary = "리뷰 생성 - 링크", responses = {
+            @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
+    })
+    @ApiErrorCode({SwaggerEnum.BAD_REQUEST})
+    @PostMapping("/{id}")
+    public ResponseEntity<SuccessResponse<?>> createReviewByLink(@PathVariable("id") final Long programId,
+                                                                 @RequestParam("type") final ProgramType programType,
+                                                                 @Valid @RequestBody final CreateReviewRequestDto requestDto) {
+        reviewService.createReviewByLink(programId, programType, requestDto);
         return SuccessResponse.created(null);
     }
 

@@ -21,8 +21,8 @@ public class WithdrawHelper {
         userWithdrawalRecordRepository.save(withdrawalRecord);
     }
 
-    public void createApplicationWithdrawalRecordAndSave(String title, ProgramType programType, User user) {
-        ApplicationWithdrawalRecord withdrawalRecord = ApplicationWithdrawalRecord.createApplicationWithdrawalRecord(title, programType, user);
+    public void createApplicationWithdrawalRecordAndSave(Long programId, String title, ProgramType programType, User user) {
+        ApplicationWithdrawalRecord withdrawalRecord = ApplicationWithdrawalRecord.createApplicationWithdrawalRecord(programId, title, programType, user);
         applicationWithdrawalRecordRepository.save(withdrawalRecord);
     }
 }
