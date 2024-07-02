@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
 import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
 import org.springframework.data.domain.Page;
@@ -27,6 +28,21 @@ import static org.letscareer.letscareer.domain.user.repository.UserQueryReposito
 @RequiredArgsConstructor
 public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplicationQueryRepository {
     private final JPAQueryFactory queryFactory;
+
+    @Override
+    public Optional<ChallengeApplication> findChallengeApplicationByChallengeIdAndUserId(Long challengeId, Long userId) {
+        return Optional.ofNullable(queryFactory
+                .selectFrom(challengeApplication)
+                .leftJoin(challengeApplication.challenge, challenge)
+                .leftJoin(challengeApplication.user, user)
+                .leftJoin(challengeApplication.payment, payment)
+                .where(
+                        eqChallengeId(challengeId),
+                        eqUserId(userId),
+                        eqPaymentIsRefunded(false)
+                )
+                .fetchFirst());
+    }
 
     @Override
     public List<AdminChallengeApplicationVo> findAdminChallengeApplicationVos(Long challengeId, Boolean isConfirmed) {
@@ -191,5 +207,9 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
 
     private BooleanExpression eqIsConfirmed(Boolean isConfirmed) {
         return isConfirmed != null ? payment.isConfirmed.eq(isConfirmed) : null;
+    }
+
+    private BooleanExpression eqPaymentIsRefunded(Boolean isRefunded) {
+        return isRefunded != null ? payment.isRefunded.eq(isRefunded) : null;
     }
 }
