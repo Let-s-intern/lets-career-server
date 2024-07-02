@@ -1,5 +1,6 @@
 package org.letscareer.letscareer.domain.application.repository;
 
+import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
 import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
 import org.springframework.data.domain.Page;
@@ -9,6 +10,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ChallengeApplicationQueryRepository {
+    Optional<ChallengeApplication> findChallengeApplicationByChallengeIdAndUserId(Long challengeId, Long userId);
+
     List<AdminChallengeApplicationVo> findAdminChallengeApplicationVos(Long challengeId, Boolean isConfirmed);
 
     Page<UserChallengeApplicationVo> findUserChallengeApplicationVo(Long challengeId, Pageable pageable);
