@@ -76,7 +76,7 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                 .orderBy(challengeApplication.id.desc())
                 .where(
                         eqChallengeId(challengeId),
-                        eqIsConfirmed(isConfirmed)
+                        eqIsConfirmedAndIsRefunded(isConfirmed)
                 )
                 .fetch();
     }
@@ -98,7 +98,8 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                 .leftJoin(challengeApplication.payment, payment)
                 .where(
                         eqChallengeId(challengeId),
-                        eqIsConfirmed(true)
+                        eqIsConfirmed(true),
+                        eqPaymentIsRefunded(false)
                 )
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
@@ -211,5 +212,9 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
 
     private BooleanExpression eqPaymentIsRefunded(Boolean isRefunded) {
         return isRefunded != null ? payment.isRefunded.eq(isRefunded) : null;
+    }
+
+    private BooleanExpression eqIsConfirmedAndIsRefunded(Boolean isRefunded) {
+        return isRefunded != null ? payment.isConfirmed.eq(isRefunded).and(payment.isRefunded.eq(false)) : null;
     }
 }
