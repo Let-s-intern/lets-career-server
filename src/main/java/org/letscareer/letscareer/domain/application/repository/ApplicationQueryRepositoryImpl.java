@@ -38,6 +38,7 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
                 .where(
                         eqUserId(userId),
                         eqStatus(status),
+                        checkEndDateOrIsConfirmed(),
                         eqPaymentIsRefunded(false)
                 )
                 .fetch();
@@ -104,12 +105,7 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
         return null;
     }
 
-    private BooleanExpression eqReviewStatus(ApplicationReviewStatus reviewStatus) {
-        if (reviewStatus != null && reviewStatus.equals(ApplicationReviewStatus.YET))
-            return vWApplication.reviewId.isNull();
-        else if (reviewStatus != null && reviewStatus.equals(ApplicationReviewStatus.DONE))
-            return vWApplication.reviewId.isNotNull();
-        else
-            return null;
+    private BooleanExpression checkEndDateOrIsConfirmed() {
+        return eqPaymentIsConfirmed(true).or(beforeEnd());
     }
 }
