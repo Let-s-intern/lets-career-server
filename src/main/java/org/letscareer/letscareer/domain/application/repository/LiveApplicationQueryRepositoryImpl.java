@@ -41,6 +41,7 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
                         coupon.name,
                         calculateTotalCost(),
                         payment.isConfirmed,
+                        payment.isRefunded,
                         liveApplication.createDate
                 ))
                 .from(liveApplication)

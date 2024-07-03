@@ -18,6 +18,7 @@ public record AdminLiveApplicationVo(
         String couponName,
         Integer totalCost,
         Boolean isConfirmed,
+        Boolean isRefunded,
         LocalDateTime created_date
 ) {
 }
