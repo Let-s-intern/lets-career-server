@@ -41,7 +41,6 @@ public class LiveApplicationServiceImpl implements ApplicationService {
         Live live = liveHelper.findLiveByIdOrThrow(programId);
         liveApplicationHelper.validateExistingApplication(live.getId(), user.getId());
         liveApplicationHelper.validateLiveDuration(live);
-        validateCreateLiveApplicationDto(createApplicationRequestDto);
         LiveApplication liveApplication = liveApplicationHelper.createLiveApplicationAndSave(createApplicationRequestDto, live, user);
         Coupon coupon = couponHelper.findCouponByIdOrNull(createApplicationRequestDto.paymentInfo().couponId());
         Price price = priceHelper.findPriceByIdOrThrow(createApplicationRequestDto.paymentInfo().priceId());
