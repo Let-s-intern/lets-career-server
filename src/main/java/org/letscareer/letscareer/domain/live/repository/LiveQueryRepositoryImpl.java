@@ -38,6 +38,7 @@ public class LiveQueryRepositoryImpl implements LiveQueryRepository {
                         live.participationCount,
                         live.thumbnail,
                         live.mentorName,
+                        live.mentorPassword,
                         live.job,
                         live.place,
                         live.startDate,
