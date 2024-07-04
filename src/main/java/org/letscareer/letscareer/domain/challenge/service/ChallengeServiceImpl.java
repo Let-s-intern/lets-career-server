@@ -49,12 +49,15 @@ import org.letscareer.letscareer.domain.price.helper.ChallengePriceHelper;
 import org.letscareer.letscareer.domain.price.vo.ChallengePriceDetailVo;
 import org.letscareer.letscareer.domain.program.dto.response.ZoomMeetingResponseDto;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
+import org.letscareer.letscareer.domain.review.dto.response.GetReviewResponseDto;
 import org.letscareer.letscareer.domain.review.helper.ReviewHelper;
+import org.letscareer.letscareer.domain.review.mapper.ReviewMapper;
 import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
 import org.letscareer.letscareer.domain.review.vo.ReviewVo;
 import org.letscareer.letscareer.domain.score.entity.AdminScore;
 import org.letscareer.letscareer.domain.score.helper.AdminScoreHelper;
 import org.letscareer.letscareer.domain.user.entity.User;
+import org.letscareer.letscareer.global.common.entity.PageInfo;
 import org.letscareer.letscareer.global.common.utils.ZoomUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -85,6 +88,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final MissionMapper missionMapper;
     private final PaymentHelper paymentHelper;
     private final ReviewHelper reviewHelper;
+    private final ReviewMapper reviewMapper;
     private final FaqHelper faqHelper;
     private final FaqMapper faqMapper;
     private final ZoomUtils zoomUtils;
@@ -164,7 +168,9 @@ public class ChallengeServiceImpl implements ChallengeService {
     @Override
     public GetChallengeReviewResponseDto getReviews(Pageable pageable) {
         Page<ReviewVo> challengeReviewVos = reviewHelper.findChallengeReviewVos(pageable);
-        return challengeMapper.toGetChallengeReviewResponseDto(challengeReviewVos);
+        List<GetReviewResponseDto> reviewResDtoList = createGetReviewResponseDtoList(challengeReviewVos.getContent());
+        PageInfo pageInfo = PageInfo.of(challengeReviewVos);
+        return challengeMapper.toGetChallengeReviewResponseDto(reviewResDtoList, pageInfo);
     }
 
     @Override
@@ -299,6 +305,12 @@ public class ChallengeServiceImpl implements ChallengeService {
                                                  Challenge challenge) {
         requestDtoList.stream()
                 .map(requestDto -> challengeClassificationHelper.createChallengeClassificationAndSave(requestDto, challenge))
+                .collect(Collectors.toList());
+    }
+
+    private List<GetReviewResponseDto> createGetReviewResponseDtoList(List<ReviewVo> vos) {
+        return vos.stream()
+                .map(vo -> reviewMapper.toGetReviewResponseDto(vo, challengeHelper.findChallengeTitleVoOrThrow(vo.id()).title()))
                 .collect(Collectors.toList());
     }
 

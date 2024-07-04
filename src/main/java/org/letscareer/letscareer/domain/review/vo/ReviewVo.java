@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 @Builder
 public record ReviewVo(
+        Long id,
         String name,
         String content,
         Integer score,
