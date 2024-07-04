@@ -14,4 +14,8 @@ public interface LiveApplicationQueryRepository {
     List<String> findEmailListByLiveId(Long liveId);
 
     Optional<Long> findLiveApplicationIdByUserIdAndLiveId(Long userId, Long liveId);
+
+    List<String> findQuestionListByLiveId(Long liveId);
+
+    List<String> findMotivateListByLiveId(Long liveId);
 }

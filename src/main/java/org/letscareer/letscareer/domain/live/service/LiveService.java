@@ -7,6 +7,7 @@ import org.letscareer.letscareer.domain.classification.type.ProgramClassificatio
 import org.letscareer.letscareer.domain.faq.dto.response.GetFaqResponseDto;
 import org.letscareer.letscareer.domain.live.dto.request.CreateLiveRequestDto;
 import org.letscareer.letscareer.domain.live.dto.response.*;
+import org.letscareer.letscareer.domain.live.type.MentorContentsType;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +38,8 @@ public interface LiveService {
     GetLiveAdminReviewsResponseDto getReviewsForAdmin(Long liveId, Pageable pageable);
 
     GetLiveExisingApplicationResponseDto getLiveExistingApplication(Long liveId, Long userId);
+
+    GetLiveMentorContentsResponse getMentorContents(Long liveId, String mentorPassword, MentorContentsType mentorContentsType);
 
     void createLive(CreateLiveRequestDto requestDto);
 

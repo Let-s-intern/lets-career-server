@@ -111,6 +111,36 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
                 .fetchFirst());
     }
 
+    @Override
+    public List<String> findQuestionListByLiveId(Long liveId) {
+        return queryFactory
+                .select(
+                        liveApplication.question
+                )
+                .from(liveApplication)
+                .leftJoin(liveApplication.live, live)
+                .where(
+                        eqLiveId(liveId),
+                        liveApplication.question.isNotEmpty()
+                )
+                .fetch();
+    }
+
+    @Override
+    public List<String> findMotivateListByLiveId(Long liveId) {
+        return queryFactory
+                .select(
+                        liveApplication.motivate
+                )
+                .from(liveApplication)
+                .leftJoin(liveApplication.live, live)
+                .where(
+                        eqLiveId(liveId),
+                        liveApplication.motivate.isNotEmpty()
+                )
+                .fetch();
+    }
+
 
     private NumberExpression<Integer> calculateTotalCost() {
         NumberExpression<Integer> safePrice = new CaseBuilder()

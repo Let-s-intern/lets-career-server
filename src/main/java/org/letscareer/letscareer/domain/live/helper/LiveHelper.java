@@ -21,8 +21,8 @@ import java.util.List;
 public class LiveHelper {
     private final LiveRepository liveRepository;
 
-    public Live createLiveAndSave(CreateLiveRequestDto requestDto, ZoomMeetingResponseDto zoomMeetingInfo) {
-        Live live = Live.createLive(requestDto, zoomMeetingInfo);
+    public Live createLiveAndSave(CreateLiveRequestDto requestDto, String mentorPassword, ZoomMeetingResponseDto zoomMeetingInfo) {
+        Live live = Live.createLive(requestDto, mentorPassword, zoomMeetingInfo);
         return liveRepository.save(live);
     }
 
@@ -72,11 +72,20 @@ public class LiveHelper {
         return liveRepository.findReviewMailLiveIdList();
     }
 
+    public LiveMentorVo findLiveMentorVoOrThrow(Long liveId) {
+        return liveRepository.findLiveMentorVoByLiveId(liveId)
+                .orElseThrow(() -> new EntityNotFoundException(LiveErrorCode.LIVE_NOT_FOUND));
+    }
+
     public void deleteLiveById(Long liveId) {
         liveRepository.deleteById(liveId);
     }
 
     public void updateCurrentCount(Live live, int currenCount) {
         live.updateLiveCurrentCount(currenCount);
+    }
+
+    public boolean validateMentorPassword(Long liveId, String mentorPassword) {
+        return liveRepository.existsByIdAndMentorPassword(liveId, mentorPassword);
     }
 }

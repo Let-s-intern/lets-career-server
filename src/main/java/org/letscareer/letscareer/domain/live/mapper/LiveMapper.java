@@ -54,4 +54,8 @@ public class LiveMapper {
                                                                                  LivePriceDetailVo livePriceDetailVo) {
         return GetLiveApplicationFormResponseDto.of(user, applied, applicationFormVo, livePriceDetailVo);
     }
+
+    public GetLiveMentorContentsResponse toGetLiveMentorContentsResponse(LiveMentorVo liveMentorVo, List<String> questionList, List<String> motivateList, List<String> reviewList) {
+        return GetLiveMentorContentsResponse.of(liveMentorVo, questionList, motivateList, reviewList);
+    }
 }

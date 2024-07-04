@@ -17,6 +17,9 @@ import org.springframework.data.support.PageableExecutionUtils;
 import java.util.List;
 import java.util.Optional;
 
+import static org.letscareer.letscareer.domain.application.entity.QApplication.application;
+import static org.letscareer.letscareer.domain.application.entity.QLiveApplication.liveApplication;
+import static org.letscareer.letscareer.domain.live.entity.QLive.live;
 import static org.letscareer.letscareer.domain.review.entity.QReview.review;
 import static org.letscareer.letscareer.domain.review.entity.QVWReview.vWReview;
 
@@ -168,6 +171,19 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                 );
 
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
+    }
+
+    @Override
+    public List<String> findReviewContentByLiveId(Long liveId) {
+        return queryFactory
+                .select(
+                        vWReview.content
+                )
+                .from(vWReview)
+                .where(
+                        eqLiveId(liveId)
+                )
+                .fetch();
     }
 
     public BooleanExpression eqReviewId(Long reviewId) {

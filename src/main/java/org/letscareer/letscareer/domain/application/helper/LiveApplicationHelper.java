@@ -76,4 +76,12 @@ public class LiveApplicationHelper {
         if (Objects.isNull(user)) return null;
         return liveApplicationRepository.findLiveApplicationIdByUserIdAndLiveId(user.getId(), liveId).isPresent();
     }
+
+    public List<String> findQuestionListByLiveId(Long liveId) {
+        return liveApplicationRepository.findQuestionListByLiveId(liveId);
+    }
+
+    public List<String> findMotivateListByLiveId(Long liveId) {
+        return liveApplicationRepository.findMotivateListByLiveId(liveId);
+    }
 }
