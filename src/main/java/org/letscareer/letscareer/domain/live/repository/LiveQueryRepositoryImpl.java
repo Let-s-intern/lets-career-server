@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static org.letscareer.letscareer.domain.application.entity.QLiveApplication.liveApplication;
 import static org.letscareer.letscareer.domain.classification.entity.QLiveClassification.liveClassification;
 import static org.letscareer.letscareer.domain.live.entity.QLive.live;
 
@@ -202,6 +203,29 @@ public class LiveQueryRepositoryImpl implements LiveQueryRepository {
                 .fetch();
     }
 
+    @Override
+    public Optional<LiveMentorVo> findLiveMentorVoByLiveId(Long liveId) {
+        return Optional.ofNullable(
+                jpaQueryFactory.select(
+                        Projections.constructor(LiveMentorVo.class,
+                                live.id,
+                                live.title,
+                                liveApplication.count(),
+                                live.mentorName,
+                                live.zoomLink,
+                                live.zoomPassword,
+                                live.place,
+                                live.startDate,
+                                live.endDate))
+                        .from(live)
+                        .leftJoin(live.applicationList, liveApplication)
+                        .where(
+                                eqLiveId(liveId),
+                                isValidApplication()
+                        )
+                        .fetchFirst());
+    }
+
     private BooleanExpression eqLiveId(Long liveId) {
         return liveId != null ? live.id.eq(liveId) : null;
     }
@@ -253,5 +277,9 @@ public class LiveQueryRepositoryImpl implements LiveQueryRepository {
 
     private BooleanExpression livePostStatus(LocalDateTime now) {
         return live.endDate.lt(now);
+    }
+
+    private BooleanExpression isValidApplication() {
+        return liveApplication.payment.isConfirmed.eq(true).and(liveApplication.payment.isRefunded.eq(false));
     }
 }

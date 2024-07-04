@@ -60,6 +60,7 @@ public enum SwaggerEnum {
 
     // live
     LIVE_NOT_FOUND(LiveErrorCode.LIVE_NOT_FOUND),
+    MENTOR_PASSWORD_WRONG(LiveErrorCode.MENTOR_PASSWORD_WRONG),
 
     // mission
     MISSION_NOT_FOUND(MissionErrorCode.MISSION_NOT_FOUND),
