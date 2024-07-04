@@ -7,8 +7,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.review.entity.VWReview;
-import org.letscareer.letscareer.domain.review.vo.ReviewDetailVo;
 import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
+import org.letscareer.letscareer.domain.review.vo.ReviewDetailVo;
 import org.letscareer.letscareer.domain.review.vo.ReviewVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -80,6 +80,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
     public Page<ReviewVo> findChallengeReviewVos(Pageable pageable) {
         List<ReviewVo> contents = queryFactory
                 .select(Projections.constructor(ReviewVo.class,
+                        vWReview.programId,
                         vWReview.userName,
                         vWReview.content,
                         vWReview.score,
@@ -110,6 +111,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
     public Page<ReviewVo> findLiveReviewVos(Pageable pageable) {
         List<ReviewVo> contents = queryFactory
                 .select(Projections.constructor(ReviewVo.class,
+                        vWReview.programId,
                         vWReview.userName,
                         vWReview.content,
                         vWReview.score,
