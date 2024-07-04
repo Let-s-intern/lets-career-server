@@ -21,8 +21,8 @@ import java.util.List;
 public class LiveHelper {
     private final LiveRepository liveRepository;
 
-    public Live createLiveAndSave(CreateLiveRequestDto requestDto, ZoomMeetingResponseDto zoomMeetingInfo) {
-        Live live = Live.createLive(requestDto, zoomMeetingInfo);
+    public Live createLiveAndSave(CreateLiveRequestDto requestDto, String mentorPassword, ZoomMeetingResponseDto zoomMeetingInfo) {
+        Live live = Live.createLive(requestDto, mentorPassword, zoomMeetingInfo);
         return liveRepository.save(live);
     }
 
