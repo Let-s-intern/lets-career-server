@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.live.dto.response;
 
 import lombok.AccessLevel;
 import lombok.Builder;
+import org.letscareer.letscareer.domain.review.dto.response.GetReviewResponseDto;
 import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
 import org.letscareer.letscareer.domain.review.vo.ReviewVo;
 import org.letscareer.letscareer.global.common.entity.PageInfo;
@@ -11,13 +12,12 @@ import java.util.List;
 
 @Builder(access = AccessLevel.PRIVATE)
 public record GetLiveReviewsResponseDto(
-        List<ReviewVo> reviewList,
+        List<GetReviewResponseDto> reviewList,
         PageInfo pageInfo
 ) {
-    public static GetLiveReviewsResponseDto of(Page<ReviewVo> reviewVos) {
-        PageInfo pageInfo = PageInfo.of(reviewVos);
+    public static GetLiveReviewsResponseDto of(List<GetReviewResponseDto> reviewResDtoList, PageInfo pageInfo) {
         return GetLiveReviewsResponseDto.builder()
-                .reviewList(reviewVos.getContent())
+                .reviewList(reviewResDtoList)
                 .pageInfo(pageInfo)
                 .build();
     }
