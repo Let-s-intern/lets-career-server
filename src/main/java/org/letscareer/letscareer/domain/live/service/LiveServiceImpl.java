@@ -21,6 +21,7 @@ import org.letscareer.letscareer.domain.live.dto.response.*;
 import org.letscareer.letscareer.domain.live.entity.Live;
 import org.letscareer.letscareer.domain.live.helper.LiveHelper;
 import org.letscareer.letscareer.domain.live.mapper.LiveMapper;
+import org.letscareer.letscareer.domain.live.type.MentorContentsType;
 import org.letscareer.letscareer.domain.live.vo.*;
 import org.letscareer.letscareer.domain.price.dto.request.CreateLivePriceRequestDto;
 import org.letscareer.letscareer.domain.price.helper.LivePriceHelper;
@@ -35,19 +36,25 @@ import org.letscareer.letscareer.domain.review.vo.ReviewVo;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.entity.PageInfo;
 import org.letscareer.letscareer.global.common.utils.ZoomUtils;
+import org.letscareer.letscareer.global.error.exception.InvalidValueException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static org.letscareer.letscareer.domain.live.error.LiveErrorCode.MENTOR_PASSWORD_WRONG;
 
 @RequiredArgsConstructor
 @Transactional
 @Service
 public class LiveServiceImpl implements LiveService {
+    private static final int MENTOR_PASSWORD_LENGTH = 4;
     private final LiveHelper liveHelper;
     private final LiveMapper liveMapper;
     private final LiveApplicationHelper liveApplicationHelper;
@@ -140,9 +147,20 @@ public class LiveServiceImpl implements LiveService {
     }
 
     @Override
+    public GetLiveMentorContentsResponse getMentorContents(Long liveId, String mentorPassword, MentorContentsType mentorContentsType) {
+        validateMentorPassword(liveId, mentorPassword);
+        LiveMentorVo liveMentorVo = liveHelper.findLiveMentorVoOrThrow(liveId);
+        List<String> questionList = mentorContentsType.equals(MentorContentsType.PREV) ? liveApplicationHelper.findQuestionListByLiveId(liveId) : new ArrayList<>();
+        List<String> motivateList = mentorContentsType.equals(MentorContentsType.PREV) ? liveApplicationHelper.findMotivateListByLiveId(liveId) : new ArrayList<>();
+        List<String> reviewList = mentorContentsType.equals(MentorContentsType.REVIEW) ? reviewHelper.findLiveReviewContentByLiveId(liveId) : new ArrayList<>();
+        return liveMapper.toGetLiveMentorContentsResponse(liveMentorVo, questionList, motivateList, reviewList);
+    }
+
+    @Override
     public void createLive(CreateLiveRequestDto requestDto) {
         ZoomMeetingResponseDto zoomMeetingInfo = zoomUtils.createZoomMeeting(requestDto.title(), requestDto.startDate());
-        Live live = liveHelper.createLiveAndSave(requestDto, zoomMeetingInfo);
+        String mentorPassword = generateMentorPassword();
+        Live live = liveHelper.createLiveAndSave(requestDto, mentorPassword, zoomMeetingInfo);
         createClassificationListAndSave(requestDto.programTypeInfo(), live);
         createPriceListAndSave(requestDto.priceInfo(), live);
         createFaqListAndSave(requestDto.faqInfo(), live);
@@ -207,5 +225,21 @@ public class LiveServiceImpl implements LiveService {
         return requestDtoList.stream()
                 .map(request -> faqHelper.findFaqByIdAndThrow(request.faqId()))
                 .collect(Collectors.toList());
+    }
+
+    private String generateMentorPassword() {
+        SecureRandom secureRandom = new SecureRandom();
+        int upperLimit = (int) Math.pow(10, MENTOR_PASSWORD_LENGTH);
+        String mentorPassword = String.valueOf(secureRandom.nextInt(upperLimit));
+        while(mentorPassword.length() < MENTOR_PASSWORD_LENGTH) {
+            mentorPassword = "0" + mentorPassword;
+        }
+        return mentorPassword;
+    }
+
+    private void validateMentorPassword(Long liveId, String mentorPassword) {
+        if(!liveHelper.validateMentorPassword(liveId, mentorPassword)) {
+            throw new InvalidValueException(MENTOR_PASSWORD_WRONG);
+        }
     }
 }

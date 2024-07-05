@@ -39,7 +39,7 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
                         liveApplication.motivate,
                         liveApplication.question,
                         coupon.name,
-                        calculateTotalCost(),
+                        payment.finalPrice,
                         payment.isConfirmed,
                         payment.isRefunded,
                         liveApplication.createDate
@@ -109,6 +109,36 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
                         eqLiveId(liveId)
                 )
                 .fetchFirst());
+    }
+
+    @Override
+    public List<String> findQuestionListByLiveId(Long liveId) {
+        return queryFactory
+                .select(
+                        liveApplication.question
+                )
+                .from(liveApplication)
+                .leftJoin(liveApplication.live, live)
+                .where(
+                        eqLiveId(liveId),
+                        liveApplication.question.isNotEmpty()
+                )
+                .fetch();
+    }
+
+    @Override
+    public List<String> findMotivateListByLiveId(Long liveId) {
+        return queryFactory
+                .select(
+                        liveApplication.motivate
+                )
+                .from(liveApplication)
+                .leftJoin(liveApplication.live, live)
+                .where(
+                        eqLiveId(liveId),
+                        liveApplication.motivate.isNotEmpty()
+                )
+                .fetch();
     }
 
 

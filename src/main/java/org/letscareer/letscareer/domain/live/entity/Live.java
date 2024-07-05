@@ -41,6 +41,7 @@ public class Live extends BaseTimeEntity {
     private Integer participationCount;
     private String thumbnail;
     private String mentorName;
+    private String mentorPassword;
     private String job;
     private String place;
     private String zoomLink;
@@ -71,7 +72,7 @@ public class Live extends BaseTimeEntity {
     @Builder.Default
     private List<FaqLive> faqList = new ArrayList<>();
 
-    public static Live createLive(CreateLiveRequestDto requestDto, ZoomMeetingResponseDto zoomMeetingInfo) {
+    public static Live createLive(CreateLiveRequestDto requestDto, String mentorPassword, ZoomMeetingResponseDto zoomMeetingInfo) {
         return Live.builder()
                 .title(requestDto.title())
                 .shortDesc(requestDto.shortDesc())
@@ -80,6 +81,7 @@ public class Live extends BaseTimeEntity {
                 .participationCount(requestDto.participationCount())
                 .thumbnail(requestDto.thumbnail())
                 .mentorName(requestDto.mentorName())
+                .mentorPassword(mentorPassword)
                 .job(requestDto.job())
                 .place(requestDto.place())
                 .startDate(requestDto.startDate())

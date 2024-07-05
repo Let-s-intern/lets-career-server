@@ -7,17 +7,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.dto.response.GetLiveApplicationsResponseDto;
-import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeExisingApplicationResponseDto;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.faq.dto.response.GetFaqResponseDto;
 import org.letscareer.letscareer.domain.live.dto.request.CreateLiveRequestDto;
 import org.letscareer.letscareer.domain.live.dto.request.UpdateLiveRequestDto;
 import org.letscareer.letscareer.domain.live.dto.response.*;
 import org.letscareer.letscareer.domain.live.service.LiveService;
+import org.letscareer.letscareer.domain.live.type.MentorContentsType;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.domain.user.entity.User;
+import org.letscareer.letscareer.global.common.annotation.ApiErrorCode;
 import org.letscareer.letscareer.global.common.annotation.CurrentUser;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
+import org.letscareer.letscareer.global.common.entity.SwaggerEnum;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -136,6 +138,18 @@ public class LiveV1Controller {
     public ResponseEntity<SuccessResponse<?>> getReviewsForAdmin(@PathVariable("id") final Long liveId,
                                                                  final Pageable pageable) {
         final GetLiveAdminReviewsResponseDto responseDto = liveService.getReviewsForAdmin(liveId, pageable);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "[어드민] 라이브 멘토 전달 내용 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetLiveMentorContentsResponse.class)))
+    })
+    @ApiErrorCode({SwaggerEnum.MENTOR_PASSWORD_WRONG})
+    @GetMapping("/{id}/mentor/{password}")
+    public ResponseEntity<SuccessResponse<?>> getMentorContents(@PathVariable("id") final Long liveId,
+                                                                @PathVariable("password") final String mentorPassword,
+                                                                @RequestParam("type") final MentorContentsType mentorContentsType) {
+        final GetLiveMentorContentsResponse responseDto = liveService.getMentorContents(liveId, mentorPassword, mentorContentsType);
         return SuccessResponse.ok(responseDto);
     }
 

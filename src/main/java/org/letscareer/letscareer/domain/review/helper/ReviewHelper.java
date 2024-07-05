@@ -14,6 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 import static org.letscareer.letscareer.domain.review.error.ReviewErrorCode.REVIEW_NOT_FOUND;
 
 @RequiredArgsConstructor
@@ -58,4 +60,7 @@ public class ReviewHelper {
     }
 
 
+    public List<String> findLiveReviewContentByLiveId(Long liveId) {
+        return reviewRepository.findReviewContentByLiveId(liveId);
+    }
 }
