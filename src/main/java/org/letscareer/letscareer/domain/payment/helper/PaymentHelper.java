@@ -21,6 +21,7 @@ public class PaymentHelper {
 
     public Payment createPaymentAndSave(Application application, Coupon coupon, Price price) {
         int finalPrice = calculateFinalPrice(price, coupon);
+        System.out.println(finalPrice);
         Payment newPayment = Payment.createPayment(finalPrice, coupon, application);
         return paymentRepository.save(newPayment);
     }
@@ -53,6 +54,7 @@ public class PaymentHelper {
     private int calculateFinalPrice(Price price, Coupon coupon) {
         int finalPrice = price.getPrice() - price.getDiscount();
         if (coupon != null) {
+            System.out.println(coupon.getDiscount());
             if (coupon.getDiscount() == -1) return 0;
             finalPrice -= coupon.getDiscount();
         }
