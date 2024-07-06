@@ -9,7 +9,7 @@ import org.letscareer.letscareer.domain.file.entity.File;
 
 import java.util.Objects;
 
-import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils.updateValue;
+import static org.letscareer.letscareer.global.common.utils.entity.EntityUpdateValueUtils.updateValue;
 
 @Entity
 @Getter

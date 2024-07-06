@@ -52,8 +52,8 @@ public class MissionTemplateV1Controller {
     @Operation(summary = "[어드민] 미션 템플릿 수정", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
-    @PatchMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> updateMissionTemplate(@PathVariable(name = "id") final Long missionTemplateId,
+    @PatchMapping("/{missionTemplateId}")
+    public ResponseEntity<SuccessResponse<?>> updateMissionTemplate(@PathVariable final Long missionTemplateId,
                                                                     @RequestBody final UpdateMissionTemplateRequestDto updateMissionTemplateRequestDto) {
         missionTemplateService.updateMissionTemplate(missionTemplateId, updateMissionTemplateRequestDto);
         return SuccessResponse.ok(null);
@@ -62,8 +62,8 @@ public class MissionTemplateV1Controller {
     @Operation(summary = "[어드민] 미션 템플릿 삭제", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> deleteMissionTemplate(@PathVariable(name = "id") final Long missionTemplateId) {
+    @DeleteMapping("/{missionTemplateId}")
+    public ResponseEntity<SuccessResponse<?>> deleteMissionTemplate(@PathVariable final Long missionTemplateId) {
         missionTemplateService.deleteMissionTemplate(missionTemplateId);
         return SuccessResponse.ok(null);
     }

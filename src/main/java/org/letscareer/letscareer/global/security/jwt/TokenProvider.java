@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.letscareer.letscareer.domain.user.dto.request.TokenReissueRequestDto;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.helper.UserHelper;
-import org.letscareer.letscareer.global.common.utils.RedisUtils;
+import org.letscareer.letscareer.global.common.utils.redis.RedisUtils;
 import org.letscareer.letscareer.global.error.exception.InvalidValueException;
 import org.letscareer.letscareer.global.security.user.PrincipalDetails;
 import org.letscareer.letscareer.global.security.user.PrincipalDetailsService;
@@ -26,7 +26,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.stream.Collectors;
 
-import static org.letscareer.letscareer.global.error.GlobalErrorCode.INVALID_TOKEN;
 import static org.letscareer.letscareer.global.error.GlobalErrorCode.NOT_REFRESH_TOKEN;
 
 @Slf4j

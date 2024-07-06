@@ -1,8 +1,8 @@
-package org.letscareer.letscareer.global.common.validator;
+package org.letscareer.letscareer.global.common.utils.email;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.letscareer.letscareer.global.common.utils.ValidEmail;
+import org.letscareer.letscareer.global.common.utils.email.ValidEmail;
 
 import java.util.regex.Pattern;
 

@@ -1,4 +1,4 @@
-package org.letscareer.letscareer.global.common.utils;
+package org.letscareer.letscareer.global.common.utils.zoom;
 
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.program.dto.request.CreateZoomMeetingRequestDto;

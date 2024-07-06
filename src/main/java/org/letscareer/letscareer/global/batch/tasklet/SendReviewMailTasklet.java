@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.helper.LiveApplicationHelper;
 import org.letscareer.letscareer.domain.live.helper.LiveHelper;
 import org.letscareer.letscareer.domain.live.vo.LiveEmailVo;
-import org.letscareer.letscareer.global.common.utils.EmailUtils;
+import org.letscareer.letscareer.global.common.utils.email.EmailUtils;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.scope.context.ChunkContext;

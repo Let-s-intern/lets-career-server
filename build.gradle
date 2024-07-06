@@ -24,8 +24,10 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     // OAuth client
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
@@ -66,10 +68,14 @@ dependencies {
     // s3
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
+    // open feign
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.2'
+
     // swagger
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.1.0'
 }
+
 
 // Querydsl 설정부
 def generated = 'src/main/generated'

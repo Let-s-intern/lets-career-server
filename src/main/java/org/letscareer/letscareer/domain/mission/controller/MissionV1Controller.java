@@ -27,8 +27,8 @@ public class MissionV1Controller {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetMissionDetailResponseDto.class)))
     })
     @ApiErrorCode({SwaggerEnum.MISSION_NOT_FOUND})
-    @GetMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> getMissionsDetail(@PathVariable(name = "id") final Long missionId) {
+    @GetMapping("/{missionId}")
+    public ResponseEntity<SuccessResponse<?>> getMissionsDetail(@PathVariable final Long missionId) {
         GetMissionDetailResponseDto responseDto = missionService.getMissionsDetail(missionId);
         return SuccessResponse.ok(responseDto);
     }
@@ -38,8 +38,8 @@ public class MissionV1Controller {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = MissionAdminListResponseDto.class)))
     })
     @ApiErrorCode({SwaggerEnum.MISSION_NOT_FOUND})
-    @GetMapping("/{id}/admin")
-    public ResponseEntity<SuccessResponse<?>> getMissionsForAdmin(@PathVariable(name = "id") Long challengeId) {
+    @GetMapping("/{challengeId}/admin")
+    public ResponseEntity<SuccessResponse<?>> getMissionsForAdmin(@PathVariable Long challengeId) {
         MissionAdminListResponseDto responseDto = missionService.getMissionsForAdmin(challengeId);
         return SuccessResponse.ok(responseDto);
     }
@@ -47,8 +47,8 @@ public class MissionV1Controller {
     @Operation(summary = "[어드민] 미션 생성", responses = {
             @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
     })
-    @PostMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> createMission(@PathVariable(name = "id") final Long challengeId,
+    @PostMapping("/{challengeId}")
+    public ResponseEntity<SuccessResponse<?>> createMission(@PathVariable final Long challengeId,
                                                             @RequestBody @Valid final CreateMissionRequestDto createMissionRequestDto) {
         missionService.createMission(challengeId, createMissionRequestDto);
         return SuccessResponse.created(null);
@@ -57,8 +57,8 @@ public class MissionV1Controller {
     @Operation(summary = "[어드민] 미션 수정", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
-    @PatchMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> updateMission(@PathVariable(name = "id") final Long missionId,
+    @PatchMapping("/{missionId}")
+    public ResponseEntity<SuccessResponse<?>> updateMission(@PathVariable final Long missionId,
                                                             @RequestBody final UpdateMissionRequestDto updateMissionRequestDto) {
         missionService.updateMission(missionId, updateMissionRequestDto);
         return SuccessResponse.ok(null);
@@ -67,8 +67,8 @@ public class MissionV1Controller {
     @Operation(summary = "[어드민] 미션 삭제", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> deleteMission(@PathVariable(name = "id") final Long missionId) {
+    @DeleteMapping("/{missionId}")
+    public ResponseEntity<SuccessResponse<?>> deleteMission(@PathVariable final Long missionId) {
         missionService.deleteMission(missionId);
         return SuccessResponse.ok(null);
     }

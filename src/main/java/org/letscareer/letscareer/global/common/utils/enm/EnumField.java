@@ -1,4 +1,4 @@
-package org.letscareer.letscareer.global.common.utils;
+package org.letscareer.letscareer.global.common.utils.enm;
 
 public interface EnumField {
     Integer getCode();

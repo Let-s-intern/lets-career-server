@@ -8,7 +8,7 @@ import org.letscareer.letscareer.domain.challengeguide.dto.request.CreateChallen
 import org.letscareer.letscareer.domain.challengeguide.dto.request.UpdateChallengeGuideRequestDto;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
-import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils.updateValue;
+import static org.letscareer.letscareer.global.common.utils.entity.EntityUpdateValueUtils.updateValue;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)

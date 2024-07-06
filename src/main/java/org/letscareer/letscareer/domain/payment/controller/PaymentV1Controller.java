@@ -27,8 +27,8 @@ public class PaymentV1Controller {
     @Operation(summary = "[어드민] 결제 내역 수정", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
-    @PatchMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> updatePayment(@PathVariable(name = "id") final Long paymentId,
+    @PatchMapping("/{paymentId}")
+    public ResponseEntity<SuccessResponse<?>> updatePayment(@PathVariable final Long paymentId,
                                                             @RequestParam(name = "type") final ProgramType programType,
                                                             @RequestBody final UpdatePaymentRequestDto updatePaymentRequestDto) {
         paymentService.updatePayment(paymentId, programType, updatePaymentRequestDto);

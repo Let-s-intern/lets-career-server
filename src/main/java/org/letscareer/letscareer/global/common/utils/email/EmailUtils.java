@@ -1,8 +1,9 @@
-package org.letscareer.letscareer.global.common.utils;
+package org.letscareer.letscareer.global.common.utils.email;
 
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.live.type.ProgressType;
 import org.letscareer.letscareer.domain.live.vo.LiveEmailVo;
+import org.letscareer.letscareer.global.common.utils.string.StringUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;

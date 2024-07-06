@@ -58,7 +58,7 @@ import org.letscareer.letscareer.domain.score.entity.AdminScore;
 import org.letscareer.letscareer.domain.score.helper.AdminScoreHelper;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.entity.PageInfo;
-import org.letscareer.letscareer.global.common.utils.ZoomUtils;
+import org.letscareer.letscareer.global.common.utils.zoom.ZoomUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
