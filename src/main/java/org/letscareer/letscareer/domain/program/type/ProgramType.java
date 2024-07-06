@@ -10,7 +10,8 @@ import org.letscareer.letscareer.global.common.utils.enm.EnumField;
 public enum ProgramType implements EnumField {
     CHALLENGE(1, "CHALLENGE"),
     LIVE(2, "LIVE"),
-    VOD(3, "VOD");
+    VOD(3, "VOD"),
+    TOSS(4, "TOSS");
 
     private final Integer code;
     private final String desc;
