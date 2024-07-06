@@ -31,8 +31,8 @@ public class ContentsV1Controller {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetContentsResponseDto.class)))
     })
     @ApiErrorCode({SwaggerEnum.CONTENTS_NOT_FOUND})
-    @GetMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> getContentsDetail(@PathVariable("id") final Long contentsId) {
+    @GetMapping("/{contentsId}")
+    public ResponseEntity<SuccessResponse<?>> getContentsDetail(@PathVariable final Long contentsId) {
         final GetContentsResponseDto responseDto = contentsService.getContentsDetail(contentsId);
         return SuccessResponse.ok(responseDto);
     }
@@ -67,19 +67,19 @@ public class ContentsV1Controller {
     @Operation(summary = "[어드민] 콘텐츠 수정", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
-    @PatchMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> updateContents(@PathVariable final Long id,
+    @PatchMapping("/{contentsId}")
+    public ResponseEntity<SuccessResponse<?>> updateContents(@PathVariable final Long contentsId,
                                                              @RequestBody final UpdateContentsRequestDto updateContentsRequestDto) {
-        contentsService.updateContents(id, updateContentsRequestDto);
+        contentsService.updateContents(contentsId, updateContentsRequestDto);
         return SuccessResponse.ok(null);
     }
 
     @Operation(summary = "[어드민] 콘텐츠 삭제", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> deleteContents(@PathVariable final Long id) {
-        contentsService.deleteContents(id);
+    @DeleteMapping("/{contentsId}")
+    public ResponseEntity<SuccessResponse<?>> deleteContents(@PathVariable final Long contentsId) {
+        contentsService.deleteContents(contentsId);
         return SuccessResponse.ok(null);
     }
 }

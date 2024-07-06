@@ -19,8 +19,8 @@ public class ChallengeGuideV1Controller {
     @Operation(summary = "[어드민] 챌린지 가이드 생성", responses = {
             @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
     })
-    @PostMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> createChallengeGuide(@PathVariable(name = "id") final Long challengeId,
+    @PostMapping("/{challengeId}")
+    public ResponseEntity<SuccessResponse<?>> createChallengeGuide(@PathVariable final Long challengeId,
                                                                    @RequestBody final CreateChallengeGuideRequestDto createChallengeGuideRequestDto) {
         challengeGuideService.createChallengeGuide(challengeId, createChallengeGuideRequestDto);
         return SuccessResponse.created(null);
@@ -29,8 +29,8 @@ public class ChallengeGuideV1Controller {
     @Operation(summary = "[어드민] 챌린지 가이드 수정", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
-    @PatchMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> updateChallengeGuide(@PathVariable(name = "id") final Long challengeGuideId,
+    @PatchMapping("/{challengeGuideId}")
+    public ResponseEntity<SuccessResponse<?>> updateChallengeGuide(@PathVariable final Long challengeGuideId,
                                                                    @RequestBody final UpdateChallengeGuideRequestDto updateChallengeGuideRequestDto) {
         challengeGuideService.updateChallengeGuide(challengeGuideId, updateChallengeGuideRequestDto);
         return SuccessResponse.ok(null);
@@ -39,8 +39,8 @@ public class ChallengeGuideV1Controller {
     @Operation(summary = "[어드민] 챌린지 가이드 삭제", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> deleteChallengeGuide(@PathVariable(name = "id") final Long challengeGuideId) {
+    @DeleteMapping("/{challengeGuideId}")
+    public ResponseEntity<SuccessResponse<?>> deleteChallengeGuide(@PathVariable final Long challengeGuideId) {
         challengeGuideService.deleteChallengeGuide(challengeGuideId);
         return SuccessResponse.ok(null);
     }

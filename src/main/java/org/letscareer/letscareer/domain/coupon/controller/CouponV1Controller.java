@@ -49,8 +49,8 @@ public class CouponV1Controller {
     @Operation(summary = "[어드민] 쿠폰 상세 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetCouponDetailResponseDto.class)))
     })
-    @GetMapping("/admin/{id}")
-    public ResponseEntity<SuccessResponse<?>> getCouponDetail(@PathVariable("id") final Long couponId) {
+    @GetMapping("/admin/{couponId}")
+    public ResponseEntity<SuccessResponse<?>> getCouponDetail(@PathVariable final Long couponId) {
         GetCouponDetailResponseDto responseDto = couponService.getCouponDetail(couponId);
         return SuccessResponse.ok(responseDto);
     }
@@ -67,8 +67,8 @@ public class CouponV1Controller {
     @Operation(summary = "[어드민] 쿠폰 수정", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
-    @PatchMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> updateCoupon(@PathVariable("id") final Long couponId,
+    @PatchMapping("/{couponId}")
+    public ResponseEntity<SuccessResponse<?>> updateCoupon(@PathVariable final Long couponId,
                                                            @RequestBody final CreateCouponRequestDto requestDto) {
         couponService.updateCoupon(couponId, requestDto);
         return SuccessResponse.ok(null);
@@ -77,8 +77,8 @@ public class CouponV1Controller {
     @Operation(summary = "[어드민] 쿠폰 삭제", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> deleteCoupon(@PathVariable("id") final Long couponId) {
+    @DeleteMapping("/{couponId}")
+    public ResponseEntity<SuccessResponse<?>> deleteCoupon(@PathVariable final Long couponId) {
         couponService.deleteCoupon(couponId);
         return SuccessResponse.ok(null);
     }
