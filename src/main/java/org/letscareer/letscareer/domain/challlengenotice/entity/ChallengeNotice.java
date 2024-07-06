@@ -9,7 +9,7 @@ import org.letscareer.letscareer.domain.challlengenotice.type.ChallengeNoticeTyp
 import org.letscareer.letscareer.domain.challlengenotice.type.converter.ChallengeNoticeTypeConverter;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
-import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils.updateValue;
+import static org.letscareer.letscareer.global.common.utils.entity.EntityUpdateValueUtils.updateValue;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)

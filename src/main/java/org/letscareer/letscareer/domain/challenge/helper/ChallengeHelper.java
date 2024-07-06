@@ -9,7 +9,7 @@ import org.letscareer.letscareer.domain.challenge.vo.*;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.program.dto.response.ZoomMeetingResponseDto;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
-import org.letscareer.letscareer.global.common.utils.StringUtils;
+import org.letscareer.letscareer.global.common.utils.string.StringUtils;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;

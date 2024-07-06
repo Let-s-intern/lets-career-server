@@ -1,7 +1,9 @@
-package org.letscareer.letscareer.global.common.utils;
+package org.letscareer.letscareer.global.common.utils.e;
 
 import jakarta.persistence.AttributeConverter;
 import lombok.Getter;
+import org.letscareer.letscareer.global.common.utils.e.EnumField;
+import org.letscareer.letscareer.global.common.utils.e.EnumValueUtils;
 
 @Getter
 public class AbstractEnumCodeAttributeConverter<T extends Enum<T> & EnumField> implements AttributeConverter<T, Integer> {

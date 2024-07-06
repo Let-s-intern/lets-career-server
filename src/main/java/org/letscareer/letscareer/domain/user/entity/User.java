@@ -24,7 +24,7 @@ import org.letscareer.letscareer.global.security.oauth2.userinfo.OAuth2UserInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils.updateValue;
+import static org.letscareer.letscareer.global.common.utils.entity.EntityUpdateValueUtils.updateValue;
 
 @Entity
 @Getter

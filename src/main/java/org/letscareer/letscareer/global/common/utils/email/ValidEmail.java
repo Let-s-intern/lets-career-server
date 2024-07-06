@@ -1,4 +1,4 @@
-package org.letscareer.letscareer.global.common.utils;
+package org.letscareer.letscareer.global.common.utils.email;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

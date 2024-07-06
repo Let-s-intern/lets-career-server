@@ -1,4 +1,4 @@
-package org.letscareer.letscareer.global.common.utils;
+package org.letscareer.letscareer.global.common.utils.e;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
