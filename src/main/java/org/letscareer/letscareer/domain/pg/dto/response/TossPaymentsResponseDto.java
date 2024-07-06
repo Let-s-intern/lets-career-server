@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.pg.dto.response;
 
 import org.letscareer.letscareer.domain.pg.dto.response.toss.CheckoutInfo;
+import org.letscareer.letscareer.domain.pg.dto.response.toss.FailureInfo;
 import org.letscareer.letscareer.domain.pg.dto.response.toss.PayInfo;
 import org.letscareer.letscareer.domain.pg.dto.response.toss.ReceiptInfo;
 
@@ -32,7 +33,7 @@ public record TossPaymentsResponseDto(
         String type,
         PayInfo easyPay,
         String country,
-        String failure,
+        FailureInfo failure,
         Boolean isPartialCancelable,
         ReceiptInfo receipt,
         CheckoutInfo checkout,
