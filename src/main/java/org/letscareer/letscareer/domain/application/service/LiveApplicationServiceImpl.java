@@ -45,8 +45,8 @@ public class LiveApplicationServiceImpl implements ApplicationService {
         liveApplicationHelper.validateLiveDuration(live);
         LiveApplication liveApplication = liveApplicationHelper.createLiveApplicationAndSave(createApplicationRequestDto, live, user);
         Coupon coupon = couponHelper.findCouponByIdOrNull(createApplicationRequestDto.paymentInfo().couponId());
-//        Price price = priceHelper.findPriceByIdOrThrow(createApplicationRequestDto.paymentInfo().priceId());
-//        int finalPrice = priceHelper.calculateFinalPrice(price, coupon);
+        Price price = priceHelper.findPriceByIdOrThrow(createApplicationRequestDto.paymentInfo().priceId());
+        priceHelper.validatePrice(price, coupon, createApplicationRequestDto.paymentInfo().amount());
         tossProvider.requestPayments(createApplicationRequestDto.paymentInfo());
         Payment payment = paymentHelper.createPaymentAndSave(createApplicationRequestDto.paymentInfo(), liveApplication, coupon);
         liveApplication.setPayment(payment);
