@@ -6,14 +6,12 @@ import lombok.*;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.missiontemplate.dto.request.CreateMissionTemplateRequestDto;
 import org.letscareer.letscareer.domain.missiontemplate.dto.request.UpdateMissionTemplateRequestDto;
-import org.letscareer.letscareer.domain.missiontemplate.type.MissionTemplateType;
-import org.letscareer.letscareer.domain.missiontemplate.type.converter.MissionTemplateTypeConverter;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils.updateValue;
+import static org.letscareer.letscareer.global.common.utils.entity.EntityUpdateValueUtils.updateValue;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)

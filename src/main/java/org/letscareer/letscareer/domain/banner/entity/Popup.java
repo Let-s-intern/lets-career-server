@@ -1,7 +1,6 @@
 package org.letscareer.letscareer.domain.banner.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.letscareer.letscareer.domain.banner.dto.request.CreateBannerRequestDto;
 import org.letscareer.letscareer.domain.banner.dto.request.UpdateBannerRequestDto;
@@ -10,7 +9,7 @@ import org.letscareer.letscareer.domain.file.entity.File;
 
 import java.util.Objects;
 
-import static org.letscareer.letscareer.global.common.utils.EntityUpdateValueUtils.updateValue;
+import static org.letscareer.letscareer.global.common.utils.entity.EntityUpdateValueUtils.updateValue;
 
 @Entity(name = "Popup")
 @Getter

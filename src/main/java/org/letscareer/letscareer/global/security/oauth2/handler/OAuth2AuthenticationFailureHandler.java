@@ -4,7 +4,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.global.common.utils.CookieUtils;
+import org.letscareer.letscareer.global.common.utils.redis.CookieUtils;
 import org.letscareer.letscareer.global.security.oauth2.CookieAuthorizationRequestRepository;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;

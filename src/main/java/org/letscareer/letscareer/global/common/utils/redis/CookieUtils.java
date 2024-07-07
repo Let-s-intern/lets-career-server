@@ -1,4 +1,4 @@
-package org.letscareer.letscareer.global.common.utils;
+package org.letscareer.letscareer.global.common.utils.redis;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;

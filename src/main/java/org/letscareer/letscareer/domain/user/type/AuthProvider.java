@@ -3,7 +3,7 @@ package org.letscareer.letscareer.domain.user.type;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.letscareer.letscareer.global.common.utils.EnumField;
+import org.letscareer.letscareer.global.common.utils.enm.EnumField;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)

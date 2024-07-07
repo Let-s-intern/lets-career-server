@@ -17,7 +17,7 @@ import org.letscareer.letscareer.domain.price.helper.PriceHelper;
 import org.letscareer.letscareer.domain.price.vo.PriceDetailVo;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.program.vo.ProgramSimpleVo;
-import org.letscareer.letscareer.global.common.utils.EmailUtils;
+import org.letscareer.letscareer.global.common.utils.email.EmailUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
