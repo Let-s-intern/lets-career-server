@@ -41,7 +41,7 @@ public class PaymentServiceImpl implements PaymentService {
         Payment payment = paymentHelper.findPaymentByIdOrThrow(paymentId);
         Application application = payment.getApplication();
         ProgramSimpleVo programSimpleVo = applicationHelper.findVWApplicationProgramIdByIdOrThrow(application.getId());
-        PriceDetailVo priceInfo = finePriceInfoForProgramType(programSimpleVo);
+        PriceDetailVo priceInfo = findPriceInfoForProgramType(programSimpleVo);
         PaymentDetailVo paymentInfo = paymentHelper.findPaymentDetailVoByPaymentId(paymentId);
         TossPaymentsResponseDto tossInfo = tossProvider.requestPaymentDetail();
         return paymentMapper.toGetPaymentDetailResponseDto(priceInfo, paymentInfo, tossInfo);
@@ -56,7 +56,7 @@ public class PaymentServiceImpl implements PaymentService {
         payment.updatePayment(updatePaymentRequestDto);
     }
 
-    private PriceDetailVo finePriceInfoForProgramType(ProgramSimpleVo programSimpleVo) {
+    private PriceDetailVo findPriceInfoForProgramType(ProgramSimpleVo programSimpleVo) {
         if (ProgramType.CHALLENGE.equals(programSimpleVo.programType()))
             return challengePriceHelper.findPriceDetailVoByChallengeId(programSimpleVo.programId());
         else
