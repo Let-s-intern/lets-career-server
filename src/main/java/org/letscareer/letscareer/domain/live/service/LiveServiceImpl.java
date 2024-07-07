@@ -157,6 +157,13 @@ public class LiveServiceImpl implements LiveService {
     }
 
     @Override
+    public GetLiveMentorPasswordResponseDto getMentorPassword(Long liveId) {
+        String mentorPassword = liveHelper.findLiveMentorPasswordByIdOrThrow(liveId);
+        GetLiveMentorPasswordResponseDto responseDto = GetLiveMentorPasswordResponseDto.of(mentorPassword);
+        return responseDto;
+    }
+
+    @Override
     public void createLive(CreateLiveRequestDto requestDto) {
         ZoomMeetingResponseDto zoomMeetingInfo = zoomUtils.createZoomMeeting(requestDto.title(), requestDto.startDate());
         String mentorPassword = generateMentorPassword();

@@ -11,6 +11,7 @@ import org.letscareer.letscareer.domain.live.entity.Live;
 import org.letscareer.letscareer.domain.live.helper.LiveHelper;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.payment.helper.PaymentHelper;
+import org.letscareer.letscareer.domain.pg.provider.TossProvider;
 import org.letscareer.letscareer.domain.price.entity.Price;
 import org.letscareer.letscareer.domain.price.helper.PriceHelper;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
@@ -27,6 +28,7 @@ import static org.letscareer.letscareer.domain.application.error.ApplicationErro
 @Transactional
 @Service("LIVE")
 public class LiveApplicationServiceImpl implements ApplicationService {
+    private final TossProvider tossProvider;
     private final LiveApplicationHelper liveApplicationHelper;
     private final ApplicationHelper applicationHelper;
     private final WithdrawHelper withdrawHelper;
@@ -44,7 +46,9 @@ public class LiveApplicationServiceImpl implements ApplicationService {
         LiveApplication liveApplication = liveApplicationHelper.createLiveApplicationAndSave(createApplicationRequestDto, live, user);
         Coupon coupon = couponHelper.findCouponByIdOrNull(createApplicationRequestDto.paymentInfo().couponId());
         Price price = priceHelper.findPriceByIdOrThrow(createApplicationRequestDto.paymentInfo().priceId());
-        Payment payment = paymentHelper.createPaymentAndSave(liveApplication, coupon, price);
+        priceHelper.validatePrice(price, coupon, createApplicationRequestDto.paymentInfo().amount());
+        tossProvider.requestPayments(createApplicationRequestDto.paymentInfo());
+        Payment payment = paymentHelper.createPaymentAndSave(createApplicationRequestDto.paymentInfo(), liveApplication, coupon);
         liveApplication.setPayment(payment);
         userHelper.updateContactEmail(user, createApplicationRequestDto.contactEmail());
     }
