@@ -47,7 +47,7 @@ public class LiveV1Controller {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetLiveDetailResponseDto.class)))
     })
     @GetMapping("/{liveId}")
-    public ResponseEntity<SuccessResponse<?>> getLiveDetail(@PathVariable("liveId") final Long liveId) {
+    public ResponseEntity<SuccessResponse<?>> getLiveDetail(@PathVariable final Long liveId) {
         GetLiveDetailResponseDto responseDto = liveService.getLiveDetail(liveId);
         return SuccessResponse.ok(responseDto);
     }
@@ -56,7 +56,7 @@ public class LiveV1Controller {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetLiveTitleResponseDto.class)))
     })
     @GetMapping("/{liveId}/title")
-    public ResponseEntity<SuccessResponse<?>> getLiveTitle(@PathVariable("liveId") final Long liveId) {
+    public ResponseEntity<SuccessResponse<?>> getLiveTitle(@PathVariable final Long liveId) {
         final GetLiveTitleResponseDto responseDto = liveService.getLiveTitle(liveId);
         return SuccessResponse.ok(responseDto);
     }
@@ -65,7 +65,7 @@ public class LiveV1Controller {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetLiveThumbnailResponseDto.class)))
     })
     @GetMapping("/{liveId}/thumbnail")
-    public ResponseEntity<SuccessResponse<?>> getLiveThumbnail(@PathVariable("liveId") final Long liveId) {
+    public ResponseEntity<SuccessResponse<?>> getLiveThumbnail(@PathVariable final Long liveId) {
         final GetLiveThumbnailResponseDto responseDto = liveService.getLiveThumbnail(liveId);
         return SuccessResponse.ok(responseDto);
     }
@@ -74,7 +74,7 @@ public class LiveV1Controller {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetLiveContentResponseDto.class)))
     })
     @GetMapping("/{liveId}/content")
-    public ResponseEntity<SuccessResponse<?>> getLiveDetailContent(@PathVariable("liveId") final Long liveId) {
+    public ResponseEntity<SuccessResponse<?>> getLiveDetailContent(@PathVariable final Long liveId) {
         final GetLiveContentResponseDto responseDto = liveService.getLiveDetailContent(liveId);
         return SuccessResponse.ok(responseDto);
     }
@@ -83,7 +83,7 @@ public class LiveV1Controller {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetFaqResponseDto.class)))
     })
     @GetMapping("/{liveId}/faqs")
-    public ResponseEntity<SuccessResponse<?>> getLiveFaqs(@PathVariable("liveId") final Long liveId) {
+    public ResponseEntity<SuccessResponse<?>> getLiveFaqs(@PathVariable final Long liveId) {
         final GetFaqResponseDto responseDto = liveService.getLiveFaqs(liveId);
         return SuccessResponse.ok(responseDto);
     }
@@ -105,7 +105,7 @@ public class LiveV1Controller {
             )
     })
     @GetMapping("/{liveId}/application")
-    public ResponseEntity<SuccessResponse<?>> getLiveApplicationForm(@PathVariable("liveId") final Long liveId,
+    public ResponseEntity<SuccessResponse<?>> getLiveApplicationForm(@PathVariable final Long liveId,
                                                                      @CurrentUser User user) {
         final GetLiveApplicationFormResponseDto responseDto = liveService.getLiveApplicationForm(user, liveId);
         return SuccessResponse.ok(responseDto);
@@ -176,7 +176,7 @@ public class LiveV1Controller {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @PatchMapping("/{liveId}")
-    public ResponseEntity<SuccessResponse<?>> updateChallengeProgram(@PathVariable("liveId") final Long liveId,
+    public ResponseEntity<SuccessResponse<?>> updateChallengeProgram(@PathVariable final Long liveId,
                                                                      @RequestBody final UpdateLiveRequestDto requestDto) {
         liveService.updateLive(liveId, requestDto);
         return SuccessResponse.ok(null);
@@ -186,7 +186,7 @@ public class LiveV1Controller {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @DeleteMapping("/{liveId}")
-    public ResponseEntity<SuccessResponse<?>> deleteLiveProgram(@PathVariable("liveId") final Long liveId) {
+    public ResponseEntity<SuccessResponse<?>> deleteLiveProgram(@PathVariable final Long liveId) {
         liveService.deleteLive(liveId);
         return SuccessResponse.ok(null);
     }

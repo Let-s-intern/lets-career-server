@@ -57,7 +57,7 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                         user.grade,
                         user.major,
                         coupon.name,
-                        calculateTotalCost(),
+                        payment.finalPrice,
                         payment.isRefunded,
                         payment.isConfirmed,
                         user.wishJob,

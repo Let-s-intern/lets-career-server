@@ -47,8 +47,8 @@ public class ChallengeV1Controller {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeDetailResponseDto.class)))
     })
     @ApiErrorCode({SwaggerEnum.CHALLENGE_NOT_FOUND})
-    @GetMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> getChallengeDetail(@PathVariable("id") final Long challengeId) {
+    @GetMapping("/{challengeId}")
+    public ResponseEntity<SuccessResponse<?>> getChallengeDetail(@PathVariable final Long challengeId) {
         final GetChallengeDetailResponseDto responseDto = challengeService.getChallengeDetail(challengeId);
         return SuccessResponse.ok(responseDto);
     }
@@ -57,8 +57,8 @@ public class ChallengeV1Controller {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeTitleResponseDto.class)))
     })
     @ApiErrorCode({SwaggerEnum.CHALLENGE_NOT_FOUND})
-    @GetMapping("/{id}/title")
-    public ResponseEntity<SuccessResponse<?>> getChallengeTitle(@PathVariable("id") final Long challengeId) {
+    @GetMapping("/{challengeId}/title")
+    public ResponseEntity<SuccessResponse<?>> getChallengeTitle(@PathVariable final Long challengeId) {
         final GetChallengeTitleResponseDto responseDto = challengeService.getChallengeTitle(challengeId);
         return SuccessResponse.ok(responseDto);
     }
@@ -67,8 +67,8 @@ public class ChallengeV1Controller {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeThumbnailResponseDto.class)))
     })
     @ApiErrorCode({SwaggerEnum.CHALLENGE_NOT_FOUND})
-    @GetMapping("/{id}/thumbnail")
-    public ResponseEntity<SuccessResponse<?>> getChallengeThumbnail(@PathVariable("id") final Long challengeId) {
+    @GetMapping("/{challengeId}/thumbnail")
+    public ResponseEntity<SuccessResponse<?>> getChallengeThumbnail(@PathVariable final Long challengeId) {
         final GetChallengeThumbnailResponseDto responseDto = challengeService.getChallengeThumbnail(challengeId);
         return SuccessResponse.ok(responseDto);
     }
@@ -77,8 +77,8 @@ public class ChallengeV1Controller {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeContentResponseDto.class)))
     })
     @ApiErrorCode({SwaggerEnum.CHALLENGE_NOT_FOUND})
-    @GetMapping("/{id}/content")
-    public ResponseEntity<SuccessResponse<?>> getChallengeDetailContent(@PathVariable("id") final Long challengeId) {
+    @GetMapping("/{challengeId}/content")
+    public ResponseEntity<SuccessResponse<?>> getChallengeDetailContent(@PathVariable final Long challengeId) {
         final GetChallengeContentResponseDto responseDto = challengeService.getChallengeDetailContent(challengeId);
         return SuccessResponse.ok(responseDto);
     }
@@ -87,8 +87,8 @@ public class ChallengeV1Controller {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetFaqResponseDto.class)))
     })
     @ApiErrorCode({SwaggerEnum.CHALLENGE_NOT_FOUND})
-    @GetMapping("/{id}/faqs")
-    public ResponseEntity<SuccessResponse<?>> getChallengeFaqs(@PathVariable("id") final Long challengeId) {
+    @GetMapping("/{challengeId}/faqs")
+    public ResponseEntity<SuccessResponse<?>> getChallengeFaqs(@PathVariable final Long challengeId) {
         final GetFaqResponseDto responseDto = challengeService.getChallengeFaqs(challengeId);
         return SuccessResponse.ok(responseDto);
     }
@@ -110,8 +110,8 @@ public class ChallengeV1Controller {
             )
     })
     @ApiErrorCode({SwaggerEnum.CHALLENGE_NOT_FOUND})
-    @GetMapping("/{id}/application")
-    public ResponseEntity<SuccessResponse<?>> getChallengeApplicationForm(@PathVariable("id") final Long challengeId,
+    @GetMapping("/{challengeId}/application")
+    public ResponseEntity<SuccessResponse<?>> getChallengeApplicationForm(@PathVariable final Long challengeId,
                                                                           @CurrentUser User user) {
         final GetChallengeApplicationFormResponseDto responseDto = challengeService.getChallengeApplicationForm(user, challengeId);
         return SuccessResponse.ok(responseDto);
@@ -120,8 +120,8 @@ public class ChallengeV1Controller {
     @Operation(summary = "챌린지 신청 여부 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeExisingApplicationResponseDto.class)))
     })
-    @GetMapping("/{id}/history")
-    public ResponseEntity<SuccessResponse<?>> getChallengeExistingApplication(@PathVariable("id") final Long challengeId,
+    @GetMapping("/{challengeId}/history")
+    public ResponseEntity<SuccessResponse<?>> getChallengeExistingApplication(@PathVariable final Long challengeId,
                                                                               @CurrentUser User user) {
         GetChallengeExisingApplicationResponseDto responseDto = challengeService.getChallengeExistingApplication(challengeId, user.getId());
         return SuccessResponse.ok(responseDto);
@@ -130,8 +130,8 @@ public class ChallengeV1Controller {
     @Operation(summary = "[어드민] 프로그램 신청자 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeApplicationsResponseDto.class)))
     })
-    @GetMapping("/{id}/applications")
-    public ResponseEntity<SuccessResponse<?>> getApplications(@PathVariable("id") final Long challengeId,
+    @GetMapping("/{challengeId}/applications")
+    public ResponseEntity<SuccessResponse<?>> getApplications(@PathVariable final Long challengeId,
                                                               @RequestParam(required = false) final Boolean isConfirmed) {
         final GetChallengeApplicationsResponseDto responseDto = challengeService.getApplications(challengeId, isConfirmed);
         return SuccessResponse.ok(responseDto);
@@ -140,8 +140,8 @@ public class ChallengeV1Controller {
     @Operation(summary = "[어드민] 신청자 리뷰 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeAdminReviewResponseDto.class)))
     })
-    @GetMapping("/{id}/reviews")
-    public ResponseEntity<SuccessResponse<?>> getReviewsForAdmin(@PathVariable("id") final Long challengeId,
+    @GetMapping("/{challengeId}/reviews")
+    public ResponseEntity<SuccessResponse<?>> getReviewsForAdmin(@PathVariable final Long challengeId,
                                                                  final Pageable pageable) {
         final GetChallengeAdminReviewResponseDto responseDto = challengeService.getReviewsForAdmin(challengeId, pageable);
         return SuccessResponse.ok(responseDto);
@@ -150,8 +150,8 @@ public class ChallengeV1Controller {
     @Operation(summary = "[어드민] 챌린지 확정 메일 대상 목록", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeApplicationEmailListResponseDto.class)))
     })
-    @GetMapping("/{id}/emails")
-    public ResponseEntity<SuccessResponse<?>> getApplicationEmailList(@PathVariable("id") final Long challengeId) {
+    @GetMapping("/{challengeId}/emails")
+    public ResponseEntity<SuccessResponse<?>> getApplicationEmailList(@PathVariable final Long challengeId) {
         final GetChallengeApplicationEmailListResponseDto responseDto = challengeService.getApplicationEmails(challengeId);
         return SuccessResponse.ok(responseDto);
     }
@@ -159,8 +159,8 @@ public class ChallengeV1Controller {
     @Operation(summary = "[어드민] 챌린지 확정 메일 내용", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeEmailContentsResponseDto.class)))
     })
-    @GetMapping("/{id}/mail-contents")
-    public ResponseEntity<SuccessResponse<?>> getEmailContents(@PathVariable("id") final Long challengeId) {
+    @GetMapping("/{challengeId}/mail-contents")
+    public ResponseEntity<SuccessResponse<?>> getEmailContents(@PathVariable final Long challengeId) {
         final GetChallengeEmailContentsResponseDto responseDto = challengeService.getEmailContents(challengeId);
         return SuccessResponse.ok(responseDto);
     }
@@ -169,8 +169,8 @@ public class ChallengeV1Controller {
             @ApiResponse(responseCode = "200", description = "[th:99] 운영진 점수", content = @Content(schema = @Schema(implementation = GetChallengeApplicationsPaybackResponseDto.class)))
     })
     @ApiErrorCode({SwaggerEnum.PAYMENT_NOT_FOUND})
-    @GetMapping("/{id}/applications/payback")
-    public ResponseEntity<SuccessResponse<?>> getApplicationsScore(@PathVariable(name = "id") final Long challengeId,
+    @GetMapping("/{challengeId}/applications/payback")
+    public ResponseEntity<SuccessResponse<?>> getApplicationsScore(@PathVariable final Long challengeId,
                                                                    final Pageable pageable) {
         final GetChallengeApplicationsPaybackResponseDto responseDto = challengeService.getApplicationsScore(challengeId, pageable);
         return SuccessResponse.ok(responseDto);
@@ -190,8 +190,8 @@ public class ChallengeV1Controller {
     @Operation(summary = "챌린지 접근 권한 확인", responses = {
             @ApiResponse(responseCode = "200")
     })
-    @GetMapping("/{id}/access")
-    public ResponseEntity<SuccessResponse<?>> checkChallengeDashboardAccessibleUser(@PathVariable(name = "id") final Long challengeId,
+    @GetMapping("/{challengeId}/access")
+    public ResponseEntity<SuccessResponse<?>> checkChallengeDashboardAccessibleUser(@PathVariable final Long challengeId,
                                                                                     @CurrentUser User user) {
         final GetChallengeAccessResponseDto responseDto = challengeService.checkChallengeDashboardAccessibleUser(challengeId, user.getId());
         return SuccessResponse.ok(responseDto);
@@ -200,8 +200,8 @@ public class ChallengeV1Controller {
     @Operation(summary = "챌린지 가이드 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeGuidesResponseDto.class)))
     })
-    @GetMapping("/{id}/guides")
-    public ResponseEntity<SuccessResponse<?>> getGuides(@PathVariable(name = "id") final Long challengeId) {
+    @GetMapping("/{challengeId}/guides")
+    public ResponseEntity<SuccessResponse<?>> getGuides(@PathVariable final Long challengeId) {
         final GetChallengeGuidesResponseDto responseDto = challengeService.getGuides(challengeId);
         return SuccessResponse.ok(responseDto);
     }
@@ -209,8 +209,8 @@ public class ChallengeV1Controller {
     @Operation(summary = "챌린지 공지사항 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeNoticesResponseDto.class)))
     })
-    @GetMapping("/{id}/notices")
-    public ResponseEntity<SuccessResponse<?>> getNotices(@PathVariable(name = "id") final Long challengeId,
+    @GetMapping("/{challengeId}/notices")
+    public ResponseEntity<SuccessResponse<?>> getNotices(@PathVariable final Long challengeId,
                                                          final Pageable pageable) {
         final GetChallengeNoticesResponseDto responseDto = challengeService.getNotices(challengeId, pageable);
         return SuccessResponse.ok(responseDto);
@@ -219,8 +219,8 @@ public class ChallengeV1Controller {
     @Operation(summary = "챌린지 대시보드 미션 점수 현황", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeTotalScoreResponseDto.class)))
     })
-    @GetMapping("/{id}/score")
-    public ResponseEntity<SuccessResponse<?>> getTotalScore(@PathVariable(name = "id") final Long challengeId,
+    @GetMapping("/{challengeId}/score")
+    public ResponseEntity<SuccessResponse<?>> getTotalScore(@PathVariable final Long challengeId,
                                                             @CurrentUser User user) {
         final GetChallengeTotalScoreResponseDto responseDto = challengeService.getTotalScore(challengeId, user.getId());
         return SuccessResponse.ok(responseDto);
@@ -229,8 +229,8 @@ public class ChallengeV1Controller {
     @Operation(summary = "챌린지 대시보드 일정 및 미션 제출 현황", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeScheduleResponseDto.class)))
     })
-    @GetMapping("/{id}/schedule")
-    public ResponseEntity<SuccessResponse<?>> getSchedule(@PathVariable(name = "id") final Long challengeId,
+    @GetMapping("/{challengeId}/schedule")
+    public ResponseEntity<SuccessResponse<?>> getSchedule(@PathVariable final Long challengeId,
                                                           @CurrentUser User user) {
         final GetChallengeScheduleResponseDto responseDto = challengeService.getSchedule(challengeId, user.getId());
         return SuccessResponse.ok(responseDto);
@@ -239,8 +239,8 @@ public class ChallengeV1Controller {
     @Operation(summary = "챌린지 대시보드 데일리 미션", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeDailyMissionResponseDto.class)))
     })
-    @GetMapping("/{id}/daily-mission")
-    public ResponseEntity<SuccessResponse<?>> getDailyMission(@PathVariable(name = "id") final Long challengeId,
+    @GetMapping("/{challengeId}/daily-mission")
+    public ResponseEntity<SuccessResponse<?>> getDailyMission(@PathVariable final Long challengeId,
                                                               @CurrentUser User user) {
         final GetChallengeDailyMissionResponseDto responseDto = challengeService.getDailyMission(challengeId, user);
         return SuccessResponse.ok(responseDto);
@@ -249,8 +249,8 @@ public class ChallengeV1Controller {
     @Operation(summary = "챌린지 나의 기록장 데일리 미션", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeMyDailyMissionResponseDto.class)))
     })
-    @GetMapping("/{id}/my/daily-mission")
-    public ResponseEntity<SuccessResponse<?>> getMyDailyMission(@PathVariable(name = "id") final Long challengeId,
+    @GetMapping("/{challengeId}/my/daily-mission")
+    public ResponseEntity<SuccessResponse<?>> getMyDailyMission(@PathVariable final Long challengeId,
                                                                 @CurrentUser User user) {
         final GetChallengeMyDailyMissionResponseDto responseDto = challengeService.getDashboardDailyMission(challengeId, user);
         return SuccessResponse.ok(responseDto);
@@ -259,8 +259,8 @@ public class ChallengeV1Controller {
     @Operation(summary = "챌린지 나의 기록장 미션 목록", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeMyMissionsResponseDto.class)))
     })
-    @GetMapping("/{id}/missions")
-    public ResponseEntity<SuccessResponse<?>> getMyMissions(@PathVariable(name = "id") final Long challengeId,
+    @GetMapping("/{challengeId}/missions")
+    public ResponseEntity<SuccessResponse<?>> getMyMissions(@PathVariable final Long challengeId,
                                                             @RequestParam(name = "type") final MissionQueryType queryType,
                                                             @CurrentUser User user) {
         GetChallengeMyMissionsResponseDto responseDto = challengeService.getMyMissions(challengeId, queryType, user);
@@ -292,8 +292,8 @@ public class ChallengeV1Controller {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @ApiErrorCode({SwaggerEnum.CHALLENGE_NOT_FOUND})
-    @PatchMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> updateChallengeProgram(@PathVariable("id") final Long challengeId,
+    @PatchMapping("/{challengeId}")
+    public ResponseEntity<SuccessResponse<?>> updateChallengeProgram(@PathVariable final Long challengeId,
                                                                      @RequestBody final UpdateChallengeRequestDto requestDto) {
         challengeService.updateChallenge(challengeId, requestDto);
         return SuccessResponse.ok(null);
@@ -315,8 +315,8 @@ public class ChallengeV1Controller {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @ApiErrorCode({SwaggerEnum.CHALLENGE_NOT_FOUND})
-    @DeleteMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> deleteChallengeProgram(@PathVariable("id") final Long challengeId) {
+    @DeleteMapping("/{challengeId}")
+    public ResponseEntity<SuccessResponse<?>> deleteChallengeProgram(@PathVariable final Long challengeId) {
         challengeService.deleteChallenge(challengeId);
         return SuccessResponse.ok(null);
     }

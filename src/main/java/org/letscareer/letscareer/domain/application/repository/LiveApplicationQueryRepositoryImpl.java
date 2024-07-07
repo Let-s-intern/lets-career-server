@@ -39,7 +39,7 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
                         liveApplication.motivate,
                         liveApplication.question,
                         coupon.name,
-                        calculateTotalCost(),
+                        payment.finalPrice,
                         payment.isConfirmed,
                         payment.isRefunded,
                         liveApplication.createDate

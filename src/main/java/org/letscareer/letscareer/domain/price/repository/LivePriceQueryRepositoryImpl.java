@@ -41,10 +41,7 @@ public class LivePriceQueryRepositoryImpl implements LivePriceQueryRepository {
                 jpaQueryFactory.select(Projections.constructor(PriceDetailVo.class,
                         livePrice.id,
                         livePrice.price,
-                        livePrice.discount,
-                        livePrice.deadline,
-                        livePrice.accountType,
-                        livePrice.accountNumber))
+                        livePrice.discount))
                         .from(livePrice)
                         .where(
                                 livePrice.live.id.eq(programId)

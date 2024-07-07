@@ -3,7 +3,7 @@ package org.letscareer.letscareer.domain.file.helper;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.file.entity.File;
 import org.letscareer.letscareer.domain.file.repository.FileRepository;
-import org.letscareer.letscareer.global.common.utils.S3Utils;
+import org.letscareer.letscareer.global.common.utils.aws.S3Utils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
