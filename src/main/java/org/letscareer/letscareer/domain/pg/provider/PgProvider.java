@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface PgProvider {
-    void requestPayments(CreatePaymentRequestDto paymentRequestDto);
+    TossPaymentsResponseDto requestPayments(CreatePaymentRequestDto paymentRequestDto);
 
     TossPaymentsResponseDto requestPaymentDetail();
 }

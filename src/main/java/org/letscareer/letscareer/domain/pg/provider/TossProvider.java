@@ -15,10 +15,13 @@ public class TossProvider implements PgProvider {
     private final TossMapper tossMapper;
 
     @Override
-    public void requestPayments(CreatePaymentRequestDto paymentRequestDto) {
+    public TossPaymentsResponseDto requestPayments(CreatePaymentRequestDto paymentRequestDto) {
         TossPaymentsRequestDto requestDto = tossMapper.toTossPaymentsRequestDto(paymentRequestDto);
-        TossPaymentsResponseDto responseDto = tossFeignController.createPayments(requestDto);
+        return tossFeignController.createPayments(requestDto);
     }
 
-
+    @Override
+    public TossPaymentsResponseDto requestPaymentDetail() {
+        return null;
+    }
 }
