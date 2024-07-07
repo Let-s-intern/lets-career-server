@@ -18,8 +18,8 @@ public class ChallengeNoticeV1Controller {
     @Operation(summary = "[어드민] 챌린지 공지사항 생성", responses = {
             @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
     })
-    @PostMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> createChallengeNotice(@PathVariable(name = "id") final Long challengeId,
+    @PostMapping("/{challengeId}")
+    public ResponseEntity<SuccessResponse<?>> createChallengeNotice(@PathVariable final Long challengeId,
                                                                     @RequestBody final CreateChallengeNoticeRequestDto createChallengeNoticeRequestDto) {
         challengeNoticeService.createChallengeNotice(challengeId, createChallengeNoticeRequestDto);
         return SuccessResponse.created(null);
@@ -28,8 +28,8 @@ public class ChallengeNoticeV1Controller {
     @Operation(summary = "[어드민] 챌린지 공지사항 수정", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
-    @PatchMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> updateChallengeNotice(@PathVariable(name = "id") final Long challengeNoticeId,
+    @PatchMapping("/{challengeNoticeId}")
+    public ResponseEntity<SuccessResponse<?>> updateChallengeNotice(@PathVariable final Long challengeNoticeId,
                                                                     @RequestBody final CreateChallengeNoticeRequestDto updateChallengeNoticeRequestDto) {
         challengeNoticeService.updateChallengeNotice(challengeNoticeId, updateChallengeNoticeRequestDto);
         return SuccessResponse.ok(null);
@@ -38,8 +38,8 @@ public class ChallengeNoticeV1Controller {
     @Operation(summary = "[어드민] 챌린지 공지사항 삭제", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> deleteChallengeNotice(@PathVariable(name = "id") final Long challengeNoticeId) {
+    @DeleteMapping("/{challengeNoticeId}")
+    public ResponseEntity<SuccessResponse<?>> deleteChallengeNotice(@PathVariable final Long challengeNoticeId) {
         challengeNoticeService.deleteChallengeNotice(challengeNoticeId);
         return SuccessResponse.ok(null);
     }

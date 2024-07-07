@@ -24,8 +24,8 @@ public class ApplicationV1Controller {
             @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
     })
     @ApiErrorCode({SwaggerEnum.INVALID_APPLICATION_TIME})
-    @PostMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> createApplication(@PathVariable(name = "id") final Long programId,
+    @PostMapping("/{programId}")
+    public ResponseEntity<SuccessResponse<?>> createApplication(@PathVariable final Long programId,
                                                                 @RequestParam(name = "type") final ProgramType programType,
                                                                 @CurrentUser final User user,
                                                                 @RequestBody final CreateApplicationRequestDto requestDto) {
@@ -36,8 +36,8 @@ public class ApplicationV1Controller {
     @Operation(summary = "신청서 삭제", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> deleteApplication(@PathVariable(name = "id") final Long applicationId,
+    @DeleteMapping("/{applicationId}")
+    public ResponseEntity<SuccessResponse<?>> deleteApplication(@PathVariable final Long applicationId,
                                                                 @RequestParam final ProgramType type,
                                                                 @CurrentUser User user) {
         applicationServiceFactory.getApplicationService(type).deleteApplication(applicationId, user);
