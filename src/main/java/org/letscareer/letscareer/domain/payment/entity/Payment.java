@@ -26,6 +26,8 @@ public class Payment extends BaseTimeEntity {
     @Builder.Default
     private Integer finalPrice = 0;
     @Builder.Default
+    private Integer programPrice = 0;
+    @Builder.Default
     private Boolean isConfirmed = false;
     @Builder.Default
     private Boolean isRefunded = false;
@@ -42,9 +44,11 @@ public class Payment extends BaseTimeEntity {
 
     public static Payment createPayment(CreatePaymentRequestDto paymentInfo,
                                         Coupon coupon,
-                                        Application application) {
+                                        Application application,
+                                        Integer programPrice) {
         return Payment.builder()
                 .finalPrice(Integer.valueOf(paymentInfo.amount()))
+                .programPrice(programPrice)
                 .paymentKey(paymentInfo.paymentKey())
                 .orderId(paymentInfo.orderId())
                 .coupon(coupon)
