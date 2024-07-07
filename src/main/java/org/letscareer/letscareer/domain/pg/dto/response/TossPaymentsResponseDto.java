@@ -1,15 +1,13 @@
 package org.letscareer.letscareer.domain.pg.dto.response;
 
-import org.letscareer.letscareer.domain.pg.dto.response.toss.CheckoutInfo;
-import org.letscareer.letscareer.domain.pg.dto.response.toss.PayInfo;
-import org.letscareer.letscareer.domain.pg.dto.response.toss.ReceiptInfo;
+import jakarta.annotation.Nullable;
+import org.letscareer.letscareer.domain.pg.dto.response.toss.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public record TossPaymentsResponseDto(
         String mId,
-        String lastTransactionKey,
+        @Nullable String lastTransactionKey,
         String paymentKey,
         String orderId,
         String orderName,
@@ -19,23 +17,23 @@ public record TossPaymentsResponseDto(
         LocalDateTime approvedAt,
         Boolean useEscrow,
         Boolean cultureExpense,
-        String card,
-        String virtualAccount,
-        String transfer,
-        String mobilePhone,
-        String giftCertificate,
-        String cashReceipt,
-        String cashReceipts,
-        String discount,
-        String cancels,
-        String secret,
+        @Nullable CardInfo card,
+        @Nullable String virtualAccount,
+        @Nullable TransferInfo transfer,
+        @Nullable MobilePhoneInfo mobilePhone,
+        @Nullable GiftCertificateInfo giftCertificate,
+        @Nullable CashReceiptInfo cashReceipt,
+        @Nullable CashReceiptsInfo cashReceipts,
+        @Nullable DiscountInfo discount,
+        @Nullable CancelsInfo cancels,
+        @Nullable String secret,
         String type,
-        PayInfo easyPay,
+        @Nullable PayInfo easyPay,
         String country,
-        String failure,
+        @Nullable FailureInfo failure,
         Boolean isPartialCancelable,
-        ReceiptInfo receipt,
-        CheckoutInfo checkout,
+        @Nullable ReceiptInfo receipt,
+        @Nullable CheckoutInfo checkout,
         String currency,
         Integer totalAmount,
         Integer balanceAmount,
@@ -43,6 +41,6 @@ public record TossPaymentsResponseDto(
         Integer vat,
         Integer taxFreeAmount,
         String method,
-        LocalDate version
+        String version
 ) {
 }

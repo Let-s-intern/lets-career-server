@@ -50,6 +50,7 @@ public enum GlobalErrorCode implements ErrorCode {
      * 500 Internal Server Error
      */
     ZOOM_CREATE_INTERNAL_SERVER(HttpStatus.INTERNAL_SERVER_ERROR, "zoom 미팅방 생성에 실패했습니다."),
+    TOSS_ERROR_FORMAT(HttpStatus.INTERNAL_SERVER_ERROR, "Toss payments error 형식 변환이 잘 못되었습니다."),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류입니다.");
 
     private final HttpStatus httpStatus;
