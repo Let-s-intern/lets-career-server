@@ -41,9 +41,12 @@ public interface LiveService {
 
     GetLiveMentorContentsResponse getMentorContents(Long liveId, String mentorPassword, MentorContentsType mentorContentsType);
 
+    GetLiveMentorPasswordResponseDto getMentorPassword(Long liveId);
+
     void createLive(CreateLiveRequestDto requestDto);
 
     void updateLive(Long liveId, UpdateLiveRequestDto requestDto);
 
     void deleteLive(Long liveId);
+
 }

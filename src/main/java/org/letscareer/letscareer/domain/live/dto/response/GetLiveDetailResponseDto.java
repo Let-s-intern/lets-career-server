@@ -20,7 +20,6 @@ public record GetLiveDetailResponseDto(
         Integer participationCount,
         String thumbnail,
         String mentorName,
-        String mentorPassword,
         String job,
         String place,
         LocalDateTime startDate,

@@ -141,6 +141,13 @@ public class LiveV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
+    @GetMapping("{id}/mentor")
+    public ResponseEntity<SuccessResponse<?>> getMentorPassword(@PathVariable("id") final Long liveId,
+                                                                @CurrentUser User user) {
+        final GetLiveMentorPasswordResponseDto responseDto = liveService.getMentorPassword(liveId);
+        return SuccessResponse.ok(responseDto);
+    }
+
     @Operation(summary = "[어드민] 라이브 멘토 전달 내용 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetLiveMentorContentsResponse.class)))
     })
