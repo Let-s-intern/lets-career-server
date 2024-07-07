@@ -1,8 +1,11 @@
 package org.letscareer.letscareer.domain.payment.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.missiontemplate.dto.response.MissionTemplateAdminListResponseDto;
 import org.letscareer.letscareer.domain.payment.dto.request.UpdatePaymentRequestDto;
 import org.letscareer.letscareer.domain.payment.dto.response.GetPaymentDetailResponseDto;
 import org.letscareer.letscareer.domain.payment.service.PaymentService;
@@ -17,7 +20,9 @@ import org.springframework.web.bind.annotation.*;
 public class PaymentV1Controller {
     private final PaymentService paymentService;
 
-    @Operation(summary = "결제 내역 상세")
+    @Operation(summary = "결제 내역 상세", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetPaymentDetailResponseDto.class)))
+    })
     @GetMapping("/{paymentId}")
     public ResponseEntity<SuccessResponse<?>> getPaymentDetail(@PathVariable final Long paymentId) {
         final GetPaymentDetailResponseDto responseDto = paymentService.getPaymentDetail(paymentId);
