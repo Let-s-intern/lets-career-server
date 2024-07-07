@@ -3,6 +3,7 @@ package org.letscareer.letscareer.domain.payment.helper;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.entity.Application;
 import org.letscareer.letscareer.domain.coupon.entity.Coupon;
+import org.letscareer.letscareer.domain.payment.dto.request.CreatePaymentRequestDto;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.payment.repository.PaymentRepository;
 import org.letscareer.letscareer.domain.payment.vo.PaymentDetailVo;
@@ -19,10 +20,8 @@ import static org.letscareer.letscareer.domain.payment.error.PaymentErrorCode.PA
 public class PaymentHelper {
     private final PaymentRepository paymentRepository;
 
-    public Payment createPaymentAndSave(Application application, Coupon coupon, Price price) {
-        int finalPrice = calculateFinalPrice(price, coupon);
-        System.out.println(finalPrice);
-        Payment newPayment = Payment.createPayment(finalPrice, coupon, application);
+    public Payment createPaymentAndSave(CreatePaymentRequestDto paymentInfo, Application application, Coupon coupon) {
+        Payment newPayment = Payment.createPayment(paymentInfo, coupon, application);
         return paymentRepository.save(newPayment);
     }
 
