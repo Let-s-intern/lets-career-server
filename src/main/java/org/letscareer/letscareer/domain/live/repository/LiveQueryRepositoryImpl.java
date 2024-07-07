@@ -39,7 +39,6 @@ public class LiveQueryRepositoryImpl implements LiveQueryRepository {
                         live.participationCount,
                         live.thumbnail,
                         live.mentorName,
-                        live.mentorPassword,
                         live.job,
                         live.place,
                         live.startDate,
@@ -222,6 +221,18 @@ public class LiveQueryRepositoryImpl implements LiveQueryRepository {
                         .where(
                                 eqLiveId(liveId),
                                 isValidApplication()
+                        )
+                        .fetchFirst());
+    }
+
+    @Override
+    public Optional<String> findMentorPasswordById(Long liveId) {
+        return Optional.ofNullable(
+                jpaQueryFactory
+                        .select(live.mentorPassword)
+                        .from(live)
+                        .where(
+                                eqLiveId(liveId)
                         )
                         .fetchFirst());
     }
