@@ -9,10 +9,7 @@ import java.time.LocalDateTime;
 public record PriceDetailVo(
         Long id,
         Integer price,
-        Integer discount,
-        LocalDateTime deadline,
-        AccountType accountType,
-        String accountNumber
+        Integer discount
 ) {
 
 }
