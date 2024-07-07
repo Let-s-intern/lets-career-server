@@ -21,7 +21,9 @@ public class TossProvider implements PgProvider {
     }
 
     @Override
-    public TossPaymentsResponseDto requestPaymentDetail() {
-        return null;
+    public TossPaymentsResponseDto requestPaymentDetail(String paymentKey) {
+        if (paymentKey.isEmpty())
+            return null;
+        return tossFeignController.getPaymentDetail(paymentKey);
     }
 }

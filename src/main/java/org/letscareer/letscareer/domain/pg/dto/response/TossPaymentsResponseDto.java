@@ -1,10 +1,16 @@
 package org.letscareer.letscareer.domain.pg.dto.response;
 
 import jakarta.annotation.Nullable;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.letscareer.letscareer.domain.pg.dto.response.toss.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Builder
 public record TossPaymentsResponseDto(
         String mId,
         @Nullable String lastTransactionKey,
@@ -13,12 +19,12 @@ public record TossPaymentsResponseDto(
         String orderName,
         Integer taxExemptionAmount,
         String status,
-        LocalDateTime requestedAt,
-        LocalDateTime approvedAt,
+        String requestedAt,
+        String approvedAt,
         Boolean useEscrow,
         Boolean cultureExpense,
         @Nullable CardInfo card,
-        @Nullable String virtualAccount,
+        @Nullable VirtualAccountInfo virtualAccount,
         @Nullable TransferInfo transfer,
         @Nullable MobilePhoneInfo mobilePhone,
         @Nullable GiftCertificateInfo giftCertificate,

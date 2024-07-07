@@ -43,7 +43,7 @@ public class PaymentServiceImpl implements PaymentService {
         ProgramSimpleVo programSimpleVo = applicationHelper.findVWApplicationProgramIdByIdOrThrow(application.getId());
         PriceDetailVo priceInfo = findPriceInfoForProgramType(programSimpleVo);
         PaymentDetailVo paymentInfo = paymentHelper.findPaymentDetailVoByPaymentId(paymentId);
-        TossPaymentsResponseDto tossInfo = tossProvider.requestPaymentDetail();
+        TossPaymentsResponseDto tossInfo = tossProvider.requestPaymentDetail(payment.getPaymentKey());
         return paymentMapper.toGetPaymentDetailResponseDto(priceInfo, paymentInfo, tossInfo);
     }
 

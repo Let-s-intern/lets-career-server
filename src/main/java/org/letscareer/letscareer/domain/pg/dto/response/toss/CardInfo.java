@@ -1,7 +1,9 @@
 package org.letscareer.letscareer.domain.pg.dto.response.toss;
 
 import jakarta.annotation.Nullable;
+import lombok.Builder;
 
+@Builder
 public record CardInfo(
         Integer amount,
         String issuerCode,

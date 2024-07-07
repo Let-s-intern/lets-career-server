@@ -8,5 +8,5 @@ import org.springframework.stereotype.Service;
 public interface PgProvider {
     TossPaymentsResponseDto requestPayments(CreatePaymentRequestDto paymentRequestDto);
 
-    TossPaymentsResponseDto requestPaymentDetail();
+    TossPaymentsResponseDto requestPaymentDetail(String paymentKey);
 }
