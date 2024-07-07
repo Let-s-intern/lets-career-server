@@ -11,6 +11,7 @@ import org.letscareer.letscareer.domain.coupon.entity.Coupon;
 import org.letscareer.letscareer.domain.coupon.helper.CouponHelper;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.payment.helper.PaymentHelper;
+import org.letscareer.letscareer.domain.pg.provider.TossProvider;
 import org.letscareer.letscareer.domain.price.entity.Price;
 import org.letscareer.letscareer.domain.price.helper.PriceHelper;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
@@ -25,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @Service("CHALLENGE")
 public class ChallengeApplicationServiceImpl implements ApplicationService {
+    private final TossProvider tossProvider;
     private final ChallengeApplicationHelper challengeApplicationHelper;
     private final ApplicationHelper applicationHelper;
     private final AdminScoreHelper adminScoreHelper;
@@ -42,8 +44,10 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
         challengeApplicationHelper.validateChallengeDuration(challenge);
         ChallengeApplication challengeApplication = challengeApplicationHelper.createChallengeApplicationAndSave(challenge, user);
         Coupon coupon = couponHelper.findCouponByIdOrNull(createApplicationRequestDto.paymentInfo().couponId());
-        Price price = priceHelper.findPriceByIdOrThrow(createApplicationRequestDto.paymentInfo().priceId());
-        Payment payment = paymentHelper.createPaymentAndSave(challengeApplication, coupon, price);
+//        Price price = priceHelper.findPriceByIdOrThrow(createApplicationRequestDto.paymentInfo().priceId());
+//        int finalPrice = priceHelper.calculateFinalPrice(price, coupon);
+        tossProvider.requestPayments(createApplicationRequestDto.paymentInfo());
+        Payment payment = paymentHelper.createPaymentAndSave(createApplicationRequestDto.paymentInfo(), challengeApplication, coupon);
         challengeApplication.setPayment(payment);
         adminScoreHelper.createAdminScoreAndSave(challengeApplication);
         userHelper.updateContactEmail(user, createApplicationRequestDto.contactEmail());
