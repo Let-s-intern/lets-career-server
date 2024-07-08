@@ -1,4 +1,4 @@
-package org.letscareer.letscareer.global.common.utils.toss;
+package org.letscareer.letscareer.domain.pg.feign.toss;
 
 import org.letscareer.letscareer.domain.pg.dto.request.TossPaymentsRequestDto;
 import org.letscareer.letscareer.domain.pg.dto.response.TossPaymentsResponseDto;
