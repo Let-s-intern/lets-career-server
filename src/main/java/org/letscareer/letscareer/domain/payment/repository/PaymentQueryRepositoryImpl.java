@@ -8,7 +8,10 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.payment.vo.PaymentDetailVo;
+import org.letscareer.letscareer.domain.payment.vo.PaymentProgramVo;
+import org.letscareer.letscareer.domain.user.entity.User;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.letscareer.letscareer.domain.application.entity.QApplication.application;
