@@ -1,5 +1,6 @@
 package org.letscareer.letscareer.global.common.utils.toss;
 
+import org.letscareer.letscareer.domain.pg.dto.request.TossPaymentsCancelRequestDto;
 import org.letscareer.letscareer.domain.pg.dto.request.TossPaymentsRequestDto;
 import org.letscareer.letscareer.domain.pg.dto.response.TossPaymentsResponseDto;
 import org.letscareer.letscareer.global.config.TossFeignClientConfig;
@@ -16,4 +17,7 @@ public interface TossFeignController {
 
     @GetMapping("/{paymentKey}")
     TossPaymentsResponseDto getPaymentDetail(@PathVariable final String paymentKey);
+
+    @PostMapping("/{paymentKey}/cancel")
+    TossPaymentsResponseDto cancelPayments(@PathVariable final String paymentKey, @RequestBody final TossPaymentsCancelRequestDto requestDto);
 }

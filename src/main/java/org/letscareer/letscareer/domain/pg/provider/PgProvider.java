@@ -9,4 +9,6 @@ public interface PgProvider {
     TossPaymentsResponseDto requestPayments(CreatePaymentRequestDto paymentRequestDto);
 
     TossPaymentsResponseDto requestPaymentDetail(String paymentKey);
+
+    TossPaymentsResponseDto cancelPayments(String paymentKey);
 }

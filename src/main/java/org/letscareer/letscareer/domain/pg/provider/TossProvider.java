@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.pg.provider;
 
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.payment.dto.request.CreatePaymentRequestDto;
+import org.letscareer.letscareer.domain.pg.dto.request.TossPaymentsCancelRequestDto;
 import org.letscareer.letscareer.domain.pg.dto.request.TossPaymentsRequestDto;
 import org.letscareer.letscareer.domain.pg.dto.response.TossPaymentsResponseDto;
 import org.letscareer.letscareer.domain.pg.mapper.TossMapper;
@@ -25,5 +26,13 @@ public class TossProvider implements PgProvider {
         if (paymentKey.isEmpty())
             return null;
         return tossFeignController.getPaymentDetail(paymentKey);
+    }
+
+    @Override
+    public TossPaymentsResponseDto cancelPayments(String paymentKey) {
+        if (paymentKey.isEmpty())
+            return null;
+        TossPaymentsCancelRequestDto requestDto = tossMapper.toTossPaymentsCancelRequestDto("고객이 취소를 원함");
+        return tossFeignController.cancelPayments(paymentKey, requestDto);
     }
 }
