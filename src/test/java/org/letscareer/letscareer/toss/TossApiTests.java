@@ -74,14 +74,14 @@ public class TossApiTests {
     @DisplayName("paymentKey로 결제 취소 api")
     void cancelPayment() {
         // given
-        String paymentKey = "tgen_20240707234426FMGC4";
+        String paymentKey = "tgen_20240708210748q59z3";
         TossPaymentsCancelRequestDto requestDto = tossMapper.toTossPaymentsCancelRequestDto("고객이 취소를 원함");
 
         // when
         TossPaymentsResponseDto responseDto = tossFeignController.cancelPayments(paymentKey, requestDto);
 
         // then
-        System.out.println(responseDto);
+        System.out.println(responseDto.cancels().get(0));
         assertThat(responseDto.paymentKey()).isEqualTo(paymentKey);
     }
 }
