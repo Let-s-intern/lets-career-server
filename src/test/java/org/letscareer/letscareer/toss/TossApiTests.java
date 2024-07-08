@@ -6,7 +6,7 @@ import org.letscareer.letscareer.domain.payment.dto.request.CreatePaymentRequest
 import org.letscareer.letscareer.domain.pg.dto.request.TossPaymentsRequestDto;
 import org.letscareer.letscareer.domain.pg.dto.response.TossPaymentsResponseDto;
 import org.letscareer.letscareer.domain.pg.mapper.TossMapper;
-import org.letscareer.letscareer.domain.pg.feign.toss.TossFeignController;
+import org.letscareer.letscareer.global.common.utils.toss.TossFeignController;
 import org.letscareer.letscareer.global.common.utils.toss.TossSecretKeyGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
