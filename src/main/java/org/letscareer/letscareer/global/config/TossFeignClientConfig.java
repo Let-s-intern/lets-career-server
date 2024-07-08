@@ -16,7 +16,7 @@ public class TossFeignClientConfig {
     private final TossSecretKeyGenerator tossSecretKeyGenerator;
 
     @Bean
-    public RequestInterceptor feignInterceptor() {
+    public RequestInterceptor tossFeignInterceptor() {
         String authorization = tossSecretKeyGenerator.generateSecretKey();
         return requestTemplate -> {
             requestTemplate.header("Authorization", authorization);
