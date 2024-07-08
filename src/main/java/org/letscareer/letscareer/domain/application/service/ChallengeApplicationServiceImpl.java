@@ -51,7 +51,7 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
         priceHelper.validatePrice(price, coupon, createApplicationRequestDto.paymentInfo().amount());
         TossPaymentsResponseDto responseDto = tossProvider.requestPayments(createApplicationRequestDto.paymentInfo());
         ChallengeApplication challengeApplication = challengeApplicationHelper.createChallengeApplicationAndSave(challenge, user);
-        Payment payment = paymentHelper.createPaymentAndSave(createApplicationRequestDto.paymentInfo(), challengeApplication, coupon);
+        Payment payment = paymentHelper.createPaymentAndSave(createApplicationRequestDto.paymentInfo(), challengeApplication, coupon, price.getPrice());
         challengeApplication.setPayment(payment);
         adminScoreHelper.createAdminScoreAndSave(challengeApplication);
         userHelper.updateContactEmail(user, createApplicationRequestDto.contactEmail());

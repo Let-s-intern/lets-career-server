@@ -52,7 +52,7 @@ public class LiveApplicationServiceImpl implements ApplicationService {
         priceHelper.validatePrice(price, coupon, createApplicationRequestDto.paymentInfo().amount());
         TossPaymentsResponseDto responseDto = tossProvider.requestPayments(createApplicationRequestDto.paymentInfo());
         LiveApplication liveApplication = liveApplicationHelper.createLiveApplicationAndSave(createApplicationRequestDto, live, user);
-        Payment payment = paymentHelper.createPaymentAndSave(createApplicationRequestDto.paymentInfo(), liveApplication, coupon);
+        Payment payment = paymentHelper.createPaymentAndSave(createApplicationRequestDto.paymentInfo(), liveApplication, coupon, price.getPrice());
         liveApplication.setPayment(payment);
         userHelper.updateContactEmail(user, createApplicationRequestDto.contactEmail());
         return applicationMapper.toCreateApplicationResponseDto(responseDto);
