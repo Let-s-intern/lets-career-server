@@ -29,7 +29,7 @@ public class ApplicationV1Controller {
     @ApiErrorCode({SwaggerEnum.INVALID_APPLICATION_TIME})
     @PostMapping("/{programId}")
     public ResponseEntity<SuccessResponse<?>> createApplication(@PathVariable final Long programId,
-                                                                @RequestParam final ProgramType programType,
+                                                                @RequestParam(name = "type") final ProgramType programType,
                                                                 @CurrentUser final User user,
                                                                 @RequestBody final CreateApplicationRequestDto requestDto) {
         final CreateApplicationResponseDto responseDto = applicationServiceFactory.getApplicationService(programType).createApplication(programId, user, requestDto);
