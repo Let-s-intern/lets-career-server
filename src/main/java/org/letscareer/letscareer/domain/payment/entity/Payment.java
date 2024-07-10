@@ -28,8 +28,6 @@ public class Payment extends BaseTimeEntity {
     @Builder.Default
     private Integer programPrice = 0;
     @Builder.Default
-    private Boolean isConfirmed = false;
-    @Builder.Default
     private Boolean isRefunded = false;
     @NotNull
     private String paymentKey;
@@ -57,7 +55,6 @@ public class Payment extends BaseTimeEntity {
     }
 
     public void updatePayment(UpdatePaymentRequestDto requestDto) {
-        this.isConfirmed = updateValue(this.isConfirmed, requestDto.isConfirmed());
         this.isRefunded = updateValue(this.isRefunded, requestDto.isRefunded());
     }
 

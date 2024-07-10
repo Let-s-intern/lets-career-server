@@ -1,10 +1,7 @@
 package org.letscareer.letscareer.domain.application.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.review.entity.Review;
 import org.letscareer.letscareer.domain.user.entity.User;
@@ -22,6 +19,8 @@ public abstract class Application extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Boolean isCanceled;
+
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "payment_id")
     private Payment payment;
@@ -35,6 +34,7 @@ public abstract class Application extends BaseTimeEntity {
 
     public Application(User user) {
         this.user = user;
+        this.isCanceled = false;
     }
 
     public void setPayment(Payment payment) {

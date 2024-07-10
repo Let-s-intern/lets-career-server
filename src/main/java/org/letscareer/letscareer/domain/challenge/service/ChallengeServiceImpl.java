@@ -115,8 +115,8 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
-    public GetChallengeApplicationsResponseDto getApplications(Long challengeId, Boolean isConfirmed) {
-        List<AdminChallengeApplicationVo> applicationVos = challengeApplicationHelper.findAdminChallengeApplicationVos(challengeId, isConfirmed);
+    public GetChallengeApplicationsResponseDto getApplications(Long challengeId, Boolean isCanceled) {
+        List<AdminChallengeApplicationVo> applicationVos = challengeApplicationHelper.findAdminChallengeApplicationVos(challengeId, isCanceled);
         return challengeApplicationMapper.toGetChallengeApplicationsResponseDto(applicationVos);
     }
 

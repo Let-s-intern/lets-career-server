@@ -291,6 +291,6 @@ public class LiveQueryRepositoryImpl implements LiveQueryRepository {
     }
 
     private BooleanExpression isValidApplication() {
-        return liveApplication.payment.isConfirmed.eq(true).and(liveApplication.payment.isRefunded.eq(false));
+        return liveApplication._super.isCanceled.eq(false);
     }
 }

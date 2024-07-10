@@ -129,8 +129,8 @@ public class LiveServiceImpl implements LiveService {
     }
 
     @Override
-    public GetLiveApplicationsResponseDto getApplications(Long liveId, Boolean isConfirmed) {
-        List<AdminLiveApplicationVo> applicationVos = liveApplicationHelper.findAdminLiveApplicationVos(liveId, isConfirmed);
+    public GetLiveApplicationsResponseDto getApplications(Long liveId, Boolean isCanceled) {
+        List<AdminLiveApplicationVo> applicationVos = liveApplicationHelper.findAdminLiveApplicationVos(liveId, isCanceled);
         return liveApplicationMapper.toGetLiveApplicationsResponseDto(applicationVos);
     }
 
