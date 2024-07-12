@@ -1,9 +1,11 @@
 package org.letscareer.letscareer.domain.pg.dto.response.toss;
 
 import jakarta.annotation.Nullable;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 
+@Builder
 public record CancelsInfo(
         Integer cancelAmount,
         String cancelReason,
@@ -11,7 +13,7 @@ public record CancelsInfo(
         Integer taxExemptionAmount,
         Integer refundableAmount,
         Integer easyPayDiscountAmount,
-        LocalDateTime canceledAt,
+        String canceledAt,
         String transactionKey,
         @Nullable String receiptKey,
         String cancelStatus,

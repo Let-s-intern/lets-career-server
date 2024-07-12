@@ -88,4 +88,9 @@ public class LiveHelper {
     public boolean validateMentorPassword(Long liveId, String mentorPassword) {
         return liveRepository.existsByIdAndMentorPassword(liveId, mentorPassword);
     }
+
+    public String findLiveMentorPasswordByIdOrThrow(Long liveId) {
+        return liveRepository.findMentorPasswordById(liveId)
+                .orElseThrow(() -> new EntityNotFoundException(LiveErrorCode.LIVE_NOT_FOUND));
+    }
 }

@@ -5,6 +5,7 @@ import org.letscareer.letscareer.domain.application.entity.Application;
 import org.letscareer.letscareer.domain.application.repository.ApplicationRepository;
 import org.letscareer.letscareer.domain.application.type.ApplicationStatus;
 import org.letscareer.letscareer.domain.application.vo.MyApplicationVo;
+import org.letscareer.letscareer.domain.payment.vo.PaymentProgramVo;
 import org.letscareer.letscareer.domain.program.vo.ProgramSimpleVo;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.type.UserRole;
@@ -33,6 +34,9 @@ public class ApplicationHelper {
         return applicationRepository.findMyApplications(userId, status);
     }
 
+    public List<PaymentProgramVo> findPaymentProgramVos(Long userId) {
+        return applicationRepository.findPaymentProgramVos(userId);
+    }
 
     public Application findByIdOrThrow(Long applicationId) {
         return applicationRepository.findById(applicationId)

@@ -1,9 +1,12 @@
 package org.letscareer.letscareer.domain.application.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.dto.request.CreateApplicationRequestDto;
+import org.letscareer.letscareer.domain.application.dto.response.CreateApplicationResponseDto;
 import org.letscareer.letscareer.domain.application.service.ApplicationServiceFactory;
 import org.letscareer.letscareer.domain.application.service.TossApplicationServiceFactory;
 import org.letscareer.letscareer.domain.application.type.TossProgramType;
@@ -24,12 +27,12 @@ public class ApplicationV1Controller {
     private final TossApplicationServiceFactory tossApplicationServiceFactory;
 
     @Operation(summary = "신청서 생성", responses = {
-            @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = CreateApplicationResponseDto.class)))
     })
     @ApiErrorCode({SwaggerEnum.INVALID_APPLICATION_TIME})
     @PostMapping("/{programId}")
     public ResponseEntity<SuccessResponse<?>> createApplication(@PathVariable final Long programId,
-                                                                @RequestParam(name = "type") final ProgramType programType,
+                                                                @RequestParam final ProgramType type,
                                                                 @CurrentUser final User user,
                                                                 @RequestBody final CreateApplicationRequestDto requestDto) {
         if (user.getId().equals(1017L))

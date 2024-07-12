@@ -1,10 +1,12 @@
 package org.letscareer.letscareer.domain.payment.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.letscareer.letscareer.domain.application.entity.Application;
 import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApplicationPaybackRequestDto;
 import org.letscareer.letscareer.domain.coupon.entity.Coupon;
+import org.letscareer.letscareer.domain.payment.dto.request.CreatePaymentRequestDto;
 import org.letscareer.letscareer.domain.payment.dto.request.UpdatePaymentRequestDto;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
@@ -24,9 +26,14 @@ public class Payment extends BaseTimeEntity {
     @Builder.Default
     private Integer finalPrice = 0;
     @Builder.Default
+    private Integer programPrice = 0;
+    @Builder.Default
     private Boolean isConfirmed = false;
     @Builder.Default
     private Boolean isRefunded = false;
+    @NotNull
+    private String paymentKey;
+    private String orderId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "coupon_id")
@@ -35,11 +42,15 @@ public class Payment extends BaseTimeEntity {
     @JoinColumn(name = "application_id")
     private Application application;
 
-    public static Payment createPayment(int finalPrice,
+    public static Payment createPayment(CreatePaymentRequestDto paymentInfo,
                                         Coupon coupon,
-                                        Application application) {
+                                        Application application,
+                                        Integer programPrice) {
         return Payment.builder()
-                .finalPrice(finalPrice)
+                .finalPrice(Integer.valueOf(paymentInfo.amount()))
+                .programPrice(programPrice)
+                .paymentKey(paymentInfo.paymentKey())
+                .orderId(paymentInfo.orderId())
                 .coupon(coupon)
                 .application(application)
                 .build();

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import static org.letscareer.letscareer.domain.price.error.PriceErrorCode.INVALID_PRICE;
 import static org.letscareer.letscareer.domain.price.error.PriceErrorCode.PRICE_NOT_FOUND;
+import static org.letscareer.letscareer.domain.price.error.PriceErrorCode.INVALID_PRICE;
 
 @RequiredArgsConstructor
 @Component

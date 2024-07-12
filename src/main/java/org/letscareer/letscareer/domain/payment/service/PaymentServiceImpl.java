@@ -7,19 +7,27 @@ import org.letscareer.letscareer.domain.application.helper.LiveApplicationHelper
 import org.letscareer.letscareer.domain.live.vo.LiveEmailVo;
 import org.letscareer.letscareer.domain.payment.dto.request.UpdatePaymentRequestDto;
 import org.letscareer.letscareer.domain.payment.dto.response.GetPaymentDetailResponseDto;
+import org.letscareer.letscareer.domain.payment.dto.response.GetPaymentResponseDto;
+import org.letscareer.letscareer.domain.payment.dto.response.GetPaymentsResponseDto;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.payment.helper.PaymentHelper;
 import org.letscareer.letscareer.domain.payment.mapper.PaymentMapper;
 import org.letscareer.letscareer.domain.payment.vo.PaymentDetailVo;
+import org.letscareer.letscareer.domain.payment.vo.PaymentProgramVo;
+import org.letscareer.letscareer.domain.pg.dto.response.TossPaymentsResponseDto;
+import org.letscareer.letscareer.domain.pg.provider.TossProvider;
 import org.letscareer.letscareer.domain.price.helper.ChallengePriceHelper;
 import org.letscareer.letscareer.domain.price.helper.LivePriceHelper;
-import org.letscareer.letscareer.domain.price.helper.PriceHelper;
 import org.letscareer.letscareer.domain.price.vo.PriceDetailVo;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.program.vo.ProgramSimpleVo;
+import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.utils.email.EmailUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional
@@ -27,29 +35,38 @@ import org.springframework.transaction.annotation.Transactional;
 public class PaymentServiceImpl implements PaymentService {
     private final PaymentHelper paymentHelper;
     private final PaymentMapper paymentMapper;
-    private final ApplicationHelper applicationHelper;
-    private final PriceHelper priceHelper;
-    private final ChallengePriceHelper challengePriceHelper;
-    private final LivePriceHelper livePriceHelper;
     private final LiveApplicationHelper liveApplicationHelper;
+    private final ChallengePriceHelper challengePriceHelper;
+    private final ApplicationHelper applicationHelper;
+    private final LivePriceHelper livePriceHelper;
+    private final TossProvider tossProvider;
     private final EmailUtils emailUtils;
+
+    @Override
+    public GetPaymentsResponseDto getPayments(User user) {
+        List<PaymentProgramVo> paymentProgramInfos = applicationHelper.findPaymentProgramVos(user.getId());
+        List<GetPaymentResponseDto> payments = createGetPaymentResponseDto(paymentProgramInfos);
+        return paymentMapper.toGetPaymentsResponseDto(payments);
+    }
+
+    private List<GetPaymentResponseDto> createGetPaymentResponseDto(List<PaymentProgramVo> programInfos) {
+        return programInfos.stream()
+                .map(programInfo -> paymentMapper.toGetPaymentResponseDto(
+                        programInfo,
+                        tossProvider.requestPaymentDetail(programInfo.paymentKey())
+                ))
+                .collect(Collectors.toList());
+    }
 
     @Override
     public GetPaymentDetailResponseDto getPaymentDetail(Long paymentId) {
         Payment payment = paymentHelper.findPaymentByIdOrThrow(paymentId);
         Application application = payment.getApplication();
         ProgramSimpleVo programSimpleVo = applicationHelper.findVWApplicationProgramIdByIdOrThrow(application.getId());
-        PriceDetailVo priceInfo = null;
-        switch (programSimpleVo.programType()) {
-            case CHALLENGE -> {
-                priceInfo = challengePriceHelper.findPriceDetailVoByChallengeId(programSimpleVo.programId());
-            }
-            case LIVE -> {
-                priceInfo = livePriceHelper.findLivePriceDetailVoByLiveId(programSimpleVo.programId());
-            }
-        }
+        PriceDetailVo priceInfo = findPriceInfoForProgramType(programSimpleVo);
         PaymentDetailVo paymentInfo = paymentHelper.findPaymentDetailVoByPaymentId(paymentId);
-        return paymentMapper.toGetPaymentDetailResponseDto(priceInfo, paymentInfo);
+        TossPaymentsResponseDto tossInfo = tossProvider.requestPaymentDetail(payment.getPaymentKey());
+        return paymentMapper.toGetPaymentDetailResponseDto(priceInfo, paymentInfo, tossInfo);
     }
 
     @Override
@@ -59,6 +76,13 @@ public class PaymentServiceImpl implements PaymentService {
             sendConfirmedEmail(payment);
         }
         payment.updatePayment(updatePaymentRequestDto);
+    }
+
+    private PriceDetailVo findPriceInfoForProgramType(ProgramSimpleVo programSimpleVo) {
+        if (ProgramType.CHALLENGE.equals(programSimpleVo.programType()))
+            return challengePriceHelper.findPriceDetailVoByChallengeId(programSimpleVo.programId());
+        else
+            return livePriceHelper.findLivePriceDetailVoByLiveId(programSimpleVo.programId());
     }
 
     private boolean isConfirmedEmailTarget(ProgramType programType,

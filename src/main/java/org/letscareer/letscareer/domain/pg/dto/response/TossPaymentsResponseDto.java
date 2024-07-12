@@ -1,8 +1,13 @@
 package org.letscareer.letscareer.domain.pg.dto.response;
 
 import jakarta.annotation.Nullable;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.letscareer.letscareer.domain.pg.dto.response.toss.*;
 
+@Builder
 public record TossPaymentsResponseDto(
         String mId,
         @Nullable String lastTransactionKey,

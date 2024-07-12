@@ -37,8 +37,8 @@ public class TossApiTests {
     }
 
     @Test
-    @DisplayName("provider 요청 생성")
-    void createRequestHeaderTest() {
+    @DisplayName("provider 결제 승인 api")
+    void createPaymentTest() {
         // given
         Long couponId = null;
         Long priceId = null;
@@ -53,5 +53,19 @@ public class TossApiTests {
 
         // then
         assertThat(responseDto).isNotNull();
+    }
+
+    @Test
+    @DisplayName("paymentKey로 결제 조회 api")
+    void getPaymentDetailForPaymentKeyTest() {
+        // given
+        String paymentKey = "tgen_202407071617360oD26";
+
+        // when
+        TossPaymentsResponseDto responseDto = tossFeignController.getPaymentDetail(paymentKey);
+
+        // then
+        System.out.println(responseDto);
+        assertThat(responseDto.paymentKey()).isEqualTo(paymentKey);
     }
 }

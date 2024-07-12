@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.type.ApplicationReviewStatus;
 import org.letscareer.letscareer.domain.application.type.ApplicationStatus;
 import org.letscareer.letscareer.domain.application.vo.MyApplicationVo;
+import org.letscareer.letscareer.domain.payment.vo.PaymentProgramVo;
 import org.letscareer.letscareer.domain.program.vo.ProgramSimpleVo;
 
 import java.time.LocalDateTime;
@@ -41,6 +42,25 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
                         checkEndDateOrIsConfirmed(),
                         eqPaymentIsRefunded(false)
                 )
+                .fetch();
+    }
+
+    @Override
+    public List<PaymentProgramVo> findPaymentProgramVos(Long userId) {
+        return queryFactory
+                .select(Projections.constructor(PaymentProgramVo.class,
+                        vWApplication.paymentId,
+                        vWApplication.programTitle,
+                        vWApplication.programThumbnail,
+                        vWApplication.programPrice,
+                        vWApplication.paymentKey,
+                        vWApplication.paymentCreateDate
+                ))
+                .from(vWApplication)
+                .where(
+                        eqUserId(userId)
+                )
+                .orderBy(vWApplication.paymentCreateDate.desc())
                 .fetch();
     }
 
