@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.global.config;
 
 import org.letscareer.letscareer.domain.application.service.ApplicationServiceFactory;
+import org.letscareer.letscareer.domain.application.service.TossApplicationServiceFactory;
 import org.letscareer.letscareer.domain.pg.provider.PgProviderFactory;
 import org.springframework.beans.factory.config.ServiceLocatorFactoryBean;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +13,13 @@ public class FactoryConfig {
     public ServiceLocatorFactoryBean applicationServiceFactoryBean() {
         ServiceLocatorFactoryBean factoryBean = new ServiceLocatorFactoryBean();
         factoryBean.setServiceLocatorInterface(ApplicationServiceFactory.class);
+        return factoryBean;
+    }
+
+    @Bean
+    public ServiceLocatorFactoryBean tossApplicationServiceFactoryBean() {
+        ServiceLocatorFactoryBean factoryBean = new ServiceLocatorFactoryBean();
+        factoryBean.setServiceLocatorInterface(TossApplicationServiceFactory.class);
         return factoryBean;
     }
 
