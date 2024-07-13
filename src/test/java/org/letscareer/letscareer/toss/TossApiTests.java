@@ -7,7 +7,6 @@ import org.letscareer.letscareer.domain.payment.type.RefundType;
 import org.letscareer.letscareer.domain.pg.dto.request.TossPaymentsCancelRequestDto;
 import org.letscareer.letscareer.domain.pg.dto.request.TossPaymentsRequestDto;
 import org.letscareer.letscareer.domain.pg.dto.response.TossPaymentsResponseDto;
-import org.letscareer.letscareer.domain.pg.mapper.TossMapper;
 import org.letscareer.letscareer.global.common.utils.toss.TossFeignController;
 import org.letscareer.letscareer.global.common.utils.toss.TossSecretKeyGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +20,6 @@ public class TossApiTests {
     private TossSecretKeyGenerator tossSecretKeyGenerator;
     @Autowired
     private TossFeignController tossFeignController;
-    @Autowired
-    private TossMapper tossMapper;
 
     @Test
     @DisplayName("secrete key 생성")
@@ -50,7 +47,7 @@ public class TossApiTests {
         CreatePaymentRequestDto paymentRequestDto = new CreatePaymentRequestDto(couponId, priceId, paymentKey, orderId, amount);
 
         // when
-        TossPaymentsRequestDto requestDto = tossMapper.toTossPaymentsRequestDto(paymentRequestDto);
+        TossPaymentsRequestDto requestDto = TossPaymentsRequestDto.of(paymentRequestDto);
         TossPaymentsResponseDto responseDto = tossFeignController.createPayments(requestDto);
 
         // then
@@ -76,7 +73,7 @@ public class TossApiTests {
     void cancelPayment() {
         // given
         String paymentKey = "tgen_20240713115657yIgO8";
-        TossPaymentsCancelRequestDto requestDto = tossMapper.toTossPaymentsCancelRequestDto(RefundType.HALF, "고객이 취소를 원함", 100);
+        TossPaymentsCancelRequestDto requestDto = TossPaymentsCancelRequestDto.of(RefundType.HALF, "고객이 취소를 원함", 100);
 
         // when
         TossPaymentsResponseDto responseDto = tossFeignController.cancelPayments(paymentKey, requestDto);
