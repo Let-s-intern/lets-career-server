@@ -13,7 +13,7 @@ import java.time.temporal.ChronoUnit;
 public enum RefundType {
     ZERO(0),
     ALL(1),
-    TWO_THIRD((double) 1/3),
+    TWO_THIRD((double) 2/3),
     HALF((double) 1/2);
 
     private final double percent;
