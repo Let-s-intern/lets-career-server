@@ -39,11 +39,12 @@ public class ApplicationV1Controller {
     @Operation(summary = "신청서 삭제", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
+    @ApiErrorCode({SwaggerEnum.APPLICATION_ALREADY_CANCELED, SwaggerEnum.APPLICATION_CANNOT_CANCELED})
     @DeleteMapping("/{applicationId}")
-    public ResponseEntity<SuccessResponse<?>> deleteApplication(@PathVariable final Long applicationId,
+    public ResponseEntity<SuccessResponse<?>> cancelApplication(@PathVariable final Long applicationId,
                                                                 @RequestParam final ProgramType type,
                                                                 @CurrentUser User user) {
-        applicationServiceFactory.getApplicationService(type).deleteApplication(applicationId, user);
+        applicationServiceFactory.getApplicationService(type).cancelApplication(applicationId, user);
         return SuccessResponse.ok(null);
     }
 }

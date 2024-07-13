@@ -132,8 +132,8 @@ public class ChallengeV1Controller {
     })
     @GetMapping("/{challengeId}/applications")
     public ResponseEntity<SuccessResponse<?>> getApplications(@PathVariable final Long challengeId,
-                                                              @RequestParam(required = false) final Boolean isConfirmed) {
-        final GetChallengeApplicationsResponseDto responseDto = challengeService.getApplications(challengeId, isConfirmed);
+                                                              @RequestParam(required = false) final Boolean isCanceled) {
+        final GetChallengeApplicationsResponseDto responseDto = challengeService.getApplications(challengeId, isCanceled);
         return SuccessResponse.ok(responseDto);
     }
 

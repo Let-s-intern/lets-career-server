@@ -25,7 +25,7 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<AdminLiveApplicationVo> findAdminLiveApplicationVos(Long liveId, Boolean isConfirmed) {
+    public List<AdminLiveApplicationVo> findAdminLiveApplicationVos(Long liveId, Boolean isCanceled) {
         return queryFactory
                 .select(Projections.constructor(AdminLiveApplicationVo.class,
                         liveApplication.id,
@@ -40,8 +40,7 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
                         liveApplication.question,
                         coupon.name,
                         payment.finalPrice,
-                        payment.isConfirmed,
-                        payment.isRefunded,
+                        liveApplication.isCanceled,
                         liveApplication.createDate
                 ))
                 .from(liveApplication)
@@ -53,7 +52,7 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
                 .orderBy(liveApplication.id.desc())
                 .where(
                         eqLiveId(liveId),
-                        eqIsConfirmed(isConfirmed)
+                        eqIsCanceled(isCanceled)
                 )
                 .fetch();
     }
@@ -89,8 +88,7 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
                 .leftJoin(liveApplication.payment, payment)
                 .where(
                         eqLiveId(liveId),
-                        eqIsConfirmed(true),
-                        eqIsRefunded(false)
+                        eqIsCanceled(false)
                 )
                 .fetch();
     }
@@ -174,8 +172,8 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
         return liveId != null ? live.id.eq(liveId) : null;
     }
 
-    private BooleanExpression eqIsConfirmed(Boolean isConfirmed) {
-        return isConfirmed != null ? payment.isConfirmed.eq(isConfirmed) : null;
+    private BooleanExpression eqIsCanceled(Boolean isCanceled) {
+        return isCanceled != null ? liveApplication.isCanceled.eq(isCanceled) : null;
     }
 
     private BooleanExpression eqIsRefunded(Boolean isRefunded) {

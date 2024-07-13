@@ -9,6 +9,7 @@ import org.letscareer.letscareer.domain.pg.dto.response.toss.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Builder
 public record TossPaymentsResponseDto(
@@ -31,7 +32,7 @@ public record TossPaymentsResponseDto(
         @Nullable CashReceiptInfo cashReceipt,
         @Nullable CashReceiptsInfo cashReceipts,
         @Nullable DiscountInfo discount,
-        @Nullable CancelsInfo cancels,
+        @Nullable List<CancelsInfo> cancels,
         @Nullable String secret,
         String type,
         @Nullable PayInfo easyPay,

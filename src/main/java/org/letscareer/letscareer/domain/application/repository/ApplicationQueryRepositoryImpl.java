@@ -1,11 +1,9 @@
 package org.letscareer.letscareer.domain.application.repository;
 
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.domain.application.type.ApplicationReviewStatus;
 import org.letscareer.letscareer.domain.application.type.ApplicationStatus;
 import org.letscareer.letscareer.domain.application.vo.MyApplicationVo;
 import org.letscareer.letscareer.domain.payment.vo.PaymentProgramVo;
@@ -25,7 +23,7 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
         return queryFactory
                 .select(Projections.constructor(MyApplicationVo.class,
                         vWApplication.applicationId,
-                        vWApplication.paymentIsConfirmed,
+                        vWApplication.isCanceled,
                         vWApplication.programId,
                         vWApplication.programType,
                         vWApplication.programTitle,
@@ -38,9 +36,7 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
                 .from(vWApplication)
                 .where(
                         eqUserId(userId),
-                        eqStatus(status),
-                        checkEndDateOrIsConfirmed(),
-                        eqPaymentIsRefunded(false)
+                        eqStatus(status)
                 )
                 .fetch();
     }
@@ -85,12 +81,8 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
         return vWApplication.userId.eq(userId);
     }
 
-    private BooleanExpression eqPaymentIsConfirmed(Boolean isConfirmed) {
-        return vWApplication.paymentIsConfirmed.eq(isConfirmed);
-    }
-
-    private BooleanExpression eqPaymentIsRefunded(Boolean isRefunded) {
-        return vWApplication.paymentIsRefunded.eq(isRefunded);
+    private BooleanExpression eqIsCanceled(Boolean isCanceled) {
+        return vWApplication.isCanceled.eq(isCanceled);
     }
 
     private BooleanExpression beforeStart() {
@@ -112,20 +104,16 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
         if (status != null) {
             switch (status) {
                 case WAITING -> {
-                    return beforeStart().and(eqPaymentIsConfirmed(false));
+                    return beforeStart();
                 }
                 case IN_PROGRESS -> {
-                    return beforeEnd().and(eqPaymentIsConfirmed(true));
+                    return beforeEnd();
                 }
                 case DONE -> {
-                    return afterEnd().and(eqPaymentIsConfirmed(true));
+                    return afterEnd();
                 }
             }
         }
         return null;
-    }
-
-    private BooleanExpression checkEndDateOrIsConfirmed() {
-        return eqPaymentIsConfirmed(true).or(beforeEnd());
     }
 }

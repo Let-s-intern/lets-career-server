@@ -10,6 +10,7 @@ public record UserChallengeApplicationVo(
         String contactEmail,
         String phoneNum,
         AccountType accountType,
-        String accountNum
+        String accountNum,
+        Boolean isCanceled
 ) {
 }

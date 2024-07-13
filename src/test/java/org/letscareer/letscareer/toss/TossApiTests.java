@@ -3,6 +3,8 @@ package org.letscareer.letscareer.toss;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.letscareer.letscareer.domain.payment.dto.request.CreatePaymentRequestDto;
+import org.letscareer.letscareer.domain.payment.type.RefundType;
+import org.letscareer.letscareer.domain.pg.dto.request.TossPaymentsCancelRequestDto;
 import org.letscareer.letscareer.domain.pg.dto.request.TossPaymentsRequestDto;
 import org.letscareer.letscareer.domain.pg.dto.response.TossPaymentsResponseDto;
 import org.letscareer.letscareer.domain.pg.mapper.TossMapper;
@@ -59,7 +61,7 @@ public class TossApiTests {
     @DisplayName("paymentKey로 결제 조회 api")
     void getPaymentDetailForPaymentKeyTest() {
         // given
-        String paymentKey = "tgen_202407071617360oD26";
+        String paymentKey = "tgen_20240713123135pVXw8";
 
         // when
         TossPaymentsResponseDto responseDto = tossFeignController.getPaymentDetail(paymentKey);
@@ -67,5 +69,20 @@ public class TossApiTests {
         // then
         System.out.println(responseDto);
         assertThat(responseDto.paymentKey()).isEqualTo(paymentKey);
+    }
+
+    @Test
+    @DisplayName("paymentKey로 결제 취소 api")
+    void cancelPayment() {
+        // given
+        String paymentKey = "tgen_20240713115657yIgO8";
+        TossPaymentsCancelRequestDto requestDto = tossMapper.toTossPaymentsCancelRequestDto(RefundType.HALF, "고객이 취소를 원함", 100);
+
+        // when
+        TossPaymentsResponseDto responseDto = tossFeignController.cancelPayments(paymentKey, requestDto);
+
+        // then
+        System.out.println(responseDto.cancels().get(0));
+        assertThat(responseDto.cancels().get(0).cancelAmount().equals(100));
     }
 }

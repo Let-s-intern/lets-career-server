@@ -13,6 +13,7 @@ import org.letscareer.letscareer.domain.live.entity.Live;
 import org.letscareer.letscareer.domain.live.helper.LiveHelper;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.payment.helper.PaymentHelper;
+import org.letscareer.letscareer.domain.payment.type.RefundType;
 import org.letscareer.letscareer.domain.pg.dto.response.TossPaymentsResponseDto;
 import org.letscareer.letscareer.domain.pg.provider.TossProvider;
 import org.letscareer.letscareer.domain.price.entity.Price;
@@ -59,13 +60,16 @@ public class LiveApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public void deleteApplication(Long applicationId, User user) {
+    public void cancelApplication(Long applicationId, User user) {
         LiveApplication liveApplication = liveApplicationHelper.findLiveApplicationByIdOrThrow(applicationId);
+        applicationHelper.checkAlreadyCanceled(liveApplication);
+        Payment payment = liveApplication.getPayment();
         Live live = liveApplication.getLive();
-        withdrawHelper.createApplicationWithdrawalRecordAndSave(live.getId(), live.getTitle(), ProgramType.LIVE, user);
         applicationHelper.validateAuthorizedUser(liveApplication.getUser(), user);
-        liveHelper.updateCurrentCount(liveApplication.getLive(), live.getCurrentCount() - 1);
-        liveApplicationHelper.deleteLiveApplication(liveApplication);
+        RefundType refundType = RefundType.of(ProgramType.LIVE, live.getStartDate().toLocalDate(), live.getEndDate().toLocalDate());
+        int cancelAmount = priceHelper.calculateCancelAmount(payment, refundType);
+        tossProvider.cancelPayments(refundType, payment.getPaymentKey(), cancelAmount);
+        liveApplication.updateIsCanceled(true);
     }
 
     private void validateCreateLiveApplicationDto(CreateApplicationRequestDto createApplicationRequestDto) {
