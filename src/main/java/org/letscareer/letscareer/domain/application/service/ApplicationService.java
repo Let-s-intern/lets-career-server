@@ -9,5 +9,5 @@ import org.springframework.stereotype.Service;
 public interface ApplicationService {
     CreateApplicationResponseDto createApplication(Long programId, User user, CreateApplicationRequestDto requestDto);
 
-    void deleteApplication(Long applicationId, User user);
+    void cancelApplication(Long applicationId, User user);
 }

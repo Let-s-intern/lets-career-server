@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.pg.provider;
 
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.payment.dto.request.CreatePaymentRequestDto;
+import org.letscareer.letscareer.domain.payment.type.RefundType;
 import org.letscareer.letscareer.domain.pg.dto.request.TossPaymentsCancelRequestDto;
 import org.letscareer.letscareer.domain.pg.dto.request.TossPaymentsRequestDto;
 import org.letscareer.letscareer.domain.pg.dto.response.TossPaymentsResponseDto;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 public class TossProvider implements PgProvider {
     private final TossFeignController tossFeignController;
     private final TossMapper tossMapper;
+    private static final String CANCEL_REASON = "고객이 취소를 원함";
 
     @Override
     public TossPaymentsResponseDto requestPayments(CreatePaymentRequestDto paymentRequestDto) {
@@ -29,10 +31,9 @@ public class TossProvider implements PgProvider {
     }
 
     @Override
-    public TossPaymentsResponseDto cancelPayments(String paymentKey) {
-        if (paymentKey.isEmpty())
-            return null;
-        TossPaymentsCancelRequestDto requestDto = tossMapper.toTossPaymentsCancelRequestDto("고객이 취소를 원함");
+    public TossPaymentsResponseDto cancelPayments(RefundType refundType, String paymentKey, Integer cancelAmount) {
+        if (paymentKey.isEmpty()) return null;
+        TossPaymentsCancelRequestDto requestDto = tossMapper.toTossPaymentsCancelRequestDto(refundType, CANCEL_REASON, cancelAmount);
         return tossFeignController.cancelPayments(paymentKey, requestDto);
     }
 }

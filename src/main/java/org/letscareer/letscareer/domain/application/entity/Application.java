@@ -1,11 +1,14 @@
 package org.letscareer.letscareer.domain.application.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.review.entity.Review;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
+
+import static org.letscareer.letscareer.global.common.utils.entity.EntityUpdateValueUtils.updateValue;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -19,6 +22,7 @@ public abstract class Application extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private Boolean isCanceled;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -43,5 +47,9 @@ public abstract class Application extends BaseTimeEntity {
 
     public void setReview(Review review) {
         this.review = review;
+    }
+
+    public void updateIsCanceled(boolean isCanceled) {
+        this.isCanceled = updateValue(this.isCanceled, isCanceled);
     }
 }

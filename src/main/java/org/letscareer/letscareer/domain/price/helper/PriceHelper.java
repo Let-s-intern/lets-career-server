@@ -2,6 +2,8 @@ package org.letscareer.letscareer.domain.price.helper;
 
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.coupon.entity.Coupon;
+import org.letscareer.letscareer.domain.payment.entity.Payment;
+import org.letscareer.letscareer.domain.payment.type.RefundType;
 import org.letscareer.letscareer.domain.price.entity.Price;
 import org.letscareer.letscareer.domain.price.repository.PriceRepository;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
@@ -35,5 +37,9 @@ public class PriceHelper {
             finalPrice -= coupon.getDiscount();
         }
         return finalPrice;
+    }
+
+    public int calculateCancelAmount(Payment payment, RefundType refundType) {
+        return (int) (payment.getFinalPrice() * refundType.getPercent()) / 10 * 10;
     }
 }

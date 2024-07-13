@@ -65,10 +65,6 @@ public class ChallengeApplicationHelper {
         return challengeApplicationRepository.countByChallengeId(challengeId);
     }
 
-    public void deleteChallengeApplication(ChallengeApplication challengeApplication) {
-        challengeApplicationRepository.delete(challengeApplication);
-    }
-
     public Boolean checkExistingChallengeApplication(User user, Long challengeId) {
         if (Objects.isNull(user)) return null;
         return challengeApplicationRepository.findChallengeApplicationIdByUserIdAndChallengeId(user.getId(), challengeId).isPresent();

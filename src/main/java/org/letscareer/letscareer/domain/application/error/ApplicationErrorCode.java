@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ApplicationErrorCode implements ErrorCode {
     INVALID_APPLICATION_TIME(HttpStatus.BAD_REQUEST, "신청이 마감된 프로그램입니다."),
+    APPLICATION_ALREADY_CANCELED(HttpStatus.CONFLICT, "이미 취소된 신청 내역입니다."),
     CONFLICT_APPLICATION(HttpStatus.CONFLICT, "이미 존재하는 신청 내역입니다."),
     LIVE_BAD_REQUEST(HttpStatus.BAD_REQUEST, "지원동기를 입력해주세요."),
     APPLICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 신청 내역입니다.");

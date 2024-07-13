@@ -13,6 +13,7 @@ import org.letscareer.letscareer.domain.coupon.entity.Coupon;
 import org.letscareer.letscareer.domain.coupon.helper.CouponHelper;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.payment.helper.PaymentHelper;
+import org.letscareer.letscareer.domain.payment.type.RefundType;
 import org.letscareer.letscareer.domain.pg.dto.response.TossPaymentsResponseDto;
 import org.letscareer.letscareer.domain.pg.provider.TossProvider;
 import org.letscareer.letscareer.domain.price.entity.Price;
@@ -21,7 +22,6 @@ import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.score.helper.AdminScoreHelper;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.helper.UserHelper;
-import org.letscareer.letscareer.domain.withdraw.helper.WithdrawHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +35,6 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
     private final ApplicationMapper applicationMapper;
     private final AdminScoreHelper adminScoreHelper;
     private final ChallengeHelper challengeHelper;
-    private final WithdrawHelper withdrawHelper;
     private final PaymentHelper paymentHelper;
     private final CouponHelper couponHelper;
     private final PriceHelper priceHelper;
@@ -59,11 +58,15 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public void deleteApplication(Long applicationId, User user) {
+    public void cancelApplication(Long applicationId, User user) {
         ChallengeApplication challengeApplication = challengeApplicationHelper.findChallengeApplicationByIdOrThrow(applicationId);
+        applicationHelper.checkAlreadyCanceled(challengeApplication);
+        Payment payment = challengeApplication.getPayment();
         Challenge challenge = challengeApplication.getChallenge();
-        withdrawHelper.createApplicationWithdrawalRecordAndSave(challenge.getId(), challenge.getTitle(), ProgramType.CHALLENGE, user);
         applicationHelper.validateAuthorizedUser(challengeApplication.getUser(), user);
-        challengeApplicationHelper.deleteChallengeApplication(challengeApplication);
+        RefundType refundType = RefundType.of(ProgramType.CHALLENGE, challenge.getStartDate().toLocalDate(), challenge.getEndDate().toLocalDate());
+        int cancelAmount = priceHelper.calculateCancelAmount(payment, refundType);
+        tossProvider.cancelPayments(refundType, payment.getPaymentKey(), cancelAmount);
+        challengeApplication.updateIsCanceled(true);
     }
 }
