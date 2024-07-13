@@ -11,6 +11,8 @@ import org.letscareer.letscareer.domain.coupon.entity.Coupon;
 import org.letscareer.letscareer.domain.coupon.helper.CouponHelper;
 import org.letscareer.letscareer.domain.live.entity.Live;
 import org.letscareer.letscareer.domain.live.helper.LiveHelper;
+import org.letscareer.letscareer.domain.nhn.dto.request.CreditConfirmParameter;
+import org.letscareer.letscareer.domain.nhn.provider.NhnProvider;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.payment.helper.PaymentHelper;
 import org.letscareer.letscareer.domain.payment.type.RefundType;
@@ -18,62 +20,70 @@ import org.letscareer.letscareer.domain.pg.dto.response.TossPaymentsResponseDto;
 import org.letscareer.letscareer.domain.pg.provider.TossProvider;
 import org.letscareer.letscareer.domain.price.entity.Price;
 import org.letscareer.letscareer.domain.price.helper.PriceHelper;
-import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.helper.UserHelper;
-import org.letscareer.letscareer.domain.withdraw.helper.WithdrawHelper;
-import org.letscareer.letscareer.global.error.exception.InvalidValueException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import static org.letscareer.letscareer.domain.application.error.ApplicationErrorCode.LIVE_BAD_REQUEST;
 
 @RequiredArgsConstructor
 @Transactional
 @Service("LIVE")
 public class LiveApplicationServiceImpl implements ApplicationService {
-    private final TossProvider tossProvider;
     private final LiveApplicationHelper liveApplicationHelper;
     private final ApplicationHelper applicationHelper;
     private final ApplicationMapper applicationMapper;
-    private final WithdrawHelper withdrawHelper;
     private final PaymentHelper paymentHelper;
     private final CouponHelper couponHelper;
     private final PriceHelper priceHelper;
     private final LiveHelper liveHelper;
     private final UserHelper userHelper;
+    private final TossProvider tossProvider;
+    private final NhnProvider nhnProvider;
 
     @Override
     public CreateApplicationResponseDto createApplication(Long programId, User user, CreateApplicationRequestDto createApplicationRequestDto) {
         Live live = liveHelper.findLiveByIdOrThrow(programId);
         Price price = priceHelper.findPriceByIdOrThrow(createApplicationRequestDto.paymentInfo().priceId());
         Coupon coupon = couponHelper.findCouponByIdOrNull(createApplicationRequestDto.paymentInfo().couponId());
-        liveApplicationHelper.validateExistingApplication(live.getId(), user.getId());
-        liveApplicationHelper.validateLiveDuration(live);
-        priceHelper.validatePrice(price, coupon, createApplicationRequestDto.paymentInfo().amount());
+        validateRequestConditionForCreateApplication(live, coupon, price, user, createApplicationRequestDto);
         TossPaymentsResponseDto responseDto = tossProvider.requestPayments(createApplicationRequestDto.paymentInfo());
-        LiveApplication liveApplication = liveApplicationHelper.createLiveApplicationAndSave(createApplicationRequestDto, live, user);
-        Payment payment = paymentHelper.createPaymentAndSave(createApplicationRequestDto.paymentInfo(), liveApplication, coupon, price.getPrice());
-        liveApplication.setPayment(payment);
-        userHelper.updateContactEmail(user, createApplicationRequestDto.contactEmail());
+        createEntityAndSave(live, coupon, price, user, createApplicationRequestDto);
+        sendKakaoMessage(live, user, responseDto);
         return applicationMapper.toCreateApplicationResponseDto(responseDto);
     }
 
     @Override
     public void cancelApplication(Long applicationId, User user) {
-        LiveApplication liveApplication = liveApplicationHelper.findLiveApplicationByIdOrThrow(applicationId);
-        applicationHelper.checkAlreadyCanceled(liveApplication);
-        Payment payment = liveApplication.getPayment();
-        Live live = liveApplication.getLive();
-        applicationHelper.validateAuthorizedUser(liveApplication.getUser(), user);
-        RefundType refundType = RefundType.of(ProgramType.LIVE, live.getStartDate().toLocalDate(), live.getEndDate().toLocalDate());
+        LiveApplication application = liveApplicationHelper.findLiveApplicationByIdOrThrow(applicationId);
+        validateConditionForCancelApplication(application, user);
+        Payment payment = application.getPayment();
+        Live live = application.getLive();
+        RefundType refundType = RefundType.ofLive(live);
         int cancelAmount = priceHelper.calculateCancelAmount(payment, refundType);
         tossProvider.cancelPayments(refundType, payment.getPaymentKey(), cancelAmount);
-        liveApplication.updateIsCanceled(true);
+        application.updateIsCanceled(true);
     }
 
-    private void validateCreateLiveApplicationDto(CreateApplicationRequestDto createApplicationRequestDto) {
-        if (createApplicationRequestDto.motivate().isBlank())
-            throw new InvalidValueException(LIVE_BAD_REQUEST);
+    private void validateRequestConditionForCreateApplication(Live live, Coupon coupon, Price price, User user, CreateApplicationRequestDto requestDto) {
+        liveApplicationHelper.validateExistingApplication(live.getId(), user.getId());
+        liveApplicationHelper.validateLiveDuration(live);
+        priceHelper.validatePrice(price, coupon, requestDto.paymentInfo().amount());
+    }
+
+    private void validateConditionForCancelApplication(LiveApplication application, User user) {
+        applicationHelper.checkAlreadyCanceled(application);
+        applicationHelper.validateAuthorizedUser(application.getUser(), user);
+    }
+
+    private void createEntityAndSave(Live live, Coupon coupon, Price price, User user, CreateApplicationRequestDto requestDto) {
+        LiveApplication liveApplication = liveApplicationHelper.createLiveApplicationAndSave(requestDto, live, user);
+        Payment payment = paymentHelper.createPaymentAndSave(requestDto.paymentInfo(), liveApplication, coupon, price.getPrice());
+        liveApplication.setPayment(payment);
+        userHelper.updateContactEmail(user, requestDto.contactEmail());
+    }
+
+    private void sendKakaoMessage(Live live, User user, TossPaymentsResponseDto responseDto) {
+        CreditConfirmParameter requestParameter = CreditConfirmParameter.of(user.getName(), live.getTitle(), responseDto);
+        nhnProvider.sendKakaoMessage(user, requestParameter);
     }
 }
