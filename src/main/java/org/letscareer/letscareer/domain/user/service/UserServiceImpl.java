@@ -148,6 +148,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void deleteUserForAdmin(User admin, String number) {
+        userHelper.validateAdminUser(admin);
+        User user = userHelper.findUserByPhoneNumOrThrow(number);
+        tokenProvider.deleteRefreshToken(user.getId());
+        userHelper.deleteUser(user);
+    }
+
+    @Override
     public Boolean isAdmin(User user) {
         return user.getRole().equals(UserRole.ADMIN);
     }

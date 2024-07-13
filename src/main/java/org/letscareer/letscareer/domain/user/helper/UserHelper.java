@@ -7,15 +7,18 @@ import org.letscareer.letscareer.domain.user.dto.request.UserUpdateRequestDto;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.repository.UserRepository;
 import org.letscareer.letscareer.domain.user.type.AuthProvider;
+import org.letscareer.letscareer.domain.user.type.UserRole;
 import org.letscareer.letscareer.domain.user.vo.UserAdminVo;
 import org.letscareer.letscareer.global.error.exception.ConflictException;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.letscareer.letscareer.global.error.exception.InvalidValueException;
+import org.letscareer.letscareer.global.error.exception.UnauthorizedException;
 import org.letscareer.letscareer.global.security.user.PrincipalDetailsService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -54,7 +57,13 @@ public class UserHelper {
     }
 
     public User findUserByPhoneNumOrNull(String phoneNum) {
-        return userRepository.findFirstByPhoneNum(phoneNum).orElse(null);
+        return userRepository.findFirstByPhoneNum(phoneNum)
+                .orElse(null);
+    }
+
+    public User findUserByPhoneNumOrThrow(String phoneNum) {
+        return userRepository.findFirstByPhoneNum(phoneNum)
+                .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND));
     }
 
     public User saveUser(User user) {
@@ -98,6 +107,11 @@ public class UserHelper {
             return;
         if (userRepository.existsByPhoneNum(phoneNum))
             throw new ConflictException(USER_PHONE_NUMBER_CONFLICT);
+    }
+
+    public void validateAdminUser(User admin) {
+        if (!admin.getRole().equals(UserRole.ADMIN))
+            throw new UnauthorizedException(IS_NOT_ADMIN);
     }
 
     public String encodePassword(String rawPassword) {
