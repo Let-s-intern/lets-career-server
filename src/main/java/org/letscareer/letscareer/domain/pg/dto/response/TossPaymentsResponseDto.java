@@ -1,14 +1,9 @@
 package org.letscareer.letscareer.domain.pg.dto.response;
 
 import jakarta.annotation.Nullable;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.letscareer.letscareer.domain.pg.dto.response.toss.*;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder
