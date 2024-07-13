@@ -10,6 +10,7 @@ import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.letscareer.letscareer.global.error.exception.InvalidValueException;
 import org.springframework.stereotype.Component;
 
+import static org.letscareer.letscareer.domain.application.error.ApplicationErrorCode.APPLICATION_CANNOT_CANCELED;
 import static org.letscareer.letscareer.domain.price.error.PriceErrorCode.PRICE_NOT_FOUND;
 import static org.letscareer.letscareer.domain.price.error.PriceErrorCode.INVALID_PRICE;
 
@@ -40,6 +41,7 @@ public class PriceHelper {
     }
 
     public int calculateCancelAmount(Payment payment, RefundType refundType) {
+        if(refundType.equals(RefundType.ZERO)) throw new InvalidValueException(APPLICATION_CANNOT_CANCELED);
         return (int) (payment.getFinalPrice() * refundType.getPercent()) / 10 * 10;
     }
 }
