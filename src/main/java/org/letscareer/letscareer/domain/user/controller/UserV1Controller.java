@@ -171,4 +171,15 @@ public class UserV1Controller {
         return SuccessResponse.ok(null);
     }
 
+    @Operation(summary = "[ADMIN] 유저 삭제", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    })
+    @ApiErrorCode({SwaggerEnum.IS_NOT_ADMIN, SwaggerEnum.USER_NOT_FOUND})
+    @DeleteMapping("/admin")
+    public ResponseEntity<SuccessResponse<?>> deleteUserForAdmin(@CurrentUser User user,
+                                                                 @RequestParam String number) {
+        userService.deleteUserForAdmin(user, number);
+        return SuccessResponse.ok(null);
+    }
+
 }

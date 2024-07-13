@@ -31,13 +31,13 @@ public interface UserService {
 
     GetMyApplicationsResponseDto getMyApplications(User user, ApplicationStatus status);
 
+    UserChallengeInfoResponseDto checkUserChallengeInfo(User user);
+
     void pwSignUp(UserPwSignUpRequestDto pwSignUpRequestDto);
 
     void updateUser(Long userId, UserUpdateRequestDto userUpdateRequestDto);
 
     void updateUserForSign(UpdateUserSignInfoRequestDto requestDto);
-
-    void deleteUser(User user);
 
     void resetPassword(PasswordResetRequestDto passwordResetRequestDto);
 
@@ -45,5 +45,7 @@ public interface UserService {
 
     void signOut(User user);
 
-    UserChallengeInfoResponseDto checkUserChallengeInfo(User user);
+    void deleteUser(User user);
+
+    void deleteUserForAdmin(User user, String number);
 }
