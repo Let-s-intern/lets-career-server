@@ -26,8 +26,8 @@ public class NhnProvider {
         List<RecipientInfo<?>> recipientInfoList = createRecipient(user, requestParameter);
         CreateMessageRequestDto requestDto = createMessageRequestDto(recipientInfoList);
         System.out.println("tlwkr");
-        nhnFeignController.createMessage(appKey, requestDto);
-        System.out.println("Rmx");
+        CreateMessageResponseDto responseDto = nhnFeignController.createMessage(appKey, requestDto);
+        System.out.println(responseDto.message());
     }
 
     private CreateMessageRequestDto createMessageRequestDto(List<RecipientInfo<?>> recipientList) {
