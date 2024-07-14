@@ -33,8 +33,8 @@ public class UserMapper {
         return UserAdminListResponseDto.of(userAdminList, pageInfo);
     }
 
-    public UserInfoResponseDto toUserInfoResponseDto(User user) {
-        return UserInfoResponseDto.of(user);
+    public UserInfoResponseDto toUserInfoResponseDto(User user, String stringId) {
+        return UserInfoResponseDto.of(user, stringId);
     }
 
     public UserChallengeInfoResponseDto toUserChallengeInfoResponseDto(Boolean pass) {

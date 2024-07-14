@@ -36,7 +36,8 @@ public class UserV1Controller {
     @ApiErrorCode({SwaggerEnum.USER_NOT_FOUND})
     @GetMapping
     public ResponseEntity<SuccessResponse<?>> getUserInfo(@CurrentUser User user) {
-        return SuccessResponse.ok(userService.getUserInfo(user));
+        final UserInfoResponseDto responseDto = userService.getUserInfo(user);
+        return SuccessResponse.ok(responseDto);
     }
 
     @Operation(summary = "유저 로그아웃", responses = {
