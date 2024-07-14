@@ -25,7 +25,9 @@ public class NhnProvider {
         String appKey = nhnSecretKeyReader.getAppKey();
         List<RecipientInfo<?>> recipientInfoList = createRecipient(user, requestParameter);
         CreateMessageRequestDto requestDto = createMessageRequestDto(recipientInfoList);
+        System.out.println("tlwkr");
         nhnFeignController.createMessage(appKey, requestDto);
+        System.out.println("Rmx");
     }
 
     private CreateMessageRequestDto createMessageRequestDto(List<RecipientInfo<?>> recipientList) {
