@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.nhn.provider;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.letscareer.letscareer.domain.nhn.dto.request.CreateMessageRequestDto;
 import org.letscareer.letscareer.domain.nhn.dto.request.CreditConfirmParameter;
 import org.letscareer.letscareer.domain.nhn.dto.request.RecipientInfo;
@@ -14,19 +15,20 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class NhnProvider {
     private final NhnFeignController nhnFeignController;
     private final NhnSecretKeyReader nhnSecretKeyReader;
 
-    @Async("threadPoolTaskExecutor")
+    @Async("nhnTaskExecutor")
     public void sendKakaoMessage(User user, CreditConfirmParameter requestParameter) {
         String appKey = nhnSecretKeyReader.getAppKey();
         List<RecipientInfo<?>> recipientInfoList = createRecipient(user, requestParameter);
         CreateMessageRequestDto requestDto = createMessageRequestDto(recipientInfoList);
         CreateMessageResponseDto responseDto = nhnFeignController.createMessage(appKey, requestDto);
-        System.out.println(responseDto);
+        log.info("[NHN Result]::" + responseDto);
     }
 
     private CreateMessageRequestDto createMessageRequestDto(List<RecipientInfo<?>> recipientList) {
