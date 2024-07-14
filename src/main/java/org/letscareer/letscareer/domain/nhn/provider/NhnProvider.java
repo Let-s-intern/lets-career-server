@@ -8,6 +8,7 @@ import org.letscareer.letscareer.domain.nhn.dto.response.CreateMessageResponseDt
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.utils.nhn.NhnFeignController;
 import org.letscareer.letscareer.global.common.utils.nhn.NhnSecretKeyReader;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class NhnProvider {
     private final NhnFeignController nhnFeignController;
     private final NhnSecretKeyReader nhnSecretKeyReader;
 
+    @Async("threadPoolTaskExecutor")
     public CreateMessageResponseDto sendKakaoMessage(User user, CreditConfirmParameter requestParameter) {
         String appKey = nhnSecretKeyReader.getAppKey();
         List<RecipientInfo<?>> recipientInfoList = createRecipient(user, requestParameter);
