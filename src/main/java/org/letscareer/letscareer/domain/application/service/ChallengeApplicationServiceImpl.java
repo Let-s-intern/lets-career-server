@@ -11,6 +11,8 @@ import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
 import org.letscareer.letscareer.domain.coupon.entity.Coupon;
 import org.letscareer.letscareer.domain.coupon.helper.CouponHelper;
+import org.letscareer.letscareer.domain.nhn.dto.request.CreditConfirmParameter;
+import org.letscareer.letscareer.domain.nhn.provider.NhnProvider;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.payment.helper.PaymentHelper;
 import org.letscareer.letscareer.domain.payment.type.RefundType;
@@ -18,7 +20,6 @@ import org.letscareer.letscareer.domain.pg.dto.response.TossPaymentsResponseDto;
 import org.letscareer.letscareer.domain.pg.provider.TossProvider;
 import org.letscareer.letscareer.domain.price.entity.Price;
 import org.letscareer.letscareer.domain.price.helper.PriceHelper;
-import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.score.helper.AdminScoreHelper;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.helper.UserHelper;
@@ -29,7 +30,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @Service("CHALLENGE")
 public class ChallengeApplicationServiceImpl implements ApplicationService {
-    private final TossProvider tossProvider;
     private final ChallengeApplicationHelper challengeApplicationHelper;
     private final ApplicationHelper applicationHelper;
     private final ApplicationMapper applicationMapper;
@@ -39,34 +39,54 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
     private final CouponHelper couponHelper;
     private final PriceHelper priceHelper;
     private final UserHelper userHelper;
+    private final TossProvider tossProvider;
+    private final NhnProvider nhnProvider;
 
     @Override
     public CreateApplicationResponseDto createApplication(Long programId, User user, CreateApplicationRequestDto createApplicationRequestDto) {
         Challenge challenge = challengeHelper.findChallengeByIdOrThrow(programId);
         Coupon coupon = couponHelper.findCouponByIdOrNull(createApplicationRequestDto.paymentInfo().couponId());
         Price price = priceHelper.findPriceByIdOrThrow(createApplicationRequestDto.paymentInfo().priceId());
-        challengeApplicationHelper.validateExistingApplication(challenge.getId(), user.getId());
-        challengeApplicationHelper.validateChallengeDuration(challenge);
-        priceHelper.validatePrice(price, coupon, createApplicationRequestDto.paymentInfo().amount());
+        validateConditionForCreateApplication(challenge, coupon, price, user, createApplicationRequestDto);
         TossPaymentsResponseDto responseDto = tossProvider.requestPayments(createApplicationRequestDto.paymentInfo());
-        ChallengeApplication challengeApplication = challengeApplicationHelper.createChallengeApplicationAndSave(challenge, user);
-        Payment payment = paymentHelper.createPaymentAndSave(createApplicationRequestDto.paymentInfo(), challengeApplication, coupon, price.getPrice());
-        challengeApplication.setPayment(payment);
-        adminScoreHelper.createAdminScoreAndSave(challengeApplication);
-        userHelper.updateContactEmail(user, createApplicationRequestDto.contactEmail());
+        createEntityAndSave(challenge, coupon, price, user, createApplicationRequestDto);
+        sendKakaoMessage(challenge, user, responseDto);
         return applicationMapper.toCreateApplicationResponseDto(responseDto);
     }
 
     @Override
     public void cancelApplication(Long applicationId, User user) {
-        ChallengeApplication challengeApplication = challengeApplicationHelper.findChallengeApplicationByIdOrThrow(applicationId);
-        applicationHelper.checkAlreadyCanceled(challengeApplication);
-        Payment payment = challengeApplication.getPayment();
-        Challenge challenge = challengeApplication.getChallenge();
-        applicationHelper.validateAuthorizedUser(challengeApplication.getUser(), user);
-        RefundType refundType = RefundType.of(ProgramType.CHALLENGE, challenge.getStartDate().toLocalDate(), challenge.getEndDate().toLocalDate());
-        int cancelAmount = priceHelper.calculateCancelAmount(payment, refundType);
+        ChallengeApplication application = challengeApplicationHelper.findChallengeApplicationByIdOrThrow(applicationId);
+        validateConditionForCancelApplication(application, user);
+        Payment payment = application.getPayment();
+        Challenge challenge = application.getChallenge();
+        RefundType refundType = RefundType.ofChallenge(challenge);
+        Integer cancelAmount = priceHelper.calculateCancelAmount(payment, refundType);
         tossProvider.cancelPayments(refundType, payment.getPaymentKey(), cancelAmount);
-        challengeApplication.updateIsCanceled(true);
+        application.updateIsCanceled(true);
+    }
+
+    private void validateConditionForCreateApplication(Challenge challenge, Coupon coupon, Price price, User user, CreateApplicationRequestDto requestDto) {
+        challengeApplicationHelper.validateExistingApplication(challenge.getId(), user.getId());
+        challengeApplicationHelper.validateChallengeDuration(challenge);
+        priceHelper.validatePrice(price, coupon, requestDto.paymentInfo().amount());
+    }
+
+    private void validateConditionForCancelApplication(ChallengeApplication application, User user) {
+        applicationHelper.checkAlreadyCanceled(application);
+        applicationHelper.validateAuthorizedUser(application.getUser(), user);
+    }
+
+    private void createEntityAndSave(Challenge challenge, Coupon coupon, Price price, User user, CreateApplicationRequestDto requestDto) {
+        ChallengeApplication challengeApplication = challengeApplicationHelper.createChallengeApplicationAndSave(challenge, user);
+        Payment payment = paymentHelper.createPaymentAndSave(requestDto.paymentInfo(), challengeApplication, coupon, price.getPrice());
+        challengeApplication.setPayment(payment);
+        adminScoreHelper.createAdminScoreAndSave(challengeApplication);
+        userHelper.updateContactEmail(user, requestDto.contactEmail());
+    }
+
+    private void sendKakaoMessage(Challenge challenge, User user, TossPaymentsResponseDto responseDto) {
+        CreditConfirmParameter requestParameter = CreditConfirmParameter.of(user.getName(), challenge.getTitle(), responseDto);
+        nhnProvider.sendKakaoMessage(user, requestParameter);
     }
 }

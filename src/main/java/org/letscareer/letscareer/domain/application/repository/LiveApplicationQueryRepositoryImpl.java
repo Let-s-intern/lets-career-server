@@ -40,7 +40,7 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
                         liveApplication.question,
                         coupon.name,
                         payment.finalPrice,
-                        liveApplication.isCanceled,
+                        liveApplication._super.isCanceled,
                         liveApplication.createDate
                 ))
                 .from(liveApplication)
@@ -173,7 +173,7 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
     }
 
     private BooleanExpression eqIsCanceled(Boolean isCanceled) {
-        return isCanceled != null ? liveApplication.isCanceled.eq(isCanceled) : null;
+        return isCanceled != null ? liveApplication._super.isCanceled.eq(isCanceled) : null;
     }
 
     private BooleanExpression eqIsRefunded(Boolean isRefunded) {

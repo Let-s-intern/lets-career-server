@@ -58,7 +58,7 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                         user.major,
                         coupon.name,
                         payment.finalPrice,
-                        challengeApplication.isCanceled,
+                        challengeApplication._super.isCanceled,
                         user.wishJob,
                         user.wishCompany,
                         user.inflowPath,
@@ -137,15 +137,15 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
     public Optional<Long> findChallengeApplicationIdByChallengeIdAndUserIdAndIsCanceled(Long challengeId, Long userId, Boolean isCanceled) {
         return Optional.ofNullable(queryFactory
                 .select(challengeApplication.id)
-                        .from(challengeApplication)
-                        .leftJoin(challengeApplication.user, user)
-                        .leftJoin(challengeApplication.payment, payment)
-                        .where(
-                                eqChallengeId(challengeId),
-                                eqUserId(userId),
-                                eqIsCanceled(isCanceled)
-                        )
-                        .fetchFirst());
+                .from(challengeApplication)
+                .leftJoin(challengeApplication.user, user)
+                .leftJoin(challengeApplication.payment, payment)
+                .where(
+                        eqChallengeId(challengeId),
+                        eqUserId(userId),
+                        eqIsCanceled(isCanceled)
+                )
+                .fetchFirst());
     }
 
     @Override
@@ -205,6 +205,6 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
     }
 
     private BooleanExpression eqIsCanceled(Boolean isCanceled) {
-        return isCanceled != null ? challengeApplication.isCanceled.eq(isCanceled) : null;
+        return isCanceled != null ? challengeApplication._super.isCanceled.eq(isCanceled) : null;
     }
 }
