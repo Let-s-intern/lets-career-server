@@ -2,8 +2,6 @@ package org.letscareer.letscareer.domain.application.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.CaseBuilder;
-import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.vo.AdminLiveApplicationVo;
@@ -104,7 +102,8 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
                 .leftJoin(liveApplication.live, live)
                 .where(
                         eqUserId(userId),
-                        eqLiveId(liveId)
+                        eqLiveId(liveId),
+                        eqIsCanceled(false)
                 )
                 .fetchFirst());
     }
@@ -137,26 +136,6 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
                         liveApplication.motivate.isNotEmpty()
                 )
                 .fetch();
-    }
-
-
-    private NumberExpression<Integer> calculateTotalCost() {
-        NumberExpression<Integer> safePrice = new CaseBuilder()
-                .when(livePrice.price.isNull())
-                .then(0)
-                .otherwise(livePrice.price);
-
-        NumberExpression<Integer> safeDiscount = new CaseBuilder()
-                .when(livePrice.discount.isNull())
-                .then(0)
-                .otherwise(livePrice.discount);
-
-        NumberExpression<Integer> safeCouponDiscount = new CaseBuilder()
-                .when(coupon.discount.isNull())
-                .then(0)
-                .otherwise(coupon.discount);
-
-        return safePrice.subtract(safeDiscount).subtract(safeCouponDiscount);
     }
 
     private BooleanExpression eqApplicationId(Long applicationId) {
