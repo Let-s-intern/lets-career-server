@@ -20,11 +20,12 @@ public class NhnProvider {
     private final NhnFeignController nhnFeignController;
     private final NhnSecretKeyReader nhnSecretKeyReader;
 
-    public CreateMessageResponseDto sendKakaoMessage(User user, CreditConfirmParameter requestParameter) {
+    @Async("threadPoolTaskExecutor")
+    public void sendKakaoMessage(User user, CreditConfirmParameter requestParameter) {
         String appKey = nhnSecretKeyReader.getAppKey();
         List<RecipientInfo<?>> recipientInfoList = createRecipient(user, requestParameter);
         CreateMessageRequestDto requestDto = createMessageRequestDto(recipientInfoList);
-        return nhnFeignController.createMessage(appKey, requestDto);
+        nhnFeignController.createMessage(appKey, requestDto);
     }
 
     private CreateMessageRequestDto createMessageRequestDto(List<RecipientInfo<?>> recipientList) {

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Component
 @FeignClient(name = "nhn-feign-client", url = "https://api-alimtalk.cloud.toast.com", configuration = NhnFeignClientConfig.class)
 public interface NhnFeignController {
-    @Async("threadPoolTaskExecutor")
     @PostMapping("/alimtalk/v2.3/appkeys/{appkey}/messages")
     CreateMessageResponseDto createMessage(@PathVariable final String appkey, @RequestBody final CreateMessageRequestDto requestDto);
 }
