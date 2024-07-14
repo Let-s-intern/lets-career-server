@@ -22,7 +22,7 @@ public class NhnProvider {
     private final NhnFeignController nhnFeignController;
     private final NhnSecretKeyReader nhnSecretKeyReader;
 
-    @Async("nhnTaskExecutor")
+    @Async("threadPoolTaskExecutor")
     public void sendKakaoMessage(User user, CreditConfirmParameter requestParameter) {
         String appKey = nhnSecretKeyReader.getAppKey();
         List<RecipientInfo<?>> recipientInfoList = createRecipient(user, requestParameter);
