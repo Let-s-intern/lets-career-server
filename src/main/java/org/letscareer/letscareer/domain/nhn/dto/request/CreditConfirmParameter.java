@@ -16,7 +16,7 @@ public record CreditConfirmParameter(
                                             TossPaymentsResponseDto responseDto) {
         return CreditConfirmParameter.builder()
                 .이름(이름)
-                .주문번호(responseDto.paymentKey())
+                .주문번호(responseDto.orderId().substring(12))
                 .프로그램명(프로그램명)
                 .결제금액(String.valueOf(responseDto.totalAmount()))
                 .build();
