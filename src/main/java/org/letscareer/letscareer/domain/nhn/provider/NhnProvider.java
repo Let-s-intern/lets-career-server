@@ -27,7 +27,7 @@ public class NhnProvider {
         CreateMessageRequestDto requestDto = createMessageRequestDto(recipientInfoList);
         System.out.println("tlwkr");
         CreateMessageResponseDto responseDto = nhnFeignController.createMessage(appKey, requestDto);
-        System.out.println(responseDto.message());
+        System.out.println(responseDto);
     }
 
     private CreateMessageRequestDto createMessageRequestDto(List<RecipientInfo<?>> recipientList) {
