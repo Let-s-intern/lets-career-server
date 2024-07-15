@@ -8,14 +8,15 @@ import org.letscareer.letscareer.domain.payment.vo.PaymentDetailVo;
 import org.letscareer.letscareer.domain.payment.vo.PaymentProgramVo;
 import org.letscareer.letscareer.domain.pg.dto.response.TossPaymentsResponseDto;
 import org.letscareer.letscareer.domain.price.vo.PriceDetailVo;
+import org.letscareer.letscareer.domain.program.vo.ProgramSimpleVo;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
 public class PaymentMapper {
-    public GetPaymentDetailResponseDto toGetPaymentDetailResponseDto(PriceDetailVo priceInfo, PaymentDetailVo paymentInfo, TossPaymentsResponseDto tossInfo) {
-        return GetPaymentDetailResponseDto.of(priceInfo, paymentInfo, tossInfo);
+    public GetPaymentDetailResponseDto toGetPaymentDetailResponseDto(ProgramSimpleVo programSimpleVo, PriceDetailVo priceInfo, PaymentDetailVo paymentInfo, TossPaymentsResponseDto tossInfo) {
+        return GetPaymentDetailResponseDto.of(programSimpleVo, priceInfo, paymentInfo, tossInfo);
     }
 
     public GetPaymentProgramResponseDto toGetPaymentProgramResponseDto(PaymentProgramVo programInfo) {

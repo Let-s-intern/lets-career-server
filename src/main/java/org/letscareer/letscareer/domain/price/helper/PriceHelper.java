@@ -41,7 +41,8 @@ public class PriceHelper {
     }
 
     public int calculateCancelAmount(Payment payment, RefundType refundType) {
-        if(refundType.equals(RefundType.ZERO)) throw new InvalidValueException(APPLICATION_CANNOT_CANCELED);
+        if(refundType.equals(RefundType.ZERO))
+            throw new InvalidValueException(APPLICATION_CANNOT_CANCELED);
         return (int) (payment.getFinalPrice() * refundType.getPercent()) / 10 * 10;
     }
 }
