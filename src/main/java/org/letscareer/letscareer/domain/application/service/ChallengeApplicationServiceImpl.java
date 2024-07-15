@@ -72,17 +72,17 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
         priceHelper.validatePrice(price, coupon, requestDto.paymentInfo().amount());
     }
 
-    private void validateConditionForCancelApplication(ChallengeApplication application, User user) {
-        applicationHelper.checkAlreadyCanceled(application);
-        applicationHelper.validateAuthorizedUser(application.getUser(), user);
-    }
-
     private void createEntityAndSave(Challenge challenge, Coupon coupon, Price price, User user, CreateApplicationRequestDto requestDto) {
         ChallengeApplication challengeApplication = challengeApplicationHelper.createChallengeApplicationAndSave(challenge, user);
         Payment payment = paymentHelper.createPaymentAndSave(requestDto.paymentInfo(), challengeApplication, coupon, price.getPrice());
         challengeApplication.setPayment(payment);
         adminScoreHelper.createAdminScoreAndSave(challengeApplication);
         userHelper.updateContactEmail(user, requestDto.contactEmail());
+    }
+
+    private void validateConditionForCancelApplication(ChallengeApplication application, User user) {
+        applicationHelper.checkAlreadyCanceled(application);
+        applicationHelper.validateAuthorizedUser(application.getUser(), user);
     }
 
     private void sendKakaoMessage(Challenge challenge, User user, TossPaymentsResponseDto responseDto) {
