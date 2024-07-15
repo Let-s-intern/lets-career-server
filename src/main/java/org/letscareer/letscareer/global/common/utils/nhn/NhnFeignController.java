@@ -4,6 +4,7 @@ import org.letscareer.letscareer.domain.nhn.dto.request.CreateMessageRequestDto;
 import org.letscareer.letscareer.domain.nhn.dto.response.CreateMessageResponseDto;
 import org.letscareer.letscareer.global.config.NhnFeignClientConfig;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;

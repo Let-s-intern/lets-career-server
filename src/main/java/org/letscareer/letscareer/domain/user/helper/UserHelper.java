@@ -18,11 +18,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
@@ -30,7 +27,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.letscareer.letscareer.domain.user.error.UserErrorCode.*;
-import static org.letscareer.letscareer.global.error.GlobalErrorCode.MISMATCH_PASSWORD;
 
 @Component
 @RequiredArgsConstructor
@@ -40,7 +36,8 @@ public class UserHelper {
     private final static String EMAIL_REGEX = "^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\\.[A-Za-z]{2,3}$";
     private final UserRepository userRepository;
     private final PrincipalDetailsService principalDetailsService;
-    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+//    private final PasswordEncoder passwordEncoder;
+//    private final MessageDigestPasswordEncoder hashEncoder;
 
     public User findUserByIdOrThrow(Long id) {
         return userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
@@ -114,20 +111,6 @@ public class UserHelper {
             throw new UnauthorizedException(IS_NOT_ADMIN);
     }
 
-    public String encodePassword(String rawPassword) {
-        return passwordEncoder.encode(rawPassword);
-    }
-
-    public void validatePassword(User user, String inputPassword) {
-        if (!matchPassword(inputPassword, user.getPassword())) {
-            throw new InvalidValueException(MISMATCH_PASSWORD);
-        }
-    }
-
-    private boolean matchPassword(String rawPassword, String encodedPassword) {
-        return passwordEncoder.matches(rawPassword, encodedPassword);
-    }
-
     public Authentication userAuthorizationInput(User user) {
         UserDetails userDetails = principalDetailsService.loadUserByUserId(user.getId());
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
@@ -146,11 +129,6 @@ public class UserHelper {
 
     public Page<UserAdminVo> findAllUserAdminVos(String email, String name, String phoneNum, Pageable pageable) {
         return userRepository.findAllUserAdminVos(email, name, phoneNum, pageable);
-    }
-
-    public void updatePassword(User user, String randomPassword) {
-        String encodedRandomPassword = encodePassword(randomPassword);
-        user.updateUserPassword(encodedRandomPassword);
     }
 
     public Boolean checkUserChallengeInfo(User user) {

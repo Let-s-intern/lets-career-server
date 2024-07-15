@@ -20,6 +20,7 @@ import org.letscareer.letscareer.domain.user.type.UserRole;
 import org.letscareer.letscareer.domain.user.vo.UserAdminVo;
 import org.letscareer.letscareer.domain.withdraw.helper.WithdrawHelper;
 import org.letscareer.letscareer.global.common.utils.email.EmailUtils;
+import org.letscareer.letscareer.global.common.utils.encoder.EncoderUtil;
 import org.letscareer.letscareer.global.security.jwt.TokenProvider;
 import org.letscareer.letscareer.global.security.oauth2.userinfo.OAuth2UserInfo;
 import org.springframework.data.domain.Page;
@@ -41,6 +42,7 @@ public class UserServiceImpl implements UserService {
     private final WithdrawHelper withdrawHelper;
     private final TokenProvider tokenProvider;
     private final EmailUtils emailUtils;
+    private final EncoderUtil encoderUtil;
 
     @Override
     public User createUserFromOAuth2(OAuth2UserInfo oAuth2UserInfo, AuthProvider authProvider) {
@@ -59,7 +61,7 @@ public class UserServiceImpl implements UserService {
         userHelper.validateRegexEmail(pwSignUpRequestDto.email());
         userHelper.validateRegexPhoneNumber(pwSignUpRequestDto.phoneNum());
         userHelper.validateRegexPassword(pwSignUpRequestDto.password());
-        String encodedPassword = userHelper.encodePassword(pwSignUpRequestDto.password());
+        String encodedPassword = encoderUtil.encodePassword(pwSignUpRequestDto.password());
         User newUser = userMapper.toEntity(pwSignUpRequestDto, encodedPassword);
         userHelper.saveUser(newUser);
     }
@@ -67,7 +69,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public TokenResponseDto pwSignIn(UserPwSignInRequestDto pwSignInRequestDto) {
         final User user = userHelper.findUserByEmailAndAuthProviderOrThrow(pwSignInRequestDto.email(), AuthProvider.SERVICE);
-        userHelper.validatePassword(user, pwSignInRequestDto.password());
+        encoderUtil.validatePassword(user, pwSignInRequestDto.password());
         final Authentication authentication = userHelper.userAuthorizationInput(user);
         final String accessToken = tokenProvider.createAccessToken(user.getId(), authentication);
         final String refreshToken = tokenProvider.createRefreshToken(user.getId(), authentication);
@@ -100,7 +102,8 @@ public class UserServiceImpl implements UserService {
     public void resetPassword(PasswordResetRequestDto passwordResetRequestDto) {
         User user = userHelper.findUserByEmailAndNameAndPhoneNumAndAuthProviderOrThrow(passwordResetRequestDto, AuthProvider.SERVICE);
         String randomPassword = RandomStringUtils.randomAlphanumeric(8);
-        userHelper.updatePassword(user, randomPassword);
+        String encodedRandomPassword = encoderUtil.encodePassword(randomPassword);
+        user.updateUserPassword(encodedRandomPassword);
         emailUtils.sendPasswordResetEmail(user.getEmail(), randomPassword);
     }
 
@@ -108,8 +111,9 @@ public class UserServiceImpl implements UserService {
     public void updatePassword(Long userId, PasswordUpdateRequestDto passwordUpdateRequestDto) {
         User user = userHelper.findUserByIdOrThrow(userId);
         userHelper.validateRegexPassword(passwordUpdateRequestDto.newPassword());
-        userHelper.validatePassword(user, passwordUpdateRequestDto.password());
-        userHelper.updatePassword(user, passwordUpdateRequestDto.newPassword());
+        encoderUtil.validatePassword(user, passwordUpdateRequestDto.password());
+        String encodedRandomPassword = encoderUtil.encodePassword(passwordUpdateRequestDto.newPassword());
+        user.updateUserPassword(encodedRandomPassword);
     }
 
     @Override
@@ -137,7 +141,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserInfoResponseDto getUserInfo(User user) {
-        return userMapper.toUserInfoResponseDto(user);
+        String stringId = encoderUtil.encodeUserData(user);
+        return userMapper.toUserInfoResponseDto(user, stringId);
     }
 
     @Override

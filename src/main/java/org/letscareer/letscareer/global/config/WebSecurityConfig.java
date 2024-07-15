@@ -22,6 +22,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.MessageDigestPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.intercept.AuthorizationFilter;
@@ -114,7 +115,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(request -> {
                     request.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                             .requestMatchers(SwaggerPatterns).permitAll()
-                            .requestMatchers(HttpMethod.GET, UserGetPatterns).hasAnyAuthority("USER","ADMIN")
+                            .requestMatchers(HttpMethod.GET, UserGetPatterns).hasAnyAuthority("USER", "ADMIN")
                             .requestMatchers(HttpMethod.POST, UserPostPatterns).hasAnyAuthority("USER", "ADMIN")
                             .requestMatchers(HttpMethod.PATCH, UserPatchPatterns).hasAnyAuthority("USER", "ADMIN")
                             .requestMatchers(HttpMethod.DELETE, UserDeletePatterns).hasAnyAuthority("USER", "ADMIN")

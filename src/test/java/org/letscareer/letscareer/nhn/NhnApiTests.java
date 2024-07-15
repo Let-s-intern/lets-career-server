@@ -43,7 +43,7 @@ public class NhnApiTests {
         String templateKey = nhnSecretKeyReader.getTemplateCode();
         String appKey = nhnSecretKeyReader.getAppKey();
         String recipientNo = "010-9278-7357";
-        CreditConfirmParameter creditConfirmParameter = CreditConfirmParameter.of("류관곤", "101", "프로그램이지롱", "1,000,000,000");
+        CreditConfirmParameter creditConfirmParameter = CreditConfirmParameter.of("류관곤", "101", null);
 
         // when
         RecipientInfo<?> recipientInfo = RecipientInfo.of(recipientNo, creditConfirmParameter);
