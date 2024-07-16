@@ -67,6 +67,7 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
         return queryFactory
                 .select(Projections.constructor(ProgramSimpleVo.class,
                         vWApplication.programId,
+                        vWApplication.applicationId,
                         vWApplication.programTitle,
                         vWApplication.programThumbnail,
                         vWApplication.programType,

@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @Builder
 public record ProgramSimpleVo(
         Long id,
+        Long applicationId,
         String title,
         String thumbnail,
         ProgramType programType,
