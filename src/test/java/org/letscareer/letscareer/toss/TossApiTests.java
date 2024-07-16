@@ -58,7 +58,7 @@ public class TossApiTests {
     @DisplayName("paymentKey로 결제 조회 api")
     void getPaymentDetailForPaymentKeyTest() {
         // given
-        String paymentKey = "tgen_20240713123135pVXw8";
+        String paymentKey = "tgen_20240716232801Ag388";
 
         // when
         TossPaymentsResponseDto responseDto = tossFeignController.getPaymentDetail(paymentKey);

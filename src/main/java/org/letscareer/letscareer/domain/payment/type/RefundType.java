@@ -30,6 +30,7 @@ public enum RefundType {
         LocalDate now = LocalDate.now();
         LocalDate startDate = challenge.getStartDate().toLocalDate();
         LocalDate endDate = challenge.getEndDate().toLocalDate();
+        if (now.isBefore(startDate)) return ALL;
         long challengePeriod = ChronoUnit.DAYS.between(startDate, endDate) + 1;
         LocalDate d3 = startDate.plusDays(challengePeriod / 3);
         LocalDate d2 = startDate.plusDays(challengePeriod / 2);
