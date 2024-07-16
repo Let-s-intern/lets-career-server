@@ -55,8 +55,7 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
                 ))
                 .from(vWApplication)
                 .where(
-                        eqUserId(userId),
-                        eqIsCanceled(false)
+                        eqUserId(userId)
                 )
                 .orderBy(vWApplication.paymentCreateDate.desc())
                 .fetch();
