@@ -16,7 +16,6 @@ import static org.letscareer.letscareer.domain.live.entity.QLive.live;
 import static org.letscareer.letscareer.domain.payment.entity.QPayment.payment;
 import static org.letscareer.letscareer.domain.price.entity.QLivePrice.livePrice;
 import static org.letscareer.letscareer.domain.user.entity.QUser.user;
-import static org.letscareer.letscareer.domain.user.repository.UserQueryRepositoryImpl.activeEmail;
 
 @RequiredArgsConstructor
 public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryRepository {
@@ -79,7 +78,7 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
     public List<String> findEmailListByLiveId(Long liveId) {
         return queryFactory
                 .select(
-                        activeEmail(liveApplication.user)
+                        liveApplication.user.contactEmail
                 )
                 .from(liveApplication)
                 .leftJoin(liveApplication.user, user)
