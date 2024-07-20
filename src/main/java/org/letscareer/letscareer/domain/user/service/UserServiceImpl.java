@@ -126,6 +126,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void updateUserForAdmin(Long userId, UpdateUserForAdminRequestDto requestDto) {
+        User user = userHelper.findUserByIdOrThrow(userId);
+        user.updateUserForAdmin(requestDto);
+    }
+
+    @Override
     public void signOut(User user) {
         tokenProvider.deleteRefreshToken(user.getId());
     }

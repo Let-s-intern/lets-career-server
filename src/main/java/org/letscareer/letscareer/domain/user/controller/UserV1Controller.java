@@ -159,6 +159,17 @@ public class UserV1Controller {
         return SuccessResponse.ok(null);
     }
 
+    @Operation(summary = "[ADMIN] 유저 정보 업데이트", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    })
+    @ApiErrorCode({SwaggerEnum.USER_NOT_FOUND, SwaggerEnum.USER_PHONE_NUMBER_CONFLICT, SwaggerEnum.INVALID_PHONE_NUMBER, SwaggerEnum.INVALID_EMAIL})
+    @PatchMapping("/{userId}")
+    public ResponseEntity<SuccessResponse<?>> updateUserForAdmin(@PathVariable final Long userId,
+                                                                 @RequestBody final UpdateUserForAdminRequestDto requestDto) {
+        userService.updateUserForAdmin(userId, requestDto);
+        return SuccessResponse.ok(null);
+    }
+
     @Operation(summary = "회원가입-추가 정보 업데이트", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })

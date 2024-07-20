@@ -15,6 +15,7 @@ public record UserInfoResponseDto(
         String contactEmail,
         String phoneNum,
         String university,
+        String inflowPath,
         UserGrade grade,
         String major,
         String wishJob,
@@ -32,6 +33,7 @@ public record UserInfoResponseDto(
                 .contactEmail(user.getContactEmail())
                 .phoneNum(user.getPhoneNum())
                 .university(user.getUniversity())
+                .inflowPath(user.getInflowPath())
                 .grade(user.getGrade())
                 .major(user.getMajor())
                 .wishJob(user.getWishJob())

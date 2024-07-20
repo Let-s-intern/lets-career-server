@@ -15,6 +15,7 @@ public interface UserService {
     User createUserFromOAuth2(OAuth2UserInfo oAuth2UserInfo, AuthProvider authProvider);
 
     User updateUserFromOAuth2(User user, OAuth2UserInfo oAuth2UserInfo);
+
     UserApplicationResponseDto getUserInfoForAdmin(Long userId);
 
     TokenResponseDto pwSignIn(UserPwSignInRequestDto pwSignInRequestDto);
@@ -40,6 +41,8 @@ public interface UserService {
     void resetPassword(PasswordResetRequestDto passwordResetRequestDto);
 
     void updatePassword(Long id, PasswordUpdateRequestDto passwordUpdateRequestDto);
+
+    void updateUserForAdmin(Long userId, UpdateUserForAdminRequestDto requestDto);
 
     void signOut(User user);
 
