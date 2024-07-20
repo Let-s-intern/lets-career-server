@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.program.vo;
 
 import lombok.Builder;
+import org.letscareer.letscareer.domain.live.type.ProgressType;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
 
 import java.time.LocalDateTime;
@@ -12,6 +13,7 @@ public record ProgramSimpleVo(
         String title,
         String thumbnail,
         ProgramType programType,
+        ProgressType progressType,
         LocalDateTime startDate,
         LocalDateTime endDate
 ) {
