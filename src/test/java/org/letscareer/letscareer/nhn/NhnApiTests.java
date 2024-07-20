@@ -5,7 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.letscareer.letscareer.domain.nhn.dto.request.CreateMessageRequestDto;
 import org.letscareer.letscareer.domain.nhn.dto.request.CreditConfirmParameter;
 import org.letscareer.letscareer.domain.nhn.dto.request.RecipientInfo;
+import org.letscareer.letscareer.domain.nhn.dto.request.CreditRefundParameter;
 import org.letscareer.letscareer.domain.nhn.dto.response.CreateMessageResponseDto;
+import org.letscareer.letscareer.domain.payment.type.RefundType;
 import org.letscareer.letscareer.global.common.utils.nhn.NhnFeignController;
 import org.letscareer.letscareer.global.common.utils.nhn.NhnSecretKeyReader;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +52,28 @@ public class NhnApiTests {
         List<RecipientInfo<?>> recipientInfoList = new ArrayList<>();
         recipientInfoList.add(recipientInfo);
         CreateMessageRequestDto requestDto = CreateMessageRequestDto.of(senderKey, templateKey, recipientInfoList);
+        CreateMessageResponseDto responseDto = nhnFeignController.createMessage(appKey, requestDto);
+
+        // then
+        System.out.println(responseDto);
+        assertThat(responseDto).isNotNull();
+    }
+
+    @Test
+    @DisplayName("환불 완료 메시지 치환 발송")
+    void sendRefundMessageToKakao() {
+        // given
+        String senderKey = nhnSecretKeyReader.getSendKey();
+        String templateCode = "payment_refund";
+        String appKey = nhnSecretKeyReader.getAppKey();
+        String recipientNo = "010-3419-0076";
+        CreditRefundParameter creditRefundParameter = CreditRefundParameter.of("김민서", "order1234", "강아지 산책 노하우", RefundType.HALF, 10000, 5000);
+
+        // when
+        List<RecipientInfo<?>> recipientInfoList = new ArrayList<>();
+        RecipientInfo<?> recipientInfo = RecipientInfo.of(recipientNo, creditRefundParameter);
+        recipientInfoList.add(recipientInfo);
+        CreateMessageRequestDto requestDto = CreateMessageRequestDto.of(senderKey, templateCode, recipientInfoList);
         CreateMessageResponseDto responseDto = nhnFeignController.createMessage(appKey, requestDto);
 
         // then
