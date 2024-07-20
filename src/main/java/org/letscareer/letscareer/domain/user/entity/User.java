@@ -96,6 +96,7 @@ public class User extends BaseTimeEntity {
     public static User createUserFromOAuth2(OAuth2UserInfo oAuth2UserInfo, AuthProvider authProvider) {
         return User.builder()
                 .email(oAuth2UserInfo.getEmail())
+                .contactEmail(oAuth2UserInfo.getEmail())
                 .name(oAuth2UserInfo.getName())
                 .phoneNum(oAuth2UserInfo.getPhoneNum())
                 .authProvider(authProvider)
@@ -105,6 +106,7 @@ public class User extends BaseTimeEntity {
     public static User createUser(UserPwSignUpRequestDto pwSignUpRequestDto, String encodedPassword) {
         return User.builder()
                 .email(pwSignUpRequestDto.email())
+                .contactEmail(pwSignUpRequestDto.email())
                 .name(pwSignUpRequestDto.name())
                 .phoneNum(pwSignUpRequestDto.phoneNum())
                 .password(encodedPassword)
