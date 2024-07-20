@@ -12,6 +12,7 @@ import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
 import org.letscareer.letscareer.domain.coupon.entity.Coupon;
 import org.letscareer.letscareer.domain.coupon.helper.CouponHelper;
 import org.letscareer.letscareer.domain.nhn.dto.request.CreditConfirmParameter;
+import org.letscareer.letscareer.domain.nhn.dto.request.CreditRefundParameter;
 import org.letscareer.letscareer.domain.nhn.provider.NhnProvider;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.payment.helper.PaymentHelper;
@@ -50,7 +51,7 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
         validateConditionForCreateApplication(challenge, coupon, price, user, createApplicationRequestDto);
         TossPaymentsResponseDto responseDto = tossProvider.requestPayments(createApplicationRequestDto.paymentInfo());
         createEntityAndSave(challenge, coupon, price, user, createApplicationRequestDto);
-        sendKakaoMessage(challenge, user, responseDto);
+        sendCreditConfirmKakaoMessage(challenge, user, responseDto);
         return applicationMapper.toCreateApplicationResponseDto(responseDto);
     }
 
@@ -62,8 +63,9 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
         Challenge challenge = application.getChallenge();
         RefundType refundType = RefundType.ofChallenge(challenge);
         Integer cancelAmount = priceHelper.calculateCancelAmount(payment, refundType);
-        tossProvider.cancelPayments(refundType, payment.getPaymentKey(), cancelAmount);
+        TossPaymentsResponseDto responseDto = tossProvider.cancelPayments(refundType, payment.getPaymentKey(), cancelAmount);
         application.updateIsCanceled(true);
+        sendCreditRefundKakaoMessage(challenge, user, payment, refundType, responseDto);
     }
 
     private void validateConditionForCreateApplication(Challenge challenge, Coupon coupon, Price price, User user, CreateApplicationRequestDto requestDto) {
@@ -85,8 +87,13 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
         applicationHelper.validateAuthorizedUser(application.getUser(), user);
     }
 
-    private void sendKakaoMessage(Challenge challenge, User user, TossPaymentsResponseDto responseDto) {
+    private void sendCreditConfirmKakaoMessage(Challenge challenge, User user, TossPaymentsResponseDto responseDto) {
         CreditConfirmParameter requestParameter = CreditConfirmParameter.of(user.getName(), challenge.getTitle(), responseDto);
-        nhnProvider.sendKakaoMessage(user, requestParameter);
+        nhnProvider.sendKakaoMessage(user, requestParameter, "payment_confirm");
+    }
+
+    private void sendCreditRefundKakaoMessage(Challenge challenge, User user, Payment payment, RefundType refundType, TossPaymentsResponseDto responseDto) {
+        CreditRefundParameter requestParameter = CreditRefundParameter.of(user.getName(), payment.getOrderId(), challenge.getTitle(), refundType, payment.getFinalPrice(), responseDto.cancels().get(0).cancelAmount());
+        nhnProvider.sendKakaoMessage(user, requestParameter, "payment_refund");
     }
 }

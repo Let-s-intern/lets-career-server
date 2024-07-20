@@ -18,26 +18,25 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class NhnProvider {
+public class NhnProvider<T> {
     private final NhnFeignController nhnFeignController;
     private final NhnSecretKeyReader nhnSecretKeyReader;
 
     @Async("threadPoolTaskExecutor")
-    public void sendKakaoMessage(User user, CreditConfirmParameter requestParameter) {
+    public void sendKakaoMessage(User user, T requestParameter, String templateCode) {
         String appKey = nhnSecretKeyReader.getAppKey();
         List<RecipientInfo<?>> recipientInfoList = createRecipient(user, requestParameter);
-        CreateMessageRequestDto requestDto = createMessageRequestDto(recipientInfoList);
+        CreateMessageRequestDto requestDto = createMessageRequestDto(recipientInfoList, templateCode);
         CreateMessageResponseDto responseDto = nhnFeignController.createMessage(appKey, requestDto);
         log.info("[NHN Result]::" + responseDto);
     }
 
-    private CreateMessageRequestDto createMessageRequestDto(List<RecipientInfo<?>> recipientList) {
+    private CreateMessageRequestDto createMessageRequestDto(List<RecipientInfo<?>> recipientList, String templateCode) {
         String senderKey = nhnSecretKeyReader.getSendKey();
-        String templateCode = nhnSecretKeyReader.getTemplateCode();
         return CreateMessageRequestDto.of(senderKey, templateCode, recipientList);
     }
 
-    private List<RecipientInfo<?>> createRecipient(User user, CreditConfirmParameter requestParameter) {
+    private List<RecipientInfo<?>> createRecipient(User user, T requestParameter) {
         List<RecipientInfo<?>> recipientList = new ArrayList<>();
         RecipientInfo<?> recipientInfo = RecipientInfo.of(user.getPhoneNum(), requestParameter);
         recipientList.add(recipientInfo);
