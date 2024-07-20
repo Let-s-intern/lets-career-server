@@ -21,7 +21,7 @@ public class BlogRating {
     private String content;
     @Builder.Default
     private Integer score = 0;
-    @OneToMany(mappedBy = "blog_hash_tag", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "blogRating", cascade = CascadeType.ALL)
     @Builder.Default
     private List<Blog> blogList = new ArrayList<>();
 }

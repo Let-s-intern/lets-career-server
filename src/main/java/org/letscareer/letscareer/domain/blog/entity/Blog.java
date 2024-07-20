@@ -19,12 +19,15 @@ public class Blog extends BaseTimeEntity {
     @Column(name = "blog_id")
     private Long id;
     private String title;
+    private String category;
     private String thumbnail;
     private String description;
+    private String content;
     private String ctaLink;
     private String ctaText;
-    @Builder.Default
-    private Boolean isVisible = Boolean.FALSE;
+    private String subContent;
+    private String subCtaLink;
+    private String subCtaText;
     private LocalDateTime displayDate;
     private LocalDateTime deleteDate;
     @ManyToOne(fetch = FetchType.LAZY)
