@@ -8,6 +8,7 @@ import org.letscareer.letscareer.domain.application.type.ApplicationStatus;
 import org.letscareer.letscareer.domain.application.vo.MyApplicationVo;
 import org.letscareer.letscareer.domain.payment.vo.PaymentProgramVo;
 import org.letscareer.letscareer.domain.program.vo.ProgramSimpleVo;
+import org.letscareer.letscareer.domain.user.dto.response.UserApplicationInfo;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -52,6 +53,21 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
                         vWApplication.programPrice,
                         vWApplication.paymentKey,
                         vWApplication.paymentCreateDate
+                ))
+                .from(vWApplication)
+                .where(
+                        eqUserId(userId)
+                )
+                .orderBy(vWApplication.paymentCreateDate.desc())
+                .fetch();
+    }
+
+    @Override
+    public List<UserApplicationInfo> findUserApplicationInfo(Long userId) {
+        return queryFactory
+                .select(Projections.constructor(UserApplicationInfo.class,
+                        vWApplication.programId,
+                        vWApplication.programTitle
                 ))
                 .from(vWApplication)
                 .where(

@@ -8,10 +8,7 @@ import org.letscareer.letscareer.domain.application.mapper.ApplicationMapper;
 import org.letscareer.letscareer.domain.application.type.ApplicationStatus;
 import org.letscareer.letscareer.domain.application.vo.MyApplicationVo;
 import org.letscareer.letscareer.domain.user.dto.request.*;
-import org.letscareer.letscareer.domain.user.dto.response.TokenResponseDto;
-import org.letscareer.letscareer.domain.user.dto.response.UserAdminListResponseDto;
-import org.letscareer.letscareer.domain.user.dto.response.UserChallengeInfoResponseDto;
-import org.letscareer.letscareer.domain.user.dto.response.UserInfoResponseDto;
+import org.letscareer.letscareer.domain.user.dto.response.*;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.helper.UserHelper;
 import org.letscareer.letscareer.domain.user.mapper.UserMapper;
@@ -19,6 +16,7 @@ import org.letscareer.letscareer.domain.user.type.AuthProvider;
 import org.letscareer.letscareer.domain.user.type.UserRole;
 import org.letscareer.letscareer.domain.user.vo.UserAdminVo;
 import org.letscareer.letscareer.domain.withdraw.helper.WithdrawHelper;
+import org.letscareer.letscareer.global.common.entity.PageInfo;
 import org.letscareer.letscareer.global.common.utils.email.EmailUtils;
 import org.letscareer.letscareer.global.common.utils.encoder.EncoderUtil;
 import org.letscareer.letscareer.global.security.jwt.TokenProvider;
@@ -30,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional
@@ -95,7 +94,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserAdminListResponseDto getUsers(String email, String name, String phoneNum, Pageable pageable) {
         Page<UserAdminVo> userAdminList = userHelper.findAllUserAdminVos(email, name, phoneNum, pageable);
-        return userMapper.toUserAdminListResponseDto(userAdminList);
+        List<UserAdminListInfo> userAdminListInfo = createUserAdminListInfo(userAdminList.getContent());
+        PageInfo pageInfo = PageInfo.of(userAdminList);
+        return userMapper.toUserAdminListResponseDto(userAdminListInfo, pageInfo);
     }
 
     @Override
@@ -165,4 +166,13 @@ public class UserServiceImpl implements UserService {
         return user.getRole().equals(UserRole.ADMIN);
     }
 
+
+    private List<UserAdminListInfo> createUserAdminListInfo(List<UserAdminVo> userAdminList) {
+        return userAdminList.stream()
+                .map(userAdminVo -> userMapper.toUserAdminListInfo(
+                        userAdminVo,
+                        applicationHelper.findUserApplicationInfo(userAdminVo.id())
+                ))
+                .collect(Collectors.toList());
+    }
 }

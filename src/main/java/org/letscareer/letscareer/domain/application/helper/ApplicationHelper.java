@@ -7,6 +7,7 @@ import org.letscareer.letscareer.domain.application.type.ApplicationStatus;
 import org.letscareer.letscareer.domain.application.vo.MyApplicationVo;
 import org.letscareer.letscareer.domain.payment.vo.PaymentProgramVo;
 import org.letscareer.letscareer.domain.program.vo.ProgramSimpleVo;
+import org.letscareer.letscareer.domain.user.dto.response.UserApplicationInfo;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.type.UserRole;
 import org.letscareer.letscareer.global.error.exception.ConflictException;
@@ -31,6 +32,10 @@ public class ApplicationHelper {
         if (!currentUser.getRole().equals(UserRole.ADMIN) && (!Objects.equals(applicationUser.getId(), currentUser.getId()))) {
             throw new UnauthorizedException(UNAUTHORIZED);
         }
+    }
+
+    public List<UserApplicationInfo> findUserApplicationInfo(Long userId) {
+        return applicationRepository.findUserApplicationInfo(userId);
     }
 
     public List<MyApplicationVo> getMyApplications(Long userId, ApplicationStatus status) {
