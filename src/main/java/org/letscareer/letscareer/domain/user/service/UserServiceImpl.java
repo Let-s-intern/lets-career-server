@@ -55,6 +55,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserApplicationResponseDto getUserInfoForAdmin(Long userId) {
+        User user = userHelper.findUserByIdOrThrow(userId);
+        UserInfoResponseDto userInfo = userMapper.toUserInfoResponseDto(user, String.valueOf(user.getId()));
+        List<UserApplicationInfo> applicationInfo = applicationHelper.findUserApplicationInfo(user.getId());
+        return userMapper.toUserApplicationResponseDto(userInfo, applicationInfo);
+    }
+
+    @Override
     public void pwSignUp(UserPwSignUpRequestDto pwSignUpRequestDto) {
         userHelper.validateExistingUser(pwSignUpRequestDto);
         userHelper.validateRegexEmail(pwSignUpRequestDto.email());

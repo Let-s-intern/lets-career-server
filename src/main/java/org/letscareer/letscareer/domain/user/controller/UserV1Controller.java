@@ -9,10 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.dto.response.GetMyApplicationsResponseDto;
 import org.letscareer.letscareer.domain.application.type.ApplicationStatus;
 import org.letscareer.letscareer.domain.user.dto.request.*;
-import org.letscareer.letscareer.domain.user.dto.response.TokenResponseDto;
-import org.letscareer.letscareer.domain.user.dto.response.UserAdminListResponseDto;
-import org.letscareer.letscareer.domain.user.dto.response.UserChallengeInfoResponseDto;
-import org.letscareer.letscareer.domain.user.dto.response.UserInfoResponseDto;
+import org.letscareer.letscareer.domain.user.dto.response.*;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.service.UserService;
 import org.letscareer.letscareer.global.common.annotation.ApiErrorCode;
@@ -37,6 +34,16 @@ public class UserV1Controller {
     @GetMapping
     public ResponseEntity<SuccessResponse<?>> getUserInfo(@CurrentUser User user) {
         final UserInfoResponseDto responseDto = userService.getUserInfo(user);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "[Admin] 유저 세부 정보 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserApplicationResponseDto.class)))
+    })
+    @ApiErrorCode({SwaggerEnum.USER_NOT_FOUND})
+    @GetMapping("/{userId}")
+    public ResponseEntity<SuccessResponse<?>> getUserInfoForAdmin(@PathVariable Long userId) {
+        final UserApplicationResponseDto responseDto = userService.getUserInfoForAdmin(userId);
         return SuccessResponse.ok(responseDto);
     }
 

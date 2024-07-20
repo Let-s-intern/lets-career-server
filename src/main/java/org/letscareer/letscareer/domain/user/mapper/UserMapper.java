@@ -18,6 +18,11 @@ public class UserMapper {
         return User.createUserFromOAuth2(oAuth2UserInfo, authProvider);
     }
 
+    public UserApplicationResponseDto toUserApplicationResponseDto(UserInfoResponseDto userInfo,
+                                                                   List<UserApplicationInfo> applicationInfo) {
+        return UserApplicationResponseDto.of(userInfo, applicationInfo);
+    }
+
     public User toEntity(UserPwSignUpRequestDto pwSignUpRequestDto, String encodedPassword) {
         return User.createUser(pwSignUpRequestDto, encodedPassword);
     }
