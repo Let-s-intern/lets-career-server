@@ -3,10 +3,7 @@ package org.letscareer.letscareer.domain.user.service;
 import org.letscareer.letscareer.domain.application.dto.response.GetMyApplicationsResponseDto;
 import org.letscareer.letscareer.domain.application.type.ApplicationStatus;
 import org.letscareer.letscareer.domain.user.dto.request.*;
-import org.letscareer.letscareer.domain.user.dto.response.TokenResponseDto;
-import org.letscareer.letscareer.domain.user.dto.response.UserAdminListResponseDto;
-import org.letscareer.letscareer.domain.user.dto.response.UserChallengeInfoResponseDto;
-import org.letscareer.letscareer.domain.user.dto.response.UserInfoResponseDto;
+import org.letscareer.letscareer.domain.user.dto.response.*;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.type.AuthProvider;
 import org.letscareer.letscareer.global.security.oauth2.userinfo.OAuth2UserInfo;
@@ -18,6 +15,8 @@ public interface UserService {
     User createUserFromOAuth2(OAuth2UserInfo oAuth2UserInfo, AuthProvider authProvider);
 
     User updateUserFromOAuth2(User user, OAuth2UserInfo oAuth2UserInfo);
+
+    UserApplicationResponseDto getUserInfoForAdmin(Long userId);
 
     TokenResponseDto pwSignIn(UserPwSignInRequestDto pwSignInRequestDto);
 
@@ -42,6 +41,8 @@ public interface UserService {
     void resetPassword(PasswordResetRequestDto passwordResetRequestDto);
 
     void updatePassword(Long id, PasswordUpdateRequestDto passwordUpdateRequestDto);
+
+    void updateUserForAdmin(Long userId, UpdateUserForAdminRequestDto requestDto);
 
     void signOut(User user);
 

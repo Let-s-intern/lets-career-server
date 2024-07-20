@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Immutable
 @Subselect(
         "SELECT a.application_id, a.is_canceled, a.user_id, " +
-                "1 as program_type, null as progress_type, ca.challenge_id as program_id, " +
+                "1 as program_type, 0 as progress_type, ca.challenge_id as program_id, " +
                 "c.title as program_title, c.short_desc as program_short_desc, c.thumbnail as program_thumbnail, c.start_date as program_start_date, c.end_date as program_end_date, " +
                 "p.payment_id as payment_id, p.payment_key, p.program_price, p.create_date as payment_create_date, " +
                 "r.review_id as review_id " +

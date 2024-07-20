@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.letscareer.letscareer.domain.application.entity.Application;
 import org.letscareer.letscareer.domain.attendance.entity.Attendance;
+import org.letscareer.letscareer.domain.user.dto.request.UpdateUserForAdminRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UpdateUserSignInfoRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UserPwSignUpRequestDto;
 import org.letscareer.letscareer.domain.user.dto.request.UserUpdateRequestDto;
@@ -137,6 +138,19 @@ public class User extends BaseTimeEntity {
         this.accountType = updateValue(this.accountType, userUpdateRequestDto.accountType());
         this.accountNum = updateValue(this.accountNum, userUpdateRequestDto.accountNum());
         this.inflowPath = updateValue(this.inflowPath, userUpdateRequestDto.inflowPath());
+    }
+
+    public void updateUserForAdmin(UpdateUserForAdminRequestDto requestDto) {
+        this.email = updateValue(this.email, requestDto.email());
+        this.name = updateValue(this.name, requestDto.name());
+        this.phoneNum = updateValue(this.phoneNum, requestDto.phoneNum());
+        this.university = updateValue(this.university, requestDto.university());
+        this.major = updateValue(this.major, requestDto.major());
+        this.grade = updateValue(this.grade, requestDto.grade());
+        this.wishJob = updateValue(this.wishJob, requestDto.wishJob());
+        this.wishCompany = updateValue(this.wishCompany, requestDto.wishCompany());
+        this.inflowPath = updateValue(this.inflowPath, requestDto.inflowPath());
+        this.contactEmail = updateValue(this.contactEmail, requestDto.contactEmail());
     }
 
     public void updateUserPassword(String encodedPassword) {
