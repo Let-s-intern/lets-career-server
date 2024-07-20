@@ -18,10 +18,10 @@ public class BlogHashTag extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "blog_hash_tag_id")
     private Long id;
-    @OneToMany(mappedBy = "blog_hash_tag", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "blogHashTag", cascade = CascadeType.ALL)
     @Builder.Default
     private List<Blog> blogList = new ArrayList<>();
-    @OneToMany(mappedBy = "blog_hash_tag", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "blogHashTag", cascade = CascadeType.ALL)
     @Builder.Default
     private List<HashTag> hashTagList = new ArrayList<>();
 }

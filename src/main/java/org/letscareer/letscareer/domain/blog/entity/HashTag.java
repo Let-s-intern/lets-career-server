@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PRIVATE)
 @Getter
-@Table(name = "blog")
+@Table(name = "hash_tag")
 @Entity
 public class HashTag extends BaseTimeEntity {
     @Id
