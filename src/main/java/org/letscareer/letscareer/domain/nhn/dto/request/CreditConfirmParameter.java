@@ -2,7 +2,7 @@ package org.letscareer.letscareer.domain.nhn.dto.request;
 
 import lombok.AccessLevel;
 import lombok.Builder;
-import org.letscareer.letscareer.domain.pg.dto.response.TossPaymentsResponseDto;
+import org.letscareer.letscareer.domain.payment.dto.request.CreatePaymentRequestDto;
 
 @Builder(access = AccessLevel.PRIVATE)
 public record CreditConfirmParameter(
@@ -13,12 +13,12 @@ public record CreditConfirmParameter(
 ) {
     public static CreditConfirmParameter of(String name,
                                             String programTitle,
-                                            TossPaymentsResponseDto responseDto) {
+                                            CreatePaymentRequestDto paymentInfo) {
         return CreditConfirmParameter.builder()
                 .name(name)
-                .orderId(responseDto.orderId())
+                .orderId(paymentInfo.orderId())
                 .programTitle(programTitle)
-                .amount(String.valueOf(responseDto.totalAmount()))
+                .amount(String.valueOf(paymentInfo.amount()))
                 .build();
     }
 }

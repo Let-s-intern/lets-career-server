@@ -1,4 +1,4 @@
-package org.letscareer.letscareer.domain.blog.dto.response;
+package org.letscareer.letscareer.domain.blog.dto.response.blog;
 
 import org.letscareer.letscareer.domain.blog.vo.BlogDetailVo;
 import org.letscareer.letscareer.domain.blog.vo.HashTagDetailInfo;

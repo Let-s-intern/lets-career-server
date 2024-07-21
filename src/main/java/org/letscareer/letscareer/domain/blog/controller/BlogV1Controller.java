@@ -6,8 +6,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.blog.dto.request.CreateBlogRequestDto;
-import org.letscareer.letscareer.domain.blog.dto.response.GetBlogResponseDto;
-import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeMyMissionDetailResponseDto;
+import org.letscareer.letscareer.domain.blog.dto.request.UpdateBlogRequestDto;
+import org.letscareer.letscareer.domain.blog.dto.response.blog.GetBlogResponseDto;
+import org.letscareer.letscareer.domain.blog.dto.response.blog.GetBlogsResponseDto;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class BlogV1Controller {
 
     @Operation(summary = "블로그 목록 조회", responses = {
-            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeMyMissionDetailResponseDto.class)))
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetBlogsResponseDto.class)))
     })
     @GetMapping
     public ResponseEntity<SuccessResponse<?>> getBlogs() {
@@ -41,5 +42,20 @@ public class BlogV1Controller {
         return null;
     }
 
+    @Operation(summary = "블로그 수정", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    })
+    @PatchMapping("/{blogId}")
+    public ResponseEntity<SuccessResponse<?>> createBlog(@PathVariable final Long blogId,
+                                                         @RequestBody final UpdateBlogRequestDto requestDto) {
+        return null;
+    }
 
+    @Operation(summary = "블로그 삭제", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    })
+    @DeleteMapping("/{blogId}")
+    public ResponseEntity<SuccessResponse<?>> deleteBlog(@PathVariable final Long blogId) {
+        return null;
+    }
 }
