@@ -26,7 +26,8 @@ public class HashTagV1Controller {
     })
     @GetMapping
     public ResponseEntity<SuccessResponse<?>> getTags() {
-        return null;
+        GetTagsResponseDto responseDto = hashTagService.getTags();
+        return SuccessResponse.ok(responseDto);
     }
 
     @Operation(summary = "태그 생성", responses = {
