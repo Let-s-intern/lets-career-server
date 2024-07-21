@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.blog.dto.request.CreateHashTagRequestDto;
 import org.letscareer.letscareer.domain.blog.dto.request.UpdateHashTagRequestDto;
 import org.letscareer.letscareer.domain.blog.dto.response.tag.GetTagsResponseDto;
+import org.letscareer.letscareer.domain.blog.service.HashTagService;
 import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeMyMissionDetailResponseDto;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/blog-tag")
 @RestController
 public class HashTagV1Controller {
+
+    private final HashTagService hashTagService;
+
     @Operation(summary = "태그 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetTagsResponseDto.class)))
     })
@@ -30,7 +34,8 @@ public class HashTagV1Controller {
     })
     @PostMapping
     public ResponseEntity<SuccessResponse<?>> createHashTag(@RequestBody final CreateHashTagRequestDto requestDto) {
-        return null;
+        hashTagService.createHashTag(requestDto);
+        return SuccessResponse.created(null);
     }
 
     @Operation(summary = "태그 수정", responses = {
