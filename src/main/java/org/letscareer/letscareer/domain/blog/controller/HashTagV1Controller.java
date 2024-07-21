@@ -45,7 +45,8 @@ public class HashTagV1Controller {
     @PostMapping("/{tagId}")
     public ResponseEntity<SuccessResponse<?>> updateHashTag(@PathVariable final Long tagId,
                                                             @RequestBody final UpdateHashTagRequestDto requestDto) {
-        return null;
+        hashTagService.updateHashTag(tagId, requestDto);
+        return SuccessResponse.ok(null);
     }
 
     @Operation(summary = "태그 삭제", responses = {
@@ -53,6 +54,7 @@ public class HashTagV1Controller {
     })
     @DeleteMapping("/{tagId}")
     public ResponseEntity<SuccessResponse<?>> deleteHashTag(@PathVariable final Long tagId) {
-        return null;
+        hashTagService.deleteHashTag(tagId);
+        return SuccessResponse.ok(null);
     }
 }
