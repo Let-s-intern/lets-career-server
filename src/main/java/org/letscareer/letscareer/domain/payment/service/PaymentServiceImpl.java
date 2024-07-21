@@ -44,15 +44,6 @@ public class PaymentServiceImpl implements PaymentService {
         return paymentMapper.toGetPaymentsResponseDto(payments);
     }
 
-    private List<GetPaymentResponseDto> createGetPaymentResponseDto(List<PaymentProgramVo> programInfos) {
-        return programInfos.stream()
-                .map(programInfo -> paymentMapper.toGetPaymentResponseDto(
-                        programInfo,
-                        tossProvider.requestPaymentDetail(programInfo.paymentKey())
-                ))
-                .collect(Collectors.toList());
-    }
-
     @Override
     public GetPaymentDetailResponseDto getPaymentDetail(Long paymentId) {
         Payment payment = paymentHelper.findPaymentByIdOrThrow(paymentId);
@@ -68,6 +59,15 @@ public class PaymentServiceImpl implements PaymentService {
     public void updatePayment(Long paymentId, ProgramType programType, UpdatePaymentRequestDto updatePaymentRequestDto) {
         Payment payment = paymentHelper.findPaymentByIdOrThrow(paymentId);
         payment.updatePayment(updatePaymentRequestDto);
+    }
+
+    private List<GetPaymentResponseDto> createGetPaymentResponseDto(List<PaymentProgramVo> programInfos) {
+        return programInfos.stream()
+                .map(programInfo -> paymentMapper.toGetPaymentResponseDto(
+                        programInfo,
+                        tossProvider.requestPaymentDetail(programInfo.paymentKey())
+                ))
+                .collect(Collectors.toList());
     }
 
     private PriceDetailVo findPriceInfoForProgramType(ProgramSimpleVo programSimpleVo) {

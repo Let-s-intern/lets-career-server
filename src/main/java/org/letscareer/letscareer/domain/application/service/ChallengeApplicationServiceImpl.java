@@ -49,8 +49,8 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
         Coupon coupon = couponHelper.findCouponByIdOrNull(createApplicationRequestDto.paymentInfo().couponId());
         Price price = priceHelper.findPriceByIdOrThrow(createApplicationRequestDto.paymentInfo().priceId());
         validateConditionForCreateApplication(challenge, coupon, price, user, createApplicationRequestDto);
-        TossPaymentsResponseDto responseDto = tossProvider.requestPayments(createApplicationRequestDto.paymentInfo());
         createEntityAndSave(challenge, coupon, price, user, createApplicationRequestDto);
+        TossPaymentsResponseDto responseDto = tossProvider.requestPayments(createApplicationRequestDto.paymentInfo());
         sendCreditConfirmKakaoMessage(challenge, user, responseDto);
         return applicationMapper.toCreateApplicationResponseDto(responseDto);
     }

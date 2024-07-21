@@ -2,7 +2,6 @@ package org.letscareer.letscareer.domain.payment.dto.response;
 
 import lombok.AccessLevel;
 import lombok.Builder;
-import org.letscareer.letscareer.domain.payment.vo.PaymentProgramVo;
 import org.letscareer.letscareer.domain.pg.dto.response.TossPaymentsResponseDto;
 
 @Builder(access = AccessLevel.PRIVATE)

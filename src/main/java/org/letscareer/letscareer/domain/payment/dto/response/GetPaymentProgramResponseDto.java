@@ -9,7 +9,8 @@ public record GetPaymentProgramResponseDto(
         Long paymentId,
         String title,
         String thumbnail,
-        Integer price
+        Integer price,
+        Boolean isCanceled
 ) {
     public static GetPaymentProgramResponseDto of(PaymentProgramVo vo) {
         return GetPaymentProgramResponseDto.builder()
