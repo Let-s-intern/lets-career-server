@@ -18,7 +18,7 @@ public class HashTag extends BaseTimeEntity {
     @Column(name = "hash_tag_id")
     private Long id;
     @Column(nullable = false)
-    private String content;
+    private String title;
     private LocalDateTime deleteDate;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "blog_hash_tag_id")
