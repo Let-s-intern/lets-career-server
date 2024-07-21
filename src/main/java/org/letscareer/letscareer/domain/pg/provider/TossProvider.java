@@ -13,10 +13,12 @@ import org.springframework.stereotype.Service;
 @Service("TOSS")
 public class TossProvider implements PgProvider {
     private static final String CANCEL_REASON = "고객이 취소를 원함";
+    private static final String ZERO_AMOUNT = "0";
     private final TossFeignController tossFeignController;
 
     @Override
     public TossPaymentsResponseDto requestPayments(CreatePaymentRequestDto paymentRequestDto) {
+        if (paymentRequestDto.amount().equals(ZERO_AMOUNT)) return null;
         TossPaymentsRequestDto requestDto = TossPaymentsRequestDto.of(paymentRequestDto);
         return tossFeignController.createPayments(requestDto);
     }
@@ -29,7 +31,7 @@ public class TossProvider implements PgProvider {
 
     @Override
     public TossPaymentsResponseDto cancelPayments(RefundType refundType, String paymentKey, Integer cancelAmount) {
-        if (paymentKey.isEmpty()) return null;
+        if (paymentKey.isEmpty() || cancelAmount == 0) return null;
         TossPaymentsCancelRequestDto requestDto = TossPaymentsCancelRequestDto.of(refundType, CANCEL_REASON, cancelAmount);
         return tossFeignController.cancelPayments(paymentKey, requestDto);
     }
