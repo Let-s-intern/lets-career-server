@@ -47,7 +47,7 @@ public class Payment extends BaseTimeEntity {
         return Payment.builder()
                 .finalPrice(Integer.valueOf(paymentInfo.amount()))
                 .programPrice(programPrice)
-                .paymentKey(paymentInfo.paymentKey())
+                .paymentKey(updateValue("", paymentInfo.paymentKey()))
                 .orderId(paymentInfo.orderId())
                 .coupon(coupon)
                 .application(application)
