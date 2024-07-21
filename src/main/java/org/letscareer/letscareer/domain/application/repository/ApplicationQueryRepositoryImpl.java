@@ -51,6 +51,7 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
                         vWApplication.programTitle,
                         vWApplication.programThumbnail,
                         vWApplication.programPrice,
+                        vWApplication.finalPrice,
                         vWApplication.paymentKey,
                         vWApplication.isCanceled,
                         vWApplication.paymentCreateDate
