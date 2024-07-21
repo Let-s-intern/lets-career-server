@@ -14,6 +14,7 @@ public record ProgramSimpleVo(
         String thumbnail,
         ProgramType programType,
         ProgressType progressType,
+        Boolean isCanceled,
         LocalDateTime startDate,
         LocalDateTime endDate
 ) {

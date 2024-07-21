@@ -89,6 +89,7 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
                         vWApplication.programThumbnail,
                         vWApplication.programType,
                         vWApplication.progressType,
+                        vWApplication.isCanceled,
                         vWApplication.programStartDate,
                         vWApplication.programEndDate))
                 .from(vWApplication)
