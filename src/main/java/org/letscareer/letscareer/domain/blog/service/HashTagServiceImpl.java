@@ -37,4 +37,10 @@ public class HashTagServiceImpl implements HashTagService {
         HashTag hashTag = hashTagHelper.findHashTagByTagId(tagId);
         hashTag.updateHashTag(requestDto);
     }
+
+    @Override
+    public void deleteHashTag(Long tagId) {
+        HashTag hashTag = hashTagHelper.findHashTagByTagId(tagId);
+        hashTagHelper.deleteHashTag(hashTag);
+    }
 }

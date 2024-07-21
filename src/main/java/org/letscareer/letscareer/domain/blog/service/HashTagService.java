@@ -10,4 +10,5 @@ public interface HashTagService {
     void createHashTag(CreateHashTagRequestDto requestDto);
     GetTagsResponseDto getTags();
     void updateHashTag(Long tagId, UpdateHashTagRequestDto requestDto);
+    void deleteHashTag(Long tagId);
 }

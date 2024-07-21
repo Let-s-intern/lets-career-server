@@ -54,6 +54,7 @@ public class HashTagV1Controller {
     })
     @DeleteMapping("/{tagId}")
     public ResponseEntity<SuccessResponse<?>> deleteHashTag(@PathVariable final Long tagId) {
-        return null;
+        hashTagService.deleteHashTag(tagId);
+        return SuccessResponse.ok(null);
     }
 }

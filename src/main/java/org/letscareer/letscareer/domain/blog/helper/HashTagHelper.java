@@ -25,4 +25,8 @@ public class HashTagHelper {
     public HashTag findHashTagByTagId(Long tagId) {
         return hashTagRepository.findById(tagId).orElseThrow(() -> new EntityNotFoundException());
     }
+
+    public void deleteHashTag(HashTag hashTag) {
+        hashTagRepository.delete(hashTag);
+    }
 }
