@@ -14,6 +14,7 @@ import org.letscareer.letscareer.domain.live.helper.LiveHelper;
 import org.letscareer.letscareer.domain.nhn.dto.request.CreditConfirmParameter;
 import org.letscareer.letscareer.domain.nhn.dto.request.CreditRefundParameter;
 import org.letscareer.letscareer.domain.nhn.provider.NhnProvider;
+import org.letscareer.letscareer.domain.payment.dto.request.CreatePaymentRequestDto;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.payment.helper.PaymentHelper;
 import org.letscareer.letscareer.domain.payment.type.RefundType;
@@ -25,6 +26,8 @@ import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.helper.UserHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Transactional
@@ -49,7 +52,7 @@ public class LiveApplicationServiceImpl implements ApplicationService {
         validateRequestConditionForCreateApplication(live, coupon, price, user, createApplicationRequestDto);
         createEntityAndSave(live, coupon, price, user, createApplicationRequestDto);
         TossPaymentsResponseDto responseDto = tossProvider.requestPayments(createApplicationRequestDto.paymentInfo());
-        sendCreditConfirmKakaoMessage(live, user, responseDto);
+        sendCreditConfirmKakaoMessage(live, user, createApplicationRequestDto.paymentInfo());
         return applicationMapper.toCreateApplicationResponseDto(responseDto);
     }
 
@@ -61,9 +64,9 @@ public class LiveApplicationServiceImpl implements ApplicationService {
         Live live = application.getLive();
         RefundType refundType = RefundType.ofLive(live);
         Integer cancelAmount = priceHelper.calculateCancelAmount(payment, refundType);
-        TossPaymentsResponseDto responseDto = tossProvider.cancelPayments(refundType, payment.getPaymentKey(), cancelAmount);
+        tossProvider.cancelPayments(refundType, payment.getPaymentKey(), cancelAmount);
         application.updateIsCanceled(true);
-        sendCreditRefundKakaoMessage(live, user, payment, refundType, responseDto);
+        sendCreditRefundKakaoMessage(live, user, payment, refundType, cancelAmount);
     }
 
     private void validateRequestConditionForCreateApplication(Live live, Coupon coupon, Price price, User user, CreateApplicationRequestDto requestDto) {
@@ -84,13 +87,13 @@ public class LiveApplicationServiceImpl implements ApplicationService {
         userHelper.updateContactEmail(user, requestDto.contactEmail());
     }
 
-    private void sendCreditConfirmKakaoMessage(Live live, User user, TossPaymentsResponseDto responseDto) {
-        CreditConfirmParameter requestParameter = CreditConfirmParameter.of(user.getName(), live.getTitle(), responseDto);
+    private void sendCreditConfirmKakaoMessage(Live live, User user, CreatePaymentRequestDto paymentInfo) {
+        CreditConfirmParameter requestParameter = CreditConfirmParameter.of(user.getName(), live.getTitle(), paymentInfo);
         nhnProvider.sendKakaoMessage(user, requestParameter, "payment_confirm");
     }
 
-    private void sendCreditRefundKakaoMessage(Live live, User user, Payment payment, RefundType refundType, TossPaymentsResponseDto responseDto) {
-        CreditRefundParameter requestParameter = CreditRefundParameter.of(user.getName(), payment.getOrderId(), live.getTitle(), refundType, payment.getFinalPrice(), responseDto.cancels().get(0).cancelAmount());
+    private void sendCreditRefundKakaoMessage(Live live, User user, Payment payment, RefundType refundType, Integer cancelAmount) {
+        CreditRefundParameter requestParameter = CreditRefundParameter.of(user.getName(), payment.getOrderId(), live.getTitle(), refundType, payment.getFinalPrice(), cancelAmount);
         nhnProvider.sendKakaoMessage(user, requestParameter, "payment_refund");
     }
 }
