@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.blog.dto.request.CreateRatingRequestDto;
 import org.letscareer.letscareer.domain.blog.dto.response.rating.GetRatingsResponseDto;
+import org.letscareer.letscareer.domain.blog.service.RatingService;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/blog-rating")
 @RestController
 public class RatingV1Controller {
+    private final RatingService ratingService;
+
     @Operation(summary = "별점 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetRatingsResponseDto.class)))
     })
@@ -29,6 +32,7 @@ public class RatingV1Controller {
     @PostMapping("/{blogId}")
     public ResponseEntity<SuccessResponse<?>> createBlogRating(@PathVariable final Long blogId,
                                                                @RequestBody final CreateRatingRequestDto requestDto) {
-        return null;
+        ratingService.createBlogRating(blogId, requestDto);
+        return SuccessResponse.created(null);
     }
 }
