@@ -28,9 +28,6 @@ public class Blog extends BaseTimeEntity {
     private String content;
     private String ctaLink;
     private String ctaText;
-    private String subContent;
-    private String subCtaLink;
-    private String subCtaText;
     private LocalDateTime displayDate;
     private LocalDateTime deleteDate;
     @ManyToOne(fetch = FetchType.LAZY)
