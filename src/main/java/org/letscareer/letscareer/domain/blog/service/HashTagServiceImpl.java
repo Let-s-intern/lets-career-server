@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.blog.service;
 
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.blog.dto.request.CreateHashTagRequestDto;
+import org.letscareer.letscareer.domain.blog.dto.request.UpdateHashTagRequestDto;
 import org.letscareer.letscareer.domain.blog.dto.response.tag.GetTagsResponseDto;
 import org.letscareer.letscareer.domain.blog.entity.HashTag;
 import org.letscareer.letscareer.domain.blog.helper.HashTagHelper;
@@ -29,5 +30,11 @@ public class HashTagServiceImpl implements HashTagService {
     public GetTagsResponseDto getTags() {
         List<HashTagDetailInfo> tagDetailInfos = hashTagHelper.getTagDetailInfos();
         return hashTagMapper.toGetTagsResponseDto(tagDetailInfos);
+    }
+
+    @Override
+    public void updateHashTag(Long tagId, UpdateHashTagRequestDto requestDto) {
+        HashTag hashTag = hashTagHelper.findHashTagByTagId(tagId);
+        hashTag.updateHashTag(requestDto);
     }
 }
