@@ -12,7 +12,8 @@ public enum FileType {
     BANNER_POPUP(3, "banner/popup/"),
     CHALLENGE(4, "program/challenge/"),
     LIVE(5, "program/live/"),
-    VOD(6, "program/vod/");
+    VOD(6, "program/vod/"),
+    BLOG(7, "blog/");
 
     private final Integer code;
     private final String desc;
