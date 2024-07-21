@@ -56,7 +56,8 @@ public class PaymentQueryRepositoryImpl implements PaymentQueryRepository {
                         .select(Projections.constructor(PaymentDetailVo.class,
                                 payment.id,
                                 payment.finalPrice,
-                                coupon.discount))
+                                coupon.discount,
+                                payment.lastModifiedDate))
                         .from(payment)
                         .leftJoin(payment.coupon, coupon)
                         .where(

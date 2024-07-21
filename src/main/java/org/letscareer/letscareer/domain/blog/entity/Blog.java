@@ -2,6 +2,8 @@ package org.letscareer.letscareer.domain.blog.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.letscareer.letscareer.domain.blog.type.BlogType;
+import org.letscareer.letscareer.domain.blog.type.converter.BlogTypeConverter;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
@@ -19,15 +21,13 @@ public class Blog extends BaseTimeEntity {
     @Column(name = "blog_id")
     private Long id;
     private String title;
-    private String category;
+    @Convert(converter = BlogTypeConverter.class)
+    private BlogType category;
     private String thumbnail;
     private String description;
     private String content;
     private String ctaLink;
     private String ctaText;
-    private String subContent;
-    private String subCtaLink;
-    private String subCtaText;
     private LocalDateTime displayDate;
     private LocalDateTime deleteDate;
     @ManyToOne(fetch = FetchType.LAZY)

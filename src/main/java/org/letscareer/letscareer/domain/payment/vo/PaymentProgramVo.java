@@ -7,6 +7,7 @@ public record PaymentProgramVo(
         String title,
         String thumbnail,
         Integer price,
+        Integer finalPrice,
         String paymentKey,
         Boolean isCanceled,
         LocalDateTime createDate

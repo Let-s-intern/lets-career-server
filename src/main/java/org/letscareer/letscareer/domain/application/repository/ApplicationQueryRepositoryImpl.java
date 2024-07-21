@@ -51,6 +51,7 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
                         vWApplication.programTitle,
                         vWApplication.programThumbnail,
                         vWApplication.programPrice,
+                        vWApplication.finalPrice,
                         vWApplication.paymentKey,
                         vWApplication.isCanceled,
                         vWApplication.paymentCreateDate
@@ -88,6 +89,7 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
                         vWApplication.programThumbnail,
                         vWApplication.programType,
                         vWApplication.progressType,
+                        vWApplication.isCanceled,
                         vWApplication.programStartDate,
                         vWApplication.programEndDate))
                 .from(vWApplication)

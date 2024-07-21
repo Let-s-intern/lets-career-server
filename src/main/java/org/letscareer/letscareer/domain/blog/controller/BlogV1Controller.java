@@ -9,7 +9,9 @@ import org.letscareer.letscareer.domain.blog.dto.request.CreateBlogRequestDto;
 import org.letscareer.letscareer.domain.blog.dto.request.UpdateBlogRequestDto;
 import org.letscareer.letscareer.domain.blog.dto.response.blog.GetBlogResponseDto;
 import org.letscareer.letscareer.domain.blog.dto.response.blog.GetBlogsResponseDto;
+import org.letscareer.letscareer.domain.blog.type.BlogType;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +24,9 @@ public class BlogV1Controller {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetBlogsResponseDto.class)))
     })
     @GetMapping
-    public ResponseEntity<SuccessResponse<?>> getBlogs() {
+    public ResponseEntity<SuccessResponse<?>> getBlogs(@RequestParam(required = false) final BlogType type,
+                                                       @RequestParam(required = false) final Long tagId,
+                                                       final Pageable pageable) {
         return null;
     }
 
