@@ -8,6 +8,7 @@ public record PaymentProgramVo(
         String thumbnail,
         Integer price,
         String paymentKey,
+        Boolean isCanceled,
         LocalDateTime createDate
 ) {
 }
