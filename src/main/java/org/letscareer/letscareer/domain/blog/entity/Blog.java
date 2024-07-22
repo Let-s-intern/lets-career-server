@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.blog.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.letscareer.letscareer.domain.blog.dto.request.CreateBlogRequestDto;
 import org.letscareer.letscareer.domain.blog.type.BlogType;
 import org.letscareer.letscareer.domain.blog.type.converter.BlogTypeConverter;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
