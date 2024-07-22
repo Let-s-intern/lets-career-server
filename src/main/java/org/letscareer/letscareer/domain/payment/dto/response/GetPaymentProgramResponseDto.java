@@ -18,6 +18,7 @@ public record GetPaymentProgramResponseDto(
                 .title(vo.title())
                 .thumbnail(vo.thumbnail())
                 .price(vo.price())
+                .isCanceled(vo.isCanceled())
                 .build();
     }
 }

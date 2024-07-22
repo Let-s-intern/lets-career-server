@@ -23,7 +23,8 @@ public class RatingV1Controller {
     })
     @GetMapping("/{blogId}")
     public ResponseEntity<SuccessResponse<?>> getBlogRatings(@PathVariable final Long blogId) {
-        return null;
+        GetRatingsResponseDto responseDto = ratingService.getBlogRatings(blogId);
+        return SuccessResponse.ok(responseDto);
     }
 
     @Operation(summary = "별점 생성", responses = {

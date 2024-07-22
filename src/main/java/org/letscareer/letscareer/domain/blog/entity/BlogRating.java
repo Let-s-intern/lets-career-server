@@ -3,6 +3,7 @@ package org.letscareer.letscareer.domain.blog.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.letscareer.letscareer.domain.blog.dto.request.CreateRatingRequestDto;
+import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
 @Getter
 @Table(name = "blog_rating")
 @Entity
-public class BlogRating {
+public class BlogRating extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "blog_rating_id")
