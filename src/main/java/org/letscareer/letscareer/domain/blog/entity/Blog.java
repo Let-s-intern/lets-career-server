@@ -7,6 +7,7 @@ import org.letscareer.letscareer.domain.blog.type.BlogType;
 import org.letscareer.letscareer.domain.blog.type.converter.BlogTypeConverter;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
+import org.letscareer.letscareer.global.common.utils.entity.EntityUpdateValueUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -52,4 +53,5 @@ public class Blog extends BaseTimeEntity {
                 .displayDate(requestDto.displayDate())
                 .build();
     }
+
 }
