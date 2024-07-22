@@ -2,10 +2,12 @@ package org.letscareer.letscareer.domain.blog.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.letscareer.letscareer.domain.blog.dto.request.CreateBlogRequestDto;
 import org.letscareer.letscareer.domain.blog.type.BlogType;
 import org.letscareer.letscareer.domain.blog.type.converter.BlogTypeConverter;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
+import org.letscareer.letscareer.global.common.utils.entity.EntityUpdateValueUtils;
 
 import java.time.LocalDateTime;
 
@@ -36,4 +38,17 @@ public class Blog extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "blog_rating_id")
     private BlogRating blogRating;
+
+    public static Blog createBlog(CreateBlogRequestDto requestDto) {
+        return Blog.builder()
+                .title(requestDto.title())
+                .category(requestDto.category())
+                .thumbnail(requestDto.thumbnail())
+                .description(requestDto.description())
+                .content(requestDto.content())
+                .ctaLink(requestDto.ctaLink())
+                .ctaText(requestDto.ctaText())
+                .displayDate(requestDto.displayDate())
+                .build();
+    }
 }

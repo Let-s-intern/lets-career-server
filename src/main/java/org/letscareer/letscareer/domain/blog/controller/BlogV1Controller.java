@@ -9,6 +9,7 @@ import org.letscareer.letscareer.domain.blog.dto.request.CreateBlogRequestDto;
 import org.letscareer.letscareer.domain.blog.dto.request.UpdateBlogRequestDto;
 import org.letscareer.letscareer.domain.blog.dto.response.blog.GetBlogResponseDto;
 import org.letscareer.letscareer.domain.blog.dto.response.blog.GetBlogsResponseDto;
+import org.letscareer.letscareer.domain.blog.service.BlogService;
 import org.letscareer.letscareer.domain.blog.type.BlogType;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/blog")
 @RestController
 public class BlogV1Controller {
+    private final BlogService blogService;
 
     @Operation(summary = "블로그 목록 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetBlogsResponseDto.class)))
@@ -43,16 +45,18 @@ public class BlogV1Controller {
     })
     @PostMapping
     public ResponseEntity<SuccessResponse<?>> createBlog(@RequestBody final CreateBlogRequestDto requestDto) {
-        return null;
+        blogService.createBlog(requestDto);
+        return SuccessResponse.created(null);
     }
 
     @Operation(summary = "블로그 수정", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @PatchMapping("/{blogId}")
-    public ResponseEntity<SuccessResponse<?>> createBlog(@PathVariable final Long blogId,
+    public ResponseEntity<SuccessResponse<?>> updateBlog(@PathVariable final Long blogId,
                                                          @RequestBody final UpdateBlogRequestDto requestDto) {
-        return null;
+        blogService.updateBlog(blogId, requestDto);
+        return SuccessResponse.ok(null);
     }
 
     @Operation(summary = "블로그 삭제", responses = {

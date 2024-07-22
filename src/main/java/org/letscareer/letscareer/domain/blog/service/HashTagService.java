@@ -6,6 +6,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface HashTagService {
-    void createHashTag(CreateHashTagRequestDto requestDto);
     GetTagsResponseDto getTags();
+    void createHashTag(CreateHashTagRequestDto requestDto);
 }

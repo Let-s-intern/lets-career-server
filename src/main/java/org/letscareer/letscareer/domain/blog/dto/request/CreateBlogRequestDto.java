@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.blog.dto.request;
 
 import org.letscareer.letscareer.domain.blog.type.BlogType;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public record CreateBlogRequestDto(
@@ -9,8 +10,10 @@ public record CreateBlogRequestDto(
         BlogType category,
         String thumbnail,
         String description,
+        String content,
         String ctaLink,
         String ctaText,
+        LocalDateTime displayDate,
         List<Long> tagList
 ) {
 }
