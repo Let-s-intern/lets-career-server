@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.blog.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.letscareer.letscareer.domain.blog.dto.request.CreateRatingRequestDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,15 @@ public class BlogRating {
     private String content;
     @Builder.Default
     private Integer score = 0;
-    @OneToMany(mappedBy = "blogRating", cascade = CascadeType.ALL)
-    @Builder.Default
-    private List<Blog> blogList = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "blog_id")
+    private Blog blog;
+
+    public static BlogRating createBlogRating(Blog blog, CreateRatingRequestDto requestDto) {
+        return BlogRating.builder()
+                .title(requestDto.title())
+                .score(requestDto.score())
+                .blog(blog)
+                .build();
+    }
 }
