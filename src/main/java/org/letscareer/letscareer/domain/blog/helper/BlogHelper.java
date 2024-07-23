@@ -4,13 +4,29 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.blog.dto.request.CreateBlogRequestDto;
 import org.letscareer.letscareer.domain.blog.entity.Blog;
 import org.letscareer.letscareer.domain.blog.repository.BlogRepository;
+import org.letscareer.letscareer.domain.blog.type.BlogType;
+import org.letscareer.letscareer.domain.blog.vo.BlogDetailVo;
+import org.letscareer.letscareer.domain.blog.vo.BlogThumbnailVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+
+import static org.letscareer.letscareer.domain.blog.error.BlogErrorCode.BLOG_NOT_FOUND;
 
 @RequiredArgsConstructor
 @Component
 public class BlogHelper {
     private final BlogRepository blogRepository;
+
+    public Page<BlogThumbnailVo> findBlogThumbnailVos(BlogType type, Long tagId, Pageable pageable) {
+        return blogRepository.findBlogThumbnailVos(type, tagId, pageable);
+    }
+
+    public BlogDetailVo findBlogDetailVoOrThrow(Long blogId) {
+        return blogRepository.findBlogDetailVo(blogId)
+                .orElseThrow(() -> new EntityNotFoundException(BLOG_NOT_FOUND));
+    }
 
     public Blog createBlogAndSave(CreateBlogRequestDto requestDto) {
         Blog blog = Blog.createBlog(requestDto);
@@ -19,6 +35,10 @@ public class BlogHelper {
 
     public Blog findBlogByIdByOrThrow(Long blogId) {
         return blogRepository.findById(blogId)
-                .orElseThrow(() -> new EntityNotFoundException());
+                .orElseThrow(() -> new EntityNotFoundException(BLOG_NOT_FOUND));
+    }
+
+    public void deleteBlogById(Long blogId) {
+        blogRepository.deleteById(blogId);
     }
 }
