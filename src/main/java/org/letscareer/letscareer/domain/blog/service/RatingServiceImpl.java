@@ -10,10 +10,12 @@ import org.letscareer.letscareer.domain.blog.helper.RatingHelper;
 import org.letscareer.letscareer.domain.blog.mapper.RatingMapper;
 import org.letscareer.letscareer.domain.blog.vo.RatingDetailVo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class RatingServiceImpl implements RatingService {
     private final RatingHelper ratingHelper;
