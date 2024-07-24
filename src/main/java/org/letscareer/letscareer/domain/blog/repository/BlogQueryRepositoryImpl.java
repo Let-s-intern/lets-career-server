@@ -70,6 +70,7 @@ public class BlogQueryRepositoryImpl implements BlogQueryRepository {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(blog.createDate.desc())
+                .distinct()
                 .fetch();
 
         JPAQuery<Long> countQuery = queryFactory
@@ -80,7 +81,8 @@ public class BlogQueryRepositoryImpl implements BlogQueryRepository {
                 .where(
                         eqBlogType(type),
                         eqTagId(tagId)
-                );
+                )
+                .distinct();
 
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
     }
