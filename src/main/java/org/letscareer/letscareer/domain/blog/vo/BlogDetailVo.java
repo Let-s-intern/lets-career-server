@@ -13,9 +13,6 @@ public record BlogDetailVo(
         String content,
         String ctaLink,
         String ctaText,
-        String subContent,
-        String subCtaLink,
-        String subCtaText,
         LocalDateTime displayDate,
         LocalDateTime createDate,
         LocalDateTime lastModifiedDate

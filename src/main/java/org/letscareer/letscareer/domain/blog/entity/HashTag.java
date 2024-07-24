@@ -7,6 +7,8 @@ import org.letscareer.letscareer.domain.blog.dto.request.UpdateHashTagRequestDto
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.letscareer.letscareer.global.common.utils.entity.EntityUpdateValueUtils.updateValue;
 
@@ -24,9 +26,9 @@ public class HashTag extends BaseTimeEntity {
     @Column(nullable = false)
     private String title;
     private LocalDateTime deleteDate;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "blog_hash_tag_id")
-    private BlogHashTag blogHashTag;
+    @OneToMany(mappedBy = "hashTag", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<BlogHashTag> blogHashTags = new ArrayList<>();
 
     public static HashTag createHashTag(CreateHashTagRequestDto requestDto) {
         return HashTag.builder()
@@ -36,5 +38,9 @@ public class HashTag extends BaseTimeEntity {
 
     public void updateHashTag(UpdateHashTagRequestDto requestDto) {
         this.title = updateValue(this.title, requestDto.title());
+    }
+
+    public void addBlogHashTag(BlogHashTag blogHashTag) {
+        this.blogHashTags.add(blogHashTag);
     }
 }

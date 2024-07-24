@@ -3,6 +3,7 @@ package org.letscareer.letscareer.global.common.entity;
 import org.letscareer.letscareer.domain.application.error.ApplicationErrorCode;
 import org.letscareer.letscareer.domain.attendance.error.AttendanceErrorCode;
 import org.letscareer.letscareer.domain.banner.error.BannerErrorCode;
+import org.letscareer.letscareer.domain.blog.error.BlogErrorCode;
 import org.letscareer.letscareer.domain.challenge.error.ChallengeErrorCode;
 import org.letscareer.letscareer.domain.challengeguide.error.ChallengeGuideErrorCode;
 import org.letscareer.letscareer.domain.classification.error.ChallengeClassificationErrorCode;
@@ -38,6 +39,9 @@ public enum SwaggerEnum {
 
     // Banner
     BANNER_NOT_FOUND(BannerErrorCode.BANNER_NOT_FOUND),
+
+    // Blog
+    BLOG_NOT_FOUND(BlogErrorCode.BLOG_NOT_FOUND),
 
     // challenge
     CHALLENGE_NOT_FOUND(ChallengeErrorCode.CHALLENGE_NOT_FOUND),

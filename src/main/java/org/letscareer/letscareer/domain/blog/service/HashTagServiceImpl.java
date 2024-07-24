@@ -22,13 +22,12 @@ public class HashTagServiceImpl implements HashTagService {
 
     @Override
     public void createHashTag(CreateHashTagRequestDto requestDto) {
-        HashTag newHashTag = HashTag.createHashTag(requestDto);
-        hashTagHelper.saveHashTag(newHashTag);
+        hashTagHelper.createAndSaveHashTag(requestDto);
     }
 
     @Override
     public GetTagsResponseDto getTags() {
-        List<HashTagDetailInfo> tagDetailInfos = hashTagHelper.getTagDetailInfos();
+        List<HashTagDetailInfo> tagDetailInfos = hashTagHelper.findTagDetailInfos(null);
         return hashTagMapper.toGetTagsResponseDto(tagDetailInfos);
     }
 

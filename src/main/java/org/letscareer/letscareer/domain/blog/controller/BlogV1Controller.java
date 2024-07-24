@@ -11,7 +11,9 @@ import org.letscareer.letscareer.domain.blog.dto.response.blog.GetBlogResponseDt
 import org.letscareer.letscareer.domain.blog.dto.response.blog.GetBlogsResponseDto;
 import org.letscareer.letscareer.domain.blog.service.BlogService;
 import org.letscareer.letscareer.domain.blog.type.BlogType;
+import org.letscareer.letscareer.global.common.annotation.ApiErrorCode;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
+import org.letscareer.letscareer.global.common.entity.SwaggerEnum;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,20 +31,24 @@ public class BlogV1Controller {
     public ResponseEntity<SuccessResponse<?>> getBlogs(@RequestParam(required = false) final BlogType type,
                                                        @RequestParam(required = false) final Long tagId,
                                                        final Pageable pageable) {
-        return null;
+        final GetBlogsResponseDto responseDto = blogService.getBlogs(type, tagId, pageable);
+        return SuccessResponse.ok(responseDto);
     }
 
     @Operation(summary = "블로그 상세 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetBlogResponseDto.class)))
     })
+    @ApiErrorCode({SwaggerEnum.BLOG_NOT_FOUND})
     @GetMapping("/{blogId}")
     public ResponseEntity<SuccessResponse<?>> getBlogDetail(@PathVariable final Long blogId) {
-        return null;
+        final GetBlogResponseDto responseDto = blogService.getBlogDetail(blogId);
+        return SuccessResponse.ok(responseDto);
     }
 
     @Operation(summary = "블로그 생성", responses = {
             @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
     })
+    @ApiErrorCode({SwaggerEnum.BLOG_NOT_FOUND})
     @PostMapping
     public ResponseEntity<SuccessResponse<?>> createBlog(@RequestBody final CreateBlogRequestDto requestDto) {
         blogService.createBlog(requestDto);
@@ -52,6 +58,7 @@ public class BlogV1Controller {
     @Operation(summary = "블로그 수정", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
+    @ApiErrorCode({SwaggerEnum.BLOG_NOT_FOUND})
     @PatchMapping("/{blogId}")
     public ResponseEntity<SuccessResponse<?>> updateBlog(@PathVariable final Long blogId,
                                                          @RequestBody final UpdateBlogRequestDto requestDto) {
@@ -62,8 +69,10 @@ public class BlogV1Controller {
     @Operation(summary = "블로그 삭제", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
+    @ApiErrorCode({SwaggerEnum.BLOG_NOT_FOUND})
     @DeleteMapping("/{blogId}")
     public ResponseEntity<SuccessResponse<?>> deleteBlog(@PathVariable final Long blogId) {
-        return null;
+        blogService.deleteBlog(blogId);
+        return SuccessResponse.ok(null);
     }
 }
