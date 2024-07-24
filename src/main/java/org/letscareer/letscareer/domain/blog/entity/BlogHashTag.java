@@ -19,11 +19,13 @@ public class BlogHashTag extends BaseTimeEntity {
     @JoinColumn(name = "blog_id")
     private Blog blog;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hast_tag_id")
+    @JoinColumn(name = "hash_tag_id")
     private HashTag hashTag;
 
     public static BlogHashTag createBlogHashTag(Blog blog, HashTag hashTag) {
         BlogHashTag blogHashTag = BlogHashTag.builder()
+                .blog(blog)
+                .hashTag(hashTag)
                 .build();
         blog.addBlogHashTag(blogHashTag);
         hashTag.addBlogHashTag(blogHashTag);
