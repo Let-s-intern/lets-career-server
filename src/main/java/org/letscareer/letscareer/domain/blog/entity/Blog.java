@@ -6,9 +6,7 @@ import org.letscareer.letscareer.domain.blog.dto.request.CreateBlogRequestDto;
 import org.letscareer.letscareer.domain.blog.dto.request.UpdateBlogRequestDto;
 import org.letscareer.letscareer.domain.blog.type.BlogType;
 import org.letscareer.letscareer.domain.blog.type.converter.BlogTypeConverter;
-import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
-import org.letscareer.letscareer.global.common.utils.entity.EntityUpdateValueUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -53,7 +51,7 @@ public class Blog extends BaseTimeEntity {
                 .content(requestDto.content())
                 .ctaLink(requestDto.ctaLink())
                 .ctaText(requestDto.ctaText())
-                .displayDate(requestDto.displayDate())
+                .displayDate(requestDto.isDisplayed() ? LocalDateTime.now() : null)
                 .build();
     }
 
@@ -65,7 +63,7 @@ public class Blog extends BaseTimeEntity {
         this.content = updateValue(this.content, requestDto.content());
         this.ctaLink = updateValue(this.ctaLink, requestDto.ctaLink());
         this.ctaText = updateValue(this.ctaText, requestDto.ctaText());
-        this.displayDate = updateValue(this.displayDate, requestDto.displayDate());
+        this.displayDate = requestDto.isDisplayed() ? LocalDateTime.now() : null;
     }
 
     public void addBlogHashTag(BlogHashTag blogHashTag) {

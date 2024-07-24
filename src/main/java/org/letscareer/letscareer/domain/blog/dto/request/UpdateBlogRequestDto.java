@@ -1,5 +1,6 @@
 package org.letscareer.letscareer.domain.blog.dto.request;
 
+import jakarta.validation.constraints.NotNull;
 import org.letscareer.letscareer.domain.blog.type.BlogType;
 
 import java.time.LocalDateTime;
@@ -13,7 +14,8 @@ public record UpdateBlogRequestDto(
         String description,
         String ctaLink,
         String ctaText,
-        LocalDateTime displayDate,
+        @NotNull
+        Boolean isDisplayed,
         List<Long> tagList
 ) {
 }
