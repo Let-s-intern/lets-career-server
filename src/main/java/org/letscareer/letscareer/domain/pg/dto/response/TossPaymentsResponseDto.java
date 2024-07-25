@@ -25,7 +25,7 @@ public record TossPaymentsResponseDto(
         @Nullable MobilePhoneInfo mobilePhone,
         @Nullable GiftCertificateInfo giftCertificate,
         @Nullable CashReceiptInfo cashReceipt,
-        @Nullable CashReceiptsInfo cashReceipts,
+        @Nullable List<CashReceiptsInfo> cashReceipts,
         @Nullable DiscountInfo discount,
         @Nullable List<CancelsInfo> cancels,
         @Nullable String secret,
