@@ -11,8 +11,8 @@ import org.letscareer.letscareer.global.error.exception.InvalidValueException;
 import org.springframework.stereotype.Component;
 
 import static org.letscareer.letscareer.domain.application.error.ApplicationErrorCode.APPLICATION_CANNOT_CANCELED;
-import static org.letscareer.letscareer.domain.price.error.PriceErrorCode.PRICE_NOT_FOUND;
 import static org.letscareer.letscareer.domain.price.error.PriceErrorCode.INVALID_PRICE;
+import static org.letscareer.letscareer.domain.price.error.PriceErrorCode.PRICE_NOT_FOUND;
 
 @RequiredArgsConstructor
 @Component
@@ -26,7 +26,7 @@ public class PriceHelper {
 
     public void validatePrice(Price price, Coupon coupon, String amount) {
         int finalPrice = calculateFinalPrice(price, coupon);
-        if(finalPrice != Integer.parseInt(amount)) {
+        if (finalPrice != Integer.parseInt(amount)) {
             throw new InvalidValueException(INVALID_PRICE);
         }
     }
@@ -42,8 +42,10 @@ public class PriceHelper {
 
     public int calculateCancelAmount(Payment payment, RefundType refundType) {
         System.out.println(refundType);
-        if(refundType.equals(RefundType.ZERO))
+        if (refundType.equals(RefundType.ZERO))
             throw new InvalidValueException(APPLICATION_CANNOT_CANCELED);
-        return (int) (payment.getFinalPrice() * refundType.getPercent()) / 10 * 10;
+        int couponPrice = payment.getFinalPrice() - payment.getProgramPrice();
+        int refundPrice = ((int) (payment.getProgramPrice() * refundType.getPercent())) - couponPrice;
+        return Math.max(refundPrice, 0);
     }
 }
