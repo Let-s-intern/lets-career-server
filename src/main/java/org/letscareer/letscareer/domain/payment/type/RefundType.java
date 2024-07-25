@@ -6,7 +6,7 @@ import lombok.Getter;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.live.entity.Live;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 @Getter
@@ -20,20 +20,20 @@ public enum RefundType {
     private final double percent;
 
     public static RefundType ofLive(Live live) {
-        LocalDate now = LocalDate.now();
-        LocalDate startDate = live.getStartDate().toLocalDate();
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime startDate = live.getStartDate();
         if (now.isBefore(startDate)) return ALL;
         return ZERO;
     }
 
     public static RefundType ofChallenge(Challenge challenge) {
-        LocalDate now = LocalDate.now();
-        LocalDate startDate = challenge.getStartDate().toLocalDate();
-        LocalDate endDate = challenge.getEndDate().toLocalDate();
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime startDate = challenge.getStartDate();
+        LocalDateTime endDate = challenge.getEndDate();
         if (now.isBefore(startDate)) return ALL;
         long challengePeriod = ChronoUnit.DAYS.between(startDate, endDate) + 1;
-        LocalDate d3 = startDate.plusDays(challengePeriod / 3);
-        LocalDate d2 = startDate.plusDays(challengePeriod / 2);
+        LocalDateTime d3 = startDate.plusDays((long) Math.ceil((double) challengePeriod / 3));
+        LocalDateTime d2 = startDate.plusDays((long) Math.ceil((double) challengePeriod / 2));
         if (now.isBefore(d3)) return TWO_THIRD;
         else if (now.isBefore(d2)) return HALF;
         else return ZERO;
