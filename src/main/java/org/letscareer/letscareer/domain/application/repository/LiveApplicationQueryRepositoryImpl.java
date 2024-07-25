@@ -153,6 +153,18 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
                 .fetch();
     }
 
+    @Override
+    public Long countByLiveId(Long liveId) {
+        return queryFactory
+                .select(liveApplication.id.countDistinct())
+                .from(liveApplication)
+                .where(
+                        eqLiveId(liveId),
+                        eqIsCanceled(false)
+                )
+                .fetchOne();
+    }
+
     private BooleanExpression eqApplicationId(Long applicationId) {
         return applicationId != null ? liveApplication.id.eq(applicationId) : null;
     }

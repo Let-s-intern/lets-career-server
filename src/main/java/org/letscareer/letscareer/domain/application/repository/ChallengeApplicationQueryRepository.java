@@ -23,4 +23,6 @@ public interface ChallengeApplicationQueryRepository {
     List<String> findAllEmailByChallengeIdAndIsCanceled(Long challengeId, Boolean isCanceled);
 
     Long findApplicationIdByChallengeIdAndUserId(Long challengeId, Long userId);
+
+    Long countByChallengeId(Long challengeId);
 }
