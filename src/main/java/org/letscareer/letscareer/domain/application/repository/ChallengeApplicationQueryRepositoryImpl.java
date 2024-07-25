@@ -178,6 +178,18 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                 .fetchOne();
     }
 
+    @Override
+    public Long countByChallengeId(Long challengeId) {
+        return queryFactory
+                .select(challengeApplication.id.countDistinct())
+                .from(challengeApplication)
+                .where(
+                        eqChallengeId(challengeId),
+                        eqIsCanceled(false)
+                )
+                .fetchOne();
+    }
+
     private NumberExpression<Integer> calculateTotalCost() {
         NumberExpression<Integer> safePrice = new CaseBuilder()
                 .when(challengePrice.price.isNull())

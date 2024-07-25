@@ -20,4 +20,6 @@ public interface LiveApplicationQueryRepository {
     List<String> findQuestionListByLiveId(Long liveId);
 
     List<String> findMotivateListByLiveId(Long liveId);
+
+    Long countByLiveId(Long liveId);
 }
