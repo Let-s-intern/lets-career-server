@@ -2,7 +2,7 @@ package org.letscareer.letscareer.domain.nhn.dto.request;
 
 import lombok.AccessLevel;
 import lombok.Builder;
-import org.letscareer.letscareer.global.common.utils.string.StringUtils
+import org.letscareer.letscareer.global.common.utils.string.StringUtils;
 import org.letscareer.letscareer.domain.payment.dto.request.CreatePaymentRequestDto;
 
 @Builder(access = AccessLevel.PRIVATE)
