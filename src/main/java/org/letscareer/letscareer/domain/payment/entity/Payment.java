@@ -61,4 +61,8 @@ public class Payment extends BaseTimeEntity {
     public void updateRefund(UpdateChallengeApplicationPaybackRequestDto requestDto) {
         this.isRefunded = updateValue(this.isRefunded, requestDto.isRefunded());
     }
+
+    public void updateRefundPrice(Integer price) {
+        this.finalPrice = price;
+    }
 }
