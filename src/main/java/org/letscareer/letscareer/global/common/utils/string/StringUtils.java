@@ -48,4 +48,8 @@ public class StringUtils {
     public static String toStringWithThousandsSeparator(Integer num) {
         return String.format("%,d", num);
     }
+
+    public static String withThousandsSeparator(String str) {
+        return str.replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
+    }
 }
