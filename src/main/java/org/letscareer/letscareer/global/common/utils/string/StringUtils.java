@@ -44,4 +44,8 @@ public class StringUtils {
     public static String dateToStringMMdd(LocalDateTime date) {
         return date.format(DATE_TIME_FORMATTER_MM_dd);
     }
+
+    public static String toStringWithThousandsSeparator(Integer num) {
+        return String.format("%,d", num);
+    }
 }
