@@ -27,8 +27,6 @@ import org.letscareer.letscareer.domain.user.helper.UserHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Objects;
-
 @RequiredArgsConstructor
 @Transactional
 @Service("LIVE")
@@ -61,9 +59,10 @@ public class LiveApplicationServiceImpl implements ApplicationService {
         LiveApplication application = liveApplicationHelper.findLiveApplicationByIdOrThrow(applicationId);
         validateConditionForCancelApplication(application, user);
         Payment payment = application.getPayment();
+        Coupon coupon = payment.getCoupon();
         Live live = application.getLive();
         RefundType refundType = RefundType.ofLive(live);
-        Integer cancelAmount = priceHelper.calculateCancelAmount(payment, refundType);
+        Integer cancelAmount = priceHelper.calculateCancelAmount(payment, coupon, refundType);
         tossProvider.cancelPayments(refundType, payment.getPaymentKey(), cancelAmount);
         application.updateIsCanceled(true);
         sendCreditRefundKakaoMessage(live, user, payment, refundType, cancelAmount);

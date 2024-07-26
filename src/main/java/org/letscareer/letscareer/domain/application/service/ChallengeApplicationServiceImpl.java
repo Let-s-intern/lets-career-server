@@ -61,9 +61,10 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
         ChallengeApplication application = challengeApplicationHelper.findChallengeApplicationByIdOrThrow(applicationId);
         validateConditionForCancelApplication(application, user);
         Payment payment = application.getPayment();
+        Coupon coupon = payment.getCoupon();
         Challenge challenge = application.getChallenge();
         RefundType refundType = RefundType.ofChallenge(challenge);
-        Integer cancelAmount = priceHelper.calculateCancelAmount(payment, refundType);
+        Integer cancelAmount = priceHelper.calculateCancelAmount(payment, coupon, refundType);
         tossProvider.cancelPayments(refundType, payment.getPaymentKey(), cancelAmount);
         application.updateIsCanceled(true);
         sendCreditRefundKakaoMessage(challenge, user, payment, refundType, cancelAmount);
