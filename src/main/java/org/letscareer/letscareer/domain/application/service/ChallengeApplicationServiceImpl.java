@@ -67,6 +67,7 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
         Integer cancelAmount = priceHelper.calculateCancelAmount(payment, coupon, refundType);
         tossProvider.cancelPayments(refundType, payment.getPaymentKey(), cancelAmount);
         application.updateIsCanceled(true);
+        payment.updateRefundPrice(cancelAmount);
         sendCreditRefundKakaoMessage(challenge, user, payment, refundType, cancelAmount);
     }
 
