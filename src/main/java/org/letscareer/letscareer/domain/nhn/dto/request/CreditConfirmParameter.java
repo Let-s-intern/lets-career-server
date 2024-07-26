@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.nhn.dto.request;
 
 import lombok.AccessLevel;
 import lombok.Builder;
+import org.letscareer.letscareer.global.common.utils.string.StringUtils
 import org.letscareer.letscareer.domain.payment.dto.request.CreatePaymentRequestDto;
 
 @Builder(access = AccessLevel.PRIVATE)
@@ -18,7 +19,7 @@ public record CreditConfirmParameter(
                 .name(name)
                 .orderId(paymentInfo.orderId())
                 .programTitle(programTitle)
-                .amount(String.valueOf(paymentInfo.amount()))
+                .amount(StringUtils.toStringWithThousandsSeparator(paymentInfo.amount()))
                 .build();
     }
 }
