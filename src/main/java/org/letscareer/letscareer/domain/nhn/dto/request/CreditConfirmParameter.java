@@ -19,7 +19,7 @@ public record CreditConfirmParameter(
                 .name(name)
                 .orderId(paymentInfo.orderId())
                 .programTitle(programTitle)
-                .amount(StringUtils.toStringWithThousandsSeparator(paymentInfo.amount()))
+                .amount(StringUtils.withThousandsSeparator(paymentInfo.amount()))
                 .build();
     }
 }
