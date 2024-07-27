@@ -62,11 +62,12 @@ public class LiveApplicationServiceImpl implements ApplicationService {
         Coupon coupon = payment.getCoupon();
         Live live = application.getLive();
         RefundType refundType = RefundType.ofLive(live);
+        Integer finalPrice = payment.getFinalPrice();
         Integer cancelAmount = priceHelper.calculateCancelAmount(payment, coupon, refundType);
         tossProvider.cancelPayments(refundType, payment.getPaymentKey(), cancelAmount);
+        sendCreditRefundKakaoMessage(live, user, payment, refundType, finalPrice, cancelAmount);
         application.updateIsCanceled(true);
         payment.updateRefundPrice(cancelAmount);
-        sendCreditRefundKakaoMessage(live, user, payment, refundType, cancelAmount);
     }
 
     private void validateRequestConditionForCreateApplication(Live live, Coupon coupon, Price price, User user, CreateApplicationRequestDto requestDto) {
@@ -92,8 +93,8 @@ public class LiveApplicationServiceImpl implements ApplicationService {
         nhnProvider.sendKakaoMessage(user, requestParameter, "payment_confirm");
     }
 
-    private void sendCreditRefundKakaoMessage(Live live, User user, Payment payment, RefundType refundType, Integer cancelAmount) {
-        CreditRefundParameter requestParameter = CreditRefundParameter.of(user.getName(), payment.getOrderId(), live.getTitle(), refundType, payment.getFinalPrice(), cancelAmount);
+    private void sendCreditRefundKakaoMessage(Live live, User user, Payment payment, RefundType refundType, Integer finalPrice, Integer cancelAmount) {
+        CreditRefundParameter requestParameter = CreditRefundParameter.of(user.getName(), payment.getOrderId(), live.getTitle(), refundType, finalPrice, cancelAmount);
         nhnProvider.sendKakaoMessage(user, requestParameter, "payment_refund");
     }
 }
