@@ -46,6 +46,7 @@ public class PriceHelper {
         if (refundType.equals(RefundType.ZERO))
             throw new InvalidValueException(APPLICATION_CANNOT_CANCELED);
         int couponPrice = Objects.isNull(coupon) ? 0 : coupon.getDiscount();
+        couponPrice = couponPrice == -1 ? 0 : couponPrice;
         int regularPrice = payment.getFinalPrice() + couponPrice;
         int refundPrice = ((int) (regularPrice * refundType.getPercent())) - couponPrice;
         return Math.max(refundPrice, 0);
