@@ -64,11 +64,12 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
         Coupon coupon = payment.getCoupon();
         Challenge challenge = application.getChallenge();
         RefundType refundType = RefundType.ofChallenge(challenge);
+        Integer finalPrice = payment.getFinalPrice();
         Integer cancelAmount = priceHelper.calculateCancelAmount(payment, coupon, refundType);
         tossProvider.cancelPayments(refundType, payment.getPaymentKey(), cancelAmount);
+        sendCreditRefundKakaoMessage(challenge, user, payment, refundType, finalPrice, cancelAmount);
         application.updateIsCanceled(true);
         payment.updateRefundPrice(cancelAmount);
-        sendCreditRefundKakaoMessage(challenge, user, payment, refundType, cancelAmount);
     }
 
     private void validateConditionForCreateApplication(Challenge challenge, Coupon coupon, Price price, User user, CreateApplicationRequestDto requestDto) {
@@ -95,8 +96,8 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
         nhnProvider.sendKakaoMessage(user, requestParameter, "payment_confirm");
     }
 
-    private void sendCreditRefundKakaoMessage(Challenge challenge, User user, Payment payment, RefundType refundType, Integer cancelAmount) {
-        CreditRefundParameter requestParameter = CreditRefundParameter.of(user.getName(), payment.getOrderId(), challenge.getTitle(), refundType, payment.getFinalPrice(), cancelAmount);
+    private void sendCreditRefundKakaoMessage(Challenge challenge, User user, Payment payment, RefundType refundType, Integer finalPrice, Integer cancelAmount) {
+        CreditRefundParameter requestParameter = CreditRefundParameter.of(user.getName(), payment.getOrderId(), challenge.getTitle(), refundType, finalPrice, cancelAmount);
         nhnProvider.sendKakaoMessage(user, requestParameter, "payment_refund");
     }
 }
