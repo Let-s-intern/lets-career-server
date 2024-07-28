@@ -41,7 +41,8 @@ public class PaymentQueryRepositoryImpl implements PaymentQueryRepository {
                 .from(payment)
                 .where(
                         eqUserId(userId),
-                        eqCouponId(couponId)
+                        eqCouponId(couponId),
+                        eqIsCanceled(Boolean.FALSE)
                 )
                 .leftJoin(payment.application.user, user)
                 .leftJoin(payment.coupon, coupon)
@@ -55,7 +56,8 @@ public class PaymentQueryRepositoryImpl implements PaymentQueryRepository {
                         .select(Projections.constructor(PaymentDetailVo.class,
                                 payment.id,
                                 payment.finalPrice,
-                                coupon.discount))
+                                coupon.discount,
+                                payment.lastModifiedDate))
                         .from(payment)
                         .leftJoin(payment.coupon, coupon)
                         .where(
@@ -90,6 +92,10 @@ public class PaymentQueryRepositoryImpl implements PaymentQueryRepository {
 
     private BooleanExpression eqChallengeId(Long challengeId) {
         return challengeId != null ? challenge.id.eq(challengeId) : null;
+    }
+
+    private BooleanExpression eqIsCanceled(Boolean isCanceled) {
+        return isCanceled != null ? application.isCanceled.eq(isCanceled) : null;
     }
 
     private Predicate eqCouponId(Long couponId) {

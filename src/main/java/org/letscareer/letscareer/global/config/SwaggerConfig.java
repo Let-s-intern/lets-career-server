@@ -30,20 +30,25 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Configuration
 public class SwaggerConfig {
+    private final static String TOKEN_FORMAT = "JWT";
+    private final static String TOKEN_TYPE = "bearer";
+    private final static String SWAGGER_TITLE = "Lets career API";
+    private final static String SWAGGER_VERSION = "1.0.0";
+
     @Bean
     public OpenAPI openAPI() {
-        Info info = new Info().title("Packy API")
-                .version("1.0.0");
+        Info info = new Info().title(SWAGGER_TITLE)
+                .version(SWAGGER_VERSION);
 
-        String jwtSchemeName = "JWT";
+        String jwtSchemeName = TOKEN_FORMAT;
         SecurityRequirement securityRequirement = new SecurityRequirement()
                 .addList(jwtSchemeName);
         Components components = new Components()
                 .addSecuritySchemes(jwtSchemeName, new SecurityScheme()
                         .name(jwtSchemeName)
                         .type(SecurityScheme.Type.HTTP)
-                        .scheme("bearer")
-                        .bearerFormat("JWT")
+                        .scheme(TOKEN_TYPE)
+                        .bearerFormat(TOKEN_FORMAT)
                 );
 
         return new OpenAPI()

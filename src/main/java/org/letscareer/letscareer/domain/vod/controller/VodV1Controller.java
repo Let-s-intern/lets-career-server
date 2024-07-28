@@ -37,8 +37,8 @@ public class VodV1Controller {
     @Operation(summary = "vod 상세 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetVodDetailResponseDto.class)))
     })
-    @GetMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> getVodDetail(@PathVariable("id") final Long vodId) {
+    @GetMapping("/{vodId}")
+    public ResponseEntity<SuccessResponse<?>> getVodDetail(@PathVariable final Long vodId) {
         GetVodDetailResponseDto responseDto = vodService.getVodDetail(vodId);
         return SuccessResponse.ok(responseDto);
     }
@@ -55,8 +55,8 @@ public class VodV1Controller {
     @Operation(summary = "[어드민] vod 수정", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
-    @PatchMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> updateVodProgram(@PathVariable("id") final Long vodId,
+    @PatchMapping("/{vodId}")
+    public ResponseEntity<SuccessResponse<?>> updateVodProgram(@PathVariable final Long vodId,
                                                                @RequestBody final UpdateVodRequestDto requestDto) {
         vodService.updateVod(vodId, requestDto);
         return SuccessResponse.ok(null);
@@ -65,8 +65,8 @@ public class VodV1Controller {
     @Operation(summary = "[어드민] vod 삭제", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> deleteVodProgram(@PathVariable("id") final Long vodId) {
+    @DeleteMapping("/{vodId}")
+    public ResponseEntity<SuccessResponse<?>> deleteVodProgram(@PathVariable final Long vodId) {
         vodService.deleteVod(vodId);
         return SuccessResponse.ok(null);
     }

@@ -23,7 +23,7 @@ public interface ChallengeService {
 
     GetChallengeTitleResponseDto getChallengeTitle(Long challengeId);
 
-    GetChallengeApplicationsResponseDto getApplications(Long challengeId, Boolean isConfirmed);
+    GetChallengeApplicationsResponseDto getApplications(Long challengeId, Boolean isCanceled);
 
     GetChallengeApplicationsPaybackResponseDto getApplicationsScore(Long challengeId, Pageable pageable);
 

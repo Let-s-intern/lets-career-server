@@ -34,10 +34,10 @@ public class BannerV1Controller {
     @Operation(summary = "[어드민] 배너 상세 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = BannerDetailResponseDto.class)))
     })
-    @GetMapping("/admin/{id}")
-    public ResponseEntity<SuccessResponse<?>> getBannerDetail(@PathVariable(name = "id") final Long bannerId,
+    @GetMapping("/admin/{bannerId}")
+    public ResponseEntity<SuccessResponse<?>> getBannerDetail(@PathVariable final Long bannerId,
                                                               @RequestParam(name = "type") final BannerType bannerType) {
-        final BannerDetailResponseDto responseDto = bannerServiceFactory.getBannerService(bannerType).getBannerDetail(bannerId);
+        final BannerDetailResponseDto<?> responseDto = bannerServiceFactory.getBannerService(bannerType).getBannerDetail(bannerId);
         return SuccessResponse.ok(responseDto);
     }
 
@@ -57,8 +57,8 @@ public class BannerV1Controller {
     @Operation(summary = "[어드민] 타입별 배너 수정", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
-    @PatchMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> updateBanner(@PathVariable(name = "id") final Long bannerId,
+    @PatchMapping("/{bannerId}")
+    public ResponseEntity<SuccessResponse<?>> updateBanner(@PathVariable final Long bannerId,
                                                            @RequestParam(name = "type") final BannerType bannerType,
                                                            @RequestPart(required = false) final UpdateBannerRequestDto requestDto,
                                                            @RequestPart(required = false) final MultipartFile file,
@@ -79,8 +79,8 @@ public class BannerV1Controller {
     @Operation(summary = "[어드민] 배너 삭제", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> deleteBanner(@PathVariable(name = "id") final Long bannerId,
+    @DeleteMapping("/{bannerId}")
+    public ResponseEntity<SuccessResponse<?>> deleteBanner(@PathVariable final Long bannerId,
                                                            @RequestParam(name = "type") final BannerType bannerType) {
         bannerServiceFactory.getBannerService(bannerType).deleteBanner(bannerId);
         return SuccessResponse.ok(null);

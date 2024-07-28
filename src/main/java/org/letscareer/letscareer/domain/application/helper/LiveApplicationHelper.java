@@ -25,8 +25,8 @@ import static org.letscareer.letscareer.domain.application.error.ApplicationErro
 public class LiveApplicationHelper {
     private final LiveApplicationRepository liveApplicationRepository;
 
-    public List<AdminLiveApplicationVo> findAdminLiveApplicationVos(Long liveId, Boolean isConfirmed) {
-        return liveApplicationRepository.findAdminLiveApplicationVos(liveId, isConfirmed);
+    public List<AdminLiveApplicationVo> findAdminLiveApplicationVos(Long liveId, Boolean isCanceled) {
+        return liveApplicationRepository.findAdminLiveApplicationVos(liveId, isCanceled);
     }
 
     public LiveApplication createLiveApplicationAndSave(CreateApplicationRequestDto requestDto, Live live, User user) {

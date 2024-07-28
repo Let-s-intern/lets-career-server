@@ -39,13 +39,13 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                 .where(
                         eqChallengeId(challengeId),
                         eqUserId(userId),
-                        eqPaymentIsRefunded(false)
+                        eqIsCanceled(false)
                 )
                 .fetchFirst());
     }
 
     @Override
-    public List<AdminChallengeApplicationVo> findAdminChallengeApplicationVos(Long challengeId, Boolean isConfirmed) {
+    public List<AdminChallengeApplicationVo> findAdminChallengeApplicationVos(Long challengeId, Boolean isCanceled) {
         return queryFactory
                 .select(Projections.constructor(AdminChallengeApplicationVo.class,
                         challengeApplication.id,
@@ -57,9 +57,12 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                         user.grade,
                         user.major,
                         coupon.name,
+                        coupon.discount,
                         payment.finalPrice,
-                        payment.isRefunded,
-                        payment.isConfirmed,
+                        payment.programPrice,
+                        payment.programDiscount,
+                        payment.orderId,
+                        challengeApplication._super.isCanceled,
                         user.wishJob,
                         user.wishCompany,
                         user.inflowPath,
@@ -76,7 +79,7 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                 .orderBy(challengeApplication.id.desc())
                 .where(
                         eqChallengeId(challengeId),
-                        eqIsConfirmedAndIsRefunded(isConfirmed)
+                        eqIsCanceled(isCanceled)
                 )
                 .fetch();
     }
@@ -98,8 +101,7 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                 .leftJoin(challengeApplication.payment, payment)
                 .where(
                         eqChallengeId(challengeId),
-                        eqIsConfirmed(true),
-                        eqPaymentIsRefunded(false)
+                        eqIsCanceled(false)
                 )
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
@@ -113,7 +115,7 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                 .leftJoin(challengeApplication.payment, payment)
                 .where(
                         eqChallengeId(challengeId),
-                        eqIsConfirmed(true)
+                        eqIsCanceled(false)
                 );
 
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
@@ -130,28 +132,29 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                 .leftJoin(challengeApplication.challenge, challenge)
                 .where(
                         eqUserId(userId),
-                        eqChallengeId(challengeId)
+                        eqChallengeId(challengeId),
+                        eqIsCanceled(false)
                 )
                 .fetchFirst());
     }
 
     @Override
-    public Optional<Long> findChallengeApplicationIdByChallengeIdAndUserIdAndIsConfirmed(Long challengeId, Long userId, Boolean isConfirmed) {
+    public Optional<Long> findChallengeApplicationIdByChallengeIdAndUserIdAndIsCanceled(Long challengeId, Long userId, Boolean isCanceled) {
         return Optional.ofNullable(queryFactory
                 .select(challengeApplication.id)
-                        .from(challengeApplication)
-                        .leftJoin(challengeApplication.user, user)
-                        .leftJoin(challengeApplication.payment, payment)
-                        .where(
-                                eqChallengeId(challengeId),
-                                eqUserId(userId),
-                                eqIsConfirmed(isConfirmed)
-                        )
-                        .fetchFirst());
+                .from(challengeApplication)
+                .leftJoin(challengeApplication.user, user)
+                .leftJoin(challengeApplication.payment, payment)
+                .where(
+                        eqChallengeId(challengeId),
+                        eqUserId(userId),
+                        eqIsCanceled(isCanceled)
+                )
+                .fetchFirst());
     }
 
     @Override
-    public List<String> findAllEmailByChallengeIdAndPaymentIsConfirmed(Long challengeId, Boolean isConfirmed) {
+    public List<String> findAllEmailByChallengeIdAndIsCanceled(Long challengeId, Boolean isCanceled) {
         return queryFactory
                 .select(activeEmail(challengeApplication.user))
                 .from(challengeApplication)
@@ -160,7 +163,7 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                 .leftJoin(challengeApplication.payment, payment)
                 .where(
                         eqChallengeId(challengeId),
-                        eqIsConfirmed(isConfirmed)
+                        eqIsCanceled(isCanceled)
                 )
                 .fetch();
     }
@@ -175,6 +178,18 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                 .where(
                         eqChallengeId(challengeId),
                         eqUserId(userId)
+                )
+                .fetchOne();
+    }
+
+    @Override
+    public Long countByChallengeId(Long challengeId) {
+        return queryFactory
+                .select(challengeApplication.id.countDistinct())
+                .from(challengeApplication)
+                .where(
+                        eqChallengeId(challengeId),
+                        eqIsCanceled(false)
                 )
                 .fetchOne();
     }
@@ -206,15 +221,7 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
         return challengeId != null ? challenge.id.eq(challengeId) : null;
     }
 
-    private BooleanExpression eqIsConfirmed(Boolean isConfirmed) {
-        return isConfirmed != null ? payment.isConfirmed.eq(isConfirmed) : null;
-    }
-
-    private BooleanExpression eqPaymentIsRefunded(Boolean isRefunded) {
-        return isRefunded != null ? payment.isRefunded.eq(isRefunded) : null;
-    }
-
-    private BooleanExpression eqIsConfirmedAndIsRefunded(Boolean isRefunded) {
-        return isRefunded != null ? payment.isConfirmed.eq(isRefunded).and(payment.isRefunded.eq(false)) : null;
+    private BooleanExpression eqIsCanceled(Boolean isCanceled) {
+        return isCanceled != null ? challengeApplication._super.isCanceled.eq(isCanceled) : null;
     }
 }

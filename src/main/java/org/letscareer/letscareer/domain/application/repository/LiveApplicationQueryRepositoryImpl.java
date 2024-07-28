@@ -2,10 +2,9 @@ package org.letscareer.letscareer.domain.application.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.CaseBuilder;
-import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.application.entity.LiveApplication;
 import org.letscareer.letscareer.domain.application.vo.AdminLiveApplicationVo;
 import org.letscareer.letscareer.domain.live.vo.LiveEmailVo;
 
@@ -18,14 +17,28 @@ import static org.letscareer.letscareer.domain.live.entity.QLive.live;
 import static org.letscareer.letscareer.domain.payment.entity.QPayment.payment;
 import static org.letscareer.letscareer.domain.price.entity.QLivePrice.livePrice;
 import static org.letscareer.letscareer.domain.user.entity.QUser.user;
-import static org.letscareer.letscareer.domain.user.repository.UserQueryRepositoryImpl.activeEmail;
 
 @RequiredArgsConstructor
 public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<AdminLiveApplicationVo> findAdminLiveApplicationVos(Long liveId, Boolean isConfirmed) {
+    public Optional<LiveApplication> findLiveApplicationByLiveIdAndUserId(Long liveId, Long userId) {
+        return Optional.ofNullable(queryFactory
+                .selectFrom(liveApplication)
+                .leftJoin(liveApplication.live, live)
+                .leftJoin(liveApplication.user, user)
+                .leftJoin(liveApplication.payment, payment)
+                .where(
+                        eqLiveId(liveId),
+                        eqUserId(userId),
+                        eqIsCanceled(false)
+                )
+                .fetchFirst());
+    }
+
+    @Override
+    public List<AdminLiveApplicationVo> findAdminLiveApplicationVos(Long liveId, Boolean isCanceled) {
         return queryFactory
                 .select(Projections.constructor(AdminLiveApplicationVo.class,
                         liveApplication.id,
@@ -39,9 +52,12 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
                         liveApplication.motivate,
                         liveApplication.question,
                         coupon.name,
+                        coupon.discount,
                         payment.finalPrice,
-                        payment.isConfirmed,
-                        payment.isRefunded,
+                        payment.programPrice,
+                        payment.programDiscount,
+                        payment.orderId,
+                        liveApplication._super.isCanceled,
                         liveApplication.createDate
                 ))
                 .from(liveApplication)
@@ -53,7 +69,7 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
                 .orderBy(liveApplication.id.desc())
                 .where(
                         eqLiveId(liveId),
-                        eqIsConfirmed(isConfirmed)
+                        eqIsCanceled(isCanceled)
                 )
                 .fetch();
     }
@@ -82,15 +98,14 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
     public List<String> findEmailListByLiveId(Long liveId) {
         return queryFactory
                 .select(
-                        activeEmail(liveApplication.user)
+                        liveApplication.user.contactEmail
                 )
                 .from(liveApplication)
                 .leftJoin(liveApplication.user, user)
                 .leftJoin(liveApplication.payment, payment)
                 .where(
                         eqLiveId(liveId),
-                        eqIsConfirmed(true),
-                        eqIsRefunded(false)
+                        eqIsCanceled(false)
                 )
                 .fetch();
     }
@@ -106,7 +121,8 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
                 .leftJoin(liveApplication.live, live)
                 .where(
                         eqUserId(userId),
-                        eqLiveId(liveId)
+                        eqLiveId(liveId),
+                        eqIsCanceled(false)
                 )
                 .fetchFirst());
     }
@@ -141,24 +157,16 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
                 .fetch();
     }
 
-
-    private NumberExpression<Integer> calculateTotalCost() {
-        NumberExpression<Integer> safePrice = new CaseBuilder()
-                .when(livePrice.price.isNull())
-                .then(0)
-                .otherwise(livePrice.price);
-
-        NumberExpression<Integer> safeDiscount = new CaseBuilder()
-                .when(livePrice.discount.isNull())
-                .then(0)
-                .otherwise(livePrice.discount);
-
-        NumberExpression<Integer> safeCouponDiscount = new CaseBuilder()
-                .when(coupon.discount.isNull())
-                .then(0)
-                .otherwise(coupon.discount);
-
-        return safePrice.subtract(safeDiscount).subtract(safeCouponDiscount);
+    @Override
+    public Long countByLiveId(Long liveId) {
+        return queryFactory
+                .select(liveApplication.id.countDistinct())
+                .from(liveApplication)
+                .where(
+                        eqLiveId(liveId),
+                        eqIsCanceled(false)
+                )
+                .fetchOne();
     }
 
     private BooleanExpression eqApplicationId(Long applicationId) {
@@ -174,8 +182,8 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
         return liveId != null ? live.id.eq(liveId) : null;
     }
 
-    private BooleanExpression eqIsConfirmed(Boolean isConfirmed) {
-        return isConfirmed != null ? payment.isConfirmed.eq(isConfirmed) : null;
+    private BooleanExpression eqIsCanceled(Boolean isCanceled) {
+        return isCanceled != null ? liveApplication._super.isCanceled.eq(isCanceled) : null;
     }
 
     private BooleanExpression eqIsRefunded(Boolean isRefunded) {

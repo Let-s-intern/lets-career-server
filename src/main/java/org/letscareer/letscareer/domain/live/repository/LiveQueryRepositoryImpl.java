@@ -39,7 +39,6 @@ public class LiveQueryRepositoryImpl implements LiveQueryRepository {
                         live.participationCount,
                         live.thumbnail,
                         live.mentorName,
-                        live.mentorPassword,
                         live.job,
                         live.place,
                         live.startDate,
@@ -226,6 +225,18 @@ public class LiveQueryRepositoryImpl implements LiveQueryRepository {
                         .fetchFirst());
     }
 
+    @Override
+    public Optional<String> findMentorPasswordById(Long liveId) {
+        return Optional.ofNullable(
+                jpaQueryFactory
+                        .select(live.mentorPassword)
+                        .from(live)
+                        .where(
+                                eqLiveId(liveId)
+                        )
+                        .fetchFirst());
+    }
+
     private BooleanExpression eqLiveId(Long liveId) {
         return liveId != null ? live.id.eq(liveId) : null;
     }
@@ -280,6 +291,6 @@ public class LiveQueryRepositoryImpl implements LiveQueryRepository {
     }
 
     private BooleanExpression isValidApplication() {
-        return liveApplication.payment.isConfirmed.eq(true).and(liveApplication.payment.isRefunded.eq(false));
+        return liveApplication._super.isCanceled.eq(false);
     }
 }

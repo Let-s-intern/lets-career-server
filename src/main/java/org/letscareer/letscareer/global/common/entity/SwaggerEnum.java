@@ -3,6 +3,7 @@ package org.letscareer.letscareer.global.common.entity;
 import org.letscareer.letscareer.domain.application.error.ApplicationErrorCode;
 import org.letscareer.letscareer.domain.attendance.error.AttendanceErrorCode;
 import org.letscareer.letscareer.domain.banner.error.BannerErrorCode;
+import org.letscareer.letscareer.domain.blog.error.BlogErrorCode;
 import org.letscareer.letscareer.domain.challenge.error.ChallengeErrorCode;
 import org.letscareer.letscareer.domain.challengeguide.error.ChallengeGuideErrorCode;
 import org.letscareer.letscareer.domain.classification.error.ChallengeClassificationErrorCode;
@@ -31,11 +32,16 @@ public enum SwaggerEnum {
     // application
     INVALID_APPLICATION_TIME(ApplicationErrorCode.INVALID_APPLICATION_TIME),
     CONFLICT_APPLICATION(ApplicationErrorCode.CONFLICT_APPLICATION),
+    APPLICATION_ALREADY_CANCELED(ApplicationErrorCode.APPLICATION_ALREADY_CANCELED),
+    APPLICATION_CANNOT_CANCELED(ApplicationErrorCode.APPLICATION_CANNOT_CANCELED),
     LIVE_BAD_REQUEST(ApplicationErrorCode.LIVE_BAD_REQUEST),
     APPLICATION_NOT_FOUND(ApplicationErrorCode.APPLICATION_NOT_FOUND),
 
     // Banner
     BANNER_NOT_FOUND(BannerErrorCode.BANNER_NOT_FOUND),
+
+    // Blog
+    BLOG_NOT_FOUND(BlogErrorCode.BLOG_NOT_FOUND),
 
     // challenge
     CHALLENGE_NOT_FOUND(ChallengeErrorCode.CHALLENGE_NOT_FOUND),
@@ -84,6 +90,7 @@ public enum SwaggerEnum {
     INVALID_EMAIL(UserErrorCode.INVALID_EMAIL),
     INVALID_PASSWORD(UserErrorCode.INVALID_PASSWORD),
     INVALID_PHONE_NUMBER(UserErrorCode.INVALID_PHONE_NUMBER),
+    IS_NOT_ADMIN(UserErrorCode.IS_NOT_ADMIN),
     USER_NOT_FOUND(UserErrorCode.USER_NOT_FOUND),
     USER_PHONE_NUMBER_CONFLICT(UserErrorCode.USER_PHONE_NUMBER_CONFLICT),
     USER_EMAIL_CONFLICT(UserErrorCode.USER_EMAIL_CONFLICT),

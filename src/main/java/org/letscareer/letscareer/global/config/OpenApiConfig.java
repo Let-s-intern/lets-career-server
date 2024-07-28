@@ -12,7 +12,6 @@ import java.util.Arrays;
 
 @Configuration
 public class OpenApiConfig {
-
     @Value("${server.url}")
     private String SERVER_URL;
 

@@ -10,12 +10,12 @@ import java.util.List;
 
 @Builder(access = AccessLevel.PRIVATE)
 public record UserAdminListResponseDto(
-        List<UserAdminVo> userAdminList,
+        List<UserAdminListInfo> userAdminList,
         PageInfo pageInfo
 ) {
-    public static UserAdminListResponseDto of(Page<UserAdminVo> userAdminList, PageInfo pageInfo) {
+    public static UserAdminListResponseDto of(List<UserAdminListInfo> userAdminList, PageInfo pageInfo) {
         return UserAdminListResponseDto.builder()
-                .userAdminList(userAdminList.getContent())
+                .userAdminList(userAdminList)
                 .pageInfo(pageInfo)
                 .build();
     }

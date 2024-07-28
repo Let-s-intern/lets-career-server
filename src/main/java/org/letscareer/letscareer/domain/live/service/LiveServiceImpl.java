@@ -35,7 +35,7 @@ import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
 import org.letscareer.letscareer.domain.review.vo.ReviewVo;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.entity.PageInfo;
-import org.letscareer.letscareer.global.common.utils.ZoomUtils;
+import org.letscareer.letscareer.global.common.utils.zoom.ZoomUtils;
 import org.letscareer.letscareer.global.error.exception.InvalidValueException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -129,8 +129,8 @@ public class LiveServiceImpl implements LiveService {
     }
 
     @Override
-    public GetLiveApplicationsResponseDto getApplications(Long liveId, Boolean isConfirmed) {
-        List<AdminLiveApplicationVo> applicationVos = liveApplicationHelper.findAdminLiveApplicationVos(liveId, isConfirmed);
+    public GetLiveApplicationsResponseDto getApplications(Long liveId, Boolean isCanceled) {
+        List<AdminLiveApplicationVo> applicationVos = liveApplicationHelper.findAdminLiveApplicationVos(liveId, isCanceled);
         return liveApplicationMapper.toGetLiveApplicationsResponseDto(applicationVos);
     }
 
@@ -154,6 +154,13 @@ public class LiveServiceImpl implements LiveService {
         List<String> motivateList = mentorContentsType.equals(MentorContentsType.PREV) ? liveApplicationHelper.findMotivateListByLiveId(liveId) : new ArrayList<>();
         List<String> reviewList = mentorContentsType.equals(MentorContentsType.REVIEW) ? reviewHelper.findLiveReviewContentByLiveId(liveId) : new ArrayList<>();
         return liveMapper.toGetLiveMentorContentsResponse(liveMentorVo, questionList, motivateList, reviewList);
+    }
+
+    @Override
+    public GetLiveMentorPasswordResponseDto getMentorPassword(Long liveId) {
+        String mentorPassword = liveHelper.findLiveMentorPasswordByIdOrThrow(liveId);
+        GetLiveMentorPasswordResponseDto responseDto = GetLiveMentorPasswordResponseDto.of(mentorPassword);
+        return responseDto;
     }
 
     @Override

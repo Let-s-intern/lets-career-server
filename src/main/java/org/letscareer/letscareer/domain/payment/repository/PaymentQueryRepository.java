@@ -7,7 +7,10 @@ import java.util.Optional;
 
 public interface PaymentQueryRepository {
     Optional<Payment> findPaymentByApplicationId(Long applicationId);
+
     long countCouponAppliedTime(Long userId, Long couponId);
+
     Optional<PaymentDetailVo> findPaymentDetailVoByPaymentId(Long paymentId);
+
     Optional<Payment> findPaymentByChallengeIdAndUserId(Long challengeId, Long userId);
 }

@@ -26,8 +26,8 @@ public class ReviewV1Controller {
     @Operation(summary = "리뷰 상세 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReviewDetailResponseDto.class)))
     })
-    @GetMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> getReviewDetail(@PathVariable("id") final Long reviewId) {
+    @GetMapping("/{reviewId}")
+    public ResponseEntity<SuccessResponse<?>> getReviewDetail(@PathVariable final Long reviewId) {
         GetReviewDetailResponseDto requestDto = reviewService.getReviewDetail(reviewId);
         return SuccessResponse.ok(requestDto);
     }
@@ -47,8 +47,8 @@ public class ReviewV1Controller {
             @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
     })
     @ApiErrorCode({SwaggerEnum.BAD_REQUEST})
-    @PostMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> createReviewByLink(@PathVariable("id") final Long programId,
+    @PostMapping("/{programId}")
+    public ResponseEntity<SuccessResponse<?>> createReviewByLink(@PathVariable final Long programId,
                                                                  @RequestParam("type") final ProgramType programType,
                                                                  @Valid @RequestBody final CreateReviewRequestDto requestDto) {
         reviewService.createReviewByLink(programId, programType, requestDto);
@@ -58,8 +58,8 @@ public class ReviewV1Controller {
     @Operation(summary = "리뷰 수정", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
-    @PatchMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> updateReview(@PathVariable("id") final Long reviewId,
+    @PatchMapping("/{reviewId}")
+    public ResponseEntity<SuccessResponse<?>> updateReview(@PathVariable final Long reviewId,
                                                            @RequestBody final UpdateReviewRequestDto requestDto) {
         reviewService.updateReview(reviewId, requestDto);
         return SuccessResponse.ok(null);
@@ -68,8 +68,8 @@ public class ReviewV1Controller {
     @Operation(summary = "[어드민] 리뷰 노출 여부 수정", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
-    @PatchMapping("/{id}/status")
-    public ResponseEntity<SuccessResponse<?>> updateReviewVisibleStatus(@PathVariable("id") final Long reviewId,
+    @PatchMapping("/{reviewId}/status")
+    public ResponseEntity<SuccessResponse<?>> updateReviewVisibleStatus(@PathVariable final Long reviewId,
                                                                         @RequestParam final Boolean isVisible) {
         reviewService.updateReviewVisibleStatus(reviewId, isVisible);
         return SuccessResponse.ok(null);

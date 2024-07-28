@@ -3,7 +3,7 @@ package org.letscareer.letscareer.global.security.oauth2;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
-import org.letscareer.letscareer.global.common.utils.CookieUtils;
+import org.letscareer.letscareer.global.common.utils.redis.CookieUtils;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.stereotype.Component;

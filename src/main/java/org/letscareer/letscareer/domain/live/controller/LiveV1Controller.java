@@ -46,8 +46,8 @@ public class LiveV1Controller {
     @Operation(summary = "라이브 상세 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetLiveDetailResponseDto.class)))
     })
-    @GetMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> getLiveDetail(@PathVariable("id") final Long liveId) {
+    @GetMapping("/{liveId}")
+    public ResponseEntity<SuccessResponse<?>> getLiveDetail(@PathVariable final Long liveId) {
         GetLiveDetailResponseDto responseDto = liveService.getLiveDetail(liveId);
         return SuccessResponse.ok(responseDto);
     }
@@ -55,8 +55,8 @@ public class LiveV1Controller {
     @Operation(summary = "라이브 title 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetLiveTitleResponseDto.class)))
     })
-    @GetMapping("/{id}/title")
-    public ResponseEntity<SuccessResponse<?>> getLiveTitle(@PathVariable("id") final Long liveId) {
+    @GetMapping("/{liveId}/title")
+    public ResponseEntity<SuccessResponse<?>> getLiveTitle(@PathVariable final Long liveId) {
         final GetLiveTitleResponseDto responseDto = liveService.getLiveTitle(liveId);
         return SuccessResponse.ok(responseDto);
     }
@@ -64,8 +64,8 @@ public class LiveV1Controller {
     @Operation(summary = "라이브 섬네일 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetLiveThumbnailResponseDto.class)))
     })
-    @GetMapping("/{id}/thumbnail")
-    public ResponseEntity<SuccessResponse<?>> getLiveThumbnail(@PathVariable("id") final Long liveId) {
+    @GetMapping("/{liveId}/thumbnail")
+    public ResponseEntity<SuccessResponse<?>> getLiveThumbnail(@PathVariable final Long liveId) {
         final GetLiveThumbnailResponseDto responseDto = liveService.getLiveThumbnail(liveId);
         return SuccessResponse.ok(responseDto);
     }
@@ -73,8 +73,8 @@ public class LiveV1Controller {
     @Operation(summary = "라이브 상세내용 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetLiveContentResponseDto.class)))
     })
-    @GetMapping("/{id}/content")
-    public ResponseEntity<SuccessResponse<?>> getLiveDetailContent(@PathVariable("id") final Long liveId) {
+    @GetMapping("/{liveId}/content")
+    public ResponseEntity<SuccessResponse<?>> getLiveDetailContent(@PathVariable final Long liveId) {
         final GetLiveContentResponseDto responseDto = liveService.getLiveDetailContent(liveId);
         return SuccessResponse.ok(responseDto);
     }
@@ -82,8 +82,8 @@ public class LiveV1Controller {
     @Operation(summary = "라이브 faq 목록 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetFaqResponseDto.class)))
     })
-    @GetMapping("/{id}/faqs")
-    public ResponseEntity<SuccessResponse<?>> getLiveFaqs(@PathVariable("id") final Long liveId) {
+    @GetMapping("/{liveId}/faqs")
+    public ResponseEntity<SuccessResponse<?>> getLiveFaqs(@PathVariable final Long liveId) {
         final GetFaqResponseDto responseDto = liveService.getLiveFaqs(liveId);
         return SuccessResponse.ok(responseDto);
     }
@@ -104,8 +104,8 @@ public class LiveV1Controller {
                     content = @Content(schema = @Schema(implementation = GetLiveApplicationFormResponseDto.class))
             )
     })
-    @GetMapping("/{id}/application")
-    public ResponseEntity<SuccessResponse<?>> getLiveApplicationForm(@PathVariable("id") final Long liveId,
+    @GetMapping("/{liveId}/application")
+    public ResponseEntity<SuccessResponse<?>> getLiveApplicationForm(@PathVariable final Long liveId,
                                                                      @CurrentUser User user) {
         final GetLiveApplicationFormResponseDto responseDto = liveService.getLiveApplicationForm(user, liveId);
         return SuccessResponse.ok(responseDto);
@@ -114,8 +114,8 @@ public class LiveV1Controller {
     @Operation(summary = "라이브 신청 여부 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetLiveExisingApplicationResponseDto.class)))
     })
-    @GetMapping("/{id}/history")
-    public ResponseEntity<SuccessResponse<?>> getLiveExistingApplication(@PathVariable("id") final Long liveId,
+    @GetMapping("/{liveId}/history")
+    public ResponseEntity<SuccessResponse<?>> getLiveExistingApplication(@PathVariable final Long liveId,
                                                                          @CurrentUser User user) {
         GetLiveExisingApplicationResponseDto responseDto = liveService.getLiveExistingApplication(liveId, user.getId());
         return SuccessResponse.ok(responseDto);
@@ -124,20 +124,30 @@ public class LiveV1Controller {
     @Operation(summary = "[어드민] 프로그램 신청자 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetLiveApplicationsResponseDto.class)))
     })
-    @GetMapping("/{id}/applications")
-    public ResponseEntity<SuccessResponse<?>> getApplications(@PathVariable("id") final Long liveId,
-                                                              @RequestParam(required = false) final Boolean isConfirmed) {
-        final GetLiveApplicationsResponseDto responseDto = liveService.getApplications(liveId, isConfirmed);
+    @GetMapping("/{liveId}/applications")
+    public ResponseEntity<SuccessResponse<?>> getApplications(@PathVariable final Long liveId,
+                                                              @RequestParam(required = false) final Boolean isCanceled) {
+        final GetLiveApplicationsResponseDto responseDto = liveService.getApplications(liveId, isCanceled);
         return SuccessResponse.ok(responseDto);
     }
 
     @Operation(summary = "[어드민] 신청자 리뷰 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetLiveAdminReviewsResponseDto.class)))
     })
-    @GetMapping("/{id}/reviews")
-    public ResponseEntity<SuccessResponse<?>> getReviewsForAdmin(@PathVariable("id") final Long liveId,
+    @GetMapping("/{liveId}/reviews")
+    public ResponseEntity<SuccessResponse<?>> getReviewsForAdmin(@PathVariable final Long liveId,
                                                                  final Pageable pageable) {
         final GetLiveAdminReviewsResponseDto responseDto = liveService.getReviewsForAdmin(liveId, pageable);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "[어드민] 라이브 멘토 비밀번호 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetLiveMentorPasswordResponseDto.class)))
+    })
+    @GetMapping("{liveId}/mentor")
+    public ResponseEntity<SuccessResponse<?>> getMentorPassword(@PathVariable final Long liveId,
+                                                                @CurrentUser User user) {
+        final GetLiveMentorPasswordResponseDto responseDto = liveService.getMentorPassword(liveId);
         return SuccessResponse.ok(responseDto);
     }
 
@@ -145,8 +155,8 @@ public class LiveV1Controller {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetLiveMentorContentsResponse.class)))
     })
     @ApiErrorCode({SwaggerEnum.MENTOR_PASSWORD_WRONG})
-    @GetMapping("/{id}/mentor/{password}")
-    public ResponseEntity<SuccessResponse<?>> getMentorContents(@PathVariable("id") final Long liveId,
+    @GetMapping("/{liveId}/mentor/{password}")
+    public ResponseEntity<SuccessResponse<?>> getMentorContents(@PathVariable final Long liveId,
                                                                 @PathVariable("password") final String mentorPassword,
                                                                 @RequestParam("type") final MentorContentsType mentorContentsType) {
         final GetLiveMentorContentsResponse responseDto = liveService.getMentorContents(liveId, mentorPassword, mentorContentsType);
@@ -165,8 +175,8 @@ public class LiveV1Controller {
     @Operation(summary = "[어드민] 라이브 수정", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
-    @PatchMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> updateChallengeProgram(@PathVariable("id") final Long liveId,
+    @PatchMapping("/{liveId}")
+    public ResponseEntity<SuccessResponse<?>> updateChallengeProgram(@PathVariable final Long liveId,
                                                                      @RequestBody final UpdateLiveRequestDto requestDto) {
         liveService.updateLive(liveId, requestDto);
         return SuccessResponse.ok(null);
@@ -175,8 +185,8 @@ public class LiveV1Controller {
     @Operation(summary = "[어드민] 라이브 삭제", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> deleteLiveProgram(@PathVariable("id") final Long liveId) {
+    @DeleteMapping("/{liveId}")
+    public ResponseEntity<SuccessResponse<?>> deleteLiveProgram(@PathVariable final Long liveId) {
         liveService.deleteLive(liveId);
         return SuccessResponse.ok(null);
     }

@@ -23,7 +23,7 @@ public record MyApplicationVo(
         Long paymentId
 ) {
     public MyApplicationVo(Long id,
-                           Boolean paymentIsConfirmed,
+                           Boolean isCanceled,
                            Long programId,
                            ProgramType programType,
                            String programTitle,
@@ -35,7 +35,7 @@ public record MyApplicationVo(
                            Long paymentId) {
         this(
                 id,
-                ApplicationStatus.of(paymentIsConfirmed, programEndDate),
+                ApplicationStatus.of(isCanceled, programEndDate),
                 programId,
                 programType,
                 ProgramStatusType.of(programType, programStartDate, programEndDate),

@@ -48,8 +48,8 @@ public class ChallengeApplicationHelper {
         return challengeApplicationRepository.findApplicationIdByChallengeIdAndUserId(challengeId, userId);
     }
 
-    public List<AdminChallengeApplicationVo> findAdminChallengeApplicationVos(Long challengeId, Boolean isConfirmed) {
-        return challengeApplicationRepository.findAdminChallengeApplicationVos(challengeId, isConfirmed);
+    public List<AdminChallengeApplicationVo> findAdminChallengeApplicationVos(Long challengeId, Boolean isCanceled) {
+        return challengeApplicationRepository.findAdminChallengeApplicationVos(challengeId, isCanceled);
     }
 
     public ChallengeApplication findChallengeApplicationByIdOrThrow(Long applicationId) {
@@ -65,10 +65,6 @@ public class ChallengeApplicationHelper {
         return challengeApplicationRepository.countByChallengeId(challengeId);
     }
 
-    public void deleteChallengeApplication(ChallengeApplication challengeApplication) {
-        challengeApplicationRepository.delete(challengeApplication);
-    }
-
     public Boolean checkExistingChallengeApplication(User user, Long challengeId) {
         if (Objects.isNull(user)) return null;
         return challengeApplicationRepository.findChallengeApplicationIdByUserIdAndChallengeId(user.getId(), challengeId).isPresent();
@@ -76,12 +72,12 @@ public class ChallengeApplicationHelper {
 
     public void validateChallengeDashboardAccessibleUser(Long challengeId, User user) {
         if (user.getRole().equals(UserRole.ADMIN)) return;
-        challengeApplicationRepository.findChallengeApplicationIdByChallengeIdAndUserIdAndIsConfirmed(challengeId, user.getId(), true)
+        challengeApplicationRepository.findChallengeApplicationIdByChallengeIdAndUserIdAndIsCanceled(challengeId, user.getId(), false)
                 .orElseThrow(() -> new EntityNotFoundException(APPLICATION_NOT_FOUND));
     }
 
     public List<String> getValidApplicationEmailList(Long challengeId) {
-        return challengeApplicationRepository.findAllEmailByChallengeIdAndPaymentIsConfirmed(challengeId, true);
+        return challengeApplicationRepository.findAllEmailByChallengeIdAndIsCanceled(challengeId, false);
     }
 
     public Boolean existChallengeApplicationByChallengeIdAndUserId(Long challengeId, Long userId) {

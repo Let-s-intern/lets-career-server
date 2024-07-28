@@ -28,8 +28,8 @@ public class AttendanceV1Controller {
             @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
     })
     @ApiErrorCode({SwaggerEnum.APPLICATION_NOT_FOUND, SwaggerEnum.CONFLICT_ATTENDANCE, SwaggerEnum.ATTENDANCE_NOT_AVAILABLE_DATE})
-    @PostMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> createAttendance(@PathVariable(name = "id") final Long missionId,
+    @PostMapping("/{missionId}")
+    public ResponseEntity<SuccessResponse<?>> createAttendance(@PathVariable final Long missionId,
                                                                @RequestBody CreateAttendanceRequestDto createAttendanceRequestDto,
                                                                @CurrentUser User user) {
         attendanceService.createAttendance(missionId, createAttendanceRequestDto, user.getId());
@@ -39,8 +39,8 @@ public class AttendanceV1Controller {
     @Operation(summary = "[어드민] 챌린지 1개의 출석 전체 목록", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = AttendanceAdminListResponseDto.class)))
     })
-    @GetMapping("/{id}/admin")
-    public ResponseEntity<SuccessResponse<?>> getAttendancesOfChallenge(@PathVariable(name = "id") final Long challengeId) {
+    @GetMapping("/{challengeId}/admin")
+    public ResponseEntity<SuccessResponse<?>> getAttendancesOfChallenge(@PathVariable final Long challengeId) {
         AttendanceAdminListResponseDto responseDto = attendanceService.getAttendancesOfChallenge(challengeId);
         return SuccessResponse.ok(responseDto);
     }
@@ -49,8 +49,8 @@ public class AttendanceV1Controller {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @ApiErrorCode({SwaggerEnum.ATTENDANCE_UNAUTHORIZED})
-    @PatchMapping("/{id}")
-    public ResponseEntity<SuccessResponse<?>> updateAttendance(@PathVariable(name = "id") final Long attendanceId,
+    @PatchMapping("/{attendanceId}")
+    public ResponseEntity<SuccessResponse<?>> updateAttendance(@PathVariable final Long attendanceId,
                                                                @CurrentUser final User user,
                                                                @RequestBody final UpdateAttendanceRequestDto updateAttendanceRequestDto) {
         attendanceService.updateAttendance(attendanceId, user, updateAttendanceRequestDto);

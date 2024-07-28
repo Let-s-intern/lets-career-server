@@ -9,11 +9,13 @@ import org.letscareer.letscareer.domain.user.type.UserGrade;
 
 @Builder(access = AccessLevel.PRIVATE)
 public record UserInfoResponseDto(
+        String id,
         String name,
         String email,
         String contactEmail,
         String phoneNum,
         String university,
+        String inflowPath,
         UserGrade grade,
         String major,
         String wishJob,
@@ -23,13 +25,15 @@ public record UserInfoResponseDto(
         Boolean marketingAgree,
         AuthProvider authProvider
 ) {
-    public static UserInfoResponseDto of(User user) {
+    public static UserInfoResponseDto of(User user, String id) {
         return UserInfoResponseDto.builder()
+                .id(id)
                 .name(user.getName())
                 .email(user.getEmail())
                 .contactEmail(user.getContactEmail())
                 .phoneNum(user.getPhoneNum())
                 .university(user.getUniversity())
+                .inflowPath(user.getInflowPath())
                 .grade(user.getGrade())
                 .major(user.getMajor())
                 .wishJob(user.getWishJob())

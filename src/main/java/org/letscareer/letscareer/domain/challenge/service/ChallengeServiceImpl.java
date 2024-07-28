@@ -58,7 +58,7 @@ import org.letscareer.letscareer.domain.score.entity.AdminScore;
 import org.letscareer.letscareer.domain.score.helper.AdminScoreHelper;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.entity.PageInfo;
-import org.letscareer.letscareer.global.common.utils.ZoomUtils;
+import org.letscareer.letscareer.global.common.utils.zoom.ZoomUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -115,8 +115,8 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
-    public GetChallengeApplicationsResponseDto getApplications(Long challengeId, Boolean isConfirmed) {
-        List<AdminChallengeApplicationVo> applicationVos = challengeApplicationHelper.findAdminChallengeApplicationVos(challengeId, isConfirmed);
+    public GetChallengeApplicationsResponseDto getApplications(Long challengeId, Boolean isCanceled) {
+        List<AdminChallengeApplicationVo> applicationVos = challengeApplicationHelper.findAdminChallengeApplicationVos(challengeId, isCanceled);
         return challengeApplicationMapper.toGetChallengeApplicationsResponseDto(applicationVos);
     }
 

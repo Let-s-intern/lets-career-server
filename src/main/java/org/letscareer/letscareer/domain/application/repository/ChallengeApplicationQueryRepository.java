@@ -12,15 +12,17 @@ import java.util.Optional;
 public interface ChallengeApplicationQueryRepository {
     Optional<ChallengeApplication> findChallengeApplicationByChallengeIdAndUserId(Long challengeId, Long userId);
 
-    List<AdminChallengeApplicationVo> findAdminChallengeApplicationVos(Long challengeId, Boolean isConfirmed);
+    List<AdminChallengeApplicationVo> findAdminChallengeApplicationVos(Long challengeId, Boolean isCanceled);
 
     Page<UserChallengeApplicationVo> findUserChallengeApplicationVo(Long challengeId, Pageable pageable);
 
     Optional<Long> findChallengeApplicationIdByUserIdAndChallengeId(Long userId, Long challengeId);
 
-    Optional<Long> findChallengeApplicationIdByChallengeIdAndUserIdAndIsConfirmed(Long challengeId, Long userId, Boolean isConfirmed);
+    Optional<Long> findChallengeApplicationIdByChallengeIdAndUserIdAndIsCanceled(Long challengeId, Long userId, Boolean isCanceled);
 
-    List<String> findAllEmailByChallengeIdAndPaymentIsConfirmed(Long challengeId, Boolean isConfirmed);
+    List<String> findAllEmailByChallengeIdAndIsCanceled(Long challengeId, Boolean isCanceled);
 
     Long findApplicationIdByChallengeIdAndUserId(Long challengeId, Long userId);
+
+    Long countByChallengeId(Long challengeId);
 }
