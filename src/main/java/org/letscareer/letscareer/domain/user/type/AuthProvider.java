@@ -11,7 +11,7 @@ public enum AuthProvider implements EnumField {
     KAKAO(1, "카카오톡"),
     NAVER(2, "네이버"),
     GOOGLE(3, "구글"),
-    SERVICE(4, "서비스");
+    SERVICE(4, "이메일");
 
     private final Integer code;
     private final String desc;
