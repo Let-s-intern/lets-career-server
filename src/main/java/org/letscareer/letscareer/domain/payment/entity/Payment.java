@@ -8,6 +8,7 @@ import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApp
 import org.letscareer.letscareer.domain.coupon.entity.Coupon;
 import org.letscareer.letscareer.domain.payment.dto.request.CreatePaymentRequestDto;
 import org.letscareer.letscareer.domain.payment.dto.request.UpdatePaymentRequestDto;
+import org.letscareer.letscareer.domain.price.entity.Price;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 import static org.letscareer.letscareer.global.common.utils.entity.EntityUpdateValueUtils.updateValue;
@@ -28,6 +29,8 @@ public class Payment extends BaseTimeEntity {
     @Builder.Default
     private Integer programPrice = 0;
     @Builder.Default
+    private Integer programDiscount = 0;
+    @Builder.Default
     private Boolean isRefunded = false;
     @NotNull
     private String paymentKey;
@@ -43,10 +46,11 @@ public class Payment extends BaseTimeEntity {
     public static Payment createPayment(CreatePaymentRequestDto paymentInfo,
                                         Coupon coupon,
                                         Application application,
-                                        Integer programPrice) {
+                                        Price price) {
         return Payment.builder()
                 .finalPrice(Integer.valueOf(paymentInfo.amount()))
-                .programPrice(programPrice)
+                .programPrice(price.getPrice())
+                .programDiscount(price.getDiscount())
                 .paymentKey(updateValue("", paymentInfo.paymentKey()))
                 .orderId(paymentInfo.orderId())
                 .coupon(coupon)
