@@ -23,8 +23,8 @@ import static org.letscareer.letscareer.domain.payment.error.PaymentErrorCode.PA
 public class PaymentHelper {
     private final PaymentRepository paymentRepository;
 
-    public Payment createPaymentAndSave(CreatePaymentRequestDto paymentInfo, Application application, Coupon coupon, Integer programPrice) {
-        Payment newPayment = Payment.createPayment(paymentInfo, coupon, application, programPrice);
+    public Payment createPaymentAndSave(CreatePaymentRequestDto paymentInfo, Application application, Coupon coupon, Price price) {
+        Payment newPayment = Payment.createPayment(paymentInfo, coupon, application, price);
         return paymentRepository.save(newPayment);
     }
 
