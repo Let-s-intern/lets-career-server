@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.letscareer.letscareer.domain.blog.error.BlogErrorCode.HASHTAG_NOT_FOUND;
+
 @RequiredArgsConstructor
 @Component
 public class HashTagHelper {
@@ -26,7 +28,7 @@ public class HashTagHelper {
     }
 
     public HashTag findHashTagByTagId(Long tagId) {
-        return hashTagRepository.findById(tagId).orElseThrow(() -> new EntityNotFoundException());
+        return hashTagRepository.findById(tagId).orElseThrow(() -> new EntityNotFoundException(HASHTAG_NOT_FOUND));
     }
 
     public List<HashTag> findHashTags(List<Long> tagList) {
