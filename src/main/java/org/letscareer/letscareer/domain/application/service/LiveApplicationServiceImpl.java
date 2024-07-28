@@ -83,7 +83,7 @@ public class LiveApplicationServiceImpl implements ApplicationService {
 
     private void createEntityAndSave(Live live, Coupon coupon, Price price, User user, CreateApplicationRequestDto requestDto) {
         LiveApplication liveApplication = liveApplicationHelper.createLiveApplicationAndSave(requestDto, live, user);
-        Payment payment = paymentHelper.createPaymentAndSave(requestDto.paymentInfo(), liveApplication, coupon, price.getPrice());
+        Payment payment = paymentHelper.createPaymentAndSave(requestDto.paymentInfo(), liveApplication, coupon, price);
         liveApplication.setPayment(payment);
         userHelper.updateContactEmail(user, requestDto.contactEmail());
     }

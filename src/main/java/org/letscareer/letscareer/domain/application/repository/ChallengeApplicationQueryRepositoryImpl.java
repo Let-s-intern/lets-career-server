@@ -58,6 +58,8 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                         user.major,
                         coupon.name,
                         payment.finalPrice,
+                        payment.programPrice,
+                        payment.programDiscount,
                         challengeApplication._super.isCanceled,
                         user.wishJob,
                         user.wishCompany,

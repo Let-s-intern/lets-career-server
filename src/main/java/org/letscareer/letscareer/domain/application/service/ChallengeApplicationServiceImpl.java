@@ -80,7 +80,7 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
 
     private void createEntityAndSave(Challenge challenge, Coupon coupon, Price price, User user, CreateApplicationRequestDto requestDto) {
         ChallengeApplication challengeApplication = challengeApplicationHelper.createChallengeApplicationAndSave(challenge, user);
-        Payment payment = paymentHelper.createPaymentAndSave(requestDto.paymentInfo(), challengeApplication, coupon, price.getPrice());
+        Payment payment = paymentHelper.createPaymentAndSave(requestDto.paymentInfo(), challengeApplication, coupon, price);
         challengeApplication.setPayment(payment);
         adminScoreHelper.createAdminScoreAndSave(challengeApplication);
         userHelper.updateContactEmail(user, requestDto.contactEmail());
