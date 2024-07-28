@@ -53,6 +53,9 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
                         liveApplication.question,
                         coupon.name,
                         payment.finalPrice,
+                        payment.programPrice,
+                        payment.programDiscount,
+                        payment.orderId,
                         liveApplication._super.isCanceled,
                         liveApplication.createDate
                 ))

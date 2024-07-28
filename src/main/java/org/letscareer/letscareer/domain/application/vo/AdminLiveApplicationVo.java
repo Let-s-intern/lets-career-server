@@ -16,7 +16,10 @@ public record AdminLiveApplicationVo(
         String motivate,
         String question,
         String couponName,
-        Integer totalCost,
+        Integer finalPrice,
+        Integer programPrice,
+        Integer programDiscount,
+        String orderId,
         Boolean isCanceled,
         LocalDateTime created_date
 ) {

@@ -20,6 +20,7 @@ public record AdminChallengeApplicationVo(
         Integer finalPrice,
         Integer programPrice,
         Integer programDiscount,
+        String orderId,
         Boolean isCanceled,
         String wishJob,
         String wishCompany,
