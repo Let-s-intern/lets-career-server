@@ -73,7 +73,7 @@ public class PaymentServiceImpl implements PaymentService {
     private void sendConfirmedEmail(Payment payment) {
         LiveEmailVo liveEmailVo = liveApplicationHelper.findLiveEmailVo(payment.getApplication().getId());
         User user = payment.getApplication().getUser();
-        String emailAddress = !user.getContactEmail().isEmpty() ? user.getContactEmail() : user.getEmail();
+        String emailAddress = user.getContactEmail();
         emailUtils.sendConfirmedEmail(emailAddress, liveEmailVo);
     }
 }
