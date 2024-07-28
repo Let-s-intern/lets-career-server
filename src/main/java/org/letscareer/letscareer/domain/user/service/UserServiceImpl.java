@@ -7,6 +7,8 @@ import org.letscareer.letscareer.domain.application.helper.ApplicationHelper;
 import org.letscareer.letscareer.domain.application.mapper.ApplicationMapper;
 import org.letscareer.letscareer.domain.application.type.ApplicationStatus;
 import org.letscareer.letscareer.domain.application.vo.MyApplicationVo;
+import org.letscareer.letscareer.domain.nhn.dto.request.SignUpParameter;
+import org.letscareer.letscareer.domain.nhn.provider.NhnProvider;
 import org.letscareer.letscareer.domain.user.dto.request.*;
 import org.letscareer.letscareer.domain.user.dto.response.*;
 import org.letscareer.letscareer.domain.user.entity.User;
@@ -42,6 +44,7 @@ public class UserServiceImpl implements UserService {
     private final TokenProvider tokenProvider;
     private final EmailUtils emailUtils;
     private final EncoderUtil encoderUtil;
+    private final NhnProvider nhnProvider;
 
     @Override
     public User createUserFromOAuth2(OAuth2UserInfo oAuth2UserInfo, AuthProvider authProvider) {
@@ -71,6 +74,12 @@ public class UserServiceImpl implements UserService {
         String encodedPassword = encoderUtil.encodePassword(pwSignUpRequestDto.password());
         User newUser = userMapper.toEntity(pwSignUpRequestDto, encodedPassword);
         userHelper.saveUser(newUser);
+        sendSignUpKakaoMessage(newUser);
+    }
+
+    private void sendSignUpKakaoMessage(User newUser) {
+        SignUpParameter requestParameter = SignUpParameter.of(newUser);
+        nhnProvider.sendKakaoMessage(newUser, requestParameter, "sign_up_confirm");
     }
 
     @Override
