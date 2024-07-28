@@ -33,6 +33,7 @@ public class HashTagQueryRepositoryImpl implements HashTagQueryRepository {
                 .orderBy(
                         hashTag.id.desc()
                 )
+                .groupBy(hashTag.id)
                 .fetch();
     }
 
