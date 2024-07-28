@@ -1,6 +1,8 @@
 package org.letscareer.letscareer.global.security.oauth2;
 
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.nhn.dto.request.SignUpParameter;
+import org.letscareer.letscareer.domain.nhn.provider.NhnProvider;
 import org.letscareer.letscareer.domain.user.service.UserService;
 import org.letscareer.letscareer.domain.user.type.AuthProvider;
 import org.letscareer.letscareer.domain.user.entity.User;
@@ -21,6 +23,7 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
     private final UserHelper userHelper;
     private final UserService userService;
+    private final NhnProvider nhnProvider;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException {
@@ -45,6 +48,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             user = userService.createUserFromOAuth2(oAuth2UserInfo, authProvider);
             principalDetails = new PrincipalDetails(user);
             principalDetails.setNew(true);
+            sendSignUpKakaoMessage(user);
         }
 
         /* 동일 AuthProvider 에서 가입 이력 존재 */
@@ -75,5 +79,10 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             throw new RuntimeException("Email Not Found From OAuth2 Provider");
         if(!StringUtils.hasText(oAuth2UserInfo.getPhoneNum()))
             throw new RuntimeException("PhoneNum Not Found From OAuth2 Provider");
+    }
+
+    private void sendSignUpKakaoMessage(User newUser) {
+        SignUpParameter requestParameter = SignUpParameter.of(newUser);
+        nhnProvider.sendKakaoMessage(newUser, requestParameter, "sign_up_confirm");
     }
 }
