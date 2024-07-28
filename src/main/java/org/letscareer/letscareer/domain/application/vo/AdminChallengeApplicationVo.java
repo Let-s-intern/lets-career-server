@@ -17,6 +17,7 @@ public record AdminChallengeApplicationVo(
         UserGrade grade,
         String major,
         String couponName,
+        Integer couponDiscount,
         Integer finalPrice,
         Integer programPrice,
         Integer programDiscount,

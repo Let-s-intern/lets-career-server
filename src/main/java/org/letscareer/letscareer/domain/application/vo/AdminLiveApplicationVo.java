@@ -16,6 +16,7 @@ public record AdminLiveApplicationVo(
         String motivate,
         String question,
         String couponName,
+        Integer couponDiscount,
         Integer finalPrice,
         Integer programPrice,
         Integer programDiscount,

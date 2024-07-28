@@ -57,6 +57,7 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                         user.grade,
                         user.major,
                         coupon.name,
+                        coupon.discount,
                         payment.finalPrice,
                         payment.programPrice,
                         payment.programDiscount,

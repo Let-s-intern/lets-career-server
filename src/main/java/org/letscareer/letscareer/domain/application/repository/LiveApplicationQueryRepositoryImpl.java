@@ -52,6 +52,7 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
                         liveApplication.motivate,
                         liveApplication.question,
                         coupon.name,
+                        coupon.discount,
                         payment.finalPrice,
                         payment.programPrice,
                         payment.programDiscount,
