@@ -27,9 +27,9 @@ public class HashTagQueryRepositoryImpl implements HashTagQueryRepository {
                 .from(hashTag)
                 .leftJoin(hashTag.blogHashTags, blogHashTag)
                 .leftJoin(blogHashTag.blog, blog)
-//                .where(
-//                        eqBlogId(blogId)
-//                )
+                .where(
+                        eqBlogId(blogId)
+                )
                 .orderBy(
                         hashTag.id.desc()
                 )
