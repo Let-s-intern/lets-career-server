@@ -9,7 +9,8 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public enum BlogErrorCode implements ErrorCode {
-    BLOG_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 블로그입니다.");
+    BLOG_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 블로그입니다."),
+    HASHTAG_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 해시태그입니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
