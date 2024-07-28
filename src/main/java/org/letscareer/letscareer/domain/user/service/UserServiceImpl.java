@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -77,11 +78,6 @@ public class UserServiceImpl implements UserService {
         sendSignUpKakaoMessage(newUser);
     }
 
-    private void sendSignUpKakaoMessage(User newUser) {
-        SignUpParameter requestParameter = SignUpParameter.of(newUser);
-        nhnProvider.sendKakaoMessage(newUser, requestParameter, "sign_up_confirm");
-    }
-
     @Override
     public TokenResponseDto pwSignIn(UserPwSignInRequestDto pwSignInRequestDto) {
         final User user = userHelper.findUserByEmailAndAuthProviderOrThrow(pwSignInRequestDto.email(), AuthProvider.SERVICE);
@@ -100,6 +96,7 @@ public class UserServiceImpl implements UserService {
         userHelper.validateRegexPhoneNumber(userUpdateRequestDto.phoneNum());
         userHelper.validateUpdatedPhoneNumber(user, userUpdateRequestDto);
         userHelper.updateUser(user, userUpdateRequestDto);
+        sendSocialSignUpKakaoMessage(user);
     }
 
     @Override
@@ -189,6 +186,17 @@ public class UserServiceImpl implements UserService {
         return user.getRole().equals(UserRole.ADMIN);
     }
 
+    private void sendSignUpKakaoMessage(User newUser) {
+        SignUpParameter requestParameter = SignUpParameter.of(newUser);
+        nhnProvider.sendKakaoMessage(newUser, requestParameter, "sign_up_confirm");
+    }
+
+    private void sendSocialSignUpKakaoMessage(User newUser) {
+        if (AuthProvider.SERVICE.equals(newUser.getAuthProvider())) return;
+        if (Objects.isNull(newUser.getContactEmail())) return;
+        SignUpParameter requestParameter = SignUpParameter.of(newUser);
+        nhnProvider.sendKakaoMessage(newUser, requestParameter, "sign_up_confirm");
+    }
 
     private List<UserAdminListInfo> createUserAdminListInfo(List<UserAdminVo> userAdminList) {
         return userAdminList.stream()

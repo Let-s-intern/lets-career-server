@@ -48,7 +48,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             user = userService.createUserFromOAuth2(oAuth2UserInfo, authProvider);
             principalDetails = new PrincipalDetails(user);
             principalDetails.setNew(true);
-            sendSignUpKakaoMessage(user);
         }
 
         /* 동일 AuthProvider 에서 가입 이력 존재 */
@@ -79,10 +78,5 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             throw new RuntimeException("Email Not Found From OAuth2 Provider");
         if(!StringUtils.hasText(oAuth2UserInfo.getPhoneNum()))
             throw new RuntimeException("PhoneNum Not Found From OAuth2 Provider");
-    }
-
-    private void sendSignUpKakaoMessage(User newUser) {
-        SignUpParameter requestParameter = SignUpParameter.of(newUser);
-        nhnProvider.sendKakaoMessage(newUser, requestParameter, "sign_up_confirm");
     }
 }
