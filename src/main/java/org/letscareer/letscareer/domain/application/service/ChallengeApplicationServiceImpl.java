@@ -11,6 +11,7 @@ import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
 import org.letscareer.letscareer.domain.coupon.entity.Coupon;
 import org.letscareer.letscareer.domain.coupon.helper.CouponHelper;
+import org.letscareer.letscareer.domain.nhn.dto.request.ChallengePaymentParameter;
 import org.letscareer.letscareer.domain.nhn.dto.request.CreditConfirmParameter;
 import org.letscareer.letscareer.domain.nhn.dto.request.CreditRefundParameter;
 import org.letscareer.letscareer.domain.nhn.provider.NhnProvider;
@@ -20,8 +21,10 @@ import org.letscareer.letscareer.domain.payment.helper.PaymentHelper;
 import org.letscareer.letscareer.domain.payment.type.RefundType;
 import org.letscareer.letscareer.domain.pg.dto.response.TossPaymentsResponseDto;
 import org.letscareer.letscareer.domain.pg.provider.TossProvider;
+import org.letscareer.letscareer.domain.price.entity.ChallengePrice;
 import org.letscareer.letscareer.domain.price.entity.Price;
 import org.letscareer.letscareer.domain.price.helper.PriceHelper;
+import org.letscareer.letscareer.domain.price.type.ChallengeParticipationType;
 import org.letscareer.letscareer.domain.score.helper.AdminScoreHelper;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.helper.UserHelper;
@@ -53,6 +56,7 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
         createEntityAndSave(challenge, coupon, price, user, createApplicationRequestDto);
         TossPaymentsResponseDto responseDto = tossProvider.requestPayments(createApplicationRequestDto.paymentInfo());
         sendCreditConfirmKakaoMessage(challenge, user, createApplicationRequestDto.paymentInfo());
+        sendChallengePaymentKakaoMessage(challenge, user);
         return applicationMapper.toCreateApplicationResponseDto(responseDto);
     }
 
@@ -96,8 +100,21 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
         nhnProvider.sendKakaoMessage(user, requestParameter, "payment_confirm");
     }
 
+    private void sendChallengePaymentKakaoMessage(Challenge challenge, User user) {
+        if(!isLiveChallenge(challenge)) return;
+        ChallengePaymentParameter requestParameter = ChallengePaymentParameter.of(user.getName(), challenge);
+        nhnProvider.sendKakaoMessage(user, requestParameter, "challenge_payment");
+    }
+
     private void sendCreditRefundKakaoMessage(Challenge challenge, User user, Payment payment, RefundType refundType, Integer finalPrice, Integer cancelAmount) {
         CreditRefundParameter requestParameter = CreditRefundParameter.of(user.getName(), payment.getOrderId(), challenge.getTitle(), refundType, finalPrice, cancelAmount);
         nhnProvider.sendKakaoMessage(user, requestParameter, "payment_refund");
+    }
+
+    private boolean isLiveChallenge(Challenge challenge) {
+        for(ChallengePrice price : challenge.getPriceList())
+            if(!price.getChallengeParticipationType().equals(ChallengeParticipationType.LIVE))
+                return false;
+        return true;
     }
 }

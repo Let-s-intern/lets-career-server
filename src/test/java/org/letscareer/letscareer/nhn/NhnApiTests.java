@@ -2,6 +2,8 @@ package org.letscareer.letscareer.nhn;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.letscareer.letscareer.domain.challenge.entity.Challenge;
+import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
 import org.letscareer.letscareer.domain.nhn.dto.request.*;
 import org.letscareer.letscareer.domain.nhn.dto.response.CreateMessageResponseDto;
 import org.letscareer.letscareer.domain.payment.type.RefundType;
@@ -22,6 +24,8 @@ public class NhnApiTests {
     private NhnSecretKeyReader nhnSecretKeyReader;
     @Autowired
     private NhnFeignController nhnFeignController;
+    @Autowired
+    private ChallengeHelper challengeHelper;
 
     @Test
     @DisplayName("app key 생성")
@@ -200,6 +204,31 @@ public class NhnApiTests {
     }
 
     @Test
+    @DisplayName("챌린지 안내사항 전달 (LIVE) 메시지 치환 발송")
+    void sendChallengePaymentMessageToKakao() {
+        // given
+        String senderKey = nhnSecretKeyReader.getSendKey();
+        String templateCode = "challenge_payment";
+        String appKey = nhnSecretKeyReader.getAppKey();
+        String recipientNo = "010-3419-0076";
+
+        String userName = "김민서";
+        Challenge challenge = challengeHelper.findChallengeByIdOrThrow(6L);
+        ChallengePaymentParameter challengePaymentParameter = ChallengePaymentParameter.of(userName, challenge);
+
+        // when
+        List<RecipientInfo<?>> recipientInfoList = new ArrayList<>();
+        RecipientInfo<?> recipientInfo = RecipientInfo.of(recipientNo, challengePaymentParameter);
+        recipientInfoList.add(recipientInfo);
+        CreateMessageRequestDto requestDto = CreateMessageRequestDto.of(senderKey, templateCode, recipientInfoList);
+        CreateMessageResponseDto responseDto = nhnFeignController.createMessage(appKey, requestDto);
+
+        // then
+        System.out.println(responseDto);
+        assertThat(responseDto).isNotNull();
+    }
+
+    @Test
     @DisplayName("챌린지 D-1 안내 (LIVE) 메시지 치환 발송")
     void sendChallengeRemindMessageToKakao() {
         // given
@@ -263,9 +292,11 @@ public class NhnApiTests {
         String templateCode = "review";
         String appKey = nhnSecretKeyReader.getAppKey();
         String recipientNo = "010-9322-8191";
+        String program = "CHALLENGE";
+        Long programId = 1L;
 
         String userName = "임호정";
-        ReviewParameter challengeEndParameter = ReviewParameter.of(userName);
+        ReviewParameter challengeEndParameter = ReviewParameter.of(userName, program, programId);
 
         // when
         List<RecipientInfo<?>> recipientInfoList = new ArrayList<>();
