@@ -15,7 +15,6 @@ import org.springframework.data.support.PageableExecutionUtils;
 import java.util.List;
 import java.util.Optional;
 
-import static org.letscareer.letscareer.domain.application.entity.QApplication.application;
 import static org.letscareer.letscareer.domain.application.entity.QChallengeApplication.challengeApplication;
 import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
 import static org.letscareer.letscareer.domain.coupon.entity.QCoupon.coupon;
@@ -187,8 +186,7 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
         return queryFactory
                 .select(challengeApplication.id.countDistinct())
                 .from(challengeApplication)
-                .leftJoin(challengeApplication._super, application)
-                .leftJoin(application.payment, payment)
+                .leftJoin(challengeApplication.payment, payment)
                 .where(
                         eqChallengeId(challengeId),
                         eqIsCanceled(false),
