@@ -85,7 +85,7 @@ public class LiveApplicationHelper {
         return liveApplicationRepository.findMotivateListByLiveId(liveId);
     }
 
-    public List<User> getApplicationNotificationUsers(Long liveId) {
-        return liveApplicationRepository.findAllApplicationNotificationUser(liveId);
+    public List<User> getReviewNotificationUsers(Long liveId) {
+        return liveApplicationRepository.findAllReviewNotificationUser(liveId);
     }
 }

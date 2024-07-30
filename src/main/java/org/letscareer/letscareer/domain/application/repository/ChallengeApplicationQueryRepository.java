@@ -27,5 +27,7 @@ public interface ChallengeApplicationQueryRepository {
 
     Long countByChallengeId(Long challengeId);
 
-    List<User> findAllApplicationNotificationUser(Long challengeId);
+    List<User> findAllReviewNotificationUser(Long challengeId);
+
+    List<User> findAllRemindNotificationUser(Long challengeId);
 }

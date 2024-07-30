@@ -172,7 +172,7 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
     }
 
     @Override
-    public List<User> findAllApplicationNotificationUser(Long liveId) {
+    public List<User> findAllReviewNotificationUser(Long liveId) {
         return queryFactory
                 .select(liveApplication._super.user)
                 .from(liveApplication)

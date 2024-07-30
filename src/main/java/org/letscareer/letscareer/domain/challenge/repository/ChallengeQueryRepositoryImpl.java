@@ -1,24 +1,30 @@
 package org.letscareer.letscareer.domain.challenge.repository;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.challenge.vo.*;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
+import org.letscareer.letscareer.domain.price.type.ChallengeParticipationType;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
 import static org.letscareer.letscareer.domain.classification.entity.QChallengeClassification.challengeClassification;
+import static org.letscareer.letscareer.domain.price.entity.QChallengePrice.challengePrice;
+import static org.letscareer.letscareer.domain.program.entity.QVWProgram.vWProgram;
 
 @RequiredArgsConstructor
 public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
@@ -148,6 +154,28 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
                 )
                 .fetchOne()
         );
+    }
+
+    @Override
+    public List<Long> findAllRemindNotificationChallengeId() {
+        return queryFactory
+                .select(challenge.id)
+                .from(challenge)
+                .leftJoin(challenge.priceList, challengePrice)
+                .where(
+                        eqChallengeParticipationType(ChallengeParticipationType.LIVE),
+                        isDayBeforeStartDate()
+                )
+                .fetch();
+    }
+
+    private BooleanExpression eqChallengeParticipationType(ChallengeParticipationType participationType) {
+        return participationType != null ? challengePrice.challengeParticipationType.eq(participationType) : null;
+    }
+
+    private BooleanExpression isDayBeforeStartDate() {
+        LocalDate nowPlusOneDay = LocalDate.now().plusDays(1);
+        return Expressions.dateTemplate(LocalDate.class, "DATE_FORMAT({0}, '%Y-%m-%d')", challenge.startDate).eq(nowPlusOneDay);
     }
 
     private BooleanExpression eqChallengeId(Long challengeId) {

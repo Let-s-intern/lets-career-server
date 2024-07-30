@@ -1,5 +1,6 @@
 package org.letscareer.letscareer.domain.application.repository;
 
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
 import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
+import org.letscareer.letscareer.domain.price.type.ChallengeParticipationType;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -196,7 +198,7 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
     }
 
     @Override
-    public List<User> findAllApplicationNotificationUser(Long challengeId) {
+    public List<User> findAllReviewNotificationUser(Long challengeId) {
         return queryFactory
                 .select(challengeApplication._super.user)
                 .from(challengeApplication)
@@ -207,6 +209,26 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                 )
                 .groupBy(user.id)
                 .fetch();
+    }
+
+    @Override
+    public List<User> findAllRemindNotificationUser(Long challengeId) {
+        return queryFactory
+                .select(challengeApplication._super.user)
+                .from(challengeApplication)
+                .leftJoin(challengeApplication.challenge, challenge)
+                .leftJoin(challenge.priceList, challengePrice)
+                .where(
+                        eqChallengeId(challengeId),
+                        eqChallengeParticipationType(ChallengeParticipationType.LIVE),
+                        eqIsCanceled(false)
+                )
+                .groupBy(user.id)
+                .fetch();
+    }
+
+    private BooleanExpression eqChallengeParticipationType(ChallengeParticipationType participationType) {
+        return participationType != null ? challengePrice.challengeParticipationType.eq(participationType) : null;
     }
 
     private BooleanExpression reviewIsNull() {

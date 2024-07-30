@@ -85,7 +85,11 @@ public class ChallengeApplicationHelper {
         return !Objects.isNull(challengeApplication);
     }
 
-    public List<User> getApplicationNotificationUsers(Long challengeId) {
-        return challengeApplicationRepository.findAllApplicationNotificationUser(challengeId);
+    public List<User> getReviewNotificationUsers(Long challengeId) {
+        return challengeApplicationRepository.findAllReviewNotificationUser(challengeId);
+    }
+
+    public List<User> getRemindNotificationUsers(Long challengeId) {
+        return challengeApplicationRepository.findAllRemindNotificationUser(challengeId);
     }
 }

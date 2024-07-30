@@ -24,5 +24,5 @@ public interface LiveApplicationQueryRepository {
 
     Long countByLiveId(Long liveId);
 
-    List<User> findAllApplicationNotificationUser(Long liveId);
+    List<User> findAllReviewNotificationUser(Long liveId);
 }

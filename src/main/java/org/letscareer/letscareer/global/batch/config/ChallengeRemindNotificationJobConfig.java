@@ -1,7 +1,7 @@
 package org.letscareer.letscareer.global.batch.config;
 
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.global.batch.tasklet.ReviewNotificationTasklet;
+import org.letscareer.letscareer.global.batch.tasklet.ChallengeRemindNotificationTasklet;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -15,22 +15,22 @@ import org.springframework.transaction.PlatformTransactionManager;
 @EnableBatchProcessing
 @RequiredArgsConstructor
 @Configuration
-public class ReviewNotificationJobConfig {
+public class ChallengeRemindNotificationJobConfig {
     private final JobRepository jobRepository;
     private final PlatformTransactionManager transactionManager;
-    private final ReviewNotificationTasklet reviewNotificationTasklet;
+    private final ChallengeRemindNotificationTasklet challengeRemindNotificationTasklet;
 
     @Bean
-    public Job reviewNotificationJob() {
-        return new JobBuilder("reviewNotificationJob", jobRepository)
-                .start(sendReviewNotificationStep())
+    public Job challengeRemindNotificationJob() {
+        return new JobBuilder("challengeRemindNotificationJob", jobRepository)
+                .start(sendchallengeRemindNotificationStep())
                 .build();
     }
 
     @Bean
-    protected Step sendReviewNotificationStep() {
-        return new StepBuilder("sendReviewNotificationStep", jobRepository)
-                .tasklet(reviewNotificationTasklet, transactionManager)
+    protected Step sendchallengeRemindNotificationStep() {
+        return new StepBuilder("sendChallengeRemindNotificationStep", jobRepository)
+                .tasklet(challengeRemindNotificationTasklet, transactionManager)
                 .build();
     }
 }

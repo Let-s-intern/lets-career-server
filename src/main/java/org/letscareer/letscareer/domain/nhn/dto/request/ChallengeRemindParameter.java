@@ -3,6 +3,7 @@ package org.letscareer.letscareer.domain.nhn.dto.request;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
 import lombok.Builder;
+import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 
 import java.time.LocalDateTime;
 
@@ -14,25 +15,16 @@ public record ChallengeRemindParameter(
         LocalDateTime programStartDate,
         @JsonFormat(pattern = "yyyy년 MM월 dd일", timezone = "Asia/Seoul")
         LocalDateTime programEndDate,
-        String zoomLink,
-        String link,
-        String password
+        String zoomLink
 ) {
     public static ChallengeRemindParameter of(String userName,
-                                              String programTitle,
-                                              LocalDateTime programStartDate,
-                                              LocalDateTime programEndDate,
-                                              String zoomLink,
-                                              String link,
-                                              String password) {
+                                              Challenge challenge) {
         return ChallengeRemindParameter.builder()
                 .userName(userName)
-                .programTitle(programTitle)
-                .programStartDate(programStartDate)
-                .programEndDate(programEndDate)
-                .zoomLink(zoomLink)
-                .link(link)
-                .password(password)
+                .programTitle(challenge.getTitle())
+                .programStartDate(challenge.getStartDate())
+                .programEndDate(challenge.getEndDate())
+                .zoomLink(challenge.getZoomLink().substring(8))
                 .build();
     }
 }

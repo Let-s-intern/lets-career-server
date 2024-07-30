@@ -2,7 +2,9 @@ package org.letscareer.letscareer.global.batch.tasklet;
 
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.helper.ChallengeApplicationHelper;
-import org.letscareer.letscareer.domain.application.helper.LiveApplicationHelper;
+import org.letscareer.letscareer.domain.challenge.entity.Challenge;
+import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
+import org.letscareer.letscareer.domain.nhn.dto.request.ChallengeRemindParameter;
 import org.letscareer.letscareer.domain.nhn.dto.request.ReviewParameter;
 import org.letscareer.letscareer.domain.nhn.provider.NhnProvider;
 import org.letscareer.letscareer.domain.user.entity.User;
@@ -20,27 +22,23 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Component
 @StepScope
-public class ReviewNotificationTasklet implements Tasklet {
+public class ChallengeRemindNotificationTasklet implements Tasklet {
+    private final ChallengeHelper challengeHelper;
     private final ChallengeApplicationHelper challengeApplicationHelper;
-    private final LiveApplicationHelper liveApplicationHelper;
     private final NhnProvider nhnProvider;
 
-    @Value("#{jobParameters[programId]}")
-    private Long programId;
-
-    @Value("#{jobParameters[programType]}")
-    private String programType;
+    @Value("#{jobParameters[challengeId]}")
+    private Long challengeId;
 
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) {
-        List<User> userList = null;
-        if(programType.equals("CHALLENGE")) userList = challengeApplicationHelper.getReviewNotificationUsers(programId);
-        else userList = liveApplicationHelper.getReviewNotificationUsers(programId);
-        if(userList != null && !userList.isEmpty()) {
-            List<ReviewParameter> requestParameterList = userList.stream()
-                    .map(user -> ReviewParameter.of(user.getName(), programType, programId))
+        Challenge challenge = challengeHelper.findChallengeByIdOrThrow(challengeId);
+        List<User> userList = challengeApplicationHelper.getRemindNotificationUsers(challengeId);
+        if(!userList.isEmpty()) {
+            List<ChallengeRemindParameter> requestParameterList = userList.stream()
+                    .map(user -> ChallengeRemindParameter.of(user.getName(), challenge))
                     .collect(Collectors.toList());
-            nhnProvider.sendKakaoMessages(userList, requestParameterList, "review");
+            nhnProvider.sendKakaoMessages(userList, requestParameterList, "challenge_remind");
         }
         return RepeatStatus.FINISHED;
     }
