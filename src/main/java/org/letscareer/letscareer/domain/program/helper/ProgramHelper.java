@@ -5,8 +5,11 @@ import org.letscareer.letscareer.domain.program.entity.SearchCondition;
 import org.letscareer.letscareer.domain.program.repository.ProgramRepository;
 import org.letscareer.letscareer.domain.program.vo.ProgramForAdminVo;
 import org.letscareer.letscareer.domain.program.vo.ProgramForConditionVo;
+import org.letscareer.letscareer.domain.program.vo.ProgramReviewNotificationVo;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Component
@@ -19,5 +22,9 @@ public class ProgramHelper {
 
     public Page<ProgramForAdminVo> findProgramForAdminVos(SearchCondition condition) {
         return programRepository.findProgramForAdminVos(condition);
+    }
+
+    public List<ProgramReviewNotificationVo> findProgramReviewNotificationVos() {
+        return programRepository.findProgramReviewNotificationVos();
     }
 }

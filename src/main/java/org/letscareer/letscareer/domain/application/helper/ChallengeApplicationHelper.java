@@ -84,4 +84,8 @@ public class ChallengeApplicationHelper {
         ChallengeApplication challengeApplication = challengeApplicationRepository.findChallengeApplicationByChallengeIdAndUserId(challengeId, userId).orElse(null);
         return !Objects.isNull(challengeApplication);
     }
+
+    public List<User> getApplicationNotificationUsers(Long challengeId) {
+        return challengeApplicationRepository.findAllApplicationNotificationUser(challengeId);
+    }
 }

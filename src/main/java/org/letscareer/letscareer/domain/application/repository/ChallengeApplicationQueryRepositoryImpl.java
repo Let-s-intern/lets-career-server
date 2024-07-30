@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
 import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
+import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
@@ -192,6 +193,24 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                         eqIsCanceled(false)
                 )
                 .fetchOne();
+    }
+
+    @Override
+    public List<User> findAllApplicationNotificationUser(Long challengeId) {
+        return queryFactory
+                .select(challengeApplication._super.user)
+                .from(challengeApplication)
+                .where(
+                        eqChallengeId(challengeId),
+                        eqIsCanceled(false),
+                        reviewIsNull()
+                )
+                .groupBy(user.id)
+                .fetch();
+    }
+
+    private BooleanExpression reviewIsNull() {
+        return challengeApplication._super.review.isNull();
     }
 
     private NumberExpression<Integer> calculateTotalCost() {
