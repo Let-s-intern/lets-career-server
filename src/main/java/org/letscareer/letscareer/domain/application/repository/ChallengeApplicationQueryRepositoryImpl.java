@@ -79,7 +79,8 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                 .orderBy(challengeApplication.id.desc())
                 .where(
                         eqChallengeId(challengeId),
-                        eqIsCanceled(isCanceled)
+                        eqIsCanceled(false),
+                        eqIsRefunded(false)
                 )
                 .fetch();
     }
@@ -194,25 +195,6 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                 .fetchOne();
     }
 
-    private NumberExpression<Integer> calculateTotalCost() {
-        NumberExpression<Integer> safePrice = new CaseBuilder()
-                .when(challengePrice.price.isNull())
-                .then(0)
-                .otherwise(challengePrice.price);
-
-        NumberExpression<Integer> safeDiscount = new CaseBuilder()
-                .when(challengePrice.discount.isNull())
-                .then(0)
-                .otherwise(challengePrice.discount);
-
-        NumberExpression<Integer> safeCouponDiscount = new CaseBuilder()
-                .when(coupon.discount.isNull())
-                .then(0)
-                .otherwise(coupon.discount);
-
-        return safePrice.subtract(safeDiscount).subtract(safeCouponDiscount);
-    }
-
     private BooleanExpression eqUserId(Long userId) {
         return userId != null ? user.id.eq(userId) : null;
     }
@@ -223,5 +205,9 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
 
     private BooleanExpression eqIsCanceled(Boolean isCanceled) {
         return isCanceled != null ? challengeApplication._super.isCanceled.eq(isCanceled) : null;
+    }
+
+    private BooleanExpression eqIsRefunded(Boolean isRefunded) {
+        return isRefunded != null ? payment.isRefunded.eq(isRefunded) : null;
     }
 }
