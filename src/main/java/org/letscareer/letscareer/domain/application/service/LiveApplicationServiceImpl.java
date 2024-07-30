@@ -11,8 +11,10 @@ import org.letscareer.letscareer.domain.coupon.entity.Coupon;
 import org.letscareer.letscareer.domain.coupon.helper.CouponHelper;
 import org.letscareer.letscareer.domain.live.entity.Live;
 import org.letscareer.letscareer.domain.live.helper.LiveHelper;
+import org.letscareer.letscareer.domain.live.type.ProgressType;
 import org.letscareer.letscareer.domain.nhn.dto.request.CreditConfirmParameter;
 import org.letscareer.letscareer.domain.nhn.dto.request.CreditRefundParameter;
+import org.letscareer.letscareer.domain.nhn.dto.request.LiveClassPaymentParameter;
 import org.letscareer.letscareer.domain.nhn.provider.NhnProvider;
 import org.letscareer.letscareer.domain.payment.dto.request.CreatePaymentRequestDto;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
@@ -51,6 +53,7 @@ public class LiveApplicationServiceImpl implements ApplicationService {
         createEntityAndSave(live, coupon, price, user, createApplicationRequestDto);
         TossPaymentsResponseDto responseDto = tossProvider.requestPayments(createApplicationRequestDto.paymentInfo());
         sendCreditConfirmKakaoMessage(live, user, createApplicationRequestDto.paymentInfo());
+        sendLiveClassPaymentKakaoMessage(live, user);
         return applicationMapper.toCreateApplicationResponseDto(responseDto);
     }
 
@@ -93,8 +96,19 @@ public class LiveApplicationServiceImpl implements ApplicationService {
         nhnProvider.sendKakaoMessage(user, requestParameter, "payment_confirm");
     }
 
+    private void sendLiveClassPaymentKakaoMessage(Live live, User user) {
+        if(!isOnlineLiveClass(live)) return;
+        LiveClassPaymentParameter requestParameter = LiveClassPaymentParameter.of(user.getName(), live);
+        nhnProvider.sendKakaoMessage(user, requestParameter, "liveclass_payment");
+    }
+
     private void sendCreditRefundKakaoMessage(Live live, User user, Payment payment, RefundType refundType, Integer finalPrice, Integer cancelAmount) {
         CreditRefundParameter requestParameter = CreditRefundParameter.of(user.getName(), payment.getOrderId(), live.getTitle(), refundType, finalPrice, cancelAmount);
         nhnProvider.sendKakaoMessage(user, requestParameter, "payment_refund");
+    }
+
+    private boolean isOnlineLiveClass(Live live) {
+        ProgressType progressType = live.getProgressType();
+        return progressType.equals(ProgressType.ALL) || progressType.equals(ProgressType.ONLINE);
     }
 }

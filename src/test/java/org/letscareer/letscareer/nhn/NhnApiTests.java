@@ -4,6 +4,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
+import org.letscareer.letscareer.domain.live.entity.Live;
+import org.letscareer.letscareer.domain.live.helper.LiveHelper;
 import org.letscareer.letscareer.domain.nhn.dto.request.*;
 import org.letscareer.letscareer.domain.nhn.dto.response.CreateMessageResponseDto;
 import org.letscareer.letscareer.domain.payment.type.RefundType;
@@ -26,6 +28,8 @@ public class NhnApiTests {
     private NhnFeignController nhnFeignController;
     @Autowired
     private ChallengeHelper challengeHelper;
+    @Autowired
+    private LiveHelper liveHelper;
 
     @Test
     @DisplayName("app key 생성")
@@ -180,16 +184,11 @@ public class NhnApiTests {
         String senderKey = nhnSecretKeyReader.getSendKey();
         String templateCode = "liveclass_payment";
         String appKey = nhnSecretKeyReader.getAppKey();
-        String recipientNo = "010-9322-8191";
+        String recipientNo = "010-3419-0076";
 
-        String userName = "임호정";
-        String programTitle = "test program";
-        LocalDateTime programStartDate = LocalDateTime.now();
-        String zoomLink = "https";
-        Long programId = 3L;
-        String link = "84801956463";
-        String password = "0BV4scd";
-        LiveClassPaymentParameter liveClassPaymentParameter = LiveClassPaymentParameter.of(userName, programTitle, programStartDate, zoomLink, programId, link, password);
+        String userName = "김민동";
+        Live live = liveHelper.findLiveByIdOrThrow(3L);
+        LiveClassPaymentParameter liveClassPaymentParameter = LiveClassPaymentParameter.of(userName, live);
 
         // when
         List<RecipientInfo<?>> recipientInfoList = new ArrayList<>();
