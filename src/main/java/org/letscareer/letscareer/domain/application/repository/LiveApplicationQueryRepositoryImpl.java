@@ -7,6 +7,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.entity.LiveApplication;
 import org.letscareer.letscareer.domain.application.vo.AdminLiveApplicationVo;
+import org.letscareer.letscareer.domain.live.type.ProgressType;
 import org.letscareer.letscareer.domain.live.vo.LiveEmailVo;
 import org.letscareer.letscareer.domain.user.entity.User;
 
@@ -180,6 +181,19 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
                         eqLiveId(liveId),
                         eqIsCanceled(false),
                         reviewIsNull()
+                )
+                .fetch();
+    }
+
+    @Override
+    public List<User> findAllRemindNotificationUser(Long liveId) {
+        return queryFactory
+                .select(liveApplication._super.user)
+                .from(liveApplication)
+                .leftJoin(liveApplication.live, live)
+                .where(
+                        eqLiveId(liveId),
+                        eqIsCanceled(false)
                 )
                 .fetch();
     }

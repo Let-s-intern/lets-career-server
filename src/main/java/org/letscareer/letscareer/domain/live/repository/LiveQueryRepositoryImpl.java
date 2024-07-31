@@ -3,11 +3,12 @@ package org.letscareer.letscareer.domain.live.repository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
-import org.letscareer.letscareer.domain.live.type.MailStatus;
+import org.letscareer.letscareer.domain.live.type.ProgressType;
 import org.letscareer.letscareer.domain.live.vo.*;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.springframework.data.domain.Page;
@@ -154,55 +155,6 @@ public class LiveQueryRepositoryImpl implements LiveQueryRepository {
     }
 
     @Override
-    public Optional<LiveEmailVo> findLiveEmailVoByLiveId(Long liveId) {
-        return Optional.ofNullable(jpaQueryFactory
-                .select(Projections.constructor(LiveEmailVo.class,
-                        live.id,
-                        live.title,
-                        live.startDate,
-                        live.endDate,
-                        live.progressType,
-                        live.place,
-                        live.zoomLink,
-                        live.zoomPassword
-                ))
-                .from(live)
-                .where(
-                        eqLiveId(liveId)
-                )
-                .fetchOne()
-        );
-    }
-
-    @Override
-    public List<Long> findRemindMailLiveIdList() {
-        return jpaQueryFactory
-                .select(
-                        live.id
-                )
-                .from(live)
-                .where(
-                        eqMailStatus(MailStatus.REMIND),
-                        eqStartDate()
-                )
-                .fetch();
-    }
-
-    @Override
-    public List<Long> findReviewMailLiveIdList() {
-        return jpaQueryFactory
-                .select(
-                        live.id
-                )
-                .from(live)
-                .where(
-                        eqMailStatus(MailStatus.REVIEW),
-                        afterEndDate()
-                )
-                .fetch();
-    }
-
-    @Override
     public Optional<LiveMentorVo> findLiveMentorVoByLiveId(Long liveId) {
         return Optional.ofNullable(
                 jpaQueryFactory.select(
@@ -237,22 +189,29 @@ public class LiveQueryRepositoryImpl implements LiveQueryRepository {
                         .fetchFirst());
     }
 
+    @Override
+    public List<Long> findAllRemindNotificationLiveId() {
+        return jpaQueryFactory
+                .select(live.id)
+                .from(live)
+                .where(
+                        neProgressType(ProgressType.OFFLINE),
+                        isStartDate()
+                )
+                .fetch();
+    }
+
+    private BooleanExpression neProgressType(ProgressType progressType) {
+        return progressType != null ? live.progressType.ne(progressType) : null;
+    }
+
     private BooleanExpression eqLiveId(Long liveId) {
         return liveId != null ? live.id.eq(liveId) : null;
     }
 
-    private BooleanExpression eqMailStatus(MailStatus mailStatus) {
-        return mailStatus != null ? live.mailStatus.eq(mailStatus) : null;
-    }
-
-    private BooleanExpression eqStartDate() {
-        int now = LocalDate.now().getDayOfYear();
-        return live.startDate.dayOfYear().eq(now);
-    }
-
-    private BooleanExpression afterEndDate() {
-        LocalDateTime now = LocalDateTime.now();
-        return live.endDate.before(now);
+    private BooleanExpression isStartDate() {
+        LocalDate now = LocalDate.now();
+        return Expressions.dateTemplate(LocalDate.class, "DATE_FORMAT({0}, '%Y-%m-%d')", live.startDate).eq(now);
     }
 
     private BooleanExpression inLiveClassification(List<ProgramClassification> typeList) {

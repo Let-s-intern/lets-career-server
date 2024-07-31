@@ -2,9 +2,11 @@ package org.letscareer.letscareer.global.batch.scheduler;
 
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
+import org.letscareer.letscareer.domain.live.helper.LiveHelper;
 import org.letscareer.letscareer.domain.program.helper.ProgramHelper;
 import org.letscareer.letscareer.domain.program.vo.ProgramReviewNotificationVo;
 import org.letscareer.letscareer.global.batch.config.ChallengeRemindNotificationJobConfig;
+import org.letscareer.letscareer.global.batch.config.LiveRemindNotificationJobConfig;
 import org.letscareer.letscareer.global.batch.config.ReviewNotificationJobConfig;
 import org.letscareer.letscareer.global.batch.tasklet.ChallengeRemindNotificationTasklet;
 import org.springframework.batch.core.JobParametersBuilder;
@@ -25,8 +27,10 @@ public class NotificationScheduler {
     private final JobLauncher jobLauncher;
     private final ReviewNotificationJobConfig reviewNotificationJobConfig;
     private final ChallengeRemindNotificationJobConfig challengeRemindNotificationJobConfig;
+    private final LiveRemindNotificationJobConfig liveRemindNotificationJobConfig;
     private final ProgramHelper programHelper;
     private final ChallengeHelper challengeHelper;
+    private final LiveHelper liveHelper;
 
     @Scheduled(cron = "0 0 10 * * ?")
     public void sendReviewNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
@@ -51,6 +55,21 @@ public class NotificationScheduler {
                     challengeRemindNotificationJobConfig.challengeRemindNotificationJob(),
                     new JobParametersBuilder()
                             .addLong("challengeId", challengeId)
+                            .addLocalDateTime("now", LocalDateTime.now())
+                            .toJobParameters()
+            );
+        }
+    }
+
+    //@Scheduled(cron = "0 5 9 * * ?")
+    @Scheduled(fixedDelay = 50000)
+    public void sendLiveRemindNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
+        List<Long> liveIdList = liveHelper.findRemindNotificationLiveIds();
+        for(Long liveId : liveIdList) {
+            jobLauncher.run(
+                    liveRemindNotificationJobConfig.liveRemindNotificationJob(),
+                    new JobParametersBuilder()
+                            .addLong("liveId", liveId)
                             .addLocalDateTime("now", LocalDateTime.now())
                             .toJobParameters()
             );

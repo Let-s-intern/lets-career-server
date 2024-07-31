@@ -88,4 +88,8 @@ public class LiveApplicationHelper {
     public List<User> getReviewNotificationUsers(Long liveId) {
         return liveApplicationRepository.findAllReviewNotificationUser(liveId);
     }
+
+    public List<User> getRemindNotificationUsers(Long liveId) {
+        return liveApplicationRepository.findAllRemindNotificationUser(liveId);
+    }
 }
