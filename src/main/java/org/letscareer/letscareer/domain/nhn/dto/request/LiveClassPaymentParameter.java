@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public record LiveClassPaymentParameter(
         String userName,
         String programTitle,
-        @JsonFormat(pattern = "yyyy년 MM월 dd일", timezone = "Asia/Seoul")
+        @JsonFormat(pattern = "yyyy년 MM월 dd일 HH:mm", timezone = "Asia/Seoul")
         LocalDateTime programStartDate,
         String zoomLink
 ) {
