@@ -31,8 +31,7 @@ public class NotificationScheduler {
     private final ChallengeHelper challengeHelper;
     private final LiveHelper liveHelper;
 
-//    @Scheduled(cron = "0 0 10 * * ?")
-    @Scheduled(cron = "0 0 18 * * ?")
+    @Scheduled(cron = "0 0 10 * * ?")
     public void sendReviewNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
         List<ProgramReviewNotificationVo> programList = programHelper.findProgramReviewNotificationVos();
         for(ProgramReviewNotificationVo program : programList) {
@@ -47,8 +46,7 @@ public class NotificationScheduler {
         }
     }
 
-//    @Scheduled(cron = "0 0 9 * * ?")
-    @Scheduled(cron = "0 0 17 * * ?")
+    @Scheduled(cron = "0 0 9 * * ?")
     public void sendChallengeRemindNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
         List<Long> challengeIdList = challengeHelper.findRemindNotificationChallengeIds();
         for(Long challengeId : challengeIdList) {
@@ -62,8 +60,7 @@ public class NotificationScheduler {
         }
     }
 
-//    @Scheduled(cron = "0 5 9 * * ?")
-    @Scheduled(cron = "0 10 17 * * ?")
+    @Scheduled(cron = "0 10 9 * * ?")
     public void sendLiveRemindNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
         List<Long> liveIdList = liveHelper.findRemindNotificationLiveIds();
         for(Long liveId : liveIdList) {
