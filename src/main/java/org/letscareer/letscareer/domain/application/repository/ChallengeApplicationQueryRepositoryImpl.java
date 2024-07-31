@@ -2,8 +2,6 @@ package org.letscareer.letscareer.domain.application.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.CaseBuilder;
-import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -80,7 +78,8 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                 .orderBy(challengeApplication.id.desc())
                 .where(
                         eqChallengeId(challengeId),
-                        eqIsCanceled(isCanceled)
+                        eqIsCanceled(false),
+                        eqIsRefunded(false)
                 )
                 .fetch();
     }
@@ -188,9 +187,11 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
         return queryFactory
                 .select(challengeApplication.id.countDistinct())
                 .from(challengeApplication)
+                .leftJoin(challengeApplication.payment, payment)
                 .where(
                         eqChallengeId(challengeId),
-                        eqIsCanceled(false)
+                        eqIsCanceled(false),
+                        eqIsRefunded(false)
                 )
                 .fetchOne();
     }
@@ -256,5 +257,9 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
 
     private BooleanExpression eqIsCanceled(Boolean isCanceled) {
         return isCanceled != null ? challengeApplication._super.isCanceled.eq(isCanceled) : null;
+    }
+
+    private BooleanExpression eqIsRefunded(Boolean isRefunded) {
+        return isRefunded != null ? payment.isRefunded.eq(isRefunded) : null;
     }
 }
