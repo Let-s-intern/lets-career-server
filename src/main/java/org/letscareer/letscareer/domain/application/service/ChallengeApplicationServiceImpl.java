@@ -52,11 +52,10 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
         Challenge challenge = challengeHelper.findChallengeByIdOrThrow(programId);
         Coupon coupon = couponHelper.findCouponByIdOrNull(createApplicationRequestDto.paymentInfo().couponId());
         Price price = priceHelper.findPriceByIdOrThrow(createApplicationRequestDto.paymentInfo().priceId());
-        validateConditionForCreateApplication(challenge, coupon, price, user, createApplicationRequestDto);
+        //validateConditionForCreateApplication(challenge, coupon, price, user, createApplicationRequestDto);
         createEntityAndSave(challenge, coupon, price, user, createApplicationRequestDto);
         TossPaymentsResponseDto responseDto = tossProvider.requestPayments(createApplicationRequestDto.paymentInfo());
-        sendCreditConfirmKakaoMessage(challenge, user, createApplicationRequestDto.paymentInfo());
-        sendChallengePaymentKakaoMessage(challenge, user);
+        sendKakaoMessages(challenge, user, createApplicationRequestDto.paymentInfo());
         return applicationMapper.toCreateApplicationResponseDto(responseDto);
     }
 
@@ -93,6 +92,11 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
     private void validateConditionForCancelApplication(ChallengeApplication application, User user) {
         applicationHelper.checkAlreadyCanceled(application);
         applicationHelper.validateAuthorizedUser(application.getUser(), user);
+    }
+
+    private void sendKakaoMessages(Challenge challenge, User user, CreatePaymentRequestDto paymentInfo) {
+        sendCreditConfirmKakaoMessage(challenge, user, paymentInfo);
+        sendChallengePaymentKakaoMessage(challenge, user);
     }
 
     private void sendCreditConfirmKakaoMessage(Challenge challenge, User user, CreatePaymentRequestDto paymentInfo) {

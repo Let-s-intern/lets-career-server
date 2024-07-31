@@ -52,8 +52,7 @@ public class LiveApplicationServiceImpl implements ApplicationService {
         validateRequestConditionForCreateApplication(live, coupon, price, user, createApplicationRequestDto);
         createEntityAndSave(live, coupon, price, user, createApplicationRequestDto);
         TossPaymentsResponseDto responseDto = tossProvider.requestPayments(createApplicationRequestDto.paymentInfo());
-        sendCreditConfirmKakaoMessage(live, user, createApplicationRequestDto.paymentInfo());
-        sendLiveClassPaymentKakaoMessage(live, user);
+        sendKakaoMessages(live, user, createApplicationRequestDto.paymentInfo());
         return applicationMapper.toCreateApplicationResponseDto(responseDto);
     }
 
@@ -89,6 +88,11 @@ public class LiveApplicationServiceImpl implements ApplicationService {
         Payment payment = paymentHelper.createPaymentAndSave(requestDto.paymentInfo(), liveApplication, coupon, price);
         liveApplication.setPayment(payment);
         userHelper.updateContactEmail(user, requestDto.contactEmail());
+    }
+
+    public void sendKakaoMessages(Live live, User user, CreatePaymentRequestDto paymentInfo) {
+        sendCreditConfirmKakaoMessage(live, user, paymentInfo);
+        sendLiveClassPaymentKakaoMessage(live, user);
     }
 
     private void sendCreditConfirmKakaoMessage(Live live, User user, CreatePaymentRequestDto paymentInfo) {
