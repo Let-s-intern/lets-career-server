@@ -64,6 +64,10 @@ public class ChallengeHelper {
                 .orElseThrow(() -> new EntityNotFoundException(ChallengeErrorCode.CHALLENGE_NOT_FOUND));
     }
 
+    public List<Long> findRemindNotificationChallengeIds() {
+        return challengeRepository.findAllRemindNotificationChallengeId();
+    }
+
     public void deleteChallengeById(Long challengeId) {
         challengeRepository.deleteById(challengeId);
     }

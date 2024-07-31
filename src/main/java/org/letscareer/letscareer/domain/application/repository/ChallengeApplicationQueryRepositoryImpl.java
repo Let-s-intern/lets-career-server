@@ -2,12 +2,15 @@ package org.letscareer.letscareer.domain.application.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
 import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
+import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
@@ -193,6 +196,57 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                         eqIsRefunded(false)
                 )
                 .fetchOne();
+    }
+
+    @Override
+    public List<User> findAllReviewNotificationUser(Long challengeId) {
+        return queryFactory
+                .select(challengeApplication._super.user)
+                .from(challengeApplication)
+                .where(
+                        eqChallengeId(challengeId),
+                        eqIsCanceled(false),
+                        reviewIsNull()
+                )
+                .groupBy(user.id)
+                .fetch();
+    }
+
+    @Override
+    public List<User> findAllRemindNotificationUser(Long challengeId) {
+        return queryFactory
+                .select(challengeApplication._super.user)
+                .from(challengeApplication)
+                .leftJoin(challengeApplication.challenge, challenge)
+                .where(
+                        eqChallengeId(challengeId),
+                        eqIsCanceled(false)
+                )
+                .groupBy(user.id)
+                .fetch();
+    }
+
+    private BooleanExpression reviewIsNull() {
+        return challengeApplication._super.review.isNull();
+    }
+
+    private NumberExpression<Integer> calculateTotalCost() {
+        NumberExpression<Integer> safePrice = new CaseBuilder()
+                .when(challengePrice.price.isNull())
+                .then(0)
+                .otherwise(challengePrice.price);
+
+        NumberExpression<Integer> safeDiscount = new CaseBuilder()
+                .when(challengePrice.discount.isNull())
+                .then(0)
+                .otherwise(challengePrice.discount);
+
+        NumberExpression<Integer> safeCouponDiscount = new CaseBuilder()
+                .when(coupon.discount.isNull())
+                .then(0)
+                .otherwise(coupon.discount);
+
+        return safePrice.subtract(safeDiscount).subtract(safeCouponDiscount);
     }
 
     private BooleanExpression eqUserId(Long userId) {
