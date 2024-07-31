@@ -35,6 +35,26 @@ public class NhnProvider<T> {
     }
 
     @Async("threadPoolTaskExecutor")
+    public void sendPaymentKakaoMessages(User user, T paymentRequestParameter, T programRequestParameter, String paymentTemplateCode, String programTemplateCode) {
+        try {
+            String appKey = nhnSecretKeyReader.getAppKey();
+            List<RecipientInfo<?>> paymentRecipientInfoList = createRecipient(user, paymentRequestParameter);
+            CreateMessageRequestDto paymentRequestDto = createMessageRequestDto(paymentRecipientInfoList, paymentTemplateCode);
+            CreateMessageResponseDto paymentResponseDto = nhnFeignController.createMessage(appKey, paymentRequestDto);
+            log.info("[NHN Result]::" + paymentResponseDto);
+            Thread.sleep(5000);
+            if(programRequestParameter != null) {
+                List<RecipientInfo<?>> programRecipientInfoList = createRecipient(user, programRequestParameter);
+                CreateMessageRequestDto programRequestDto = createMessageRequestDto(programRecipientInfoList, programTemplateCode);
+                CreateMessageResponseDto programResponseDto = nhnFeignController.createMessage(appKey, programRequestDto);
+                log.info("[NHN Result]::" + programResponseDto);
+            }
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Async("threadPoolTaskExecutor")
     public void sendKakaoMessages(List<User> userList, List<T> requestParameterList, String templateCode) {
         String appKey = nhnSecretKeyReader.getAppKey();
         List<RecipientInfo<?>> recipientInfoList = createRecipientList(userList, requestParameterList);

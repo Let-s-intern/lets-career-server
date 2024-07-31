@@ -52,7 +52,7 @@ public class LiveApplicationServiceImpl implements ApplicationService {
         validateRequestConditionForCreateApplication(live, coupon, price, user, createApplicationRequestDto);
         createEntityAndSave(live, coupon, price, user, createApplicationRequestDto);
         TossPaymentsResponseDto responseDto = tossProvider.requestPayments(createApplicationRequestDto.paymentInfo());
-        sendKakaoMessages(live, user, createApplicationRequestDto.paymentInfo());
+        sendPaymentKakaoMessages(live, user, createApplicationRequestDto.paymentInfo());
         return applicationMapper.toCreateApplicationResponseDto(responseDto);
     }
 
@@ -90,20 +90,10 @@ public class LiveApplicationServiceImpl implements ApplicationService {
         userHelper.updateContactEmail(user, requestDto.contactEmail());
     }
 
-    public void sendKakaoMessages(Live live, User user, CreatePaymentRequestDto paymentInfo) {
-        sendCreditConfirmKakaoMessage(live, user, paymentInfo);
-        sendLiveClassPaymentKakaoMessage(live, user);
-    }
-
-    private void sendCreditConfirmKakaoMessage(Live live, User user, CreatePaymentRequestDto paymentInfo) {
-        CreditConfirmParameter requestParameter = CreditConfirmParameter.of(user.getName(), live.getTitle(), paymentInfo);
-        nhnProvider.sendKakaoMessage(user, requestParameter, "payment_confirm");
-    }
-
-    private void sendLiveClassPaymentKakaoMessage(Live live, User user) {
-        if(!isOnlineLiveClass(live)) return;
-        LiveClassPaymentParameter requestParameter = LiveClassPaymentParameter.of(user.getName(), live);
-        nhnProvider.sendKakaoMessage(user, requestParameter, "liveclass_payment");
+    public void sendPaymentKakaoMessages(Live live, User user, CreatePaymentRequestDto paymentInfo) {
+        CreditConfirmParameter paymentRequestParameter = CreditConfirmParameter.of(user.getName(), live.getTitle(), paymentInfo);
+        LiveClassPaymentParameter programRequestParameter = isOnlineLiveClass(live) ? LiveClassPaymentParameter.of(user.getName(), live) : null;
+        nhnProvider.sendPaymentKakaoMessages(user, paymentRequestParameter, programRequestParameter, "payment_confirm", "liveclass_payment");
     }
 
     private void sendCreditRefundKakaoMessage(Live live, User user, Payment payment, RefundType refundType, Integer finalPrice, Integer cancelAmount) {

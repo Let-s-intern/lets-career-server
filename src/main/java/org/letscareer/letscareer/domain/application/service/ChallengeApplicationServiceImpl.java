@@ -55,7 +55,7 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
         validateConditionForCreateApplication(challenge, coupon, price, user, createApplicationRequestDto);
         createEntityAndSave(challenge, coupon, price, user, createApplicationRequestDto);
         TossPaymentsResponseDto responseDto = tossProvider.requestPayments(createApplicationRequestDto.paymentInfo());
-        sendKakaoMessages(challenge, user, createApplicationRequestDto.paymentInfo());
+        sendPaymentKakaoMessages(challenge, user, createApplicationRequestDto.paymentInfo());
         return applicationMapper.toCreateApplicationResponseDto(responseDto);
     }
 
@@ -94,20 +94,10 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
         applicationHelper.validateAuthorizedUser(application.getUser(), user);
     }
 
-    private void sendKakaoMessages(Challenge challenge, User user, CreatePaymentRequestDto paymentInfo) {
-        sendCreditConfirmKakaoMessage(challenge, user, paymentInfo);
-        sendChallengePaymentKakaoMessage(challenge, user);
-    }
-
-    private void sendCreditConfirmKakaoMessage(Challenge challenge, User user, CreatePaymentRequestDto paymentInfo) {
-        CreditConfirmParameter requestParameter = CreditConfirmParameter.of(user.getName(), challenge.getTitle(), paymentInfo);
-        nhnProvider.sendKakaoMessage(user, requestParameter, "payment_confirm");
-    }
-
-    private void sendChallengePaymentKakaoMessage(Challenge challenge, User user) {
-        if(!isLiveChallenge(challenge)) return;
-        ChallengePaymentParameter requestParameter = ChallengePaymentParameter.of(user.getName(), challenge);
-        nhnProvider.sendKakaoMessage(user, requestParameter, "challenge_payment");
+    private void sendPaymentKakaoMessages(Challenge challenge, User user, CreatePaymentRequestDto paymentInfo) {
+        CreditConfirmParameter paymentRequestParameter = CreditConfirmParameter.of(user.getName(), challenge.getTitle(), paymentInfo);
+        ChallengePaymentParameter programRequestParameter = isLiveChallenge(challenge) ? ChallengePaymentParameter.of(user.getName(), challenge) : null;
+        nhnProvider.sendPaymentKakaoMessages(user, paymentRequestParameter, programRequestParameter, "payment_confirm", "challenge_payment");
     }
 
     private void sendCreditRefundKakaoMessage(Challenge challenge, User user, Payment payment, RefundType refundType, Integer finalPrice, Integer cancelAmount) {
