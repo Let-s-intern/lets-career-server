@@ -164,18 +164,37 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
                 .leftJoin(challenge.priceList, challengePrice)
                 .where(
                         eqChallengeParticipationType(ChallengeParticipationType.LIVE),
-                        isDayBeforeStartDate()
+                        isDayBeforeStartDate(1)
                 )
                 .fetch();
     }
+
+    @Override
+    public List<Long> findAllEndNotificationChallengeId() {
+        return queryFactory
+                .select(challenge.id)
+                .from(challenge)
+                .leftJoin(challenge.priceList, challengePrice)
+                .where(
+                        eqChallengeParticipationType(ChallengeParticipationType.LIVE),
+                        isDayAfterEndDate(2)
+                )
+                .fetch();
+    }
+
 
     private BooleanExpression eqChallengeParticipationType(ChallengeParticipationType participationType) {
         return participationType != null ? challengePrice.challengeParticipationType.eq(participationType) : null;
     }
 
-    private BooleanExpression isDayBeforeStartDate() {
-        LocalDate nowPlusOneDay = LocalDate.now().plusDays(1);
-        return Expressions.dateTemplate(LocalDate.class, "DATE_FORMAT({0}, '%Y-%m-%d')", challenge.startDate).eq(nowPlusOneDay);
+    private BooleanExpression isDayBeforeStartDate(int days) {
+        LocalDate nowPlusDays = LocalDate.now().plusDays(days);
+        return Expressions.dateTemplate(LocalDate.class, "DATE_FORMAT({0}, '%Y-%m-%d')", challenge.startDate).eq(nowPlusDays);
+    }
+
+    private BooleanExpression isDayAfterEndDate(int days) {
+        LocalDate nowMinusDays = LocalDate.now().minusDays(days);
+        return Expressions.dateTemplate(LocalDate.class, "DATE_FORMAT({0}, '%Y-%m-%d')", challenge.endDate).eq(nowMinusDays);
     }
 
     private BooleanExpression eqChallengeId(Long challengeId) {

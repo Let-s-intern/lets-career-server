@@ -213,7 +213,7 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
     }
 
     @Override
-    public List<User> findAllRemindNotificationUser(Long challengeId) {
+    public List<User> findAllNotificationUser(Long challengeId) {
         return queryFactory
                 .select(challengeApplication._super.user)
                 .from(challengeApplication)

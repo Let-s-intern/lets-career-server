@@ -5,6 +5,7 @@ import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
 import org.letscareer.letscareer.domain.live.helper.LiveHelper;
 import org.letscareer.letscareer.domain.program.helper.ProgramHelper;
 import org.letscareer.letscareer.domain.program.vo.ProgramReviewNotificationVo;
+import org.letscareer.letscareer.global.batch.config.ChallengeEndNotificationJobConfig;
 import org.letscareer.letscareer.global.batch.config.ChallengeRemindNotificationJobConfig;
 import org.letscareer.letscareer.global.batch.config.LiveRemindNotificationJobConfig;
 import org.letscareer.letscareer.global.batch.config.ReviewNotificationJobConfig;
@@ -27,6 +28,7 @@ public class NotificationScheduler {
     private final ReviewNotificationJobConfig reviewNotificationJobConfig;
     private final ChallengeRemindNotificationJobConfig challengeRemindNotificationJobConfig;
     private final LiveRemindNotificationJobConfig liveRemindNotificationJobConfig;
+    private final ChallengeEndNotificationJobConfig challengeEndNotificationJobConfig;
     private final ProgramHelper programHelper;
     private final ChallengeHelper challengeHelper;
     private final LiveHelper liveHelper;
@@ -68,6 +70,20 @@ public class NotificationScheduler {
                     liveRemindNotificationJobConfig.liveRemindNotificationJob(),
                     new JobParametersBuilder()
                             .addLong("liveId", liveId)
+                            .addLocalDateTime("now", LocalDateTime.now())
+                            .toJobParameters()
+            );
+        }
+    }
+
+    @Scheduled(cron = "0 0 18 * * ?")
+    public void sendChallengeEndNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
+        List<Long> challengeIdList = challengeHelper.findEndNotificationChallengeIds();
+        for(Long challengeId : challengeIdList) {
+            jobLauncher.run(
+                    challengeEndNotificationJobConfig.challengeEndNotificationJob(),
+                    new JobParametersBuilder()
+                            .addLong("challengeId", challengeId)
                             .addLocalDateTime("now", LocalDateTime.now())
                             .toJobParameters()
             );

@@ -89,7 +89,7 @@ public class ChallengeApplicationHelper {
         return challengeApplicationRepository.findAllReviewNotificationUser(challengeId);
     }
 
-    public List<User> getRemindNotificationUsers(Long challengeId) {
-        return challengeApplicationRepository.findAllRemindNotificationUser(challengeId);
+    public List<User> getNotificationUsers(Long challengeId) {
+        return challengeApplicationRepository.findAllNotificationUser(challengeId);
     }
 }

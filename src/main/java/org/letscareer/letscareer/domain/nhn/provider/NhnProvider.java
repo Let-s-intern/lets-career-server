@@ -54,7 +54,6 @@ public class NhnProvider<T> {
         }
     }
 
-    @Async("threadPoolTaskExecutor")
     public void sendKakaoMessages(List<User> userList, List<T> requestParameterList, String templateCode) {
         String appKey = nhnSecretKeyReader.getAppKey();
         List<RecipientInfo<?>> recipientInfoList = createRecipientList(userList, requestParameterList);
