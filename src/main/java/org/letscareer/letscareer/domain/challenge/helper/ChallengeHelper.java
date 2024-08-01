@@ -72,6 +72,10 @@ public class ChallengeHelper {
         return challengeRepository.findAllEndNotificationChallengeId();
     }
 
+    public List<Long> findOTRemindNotificationChallengeIds() {
+        return challengeRepository.findAllOTRemindNotificationChallengeId();
+    }
+
     public void deleteChallengeById(Long challengeId) {
         challengeRepository.deleteById(challengeId);
     }

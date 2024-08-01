@@ -182,6 +182,18 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
                 .fetch();
     }
 
+    @Override
+    public List<Long> findAllOTRemindNotificationChallengeId() {
+        return queryFactory
+                .select(challenge.id)
+                .from(challenge)
+                .leftJoin(challenge.priceList, challengePrice)
+                .where(
+                        eqChallengeParticipationType(ChallengeParticipationType.LIVE),
+                        isHourBeforeStartDate(1)
+                )
+                .fetch();
+    }
 
     private BooleanExpression eqChallengeParticipationType(ChallengeParticipationType participationType) {
         return participationType != null ? challengePrice.challengeParticipationType.eq(participationType) : null;
@@ -195,6 +207,12 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
     private BooleanExpression isDayAfterEndDate(int days) {
         LocalDate nowMinusDays = LocalDate.now().minusDays(days);
         return Expressions.dateTemplate(LocalDate.class, "DATE_FORMAT({0}, '%Y-%m-%d')", challenge.endDate).eq(nowMinusDays);
+    }
+
+    private BooleanExpression isHourBeforeStartDate(int hours) {
+        LocalDateTime now = LocalDateTime.now().withMinute(0).withSecond(0).withNano(0);
+        LocalDateTime nowPlusHours = LocalDateTime.now().plusHours(hours);
+        return challenge.startDate.gt(now).and(challenge.startDate.loe(nowPlusHours));
     }
 
     private BooleanExpression eqChallengeId(Long challengeId) {
