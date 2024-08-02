@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.blog.dto.request.CreateHashTagRequestDto;
 import org.letscareer.letscareer.domain.blog.dto.request.UpdateHashTagRequestDto;
+import org.letscareer.letscareer.domain.blog.dto.response.tag.CreateTagResponseDto;
 import org.letscareer.letscareer.domain.blog.dto.response.tag.GetTagsResponseDto;
 import org.letscareer.letscareer.domain.blog.service.HashTagService;
 import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeMyMissionDetailResponseDto;
@@ -31,12 +32,12 @@ public class HashTagV1Controller {
     }
 
     @Operation(summary = "태그 생성", responses = {
-            @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
+            @ApiResponse(responseCode = "201", content = @Content(schema = @Schema(implementation = CreateTagResponseDto.class)))
     })
     @PostMapping
     public ResponseEntity<SuccessResponse<?>> createHashTag(@RequestBody final CreateHashTagRequestDto requestDto) {
-        hashTagService.createHashTag(requestDto);
-        return SuccessResponse.created(null);
+        CreateTagResponseDto responseDto = hashTagService.createHashTag(requestDto);
+        return SuccessResponse.created(responseDto);
     }
 
     @Operation(summary = "태그 수정", responses = {
