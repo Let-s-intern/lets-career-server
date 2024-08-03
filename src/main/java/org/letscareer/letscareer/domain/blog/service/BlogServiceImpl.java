@@ -16,6 +16,7 @@ import org.letscareer.letscareer.domain.blog.type.BlogType;
 import org.letscareer.letscareer.domain.blog.vo.BlogDetailVo;
 import org.letscareer.letscareer.domain.blog.vo.BlogThumbnailVo;
 import org.letscareer.letscareer.domain.blog.vo.HashTagDetailInfo;
+import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.entity.PageInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,8 +37,8 @@ public class BlogServiceImpl implements BlogService {
     private final BlogHashTagHelper blogHashTagHelper;
 
     @Override
-    public GetBlogsResponseDto getBlogs(BlogType type, Long tagId, Pageable pageable) {
-        Page<BlogThumbnailVo> blogThumbnailVos = blogHelper.findBlogThumbnailVos(type, tagId, pageable);
+    public GetBlogsResponseDto getBlogs(User user, BlogType type, Long tagId, Pageable pageable) {
+        Page<BlogThumbnailVo> blogThumbnailVos = blogHelper.findBlogThumbnailVos(user, type, tagId, pageable);
         PageInfo pageInfo = PageInfo.of(blogThumbnailVos);
         List<BlogsElementInfo> blogsElementInfos = createBlogsElementInfos(blogThumbnailVos.getContent());
         return blogMapper.toGetBlogsResponseDto(blogsElementInfos, pageInfo);

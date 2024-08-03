@@ -10,6 +10,7 @@ public record BlogThumbnailVo(
         BlogType category,
         String thumbnail,
         String description,
+        Boolean isDisplayed,
         LocalDateTime displayDate,
         LocalDateTime createDate,
         LocalDateTime lastModifiedDate

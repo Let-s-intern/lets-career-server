@@ -14,8 +14,8 @@ public record UpdateBlogRequestDto(
         String description,
         String ctaLink,
         String ctaText,
-        @NotNull
         Boolean isDisplayed,
+        LocalDateTime displayDate,
         List<Long> tagList
 ) {
 }

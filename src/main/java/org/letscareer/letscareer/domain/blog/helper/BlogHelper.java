@@ -7,6 +7,7 @@ import org.letscareer.letscareer.domain.blog.repository.BlogRepository;
 import org.letscareer.letscareer.domain.blog.type.BlogType;
 import org.letscareer.letscareer.domain.blog.vo.BlogDetailVo;
 import org.letscareer.letscareer.domain.blog.vo.BlogThumbnailVo;
+import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,8 +20,8 @@ import static org.letscareer.letscareer.domain.blog.error.BlogErrorCode.BLOG_NOT
 public class BlogHelper {
     private final BlogRepository blogRepository;
 
-    public Page<BlogThumbnailVo> findBlogThumbnailVos(BlogType type, Long tagId, Pageable pageable) {
-        return blogRepository.findBlogThumbnailVos(type, tagId, pageable);
+    public Page<BlogThumbnailVo> findBlogThumbnailVos(User user, BlogType type, Long tagId, Pageable pageable) {
+        return blogRepository.findBlogThumbnailVos(user, type, tagId, pageable);
     }
 
     public BlogDetailVo findBlogDetailVoOrThrow(Long blogId) {
