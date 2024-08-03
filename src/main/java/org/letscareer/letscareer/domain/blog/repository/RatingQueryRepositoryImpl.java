@@ -51,6 +51,8 @@ public class RatingQueryRepositoryImpl implements RatingQueryRepository {
                         blogRating.lastModifiedDate))
                 .from(blogRating)
                 .leftJoin(blogRating.blog, blog)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
 
         JPAQuery<Long> countQuery = queryFactory
