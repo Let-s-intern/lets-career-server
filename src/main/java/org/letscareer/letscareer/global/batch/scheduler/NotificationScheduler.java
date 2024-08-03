@@ -105,8 +105,7 @@ public class NotificationScheduler {
         }
     }
 
-//    @Scheduled(cron = "0 5 18 * * ?")
-    @Scheduled(fixedDelay = 50000)
+    @Scheduled(cron = "0 5 18 * * ?")
     public void sendMissionEndNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
         List<Long> missionIdList = missionHelper.findEndNotificationMissionIds();
         for(Long missionId : missionIdList) {
