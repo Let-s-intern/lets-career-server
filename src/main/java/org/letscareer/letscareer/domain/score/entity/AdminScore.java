@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
 
+import static org.letscareer.letscareer.global.common.utils.entity.EntityUpdateValueUtils.updateValue;
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DiscriminatorValue("admin_score")
 @Getter
@@ -34,7 +36,7 @@ public class AdminScore extends Score {
     }
 
     public void UpdateAdminScore(Integer score) {
-        this.score = score;
+        this.score = updateValue(this.score, score);
     }
 
 }
