@@ -88,4 +88,8 @@ public class MissionHelper {
     public void deleteMission(Long missionId) {
         missionRepository.deleteById(missionId);
     }
+
+    public List<Long> findEndNotificationMissionIds() {
+        return missionRepository.findALlEndNotificationMissionId();
+    }
 }

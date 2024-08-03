@@ -2,9 +2,11 @@ package org.letscareer.letscareer.domain.program.repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +16,11 @@ import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.program.vo.ProgramForAdminVo;
 import org.letscareer.letscareer.domain.program.vo.ProgramForConditionVo;
+import org.letscareer.letscareer.domain.program.vo.ProgramReviewNotificationVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.support.PageableExecutionUtils;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -117,6 +121,24 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
         ;
 
         return PageableExecutionUtils.getPage(contents, condition.pageable(), countQuery::fetchCount);
+    }
+
+    @Override
+    public List<ProgramReviewNotificationVo> findProgramReviewNotificationVos() {
+        return queryFactory
+                .select(Projections.constructor(ProgramReviewNotificationVo.class,
+                        vWProgram.programId,
+                        vWProgram.programType))
+                .from(vWProgram)
+                .where(
+                    isDayAfterEndDate()
+                )
+                .fetch();
+    }
+
+    private BooleanExpression isDayAfterEndDate() {
+        LocalDate nowMinusOneDay = LocalDate.now().minusDays(1);
+        return Expressions.dateTemplate(LocalDate.class, "DATE_FORMAT({0}, '%Y-%m-%d')", vWProgram.endDate).eq(nowMinusOneDay);
     }
 
     private BooleanExpression eqProgramType(List<ProgramType> programType) {

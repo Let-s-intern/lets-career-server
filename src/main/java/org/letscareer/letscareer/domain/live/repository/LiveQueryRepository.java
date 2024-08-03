@@ -22,13 +22,9 @@ public interface LiveQueryRepository {
 
     Optional<LiveApplicationFormVo> findLiveApplicationFormVo(Long liveId);
 
-    Optional<LiveEmailVo> findLiveEmailVoByLiveId(Long liveId);
-
-    List<Long> findRemindMailLiveIdList();
-
-    List<Long> findReviewMailLiveIdList();
-
     Optional<LiveMentorVo> findLiveMentorVoByLiveId(Long liveId);
 
     Optional<String> findMentorPasswordById(Long liveId);
+
+    List<Long> findAllRemindNotificationLiveId();
 }

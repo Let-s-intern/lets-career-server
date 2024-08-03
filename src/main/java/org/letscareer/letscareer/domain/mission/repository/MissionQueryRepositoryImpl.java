@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.mission.repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Expression;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
@@ -273,6 +274,23 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
                         )
                         .fetchFirst()
         );
+    }
+
+    @Override
+    public List<Long> findALlEndNotificationMissionId() {
+        return queryFactory
+                .select(mission.id)
+                .from(mission)
+                .where(
+                        isEndDate()
+                )
+                .fetch();
+    }
+
+    private BooleanExpression isEndDate() {
+        LocalDateTime now = LocalDateTime.now().withHour(18).withMinute(0).withSecond(0);
+        LocalDateTime end = LocalDateTime.now().withHour(23).withMinute(59).withSecond(59);
+        return mission.endDate.goe(now).and(mission.endDate.lt(end));
     }
 
     private Expression<Long> getAttendanceCount() {
