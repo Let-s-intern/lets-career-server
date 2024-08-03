@@ -1,9 +1,11 @@
 package org.letscareer.letscareer.domain.application.repository;
 
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.NumberExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +21,10 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.letscareer.letscareer.domain.application.entity.QChallengeApplication.challengeApplication;
+import static org.letscareer.letscareer.domain.attendance.entity.QAttendance.attendance;
 import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
 import static org.letscareer.letscareer.domain.coupon.entity.QCoupon.coupon;
+import static org.letscareer.letscareer.domain.mission.entity.QMission.mission;
 import static org.letscareer.letscareer.domain.payment.entity.QPayment.payment;
 import static org.letscareer.letscareer.domain.price.entity.QChallengePrice.challengePrice;
 import static org.letscareer.letscareer.domain.user.entity.QUser.user;
@@ -225,6 +229,31 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                 .groupBy(user.id)
                 .fetch();
     }
+
+    @Override
+    public List<User> findAllAttendanceNullNotificationUser(Long challengeId, Long missionId) {
+        return queryFactory
+                .select(challengeApplication._super.user)
+                .from(challengeApplication)
+                .leftJoin(challengeApplication.challenge, challenge)
+                .leftJoin(challengeApplication.user, user)
+                .where(
+                        eqChallengeId(challengeId),
+                        eqIsCanceled(false),
+                        attendanceIsNull(missionId)
+                )
+                .groupBy(user.id)
+                .fetch();
+    }
+
+    private BooleanExpression attendanceIsNull(Long missionId) {
+        return missionId != null ? user.id.notIn(JPAExpressions.select(attendance.user.id).from(attendance).where(eqMissionId(missionId))) : null;
+    }
+
+    private BooleanExpression eqMissionId(Long missionId) {
+        return missionId != null ? attendance.mission.id.eq(missionId) : null;
+    }
+
 
     private BooleanExpression reviewIsNull() {
         return challengeApplication._super.review.isNull();

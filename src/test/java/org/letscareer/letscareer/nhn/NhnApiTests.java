@@ -103,7 +103,7 @@ public class NhnApiTests {
         Long programId = 3L;
         String link = "84801956463";
         String password = "0BV4scd";
-        OTRemindParameter creditRefundParameter = OTRemindParameter.of(userName, programTitle, programStartDate, zoomLink, programId, link, password);
+        OTRemindParameter creditRefundParameter = OTRemindParameter.of(userName, null);
         System.out.println(creditRefundParameter.programStartDate());
 
         // when
@@ -133,7 +133,7 @@ public class NhnApiTests {
         LocalDateTime missionStartDate = LocalDateTime.now();
         LocalDateTime missionEndDate = LocalDateTime.now();
         Long programId = 3L;
-        MissionEndParameter missionEndParameter = MissionEndParameter.of(userName, th, programTitle, missionStartDate, missionEndDate, programId);
+        MissionEndParameter missionEndParameter = MissionEndParameter.of(userName, null, null);
 
         // when
         List<RecipientInfo<?>> recipientInfoList = new ArrayList<>();
@@ -163,7 +163,7 @@ public class NhnApiTests {
         Long programId = 3L;
         String link = "84801956463";
         String password = "0BV4scd";
-        LiveClassRemindParameter liveClassRemindParameter = LiveClassRemindParameter.of(userName, programTitle, programStartDate, zoomLink, programId, link, password);
+        LiveClassRemindParameter liveClassRemindParameter = LiveClassRemindParameter.of(userName, null);
 
         // when
         List<RecipientInfo<?>> recipientInfoList = new ArrayList<>();
@@ -212,7 +212,7 @@ public class NhnApiTests {
         String recipientNo = "010-3419-0076";
 
         String userName = "김민서";
-        Challenge challenge = challengeHelper.findChallengeByIdOrThrow(6L);
+        Challenge challenge = challengeHelper.findChallengeByIdOrThrow(25L);
         ChallengePaymentParameter challengePaymentParameter = ChallengePaymentParameter.of(userName, challenge);
 
         // when
@@ -220,6 +220,7 @@ public class NhnApiTests {
         RecipientInfo<?> recipientInfo = RecipientInfo.of(recipientNo, challengePaymentParameter);
         recipientInfoList.add(recipientInfo);
         CreateMessageRequestDto requestDto = CreateMessageRequestDto.of(senderKey, templateCode, recipientInfoList);
+        System.out.println(requestDto);
         CreateMessageResponseDto responseDto = nhnFeignController.createMessage(appKey, requestDto);
 
         // then
@@ -243,7 +244,7 @@ public class NhnApiTests {
         String zoomLink = "https";
         String link = "84801956463";
         String password = "0BV4scd";
-        ChallengeRemindParameter challengeRemindParameter = ChallengeRemindParameter.of(userName, programTitle, programStartDate, programEndDate, zoomLink, link, password);
+        ChallengeRemindParameter challengeRemindParameter = ChallengeRemindParameter.of(userName, null);
 
         // when
         List<RecipientInfo<?>> recipientInfoList = new ArrayList<>();

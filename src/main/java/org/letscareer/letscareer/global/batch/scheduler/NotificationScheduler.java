@@ -3,6 +3,7 @@ package org.letscareer.letscareer.global.batch.scheduler;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
 import org.letscareer.letscareer.domain.live.helper.LiveHelper;
+import org.letscareer.letscareer.domain.mission.helper.MissionHelper;
 import org.letscareer.letscareer.domain.program.helper.ProgramHelper;
 import org.letscareer.letscareer.domain.program.vo.ProgramReviewNotificationVo;
 import org.letscareer.letscareer.global.batch.config.*;
@@ -21,15 +22,17 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class NotificationScheduler {
+    private final ProgramHelper programHelper;
+    private final ChallengeHelper challengeHelper;
+    private final LiveHelper liveHelper;
+    private final MissionHelper missionHelper;
     private final JobLauncher jobLauncher;
     private final ReviewNotificationJobConfig reviewNotificationJobConfig;
     private final ChallengeRemindNotificationJobConfig challengeRemindNotificationJobConfig;
     private final LiveRemindNotificationJobConfig liveRemindNotificationJobConfig;
     private final ChallengeEndNotificationJobConfig challengeEndNotificationJobConfig;
     private final ChallengeOTRemindNotificationJobConfig challengeOTRemindNotificationJobConfig;
-    private final ProgramHelper programHelper;
-    private final ChallengeHelper challengeHelper;
-    private final LiveHelper liveHelper;
+    private final MissionEndNotificationJobConfig missionEndNotificationJobConfig;
 
     @Scheduled(cron = "0 5 10 * * ?")
     public void sendReviewNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
@@ -96,6 +99,21 @@ public class NotificationScheduler {
                     challengeOTRemindNotificationJobConfig.challengeOTRemindNotificationJob(),
                     new JobParametersBuilder()
                             .addLong("challengeId", challengeId)
+                            .addLocalDateTime("now", LocalDateTime.now())
+                            .toJobParameters()
+            );
+        }
+    }
+
+//    @Scheduled(cron = "0 5 18 * * ?")
+    @Scheduled(fixedDelay = 50000)
+    public void sendMissionEndNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
+        List<Long> missionIdList = missionHelper.findEndNotificationMissionIds();
+        for(Long missionId : missionIdList) {
+            jobLauncher.run(
+                    missionEndNotificationJobConfig.missionEndNotificationJob(),
+                    new JobParametersBuilder()
+                            .addLong("missionId", missionId)
                             .addLocalDateTime("now", LocalDateTime.now())
                             .toJobParameters()
             );
