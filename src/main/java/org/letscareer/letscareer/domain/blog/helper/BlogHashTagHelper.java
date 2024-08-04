@@ -26,4 +26,8 @@ public class BlogHashTagHelper {
     public void deleteBlogHashTag(BlogHashTag blogHashTag) {
         blogHashTagRepository.delete(blogHashTag);
     }
+
+    public Boolean existsBlogHashTagByHashTagId(Long hashTagId) {
+        return blogHashTagRepository.existsByHashTagId(hashTagId);
+    }
 }

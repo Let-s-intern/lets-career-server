@@ -10,7 +10,9 @@ import org.letscareer.letscareer.domain.blog.dto.request.UpdateHashTagRequestDto
 import org.letscareer.letscareer.domain.blog.dto.response.tag.GetTagsResponseDto;
 import org.letscareer.letscareer.domain.blog.service.HashTagService;
 import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeMyMissionDetailResponseDto;
+import org.letscareer.letscareer.global.common.annotation.ApiErrorCode;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
+import org.letscareer.letscareer.global.common.entity.SwaggerEnum;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,6 +54,7 @@ public class HashTagV1Controller {
     @Operation(summary = "태그 삭제", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
+    @ApiErrorCode({SwaggerEnum.HASHTAG_CANNOT_DELETED})
     @DeleteMapping("/{tagId}")
     public ResponseEntity<SuccessResponse<?>> deleteHashTag(@PathVariable final Long tagId) {
         hashTagService.deleteHashTag(tagId);
