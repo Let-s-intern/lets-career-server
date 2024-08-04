@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
 import org.letscareer.letscareer.domain.application.repository.ChallengeApplicationRepository;
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
+import org.letscareer.letscareer.domain.application.vo.ReviewNotificationUserVo;
 import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.user.entity.User;
@@ -85,8 +86,8 @@ public class ChallengeApplicationHelper {
         return !Objects.isNull(challengeApplication);
     }
 
-    public List<User> getReviewNotificationUsers(Long challengeId) {
-        return challengeApplicationRepository.findAllReviewNotificationUser(challengeId);
+    public List<ReviewNotificationUserVo> getReviewNotificationUserVos(Long challengeId) {
+        return challengeApplicationRepository.findAllReviewNotificationUserVo(challengeId);
     }
 
     public List<User> getNotificationUsers(Long challengeId) {
