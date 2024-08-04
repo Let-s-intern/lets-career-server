@@ -51,6 +51,7 @@ public class RatingQueryRepositoryImpl implements RatingQueryRepository {
                         blogRating.lastModifiedDate))
                 .from(blogRating)
                 .leftJoin(blogRating.blog, blog)
+                .orderBy(blogRating.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
