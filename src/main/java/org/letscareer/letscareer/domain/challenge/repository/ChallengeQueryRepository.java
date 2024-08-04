@@ -23,4 +23,8 @@ public interface ChallengeQueryRepository {
     Optional<ChallengeApplicationFormVo> findChallengeApplicationFormVo(Long challengeId);
 
     List<Long> findAllRemindNotificationChallengeId();
+
+    List<Long> findAllEndNotificationChallengeId();
+
+    List<Long> findAllOTRemindNotificationChallengeId();
 }

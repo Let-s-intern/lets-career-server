@@ -23,4 +23,5 @@ public interface MissionQueryRepository {
     Optional<Integer> findApplicationScoreByMissionId(Long missionId, Long applicationId);
     Optional<Integer> findAttendanceScoreByMissionIdAndUserId(Long challengeId, Long userId);
     Optional<MissionDetailVo> findMissionDetailVo(Long missionId);
+    List<Long> findALlEndNotificationMissionId();
 }
