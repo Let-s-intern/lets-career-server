@@ -1,6 +1,5 @@
 package org.letscareer.letscareer.domain.application.repository;
 
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
@@ -11,6 +10,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
+import org.letscareer.letscareer.domain.application.vo.ReviewNotificationUserVo;
 import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.data.domain.Page;
@@ -24,7 +24,6 @@ import static org.letscareer.letscareer.domain.application.entity.QChallengeAppl
 import static org.letscareer.letscareer.domain.attendance.entity.QAttendance.attendance;
 import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
 import static org.letscareer.letscareer.domain.coupon.entity.QCoupon.coupon;
-import static org.letscareer.letscareer.domain.mission.entity.QMission.mission;
 import static org.letscareer.letscareer.domain.payment.entity.QPayment.payment;
 import static org.letscareer.letscareer.domain.price.entity.QChallengePrice.challengePrice;
 import static org.letscareer.letscareer.domain.user.entity.QUser.user;
@@ -203,9 +202,12 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
     }
 
     @Override
-    public List<User> findAllReviewNotificationUser(Long challengeId) {
+    public List<ReviewNotificationUserVo> findAllReviewNotificationUserVo(Long challengeId) {
         return queryFactory
-                .select(challengeApplication._super.user)
+                .select(Projections.constructor(ReviewNotificationUserVo.class,
+                        challengeApplication._super.user.name,
+                        challengeApplication._super.user.phoneNum,
+                        challengeApplication._super.id))
                 .from(challengeApplication)
                 .where(
                         eqChallengeId(challengeId),

@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.nhn.provider;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.letscareer.letscareer.domain.application.vo.ReviewNotificationUserVo;
 import org.letscareer.letscareer.domain.nhn.dto.request.CreateMessageRequestDto;
 import org.letscareer.letscareer.domain.nhn.dto.request.CreditConfirmParameter;
 import org.letscareer.letscareer.domain.nhn.dto.request.RecipientInfo;
@@ -62,6 +63,14 @@ public class NhnProvider<T> {
         log.info("[NHN Result]::" + responseDto);
     }
 
+    public void sendReviewKakaoMessages(List<ReviewNotificationUserVo> userVoList, List<T> requestParameterList, String templateCode) {
+        String appKey = nhnSecretKeyReader.getAppKey();
+        List<RecipientInfo<?>> recipientInfoList = createReviewRecipientList(userVoList, requestParameterList);
+        CreateMessageRequestDto requestDto = createMessageRequestDto(recipientInfoList, templateCode);
+        CreateMessageResponseDto responseDto = nhnFeignController.createMessage(appKey, requestDto);
+        log.info("[NHN Result]::" + responseDto);
+    }
+
     private CreateMessageRequestDto createMessageRequestDto(List<RecipientInfo<?>> recipientList, String templateCode) {
         String senderKey = nhnSecretKeyReader.getSendKey();
         return CreateMessageRequestDto.of(senderKey, templateCode, recipientList);
@@ -78,6 +87,13 @@ public class NhnProvider<T> {
         return Stream.iterate(0, i->i+1)
                 .limit(userList.size())
                 .map(i -> RecipientInfo.of(userList.get(i).getPhoneNum(), requestParameterList.get(i)))
+                .collect(Collectors.toList());
+    }
+
+    private List<RecipientInfo<?>> createReviewRecipientList(List<ReviewNotificationUserVo> userVoList, List<T> requestParameterList) {
+        return Stream.iterate(0, i->i+1)
+                .limit(userVoList.size())
+                .map(i -> RecipientInfo.of(userVoList.get(i).phoneNum(), requestParameterList.get(i)))
                 .collect(Collectors.toList());
     }
 }
