@@ -60,18 +60,6 @@ public class LiveHelper {
                 .orElseThrow(() -> new EntityNotFoundException(LiveErrorCode.LIVE_NOT_FOUND));
     }
 
-    public LiveEmailVo findLiveEmailVoByLiveId(Long liveId) {
-        return liveRepository.findLiveEmailVoByLiveId(liveId)
-                .orElseThrow(() -> new EntityNotFoundException(LiveErrorCode.LIVE_NOT_FOUND));
-    }
-    public List<Long> findRemindMailLiveIdList() {
-        return liveRepository.findRemindMailLiveIdList();
-    }
-
-    public List<Long> findReviewMailLiveIdList() {
-        return liveRepository.findReviewMailLiveIdList();
-    }
-
     public LiveMentorVo findLiveMentorVoOrThrow(Long liveId) {
         return liveRepository.findLiveMentorVoByLiveId(liveId)
                 .orElseThrow(() -> new EntityNotFoundException(LiveErrorCode.LIVE_NOT_FOUND));
@@ -81,10 +69,6 @@ public class LiveHelper {
         liveRepository.deleteById(liveId);
     }
 
-    public void updateCurrentCount(Live live, int currenCount) {
-        live.updateLiveCurrentCount(currenCount);
-    }
-
     public boolean validateMentorPassword(Long liveId, String mentorPassword) {
         return liveRepository.existsByIdAndMentorPassword(liveId, mentorPassword);
     }
@@ -92,5 +76,9 @@ public class LiveHelper {
     public String findLiveMentorPasswordByIdOrThrow(Long liveId) {
         return liveRepository.findMentorPasswordById(liveId)
                 .orElseThrow(() -> new EntityNotFoundException(LiveErrorCode.LIVE_NOT_FOUND));
+    }
+
+    public List<Long> findRemindNotificationLiveIds() {
+        return liveRepository.findAllRemindNotificationLiveId();
     }
 }

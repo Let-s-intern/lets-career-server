@@ -11,7 +11,9 @@ import org.letscareer.letscareer.domain.blog.dto.response.blog.GetBlogResponseDt
 import org.letscareer.letscareer.domain.blog.dto.response.blog.GetBlogsResponseDto;
 import org.letscareer.letscareer.domain.blog.service.BlogService;
 import org.letscareer.letscareer.domain.blog.type.BlogType;
+import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.annotation.ApiErrorCode;
+import org.letscareer.letscareer.global.common.annotation.CurrentUser;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
 import org.letscareer.letscareer.global.common.entity.SwaggerEnum;
 import org.springframework.data.domain.Pageable;
@@ -28,10 +30,11 @@ public class BlogV1Controller {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetBlogsResponseDto.class)))
     })
     @GetMapping
-    public ResponseEntity<SuccessResponse<?>> getBlogs(@RequestParam(required = false) final BlogType type,
+    public ResponseEntity<SuccessResponse<?>> getBlogs(@CurrentUser final User user,
+                                                       @RequestParam(required = false) final BlogType type,
                                                        @RequestParam(required = false) final Long tagId,
                                                        final Pageable pageable) {
-        final GetBlogsResponseDto responseDto = blogService.getBlogs(type, tagId, pageable);
+        final GetBlogsResponseDto responseDto = blogService.getBlogs(user, type, tagId, pageable);
         return SuccessResponse.ok(responseDto);
     }
 

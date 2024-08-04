@@ -1,12 +1,15 @@
 package org.letscareer.letscareer.domain.application.repository;
 
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.entity.LiveApplication;
 import org.letscareer.letscareer.domain.application.vo.AdminLiveApplicationVo;
+import org.letscareer.letscareer.domain.live.type.ProgressType;
 import org.letscareer.letscareer.domain.live.vo.LiveEmailVo;
+import org.letscareer.letscareer.domain.user.entity.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -167,6 +170,36 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
                         eqIsCanceled(false)
                 )
                 .fetchOne();
+    }
+
+    @Override
+    public List<User> findAllReviewNotificationUser(Long liveId) {
+        return queryFactory
+                .select(liveApplication._super.user)
+                .from(liveApplication)
+                .where(
+                        eqLiveId(liveId),
+                        eqIsCanceled(false),
+                        reviewIsNull()
+                )
+                .fetch();
+    }
+
+    @Override
+    public List<User> findAllRemindNotificationUser(Long liveId) {
+        return queryFactory
+                .select(liveApplication._super.user)
+                .from(liveApplication)
+                .leftJoin(liveApplication.live, live)
+                .where(
+                        eqLiveId(liveId),
+                        eqIsCanceled(false)
+                )
+                .fetch();
+    }
+
+    private BooleanExpression reviewIsNull() {
+        return liveApplication._super.review.isNull();
     }
 
     private BooleanExpression eqApplicationId(Long applicationId) {

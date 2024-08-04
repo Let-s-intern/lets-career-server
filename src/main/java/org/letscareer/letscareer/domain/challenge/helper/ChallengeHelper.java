@@ -64,6 +64,18 @@ public class ChallengeHelper {
                 .orElseThrow(() -> new EntityNotFoundException(ChallengeErrorCode.CHALLENGE_NOT_FOUND));
     }
 
+    public List<Long> findRemindNotificationChallengeIds() {
+        return challengeRepository.findAllRemindNotificationChallengeId();
+    }
+
+    public List<Long> findEndNotificationChallengeIds() {
+        return challengeRepository.findAllEndNotificationChallengeId();
+    }
+
+    public List<Long> findOTRemindNotificationChallengeIds() {
+        return challengeRepository.findAllOTRemindNotificationChallengeId();
+    }
+
     public void deleteChallengeById(Long challengeId) {
         challengeRepository.deleteById(challengeId);
     }
@@ -103,4 +115,5 @@ public class ChallengeHelper {
                 "모두 내일 OT에서 만나요 :미소짓는_상기된_얼굴:\n\n" +
                 messageSource.getMessage("mail.footer", null, Locale.KOREA);
     }
+
 }

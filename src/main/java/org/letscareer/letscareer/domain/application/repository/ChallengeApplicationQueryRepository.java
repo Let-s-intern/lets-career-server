@@ -3,6 +3,7 @@ package org.letscareer.letscareer.domain.application.repository;
 import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
 import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
+import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -25,4 +26,10 @@ public interface ChallengeApplicationQueryRepository {
     Long findApplicationIdByChallengeIdAndUserId(Long challengeId, Long userId);
 
     Long countByChallengeId(Long challengeId);
+
+    List<User> findAllReviewNotificationUser(Long challengeId);
+
+    List<User> findAllNotificationUser(Long challengeId);
+
+    List<User> findAllAttendanceNullNotificationUser(Long challengeId, Long missionId);
 }

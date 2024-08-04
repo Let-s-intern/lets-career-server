@@ -3,6 +3,7 @@ package org.letscareer.letscareer.domain.nhn.dto.request;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
 import lombok.Builder;
+import org.letscareer.letscareer.domain.live.entity.Live;
 
 import java.time.LocalDateTime;
 
@@ -10,28 +11,17 @@ import java.time.LocalDateTime;
 public record LiveClassPaymentParameter(
         String userName,
         String programTitle,
-        @JsonFormat(pattern = "yyyy년 MM월 dd일", timezone = "Asia/Seoul")
+        @JsonFormat(pattern = "yyyy년 MM월 dd일 HH:mm", timezone = "Asia/Seoul")
         LocalDateTime programStartDate,
-        String zoomLink,
-        Long programId,
-        String link,
-        String password
+        String zoomLink
 ) {
     public static LiveClassPaymentParameter of(String userName,
-                                               String programTitle,
-                                               LocalDateTime programStartDate,
-                                               String zoomLink,
-                                               Long programId,
-                                               String link,
-                                               String password) {
+                                               Live live) {
         return LiveClassPaymentParameter.builder()
                 .userName(userName)
-                .programTitle(programTitle)
-                .programStartDate(programStartDate)
-                .zoomLink(zoomLink)
-                .programId(programId)
-                .link(link)
-                .password(password)
+                .programTitle(live.getTitle())
+                .programStartDate(live.getStartDate())
+                .zoomLink(live.getZoomLink().substring(8))
                 .build();
     }
 }

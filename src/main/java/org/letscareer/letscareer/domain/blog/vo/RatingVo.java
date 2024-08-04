@@ -1,17 +1,17 @@
 package org.letscareer.letscareer.domain.blog.vo;
 
+import lombok.Builder;
 import org.letscareer.letscareer.domain.blog.type.BlogType;
 
 import java.time.LocalDateTime;
 
-public record BlogThumbnailVo(
+@Builder
+public record RatingVo(
         Long id,
         String title,
         BlogType category,
-        String thumbnail,
-        String description,
-        Boolean isDisplayed,
-        LocalDateTime displayDate,
+        String content,
+        Integer score,
         LocalDateTime createDate,
         LocalDateTime lastModifiedDate
 ) {

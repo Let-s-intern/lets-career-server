@@ -1,24 +1,30 @@
 package org.letscareer.letscareer.domain.challenge.repository;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.challenge.vo.*;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
+import org.letscareer.letscareer.domain.price.type.ChallengeParticipationType;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
 import static org.letscareer.letscareer.domain.classification.entity.QChallengeClassification.challengeClassification;
+import static org.letscareer.letscareer.domain.price.entity.QChallengePrice.challengePrice;
+import static org.letscareer.letscareer.domain.program.entity.QVWProgram.vWProgram;
 
 @RequiredArgsConstructor
 public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
@@ -148,6 +154,65 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
                 )
                 .fetchOne()
         );
+    }
+
+    @Override
+    public List<Long> findAllRemindNotificationChallengeId() {
+        return queryFactory
+                .select(challenge.id)
+                .from(challenge)
+                .leftJoin(challenge.priceList, challengePrice)
+                .where(
+                        eqChallengeParticipationType(ChallengeParticipationType.LIVE),
+                        isDayBeforeStartDate(1)
+                )
+                .fetch();
+    }
+
+    @Override
+    public List<Long> findAllEndNotificationChallengeId() {
+        return queryFactory
+                .select(challenge.id)
+                .from(challenge)
+                .leftJoin(challenge.priceList, challengePrice)
+                .where(
+                        eqChallengeParticipationType(ChallengeParticipationType.LIVE),
+                        isDayAfterEndDate(2)
+                )
+                .fetch();
+    }
+
+    @Override
+    public List<Long> findAllOTRemindNotificationChallengeId() {
+        return queryFactory
+                .select(challenge.id)
+                .from(challenge)
+                .leftJoin(challenge.priceList, challengePrice)
+                .where(
+                        eqChallengeParticipationType(ChallengeParticipationType.LIVE),
+                        isHourBeforeStartDate(1)
+                )
+                .fetch();
+    }
+
+    private BooleanExpression eqChallengeParticipationType(ChallengeParticipationType participationType) {
+        return participationType != null ? challengePrice.challengeParticipationType.eq(participationType) : null;
+    }
+
+    private BooleanExpression isDayBeforeStartDate(int days) {
+        LocalDate nowPlusDays = LocalDate.now().plusDays(days);
+        return Expressions.dateTemplate(LocalDate.class, "DATE_FORMAT({0}, '%Y-%m-%d')", challenge.startDate).eq(nowPlusDays);
+    }
+
+    private BooleanExpression isDayAfterEndDate(int days) {
+        LocalDate nowMinusDays = LocalDate.now().minusDays(days);
+        return Expressions.dateTemplate(LocalDate.class, "DATE_FORMAT({0}, '%Y-%m-%d')", challenge.endDate).eq(nowMinusDays);
+    }
+
+    private BooleanExpression isHourBeforeStartDate(int hours) {
+        LocalDateTime now = LocalDateTime.now().withMinute(0).withSecond(0).withNano(0);
+        LocalDateTime nowPlusHours = LocalDateTime.now().plusHours(hours);
+        return challenge.startDate.gt(now).and(challenge.startDate.loe(nowPlusHours));
     }
 
     private BooleanExpression eqChallengeId(Long challengeId) {

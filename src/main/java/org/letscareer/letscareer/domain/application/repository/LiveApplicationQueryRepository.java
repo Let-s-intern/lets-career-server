@@ -3,6 +3,7 @@ package org.letscareer.letscareer.domain.application.repository;
 import org.letscareer.letscareer.domain.application.entity.LiveApplication;
 import org.letscareer.letscareer.domain.application.vo.AdminLiveApplicationVo;
 import org.letscareer.letscareer.domain.live.vo.LiveEmailVo;
+import org.letscareer.letscareer.domain.user.entity.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,4 +23,8 @@ public interface LiveApplicationQueryRepository {
     List<String> findMotivateListByLiveId(Long liveId);
 
     Long countByLiveId(Long liveId);
+
+    List<User> findAllReviewNotificationUser(Long liveId);
+
+    List<User> findAllRemindNotificationUser(Long liveId);
 }

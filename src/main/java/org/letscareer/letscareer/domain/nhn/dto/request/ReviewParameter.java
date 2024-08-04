@@ -5,11 +5,15 @@ import lombok.Builder;
 
 @Builder(access = AccessLevel.PRIVATE)
 public record ReviewParameter(
-        String userName
+        String userName,
+        String program,
+        Long programId
 ) {
-    public static ReviewParameter of(String userName) {
+    public static ReviewParameter of(String userName, String programType, Long programId) {
         return ReviewParameter.builder()
                 .userName(userName)
+                .program(programType)
+                .programId(programId)
                 .build();
     }
 }
