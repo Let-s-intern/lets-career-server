@@ -42,6 +42,7 @@ public enum SwaggerEnum {
 
     // Blog
     BLOG_NOT_FOUND(BlogErrorCode.BLOG_NOT_FOUND),
+    HASHTAG_CANNOT_DELETED(BlogErrorCode.HASHTAG_CANNOT_DELETED),
 
     // challenge
     CHALLENGE_NOT_FOUND(ChallengeErrorCode.CHALLENGE_NOT_FOUND),
