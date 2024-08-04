@@ -38,6 +38,7 @@ public class BlogQueryRepositoryImpl implements BlogQueryRepository {
                         blog.content,
                         blog.ctaLink,
                         blog.ctaText,
+                        blog.isDisplayed,
                         blog.displayDate,
                         blog.createDate,
                         blog.lastModifiedDate

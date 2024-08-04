@@ -13,6 +13,7 @@ public record BlogDetailVo(
         String content,
         String ctaLink,
         String ctaText,
+        Boolean isDisplayed,
         LocalDateTime displayDate,
         LocalDateTime createDate,
         LocalDateTime lastModifiedDate
