@@ -2,9 +2,14 @@ package org.letscareer.letscareer.domain.blog.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.blog.vo.RatingDetailVo;
+import org.letscareer.letscareer.domain.blog.vo.RatingVo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
 
@@ -31,6 +36,32 @@ public class RatingQueryRepositoryImpl implements RatingQueryRepository {
                         eqBlogId(blogId)
                 )
                 .fetch();
+    }
+
+    @Override
+    public Page<RatingVo> findRatingVos(Pageable pageable) {
+        List<RatingVo> contents = queryFactory
+                .select(Projections.constructor(RatingVo.class,
+                        blogRating.id,
+                        blog.title,
+                        blog.category,
+                        blogRating.title,
+                        blogRating.score,
+                        blogRating.createDate,
+                        blogRating.lastModifiedDate))
+                .from(blogRating)
+                .leftJoin(blogRating.blog, blog)
+                .orderBy(blogRating.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> countQuery = queryFactory
+                .select(blogRating.id.countDistinct())
+                .from(blogRating)
+                .distinct();
+
+        return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
     }
 
     private BooleanExpression eqBlogId(Long blogId) {

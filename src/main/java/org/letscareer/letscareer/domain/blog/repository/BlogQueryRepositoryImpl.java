@@ -8,11 +8,14 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.blog.type.BlogType;
 import org.letscareer.letscareer.domain.blog.vo.BlogDetailVo;
 import org.letscareer.letscareer.domain.blog.vo.BlogThumbnailVo;
+import org.letscareer.letscareer.domain.user.entity.User;
+import org.letscareer.letscareer.domain.user.type.UserRole;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.letscareer.letscareer.domain.blog.entity.QBlog.blog;
@@ -48,7 +51,7 @@ public class BlogQueryRepositoryImpl implements BlogQueryRepository {
     }
 
     @Override
-    public Page<BlogThumbnailVo> findBlogThumbnailVos(BlogType type, Long tagId, Pageable pageable) {
+    public Page<BlogThumbnailVo> findBlogThumbnailVos(User user, BlogType type, Long tagId, Pageable pageable) {
         List<BlogThumbnailVo> contents = queryFactory
                 .select(Projections.constructor(BlogThumbnailVo.class,
                         blog.id,
@@ -56,6 +59,7 @@ public class BlogQueryRepositoryImpl implements BlogQueryRepository {
                         blog.category,
                         blog.thumbnail,
                         blog.description,
+                        blog.isDisplayed,
                         blog.displayDate,
                         blog.createDate,
                         blog.lastModifiedDate
@@ -65,11 +69,12 @@ public class BlogQueryRepositoryImpl implements BlogQueryRepository {
                 .leftJoin(blogHashTag.hashTag, hashTag)
                 .where(
                         eqBlogType(type),
-                        eqTagId(tagId)
+                        eqTagId(tagId),
+                        eqIsDisplayedForUserRole(user)
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(blog.createDate.desc())
+                .orderBy(blog.displayDate.desc())
                 .distinct()
                 .fetch();
 
@@ -80,7 +85,8 @@ public class BlogQueryRepositoryImpl implements BlogQueryRepository {
                 .leftJoin(blogHashTag.hashTag, hashTag)
                 .where(
                         eqBlogType(type),
-                        eqTagId(tagId)
+                        eqTagId(tagId),
+                        eqIsDisplayedForUserRole(user)
                 )
                 .distinct();
 
@@ -97,5 +103,14 @@ public class BlogQueryRepositoryImpl implements BlogQueryRepository {
 
     private BooleanExpression eqTagId(Long tagId) {
         return tagId != null ? hashTag.id.eq(tagId) : null;
+    }
+
+    private BooleanExpression eqIsDisplayedForUserRole(User user) {
+        if (Objects.isNull(user))
+            return blog.isDisplayed.isTrue();
+        else if (UserRole.USER.equals(user.getRole()))
+            return blog.isDisplayed.isTrue();
+        else
+            return null;
     }
 }

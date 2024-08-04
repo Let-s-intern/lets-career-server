@@ -6,9 +6,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.blog.dto.request.CreateRatingRequestDto;
+import org.letscareer.letscareer.domain.blog.dto.response.rating.GetBlogRatingsResponseDto;
 import org.letscareer.letscareer.domain.blog.dto.response.rating.GetRatingsResponseDto;
 import org.letscareer.letscareer.domain.blog.service.RatingService;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,9 +23,18 @@ public class RatingV1Controller {
     @Operation(summary = "별점 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetRatingsResponseDto.class)))
     })
+    @GetMapping
+    public ResponseEntity<SuccessResponse<?>> getRatings(final Pageable pageable) {
+        final GetRatingsResponseDto responseDto = ratingService.getRatings(pageable);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "블로그 별 별점 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetBlogRatingsResponseDto.class)))
+    })
     @GetMapping("/{blogId}")
     public ResponseEntity<SuccessResponse<?>> getBlogRatings(@PathVariable final Long blogId) {
-        GetRatingsResponseDto responseDto = ratingService.getBlogRatings(blogId);
+        GetBlogRatingsResponseDto responseDto = ratingService.getBlogRatings(blogId);
         return SuccessResponse.ok(responseDto);
     }
 

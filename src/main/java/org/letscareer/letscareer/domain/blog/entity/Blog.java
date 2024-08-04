@@ -33,6 +33,7 @@ public class Blog extends BaseTimeEntity {
     private String content;
     private String ctaLink;
     private String ctaText;
+    private Boolean isDisplayed;
     private LocalDateTime displayDate;
     private LocalDateTime deleteDate;
     @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL)
@@ -51,7 +52,8 @@ public class Blog extends BaseTimeEntity {
                 .content(requestDto.content())
                 .ctaLink(requestDto.ctaLink())
                 .ctaText(requestDto.ctaText())
-                .displayDate(requestDto.isDisplayed() ? LocalDateTime.now() : null)
+                .isDisplayed(Boolean.FALSE)
+                .displayDate(requestDto.displayDate())
                 .build();
     }
 
@@ -63,7 +65,8 @@ public class Blog extends BaseTimeEntity {
         this.content = updateValue(this.content, requestDto.content());
         this.ctaLink = updateValue(this.ctaLink, requestDto.ctaLink());
         this.ctaText = updateValue(this.ctaText, requestDto.ctaText());
-        this.displayDate = requestDto.isDisplayed() ? LocalDateTime.now() : null;
+        this.displayDate = updateValue(this.displayDate, requestDto.displayDate());
+        this.isDisplayed = updateValue(this.isDisplayed, requestDto.isDisplayed());
     }
 
     public void addBlogHashTag(BlogHashTag blogHashTag) {

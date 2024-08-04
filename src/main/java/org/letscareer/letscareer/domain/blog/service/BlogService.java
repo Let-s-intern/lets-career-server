@@ -5,12 +5,13 @@ import org.letscareer.letscareer.domain.blog.dto.request.UpdateBlogRequestDto;
 import org.letscareer.letscareer.domain.blog.dto.response.blog.GetBlogResponseDto;
 import org.letscareer.letscareer.domain.blog.dto.response.blog.GetBlogsResponseDto;
 import org.letscareer.letscareer.domain.blog.type.BlogType;
+import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface BlogService {
-    GetBlogsResponseDto getBlogs(BlogType type, Long tagId, Pageable pageable);
+    GetBlogsResponseDto getBlogs(User user, BlogType type, Long tagId, Pageable pageable);
 
     GetBlogResponseDto getBlogDetail(Long blogId);
 

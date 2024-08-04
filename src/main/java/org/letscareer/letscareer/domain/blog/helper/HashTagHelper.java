@@ -18,9 +18,9 @@ import static org.letscareer.letscareer.domain.blog.error.BlogErrorCode.HASHTAG_
 public class HashTagHelper {
     private final HashTagRepository hashTagRepository;
 
-    public void createAndSaveHashTag(CreateHashTagRequestDto requestDto) {
+    public HashTag createAndSaveHashTag(CreateHashTagRequestDto requestDto) {
         HashTag newHashTag = HashTag.createHashTag(requestDto);
-        hashTagRepository.save(newHashTag);
+        return hashTagRepository.save(newHashTag);
     }
 
     public List<HashTagDetailInfo> findTagDetailInfos(Long blogId) {
