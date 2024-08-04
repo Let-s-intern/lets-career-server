@@ -193,7 +193,7 @@ public class UserServiceImpl implements UserService {
 
     private void sendSocialSignUpKakaoMessage(User newUser) {
         if (AuthProvider.SERVICE.equals(newUser.getAuthProvider())) return;
-        if (Objects.isNull(newUser.getContactEmail())) return;
+        if (!Objects.isNull(newUser.getContactEmail())) return;
         SignUpParameter requestParameter = SignUpParameter.of(newUser);
         nhnProvider.sendKakaoMessage(newUser, requestParameter, "sign_up_confirm");
     }
