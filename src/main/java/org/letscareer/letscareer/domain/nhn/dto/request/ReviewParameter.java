@@ -7,13 +7,15 @@ import lombok.Builder;
 public record ReviewParameter(
         String userName,
         String program,
-        Long programId
+        Long programId,
+        Long applicationId
 ) {
-    public static ReviewParameter of(String userName, String programType, Long programId) {
+    public static ReviewParameter of(String userName, String programType, Long programId, Long applicationId) {
         return ReviewParameter.builder()
                 .userName(userName)
                 .program(programType)
                 .programId(programId)
+                .applicationId(applicationId)
                 .build();
     }
 }

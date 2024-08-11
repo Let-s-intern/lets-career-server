@@ -5,8 +5,8 @@ import org.letscareer.letscareer.domain.application.dto.request.CreateApplicatio
 import org.letscareer.letscareer.domain.application.entity.LiveApplication;
 import org.letscareer.letscareer.domain.application.repository.LiveApplicationRepository;
 import org.letscareer.letscareer.domain.application.vo.AdminLiveApplicationVo;
+import org.letscareer.letscareer.domain.application.vo.ReviewNotificationUserVo;
 import org.letscareer.letscareer.domain.live.entity.Live;
-import org.letscareer.letscareer.domain.live.vo.LiveEmailVo;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.error.exception.ConflictException;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
@@ -51,14 +51,6 @@ public class LiveApplicationHelper {
                 .orElseThrow(() -> new EntityNotFoundException(APPLICATION_NOT_FOUND));
     }
 
-    public LiveEmailVo findLiveEmailVo(Long applicationId) {
-        return liveApplicationRepository.findLiveEmailVoByApplicationId(applicationId);
-    }
-
-    public List<String> findEmailListByLiveId(Long liveId) {
-        return liveApplicationRepository.findEmailListByLiveId(liveId);
-    }
-
     public Boolean existLiveApplicationByLiveIdAndUserId(Long liveId, Long userId) {
         LiveApplication liveApplication = liveApplicationRepository.findLiveApplicationByLiveIdAndUserId(liveId, userId).orElse(null);
         return !Objects.isNull(liveApplication);
@@ -85,8 +77,8 @@ public class LiveApplicationHelper {
         return liveApplicationRepository.findMotivateListByLiveId(liveId);
     }
 
-    public List<User> getReviewNotificationUsers(Long liveId) {
-        return liveApplicationRepository.findAllReviewNotificationUser(liveId);
+    public List<ReviewNotificationUserVo> getReviewNotificationUserVos(Long liveId) {
+        return liveApplicationRepository.findAllReviewNotificationUserVo(liveId);
     }
 
     public List<User> getRemindNotificationUsers(Long liveId) {

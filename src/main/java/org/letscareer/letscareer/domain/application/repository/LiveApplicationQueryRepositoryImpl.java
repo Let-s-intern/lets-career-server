@@ -1,14 +1,12 @@
 package org.letscareer.letscareer.domain.application.repository;
 
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.entity.LiveApplication;
 import org.letscareer.letscareer.domain.application.vo.AdminLiveApplicationVo;
-import org.letscareer.letscareer.domain.live.type.ProgressType;
-import org.letscareer.letscareer.domain.live.vo.LiveEmailVo;
+import org.letscareer.letscareer.domain.application.vo.ReviewNotificationUserVo;
 import org.letscareer.letscareer.domain.user.entity.User;
 
 import java.util.List;
@@ -78,42 +76,6 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
     }
 
     @Override
-    public LiveEmailVo findLiveEmailVoByApplicationId(Long applicationId) {
-        return queryFactory
-                .select(Projections.constructor(LiveEmailVo.class,
-                        live.id,
-                        live.title,
-                        live.startDate,
-                        live.endDate,
-                        live.progressType,
-                        live.place,
-                        live.zoomLink,
-                        live.zoomPassword))
-                .from(liveApplication)
-                .leftJoin(liveApplication.live, live)
-                .where(
-                        eqApplicationId(applicationId)
-                )
-                .fetchFirst();
-    }
-
-    @Override
-    public List<String> findEmailListByLiveId(Long liveId) {
-        return queryFactory
-                .select(
-                        liveApplication.user.contactEmail
-                )
-                .from(liveApplication)
-                .leftJoin(liveApplication.user, user)
-                .leftJoin(liveApplication.payment, payment)
-                .where(
-                        eqLiveId(liveId),
-                        eqIsCanceled(false)
-                )
-                .fetch();
-    }
-
-    @Override
     public Optional<Long> findLiveApplicationIdByUserIdAndLiveId(Long userId, Long liveId) {
         return Optional.ofNullable(queryFactory
                 .select(
@@ -173,9 +135,12 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
     }
 
     @Override
-    public List<User> findAllReviewNotificationUser(Long liveId) {
+    public List<ReviewNotificationUserVo> findAllReviewNotificationUserVo(Long liveId) {
         return queryFactory
-                .select(liveApplication._super.user)
+                .select(Projections.constructor(ReviewNotificationUserVo.class,
+                        liveApplication._super.user.name,
+                        liveApplication._super.user.phoneNum,
+                        liveApplication._super.id))
                 .from(liveApplication)
                 .where(
                         eqLiveId(liveId),
