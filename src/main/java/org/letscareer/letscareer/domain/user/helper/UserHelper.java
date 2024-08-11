@@ -48,8 +48,8 @@ public class UserHelper {
                 .orElseThrow(EntityNotFoundException::new);
     }
 
-    public User findUserByEmailAndNameAndPhoneNumAndAuthProviderOrThrow(PasswordResetRequestDto requestDto, AuthProvider authProvider) {
-        return userRepository.findFirstByEmailAndNameAndPhoneNumAndAuthProviderOrderByIdDesc(requestDto.email(), requestDto.name(), requestDto.phoneNum(), authProvider)
+    public User findUserByEmailAndNameAndPhoneNumOrThrow(PasswordResetRequestDto requestDto) {
+        return userRepository.findFirstByEmailAndNameAndPhoneNumOrderByIdDesc(requestDto.email(), requestDto.name(), requestDto.phoneNum())
                 .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND));
     }
 
@@ -70,6 +70,13 @@ public class UserHelper {
     public void validateExistingUser(UserPwSignUpRequestDto pwSignUpRequestDto) {
         if (userRepository.existsByPhoneNum(pwSignUpRequestDto.phoneNum()))
             throw new ConflictException(USER_PHONE_NUMBER_CONFLICT);
+    }
+
+    public void validateAuthProvider(AuthProvider authProvider) {
+        switch (authProvider) {
+            case KAKAO -> throw new InvalidValueException(INVALID_AUTH_PROVIDER_KAKAO);
+            case NAVER -> throw new InvalidValueException(INVALID_AUTH_PROVIDER_NAVER);
+        }
     }
 
     public void validateRegexEmail(String email) {

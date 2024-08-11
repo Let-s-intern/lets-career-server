@@ -115,7 +115,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void resetPassword(PasswordResetRequestDto passwordResetRequestDto) {
-        User user = userHelper.findUserByEmailAndNameAndPhoneNumAndAuthProviderOrThrow(passwordResetRequestDto, AuthProvider.SERVICE);
+        User user = userHelper.findUserByEmailAndNameAndPhoneNumOrThrow(passwordResetRequestDto);
+        userHelper.validateAuthProvider(user.getAuthProvider());
         String randomPassword = RandomStringUtils.randomAlphanumeric(8);
         String encodedRandomPassword = encoderUtil.encodePassword(randomPassword);
         user.updateUserPassword(encodedRandomPassword);
