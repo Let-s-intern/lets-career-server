@@ -296,7 +296,7 @@ public class NhnApiTests {
         Long programId = 1L;
 
         String userName = "임호정";
-        ReviewParameter challengeEndParameter = ReviewParameter.of(userName, program, programId);
+        ReviewParameter challengeEndParameter = ReviewParameter.of(userName, null, programId, null);
 
         // when
         List<RecipientInfo<?>> recipientInfoList = new ArrayList<>();

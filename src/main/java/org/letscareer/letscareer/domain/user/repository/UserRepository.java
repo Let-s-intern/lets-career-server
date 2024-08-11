@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long>, UserQueryRepository {
     Optional<User> findFirstByEmailAndAuthProviderOrderByIdDesc(String email, AuthProvider authProvider);
-    Optional<User> findFirstByEmailAndNameAndPhoneNumAndAuthProviderOrderByIdDesc(String email, String name, String phoneNum, AuthProvider authProvider);
+    Optional<User> findFirstByEmailAndNameAndPhoneNumOrderByIdDesc(String email, String name, String phoneNum);
     Optional<User> findFirstByPhoneNum(String phoneNum);
     Optional<User> findByNameAndEmail(String name, String email);
     boolean existsByPhoneNum(String phoneNum);
