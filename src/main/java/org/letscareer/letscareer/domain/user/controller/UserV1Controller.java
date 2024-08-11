@@ -120,7 +120,7 @@ public class UserV1Controller {
     @Operation(summary = "비밀번호 재설정 메일 전송", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
-    @ApiErrorCode({SwaggerEnum.USER_NOT_FOUND})
+    @ApiErrorCode({SwaggerEnum.USER_NOT_FOUND, SwaggerEnum.INVALID_AUTH_PROVIDER_KAKAO, SwaggerEnum.INVALID_AUTH_PROVIDER_NAVER})
     @PostMapping("/password")
     public ResponseEntity<SuccessResponse<?>> passwordReset(@RequestBody @Valid final PasswordResetRequestDto passwordResetRequestDto) {
         userService.resetPassword(passwordResetRequestDto);
