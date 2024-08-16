@@ -70,11 +70,13 @@ jobs:
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
       - name: Download Task Definition Template
-        run: |
-          aws ecs describe-task-definition \
-            --task-definition ${{ env.TASK_DEFINITION_NAME }} \
-            --query taskDefinition \
-            > task-definition.json
+        run: | 
+          ${{ env.TASK_DEFINITION_NAME }} > task-definition.json
+#          aws ecs describe-task-definition \
+#            --task-definition ${{ env.TASK_DEFINITION_NAME }} \
+#            --query taskDefinition \
+#            > task-definition.json
+
 
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
