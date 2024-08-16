@@ -17,6 +17,7 @@ env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   APPLICATION_SECRET_DEV: ${{ secrets.APPLICATION_SECRET_DEV }}
+  ECS_APPSPEC: appspec.yml
 
 jobs:
 
@@ -93,6 +94,6 @@ jobs:
           service: ${{ env.ECS_SERVICE }}
           cluster: ${{ env.ECS_CLUSTER }}
           wait-for-service-stability: true
-          codedeploy-appspec: appspec.yml
+          codedeploy-appspec: ${{ env.ECS_APPSPEC }}
           codedeploy-application: ${{ env.CODE_DEPLOY_APPLICATION }}
           codedeploy-deployment-group: ${{ env.CODE_DEPLOY_GROUP }}
