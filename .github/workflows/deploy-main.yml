@@ -12,13 +12,11 @@ env:
   ECS_SERVICE: ${{ secrets.ECS_SERVICE }}
   ECS_CLUSTER: ${{ secrets.ECS_CLUSTER }}
   CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
-  APP_SPEC: ${{ secrets.APP_SPEC }}
   CODE_DEPLOY_APPLICATION: ${{ secrets.CODE_DEPLOY_APPLICATION }}
   CODE_DEPLOY_GROUP: ${{ secrets.CODE_DEPLOY_GROUP }}
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   APPLICATION_SECRET_DEV: ${{ secrets.APPLICATION_SECRET_DEV }}
-  TASK_DEFINITION_NAME: ${{ secrets.TASK_DEFINITION_NAME }}
 
 jobs:
 
@@ -44,6 +42,17 @@ jobs:
         run: |
           touch ./src/main/resources/application-dev.yml
           echo "${{ env.APPLICATION_SECRET_DEV }}" > ./src/main/resources/application-dev.yml
+          
+      - name: task-definition.json 파일을 생성.
+        run: |
+          cat <<EOF > ./task-definition.json
+          ${{ secrets.ECS_TASK_DEFINITION_DEV }}
+          EOF
+
+      - name: appspec.yml 파일을 생성.
+        run: |
+          touch ./appspec.yml
+          echo "${{ secrets.APP_SPEC }}" > ./appspec.yml
 
       - name: Build with Gradle
         run: ./gradlew build
@@ -69,30 +78,21 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-#      - name: Download Task Definition Template
-#        run: |
-#          ${{ env.TASK_DEFINITION_NAME }} > task-definition.json
-#          aws ecs describe-task-definition \
-#            --task-definition ${{ env.TASK_DEFINITION_NAME }} \
-#            --query taskDefinition \
-#            > task-definition.json
-
-
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: ${{ env.TASK_DEFINITION_NAME }}
+          task-definition: task-definition.json
           container-name: ${{ env.CONTAINER_NAME }}
           image: ${{ steps.build-image.outputs.image }}
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
-          task-definition: ${{ env.TASK_DEFINITION_NAME }}
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
           service: ${{ env.ECS_SERVICE }}
           cluster: ${{ env.ECS_CLUSTER }}
           wait-for-service-stability: true
-          codedeploy-appspec: ${{ env.APP_SPEC }}
+          codedeploy-appspec: appspec.yml
           codedeploy-application: ${{ env.CODE_DEPLOY_APPLICATION }}
           codedeploy-deployment-group: ${{ env.CODE_DEPLOY_GROUP }}
