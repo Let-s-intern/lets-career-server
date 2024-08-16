@@ -69,9 +69,9 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-      - name: Download Task Definition Template
-        run: | 
-          ${{ env.TASK_DEFINITION_NAME }} > task-definition.json
+#      - name: Download Task Definition Template
+#        run: |
+#          ${{ env.TASK_DEFINITION_NAME }} > task-definition.json
 #          aws ecs describe-task-definition \
 #            --task-definition ${{ env.TASK_DEFINITION_NAME }} \
 #            --query taskDefinition \
@@ -82,14 +82,14 @@ jobs:
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: task-definition.json
+          task-definition: ${{ env.TASK_DEFINITION_NAME }}
           container-name: ${{ env.CONTAINER_NAME }}
           image: ${{ steps.build-image.outputs.image }}
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
-          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          task-definition: ${{ env.TASK_DEFINITION_NAME }}
           service: ${{ env.ECS_SERVICE }}
           cluster: ${{ env.ECS_CLUSTER }}
           wait-for-service-stability: true
