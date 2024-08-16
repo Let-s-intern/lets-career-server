@@ -19,6 +19,9 @@ env:
   APPLICATION_SECRET_DEV: ${{ secrets.APPLICATION_SECRET_DEV }}
   ECS_APPSPEC: appspec.yml
 
+permissions:
+  contents: read
+
 jobs:
 
   deploy:
