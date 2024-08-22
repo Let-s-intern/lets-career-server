@@ -190,8 +190,9 @@ public class ChallengeServiceImpl implements ChallengeService {
         List<Mission> missionList = missionHelper.findMissionsByChallengeId(challengeId);
         Long applicationId = challengeApplicationHelper.findApplicationIdByChallengeIdAndUserId(challengeId, userId);
         Integer currentScore = getMissionTotalScoreForUser(missionList, applicationId);
+        AdminScore adminScore = adminScoreHelper.findAdminScoreByChallengeIdAndApplicationIdOrThrow(challengeId, applicationId);
         Integer totalScore = missionHelper.finsSumOfMissionScoresByChallengeId(challengeId);
-        return missionMapper.toGetChallengeTotalScoreResponseDto(currentScore, totalScore);
+        return missionMapper.toGetChallengeTotalScoreResponseDto(currentScore + adminScore.getScore(), totalScore);
     }
 
     private Integer getMissionTotalScoreForUser(List<Mission> missionList, Long applicationId) {

@@ -76,9 +76,10 @@ public class PaymentQueryRepositoryImpl implements PaymentQueryRepository {
                 .leftJoin(application.user, user)
                 .where(
                         eqChallengeId(challengeId),
+                        eqIsCanceled(false),
                         eqUserId(userId)
                 )
-                .fetchOne()
+                .fetchFirst()
         );
     }
 
