@@ -5,10 +5,9 @@ import org.letscareer.letscareer.domain.application.vo.ReportApplicationForAdmin
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationPaymentForAdminVo;
 import org.letscareer.letscareer.domain.application.vo.ReportFeedbackApplicationForAdminVo;
 import org.letscareer.letscareer.domain.report.repository.ReportRepository;
-import org.letscareer.letscareer.domain.report.vo.ReportDetailForAdminVo;
-import org.letscareer.letscareer.domain.report.vo.ReportDetailVo;
-import org.letscareer.letscareer.domain.report.vo.ReportForAdminVo;
-import org.letscareer.letscareer.domain.report.vo.ReportPriceDetailVo;
+import org.letscareer.letscareer.domain.report.type.ReportType;
+import org.letscareer.letscareer.domain.report.vo.*;
+import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -51,5 +50,9 @@ public class ReportHelper {
     public ReportPriceDetailVo findReportPriceDetailVoOrThrow(Long reportId) {
         return reportRepository.findReportPriceDetailVo(reportId)
                 .orElseThrow(() -> new EntityNotFoundException(REPORT_NOT_FOUND));
+    }
+
+    public Page<MyReportVo> findMyReportVos(User user, ReportType reportType, Pageable pageable) {
+        return reportRepository.findMyReportVos(user.getId(), reportType, pageable);
     }
 }

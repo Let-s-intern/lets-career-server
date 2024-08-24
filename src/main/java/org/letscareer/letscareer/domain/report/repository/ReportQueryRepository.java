@@ -3,10 +3,9 @@ package org.letscareer.letscareer.domain.report.repository;
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationForAdminVo;
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationPaymentForAdminVo;
 import org.letscareer.letscareer.domain.application.vo.ReportFeedbackApplicationForAdminVo;
-import org.letscareer.letscareer.domain.report.vo.ReportDetailForAdminVo;
-import org.letscareer.letscareer.domain.report.vo.ReportDetailVo;
-import org.letscareer.letscareer.domain.report.vo.ReportForAdminVo;
-import org.letscareer.letscareer.domain.report.vo.ReportPriceDetailVo;
+import org.letscareer.letscareer.domain.report.type.ReportType;
+import org.letscareer.letscareer.domain.report.vo.*;
+import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -26,4 +25,6 @@ public interface ReportQueryRepository {
     Optional<ReportDetailVo> findReportDetailVo(Long reportId);
 
     Optional<ReportPriceDetailVo> findReportPriceDetailVo(Long reportId);
+
+    Page<MyReportVo> findMyReportVos(Long userId, ReportType reportType, Pageable pageable);
 }

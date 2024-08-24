@@ -7,14 +7,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.report.dto.res.*;
 import org.letscareer.letscareer.domain.report.service.*;
+import org.letscareer.letscareer.domain.report.type.ReportType;
+import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.annotation.ApiErrorCode;
+import org.letscareer.letscareer.global.common.annotation.CurrentUser;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static org.letscareer.letscareer.global.common.entity.SwaggerEnum.REPORT_APPLICATION_NOT_FOUND;
 import static org.letscareer.letscareer.global.common.entity.SwaggerEnum.REPORT_NOT_FOUND;
@@ -30,6 +30,7 @@ public class ReportV1Controller {
     private final GetReportApplicationPaymentForAdminService getReportApplicationPaymentForAdminService;
     private final GetReportDetailService getReportDetailService;
     private final GetReportPriceDetailService getReportPriceDetailService;
+    private final GetMyReportService getMyReportService;
 
     @Operation(summary = "어드민 - 진단서 목록 조회")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportsForAdminResponseDto.class)))
@@ -85,7 +86,7 @@ public class ReportV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "[테스트 중] 진단서 가격 상세 정보", description = "[서류 진단 신청하기 -> 하단 모달]")
+    @Operation(summary = "[테스트 중] 유저 - 진단서 가격 상세 정보", description = "[서류 진단 신청하기 -> 하단 모달]")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportPriceDetailResponseDto.class)))
     @ApiErrorCode({REPORT_NOT_FOUND})
     @GetMapping("/{reportId}/price")
@@ -93,23 +94,23 @@ public class ReportV1Controller {
         final GetReportPriceDetailResponseDto responseDto = getReportPriceDetailService.execute(reportId);
         return SuccessResponse.ok(responseDto);
     }
-//
-//    @Operation(summary = "[구현중] 나의 진단서 목록", description = "[My 진단서 보기 -> 서류 진단서] reportType을 제외할 경우 전체 조회")
-//    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetMyReportResponseDto.class)))
-//    @GetMapping("/my")
-//    public ResponseEntity<SuccessResponse<?>> getMyReports(@CurrentUser final User user,
-//                                                           @RequestParam(required = false) final ReportType reportType,
-//                                                           final Pageable pageable) {
-//        final GetMyReportResponseDto responseDto = reportService.getMyReports(user, reportType, pageable);
-//        return SuccessResponse.ok(responseDto);
-//    }
+
+    @Operation(summary = "[테스트 중] 유저 - 나의 진단서 목록", description = "[My 진단서 보기 -> 서류 진단서] reportType을 제외할 경우 전체 조회")
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetMyReportResponseDto.class)))
+    @GetMapping("/my")
+    public ResponseEntity<SuccessResponse<?>> getMyReports(@CurrentUser final User user,
+                                                           @RequestParam(required = false) final ReportType reportType,
+                                                           final Pageable pageable) {
+        final GetMyReportResponseDto responseDto = getMyReportService.execute(user, reportType, pageable);
+        return SuccessResponse.ok(responseDto);
+    }
 //
 //    @Operation(summary = "[구현중] 나의 1:1 첨삭 목록 보기", description = "[My 진단서 보기 -> 맞춤 첨삭] reportType을 제외할 경우 전체 조회")
 //    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetMyReportFeedbackResponseDto.class)))
 //    @GetMapping("/my/feedback")
 //    public ResponseEntity<SuccessResponse<?>> getMyReportFeedbacks(@CurrentUser final User user,
 //                                                                   @RequestParam(required = false) final ReportType reportType,
-//                                                                   final Pageable pageable) {
+//                    현                                               final Pageable pageable) {
 //        final GetMyReportFeedbackResponseDto responseDto = reportService.getMyReportFeedbacks(user, reportType, pageable);
 //        return SuccessResponse.ok(responseDto);
 //    }

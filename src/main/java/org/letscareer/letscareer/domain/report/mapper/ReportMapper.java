@@ -4,10 +4,7 @@ import org.letscareer.letscareer.domain.application.vo.ReportApplicationForAdmin
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationPaymentForAdminVo;
 import org.letscareer.letscareer.domain.application.vo.ReportFeedbackApplicationForAdminVo;
 import org.letscareer.letscareer.domain.report.dto.res.*;
-import org.letscareer.letscareer.domain.report.vo.ReportDetailForAdminVo;
-import org.letscareer.letscareer.domain.report.vo.ReportDetailVo;
-import org.letscareer.letscareer.domain.report.vo.ReportForAdminVo;
-import org.letscareer.letscareer.domain.report.vo.ReportPriceDetailVo;
+import org.letscareer.letscareer.domain.report.vo.*;
 import org.letscareer.letscareer.global.common.entity.PageInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -43,5 +40,10 @@ public class ReportMapper {
 
     public GetReportPriceDetailResponseDto toGetReportPriceDetailResponseDto(ReportPriceDetailVo vo) {
         return GetReportPriceDetailResponseDto.of(vo);
+    }
+
+    public GetMyReportResponseDto toGetMyReportResponseDto(Page<MyReportVo> vos) {
+        PageInfo pageInfo = PageInfo.of(vos);
+        return GetMyReportResponseDto.of(vos.getContent(), pageInfo);
     }
 }
