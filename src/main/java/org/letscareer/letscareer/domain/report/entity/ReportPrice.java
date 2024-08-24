@@ -17,10 +17,8 @@ public class ReportPrice extends BaseTimeEntity {
     private Long id;
 
     private Integer price;
-
     private Integer discountPrice;
 
-    private Integer correctionPrice;
-
-    private Integer correctionDiscountPrice;
+    private Integer feedbackPrice;
+    private Integer feedbackDiscountPrice;
 }

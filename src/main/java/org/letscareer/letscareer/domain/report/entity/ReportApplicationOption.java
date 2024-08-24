@@ -19,7 +19,6 @@ public class ReportApplicationOption extends BaseTimeEntity {
     private Long id;
 
     private Integer price;
-
     private Integer discountPrice;
 
     private String title;
