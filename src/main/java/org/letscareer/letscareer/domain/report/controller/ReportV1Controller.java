@@ -5,14 +5,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.domain.report.dto.res.GetReportApplicationsForAdminResponseDto;
-import org.letscareer.letscareer.domain.report.dto.res.GetReportDetailForAdminResponseDto;
-import org.letscareer.letscareer.domain.report.dto.res.GetReportFeedbackApplicationsForAdminResponseDto;
-import org.letscareer.letscareer.domain.report.dto.res.GetReportsForAdminResponseDto;
-import org.letscareer.letscareer.domain.report.service.GetReportApplicationsForAdminService;
-import org.letscareer.letscareer.domain.report.service.GetReportDetailForAdminService;
-import org.letscareer.letscareer.domain.report.service.GetReportFeedbackApplicationsForAdminService;
-import org.letscareer.letscareer.domain.report.service.GetReportsForAdminService;
+import org.letscareer.letscareer.domain.report.dto.res.*;
+import org.letscareer.letscareer.domain.report.service.*;
 import org.letscareer.letscareer.global.common.annotation.ApiErrorCode;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static org.letscareer.letscareer.global.common.entity.SwaggerEnum.REPORT_APPLICATION_NOT_FOUND;
 import static org.letscareer.letscareer.global.common.entity.SwaggerEnum.REPORT_NOT_FOUND;
 
 @RequiredArgsConstructor
@@ -32,6 +27,7 @@ public class ReportV1Controller {
     private final GetReportDetailForAdminService getReportDetailForAdminService;
     private final GetReportApplicationsForAdminService getReportApplicationsForAdminService;
     private final GetReportFeedbackApplicationsForAdminService getReportFeedbackApplicationsForAdminService;
+    private final GetReportApplicationPaymentForAdminService getReportApplicationPaymentForAdminService;
 
     @Operation(summary = "어드민 - 진단서 목록 조회")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportsForAdminResponseDto.class)))
@@ -59,7 +55,7 @@ public class ReportV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "[구현중] 어드민 - 1:1 첨삭 참여자 목록 조회")
+    @Operation(summary = "[테스트 중] 어드민 - 1:1 첨삭 참여자 목록 조회")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportFeedbackApplicationsForAdminResponseDto.class)))
     @GetMapping("/{reportId}/feedback/applications")
     public ResponseEntity<SuccessResponse<?>> getReportFeedbackApplicationsForAdmin(@PathVariable final Long reportId,
@@ -67,15 +63,16 @@ public class ReportV1Controller {
         final GetReportFeedbackApplicationsForAdminResponseDto responseDto = getReportFeedbackApplicationsForAdminService.execute(reportId, pageable);
         return SuccessResponse.ok(responseDto);
     }
-//
-//    @Operation(summary = "[구현중] 어드민 - 진단서 참여자 결제 정보 조회", description = "[서류 진단서 참여자 or 첨삭 참여자 -> 결제정보] feedbackApplicationId가 null 여부 = 1:1 첨삭 여부")
-//    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportApplicationPaymentForAdminResponseDto.class)))
-//    @GetMapping("/{reportId}/application/{applicationId}/payment")
-//    public ResponseEntity<SuccessResponse<?>> getReportApplicationPaymentForAdmin(@PathVariable final Long reportId,
-//                                                                                  @PathVariable final Long applicationId) {
-//        final GetReportApplicationPaymentForAdminResponseDto responseDto = reportService.getReportApplicationPaymentForAdmin(reportId, applicationId);
-//        return SuccessResponse.ok(responseDto);
-//    }
+
+    @Operation(summary = "[테스트 중] 어드민 - 진단서 참여자 결제 정보 조회", description = "[서류 진단서 참여자 or 첨삭 참여자 -> 결제정보] feedbackApplicationId가 null 여부 = 1:1 첨삭 여부")
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportApplicationPaymentForAdminResponseDto.class)))
+    @ApiErrorCode({REPORT_APPLICATION_NOT_FOUND})
+    @GetMapping("/{reportId}/application/{applicationId}/payment")
+    public ResponseEntity<SuccessResponse<?>> getReportApplicationPaymentForAdmin(@PathVariable final Long reportId,
+                                                                                  @PathVariable final Long applicationId) {
+        final GetReportApplicationPaymentForAdminResponseDto responseDto = getReportApplicationPaymentForAdminService.execute(reportId, applicationId);
+        return SuccessResponse.ok(responseDto);
+    }
 //
 //    @Operation(summary = "[구현중] 유저 - 진단서 상세 조회", description = "[서류 진단 신청하기]")
 //    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportDetailResponseDto.class)))

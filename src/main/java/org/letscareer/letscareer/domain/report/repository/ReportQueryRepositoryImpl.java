@@ -9,6 +9,7 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationForAdminVo;
+import org.letscareer.letscareer.domain.application.vo.ReportApplicationPaymentForAdminVo;
 import org.letscareer.letscareer.domain.application.vo.ReportFeedbackApplicationForAdminVo;
 import org.letscareer.letscareer.domain.report.vo.*;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,8 @@ import java.util.Optional;
 
 import static org.letscareer.letscareer.domain.application.entity.report.QReportApplication.reportApplication;
 import static org.letscareer.letscareer.domain.application.entity.report.QReportFeedbackApplication.reportFeedbackApplication;
+import static org.letscareer.letscareer.domain.coupon.entity.QCoupon.coupon;
+import static org.letscareer.letscareer.domain.payment.entity.QPayment.payment;
 import static org.letscareer.letscareer.domain.report.entity.QReport.report;
 import static org.letscareer.letscareer.domain.report.entity.QReportFeedback.reportFeedback;
 import static org.letscareer.letscareer.domain.report.entity.QReportOption.reportOption;
@@ -162,6 +165,30 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
     }
 
+    @Override
+    public Optional<ReportApplicationPaymentForAdminVo> findReportApplicationPaymentForAdminVo(Long reportId, Long applicationId) {
+        return Optional.ofNullable(queryFactory
+                .select(Projections.constructor(ReportApplicationPaymentForAdminVo.class,
+                        payment.id,
+                        payment.orderId,
+                        reportApplication.reportPriceType,
+                        Expressions.constant(subQueryOptionTitles(reportId)),
+                        reportFeedbackApplication.id,
+                        coupon.name,
+                        payment.finalPrice,
+                        reportApplication.isCanceled
+                ))
+                .from(report)
+                .leftJoin(report.applicationList, reportApplication)
+                .leftJoin(reportApplication.payment)
+                .leftJoin(payment.coupon)
+                .where(
+                        eqReportId(reportId),
+                        eqApplicationId(applicationId)
+                )
+                .fetchOne());
+    }
+
     private List<ReportPriceVo> subQueryForReportPriceInfos(Long reportId) {
         return queryFactory.select(Projections.constructor(ReportPriceVo.class,
                         reportPrice.reportPriceType,
@@ -205,6 +232,18 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .fetchOne();
     }
 
+    private List<String> subQueryOptionTitles(Long reportId) {
+        return queryFactory.select(Projections.constructor(String.class,
+                        reportOption.title
+                ))
+                .from(report)
+                .leftJoin(report.optionList, reportOption)
+                .where(
+                        eqReportId(reportId)
+                )
+                .fetch();
+    }
+
     private NumberExpression<Long> countNonRefundedApplications() {
         return new CaseBuilder()
                 .when(reportApplication.isCanceled.isFalse())
@@ -223,5 +262,9 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
 
     private BooleanExpression eqReportId(Long reportId) {
         return reportId != null ? report.id.eq(reportId) : null;
+    }
+
+    private BooleanExpression eqApplicationId(Long applicationId) {
+        return applicationId != null ? reportApplication.id.eq(applicationId) : null;
     }
 }

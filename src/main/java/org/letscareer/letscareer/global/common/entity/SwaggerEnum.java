@@ -84,6 +84,7 @@ public enum SwaggerEnum {
 
     // report
     REPORT_NOT_FOUND(ReportErrorCode.REPORT_NOT_FOUND),
+    REPORT_APPLICATION_NOT_FOUND(ReportErrorCode.REPORT_APPLICATION_NOT_FOUND),
 
     // score
     ATTENDANCE_SCORE_NOT_FOUND(ScoreErrorCode.ATTENDANCE_SCORE_NOT_FOUND),
