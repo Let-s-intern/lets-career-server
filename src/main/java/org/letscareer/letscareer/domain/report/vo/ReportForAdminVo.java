@@ -8,8 +8,8 @@ public record ReportForAdminVo(
         Long reportId,
         ReportType reportType,
         String title,
-        Integer reportApplicationCount,
-        Integer reportFeedbackCount,
+        Long applicationCount,
+        Long feedbackApplicationCount,
         LocalDateTime visibleDate,
         LocalDateTime createDateTime
 ) {
