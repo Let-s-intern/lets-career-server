@@ -6,22 +6,27 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.report.dto.res.*;
+import org.letscareer.letscareer.domain.report.service.GetReportDetailForAdminService;
 import org.letscareer.letscareer.domain.report.service.GetReportsForAdminService;
 import org.letscareer.letscareer.domain.report.type.ReportType;
 import org.letscareer.letscareer.domain.user.entity.User;
+import org.letscareer.letscareer.global.common.annotation.ApiErrorCode;
 import org.letscareer.letscareer.global.common.annotation.CurrentUser;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static org.letscareer.letscareer.global.common.entity.SwaggerEnum.REPORT_NOT_FOUND;
+
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/report")
 @RestController
 public class ReportV1Controller {
     private final GetReportsForAdminService getReportsForAdminService;
+    private final GetReportDetailForAdminService getReportDetailForAdminService;
 
-    @Operation(summary = "[구현중] 어드민 - 진단서 목록 조회")
+    @Operation(summary = "어드민 - 진단서 목록 조회")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportsForAdminResponseDto.class)))
     @GetMapping
     public ResponseEntity<SuccessResponse<?>> getReportsForAdmin(final Pageable pageable) {
@@ -29,14 +34,15 @@ public class ReportV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-//    @Operation(summary = "[구현중] 어드민 - 진단서 상세 조회")
-//    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportDetailForAdminResponseDto.class)))
-//    @GetMapping("/{reportId}/admin")
-//    public ResponseEntity<SuccessResponse<?>> getReportDetailForAdmin(@PathVariable final Long reportId) {
-//        final GetReportDetailForAdminResponseDto responseDto = reportService.getReportDetailForAdmin(reportId);
-//        return SuccessResponse.ok(responseDto);
-//    }
-//
+    @Operation(summary = "[테스트 중] 어드민 - 진단서 상세 조회")
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportDetailForAdminResponseDto.class)))
+    @ApiErrorCode({REPORT_NOT_FOUND})
+    @GetMapping("/{reportId}/admin")
+    public ResponseEntity<SuccessResponse<?>> getReportDetailForAdmin(@PathVariable final Long reportId) {
+        final GetReportDetailForAdminResponseDto responseDto = getReportDetailForAdminService.execute(reportId);
+        return SuccessResponse.ok(responseDto);
+    }
+
 //    @Operation(summary = "[구현중] 어드민 - 진단서 참여자 목록 조회")
 //    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportApplicationsForAdminResponseDto.class)))
 //    @GetMapping("/{reportId}/applications")
