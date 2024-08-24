@@ -34,16 +34,19 @@ public class Report extends BaseTimeEntity {
 
     private LocalDateTime visibleDate;
 
-    @OneToMany(mappedBy = "report", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "report", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private List<ReportOption> optionList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "report", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "report", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private List<ReportPrice> priceList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "report", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "report", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private List<ReportApplication> applicationList = new ArrayList<>();
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "report_feedback_id")
+    private ReportFeedback reportFeedback;
 }

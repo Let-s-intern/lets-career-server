@@ -5,9 +5,10 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.letscareer.letscareer.domain.application.entity.report.ReportApplication;
-import org.letscareer.letscareer.domain.report.type.ReportDesiredDateType;
-import org.letscareer.letscareer.domain.report.type.ReportDesiredDateTypeConverter;
+import org.letscareer.letscareer.domain.application.type.ReportDesiredDateType;
+import org.letscareer.letscareer.domain.application.type.ReportFeedbackStatus;
+import org.letscareer.letscareer.domain.application.type.converter.ReportDesiredDateTypeConverter;
+import org.letscareer.letscareer.domain.application.type.converter.ReportFeedbackStatusConverter;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 import java.time.LocalDateTime;
@@ -33,6 +34,8 @@ public class ReportFeedbackApplication extends BaseTimeEntity {
 
     @Convert(converter = ReportDesiredDateTypeConverter.class)
     private ReportDesiredDateType desiredDateType;
+    @Convert(converter = ReportFeedbackStatusConverter.class)
+    private ReportFeedbackStatus reportFeedbackStatus;
     private LocalDateTime checkedDate;
 
     private String zoomLink;

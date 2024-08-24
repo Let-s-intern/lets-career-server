@@ -4,8 +4,10 @@ import jakarta.persistence.Converter;
 import org.letscareer.letscareer.global.common.utils.enm.AbstractEnumCodeAttributeConverter;
 
 @Converter
-public class ReportDesiredDateTypeConverter extends AbstractEnumCodeAttributeConverter<ReportDesiredDateType> {
-    public ReportDesiredDateTypeConverter() {
-        super(ReportDesiredDateType.class);
+public class ReportPriceTypeConverter extends AbstractEnumCodeAttributeConverter<ReportPriceType> {
+
+    public ReportPriceTypeConverter() {
+        super(ReportPriceType.class);
     }
 }
+
