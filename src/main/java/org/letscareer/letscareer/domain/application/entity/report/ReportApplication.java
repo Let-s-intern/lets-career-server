@@ -43,6 +43,10 @@ public class ReportApplication extends Application {
     private List<ReportApplicationOption> reportApplicationOptionList = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "report_feedback_application_id")
+    private ReportFeedbackApplication reportFeedbackApplication;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "report_file_id")
     private File reportFile;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

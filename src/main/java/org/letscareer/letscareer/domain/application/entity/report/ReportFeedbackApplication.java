@@ -41,7 +41,7 @@ public class ReportFeedbackApplication extends BaseTimeEntity {
     private String zoomLink;
     private String zoomPassword;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "report_application_id")
     private ReportApplication reportApplication;
 }
