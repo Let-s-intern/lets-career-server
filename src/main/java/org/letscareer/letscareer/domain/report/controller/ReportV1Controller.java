@@ -28,6 +28,7 @@ public class ReportV1Controller {
     private final GetReportApplicationsForAdminService getReportApplicationsForAdminService;
     private final GetReportFeedbackApplicationsForAdminService getReportFeedbackApplicationsForAdminService;
     private final GetReportApplicationPaymentForAdminService getReportApplicationPaymentForAdminService;
+    private final GetReportDetailService getReportDetailService;
 
     @Operation(summary = "어드민 - 진단서 목록 조회")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportsForAdminResponseDto.class)))
@@ -73,14 +74,14 @@ public class ReportV1Controller {
         final GetReportApplicationPaymentForAdminResponseDto responseDto = getReportApplicationPaymentForAdminService.execute(reportId, applicationId);
         return SuccessResponse.ok(responseDto);
     }
-//
-//    @Operation(summary = "[구현중] 유저 - 진단서 상세 조회", description = "[서류 진단 신청하기]")
-//    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportDetailResponseDto.class)))
-//    @GetMapping("/{reportId}")
-//    public ResponseEntity<SuccessResponse<?>> getReportDetail(@PathVariable final Long reportId) {
-//        final GetReportDetailResponseDto responseDto = reportService.getReportDetail(reportId);
-//        return SuccessResponse.ok(responseDto);
-//    }
+
+    @Operation(summary = "[테스트 중] 유저 - 진단서 상세 조회", description = "[서류 진단 신청하기]")
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportDetailResponseDto.class)))
+    @GetMapping("/{reportId}")
+    public ResponseEntity<SuccessResponse<?>> getReportDetail(@PathVariable final Long reportId) {
+        final GetReportDetailResponseDto responseDto = getReportDetailService.execute(reportId);
+        return SuccessResponse.ok(responseDto);
+    }
 //
 //    @Operation(summary = "[구현중] 진단서 가격 상세 정보", description = "[서류 진단 신청하기 -> 하단 모달]")
 //    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportPriceDetailResponseDto.class)))

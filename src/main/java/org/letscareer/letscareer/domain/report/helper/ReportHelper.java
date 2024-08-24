@@ -6,6 +6,7 @@ import org.letscareer.letscareer.domain.application.vo.ReportApplicationPaymentF
 import org.letscareer.letscareer.domain.application.vo.ReportFeedbackApplicationForAdminVo;
 import org.letscareer.letscareer.domain.report.repository.ReportRepository;
 import org.letscareer.letscareer.domain.report.vo.ReportDetailForAdminVo;
+import org.letscareer.letscareer.domain.report.vo.ReportDetailVo;
 import org.letscareer.letscareer.domain.report.vo.ReportForAdminVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.data.domain.Page;
@@ -41,4 +42,8 @@ public class ReportHelper {
                 .orElseThrow(() -> new EntityNotFoundException(REPORT_NOT_FOUND));
     }
 
+    public ReportDetailVo findReportDetailVoOrThrow(Long reportId) {
+        return reportRepository.findReportDetailVo(reportId)
+                .orElseThrow(() -> new EntityNotFoundException(REPORT_NOT_FOUND));
+    }
 }

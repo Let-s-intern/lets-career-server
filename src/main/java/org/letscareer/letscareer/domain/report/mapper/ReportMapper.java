@@ -5,6 +5,7 @@ import org.letscareer.letscareer.domain.application.vo.ReportApplicationPaymentF
 import org.letscareer.letscareer.domain.application.vo.ReportFeedbackApplicationForAdminVo;
 import org.letscareer.letscareer.domain.report.dto.res.*;
 import org.letscareer.letscareer.domain.report.vo.ReportDetailForAdminVo;
+import org.letscareer.letscareer.domain.report.vo.ReportDetailVo;
 import org.letscareer.letscareer.domain.report.vo.ReportForAdminVo;
 import org.letscareer.letscareer.global.common.entity.PageInfo;
 import org.springframework.data.domain.Page;
@@ -33,5 +34,9 @@ public class ReportMapper {
 
     public GetReportApplicationPaymentForAdminResponseDto toGetReportApplicationPaymentForAdminResponseDto(ReportApplicationPaymentForAdminVo vo) {
         return GetReportApplicationPaymentForAdminResponseDto.of(vo);
+    }
+
+    public GetReportDetailResponseDto toGetReportDetailResponseDto(ReportDetailVo vo) {
+        return GetReportDetailResponseDto.of(vo);
     }
 }
