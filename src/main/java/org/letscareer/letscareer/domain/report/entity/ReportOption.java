@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.report.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.letscareer.letscareer.domain.application.entity.report.ReportApplicationOption;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 import java.util.ArrayList;
@@ -19,6 +20,9 @@ public class ReportOption extends BaseTimeEntity {
     @Column(name = "report_option_id")
     private Long id;
 
+    private Integer price;
+    private Integer discountPrice;
+
     private String title;
 
     private String code;
@@ -26,8 +30,4 @@ public class ReportOption extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "report_id")
     private Report report;
-
-    @OneToMany(mappedBy = "reportOption", cascade = CascadeType.ALL)
-    @Builder.Default
-    private List<ReportApplicationOption> reportApplicationOptionList = new ArrayList<>();
 }

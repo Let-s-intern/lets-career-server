@@ -1,11 +1,11 @@
-package org.letscareer.letscareer.domain.application.entity;
+package org.letscareer.letscareer.domain.application.entity.report;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.letscareer.letscareer.domain.application.entity.Application;
 import org.letscareer.letscareer.domain.application.type.ReportApplicationStatus;
 import org.letscareer.letscareer.domain.application.type.converter.ReportApplicationStatusConverter;
 import org.letscareer.letscareer.domain.report.entity.Report;
-import org.letscareer.letscareer.domain.report.entity.ReportApplicationOption;
 import org.letscareer.letscareer.domain.user.entity.User;
 
 import java.time.LocalDateTime;

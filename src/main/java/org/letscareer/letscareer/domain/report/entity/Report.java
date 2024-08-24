@@ -2,7 +2,7 @@ package org.letscareer.letscareer.domain.report.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.letscareer.letscareer.domain.application.entity.ReportApplication;
+import org.letscareer.letscareer.domain.application.entity.report.ReportApplication;
 import org.letscareer.letscareer.domain.report.type.ReportType;
 import org.letscareer.letscareer.domain.report.type.ReportTypeConverter;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
@@ -45,9 +45,5 @@ public class Report extends BaseTimeEntity {
     @OneToMany(mappedBy = "report", cascade = CascadeType.ALL)
     @Builder.Default
     private List<ReportApplication> applicationList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "report", cascade = CascadeType.ALL)
-    @Builder.Default
-    private List<ReportFeedbackApplication> feedbackApplicationList = new ArrayList<>();
 
 }
