@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.report.helper;
 
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationForAdminVo;
+import org.letscareer.letscareer.domain.application.vo.ReportFeedbackApplicationForAdminVo;
 import org.letscareer.letscareer.domain.report.error.ReportErrorCode;
 import org.letscareer.letscareer.domain.report.repository.ReportRepository;
 import org.letscareer.letscareer.domain.report.vo.ReportDetailForAdminVo;
@@ -18,8 +19,8 @@ import static org.letscareer.letscareer.domain.report.error.ReportErrorCode.REPO
 public class ReportHelper {
     private final ReportRepository reportRepository;
 
-    public Page<ReportForAdminVo> findReportForAdminInfos(Pageable pageable) {
-        return reportRepository.findReportForAdminInfos(pageable);
+    public Page<ReportForAdminVo> findReportForAdminVos(Pageable pageable) {
+        return reportRepository.findReportForAdminVos(pageable);
     }
 
     public ReportDetailForAdminVo findReportDetailForAdminVoOrThrow(Long reportId) {
@@ -30,4 +31,9 @@ public class ReportHelper {
     public Page<ReportApplicationForAdminVo> findReportApplicationForAdminVos(Long reportId, Pageable pageable) {
         return reportRepository.findReportApplicationForAdminVos(reportId, pageable);
     }
+
+    public Page<ReportFeedbackApplicationForAdminVo> findReportFeedbackApplicationForAdminVos(Long reportId, Pageable pageable) {
+        return reportRepository.findReportFeedbackApplicationForAdminVos(reportId, pageable);
+    }
+
 }

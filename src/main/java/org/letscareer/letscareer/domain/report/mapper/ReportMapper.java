@@ -1,8 +1,10 @@
 package org.letscareer.letscareer.domain.report.mapper;
 
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationForAdminVo;
+import org.letscareer.letscareer.domain.application.vo.ReportFeedbackApplicationForAdminVo;
 import org.letscareer.letscareer.domain.report.dto.res.GetReportApplicationsForAdminResponseDto;
 import org.letscareer.letscareer.domain.report.dto.res.GetReportDetailForAdminResponseDto;
+import org.letscareer.letscareer.domain.report.dto.res.GetReportFeedbackApplicationsForAdminResponseDto;
 import org.letscareer.letscareer.domain.report.dto.res.GetReportsForAdminResponseDto;
 import org.letscareer.letscareer.domain.report.vo.ReportDetailForAdminVo;
 import org.letscareer.letscareer.domain.report.vo.ReportForAdminVo;
@@ -24,5 +26,10 @@ public class ReportMapper {
     public GetReportApplicationsForAdminResponseDto toGetReportApplicationsForAdminResponseDto(Page<ReportApplicationForAdminVo> vos) {
         PageInfo pageInfo = PageInfo.of(vos);
         return GetReportApplicationsForAdminResponseDto.of(vos.getContent(), pageInfo);
+    }
+
+    public GetReportFeedbackApplicationsForAdminResponseDto toGetReportFeedbackApplicationsForAdminResponseDto(Page<ReportFeedbackApplicationForAdminVo> vos) {
+        PageInfo pageInfo = PageInfo.of(vos);
+        return GetReportFeedbackApplicationsForAdminResponseDto.of(vos.getContent(), pageInfo);
     }
 }

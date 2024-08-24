@@ -9,6 +9,7 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationForAdminVo;
+import org.letscareer.letscareer.domain.application.vo.ReportFeedbackApplicationForAdminVo;
 import org.letscareer.letscareer.domain.report.vo.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -103,13 +104,57 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .orderBy(reportApplication.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .groupBy(report.id)
                 .fetch();
 
         JPAQuery<Long> countQuery = queryFactory
                 .select(reportApplication.id.countDistinct())
                 .from(report)
                 .leftJoin(report.applicationList, reportApplication)
+                .where(
+                        eqReportId(reportId)
+                );
+
+        return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
+    }
+
+    @Override
+    public Page<ReportFeedbackApplicationForAdminVo> findReportFeedbackApplicationForAdminVos(Long reportId, Pageable pageable) {
+        List<ReportFeedbackApplicationForAdminVo> contents = queryFactory
+                .select(Projections.constructor(ReportFeedbackApplicationForAdminVo.class,
+                        reportApplication.id,
+                        user.name,
+                        user.contactEmail,
+                        user.phoneNum,
+                        reportApplication.wishJob,
+                        reportApplication.message,
+                        reportFeedbackApplication.reportFeedbackStatus,
+                        reportApplication.applyFile.url,
+                        reportApplication.reportFile.url,
+                        reportFeedbackApplication.zoomLink,
+                        reportFeedbackApplication.desiredDate1,
+                        reportFeedbackApplication.desiredDate2,
+                        reportFeedbackApplication.desiredDate3,
+                        reportFeedbackApplication.desiredDateAdmin,
+                        reportFeedbackApplication.desiredDateType,
+                        reportApplication.isCanceled,
+                        reportApplication.createDate
+                ))
+                .from(report)
+                .leftJoin(report.applicationList, reportApplication)
+                .leftJoin(reportApplication.reportFeedbackApplication, reportFeedbackApplication)
+                .where(
+                        eqReportId(reportId)
+                )
+                .orderBy(reportApplication.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> countQuery = queryFactory
+                .select(reportApplication.id.countDistinct())
+                .from(report)
+                .leftJoin(report.applicationList, reportApplication)
+                .leftJoin(reportApplication.reportFeedbackApplication, reportFeedbackApplication)
                 .where(
                         eqReportId(reportId)
                 );
