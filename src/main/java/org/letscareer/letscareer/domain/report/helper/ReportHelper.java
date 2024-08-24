@@ -55,4 +55,8 @@ public class ReportHelper {
     public Page<MyReportVo> findMyReportVos(User user, ReportType reportType, Pageable pageable) {
         return reportRepository.findMyReportVos(user.getId(), reportType, pageable);
     }
+
+    public Page<MyReportFeedbackVo> findMyReportFeedbackVos(User user, ReportType reportType, Pageable pageable) {
+        return reportRepository.findMyReportFeedbackVos(user.getId(), reportType, pageable);
+    }
 }

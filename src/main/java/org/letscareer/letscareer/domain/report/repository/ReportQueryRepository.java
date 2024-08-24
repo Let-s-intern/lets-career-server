@@ -5,7 +5,6 @@ import org.letscareer.letscareer.domain.application.vo.ReportApplicationPaymentF
 import org.letscareer.letscareer.domain.application.vo.ReportFeedbackApplicationForAdminVo;
 import org.letscareer.letscareer.domain.report.type.ReportType;
 import org.letscareer.letscareer.domain.report.vo.*;
-import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -27,4 +26,6 @@ public interface ReportQueryRepository {
     Optional<ReportPriceDetailVo> findReportPriceDetailVo(Long reportId);
 
     Page<MyReportVo> findMyReportVos(Long userId, ReportType reportType, Pageable pageable);
+
+    Page<MyReportFeedbackVo> findMyReportFeedbackVos(Long userId, ReportType reportType, Pageable pageable);
 }

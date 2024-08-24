@@ -46,4 +46,9 @@ public class ReportMapper {
         PageInfo pageInfo = PageInfo.of(vos);
         return GetMyReportResponseDto.of(vos.getContent(), pageInfo);
     }
+
+    public GetMyReportFeedbackResponseDto toGetMyReportFeedbackResponseDto(Page<MyReportFeedbackVo> vos) {
+        PageInfo pageInfo = PageInfo.of(vos);
+        return GetMyReportFeedbackResponseDto.of(vos.getContent(), pageInfo);
+    }
 }

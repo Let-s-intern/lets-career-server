@@ -1,5 +1,6 @@
 package org.letscareer.letscareer.domain.report.repository;
 
+import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
@@ -8,6 +9,7 @@ import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.application.type.ReportDesiredDateType;
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationForAdminVo;
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationPaymentForAdminVo;
 import org.letscareer.letscareer.domain.application.vo.ReportFeedbackApplicationForAdminVo;
@@ -17,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -259,6 +262,51 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
     }
 
+    @Override
+    public Page<MyReportFeedbackVo> findMyReportFeedbackVos(Long userId, ReportType reportType, Pageable pageable) {
+        List<MyReportFeedbackVo> contents = queryFactory
+                .select(Projections.constructor(MyReportFeedbackVo.class,
+                        report.id,
+                        reportApplication.id,
+                        report.title,
+                        report.type,
+                        reportFeedbackApplication.reportFeedbackStatus,
+                        reportFeedbackApplication.zoomLink,
+                        reportFeedbackApplication.zoomPassword,
+                        reportFeedbackApplication.desiredDate1,
+                        reportFeedbackApplication.desiredDate2,
+                        reportFeedbackApplication.desiredDate3,
+                        reportFeedbackApplication.
+                        reportApplication.createDate,
+                        getConfirmedTimeFor()
+                ))
+                .from(report)
+                .leftJoin(report.applicationList, reportApplication)
+                .leftJoin(reportApplication.user, user)
+                .leftJoin(reportApplication.reportFeedbackApplication, reportFeedbackApplication)
+                .where(
+                        eqReportType(reportType),
+                        eqUserId(userId)
+                )
+                .orderBy(reportApplication.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> countQuery = queryFactory
+                .select(reportApplication.id.countDistinct())
+                .from(report)
+                .leftJoin(report.applicationList, reportApplication)
+                .leftJoin(reportApplication.user, user)
+                .leftJoin(reportApplication.reportFeedbackApplication, reportFeedbackApplication)
+                .where(
+                        eqReportType(reportType),
+                        eqUserId(userId)
+                );
+
+        return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
+    }
+
     private List<ReportPriceVo> subQueryForReportPriceInfos(Long reportId) {
         return queryFactory.select(Projections.constructor(ReportPriceVo.class,
                         reportPrice.reportPriceType,
@@ -328,6 +376,19 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .then(reportFeedbackApplication.id)
                 .otherwise((Long) null)
                 .countDistinct();
+    }
+
+    private Expression<LocalDateTime> getConfirmedTimeFor() {
+        return new CaseBuilder()
+                .when(reportFeedbackApplication.desiredDateType.eq(ReportDesiredDateType.DESIRED_DATE_1))
+                .then(reportFeedbackApplication.desiredDate1)
+                .when(reportFeedbackApplication.desiredDateType.eq(ReportDesiredDateType.DESIRED_DATE_2))
+                .then(reportFeedbackApplication.desiredDate2)
+                .when(reportFeedbackApplication.desiredDateType.eq(ReportDesiredDateType.DESIRED_DATE_3))
+                .then(reportFeedbackApplication.desiredDate3)
+                .when(reportFeedbackApplication.desiredDateType.eq(ReportDesiredDateType.DESIRED_DATE_ADMIN))
+                .then(reportFeedbackApplication.desiredDateAdmin)
+                .otherwise((LocalDateTime) null);
     }
 
     private BooleanExpression eqReportId(Long reportId) {
