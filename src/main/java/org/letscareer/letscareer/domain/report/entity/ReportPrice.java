@@ -2,6 +2,8 @@ package org.letscareer.letscareer.domain.report.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.letscareer.letscareer.domain.report.type.ReportPriceType;
+import org.letscareer.letscareer.domain.report.type.ReportPriceTypeConverter;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -16,9 +18,10 @@ public class ReportPrice extends BaseTimeEntity {
     @Column(name = "report_price_id")
     private Long id;
 
+    @Convert(converter = ReportPriceTypeConverter.class)
+    private ReportPriceType reportPriceType;
     private Integer price;
     private Integer discountPrice;
-
     private Integer feedbackPrice;
     private Integer feedbackDiscountPrice;
 
