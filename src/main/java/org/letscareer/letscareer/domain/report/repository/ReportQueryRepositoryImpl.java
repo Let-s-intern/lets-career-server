@@ -30,7 +30,7 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<ReportForAdminVo> findReportForAdminInfos(Pageable pageable) {
+    public Page<ReportForAdminVo> findReportForAdminVos(Pageable pageable) {
         List<ReportForAdminVo> contents = queryFactory
                 .select(Projections.constructor(ReportForAdminVo.class,
                         report.id,

@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Optional;
 
 public interface ReportQueryRepository {
-    Page<ReportForAdminVo> findReportForAdminInfos(Pageable pageable);
+    Page<ReportForAdminVo> findReportForAdminVos(Pageable pageable);
     Optional<ReportDetailForAdminVo> findReportDetailForAdminVo(Long reportId);
     Page<ReportApplicationForAdminVo> findReportApplicationForAdminVos(Long reportId, Pageable pageable);
 }

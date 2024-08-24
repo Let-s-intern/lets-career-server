@@ -20,7 +20,7 @@ public class GetReportsForAdminServiceImpl implements GetReportsForAdminService 
 
     @Override
     public GetReportsForAdminResponseDto execute(Pageable pageable) {
-        Page<ReportForAdminVo> reportForAdminInfos = reportHelper.findReportForAdminInfos(pageable);
-        return reportMapper.toGetReportsForAdminResponseDto(reportForAdminInfos);
+        Page<ReportForAdminVo> vos = reportHelper.findReportForAdminVos(pageable);
+        return reportMapper.toGetReportsForAdminResponseDto(vos);
     }
 }
