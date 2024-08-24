@@ -21,4 +21,8 @@ public class ReportPrice extends BaseTimeEntity {
 
     private Integer feedbackPrice;
     private Integer feedbackDiscountPrice;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "report_id")
+    private Report report;
 }

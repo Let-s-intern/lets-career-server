@@ -4,9 +4,13 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.letscareer.letscareer.domain.application.type.ReportApplicationStatus;
 import org.letscareer.letscareer.domain.application.type.converter.ReportApplicationStatusConverter;
+import org.letscareer.letscareer.domain.report.entity.Report;
+import org.letscareer.letscareer.domain.report.entity.ReportApplicationOption;
 import org.letscareer.letscareer.domain.user.entity.User;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -26,8 +30,17 @@ public class ReportApplication extends Application {
     @Convert(converter = ReportApplicationStatusConverter.class)
     private ReportApplicationStatus status;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "report_id")
+    private Report report;
+
+    @OneToMany(mappedBy = "reportApplication", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<ReportApplicationOption> reportApplicationOptionList = new ArrayList<>();
+
     @Builder(access = AccessLevel.PRIVATE)
-    public ReportApplication(User user) {
+    public ReportApplication(Report report, User user) {
         super(user);
+        this.report = report;
     }
 }
