@@ -6,6 +6,7 @@ import org.letscareer.letscareer.domain.application.vo.ReportFeedbackApplication
 import org.letscareer.letscareer.domain.report.vo.ReportDetailForAdminVo;
 import org.letscareer.letscareer.domain.report.vo.ReportDetailVo;
 import org.letscareer.letscareer.domain.report.vo.ReportForAdminVo;
+import org.letscareer.letscareer.domain.report.vo.ReportPriceDetailVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -23,4 +24,6 @@ public interface ReportQueryRepository {
     Optional<ReportApplicationPaymentForAdminVo> findReportApplicationPaymentForAdminVo(Long reportId, Long applicationId);
 
     Optional<ReportDetailVo> findReportDetailVo(Long reportId);
+
+    Optional<ReportPriceDetailVo> findReportPriceDetailVo(Long reportId);
 }

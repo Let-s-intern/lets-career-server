@@ -29,6 +29,7 @@ public class ReportV1Controller {
     private final GetReportFeedbackApplicationsForAdminService getReportFeedbackApplicationsForAdminService;
     private final GetReportApplicationPaymentForAdminService getReportApplicationPaymentForAdminService;
     private final GetReportDetailService getReportDetailService;
+    private final GetReportPriceDetailService getReportPriceDetailService;
 
     @Operation(summary = "어드민 - 진단서 목록 조회")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportsForAdminResponseDto.class)))
@@ -77,19 +78,21 @@ public class ReportV1Controller {
 
     @Operation(summary = "[테스트 중] 유저 - 진단서 상세 조회", description = "[서류 진단 신청하기]")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportDetailResponseDto.class)))
+    @ApiErrorCode({REPORT_NOT_FOUND})
     @GetMapping("/{reportId}")
     public ResponseEntity<SuccessResponse<?>> getReportDetail(@PathVariable final Long reportId) {
         final GetReportDetailResponseDto responseDto = getReportDetailService.execute(reportId);
         return SuccessResponse.ok(responseDto);
     }
-//
-//    @Operation(summary = "[구현중] 진단서 가격 상세 정보", description = "[서류 진단 신청하기 -> 하단 모달]")
-//    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportPriceDetailResponseDto.class)))
-//    @GetMapping("/{reportId}/price")
-//    public ResponseEntity<SuccessResponse<?>> getReportPriceDetail(@PathVariable final Long reportId) {
-//        final GetReportPriceDetailResponseDto responseDto = reportService.getReportPriceDetail(reportId);
-//        return SuccessResponse.ok(responseDto);
-//    }
+
+    @Operation(summary = "[테스트 중] 진단서 가격 상세 정보", description = "[서류 진단 신청하기 -> 하단 모달]")
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportPriceDetailResponseDto.class)))
+    @ApiErrorCode({REPORT_NOT_FOUND})
+    @GetMapping("/{reportId}/price")
+    public ResponseEntity<SuccessResponse<?>> getReportPriceDetail(@PathVariable final Long reportId) {
+        final GetReportPriceDetailResponseDto responseDto = getReportPriceDetailService.execute(reportId);
+        return SuccessResponse.ok(responseDto);
+    }
 //
 //    @Operation(summary = "[구현중] 나의 진단서 목록", description = "[My 진단서 보기 -> 서류 진단서] reportType을 제외할 경우 전체 조회")
 //    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetMyReportResponseDto.class)))

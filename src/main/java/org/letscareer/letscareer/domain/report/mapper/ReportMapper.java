@@ -7,6 +7,7 @@ import org.letscareer.letscareer.domain.report.dto.res.*;
 import org.letscareer.letscareer.domain.report.vo.ReportDetailForAdminVo;
 import org.letscareer.letscareer.domain.report.vo.ReportDetailVo;
 import org.letscareer.letscareer.domain.report.vo.ReportForAdminVo;
+import org.letscareer.letscareer.domain.report.vo.ReportPriceDetailVo;
 import org.letscareer.letscareer.global.common.entity.PageInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -38,5 +39,9 @@ public class ReportMapper {
 
     public GetReportDetailResponseDto toGetReportDetailResponseDto(ReportDetailVo vo) {
         return GetReportDetailResponseDto.of(vo);
+    }
+
+    public GetReportPriceDetailResponseDto toGetReportPriceDetailResponseDto(ReportPriceDetailVo vo) {
+        return GetReportPriceDetailResponseDto.of(vo);
     }
 }
