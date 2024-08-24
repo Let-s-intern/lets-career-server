@@ -1,5 +1,7 @@
 package org.letscareer.letscareer.domain.report.mapper;
 
+import org.letscareer.letscareer.domain.application.vo.ReportApplicationForAdminVo;
+import org.letscareer.letscareer.domain.report.dto.res.GetReportApplicationsForAdminResponseDto;
 import org.letscareer.letscareer.domain.report.dto.res.GetReportDetailForAdminResponseDto;
 import org.letscareer.letscareer.domain.report.dto.res.GetReportsForAdminResponseDto;
 import org.letscareer.letscareer.domain.report.vo.ReportDetailForAdminVo;
@@ -10,12 +12,17 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ReportMapper {
-    public GetReportsForAdminResponseDto toGetReportsForAdminResponseDto(Page<ReportForAdminVo> reportForAdminInfos) {
-        PageInfo pageInfo = PageInfo.of(reportForAdminInfos);
-        return GetReportsForAdminResponseDto.of(reportForAdminInfos.getContent(), pageInfo);
+    public GetReportsForAdminResponseDto toGetReportsForAdminResponseDto(Page<ReportForAdminVo> vos) {
+        PageInfo pageInfo = PageInfo.of(vos);
+        return GetReportsForAdminResponseDto.of(vos.getContent(), pageInfo);
     }
 
     public GetReportDetailForAdminResponseDto toGetReportDetailForAdminResponseDto(ReportDetailForAdminVo vo) {
         return GetReportDetailForAdminResponseDto.of(vo);
+    }
+
+    public GetReportApplicationsForAdminResponseDto toGetReportApplicationsForAdminResponseDto(Page<ReportApplicationForAdminVo> vos) {
+        PageInfo pageInfo = PageInfo.of(vos);
+        return GetReportApplicationsForAdminResponseDto.of(vos.getContent(), pageInfo);
     }
 }

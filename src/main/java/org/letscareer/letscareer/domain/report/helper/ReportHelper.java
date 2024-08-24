@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.report.helper;
 
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.application.vo.ReportApplicationForAdminVo;
 import org.letscareer.letscareer.domain.report.error.ReportErrorCode;
 import org.letscareer.letscareer.domain.report.repository.ReportRepository;
 import org.letscareer.letscareer.domain.report.vo.ReportDetailForAdminVo;
@@ -24,6 +25,9 @@ public class ReportHelper {
     public ReportDetailForAdminVo findReportDetailForAdminVoOrThrow(Long reportId) {
         return reportRepository.findReportDetailForAdminVo(reportId)
                 .orElseThrow(() -> new EntityNotFoundException(REPORT_NOT_FOUND));
+    }
 
+    public Page<ReportApplicationForAdminVo> findReportApplicationForAdminVos(Long reportId, Pageable pageable) {
+        return reportRepository.findReportApplicationForAdminVos(reportId, pageable);
     }
 }

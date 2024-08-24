@@ -8,6 +8,7 @@ import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.application.vo.ReportApplicationForAdminVo;
 import org.letscareer.letscareer.domain.report.vo.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +23,7 @@ import static org.letscareer.letscareer.domain.report.entity.QReport.report;
 import static org.letscareer.letscareer.domain.report.entity.QReportFeedback.reportFeedback;
 import static org.letscareer.letscareer.domain.report.entity.QReportOption.reportOption;
 import static org.letscareer.letscareer.domain.report.entity.QReportPrice.reportPrice;
+import static org.letscareer.letscareer.domain.user.entity.QUser.user;
 
 @RequiredArgsConstructor
 public class ReportQueryRepositoryImpl implements ReportQueryRepository {
@@ -74,6 +76,45 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 )
                 .fetchOne()
         );
+    }
+
+    @Override
+    public Page<ReportApplicationForAdminVo> findReportApplicationForAdminVos(Long reportId, Pageable pageable) {
+        List<ReportApplicationForAdminVo> contents = queryFactory
+                .select(Projections.constructor(ReportApplicationForAdminVo.class,
+                        reportApplication.id,
+                        user.name,
+                        user.contactEmail,
+                        user.phoneNum,
+                        reportApplication.wishJob,
+                        reportApplication.message,
+                        reportApplication.status,
+                        reportApplication.applyFile.url,
+                        reportApplication.reportFile.url,
+                        reportApplication.recruitmentFile.url,
+                        reportApplication.isCanceled,
+                        reportApplication.createDate
+                ))
+                .from(report)
+                .leftJoin(report.applicationList, reportApplication)
+                .where(
+                        eqReportId(reportId)
+                )
+                .orderBy(reportApplication.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .groupBy(report.id)
+                .fetch();
+
+        JPAQuery<Long> countQuery = queryFactory
+                .select(reportApplication.id.countDistinct())
+                .from(report)
+                .leftJoin(report.applicationList, reportApplication)
+                .where(
+                        eqReportId(reportId)
+                );
+
+        return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
     }
 
     private List<ReportPriceVo> subQueryForReportPriceInfos(Long reportId) {
