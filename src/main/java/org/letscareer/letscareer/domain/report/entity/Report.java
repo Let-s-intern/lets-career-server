@@ -87,4 +87,9 @@ public class Report extends BaseTimeEntity {
     public void setInitReportFeedback() {
         this.reportFeedback = null;
     }
+
+
+    public void addApplication(ReportApplication reportApplication) {
+        this.applicationList.add(reportApplication);
+    }
 }

@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.report.dto.req.CreateReportApplicationRequestDto;
 import org.letscareer.letscareer.domain.report.dto.req.CreateReportRequestDto;
 import org.letscareer.letscareer.domain.report.dto.req.UpdateReportRequestDto;
 import org.letscareer.letscareer.domain.report.dto.res.*;
@@ -36,6 +37,7 @@ public class ReportV1Controller {
     private final GetMyReportFeedbackService getMyReportFeedbackService;
     private final CreateReportService createReportService;
     private final UpdateReportService updateReportService;
+    private final CreateReportApplicationService createReportApplicationService;
 
     @Operation(summary = "어드민 - 진단서 목록 조회")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportsForAdminResponseDto.class)))
@@ -125,6 +127,15 @@ public class ReportV1Controller {
     @PostMapping
     public ResponseEntity<SuccessResponse<?>> createReport(@RequestBody final CreateReportRequestDto requestDto) {
         createReportService.execute(requestDto);
+        return SuccessResponse.created(null);
+    }
+
+    @Operation(summary = "[테스트 중] 진단서 신청")
+    @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
+    @PostMapping("/application")
+    public ResponseEntity<SuccessResponse<?>> createReportApplication(@CurrentUser final User user,
+                                                                      @RequestBody final CreateReportApplicationRequestDto requestDto) {
+        createReportApplicationService.execute(user, requestDto);
         return SuccessResponse.created(null);
     }
 

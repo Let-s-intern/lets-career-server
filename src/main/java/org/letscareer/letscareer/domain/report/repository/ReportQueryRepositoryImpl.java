@@ -97,9 +97,9 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         reportApplication.wishJob,
                         reportApplication.message,
                         reportApplication.status,
-                        reportApplication.applyFile.url,
-                        reportApplication.reportFile.url,
-                        reportApplication.recruitmentFile.url,
+                        reportApplication.applyUrl,
+                        reportApplication.reportUrl,
+                        reportApplication.recruitmentUrl,
                         reportApplication.isCanceled,
                         reportApplication.createDate
                 ))
@@ -135,8 +135,8 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         reportApplication.wishJob,
                         reportApplication.message,
                         reportFeedbackApplication.reportFeedbackStatus,
-                        reportApplication.applyFile.url,
-                        reportApplication.reportFile.url,
+                        reportApplication.applyUrl,
+                        reportApplication.reportUrl,
                         reportFeedbackApplication.zoomLink,
                         reportFeedbackApplication.desiredDate1,
                         reportFeedbackApplication.desiredDate2,
@@ -276,8 +276,7 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         reportFeedbackApplication.desiredDate1,
                         reportFeedbackApplication.desiredDate2,
                         reportFeedbackApplication.desiredDate3,
-                        reportFeedbackApplication.
-                        reportApplication.createDate,
+                        reportFeedbackApplication.reportApplication.createDate,
                         getConfirmedTimeFor()
                 ))
                 .from(report)

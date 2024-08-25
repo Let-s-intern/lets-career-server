@@ -1,21 +1,21 @@
 package org.letscareer.letscareer.domain.application.entity.report;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.letscareer.letscareer.domain.application.type.ReportDesiredDateType;
 import org.letscareer.letscareer.domain.application.type.ReportFeedbackStatus;
 import org.letscareer.letscareer.domain.application.type.converter.ReportDesiredDateTypeConverter;
 import org.letscareer.letscareer.domain.application.type.converter.ReportFeedbackStatusConverter;
+import org.letscareer.letscareer.domain.program.dto.response.ZoomMeetingResponseDto;
+import org.letscareer.letscareer.domain.report.dto.req.CreateReportApplicationRequestDto;
+import org.letscareer.letscareer.domain.report.entity.ReportFeedback;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 import java.time.LocalDateTime;
 
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@DiscriminatorValue("report_feedback_application")
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder(access = AccessLevel.PRIVATE)
 @Getter
 @Entity
 public class ReportFeedbackApplication extends BaseTimeEntity {
@@ -35,7 +35,8 @@ public class ReportFeedbackApplication extends BaseTimeEntity {
     @Convert(converter = ReportDesiredDateTypeConverter.class)
     private ReportDesiredDateType desiredDateType;
     @Convert(converter = ReportFeedbackStatusConverter.class)
-    private ReportFeedbackStatus reportFeedbackStatus;
+    @Builder.Default
+    private ReportFeedbackStatus reportFeedbackStatus = ReportFeedbackStatus.APPLIED;
     private LocalDateTime checkedDate;
 
     private String zoomLink;
@@ -44,4 +45,19 @@ public class ReportFeedbackApplication extends BaseTimeEntity {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "report_application_id")
     private ReportApplication reportApplication;
+
+    public static ReportFeedbackApplication createReportFeedbackApplication(CreateReportApplicationRequestDto requestDto,
+                                                                            ReportFeedback reportFeedback,
+                                                                            ReportApplication reportApplication) {
+        ReportFeedbackApplication reportFeedbackApplication = ReportFeedbackApplication.builder()
+                .price(reportFeedback.getFeedbackPrice())
+                .discountPrice(reportFeedback.getFeedbackDiscountPrice())
+                .desiredDate1(requestDto.desiredDate1())
+                .desiredDate2(requestDto.desiredDate2())
+                .desiredDate3(requestDto.desiredDate3())
+                .reportApplication(reportApplication)
+                .build();
+        reportApplication.setReportFeedbackApplication(reportFeedbackApplication);
+        return reportFeedbackApplication;
+    }
 }

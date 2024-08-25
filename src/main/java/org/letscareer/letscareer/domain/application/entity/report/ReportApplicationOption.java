@@ -1,15 +1,13 @@
 package org.letscareer.letscareer.domain.application.entity.report;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.letscareer.letscareer.domain.report.entity.ReportOption;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@DiscriminatorValue("report_application_option")
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder(access = AccessLevel.PRIVATE)
 @Getter
 @Entity
 public class ReportApplicationOption extends BaseTimeEntity {
@@ -27,4 +25,17 @@ public class ReportApplicationOption extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "report_application_id")
     private ReportApplication reportApplication;
+
+    public static ReportApplicationOption createReportApplicationOption(ReportApplication reportApplication,
+                                                                        ReportOption reportOption) {
+        ReportApplicationOption reportApplicationOption = ReportApplicationOption.builder()
+                .price(reportOption.getPrice())
+                .discountPrice(reportOption.getDiscountPrice())
+                .title(reportOption.getTitle())
+                .code(reportOption.getCode())
+                .reportApplication(reportApplication)
+                .build();
+        reportApplication.addReportApplicationOption(reportApplicationOption);
+        return reportApplicationOption;
+    }
 }

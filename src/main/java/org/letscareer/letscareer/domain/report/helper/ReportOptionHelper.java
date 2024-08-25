@@ -7,6 +7,8 @@ import org.letscareer.letscareer.domain.report.entity.ReportOption;
 import org.letscareer.letscareer.domain.report.repository.ReportOptionRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Component
 public class ReportOptionHelper {
@@ -15,6 +17,10 @@ public class ReportOptionHelper {
     public ReportOption createReportOptionAndSave(CreateReportOptionRequestDto requestDto, Report report) {
         ReportOption reportOption = ReportOption.createReportOption(requestDto, report);
         return reportOptionRepository.save(reportOption);
+    }
+
+    public List<ReportOption> findReportOptionsByReportIdAndOptionIds(Long reportId, List<Long> optionIds) {
+        return reportOptionRepository.findReportOptionsByReportIdAndOptionIds(reportId, optionIds);
     }
 
     public void deleteAllReportOptionsByReportId(Long reportId) {
