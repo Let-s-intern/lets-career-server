@@ -71,4 +71,8 @@ public class ReportHelper {
         Report report = Report.createReport(requestDto);
         return reportRepository.save(report);
     }
+
+    public void deleteReport(Report report) {
+        reportRepository.delete(report);
+    }
 }
