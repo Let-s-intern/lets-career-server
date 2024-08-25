@@ -7,6 +7,8 @@ import org.letscareer.letscareer.domain.report.type.ReportPriceType;
 import org.letscareer.letscareer.domain.report.type.ReportPriceTypeConverter;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
+import static org.letscareer.letscareer.global.common.utils.entity.EntityUpdateValueUtils.updateValue;
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PRIVATE)
@@ -35,5 +37,10 @@ public class ReportFeedback extends BaseTimeEntity {
                 .feedbackDiscountPrice(requestDto.discountPrice())
                 .report(report)
                 .build();
+    }
+
+    public void updateReportFeedback(CreateReportFeedbackRequestDto requestDto) {
+        this.feedbackPrice = updateValue(this.feedbackPrice, requestDto.price());
+        this.feedbackDiscountPrice = updateValue(this.feedbackDiscountPrice, requestDto.discountPrice());
     }
 }

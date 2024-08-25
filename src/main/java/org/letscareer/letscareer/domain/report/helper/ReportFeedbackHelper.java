@@ -16,8 +16,4 @@ public class ReportFeedbackHelper {
         ReportFeedback reportFeedback = ReportFeedback.createReportFeedback(requestDto, report);
         return reportFeedbackRepository.save(reportFeedback);
     }
-
-    public void deleteAllReportFeedbacksByReportId(Long reportId) {
-        reportFeedbackRepository.deleteAllByReportId(reportId);
-    }
 }

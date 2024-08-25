@@ -7,7 +7,6 @@ import org.letscareer.letscareer.domain.report.dto.req.CreateReportPriceRequestD
 import org.letscareer.letscareer.domain.report.dto.req.UpdateReportRequestDto;
 import org.letscareer.letscareer.domain.report.entity.Report;
 import org.letscareer.letscareer.domain.report.entity.ReportFeedback;
-import org.letscareer.letscareer.domain.report.helper.ReportFeedbackHelper;
 import org.letscareer.letscareer.domain.report.helper.ReportHelper;
 import org.letscareer.letscareer.domain.report.helper.ReportOptionHelper;
 import org.letscareer.letscareer.domain.report.helper.ReportPriceHelper;
@@ -26,7 +25,6 @@ public class UpdateReportServiceImpl implements UpdateReportService {
     private final ReportHelper reportHelper;
     private final ReportPriceHelper reportPriceHelper;
     private final ReportOptionHelper reportOptionHelper;
-    private final ReportFeedbackHelper reportFeedbackHelper;
 
     @Override
     public void execute(Long reportId, UpdateReportRequestDto requestDto) {
@@ -53,9 +51,8 @@ public class UpdateReportServiceImpl implements UpdateReportService {
 
     private void updateReportFeedback(CreateReportFeedbackRequestDto feedbackInfo, Report report) {
         if(Objects.isNull(feedbackInfo)) return;
-        report.setInitReportFeedback();
-        reportFeedbackHelper.deleteAllReportFeedbacksByReportId(report.getId());
-        createReportFeedbackAndSave(feedbackInfo, report);
+        ReportFeedback reportFeedback = report.getReportFeedback();
+        reportFeedback.updateReportFeedback(feedbackInfo);
     }
 
     private void createReportPricesAndSave(List<CreateReportPriceRequestDto> priceInfo, Report report) {
@@ -68,10 +65,5 @@ public class UpdateReportServiceImpl implements UpdateReportService {
         optionInfo.stream()
                 .map(option -> reportOptionHelper.createReportOptionAndSave(option, report))
                 .collect(Collectors.toList());
-    }
-
-    private void createReportFeedbackAndSave(CreateReportFeedbackRequestDto feedbackInfo, Report report) {
-        ReportFeedback reportFeedback = reportFeedbackHelper.createReportFeedbackAndSave(feedbackInfo, report);
-        report.setReportFeedback(reportFeedback);
     }
 }
