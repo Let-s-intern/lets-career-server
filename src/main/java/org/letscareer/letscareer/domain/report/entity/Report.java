@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.letscareer.letscareer.domain.application.entity.report.ReportApplication;
 import org.letscareer.letscareer.domain.report.dto.req.CreateReportRequestDto;
+import org.letscareer.letscareer.domain.report.dto.req.UpdateReportRequestDto;
 import org.letscareer.letscareer.domain.report.type.ReportType;
 import org.letscareer.letscareer.domain.report.type.ReportTypeConverter;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
@@ -11,6 +12,8 @@ import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.letscareer.letscareer.global.common.utils.entity.EntityUpdateValueUtils.updateValue;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -63,5 +66,25 @@ public class Report extends BaseTimeEntity {
 
     public void setReportFeedback(ReportFeedback reportFeedback) {
         this.reportFeedback = reportFeedback;
+    }
+
+    public void updateReport(UpdateReportRequestDto requestDto) {
+        this.type = updateValue(this.type, requestDto.reportType());
+        this.visibleDate = updateValue(this.visibleDate, requestDto.visibleDate());
+        this.title = updateValue(this.title, requestDto.title());
+        this.contents = updateValue(this.contents, requestDto.contents());
+        this.notice = updateValue(this.notice, requestDto.notice());
+    }
+
+    public void setInitReportPrices() {
+        this.priceList = new ArrayList<>();
+    }
+
+    public void setInitReportOptions() {
+        this.optionList = new ArrayList<>();
+    }
+
+    public void setInitReportFeedback() {
+        this.reportFeedback = null;
     }
 }

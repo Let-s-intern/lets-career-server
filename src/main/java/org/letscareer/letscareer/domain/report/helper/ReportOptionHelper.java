@@ -16,4 +16,8 @@ public class ReportOptionHelper {
         ReportOption reportOption = ReportOption.createReportOption(requestDto, report);
         return reportOptionRepository.save(reportOption);
     }
+
+    public void deleteAllReportOptionsByReportId(Long reportId) {
+        reportOptionRepository.deleteAllByReportId(reportId);
+    }
 }

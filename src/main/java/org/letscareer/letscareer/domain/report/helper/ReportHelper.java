@@ -24,6 +24,11 @@ import static org.letscareer.letscareer.domain.report.error.ReportErrorCode.REPO
 public class ReportHelper {
     private final ReportRepository reportRepository;
 
+    public Report findReportByReportIdOrThrow(Long reportId) {
+        return reportRepository.findById(reportId)
+                .orElseThrow(() -> new EntityNotFoundException(REPORT_NOT_FOUND));
+    }
+
     public Page<ReportForAdminVo> findReportForAdminVos(Pageable pageable) {
         return reportRepository.findReportForAdminVos(pageable);
     }

@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.report.dto.req.CreateReportRequestDto;
+import org.letscareer.letscareer.domain.report.dto.req.UpdateReportRequestDto;
 import org.letscareer.letscareer.domain.report.dto.res.*;
 import org.letscareer.letscareer.domain.report.service.*;
 import org.letscareer.letscareer.domain.report.type.ReportType;
@@ -34,6 +35,7 @@ public class ReportV1Controller {
     private final GetMyReportService getMyReportService;
     private final GetMyReportFeedbackService getMyReportFeedbackService;
     private final CreateReportService createReportService;
+    private final UpdateReportService updateReportService;
 
     @Operation(summary = "어드민 - 진단서 목록 조회")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportsForAdminResponseDto.class)))
@@ -124,5 +126,14 @@ public class ReportV1Controller {
     public ResponseEntity<SuccessResponse<?>> createReport(@RequestBody final CreateReportRequestDto requestDto) {
         createReportService.execute(requestDto);
         return SuccessResponse.created(null);
+    }
+
+    @Operation(summary = "진단서 프로그램 수정")
+    @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    @PatchMapping("/{reportId}")
+    public ResponseEntity<SuccessResponse<?>> updateReport(@PathVariable final Long reportId,
+                                                           @RequestBody final UpdateReportRequestDto requestDto) {
+        updateReportService.execute(reportId, requestDto);
+        return SuccessResponse.ok(null);
     }
 }

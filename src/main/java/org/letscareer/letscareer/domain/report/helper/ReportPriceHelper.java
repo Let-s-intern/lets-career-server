@@ -16,4 +16,8 @@ public class ReportPriceHelper {
         ReportPrice reportPrice = ReportPrice.createReportPrice(requestDto, report);
         return reportPriceRepository.save(reportPrice);
     }
+
+    public void deleteAllReportPricesByReportId(Long reportId) {
+        reportPriceRepository.deleteAllByReportId(reportId);
+    }
 }
