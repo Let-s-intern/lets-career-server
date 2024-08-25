@@ -10,6 +10,7 @@ import org.letscareer.letscareer.domain.report.dto.req.CreateReportRequestDto;
 import org.letscareer.letscareer.domain.report.dto.req.UpdateReportRequestDto;
 import org.letscareer.letscareer.domain.report.dto.res.*;
 import org.letscareer.letscareer.domain.report.service.*;
+import org.letscareer.letscareer.domain.report.type.ReportPriceType;
 import org.letscareer.letscareer.domain.report.type.ReportType;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.annotation.ApiErrorCode;
@@ -29,7 +30,6 @@ public class ReportV1Controller {
     private final GetReportsForAdminService getReportsForAdminService;
     private final GetReportDetailForAdminService getReportDetailForAdminService;
     private final GetReportApplicationsForAdminService getReportApplicationsForAdminService;
-    private final GetReportFeedbackApplicationsForAdminService getReportFeedbackApplicationsForAdminService;
     private final GetReportApplicationPaymentForAdminService getReportApplicationPaymentForAdminService;
     private final GetReportDetailService getReportDetailService;
     private final GetReportPriceDetailService getReportPriceDetailService;
@@ -59,29 +59,23 @@ public class ReportV1Controller {
 
     @Operation(summary = "[테스트 중] 어드민 - 진단서 참여자 목록 조회")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportApplicationsForAdminResponseDto.class)))
-    @GetMapping("/{reportId}/applications")
-    public ResponseEntity<SuccessResponse<?>> getReportApplicationsForAdmin(@PathVariable final Long reportId,
+    @GetMapping("/applications")
+    public ResponseEntity<SuccessResponse<?>> getReportApplicationsForAdmin(@RequestParam(required = false) final Long reportId,
+                                                                            @RequestParam(required = false) final ReportPriceType priceType,
                                                                             final Pageable pageable) {
-        final GetReportApplicationsForAdminResponseDto responseDto = getReportApplicationsForAdminService.execute(reportId, pageable);
+        final GetReportApplicationsForAdminResponseDto responseDto = getReportApplicationsForAdminService.execute(reportId, priceType, pageable);
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "[테스트 중] 어드민 - 1:1 첨삭 참여자 목록 조회")
-    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportFeedbackApplicationsForAdminResponseDto.class)))
-    @GetMapping("/{reportId}/feedback/applications")
-    public ResponseEntity<SuccessResponse<?>> getReportFeedbackApplicationsForAdmin(@PathVariable final Long reportId,
-                                                                                    final Pageable pageable) {
-        final GetReportFeedbackApplicationsForAdminResponseDto responseDto = getReportFeedbackApplicationsForAdminService.execute(reportId, pageable);
-        return SuccessResponse.ok(responseDto);
-    }
-
-    @Operation(summary = "[테스트 중] 어드민 - 진단서 참여자 결제 정보 조회", description = "[서류 진단서 참여자 or 첨삭 참여자 -> 결제정보] feedbackApplicationId가 null 여부 = 1:1 첨삭 여부")
-    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportApplicationPaymentForAdminResponseDto.class)))
+    @Operation(summary = "[테스트 중] 어드민 - 진단서 참여자 옵션")
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportApplicationOptionsForAdminResponseDto.class)))
     @ApiErrorCode({REPORT_APPLICATION_NOT_FOUND})
-    @GetMapping("/{reportId}/application/{applicationId}/payment")
-    public ResponseEntity<SuccessResponse<?>> getReportApplicationPaymentForAdmin(@PathVariable final Long reportId,
-                                                                                  @PathVariable final Long applicationId) {
-        final GetReportApplicationPaymentForAdminResponseDto responseDto = getReportApplicationPaymentForAdminService.execute(reportId, applicationId);
+    @GetMapping("/application/options")
+    public ResponseEntity<SuccessResponse<?>> getReportApplicationPaymentForAdmin(@RequestParam(required = false) final Long reportId,
+                                                                                  @RequestParam(required = false) final Long applicationId,
+                                                                                  @RequestParam(required = false) final ReportPriceType priceType,
+                                                                                  @RequestParam(required = false) final String code) {
+        final GetReportApplicationOptionsForAdminResponseDto responseDto = getReportApplicationPaymentForAdminService.execute(reportId, applicationId, priceType, code);
         return SuccessResponse.ok(responseDto);
     }
 

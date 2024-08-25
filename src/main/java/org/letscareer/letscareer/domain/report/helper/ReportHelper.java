@@ -2,11 +2,11 @@ package org.letscareer.letscareer.domain.report.helper;
 
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationForAdminVo;
-import org.letscareer.letscareer.domain.application.vo.ReportApplicationPaymentForAdminVo;
-import org.letscareer.letscareer.domain.application.vo.ReportFeedbackApplicationForAdminVo;
+import org.letscareer.letscareer.domain.application.vo.ReportApplicationOptionForAdminVo;
 import org.letscareer.letscareer.domain.report.dto.req.CreateReportRequestDto;
 import org.letscareer.letscareer.domain.report.entity.Report;
 import org.letscareer.letscareer.domain.report.repository.ReportRepository;
+import org.letscareer.letscareer.domain.report.type.ReportPriceType;
 import org.letscareer.letscareer.domain.report.type.ReportType;
 import org.letscareer.letscareer.domain.report.vo.*;
 import org.letscareer.letscareer.domain.user.entity.User;
@@ -14,6 +14,8 @@ import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 import static org.letscareer.letscareer.domain.report.error.ReportErrorCode.REPORT_NOT_FOUND;
 
@@ -36,17 +38,11 @@ public class ReportHelper {
                 .orElseThrow(() -> new EntityNotFoundException(REPORT_NOT_FOUND));
     }
 
-    public Page<ReportApplicationForAdminVo> findReportApplicationForAdminVos(Long reportId, Pageable pageable) {
-        return reportRepository.findReportApplicationForAdminVos(reportId, pageable);
+    public Page<ReportApplicationForAdminVo> findReportApplicationForAdminVos(Long reportId, ReportPriceType priceType, Pageable pageable) {
+        return reportRepository.findReportApplicationForAdminVos(reportId, priceType, pageable);
     }
-
-    public Page<ReportFeedbackApplicationForAdminVo> findReportFeedbackApplicationForAdminVos(Long reportId, Pageable pageable) {
-        return reportRepository.findReportFeedbackApplicationForAdminVos(reportId, pageable);
-    }
-
-    public ReportApplicationPaymentForAdminVo findReportApplicationPaymentForAdminVoOrThrow(Long reportId, Long applicationId) {
-        return reportRepository.findReportApplicationPaymentForAdminVo(reportId, applicationId)
-                .orElseThrow(() -> new EntityNotFoundException(REPORT_NOT_FOUND));
+    public List<ReportApplicationOptionForAdminVo> findReportApplicationPaymentForAdminVos(Long reportId, Long applicationId, ReportPriceType priceType, String code) {
+        return reportRepository.findReportApplicationPaymentForAdminVos(reportId, applicationId, priceType, code);
     }
 
     public ReportDetailVo findReportDetailVoOrThrow(Long reportId) {

@@ -6,6 +6,7 @@ import org.letscareer.letscareer.domain.report.dto.res.GetReportApplicationsForA
 import org.letscareer.letscareer.domain.report.helper.ReportHelper;
 import org.letscareer.letscareer.domain.report.mapper.ReportMapper;
 import org.letscareer.letscareer.domain.report.service.GetReportApplicationsForAdminService;
+import org.letscareer.letscareer.domain.report.type.ReportPriceType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,8 +20,8 @@ public class GetReportApplicationsForAdminServiceImpl implements GetReportApplic
     private final ReportMapper reportMapper;
 
     @Override
-    public GetReportApplicationsForAdminResponseDto execute(Long reportId, Pageable pageable) {
-        Page<ReportApplicationForAdminVo> vos = reportHelper.findReportApplicationForAdminVos(reportId, pageable);
+    public GetReportApplicationsForAdminResponseDto execute(Long reportId, ReportPriceType priceType, Pageable pageable) {
+        Page<ReportApplicationForAdminVo> vos = reportHelper.findReportApplicationForAdminVos(reportId, priceType, pageable);
         return reportMapper.toGetReportApplicationsForAdminResponseDto(vos);
     }
 }

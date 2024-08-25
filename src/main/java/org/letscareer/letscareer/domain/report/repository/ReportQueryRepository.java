@@ -1,13 +1,14 @@
 package org.letscareer.letscareer.domain.report.repository;
 
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationForAdminVo;
-import org.letscareer.letscareer.domain.application.vo.ReportApplicationPaymentForAdminVo;
-import org.letscareer.letscareer.domain.application.vo.ReportFeedbackApplicationForAdminVo;
+import org.letscareer.letscareer.domain.application.vo.ReportApplicationOptionForAdminVo;
+import org.letscareer.letscareer.domain.report.type.ReportPriceType;
 import org.letscareer.letscareer.domain.report.type.ReportType;
 import org.letscareer.letscareer.domain.report.vo.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ReportQueryRepository {
@@ -15,11 +16,9 @@ public interface ReportQueryRepository {
 
     Optional<ReportDetailForAdminVo> findReportDetailForAdminVo(Long reportId);
 
-    Page<ReportApplicationForAdminVo> findReportApplicationForAdminVos(Long reportId, Pageable pageable);
+    Page<ReportApplicationForAdminVo> findReportApplicationForAdminVos(Long reportId, ReportPriceType priceType, Pageable pageable);
 
-    Page<ReportFeedbackApplicationForAdminVo> findReportFeedbackApplicationForAdminVos(Long reportId, Pageable pageable);
-
-    Optional<ReportApplicationPaymentForAdminVo> findReportApplicationPaymentForAdminVo(Long reportId, Long applicationId);
+    List<ReportApplicationOptionForAdminVo> findReportApplicationPaymentForAdminVos(Long reportId, Long applicationId, ReportPriceType priceType, String code);
 
     Optional<ReportDetailVo> findReportDetailVo(Long reportId);
 
