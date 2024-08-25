@@ -47,4 +47,10 @@ public class ReportMapper {
         PageInfo pageInfo = PageInfo.of(vos);
         return GetMyReportFeedbackResponseDto.of(vos.getContent(), pageInfo);
     }
+
+    public GetReportThumbnailResponseDto toGetReportThumbnailResponseDto(ReportDetailVo resumeInfo,
+                                                                         ReportDetailVo personalStatementInfo,
+                                                                         ReportDetailVo portfolioInfo) {
+        return GetReportThumbnailResponseDto.of(resumeInfo, personalStatementInfo, portfolioInfo);
+    }
 }

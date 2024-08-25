@@ -279,6 +279,23 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
     }
 
+    @Override
+    public Optional<ReportDetailVo> findReportDetailByReportTypeVoForVisible(ReportType reportType) {
+        return Optional.ofNullable(queryFactory
+                .select(Projections.constructor(ReportDetailVo.class,
+                        report.id,
+                        report.title,
+                        report.notice,
+                        report.contents,
+                        report.type))
+                .from(report)
+                .where(
+                        eqReportType(reportType),
+                        isVisible()
+                )
+                .fetchOne());
+    }
+
     private List<ReportPriceVo> subQueryForReportPriceInfos(Long reportId) {
         return queryFactory.select(Projections.constructor(ReportPriceVo.class,
                         reportPrice.reportPriceType,
@@ -385,5 +402,9 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
 
     private BooleanExpression containOptionCode(String code) {
         return code != null ? reportApplicationOption.code.contains(code) : null;
+    }
+
+    private BooleanExpression isVisible() {
+        return report.visibleDate.isNotNull();
     }
 }

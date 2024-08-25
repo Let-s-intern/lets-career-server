@@ -37,6 +37,7 @@ public class ReportV1Controller {
     private final GetMyReportFeedbackService getMyReportFeedbackService;
     private final CreateReportService createReportService;
     private final CreateReportApplicationService createReportApplicationService;
+    private final GetReportThumbnailService getReportThumbnailService;
     private final UpdateReportService updateReportService;
     private final DeleteReportService deleteReportService;
 
@@ -85,6 +86,15 @@ public class ReportV1Controller {
     @GetMapping("/{reportId}")
     public ResponseEntity<SuccessResponse<?>> getReportDetail(@PathVariable final Long reportId) {
         final GetReportDetailResponseDto responseDto = getReportDetailService.execute(reportId);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "[테스트 중] 유저 - 홈화면 조회", description = "[홈화면]")
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportThumbnailResponseDto.class)))
+    @ApiErrorCode({REPORT_NOT_FOUND})
+    @GetMapping("/thumbnail")
+    public ResponseEntity<SuccessResponse<?>> getReportThumbnail() {
+        final GetReportThumbnailResponseDto responseDto = getReportThumbnailService.execute();
         return SuccessResponse.ok(responseDto);
     }
 
