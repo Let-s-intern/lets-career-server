@@ -4,6 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationForAdminVo;
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationPaymentForAdminVo;
 import org.letscareer.letscareer.domain.application.vo.ReportFeedbackApplicationForAdminVo;
+import org.letscareer.letscareer.domain.report.dto.req.CreateReportPriceRequestDto;
+import org.letscareer.letscareer.domain.report.dto.req.CreateReportRequestDto;
+import org.letscareer.letscareer.domain.report.entity.Report;
+import org.letscareer.letscareer.domain.report.entity.ReportPrice;
 import org.letscareer.letscareer.domain.report.repository.ReportRepository;
 import org.letscareer.letscareer.domain.report.type.ReportType;
 import org.letscareer.letscareer.domain.report.vo.*;
@@ -58,5 +62,10 @@ public class ReportHelper {
 
     public Page<MyReportFeedbackVo> findMyReportFeedbackVos(User user, ReportType reportType, Pageable pageable) {
         return reportRepository.findMyReportFeedbackVos(user.getId(), reportType, pageable);
+    }
+
+    public Report createReportAndSave(CreateReportRequestDto requestDto) {
+        Report report = Report.createReport(requestDto);
+        return reportRepository.save(report);
     }
 }

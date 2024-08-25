@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.report.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.letscareer.letscareer.domain.report.dto.req.CreateReportPriceRequestDto;
 import org.letscareer.letscareer.domain.report.type.ReportPriceType;
 import org.letscareer.letscareer.domain.report.type.ReportPriceTypeConverter;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
@@ -22,10 +23,17 @@ public class ReportPrice extends BaseTimeEntity {
     private ReportPriceType reportPriceType;
     private Integer price;
     private Integer discountPrice;
-    private Integer feedbackPrice;
-    private Integer feedbackDiscountPrice;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "report_id")
     private Report report;
+
+    public static ReportPrice createReportPrice(CreateReportPriceRequestDto requestDto, Report report) {
+        return ReportPrice.builder()
+                .reportPriceType(requestDto.reportPriceType())
+                .price(requestDto.price())
+                .discountPrice(requestDto.discountPrice())
+                .report(report)
+                .build();
+    }
 }
