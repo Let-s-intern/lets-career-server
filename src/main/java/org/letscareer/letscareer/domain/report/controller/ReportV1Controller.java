@@ -36,7 +36,9 @@ public class ReportV1Controller {
     private final GetMyReportService getMyReportService;
     private final GetMyReportFeedbackService getMyReportFeedbackService;
     private final CreateReportService createReportService;
+    private final CreateReportApplicationService createReportApplicationService;
     private final UpdateReportService updateReportService;
+    private final DeleteReportService deleteReportService;
 
     @Operation(summary = "어드민 - 진단서 목록 조회")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportsForAdminResponseDto.class)))
