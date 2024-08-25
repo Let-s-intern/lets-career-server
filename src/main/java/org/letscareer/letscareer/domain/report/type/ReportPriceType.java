@@ -7,11 +7,9 @@ import org.letscareer.letscareer.global.common.utils.enm.EnumField;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-public enum ReportDesiredDateType implements EnumField {
-    DESIRED_DATE_1(1, "1"),
-    DESIRED_DATE_2(2, "2"),
-    DESIRED_DATE_3(3, "3"),
-    DESIRED_DATE_ADMIN(4, "어드민");
+public enum ReportPriceType implements EnumField {
+    BASIC(1, "기본"),
+    PREMIUM(2, "프리미엄");
 
     private final Integer code;
     private final String desc;

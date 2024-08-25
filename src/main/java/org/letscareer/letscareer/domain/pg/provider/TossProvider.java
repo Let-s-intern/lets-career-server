@@ -17,9 +17,9 @@ public class TossProvider implements PgProvider {
     private final TossFeignController tossFeignController;
 
     @Override
-    public TossPaymentsResponseDto requestPayments(CreatePaymentRequestDto paymentRequestDto) {
-        if (paymentRequestDto.amount().equals(ZERO_AMOUNT)) return null;
-        TossPaymentsRequestDto requestDto = TossPaymentsRequestDto.of(paymentRequestDto);
+    public TossPaymentsResponseDto requestPayments(String paymentKey, String orderId, String amount) {
+        if (amount.equals(ZERO_AMOUNT)) return null;
+        TossPaymentsRequestDto requestDto = TossPaymentsRequestDto.of(paymentKey, orderId, amount);
         return tossFeignController.createPayments(requestDto);
     }
 

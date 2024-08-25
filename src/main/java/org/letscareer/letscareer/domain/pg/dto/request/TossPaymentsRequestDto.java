@@ -10,11 +10,11 @@ public record TossPaymentsRequestDto(
         String orderId,
         String amount
 ) {
-    public static TossPaymentsRequestDto of(CreatePaymentRequestDto paymentRequestDto) {
+    public static TossPaymentsRequestDto of(String paymentKey, String orderId, String amount) {
         return TossPaymentsRequestDto.builder()
-                .paymentKey(paymentRequestDto.paymentKey())
-                .orderId(paymentRequestDto.orderId())
-                .amount(paymentRequestDto.amount())
+                .paymentKey(paymentKey)
+                .orderId(orderId)
+                .amount(amount)
                 .build();
     }
 }

@@ -2,6 +2,10 @@ package org.letscareer.letscareer.domain.report.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.letscareer.letscareer.domain.application.entity.report.ReportApplicationOption;
+import org.letscareer.letscareer.domain.report.dto.req.CreateReportOptionRequestDto;
+import org.letscareer.letscareer.domain.report.type.ReportPriceType;
+import org.letscareer.letscareer.domain.report.type.ReportPriceTypeConverter;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 import java.util.ArrayList;
@@ -19,6 +23,12 @@ public class ReportOption extends BaseTimeEntity {
     @Column(name = "report_option_id")
     private Long id;
 
+    @Convert(converter = ReportPriceTypeConverter.class)
+    @Builder.Default
+    private ReportPriceType reportPriceType = ReportPriceType.BASIC;
+    private Integer price;
+    private Integer discountPrice;
+
     private String title;
 
     private String code;
@@ -27,7 +37,13 @@ public class ReportOption extends BaseTimeEntity {
     @JoinColumn(name = "report_id")
     private Report report;
 
-    @OneToMany(mappedBy = "reportOption", cascade = CascadeType.ALL)
-    @Builder.Default
-    private List<ReportApplicationOption> reportApplicationOptionList = new ArrayList<>();
+    public static ReportOption createReportOption(CreateReportOptionRequestDto requestDto, Report report) {
+        return ReportOption.builder()
+                .price(requestDto.price())
+                .discountPrice(requestDto.discountPrice())
+                .title(requestDto.title())
+                .code(requestDto.code())
+                .report(report)
+                .build();
+    }
 }
