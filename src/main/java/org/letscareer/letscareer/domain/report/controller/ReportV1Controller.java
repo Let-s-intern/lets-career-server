@@ -92,7 +92,7 @@ public class ReportV1Controller {
     @Operation(summary = "[테스트 중] 유저 - 홈화면 조회", description = "[홈화면]")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportThumbnailResponseDto.class)))
     @ApiErrorCode({REPORT_NOT_FOUND})
-    @GetMapping("/thumbnail")
+    @GetMapping("/active")
     public ResponseEntity<SuccessResponse<?>> getReportThumbnail() {
         final GetReportThumbnailResponseDto responseDto = getReportThumbnailService.execute();
         return SuccessResponse.ok(responseDto);
