@@ -36,6 +36,7 @@ public class ReportV1Controller {
     private final GetMyReportFeedbackService getMyReportFeedbackService;
     private final CreateReportService createReportService;
     private final UpdateReportService updateReportService;
+    private final DeleteReportService deleteReportService;
 
     @Operation(summary = "어드민 - 진단서 목록 조회")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportsForAdminResponseDto.class)))
@@ -135,5 +136,13 @@ public class ReportV1Controller {
                                                            @RequestBody final UpdateReportRequestDto requestDto) {
         updateReportService.execute(reportId, requestDto);
         return SuccessResponse.ok(null);
+    }
+
+    @Operation(summary = "진단서 프로그램 삭제")
+    @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    @DeleteMapping("/{reportId}")
+    public ResponseEntity<SuccessResponse<?>> deleteReport(@PathVariable final Long reportId) {
+        deleteReportService.execute(reportId);
+        return ResponseEntity.ok(null);
     }
 }
