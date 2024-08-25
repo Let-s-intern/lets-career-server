@@ -51,7 +51,9 @@ public class LiveApplicationServiceImpl implements ApplicationService {
         Coupon coupon = couponHelper.findCouponByIdOrNull(createApplicationRequestDto.paymentInfo().couponId());
         validateRequestConditionForCreateApplication(live, coupon, price, user, createApplicationRequestDto);
         createEntityAndSave(live, coupon, price, user, createApplicationRequestDto);
-        TossPaymentsResponseDto responseDto = tossProvider.requestPayments(createApplicationRequestDto.paymentInfo());
+
+        CreatePaymentRequestDto paymentInfo = createApplicationRequestDto.paymentInfo();
+        TossPaymentsResponseDto responseDto = tossProvider.requestPayments(paymentInfo.paymentKey(), paymentInfo.orderId(), paymentInfo.amount());
         sendPaymentKakaoMessages(live, user, createApplicationRequestDto.paymentInfo());
         return applicationMapper.toCreateApplicationResponseDto(responseDto);
     }
