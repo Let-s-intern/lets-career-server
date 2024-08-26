@@ -37,6 +37,7 @@ public class ReportV1Controller {
     private final GetMyReportFeedbackService getMyReportFeedbackService;
     private final CreateReportService createReportService;
     private final CreateReportApplicationService createReportApplicationService;
+    private final CancelReportApplicationService cancelReportApplicationService;
     private final GetReportThumbnailService getReportThumbnailService;
     private final UpdateReportService updateReportService;
     private final DeleteReportService deleteReportService;
@@ -142,6 +143,15 @@ public class ReportV1Controller {
                                                                       @RequestBody final CreateReportApplicationRequestDto requestDto) {
         createReportApplicationService.execute(user, requestDto);
         return SuccessResponse.created(null);
+    }
+
+    @Operation(summary = "[테스트 중] 진단서 신청 취소")
+    @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    @DeleteMapping("/application/{reportApplicationId}")
+    public ResponseEntity<SuccessResponse<?>> cancelReportApplication(@CurrentUser final User user,
+                                                                      @PathVariable final Long reportApplicationId) {
+        cancelReportApplicationService.execute(user, reportApplicationId);
+        return ResponseEntity.ok(null);
     }
 
     @Operation(summary = "진단서 프로그램 수정")

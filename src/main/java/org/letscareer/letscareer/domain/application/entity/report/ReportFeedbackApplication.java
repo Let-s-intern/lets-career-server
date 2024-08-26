@@ -6,12 +6,13 @@ import org.letscareer.letscareer.domain.application.type.ReportDesiredDateType;
 import org.letscareer.letscareer.domain.application.type.ReportFeedbackStatus;
 import org.letscareer.letscareer.domain.application.type.converter.ReportDesiredDateTypeConverter;
 import org.letscareer.letscareer.domain.application.type.converter.ReportFeedbackStatusConverter;
-import org.letscareer.letscareer.domain.program.dto.response.ZoomMeetingResponseDto;
 import org.letscareer.letscareer.domain.report.dto.req.CreateReportApplicationRequestDto;
 import org.letscareer.letscareer.domain.report.entity.ReportFeedback;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 import java.time.LocalDateTime;
+
+import static org.letscareer.letscareer.global.common.utils.entity.EntityUpdateValueUtils.updateValue;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -26,6 +27,7 @@ public class ReportFeedbackApplication extends BaseTimeEntity {
 
     private Integer price;
     private Integer discountPrice;
+    private Integer refundPrice;
 
     private LocalDateTime desiredDate1;
     private LocalDateTime desiredDate2;
@@ -59,5 +61,9 @@ public class ReportFeedbackApplication extends BaseTimeEntity {
                 .build();
         reportApplication.setReportFeedbackApplication(reportFeedbackApplication);
         return reportFeedbackApplication;
+    }
+
+    public void updateRefundPrice(int refundPrice) {
+        this.refundPrice = updateValue(this.refundPrice, refundPrice);
     }
 }
