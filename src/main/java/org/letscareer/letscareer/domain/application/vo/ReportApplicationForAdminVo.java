@@ -21,6 +21,7 @@ public record ReportApplicationForAdminVo(
         String reportFileUrl,
         String recruitmentFileUrl,
 
+        Long reportFeedbackApplicationId,
         ReportFeedbackStatus reportFeedbackStatus,
         String zoomLink,
         LocalDateTime desiredDate1,
