@@ -73,6 +73,7 @@ public class ReportFeedbackApplication extends BaseTimeEntity {
         this.desiredDateAdmin = updateValue(this.desiredDateAdmin, requestDto.desiredDateAdmin());
         this.desiredDateType = updateValue(this.desiredDateType, requestDto.desiredDateType());
         this.checkedDate = LocalDateTime.now();
+        this.reportFeedbackStatus = ReportFeedbackStatus.CONFIRMED;
     }
 
     public void setZoomInfo(ZoomMeetingResponseDto zoomInfo) {
