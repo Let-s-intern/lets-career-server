@@ -138,20 +138,12 @@ public class ReportV1Controller {
 
     @Operation(summary = "[테스트 중] 진단서 신청")
     @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
-    @PostMapping("/application")
+    @PostMapping("/{reportId}/application")
     public ResponseEntity<SuccessResponse<?>> createReportApplication(@CurrentUser final User user,
+                                                                      @PathVariable final Long reportId,
                                                                       @RequestBody final CreateReportApplicationRequestDto requestDto) {
-        createReportApplicationService.execute(user, requestDto);
+        createReportApplicationService.execute(user, reportId, requestDto);
         return SuccessResponse.created(null);
-    }
-
-    @Operation(summary = "[테스트 중] 진단서 신청 취소")
-    @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
-    @DeleteMapping("/application/{reportApplicationId}")
-    public ResponseEntity<SuccessResponse<?>> cancelReportApplication(@CurrentUser final User user,
-                                                                      @PathVariable final Long reportApplicationId) {
-        cancelReportApplicationService.execute(user, reportApplicationId);
-        return ResponseEntity.ok(null);
     }
 
     @Operation(summary = "진단서 프로그램 수정")
@@ -168,6 +160,15 @@ public class ReportV1Controller {
     @DeleteMapping("/{reportId}")
     public ResponseEntity<SuccessResponse<?>> deleteReport(@PathVariable final Long reportId) {
         deleteReportService.execute(reportId);
+        return ResponseEntity.ok(null);
+    }
+
+    @Operation(summary = "[테스트 중] 진단서 신청 취소")
+    @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    @DeleteMapping("/application/{reportApplicationId}")
+    public ResponseEntity<SuccessResponse<?>> cancelReportApplication(@CurrentUser final User user,
+                                                                      @PathVariable final Long reportApplicationId) {
+        cancelReportApplicationService.execute(user, reportApplicationId);
         return ResponseEntity.ok(null);
     }
 }

@@ -37,22 +37,22 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
     private final TossProvider tossProvider;
 
     @Override
-    public void execute(User user, CreateReportApplicationRequestDto requestDto) {
-        Report report = reportHelper.findReportByReportIdOrThrow(requestDto.reportId());
+    public void execute(User user, Long reportId, CreateReportApplicationRequestDto requestDto) {
+        Report report = reportHelper.findReportByReportIdOrThrow(reportId);
         ReportFeedback reportFeedback = report.getReportFeedback();
         Coupon coupon = couponHelper.findCouponByIdOrNull(requestDto.couponId());
 
         ReportApplication reportApplication = reportApplicationHelper.createReportApplicationAndSave(requestDto, report, user);
         Payment payment = paymentHelper.createReportPaymentAndSave(requestDto, coupon, reportApplication);
-        List<ReportApplicationOption> reportApplicationOptions = createReportApplicationOptions(reportApplication, requestDto);
+        List<ReportApplicationOption> reportApplicationOptions = createReportApplicationOptions(reportApplication, reportId, requestDto);
         ReportFeedbackApplication reportFeedbackApplication = reportApplicationHelper.createReportFeedbackApplicationAndSave(requestDto, reportFeedback, reportApplication);
 
         TossPaymentsResponseDto responseDto = tossProvider.requestPayments(requestDto.paymentKey(), requestDto.orderId(), requestDto.amount());
         // TODO::알림톡 전송
     }
 
-    private List<ReportApplicationOption> createReportApplicationOptions(ReportApplication reportApplication, CreateReportApplicationRequestDto requestDto) {
-        List<ReportOption> reportOptions = reportOptionHelper.findReportOptionsByReportIdAndOptionIds(requestDto.reportId(), requestDto.optionIds());
+    private List<ReportApplicationOption> createReportApplicationOptions(ReportApplication reportApplication, Long reportId, CreateReportApplicationRequestDto requestDto) {
+        List<ReportOption> reportOptions = reportOptionHelper.findReportOptionsByReportIdAndOptionIds(reportId, requestDto.optionIds());
         return reportOptions.stream()
                 .map(reportOption -> reportApplicationHelper.createReportApplicationOptionAndSave(reportApplication, reportOption))
                 .collect(Collectors.toList());
