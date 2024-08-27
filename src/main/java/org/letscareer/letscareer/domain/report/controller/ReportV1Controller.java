@@ -59,7 +59,7 @@ public class ReportV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "[테스트 중] 어드민 - 진단서 참여자 목록 조회")
+    @Operation(summary = "어드민 - 진단서 참여자 목록 조회")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportApplicationsForAdminResponseDto.class)))
     @GetMapping("/applications")
     public ResponseEntity<SuccessResponse<?>> getReportApplicationsForAdmin(@RequestParam(required = false) final Long reportId,
@@ -70,7 +70,7 @@ public class ReportV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "[테스트 중] 어드민 - 진단서 참여자 옵션")
+    @Operation(summary = "어드민 - 진단서 참여자 옵션")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportApplicationOptionsForAdminResponseDto.class)))
     @ApiErrorCode({REPORT_APPLICATION_NOT_FOUND})
     @GetMapping("/application/options")
