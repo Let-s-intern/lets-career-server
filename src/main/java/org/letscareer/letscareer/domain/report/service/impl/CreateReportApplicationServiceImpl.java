@@ -15,6 +15,7 @@ import org.letscareer.letscareer.domain.report.dto.req.CreateReportApplicationRe
 import org.letscareer.letscareer.domain.report.entity.Report;
 import org.letscareer.letscareer.domain.report.entity.ReportFeedback;
 import org.letscareer.letscareer.domain.report.entity.ReportOption;
+import org.letscareer.letscareer.domain.report.entity.ReportPrice;
 import org.letscareer.letscareer.domain.report.helper.ReportHelper;
 import org.letscareer.letscareer.domain.report.helper.ReportOptionHelper;
 import org.letscareer.letscareer.domain.report.service.CreateReportApplicationService;
@@ -39,10 +40,11 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
     @Override
     public void execute(User user, Long reportId, CreateReportApplicationRequestDto requestDto) {
         Report report = reportHelper.findReportByReportIdOrThrow(reportId);
+        ReportPrice reportPrice = reportHelper.findReportPriceByReportIdAndType(reportId, requestDto.reportPriceType());
         ReportFeedback reportFeedback = report.getReportFeedback();
         Coupon coupon = couponHelper.findCouponByIdOrNull(requestDto.couponId());
 
-        ReportApplication reportApplication = reportApplicationHelper.createReportApplicationAndSave(requestDto, report, user);
+        ReportApplication reportApplication = reportApplicationHelper.createReportApplicationAndSave(requestDto, report, reportPrice, user);
         Payment payment = paymentHelper.createReportPaymentAndSave(requestDto, coupon, reportApplication);
         List<ReportApplicationOption> reportApplicationOptions = createReportApplicationOptions(reportApplication, reportId, requestDto);
         ReportFeedbackApplication reportFeedbackApplication = reportApplicationHelper.createReportFeedbackApplicationAndSave(requestDto, reportFeedback, reportApplication);
