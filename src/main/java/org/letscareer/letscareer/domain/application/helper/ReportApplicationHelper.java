@@ -11,8 +11,14 @@ import org.letscareer.letscareer.domain.report.dto.req.CreateReportApplicationRe
 import org.letscareer.letscareer.domain.report.entity.Report;
 import org.letscareer.letscareer.domain.report.entity.ReportFeedback;
 import org.letscareer.letscareer.domain.report.entity.ReportOption;
+import org.letscareer.letscareer.domain.report.vo.ReportApplicationOptionPriceVo;
 import org.letscareer.letscareer.domain.user.entity.User;
+import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+
+import static org.letscareer.letscareer.domain.report.error.ReportErrorCode.REPORT_APPLICATION_NOT_FOUND;
 
 @RequiredArgsConstructor
 @Component
@@ -42,5 +48,14 @@ public class ReportApplicationHelper {
         ReportFeedbackApplication reportFeedbackApplication
                 = ReportFeedbackApplication.createReportFeedbackApplication(requestDto, reportFeedback, reportApplication);
         return reportFeedbackApplicationRepository.save(reportFeedbackApplication);
+    }
+
+    public ReportApplication findReportApplicationByReportApplicationIdOrThrow(Long reportApplicationId) {
+        return reportApplicationRepository.findById(reportApplicationId)
+                .orElseThrow(() -> new EntityNotFoundException(REPORT_APPLICATION_NOT_FOUND));
+    }
+
+    public List<ReportApplicationOptionPriceVo> findAllReportApplicationOptionPriceVosByReportApplicationId(Long reportApplicationId) {
+        return reportApplicationOptionRepository.findAllReportApplicationOptionPriceVosByReportApplicationId(reportApplicationId);
     }
 }

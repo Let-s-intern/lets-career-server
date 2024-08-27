@@ -10,7 +10,7 @@ import org.letscareer.letscareer.global.common.utils.enm.EnumField;
 public enum ReportApplicationStatus implements EnumField {
     APPLIED(1, "신청완료"),
     REPORTING(2, "진단중"),
-    REPORTED(3, "진단완료"),
+    REPORTED(3, "진단서 업로드"),
     COMPLETED(4, "진단완료");
 
     private final Integer code;
