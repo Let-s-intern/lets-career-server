@@ -120,8 +120,9 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         payment.finalPrice,
                         reportApplication.isCanceled
                 ))
-                .from(report)
-                .leftJoin(report.applicationList, reportApplication)
+                .from(reportApplication)
+                .leftJoin(reportApplication.user, user)
+                .leftJoin(reportApplication.report, report)
                 .leftJoin(reportApplication.reportFeedbackApplication, reportFeedbackApplication)
                 .leftJoin(reportApplication.payment, payment)
                 .leftJoin(payment.coupon, coupon)
@@ -137,8 +138,8 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
 
         JPAQuery<Long> countQuery = queryFactory
                 .select(reportApplication.id.countDistinct())
-                .from(report)
-                .leftJoin(report.applicationList, reportApplication)
+                .from(reportApplication)
+                .leftJoin(reportApplication.report, report)
                 .where(
                         eqReportId(reportId),
                         eqPriceType(priceType),
