@@ -334,6 +334,7 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
     private FeedbackPriceVo subQueryFeedbackPriceInfo(Long reportId) {
         return queryFactory.select(Projections.constructor(FeedbackPriceVo.class,
                         reportFeedback.id,
+                        reportFeedback.reportPriceType,
                         reportFeedback.feedbackPrice,
                         reportFeedback.feedbackDiscountPrice
                 ))
