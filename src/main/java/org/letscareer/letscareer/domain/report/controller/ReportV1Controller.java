@@ -161,10 +161,11 @@ public class ReportV1Controller {
 
     @Operation(summary = "1대1 첨삭 일정 관리")
     @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
-    @PatchMapping("/application/{applicationId}/schedule")
-    public ResponseEntity<SuccessResponse<?>> updateReportFeedbackSchedule(@PathVariable final Long applicationId,
+    @PatchMapping("/{reportId}/application/{applicationId}/schedule")
+    public ResponseEntity<SuccessResponse<?>> updateReportFeedbackSchedule(@PathVariable final Long reportId,
+                                                                           @PathVariable final Long applicationId,
                                                                            @RequestBody final UpdateFeedbackScheduleRequestDto requestDto) {
-        updateReportFeedbackSchedule.execute(applicationId, requestDto);
+        updateReportFeedbackSchedule.execute(reportId, applicationId, requestDto);
         return SuccessResponse.ok(null);
     }
 

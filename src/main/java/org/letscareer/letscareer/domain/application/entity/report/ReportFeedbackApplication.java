@@ -6,6 +6,7 @@ import org.letscareer.letscareer.domain.application.type.ReportDesiredDateType;
 import org.letscareer.letscareer.domain.application.type.ReportFeedbackStatus;
 import org.letscareer.letscareer.domain.application.type.converter.ReportDesiredDateTypeConverter;
 import org.letscareer.letscareer.domain.application.type.converter.ReportFeedbackStatusConverter;
+import org.letscareer.letscareer.domain.program.dto.response.ZoomMeetingResponseDto;
 import org.letscareer.letscareer.domain.report.dto.req.CreateReportApplicationRequestDto;
 import org.letscareer.letscareer.domain.report.dto.req.UpdateFeedbackScheduleRequestDto;
 import org.letscareer.letscareer.domain.report.entity.ReportFeedback;
@@ -71,5 +72,24 @@ public class ReportFeedbackApplication extends BaseTimeEntity {
     public void updateSchedule(UpdateFeedbackScheduleRequestDto requestDto) {
         this.desiredDateAdmin = updateValue(this.desiredDateAdmin, requestDto.desiredDateAdmin());
         this.desiredDateType = updateValue(this.desiredDateType, requestDto.desiredDateType());
+        this.checkedDate = LocalDateTime.now();
+    }
+
+    public void setZoomInfo(ZoomMeetingResponseDto zoomInfo) {
+        this.zoomLink = zoomInfo.join_url();
+        this.zoomPassword = zoomInfo.password();
+    }
+
+    public LocalDateTime getCheckedFeedbackDate(ReportDesiredDateType desiredDateType) {
+        if (desiredDateType.equals(ReportDesiredDateType.DESIRED_DATE_1))
+            return desiredDate1;
+        else if (desiredDateType.equals(ReportDesiredDateType.DESIRED_DATE_2))
+            return desiredDate2;
+        else if (desiredDateType.equals(ReportDesiredDateType.DESIRED_DATE_3))
+            return desiredDate3;
+        else if (desiredDateType.equals(ReportDesiredDateType.DESIRED_DATE_ADMIN))
+            return desiredDateAdmin;
+        else
+            return null;
     }
 }
