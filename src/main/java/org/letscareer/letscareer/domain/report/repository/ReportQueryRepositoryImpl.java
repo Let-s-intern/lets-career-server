@@ -103,6 +103,7 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         reportApplication.reportUrl,
                         reportApplication.recruitmentUrl,
 
+                        reportFeedbackApplication.id,
                         reportFeedbackApplication.reportFeedbackStatus,
                         reportFeedbackApplication.zoomLink,
                         reportFeedbackApplication.desiredDate1,
@@ -115,7 +116,6 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         payment.id,
                         payment.orderId,
                         reportApplication.reportPriceType,
-                        reportFeedbackApplication.id,
                         coupon.name,
                         payment.finalPrice,
                         reportApplication.isCanceled
@@ -123,6 +123,8 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .from(report)
                 .leftJoin(report.applicationList, reportApplication)
                 .leftJoin(reportApplication.reportFeedbackApplication, reportFeedbackApplication)
+                .leftJoin(reportApplication.payment, payment)
+                .leftJoin(payment.coupon, coupon)
                 .where(
                         eqReportId(reportId),
                         eqPriceType(priceType),
