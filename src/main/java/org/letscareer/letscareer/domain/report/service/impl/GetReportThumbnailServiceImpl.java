@@ -20,9 +20,9 @@ public class GetReportThumbnailServiceImpl implements GetReportThumbnailService 
 
     @Override
     public GetReportThumbnailResponseDto execute() {
-        ReportDetailVo resumeInfo = reportHelper.findReportDetailByReportTypeVoForVisibleOrThrow(RESUME);
-        ReportDetailVo personalStatementInfo = reportHelper.findReportDetailByReportTypeVoForVisibleOrThrow(PERSONAL_STATEMENT);
-        ReportDetailVo portfolioInfo = reportHelper.findReportDetailByReportTypeVoForVisibleOrThrow(PORTFOLIO);
+        ReportDetailVo resumeInfo = reportHelper.findReportDetailByReportTypeVoForVisibleOrNull(RESUME);
+        ReportDetailVo personalStatementInfo = reportHelper.findReportDetailByReportTypeVoForVisibleOrNull(PERSONAL_STATEMENT);
+        ReportDetailVo portfolioInfo = reportHelper.findReportDetailByReportTypeVoForVisibleOrNull(PORTFOLIO);
         return reportMapper.toGetReportThumbnailResponseDto(resumeInfo, personalStatementInfo, portfolioInfo);
     }
 }

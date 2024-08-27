@@ -56,6 +56,12 @@ public class ReportHelper {
                 .orElseThrow(() -> new EntityNotFoundException(REPORT_NOT_FOUND));
     }
 
+    public ReportDetailVo findReportDetailByReportTypeVoForVisibleOrNull(ReportType reportType) {
+        return reportRepository.findReportDetailByReportTypeVoForVisible(reportType)
+                .orElse(null);
+    }
+
+
     public ReportPriceDetailVo findReportPriceDetailVoOrThrow(Long reportId) {
         return reportRepository.findReportPriceDetailVo(reportId)
                 .orElseThrow(() -> new EntityNotFoundException(REPORT_NOT_FOUND));
