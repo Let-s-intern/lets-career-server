@@ -8,6 +8,7 @@ import org.letscareer.letscareer.domain.application.type.converter.ReportApplica
 import org.letscareer.letscareer.domain.report.dto.req.CreateReportApplicationRequestDto;
 import org.letscareer.letscareer.domain.report.dto.req.UpdateReportDocumentRequestDto;
 import org.letscareer.letscareer.domain.report.entity.Report;
+import org.letscareer.letscareer.domain.report.entity.ReportPrice;
 import org.letscareer.letscareer.domain.report.type.ReportPriceType;
 import org.letscareer.letscareer.domain.report.type.ReportPriceTypeConverter;
 import org.letscareer.letscareer.domain.user.entity.User;
@@ -34,6 +35,8 @@ public class ReportApplication extends Application {
     private String applyUrl;
     private String recruitmentUrl;
 
+    private Integer refundPrice;
+
     @Convert(converter = ReportApplicationStatusConverter.class)
     private ReportApplicationStatus status = ReportApplicationStatus.REPORTING;
     @Convert(converter = ReportPriceTypeConverter.class)
@@ -52,12 +55,13 @@ public class ReportApplication extends Application {
     @Builder(access = AccessLevel.PRIVATE)
     public ReportApplication(CreateReportApplicationRequestDto requestDto,
                              Report report,
+                             ReportPrice reportPrice,
                              User user) {
         super(user);
         this.wishJob = requestDto.wishJob();
         this.message = requestDto.message();
-        this.price = Integer.parseInt(requestDto.amount());
-        this.discountPrice = requestDto.discountPrice();
+        this.price = reportPrice.getPrice();
+        this.discountPrice = reportPrice.getDiscountPrice();
         this.reportPriceType = requestDto.reportPriceType();
         this.applyUrl = requestDto.applyUrl();
         this.recruitmentUrl = requestDto.recruitmentUrl();
@@ -68,10 +72,12 @@ public class ReportApplication extends Application {
 
     public static ReportApplication createReportApplication(CreateReportApplicationRequestDto requestDto,
                                                             Report report,
+                                                            ReportPrice reportPrice,
                                                             User user) {
         ReportApplication reportApplication = ReportApplication.builder()
                 .requestDto(requestDto)
                 .report(report)
+                .reportPrice(reportPrice)
                 .user(user)
                 .build();
         report.addApplication(reportApplication);

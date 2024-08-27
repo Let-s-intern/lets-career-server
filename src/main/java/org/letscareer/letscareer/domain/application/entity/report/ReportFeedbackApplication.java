@@ -10,6 +10,8 @@ import org.letscareer.letscareer.domain.program.dto.response.ZoomMeetingResponse
 import org.letscareer.letscareer.domain.report.dto.req.CreateReportApplicationRequestDto;
 import org.letscareer.letscareer.domain.report.dto.req.UpdateFeedbackScheduleRequestDto;
 import org.letscareer.letscareer.domain.report.entity.ReportFeedback;
+import org.letscareer.letscareer.domain.report.type.ReportPriceType;
+import org.letscareer.letscareer.domain.report.type.ReportPriceTypeConverter;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 import java.time.LocalDateTime;
@@ -27,6 +29,9 @@ public class ReportFeedbackApplication extends BaseTimeEntity {
     @Column(name = "report_feedback_application_id")
     private Long id;
 
+    @Convert(converter = ReportPriceTypeConverter.class)
+    @Builder.Default
+    private ReportPriceType reportPriceType = ReportPriceType.BASIC;
     private Integer price;
     private Integer discountPrice;
     private Integer refundPrice;

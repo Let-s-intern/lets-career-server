@@ -5,6 +5,7 @@ import org.letscareer.letscareer.domain.application.vo.ReportApplicationForAdmin
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationOptionForAdminVo;
 import org.letscareer.letscareer.domain.report.dto.req.CreateReportRequestDto;
 import org.letscareer.letscareer.domain.report.entity.Report;
+import org.letscareer.letscareer.domain.report.entity.ReportPrice;
 import org.letscareer.letscareer.domain.report.repository.ReportRepository;
 import org.letscareer.letscareer.domain.report.type.ReportPriceType;
 import org.letscareer.letscareer.domain.report.type.ReportType;
@@ -17,12 +18,23 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+import static org.letscareer.letscareer.domain.report.error.ReportErrorCode.REPORT_APPLICATION_NOT_FOUND;
 import static org.letscareer.letscareer.domain.report.error.ReportErrorCode.REPORT_NOT_FOUND;
 
 @RequiredArgsConstructor
 @Component
 public class ReportHelper {
     private final ReportRepository reportRepository;
+
+    public ReportApplicationVo findReportApplicationVoByApplicationId(Long applicationId) {
+        return reportRepository.findReportApplicationVoByApplicationId(applicationId)
+                .orElseThrow(() -> new EntityNotFoundException(REPORT_APPLICATION_NOT_FOUND));
+    }
+
+    public ReportPaymentVo findReportPaymentVoByApplicationId(Long applicationId) {
+        return reportRepository.findReportPaymentVoByApplicationId(applicationId)
+                .orElseThrow(() -> new EntityNotFoundException(REPORT_APPLICATION_NOT_FOUND));
+    }
 
     public Report findReportByReportIdOrThrow(Long reportId) {
         return reportRepository.findById(reportId)
@@ -61,7 +73,6 @@ public class ReportHelper {
                 .orElse(null);
     }
 
-
     public ReportPriceDetailVo findReportPriceDetailVoOrThrow(Long reportId) {
         return reportRepository.findReportPriceDetailVo(reportId)
                 .orElseThrow(() -> new EntityNotFoundException(REPORT_NOT_FOUND));
@@ -73,6 +84,10 @@ public class ReportHelper {
 
     public Page<MyReportFeedbackVo> findMyReportFeedbackVos(User user, ReportType reportType, Pageable pageable) {
         return reportRepository.findMyReportFeedbackVos(user.getId(), reportType, pageable);
+    }
+
+    public ReportPrice findReportPriceByReportIdAndType(Long reportId, ReportPriceType reportPriceType) {
+        return reportRepository.findReportPriceByReportIdAndType(reportId, reportPriceType);
     }
 
     public Report createReportAndSave(CreateReportRequestDto requestDto) {

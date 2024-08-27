@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.report.repository;
 
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationForAdminVo;
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationOptionForAdminVo;
+import org.letscareer.letscareer.domain.report.entity.ReportPrice;
 import org.letscareer.letscareer.domain.report.type.ReportPriceType;
 import org.letscareer.letscareer.domain.report.type.ReportType;
 import org.letscareer.letscareer.domain.report.vo.*;
@@ -29,4 +30,10 @@ public interface ReportQueryRepository {
     Page<MyReportFeedbackVo> findMyReportFeedbackVos(Long userId, ReportType reportType, Pageable pageable);
 
     Optional<ReportDetailVo> findReportDetailByReportTypeVoForVisible(ReportType reportType);
+
+    Optional<ReportApplicationVo> findReportApplicationVoByApplicationId(Long applicationId);
+
+    Optional<ReportPaymentVo> findReportPaymentVoByApplicationId(Long applicationId);
+
+    ReportPrice findReportPriceByReportIdAndType(Long reportId, ReportPriceType reportPriceType);
 }

@@ -33,14 +33,15 @@ public class ReportV1Controller {
     private final GetReportPriceDetailService getReportPriceDetailService;
     private final GetMyReportService getMyReportService;
     private final GetMyReportFeedbackService getMyReportFeedbackService;
+    private final GetReportThumbnailService getReportThumbnailService;
+    private final GetReportPaymentService getReportPaymentService;
     private final CreateReportService createReportService;
     private final CreateReportApplicationService createReportApplicationService;
-    private final CancelReportApplicationService cancelReportApplicationService;
-    private final GetReportThumbnailService getReportThumbnailService;
     private final UpdateReportService updateReportService;
     private final UpdateReportFeedbackSchedule updateReportFeedbackSchedule;
     private final UpdateReportDocumentService updateReportDocumentService;
     private final DeleteReportService deleteReportService;
+    private final CancelReportApplicationService cancelReportApplicationService;
 
     @Operation(summary = "어드민 - 진단서 목록 조회")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportsForAdminResponseDto.class)))
@@ -127,6 +128,15 @@ public class ReportV1Controller {
                                                                    @RequestParam(required = false) final ReportType reportType,
                                                                    final Pageable pageable) {
         final GetMyReportFeedbackResponseDto responseDto = getMyReportFeedbackService.execute(user, reportType, pageable);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "진단서 결제 내역 상세 조회")
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportPaymentResponseDto.class)))
+    @GetMapping("/application/{applicationId}/payment")
+    public ResponseEntity<SuccessResponse<?>> getReportPayment(@CurrentUser final User user,
+                                                               @PathVariable final Long applicationId) {
+        final GetReportPaymentResponseDto responseDto = getReportPaymentService.execute(user, applicationId);
         return SuccessResponse.ok(responseDto);
     }
 

@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.type.ReportDesiredDateType;
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationForAdminVo;
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationOptionForAdminVo;
+import org.letscareer.letscareer.domain.report.entity.ReportPrice;
 import org.letscareer.letscareer.domain.report.type.ReportPriceType;
 import org.letscareer.letscareer.domain.report.type.ReportType;
 import org.letscareer.letscareer.domain.report.vo.*;
@@ -23,6 +24,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static com.querydsl.core.group.GroupBy.list;
 import static org.letscareer.letscareer.domain.application.entity.report.QReportApplication.reportApplication;
 import static org.letscareer.letscareer.domain.application.entity.report.QReportApplicationOption.reportApplicationOption;
 import static org.letscareer.letscareer.domain.application.entity.report.QReportFeedbackApplication.reportFeedbackApplication;
@@ -303,6 +305,60 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .fetchOne());
     }
 
+    @Override
+    public Optional<ReportApplicationVo> findReportApplicationVoByApplicationId(Long applicationId) {
+        return Optional.ofNullable(queryFactory
+                .select(Projections.constructor(ReportApplicationVo.class,
+                        reportApplication.id,
+                        reportFeedbackApplication.id,
+                        report.title,
+                        reportApplication.reportPriceType,
+                        Expressions.constant(subQueryReportApplicationOptionsTitle(applicationId)))
+                )
+                .from(reportApplication)
+                .leftJoin(reportApplication.report, report)
+                .leftJoin(reportApplication.reportFeedbackApplication, reportFeedbackApplication)
+                .where(
+                        eqApplicationId(applicationId)
+                )
+                .fetchOne()
+        );
+    }
+
+    @Override
+    public Optional<ReportPaymentVo> findReportPaymentVoByApplicationId(Long applicationId) {
+        return Optional.ofNullable(queryFactory
+                .select(Projections.constructor(ReportPaymentVo.class,
+                        payment.id,
+                        payment.finalPrice,
+                        coupon.discount,
+                        reportApplication.refundPrice,
+                        reportFeedbackApplication.refundPrice,
+                        Expressions.constant(subQueryForReportApplicationPriceInfo(applicationId)),
+                        Expressions.constant(subQueryReportApplicationOptionInfos(applicationId)),
+                        Expressions.constant(subQueryFeedbackApplicationPriceInfo(applicationId))
+                ))
+                .from(reportApplication)
+                .leftJoin(reportApplication.reportFeedbackApplication, reportFeedbackApplication)
+                .where(
+                        eqApplicationId(applicationId)
+                )
+                .fetchOne()
+        );
+    }
+
+    @Override
+    public ReportPrice findReportPriceByReportIdAndType(Long reportId, ReportPriceType reportPriceType) {
+        return queryFactory
+                .selectFrom(reportPrice)
+                .leftJoin(reportPrice.report, report)
+                .where(
+                        eqReportId(reportId),
+                        eqReportPriceType(reportPriceType)
+                )
+                .fetchOne();
+    }
+
     private List<ReportPriceVo> subQueryForReportPriceInfos(Long reportId) {
         return queryFactory.select(Projections.constructor(ReportPriceVo.class,
                         reportPrice.reportPriceType,
@@ -317,6 +373,19 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .fetch();
     }
 
+    private ReportPriceVo subQueryForReportApplicationPriceInfo(Long applicationId) {
+        return queryFactory.select(Projections.constructor(ReportPriceVo.class,
+                        reportApplication.reportPriceType,
+                        reportApplication.price,
+                        reportApplication.discountPrice
+                ))
+                .from(reportApplication)
+                .where(
+                        eqApplicationId(applicationId)
+                )
+                .fetchOne();
+    }
+
     private List<ReportOptionVo> subQueryReportOptionInfos(Long reportId) {
         return queryFactory.select(Projections.constructor(ReportOptionVo.class,
                         reportOption.id,
@@ -328,6 +397,21 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .leftJoin(report.optionList, reportOption)
                 .where(
                         eqReportId(reportId)
+                )
+                .fetch();
+    }
+
+    private List<ReportOptionVo> subQueryReportApplicationOptionInfos(Long applicationId) {
+        return queryFactory.select(Projections.constructor(ReportOptionVo.class,
+                        reportApplicationOption.id,
+                        reportApplicationOption.price,
+                        reportApplicationOption.discountPrice,
+                        reportApplicationOption.title
+                ))
+                .from(reportApplicationOption)
+                .leftJoin(reportApplicationOption.reportApplication, reportApplication)
+                .where(
+                        eqApplicationId(applicationId)
                 )
                 .fetch();
     }
@@ -347,6 +431,21 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .fetchOne();
     }
 
+    private FeedbackPriceVo subQueryFeedbackApplicationPriceInfo(Long applicationId) {
+        return queryFactory.select(Projections.constructor(FeedbackPriceVo.class,
+                        reportFeedbackApplication.id,
+                        reportFeedbackApplication.reportPriceType,
+                        reportFeedbackApplication.price,
+                        reportFeedbackApplication.discountPrice
+                ))
+                .from(reportFeedbackApplication)
+                .leftJoin(reportFeedbackApplication.reportApplication, reportApplication)
+                .where(
+                        eqApplicationId(applicationId)
+                )
+                .fetchOne();
+    }
+
     private List<String> subQueryOptionTitles(Long reportId) {
         return queryFactory.select(Projections.constructor(String.class,
                         reportOption.title
@@ -355,6 +454,18 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .leftJoin(report.optionList, reportOption)
                 .where(
                         eqReportId(reportId)
+                )
+                .fetch();
+    }
+
+    private List<String> subQueryReportApplicationOptionsTitle(Long applicationId) {
+        return queryFactory.select(Projections.constructor(String.class,
+                        reportApplicationOption.title
+                ))
+                .from(reportApplicationOption)
+                .leftJoin(reportApplicationOption.reportApplication, reportApplication)
+                .where(
+                        eqApplicationId(applicationId)
                 )
                 .fetch();
     }
@@ -406,6 +517,10 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
 
     private BooleanExpression eqPriceType(ReportPriceType priceType) {
         return priceType != null ? reportApplication.reportPriceType.eq(priceType) : null;
+    }
+
+    private BooleanExpression eqReportPriceType(ReportPriceType priceType) {
+        return priceType != null ? reportPrice.reportPriceType.eq(priceType) : null;
     }
 
     private BooleanExpression containOptionCode(String code) {
