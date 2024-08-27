@@ -40,7 +40,7 @@ public class ReportFeedbackApplication extends BaseTimeEntity {
     private ReportDesiredDateType desiredDateType;
     @Convert(converter = ReportFeedbackStatusConverter.class)
     @Builder.Default
-    private ReportFeedbackStatus reportFeedbackStatus = ReportFeedbackStatus.APPLIED;
+    private ReportFeedbackStatus reportFeedbackStatus = ReportFeedbackStatus.PENDING;
     private LocalDateTime checkedDate;
 
     private String zoomLink;

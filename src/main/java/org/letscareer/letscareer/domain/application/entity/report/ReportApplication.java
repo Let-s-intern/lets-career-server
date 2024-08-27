@@ -5,7 +5,6 @@ import lombok.*;
 import org.letscareer.letscareer.domain.application.entity.Application;
 import org.letscareer.letscareer.domain.application.type.ReportApplicationStatus;
 import org.letscareer.letscareer.domain.application.type.converter.ReportApplicationStatusConverter;
-import org.letscareer.letscareer.domain.file.entity.File;
 import org.letscareer.letscareer.domain.report.dto.req.CreateReportApplicationRequestDto;
 import org.letscareer.letscareer.domain.report.entity.Report;
 import org.letscareer.letscareer.domain.report.type.ReportPriceType;
@@ -35,7 +34,7 @@ public class ReportApplication extends Application {
     private String recruitmentUrl;
 
     @Convert(converter = ReportApplicationStatusConverter.class)
-    private ReportApplicationStatus status = ReportApplicationStatus.APPLIED;
+    private ReportApplicationStatus status = ReportApplicationStatus.REPORTING;
     @Convert(converter = ReportPriceTypeConverter.class)
     private ReportPriceType reportPriceType;
 
@@ -62,7 +61,7 @@ public class ReportApplication extends Application {
         this.applyUrl = requestDto.applyUrl();
         this.recruitmentUrl = requestDto.recruitmentUrl();
         this.report = report;
-        this.status = ReportApplicationStatus.APPLIED;
+        this.status = ReportApplicationStatus.REPORTING;
         this.reportApplicationOptionList = new ArrayList<>();
     }
 
