@@ -5,10 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.domain.report.dto.req.CreateReportApplicationRequestDto;
-import org.letscareer.letscareer.domain.report.dto.req.CreateReportRequestDto;
-import org.letscareer.letscareer.domain.report.dto.req.UpdateFeedbackScheduleRequestDto;
-import org.letscareer.letscareer.domain.report.dto.req.UpdateReportRequestDto;
+import org.letscareer.letscareer.domain.report.dto.req.*;
 import org.letscareer.letscareer.domain.report.dto.res.*;
 import org.letscareer.letscareer.domain.report.service.*;
 import org.letscareer.letscareer.domain.report.type.ReportPriceType;
@@ -42,6 +39,7 @@ public class ReportV1Controller {
     private final GetReportThumbnailService getReportThumbnailService;
     private final UpdateReportService updateReportService;
     private final UpdateReportFeedbackSchedule updateReportFeedbackSchedule;
+    private final UpdateReportDocumentService updateReportDocumentService;
     private final DeleteReportService deleteReportService;
 
     @Operation(summary = "어드민 - 진단서 목록 조회")
@@ -156,6 +154,15 @@ public class ReportV1Controller {
     public ResponseEntity<SuccessResponse<?>> updateReport(@PathVariable final Long reportId,
                                                            @RequestBody final UpdateReportRequestDto requestDto) {
         updateReportService.execute(reportId, requestDto);
+        return SuccessResponse.ok(null);
+    }
+
+    @Operation(summary = "진단서 업로드")
+    @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    @PatchMapping("/application/{applicationId}/document")
+    public ResponseEntity<SuccessResponse<?>> updateReportDocument(@PathVariable final Long applicationId,
+                                                                   @RequestBody final UpdateReportDocumentRequestDto requestDto) {
+        updateReportDocumentService.execute(applicationId, requestDto);
         return SuccessResponse.ok(null);
     }
 
