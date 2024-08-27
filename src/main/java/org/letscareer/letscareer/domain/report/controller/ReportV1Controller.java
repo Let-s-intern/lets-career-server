@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.report.dto.req.CreateReportApplicationRequestDto;
 import org.letscareer.letscareer.domain.report.dto.req.CreateReportRequestDto;
+import org.letscareer.letscareer.domain.report.dto.req.UpdateFeedbackScheduleRequestDto;
 import org.letscareer.letscareer.domain.report.dto.req.UpdateReportRequestDto;
 import org.letscareer.letscareer.domain.report.dto.res.*;
 import org.letscareer.letscareer.domain.report.service.*;
@@ -40,6 +41,7 @@ public class ReportV1Controller {
     private final CancelReportApplicationService cancelReportApplicationService;
     private final GetReportThumbnailService getReportThumbnailService;
     private final UpdateReportService updateReportService;
+    private final UpdateReportFeedbackSchedule updateReportFeedbackSchedule;
     private final DeleteReportService deleteReportService;
 
     @Operation(summary = "어드민 - 진단서 목록 조회")
@@ -154,6 +156,15 @@ public class ReportV1Controller {
     public ResponseEntity<SuccessResponse<?>> updateReport(@PathVariable final Long reportId,
                                                            @RequestBody final UpdateReportRequestDto requestDto) {
         updateReportService.execute(reportId, requestDto);
+        return SuccessResponse.ok(null);
+    }
+
+    @Operation(summary = "1대1 첨삭 일정 관리")
+    @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    @PatchMapping("/application/{applicationId}/schedule")
+    public ResponseEntity<SuccessResponse<?>> updateReportFeedbackSchedule(@PathVariable final Long applicationId,
+                                                                           @RequestBody final UpdateFeedbackScheduleRequestDto requestDto) {
+        updateReportFeedbackSchedule.execute(applicationId, requestDto);
         return SuccessResponse.ok(null);
     }
 

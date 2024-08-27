@@ -7,6 +7,7 @@ import org.letscareer.letscareer.domain.application.type.ReportFeedbackStatus;
 import org.letscareer.letscareer.domain.application.type.converter.ReportDesiredDateTypeConverter;
 import org.letscareer.letscareer.domain.application.type.converter.ReportFeedbackStatusConverter;
 import org.letscareer.letscareer.domain.report.dto.req.CreateReportApplicationRequestDto;
+import org.letscareer.letscareer.domain.report.dto.req.UpdateFeedbackScheduleRequestDto;
 import org.letscareer.letscareer.domain.report.entity.ReportFeedback;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
@@ -65,5 +66,10 @@ public class ReportFeedbackApplication extends BaseTimeEntity {
 
     public void updateRefundPrice(int refundPrice) {
         this.refundPrice = updateValue(this.refundPrice, refundPrice);
+    }
+
+    public void updateSchedule(UpdateFeedbackScheduleRequestDto requestDto) {
+        this.desiredDateAdmin = updateValue(this.desiredDateAdmin, requestDto.desiredDateAdmin());
+        this.desiredDateType = updateValue(this.desiredDateType, requestDto.desiredDateType());
     }
 }

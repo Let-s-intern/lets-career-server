@@ -55,6 +55,11 @@ public class ReportApplicationHelper {
                 .orElseThrow(() -> new EntityNotFoundException(REPORT_APPLICATION_NOT_FOUND));
     }
 
+    public ReportFeedbackApplication findReportFeedbackApplicationByApplicationId(Long reportApplicationId) {
+        return reportFeedbackApplicationRepository.findByReportApplicationId(reportApplicationId)
+                .orElseThrow(() -> new EntityNotFoundException(REPORT_APPLICATION_NOT_FOUND));
+    }
+
     public List<ReportApplicationOptionPriceVo> findAllReportApplicationOptionPriceVosByReportApplicationId(Long reportApplicationId) {
         return reportApplicationOptionRepository.findAllReportApplicationOptionPriceVosByReportApplicationId(reportApplicationId);
     }
