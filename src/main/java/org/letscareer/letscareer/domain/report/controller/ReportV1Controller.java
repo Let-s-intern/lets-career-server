@@ -52,7 +52,7 @@ public class ReportV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "[테스트 중] 어드민 - 진단서 상세 조회")
+    @Operation(summary = "어드민 - 진단서 상세 조회")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportDetailForAdminResponseDto.class)))
     @ApiErrorCode({REPORT_NOT_FOUND})
     @GetMapping("/{reportId}/admin")
@@ -85,7 +85,7 @@ public class ReportV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "[테스트 중] 유저 - 진단서 상세 조회", description = "[서류 진단 신청하기]")
+    @Operation(summary = "유저 - 진단서 상세 조회", description = "[서류 진단 신청하기]")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportDetailResponseDto.class)))
     @ApiErrorCode({REPORT_NOT_FOUND})
     @GetMapping("/{reportId}")
@@ -94,7 +94,7 @@ public class ReportV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "[테스트 중] 유저 - 홈화면 조회", description = "[홈화면]")
+    @Operation(summary = "유저 - 홈화면 조회", description = "[홈화면]")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportThumbnailResponseDto.class)))
     @ApiErrorCode({REPORT_NOT_FOUND})
     @GetMapping("/active")
@@ -103,7 +103,7 @@ public class ReportV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "[테스트 중] 유저 - 진단서 가격 상세 정보", description = "[서류 진단 신청하기 -> 하단 모달]")
+    @Operation(summary = "유저 - 진단서 가격 상세 정보", description = "[서류 진단 신청하기 -> 하단 모달]")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportPriceDetailResponseDto.class)))
     @ApiErrorCode({REPORT_NOT_FOUND})
     @GetMapping("/{reportId}/price")
@@ -112,7 +112,7 @@ public class ReportV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "[테스트 중] 유저 - 나의 진단서 목록", description = "[My 진단서 보기 -> 서류 진단서] reportType을 제외할 경우 전체 조회")
+    @Operation(summary = "유저 - 나의 진단서 목록", description = "[My 진단서 보기 -> 서류 진단서] reportType을 제외할 경우 전체 조회")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetMyReportResponseDto.class)))
     @GetMapping("/my")
     public ResponseEntity<SuccessResponse<?>> getMyReports(@CurrentUser final User user,
