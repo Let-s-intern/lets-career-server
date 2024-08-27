@@ -16,9 +16,9 @@ public interface ReportQueryRepository {
 
     Optional<ReportDetailForAdminVo> findReportDetailForAdminVo(Long reportId);
 
-    Page<ReportApplicationForAdminVo> findReportApplicationForAdminVos(Long reportId, ReportPriceType priceType, Pageable pageable);
+    Page<ReportApplicationForAdminVo> findReportApplicationForAdminVos(Long reportId, ReportType reportType, ReportPriceType priceType, Pageable pageable);
 
-    List<ReportApplicationOptionForAdminVo> findReportApplicationPaymentForAdminVos(Long reportId, Long applicationId, ReportPriceType priceType, String code);
+    List<ReportApplicationOptionForAdminVo> findReportApplicationPaymentForAdminVos(Long reportId, Long applicationId, ReportType reportType, ReportPriceType priceType, String code);
 
     Optional<ReportDetailVo> findReportDetailVo(Long reportId);
 

@@ -63,9 +63,10 @@ public class ReportV1Controller {
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportApplicationsForAdminResponseDto.class)))
     @GetMapping("/applications")
     public ResponseEntity<SuccessResponse<?>> getReportApplicationsForAdmin(@RequestParam(required = false) final Long reportId,
+                                                                            @RequestParam(required = false) final ReportType reportType,
                                                                             @RequestParam(required = false) final ReportPriceType priceType,
                                                                             final Pageable pageable) {
-        final GetReportApplicationsForAdminResponseDto responseDto = getReportApplicationsForAdminService.execute(reportId, priceType, pageable);
+        final GetReportApplicationsForAdminResponseDto responseDto = getReportApplicationsForAdminService.execute(reportId, reportType, priceType, pageable);
         return SuccessResponse.ok(responseDto);
     }
 
@@ -75,9 +76,10 @@ public class ReportV1Controller {
     @GetMapping("/application/options")
     public ResponseEntity<SuccessResponse<?>> getReportApplicationPaymentForAdmin(@RequestParam(required = false) final Long reportId,
                                                                                   @RequestParam(required = false) final Long applicationId,
+                                                                                  @RequestParam(required = false) final ReportType reportType,
                                                                                   @RequestParam(required = false) final ReportPriceType priceType,
                                                                                   @RequestParam(required = false) final String code) {
-        final GetReportApplicationOptionsForAdminResponseDto responseDto = getReportApplicationPaymentForAdminService.execute(reportId, applicationId, priceType, code);
+        final GetReportApplicationOptionsForAdminResponseDto responseDto = getReportApplicationPaymentForAdminService.execute(reportId, applicationId, reportType, priceType, code);
         return SuccessResponse.ok(responseDto);
     }
 

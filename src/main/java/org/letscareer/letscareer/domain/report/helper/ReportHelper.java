@@ -38,11 +38,12 @@ public class ReportHelper {
                 .orElseThrow(() -> new EntityNotFoundException(REPORT_NOT_FOUND));
     }
 
-    public Page<ReportApplicationForAdminVo> findReportApplicationForAdminVos(Long reportId, ReportPriceType priceType, Pageable pageable) {
-        return reportRepository.findReportApplicationForAdminVos(reportId, priceType, pageable);
+    public Page<ReportApplicationForAdminVo> findReportApplicationForAdminVos(Long reportId, ReportType reportType, ReportPriceType priceType, Pageable pageable) {
+        return reportRepository.findReportApplicationForAdminVos(reportId, reportType, priceType, pageable);
     }
-    public List<ReportApplicationOptionForAdminVo> findReportApplicationPaymentForAdminVos(Long reportId, Long applicationId, ReportPriceType priceType, String code) {
-        return reportRepository.findReportApplicationPaymentForAdminVos(reportId, applicationId, priceType, code);
+
+    public List<ReportApplicationOptionForAdminVo> findReportApplicationPaymentForAdminVos(Long reportId, Long applicationId, ReportType reportType, ReportPriceType priceType, String code) {
+        return reportRepository.findReportApplicationPaymentForAdminVos(reportId, applicationId, reportType, priceType, code);
     }
 
     public ReportDetailVo findReportDetailVoOrThrow(Long reportId) {

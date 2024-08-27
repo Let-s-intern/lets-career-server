@@ -7,6 +7,7 @@ import org.letscareer.letscareer.domain.report.helper.ReportHelper;
 import org.letscareer.letscareer.domain.report.mapper.ReportMapper;
 import org.letscareer.letscareer.domain.report.service.GetReportApplicationPaymentForAdminService;
 import org.letscareer.letscareer.domain.report.type.ReportPriceType;
+import org.letscareer.letscareer.domain.report.type.ReportType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,8 +21,8 @@ public class GetReportApplicationPaymentForAdminServiceImpl implements GetReport
     private final ReportMapper reportMapper;
 
     @Override
-    public GetReportApplicationOptionsForAdminResponseDto execute(Long reportId, Long applicationId, ReportPriceType priceType, String code) {
-        List<ReportApplicationOptionForAdminVo> vos = reportHelper.findReportApplicationPaymentForAdminVos(reportId, applicationId, priceType, code);
+    public GetReportApplicationOptionsForAdminResponseDto execute(Long reportId, Long applicationId, ReportType reportType, ReportPriceType priceType, String code) {
+        List<ReportApplicationOptionForAdminVo> vos = reportHelper.findReportApplicationPaymentForAdminVos(reportId, applicationId, reportType, priceType, code);
         return reportMapper.toGetReportApplicationPaymentForAdminResponseDto(vos);
     }
 }

@@ -88,7 +88,7 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
     }
 
     @Override
-    public Page<ReportApplicationForAdminVo> findReportApplicationForAdminVos(Long reportId, ReportPriceType priceType, Pageable pageable) {
+    public Page<ReportApplicationForAdminVo> findReportApplicationForAdminVos(Long reportId, ReportType reportType, ReportPriceType priceType, Pageable pageable) {
         List<ReportApplicationForAdminVo> contents = queryFactory
                 .select(Projections.constructor(ReportApplicationForAdminVo.class,
                         reportApplication.id,
@@ -125,7 +125,8 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .leftJoin(reportApplication.reportFeedbackApplication, reportFeedbackApplication)
                 .where(
                         eqReportId(reportId),
-                        eqPriceType(priceType)
+                        eqPriceType(priceType),
+                        eqReportType(reportType)
                 )
                 .orderBy(reportApplication.id.desc())
                 .offset(pageable.getOffset())
@@ -137,14 +138,16 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .from(report)
                 .leftJoin(report.applicationList, reportApplication)
                 .where(
-                        eqReportId(reportId)
+                        eqReportId(reportId),
+                        eqPriceType(priceType),
+                        eqReportType(reportType)
                 );
 
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
     }
 
     @Override
-    public List<ReportApplicationOptionForAdminVo> findReportApplicationPaymentForAdminVos(Long reportId, Long applicationId, ReportPriceType priceType, String code) {
+    public List<ReportApplicationOptionForAdminVo> findReportApplicationPaymentForAdminVos(Long reportId, Long applicationId, ReportType reportType, ReportPriceType priceType, String code) {
         return queryFactory
                 .select(Projections.constructor(ReportApplicationOptionForAdminVo.class,
                         reportApplicationOption.id,
@@ -159,6 +162,7 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .where(
                         eqReportId(reportId),
                         eqApplicationId(applicationId),
+                        eqReportType(reportType),
                         eqPriceType(priceType),
                         containOptionCode(code)
                 )
