@@ -131,7 +131,19 @@ public class ReportV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "진단서 결제 내역 상세 조회")
+    @Operation(
+            summary = "진단서 결제 내역 상세 조회",
+            description = """
+                    finalPrice : 총 결제금액 or 환불금액 <br>
+                    programPrice : 원가 금액 [피그마 용어 - 결제상품] <br>
+                    programDiscount : 원가 할인 금액 [피그마 용어 - 할인] <br>
+                    reportRefundPrice : 진단서 환불 금액 <br>
+                    feedbackRefundPrice : 1:1 첨삭 환불 금액 <br>
+                    reportPriceInfo : 진단서 가격 정보 <br>
+                    reportOptionInfos : 진단서 옵션 가격 정보 <br>
+                    feedbackPriceInfo : 1대1 첨삭 가격 정보 <br>
+                    """
+    )
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportPaymentResponseDto.class)))
     @GetMapping("/application/{applicationId}/payment")
     public ResponseEntity<SuccessResponse<?>> getReportPayment(@CurrentUser final User user,

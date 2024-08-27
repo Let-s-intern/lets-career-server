@@ -33,7 +33,9 @@ public class PaymentHelper {
     public Payment createReportPaymentAndSave(CreateReportApplicationRequestDto requestDto,
                                               Coupon coupon,
                                               ReportApplication reportApplication) {
-        Payment payment = Payment.createReportPayment(requestDto, coupon, reportApplication);
+        Integer couponDiscount = Objects.isNull(coupon) ? 0 : coupon.getDiscount();
+        Integer programPrice = Integer.parseInt(requestDto.amount()) + requestDto.discountPrice() + couponDiscount;
+        Payment payment = Payment.createReportPayment(requestDto, coupon, reportApplication, programPrice);
         return paymentRepository.save(payment);
     }
 

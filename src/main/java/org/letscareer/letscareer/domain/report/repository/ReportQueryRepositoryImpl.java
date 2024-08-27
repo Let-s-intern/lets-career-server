@@ -332,11 +332,14 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         payment.id,
                         payment.finalPrice,
                         coupon.discount,
+                        payment.programPrice,
+                        payment.programDiscount,
                         reportApplication.refundPrice,
                         reportFeedbackApplication.refundPrice,
                         Expressions.constant(subQueryForReportApplicationPriceInfo(applicationId)),
                         Expressions.constant(subQueryReportApplicationOptionInfos(applicationId)),
-                        Expressions.constant(subQueryFeedbackApplicationPriceInfo(applicationId))
+                        Expressions.constant(subQueryFeedbackApplicationPriceInfo(applicationId)),
+                        reportApplication.createDate
                 ))
                 .from(reportApplication)
                 .leftJoin(reportApplication.reportFeedbackApplication, reportFeedbackApplication)
