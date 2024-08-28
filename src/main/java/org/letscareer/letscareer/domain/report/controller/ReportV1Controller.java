@@ -66,8 +66,9 @@ public class ReportV1Controller {
     public ResponseEntity<SuccessResponse<?>> getReportApplicationsForAdmin(@RequestParam(required = false) final Long reportId,
                                                                             @RequestParam(required = false) final ReportType reportType,
                                                                             @RequestParam(required = false) final ReportPriceType priceType,
+                                                                            @RequestParam(required = false) final Boolean isApplyFeedback,
                                                                             final Pageable pageable) {
-        final GetReportApplicationsForAdminResponseDto responseDto = getReportApplicationsForAdminService.execute(reportId, reportType, priceType, pageable);
+        final GetReportApplicationsForAdminResponseDto responseDto = getReportApplicationsForAdminService.execute(reportId, reportType, priceType, isApplyFeedback, pageable);
         return SuccessResponse.ok(responseDto);
     }
 

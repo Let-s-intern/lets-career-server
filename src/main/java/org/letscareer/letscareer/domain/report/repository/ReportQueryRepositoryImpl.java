@@ -24,7 +24,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static com.querydsl.core.group.GroupBy.list;
 import static org.letscareer.letscareer.domain.application.entity.report.QReportApplication.reportApplication;
 import static org.letscareer.letscareer.domain.application.entity.report.QReportApplicationOption.reportApplicationOption;
 import static org.letscareer.letscareer.domain.application.entity.report.QReportFeedbackApplication.reportFeedbackApplication;
@@ -90,7 +89,7 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
     }
 
     @Override
-    public Page<ReportApplicationForAdminVo> findReportApplicationForAdminVos(Long reportId, ReportType reportType, ReportPriceType priceType, Pageable pageable) {
+    public Page<ReportApplicationForAdminVo> findReportApplicationForAdminVos(Long reportId, ReportType reportType, ReportPriceType priceType, Boolean isApplyFeedback, Pageable pageable) {
         List<ReportApplicationForAdminVo> contents = queryFactory
                 .select(Projections.constructor(ReportApplicationForAdminVo.class,
                         reportApplication.id,
@@ -131,7 +130,8 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .where(
                         eqReportId(reportId),
                         eqPriceType(priceType),
-                        eqReportType(reportType)
+                        eqReportType(reportType),
+                        isApplyFeedback(isApplyFeedback)
                 )
                 .orderBy(reportApplication.id.desc())
                 .offset(pageable.getOffset())
@@ -532,5 +532,9 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
 
     private BooleanExpression isVisible() {
         return report.visibleDate.isNotNull();
+    }
+
+    private BooleanExpression isApplyFeedback(Boolean isApplyFeedback) {
+        return isApplyFeedback != null ? reportFeedbackApplication.isNotNull() : null;
     }
 }

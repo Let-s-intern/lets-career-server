@@ -21,8 +21,8 @@ public class GetReportApplicationsForAdminServiceImpl implements GetReportApplic
     private final ReportMapper reportMapper;
 
     @Override
-    public GetReportApplicationsForAdminResponseDto execute(Long reportId, ReportType reportType, ReportPriceType priceType, Pageable pageable) {
-        Page<ReportApplicationForAdminVo> vos = reportHelper.findReportApplicationForAdminVos(reportId, reportType, priceType, pageable);
+    public GetReportApplicationsForAdminResponseDto execute(Long reportId, ReportType reportType, ReportPriceType priceType, Boolean isApplyFeedback, Pageable pageable) {
+        Page<ReportApplicationForAdminVo> vos = reportHelper.findReportApplicationForAdminVos(reportId, reportType, priceType, isApplyFeedback, pageable);
         return reportMapper.toGetReportApplicationsForAdminResponseDto(vos);
     }
 }
