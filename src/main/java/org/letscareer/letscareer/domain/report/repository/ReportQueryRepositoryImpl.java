@@ -11,8 +11,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.type.ReportDesiredDateType;
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationForAdminVo;
-import org.letscareer.letscareer.domain.application.vo.ReportApplicationPaymentForAdminVo;
-import org.letscareer.letscareer.domain.application.vo.ReportFeedbackApplicationForAdminVo;
+import org.letscareer.letscareer.domain.application.vo.ReportApplicationOptionForAdminVo;
+import org.letscareer.letscareer.domain.report.entity.ReportPrice;
+import org.letscareer.letscareer.domain.report.type.ReportPriceType;
 import org.letscareer.letscareer.domain.report.type.ReportType;
 import org.letscareer.letscareer.domain.report.vo.*;
 import org.springframework.data.domain.Page;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.letscareer.letscareer.domain.application.entity.report.QReportApplication.reportApplication;
+import static org.letscareer.letscareer.domain.application.entity.report.QReportApplicationOption.reportApplicationOption;
 import static org.letscareer.letscareer.domain.application.entity.report.QReportFeedbackApplication.reportFeedbackApplication;
 import static org.letscareer.letscareer.domain.coupon.entity.QCoupon.coupon;
 import static org.letscareer.letscareer.domain.payment.entity.QPayment.payment;
@@ -87,26 +89,49 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
     }
 
     @Override
-    public Page<ReportApplicationForAdminVo> findReportApplicationForAdminVos(Long reportId, Pageable pageable) {
+    public Page<ReportApplicationForAdminVo> findReportApplicationForAdminVos(Long reportId, ReportType reportType, ReportPriceType priceType, Boolean isApplyFeedback, Pageable pageable) {
         List<ReportApplicationForAdminVo> contents = queryFactory
                 .select(Projections.constructor(ReportApplicationForAdminVo.class,
                         reportApplication.id,
                         user.name,
                         user.contactEmail,
                         user.phoneNum,
+
                         reportApplication.wishJob,
                         reportApplication.message,
                         reportApplication.status,
                         reportApplication.applyUrl,
                         reportApplication.reportUrl,
                         reportApplication.recruitmentUrl,
-                        reportApplication.isCanceled,
-                        reportApplication.createDate
+
+                        reportFeedbackApplication.id,
+                        reportFeedbackApplication.reportFeedbackStatus,
+                        reportFeedbackApplication.zoomLink,
+                        reportFeedbackApplication.desiredDate1,
+                        reportFeedbackApplication.desiredDate2,
+                        reportFeedbackApplication.desiredDate3,
+                        reportFeedbackApplication.desiredDateAdmin,
+                        reportFeedbackApplication.desiredDateType,
+                        reportApplication.createDate,
+
+                        payment.id,
+                        payment.orderId,
+                        reportApplication.reportPriceType,
+                        coupon.name,
+                        payment.finalPrice,
+                        reportApplication.isCanceled
                 ))
-                .from(report)
-                .leftJoin(report.applicationList, reportApplication)
+                .from(reportApplication)
+                .leftJoin(reportApplication.user, user)
+                .leftJoin(reportApplication.report, report)
+                .leftJoin(reportApplication.reportFeedbackApplication, reportFeedbackApplication)
+                .leftJoin(reportApplication.payment, payment)
+                .leftJoin(payment.coupon, coupon)
                 .where(
-                        eqReportId(reportId)
+                        eqReportId(reportId),
+                        eqPriceType(priceType),
+                        eqReportType(reportType),
+                        isApplyFeedback(isApplyFeedback)
                 )
                 .orderBy(reportApplication.id.desc())
                 .offset(pageable.getOffset())
@@ -115,82 +140,39 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
 
         JPAQuery<Long> countQuery = queryFactory
                 .select(reportApplication.id.countDistinct())
-                .from(report)
-                .leftJoin(report.applicationList, reportApplication)
-                .where(
-                        eqReportId(reportId)
-                );
-
-        return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
-    }
-
-    @Override
-    public Page<ReportFeedbackApplicationForAdminVo> findReportFeedbackApplicationForAdminVos(Long reportId, Pageable pageable) {
-        List<ReportFeedbackApplicationForAdminVo> contents = queryFactory
-                .select(Projections.constructor(ReportFeedbackApplicationForAdminVo.class,
-                        reportApplication.id,
-                        user.name,
-                        user.contactEmail,
-                        user.phoneNum,
-                        reportApplication.wishJob,
-                        reportApplication.message,
-                        reportFeedbackApplication.reportFeedbackStatus,
-                        reportApplication.applyUrl,
-                        reportApplication.reportUrl,
-                        reportFeedbackApplication.zoomLink,
-                        reportFeedbackApplication.desiredDate1,
-                        reportFeedbackApplication.desiredDate2,
-                        reportFeedbackApplication.desiredDate3,
-                        reportFeedbackApplication.desiredDateAdmin,
-                        reportFeedbackApplication.desiredDateType,
-                        reportApplication.isCanceled,
-                        reportApplication.createDate
-                ))
-                .from(report)
-                .leftJoin(report.applicationList, reportApplication)
-                .leftJoin(reportApplication.reportFeedbackApplication, reportFeedbackApplication)
-                .where(
-                        eqReportId(reportId)
-                )
-                .orderBy(reportFeedbackApplication.id.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-
-        JPAQuery<Long> countQuery = queryFactory
-                .select(reportFeedbackApplication.id.countDistinct())
-                .from(report)
-                .leftJoin(report.applicationList, reportApplication)
-                .leftJoin(reportApplication.reportFeedbackApplication, reportFeedbackApplication)
-                .where(
-                        eqReportId(reportId)
-                );
-
-        return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
-    }
-
-    @Override
-    public Optional<ReportApplicationPaymentForAdminVo> findReportApplicationPaymentForAdminVo(Long reportId, Long applicationId) {
-        return Optional.ofNullable(queryFactory
-                .select(Projections.constructor(ReportApplicationPaymentForAdminVo.class,
-                        payment.id,
-                        payment.orderId,
-                        reportApplication.reportPriceType,
-                        Expressions.constant(subQueryOptionTitles(reportId)),
-                        reportFeedbackApplication.id,
-                        coupon.name,
-                        payment.finalPrice,
-                        reportApplication.isCanceled
-                ))
-                .from(report)
-                .leftJoin(report.applicationList, reportApplication)
-                .leftJoin(reportApplication.payment)
-                .leftJoin(payment.coupon)
+                .from(reportApplication)
+                .leftJoin(reportApplication.report, report)
                 .where(
                         eqReportId(reportId),
-                        eqApplicationId(applicationId)
+                        eqPriceType(priceType),
+                        eqReportType(reportType)
+                );
+
+        return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
+    }
+
+    @Override
+    public List<ReportApplicationOptionForAdminVo> findReportApplicationPaymentForAdminVos(Long reportId, Long applicationId, ReportType reportType, ReportPriceType priceType, String code) {
+        return queryFactory
+                .select(Projections.constructor(ReportApplicationOptionForAdminVo.class,
+                        reportApplicationOption.id,
+                        reportApplicationOption.price,
+                        reportApplicationOption.discountPrice,
+                        reportApplicationOption.title,
+                        reportApplicationOption.code
+                ))
+                .from(reportApplicationOption)
+                .leftJoin(reportApplicationOption.reportApplication, reportApplication)
+                .leftJoin(reportApplication.report, report)
+                .where(
+                        eqReportId(reportId),
+                        eqApplicationId(applicationId),
+                        eqReportType(reportType),
+                        eqPriceType(priceType),
+                        containOptionCode(code)
                 )
-                .fetchOne());
+                .orderBy(reportApplication.id.desc())
+                .fetch();
     }
 
     @Override
@@ -306,6 +288,80 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
     }
 
+    @Override
+    public Optional<ReportDetailVo> findReportDetailByReportTypeVoForVisible(ReportType reportType) {
+        return Optional.ofNullable(queryFactory
+                .select(Projections.constructor(ReportDetailVo.class,
+                        report.id,
+                        report.title,
+                        report.notice,
+                        report.contents,
+                        report.type))
+                .from(report)
+                .where(
+                        eqReportType(reportType),
+                        isVisible()
+                )
+                .fetchOne());
+    }
+
+    @Override
+    public Optional<ReportApplicationVo> findReportApplicationVoByApplicationId(Long applicationId) {
+        return Optional.ofNullable(queryFactory
+                .select(Projections.constructor(ReportApplicationVo.class,
+                        reportApplication.id,
+                        reportFeedbackApplication.id,
+                        report.title,
+                        reportApplication.reportPriceType,
+                        Expressions.constant(subQueryReportApplicationOptionsTitle(applicationId)))
+                )
+                .from(reportApplication)
+                .leftJoin(reportApplication.report, report)
+                .leftJoin(reportApplication.reportFeedbackApplication, reportFeedbackApplication)
+                .where(
+                        eqApplicationId(applicationId)
+                )
+                .fetchOne()
+        );
+    }
+
+    @Override
+    public Optional<ReportPaymentVo> findReportPaymentVoByApplicationId(Long applicationId) {
+        return Optional.ofNullable(queryFactory
+                .select(Projections.constructor(ReportPaymentVo.class,
+                        payment.id,
+                        payment.finalPrice,
+                        coupon.discount,
+                        payment.programPrice,
+                        payment.programDiscount,
+                        reportApplication.refundPrice,
+                        reportFeedbackApplication.refundPrice,
+                        Expressions.constant(subQueryForReportApplicationPriceInfo(applicationId)),
+                        Expressions.constant(subQueryReportApplicationOptionInfos(applicationId)),
+                        Expressions.constant(subQueryFeedbackApplicationPriceInfo(applicationId)),
+                        reportApplication.createDate
+                ))
+                .from(reportApplication)
+                .leftJoin(reportApplication.reportFeedbackApplication, reportFeedbackApplication)
+                .where(
+                        eqApplicationId(applicationId)
+                )
+                .fetchOne()
+        );
+    }
+
+    @Override
+    public ReportPrice findReportPriceByReportIdAndType(Long reportId, ReportPriceType reportPriceType) {
+        return queryFactory
+                .selectFrom(reportPrice)
+                .leftJoin(reportPrice.report, report)
+                .where(
+                        eqReportId(reportId),
+                        eqReportPriceType(reportPriceType)
+                )
+                .fetchOne();
+    }
+
     private List<ReportPriceVo> subQueryForReportPriceInfos(Long reportId) {
         return queryFactory.select(Projections.constructor(ReportPriceVo.class,
                         reportPrice.reportPriceType,
@@ -318,6 +374,19 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         eqReportId(reportId)
                 )
                 .fetch();
+    }
+
+    private ReportPriceVo subQueryForReportApplicationPriceInfo(Long applicationId) {
+        return queryFactory.select(Projections.constructor(ReportPriceVo.class,
+                        reportApplication.reportPriceType,
+                        reportApplication.price,
+                        reportApplication.discountPrice
+                ))
+                .from(reportApplication)
+                .where(
+                        eqApplicationId(applicationId)
+                )
+                .fetchOne();
     }
 
     private List<ReportOptionVo> subQueryReportOptionInfos(Long reportId) {
@@ -335,9 +404,25 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .fetch();
     }
 
+    private List<ReportOptionVo> subQueryReportApplicationOptionInfos(Long applicationId) {
+        return queryFactory.select(Projections.constructor(ReportOptionVo.class,
+                        reportApplicationOption.id,
+                        reportApplicationOption.price,
+                        reportApplicationOption.discountPrice,
+                        reportApplicationOption.title
+                ))
+                .from(reportApplicationOption)
+                .leftJoin(reportApplicationOption.reportApplication, reportApplication)
+                .where(
+                        eqApplicationId(applicationId)
+                )
+                .fetch();
+    }
+
     private FeedbackPriceVo subQueryFeedbackPriceInfo(Long reportId) {
         return queryFactory.select(Projections.constructor(FeedbackPriceVo.class,
                         reportFeedback.id,
+                        reportFeedback.reportPriceType,
                         reportFeedback.feedbackPrice,
                         reportFeedback.feedbackDiscountPrice
                 ))
@@ -345,6 +430,21 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .leftJoin(report.reportFeedback, reportFeedback)
                 .where(
                         eqReportId(reportId)
+                )
+                .fetchOne();
+    }
+
+    private FeedbackPriceVo subQueryFeedbackApplicationPriceInfo(Long applicationId) {
+        return queryFactory.select(Projections.constructor(FeedbackPriceVo.class,
+                        reportFeedbackApplication.id,
+                        reportFeedbackApplication.reportPriceType,
+                        reportFeedbackApplication.price,
+                        reportFeedbackApplication.discountPrice
+                ))
+                .from(reportFeedbackApplication)
+                .leftJoin(reportFeedbackApplication.reportApplication, reportApplication)
+                .where(
+                        eqApplicationId(applicationId)
                 )
                 .fetchOne();
     }
@@ -357,6 +457,18 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .leftJoin(report.optionList, reportOption)
                 .where(
                         eqReportId(reportId)
+                )
+                .fetch();
+    }
+
+    private List<String> subQueryReportApplicationOptionsTitle(Long applicationId) {
+        return queryFactory.select(Projections.constructor(String.class,
+                        reportApplicationOption.title
+                ))
+                .from(reportApplicationOption)
+                .leftJoin(reportApplicationOption.reportApplication, reportApplication)
+                .where(
+                        eqApplicationId(applicationId)
                 )
                 .fetch();
     }
@@ -404,5 +516,25 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
 
     private BooleanExpression eqUserId(Long userId) {
         return userId != null ? user.id.eq(userId) : null;
+    }
+
+    private BooleanExpression eqPriceType(ReportPriceType priceType) {
+        return priceType != null ? reportApplication.reportPriceType.eq(priceType) : null;
+    }
+
+    private BooleanExpression eqReportPriceType(ReportPriceType priceType) {
+        return priceType != null ? reportPrice.reportPriceType.eq(priceType) : null;
+    }
+
+    private BooleanExpression containOptionCode(String code) {
+        return code != null ? reportApplicationOption.code.contains(code) : null;
+    }
+
+    private BooleanExpression isVisible() {
+        return report.visibleDate.isNotNull();
+    }
+
+    private BooleanExpression isApplyFeedback(Boolean isApplyFeedback) {
+        return isApplyFeedback != null ? reportFeedbackApplication.isNotNull() : null;
     }
 }

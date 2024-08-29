@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record CreateReportApplicationRequestDto(
-        Long reportId,
         ReportPriceType reportPriceType,
         List<Long> optionIds,
         Boolean isFeedbackApplied,

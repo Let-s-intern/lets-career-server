@@ -1,7 +1,9 @@
 package org.letscareer.letscareer.domain.report.service;
 
-import org.letscareer.letscareer.domain.report.dto.res.GetReportApplicationPaymentForAdminResponseDto;
+import org.letscareer.letscareer.domain.report.dto.res.GetReportApplicationOptionsForAdminResponseDto;
+import org.letscareer.letscareer.domain.report.type.ReportPriceType;
+import org.letscareer.letscareer.domain.report.type.ReportType;
 
 public interface GetReportApplicationPaymentForAdminService {
-    GetReportApplicationPaymentForAdminResponseDto execute(Long reportId, Long applicationId);
+    GetReportApplicationOptionsForAdminResponseDto execute(Long reportId, Long applicationId, ReportType reportType, ReportPriceType priceType, String code);
 }

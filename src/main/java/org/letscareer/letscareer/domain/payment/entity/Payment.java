@@ -62,11 +62,12 @@ public class Payment extends BaseTimeEntity {
 
     public static Payment createReportPayment(CreateReportApplicationRequestDto requestDto,
                                               Coupon coupon,
-                                              ReportApplication reportApplication) {
+                                              ReportApplication reportApplication,
+                                              Integer programPrice) {
         return Payment.builder()
                 .finalPrice(Integer.valueOf(requestDto.amount()))
-                .programPrice(reportApplication.getPrice())
-                .programDiscount(reportApplication.getDiscountPrice())
+                .programPrice(programPrice)
+                .programDiscount(requestDto.discountPrice())
                 .paymentKey(updateValue("", requestDto.paymentKey()))
                 .orderId(requestDto.orderId())
                 .coupon(coupon)

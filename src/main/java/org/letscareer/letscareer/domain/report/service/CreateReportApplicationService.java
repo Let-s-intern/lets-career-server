@@ -4,5 +4,5 @@ import org.letscareer.letscareer.domain.report.dto.req.CreateReportApplicationRe
 import org.letscareer.letscareer.domain.user.entity.User;
 
 public interface CreateReportApplicationService {
-    void execute(User user, CreateReportApplicationRequestDto requestDto);
+    void execute(User user, Long reportId, CreateReportApplicationRequestDto requestDto);
 }

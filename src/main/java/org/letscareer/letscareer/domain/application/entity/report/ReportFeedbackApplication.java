@@ -8,10 +8,15 @@ import org.letscareer.letscareer.domain.application.type.converter.ReportDesired
 import org.letscareer.letscareer.domain.application.type.converter.ReportFeedbackStatusConverter;
 import org.letscareer.letscareer.domain.program.dto.response.ZoomMeetingResponseDto;
 import org.letscareer.letscareer.domain.report.dto.req.CreateReportApplicationRequestDto;
+import org.letscareer.letscareer.domain.report.dto.req.UpdateFeedbackScheduleRequestDto;
 import org.letscareer.letscareer.domain.report.entity.ReportFeedback;
+import org.letscareer.letscareer.domain.report.type.ReportPriceType;
+import org.letscareer.letscareer.domain.report.type.ReportPriceTypeConverter;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 import java.time.LocalDateTime;
+
+import static org.letscareer.letscareer.global.common.utils.entity.EntityUpdateValueUtils.updateValue;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -24,8 +29,12 @@ public class ReportFeedbackApplication extends BaseTimeEntity {
     @Column(name = "report_feedback_application_id")
     private Long id;
 
+    @Convert(converter = ReportPriceTypeConverter.class)
+    @Builder.Default
+    private ReportPriceType reportPriceType = ReportPriceType.BASIC;
     private Integer price;
     private Integer discountPrice;
+    private Integer refundPrice;
 
     private LocalDateTime desiredDate1;
     private LocalDateTime desiredDate2;
@@ -36,7 +45,7 @@ public class ReportFeedbackApplication extends BaseTimeEntity {
     private ReportDesiredDateType desiredDateType;
     @Convert(converter = ReportFeedbackStatusConverter.class)
     @Builder.Default
-    private ReportFeedbackStatus reportFeedbackStatus = ReportFeedbackStatus.APPLIED;
+    private ReportFeedbackStatus reportFeedbackStatus = ReportFeedbackStatus.PENDING;
     private LocalDateTime checkedDate;
 
     private String zoomLink;
@@ -59,5 +68,34 @@ public class ReportFeedbackApplication extends BaseTimeEntity {
                 .build();
         reportApplication.setReportFeedbackApplication(reportFeedbackApplication);
         return reportFeedbackApplication;
+    }
+
+    public void updateRefundPrice(int refundPrice) {
+        this.refundPrice = updateValue(this.refundPrice, refundPrice);
+    }
+
+    public void updateSchedule(UpdateFeedbackScheduleRequestDto requestDto) {
+        this.desiredDateAdmin = updateValue(this.desiredDateAdmin, requestDto.desiredDateAdmin());
+        this.desiredDateType = updateValue(this.desiredDateType, requestDto.desiredDateType());
+        this.checkedDate = LocalDateTime.now();
+        this.reportFeedbackStatus = ReportFeedbackStatus.CONFIRMED;
+    }
+
+    public void setZoomInfo(ZoomMeetingResponseDto zoomInfo) {
+        this.zoomLink = zoomInfo.join_url();
+        this.zoomPassword = zoomInfo.password();
+    }
+
+    public LocalDateTime getCheckedFeedbackDate(ReportDesiredDateType desiredDateType) {
+        if (desiredDateType.equals(ReportDesiredDateType.DESIRED_DATE_1))
+            return desiredDate1;
+        else if (desiredDateType.equals(ReportDesiredDateType.DESIRED_DATE_2))
+            return desiredDate2;
+        else if (desiredDateType.equals(ReportDesiredDateType.DESIRED_DATE_3))
+            return desiredDate3;
+        else if (desiredDateType.equals(ReportDesiredDateType.DESIRED_DATE_ADMIN))
+            return desiredDateAdmin;
+        else
+            return null;
     }
 }

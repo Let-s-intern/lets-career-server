@@ -1,16 +1,24 @@
 package org.letscareer.letscareer.domain.report.mapper;
 
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationForAdminVo;
-import org.letscareer.letscareer.domain.application.vo.ReportApplicationPaymentForAdminVo;
-import org.letscareer.letscareer.domain.application.vo.ReportFeedbackApplicationForAdminVo;
+import org.letscareer.letscareer.domain.application.vo.ReportApplicationOptionForAdminVo;
+import org.letscareer.letscareer.domain.pg.dto.response.TossPaymentsResponseDto;
 import org.letscareer.letscareer.domain.report.dto.res.*;
 import org.letscareer.letscareer.domain.report.vo.*;
 import org.letscareer.letscareer.global.common.entity.PageInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class ReportMapper {
+    public GetReportPaymentResponseDto toGetReportPaymentResponseDto(ReportApplicationVo reportApplicationInfo,
+                                                                     ReportPaymentVo reportPaymentInfo,
+                                                                     TossPaymentsResponseDto tossInfo) {
+        return GetReportPaymentResponseDto.of(reportApplicationInfo, reportPaymentInfo, tossInfo);
+    }
+
     public GetReportsForAdminResponseDto toGetReportsForAdminResponseDto(Page<ReportForAdminVo> vos) {
         PageInfo pageInfo = PageInfo.of(vos);
         return GetReportsForAdminResponseDto.of(vos.getContent(), pageInfo);
@@ -25,13 +33,8 @@ public class ReportMapper {
         return GetReportApplicationsForAdminResponseDto.of(vos.getContent(), pageInfo);
     }
 
-    public GetReportFeedbackApplicationsForAdminResponseDto toGetReportFeedbackApplicationsForAdminResponseDto(Page<ReportFeedbackApplicationForAdminVo> vos) {
-        PageInfo pageInfo = PageInfo.of(vos);
-        return GetReportFeedbackApplicationsForAdminResponseDto.of(vos.getContent(), pageInfo);
-    }
-
-    public GetReportApplicationPaymentForAdminResponseDto toGetReportApplicationPaymentForAdminResponseDto(ReportApplicationPaymentForAdminVo vo) {
-        return GetReportApplicationPaymentForAdminResponseDto.of(vo);
+    public GetReportApplicationOptionsForAdminResponseDto toGetReportApplicationPaymentForAdminResponseDto(List<ReportApplicationOptionForAdminVo> vos) {
+        return GetReportApplicationOptionsForAdminResponseDto.of(vos);
     }
 
     public GetReportDetailResponseDto toGetReportDetailResponseDto(ReportDetailVo vo) {
@@ -50,5 +53,11 @@ public class ReportMapper {
     public GetMyReportFeedbackResponseDto toGetMyReportFeedbackResponseDto(Page<MyReportFeedbackVo> vos) {
         PageInfo pageInfo = PageInfo.of(vos);
         return GetMyReportFeedbackResponseDto.of(vos.getContent(), pageInfo);
+    }
+
+    public GetReportThumbnailResponseDto toGetReportThumbnailResponseDto(ReportDetailVo resumeInfo,
+                                                                         ReportDetailVo personalStatementInfo,
+                                                                         ReportDetailVo portfolioInfo) {
+        return GetReportThumbnailResponseDto.of(resumeInfo, personalStatementInfo, portfolioInfo);
     }
 }
