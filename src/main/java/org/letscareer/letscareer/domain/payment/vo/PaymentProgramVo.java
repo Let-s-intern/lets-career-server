@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 public record PaymentProgramVo(
         Long paymentId,
+        Long applicationId,
+        String programType,
         String title,
         String thumbnail,
         Integer price,
