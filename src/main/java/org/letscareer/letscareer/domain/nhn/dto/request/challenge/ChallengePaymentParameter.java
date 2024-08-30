@@ -1,4 +1,4 @@
-package org.letscareer.letscareer.domain.nhn.dto.request;
+package org.letscareer.letscareer.domain.nhn.dto.request.challenge;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;

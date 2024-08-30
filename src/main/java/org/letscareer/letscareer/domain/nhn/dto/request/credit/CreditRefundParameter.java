@@ -1,4 +1,4 @@
-package org.letscareer.letscareer.domain.nhn.dto.request;
+package org.letscareer.letscareer.domain.nhn.dto.request.credit;
 
 import lombok.AccessLevel;
 import lombok.Builder;
