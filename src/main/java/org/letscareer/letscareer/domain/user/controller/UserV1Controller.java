@@ -34,7 +34,7 @@ public class UserV1Controller {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserParticipationResponseDto.class)))
     })
     @ApiErrorCode({SwaggerEnum.USER_NOT_FOUND})
-    @GetMapping
+    @GetMapping("/participation-info")
     public ResponseEntity<SuccessResponse<?>> getUserParticipationInfo(@CurrentUser User user) {
         final UserParticipationResponseDto responseDto = userParticipationService.execute(user);
         return SuccessResponse.ok(responseDto);
