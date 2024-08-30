@@ -46,6 +46,7 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
 
         ReportApplication reportApplication = reportApplicationHelper.createReportApplicationAndSave(requestDto, report, reportPrice, user);
         Payment payment = paymentHelper.createReportPaymentAndSave(requestDto, coupon, reportApplication);
+        reportApplication.setPayment(payment);
         List<ReportApplicationOption> reportApplicationOptions = createReportApplicationOptions(reportApplication, reportId, requestDto);
         ReportFeedbackApplication reportFeedbackApplication = reportApplicationHelper.createReportFeedbackApplicationAndSave(requestDto, reportFeedback, reportApplication);
 
