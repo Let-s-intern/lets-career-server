@@ -150,7 +150,14 @@ public class ReportV1Controller {
         return SuccessResponse.created(null);
     }
 
-    @Operation(summary = "[테스트 중] 진단서 신청")
+    @Operation(
+            summary = "[테스트 중] 진단서 신청",
+            description = """
+                    amount : 실제 결제 금액 <br>
+                    programPrice : (서류 진단 + 옵션 + 1대1 첨삭) 정가 <br>
+                    programDiscount : (서류 진단 + 옵션 + 1대1 첨삭) 할인 가격, 쿠폰 할인 제외 <br>
+                    """
+    )
     @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
     @PostMapping("/{reportId}/application")
     public ResponseEntity<SuccessResponse<?>> createReportApplication(@CurrentUser final User user,
@@ -178,7 +185,16 @@ public class ReportV1Controller {
         return SuccessResponse.ok(null);
     }
 
-    @Operation(summary = "1대1 첨삭 일정 관리")
+    @Operation(
+            summary = "1대1 첨삭 일정 관리",
+            description = """
+                    [NotNull] reportFeedbackStatus <br>
+                    APPLIED(1, "신청완료") <br>
+                    PENDING(2, "일정 선택완료") <br>
+                    CONFIRMED(3, "일정확정") <br>
+                    COMPLETED(4, "진행완료") <br>
+                    """
+    )
     @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     @PatchMapping("/{reportId}/application/{applicationId}/schedule")
     public ResponseEntity<SuccessResponse<?>> updateReportFeedbackSchedule(@PathVariable final Long reportId,

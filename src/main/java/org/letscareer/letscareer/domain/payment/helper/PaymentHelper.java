@@ -33,9 +33,7 @@ public class PaymentHelper {
     public Payment createReportPaymentAndSave(CreateReportApplicationRequestDto requestDto,
                                               Coupon coupon,
                                               ReportApplication reportApplication) {
-        Integer couponDiscount = Objects.isNull(coupon) ? 0 : coupon.getDiscount();
-        Integer programPrice = Integer.parseInt(requestDto.amount()) + requestDto.discountPrice() + couponDiscount;
-        Payment payment = Payment.createReportPayment(requestDto, coupon, reportApplication, programPrice);
+        Payment payment = Payment.createReportPayment(requestDto, coupon, reportApplication);
         return paymentRepository.save(payment);
     }
 
@@ -62,15 +60,5 @@ public class PaymentHelper {
 
     public long countCouponAppliedTime(Long userId, Long couponId) {
         return paymentRepository.countCouponAppliedTime(userId, couponId);
-    }
-
-    private int calculateFinalPrice(Price price, Coupon coupon) {
-        int finalPrice = price.getPrice() - price.getDiscount();
-        if (coupon != null) {
-            System.out.println(coupon.getDiscount());
-            if (coupon.getDiscount() == -1) return 0;
-            finalPrice -= coupon.getDiscount();
-        }
-        return finalPrice;
     }
 }

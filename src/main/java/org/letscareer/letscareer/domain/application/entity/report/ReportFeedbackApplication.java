@@ -45,7 +45,7 @@ public class ReportFeedbackApplication extends BaseTimeEntity {
     private ReportDesiredDateType desiredDateType;
     @Convert(converter = ReportFeedbackStatusConverter.class)
     @Builder.Default
-    private ReportFeedbackStatus reportFeedbackStatus = ReportFeedbackStatus.PENDING;
+    private ReportFeedbackStatus reportFeedbackStatus = ReportFeedbackStatus.APPLIED;
     private LocalDateTime checkedDate;
 
     private String zoomLink;
@@ -78,7 +78,11 @@ public class ReportFeedbackApplication extends BaseTimeEntity {
         this.desiredDateAdmin = updateValue(this.desiredDateAdmin, requestDto.desiredDateAdmin());
         this.desiredDateType = updateValue(this.desiredDateType, requestDto.desiredDateType());
         this.checkedDate = LocalDateTime.now();
-        this.reportFeedbackStatus = ReportFeedbackStatus.CONFIRMED;
+        this.reportFeedbackStatus = ReportFeedbackStatus.PENDING;
+    }
+
+    public void updateFeedbackStatus(ReportFeedbackStatus reportFeedbackStatus) {
+        this.reportFeedbackStatus = reportFeedbackStatus;
     }
 
     public void setZoomInfo(ZoomMeetingResponseDto zoomInfo) {
