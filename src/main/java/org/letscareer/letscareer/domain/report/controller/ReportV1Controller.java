@@ -150,7 +150,14 @@ public class ReportV1Controller {
         return SuccessResponse.created(null);
     }
 
-    @Operation(summary = "[테스트 중] 진단서 신청")
+    @Operation(
+            summary = "[테스트 중] 진단서 신청",
+            description = """
+                    amount : 실제 결제 금액 <br>
+                    programPrice : (서류 진단 + 옵션 + 1대1 첨삭) 정가 <br>
+                    programDiscount : (서류 진단 + 옵션 + 1대1 첨삭) 할인 가격, 쿠폰 할인 제외 <br>
+                    """
+    )
     @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
     @PostMapping("/{reportId}/application")
     public ResponseEntity<SuccessResponse<?>> createReportApplication(@CurrentUser final User user,
