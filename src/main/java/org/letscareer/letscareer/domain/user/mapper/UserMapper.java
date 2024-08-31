@@ -14,6 +14,10 @@ import java.util.List;
 @Component
 public class UserMapper {
 
+    public UserParticipationResponseDto toUserParticipationResponseDto(User user) {
+        return UserParticipationResponseDto.of(user);
+    }
+
     public User toEntityFromOAuth2(OAuth2UserInfo oAuth2UserInfo, AuthProvider authProvider) {
         return User.createUserFromOAuth2(oAuth2UserInfo, authProvider);
     }

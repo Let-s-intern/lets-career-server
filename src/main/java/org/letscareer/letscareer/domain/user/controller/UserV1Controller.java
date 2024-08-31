@@ -11,6 +11,7 @@ import org.letscareer.letscareer.domain.application.type.ApplicationStatus;
 import org.letscareer.letscareer.domain.user.dto.request.*;
 import org.letscareer.letscareer.domain.user.dto.response.*;
 import org.letscareer.letscareer.domain.user.entity.User;
+import org.letscareer.letscareer.domain.user.service.UserParticipationService;
 import org.letscareer.letscareer.domain.user.service.UserService;
 import org.letscareer.letscareer.global.common.annotation.ApiErrorCode;
 import org.letscareer.letscareer.global.common.annotation.CurrentUser;
@@ -26,6 +27,18 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserV1Controller {
     private final UserService userService;
+    private final UserParticipationService userParticipationService;
+
+
+    @Operation(summary = "참여자 정보 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserParticipationResponseDto.class)))
+    })
+    @ApiErrorCode({SwaggerEnum.USER_NOT_FOUND})
+    @GetMapping("/participation-info")
+    public ResponseEntity<SuccessResponse<?>> getUserParticipationInfo(@CurrentUser User user) {
+        final UserParticipationResponseDto responseDto = userParticipationService.execute(user);
+        return SuccessResponse.ok(responseDto);
+    }
 
     @Operation(summary = "유저 마이페이지 정보", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserInfoResponseDto.class)))

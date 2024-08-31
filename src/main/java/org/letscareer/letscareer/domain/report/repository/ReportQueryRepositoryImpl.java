@@ -216,55 +216,22 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         report.title,
                         report.type,
                         reportApplication.status,
-                        reportApplication.createDate,
-                        reportApplication.reportDate
-                ))
-                .from(report)
-                .leftJoin(report.applicationList, reportApplication)
-                .leftJoin(reportApplication.user, user)
-                .where(
-                        eqReportType(reportType),
-                        eqUserId(userId)
-                )
-                .orderBy(reportApplication.id.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-
-        JPAQuery<Long> countQuery = queryFactory
-                .select(reportApplication.id.countDistinct())
-                .from(report)
-                .leftJoin(report.applicationList, reportApplication)
-                .leftJoin(reportApplication.user, user)
-                .where(
-                        eqReportType(reportType),
-                        eqUserId(userId)
-                );
-
-        return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
-    }
-
-    @Override
-    public Page<MyReportFeedbackVo> findMyReportFeedbackVos(Long userId, ReportType reportType, Pageable pageable) {
-        List<MyReportFeedbackVo> contents = queryFactory
-                .select(Projections.constructor(MyReportFeedbackVo.class,
-                        report.id,
-                        reportApplication.id,
-                        report.title,
-                        report.type,
                         reportFeedbackApplication.reportFeedbackStatus,
+                        reportApplication.reportUrl,
+                        reportApplication.applyUrl,
+                        reportApplication.recruitmentUrl,
                         reportFeedbackApplication.zoomLink,
                         reportFeedbackApplication.zoomPassword,
                         reportFeedbackApplication.desiredDate1,
                         reportFeedbackApplication.desiredDate2,
                         reportFeedbackApplication.desiredDate3,
-                        reportFeedbackApplication.reportApplication.createDate,
+                        reportApplication.createDate,
                         getConfirmedTimeFor()
                 ))
                 .from(report)
                 .leftJoin(report.applicationList, reportApplication)
-                .leftJoin(reportApplication.user, user)
                 .leftJoin(reportApplication.reportFeedbackApplication, reportFeedbackApplication)
+                .leftJoin(reportApplication.user, user)
                 .where(
                         eqReportType(reportType),
                         eqUserId(userId)
@@ -279,7 +246,6 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .from(report)
                 .leftJoin(report.applicationList, reportApplication)
                 .leftJoin(reportApplication.user, user)
-                .leftJoin(reportApplication.reportFeedbackApplication, reportFeedbackApplication)
                 .where(
                         eqReportType(reportType),
                         eqUserId(userId)
