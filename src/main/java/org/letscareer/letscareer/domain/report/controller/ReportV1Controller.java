@@ -178,7 +178,16 @@ public class ReportV1Controller {
         return SuccessResponse.ok(null);
     }
 
-    @Operation(summary = "1대1 첨삭 일정 관리")
+    @Operation(
+            summary = "1대1 첨삭 일정 관리",
+            description = """
+                    [NotNull] reportFeedbackStatus <br>
+                    APPLIED(1, "신청완료") <br>
+                    PENDING(2, "일정 선택완료") <br>
+                    CONFIRMED(3, "일정확정") <br>
+                    COMPLETED(4, "진행완료") <br>
+                    """
+    )
     @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     @PatchMapping("/{reportId}/application/{applicationId}/schedule")
     public ResponseEntity<SuccessResponse<?>> updateReportFeedbackSchedule(@PathVariable final Long reportId,
