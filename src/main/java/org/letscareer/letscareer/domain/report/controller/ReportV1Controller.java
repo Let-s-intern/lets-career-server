@@ -32,7 +32,6 @@ public class ReportV1Controller {
     private final GetReportDetailService getReportDetailService;
     private final GetReportPriceDetailService getReportPriceDetailService;
     private final GetMyReportService getMyReportService;
-    private final GetMyReportFeedbackService getMyReportFeedbackService;
     private final GetReportThumbnailService getReportThumbnailService;
     private final GetReportPaymentService getReportPaymentService;
     private final CreateReportService createReportService;
@@ -119,16 +118,6 @@ public class ReportV1Controller {
                                                            @RequestParam(required = false) final ReportType reportType,
                                                            final Pageable pageable) {
         final GetMyReportResponseDto responseDto = getMyReportService.execute(user, reportType, pageable);
-        return SuccessResponse.ok(responseDto);
-    }
-
-    @Operation(summary = "나의 1:1 첨삭 목록 보기", description = "[My 진단서 보기 -> 맞춤 첨삭] reportType을 제외할 경우 전체 조회")
-    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetMyReportFeedbackResponseDto.class)))
-    @GetMapping("/my/feedback")
-    public ResponseEntity<SuccessResponse<?>> getMyReportFeedbacks(@CurrentUser final User user,
-                                                                   @RequestParam(required = false) final ReportType reportType,
-                                                                   final Pageable pageable) {
-        final GetMyReportFeedbackResponseDto responseDto = getMyReportFeedbackService.execute(user, reportType, pageable);
         return SuccessResponse.ok(responseDto);
     }
 
