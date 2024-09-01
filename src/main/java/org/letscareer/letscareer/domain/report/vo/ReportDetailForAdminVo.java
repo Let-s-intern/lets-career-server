@@ -12,7 +12,7 @@ public record ReportDetailForAdminVo(
         String contents,
         String notice,
         List<ReportPriceVo> reportPriceInfos,
-        List<ReportOptionVo> reportOptionInfos,
+        List<ReportOptionForAdminVo> reportOptionForAdminInfos,
         FeedbackPriceVo feedbackPriceInfo,
         LocalDateTime visibleDate
 ) {

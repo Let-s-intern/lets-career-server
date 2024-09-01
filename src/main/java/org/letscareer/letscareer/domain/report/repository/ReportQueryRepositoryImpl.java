@@ -77,7 +77,7 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         report.contents,
                         report.notice,
                         Expressions.constant(subQueryForReportPriceInfos(reportId)),
-                        Expressions.constant(subQueryReportOptionInfos(reportId)),
+                        Expressions.constant(subQueryReportOptionInfosForAdmin(reportId)),
                         Expressions.constant(subQueryFeedbackPriceInfo(reportId)),
                         report.visibleDate
                 ))
@@ -354,6 +354,22 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         eqApplicationId(applicationId)
                 )
                 .fetchOne();
+    }
+
+    private List<ReportOptionForAdminVo> subQueryReportOptionInfosForAdmin(Long reportId) {
+        return queryFactory.select(Projections.constructor(ReportOptionForAdminVo.class,
+                        reportOption.id,
+                        reportOption.price,
+                        reportOption.discountPrice,
+                        reportOption.title,
+                        reportOption.code
+                ))
+                .from(report)
+                .leftJoin(report.optionList, reportOption)
+                .where(
+                        eqReportId(reportId)
+                )
+                .fetch();
     }
 
     private List<ReportOptionVo> subQueryReportOptionInfos(Long reportId) {
