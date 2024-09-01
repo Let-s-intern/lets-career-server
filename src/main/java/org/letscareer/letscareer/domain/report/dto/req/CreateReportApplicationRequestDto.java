@@ -25,6 +25,7 @@ public record CreateReportApplicationRequestDto(
         LocalDateTime desiredDate3,
 
         String wishJob,
-        String message
+        String message,
+        String contactEmail
 ) {
 }
