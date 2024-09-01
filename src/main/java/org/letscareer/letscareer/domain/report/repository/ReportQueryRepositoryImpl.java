@@ -338,7 +338,8 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .from(report)
                 .leftJoin(report.priceList, reportPrice)
                 .where(
-                        eqReportId(reportId)
+                        eqReportId(reportId),
+                        reportPrice.id.isNotNull()
                 )
                 .fetch();
     }
@@ -367,7 +368,8 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .from(report)
                 .leftJoin(report.optionList, reportOption)
                 .where(
-                        eqReportId(reportId)
+                        eqReportId(reportId),
+                        reportOption.id.isNotNull()
                 )
                 .fetch();
     }
@@ -382,7 +384,8 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .from(report)
                 .leftJoin(report.optionList, reportOption)
                 .where(
-                        eqReportId(reportId)
+                        eqReportId(reportId),
+                        reportOption.id.isNotNull()
                 )
                 .fetch();
     }
@@ -397,7 +400,8 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .from(reportApplicationOption)
                 .leftJoin(reportApplicationOption.reportApplication, reportApplication)
                 .where(
-                        eqApplicationId(applicationId)
+                        eqApplicationId(applicationId),
+                        reportApplicationOption.id.isNotNull()
                 )
                 .fetch();
     }
@@ -439,7 +443,8 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .from(report)
                 .leftJoin(report.optionList, reportOption)
                 .where(
-                        eqReportId(reportId)
+                        eqReportId(reportId),
+                        reportOption.id.isNotNull()
                 )
                 .fetch();
     }
@@ -451,7 +456,8 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .from(reportApplicationOption)
                 .leftJoin(reportApplicationOption.reportApplication, reportApplication)
                 .where(
-                        eqApplicationId(applicationId)
+                        eqApplicationId(applicationId),
+                        reportApplicationOption.id.isNotNull()
                 )
                 .fetch();
     }
