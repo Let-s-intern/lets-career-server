@@ -53,7 +53,7 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
         ReportFeedbackApplication reportFeedbackApplication = reportApplicationHelper.createReportFeedbackApplicationAndSave(requestDto, reportFeedback, reportApplication);
 
         updateContactEmail(user, requestDto);
-//        TossPaymentsResponseDto responseDto = tossProvider.requestPayments(requestDto.paymentKey(), requestDto.orderId(), requestDto.amount());
+        TossPaymentsResponseDto responseDto = tossProvider.requestPayments(requestDto.paymentKey(), requestDto.orderId(), requestDto.amount());
         // TODO::알림톡 전송
     }
 
