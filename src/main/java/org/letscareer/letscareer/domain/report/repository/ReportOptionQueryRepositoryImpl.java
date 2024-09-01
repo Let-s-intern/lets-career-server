@@ -23,7 +23,8 @@ public class ReportOptionQueryRepositoryImpl implements ReportOptionQueryReposit
                 .leftJoin(report.optionList, reportOption)
                 .where(
                         eqReportId(reportId),
-                        inOptionIds(optionIds)
+                        inOptionIds(optionIds),
+                        reportOption.id.isNotNull()
                 )
                 .fetch();
     }

@@ -77,8 +77,9 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         report.contents,
                         report.notice,
                         Expressions.constant(subQueryForReportPriceInfos(reportId)),
-                        Expressions.constant(subQueryReportOptionInfos(reportId)),
-                        Expressions.constant(subQueryFeedbackPriceInfo(reportId))
+                        Expressions.constant(subQueryReportOptionInfosForAdmin(reportId)),
+                        Expressions.constant(subQueryFeedbackPriceInfo(reportId)),
+                        report.visibleDate
                 ))
                 .from(report)
                 .where(
@@ -337,7 +338,8 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .from(report)
                 .leftJoin(report.priceList, reportPrice)
                 .where(
-                        eqReportId(reportId)
+                        eqReportId(reportId),
+                        reportPrice.id.isNotNull()
                 )
                 .fetch();
     }
@@ -355,6 +357,23 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .fetchOne();
     }
 
+    private List<ReportOptionForAdminVo> subQueryReportOptionInfosForAdmin(Long reportId) {
+        return queryFactory.select(Projections.constructor(ReportOptionForAdminVo.class,
+                        reportOption.id,
+                        reportOption.price,
+                        reportOption.discountPrice,
+                        reportOption.title,
+                        reportOption.code
+                ))
+                .from(report)
+                .leftJoin(report.optionList, reportOption)
+                .where(
+                        eqReportId(reportId),
+                        reportOption.id.isNotNull()
+                )
+                .fetch();
+    }
+
     private List<ReportOptionVo> subQueryReportOptionInfos(Long reportId) {
         return queryFactory.select(Projections.constructor(ReportOptionVo.class,
                         reportOption.id,
@@ -365,7 +384,8 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .from(report)
                 .leftJoin(report.optionList, reportOption)
                 .where(
-                        eqReportId(reportId)
+                        eqReportId(reportId),
+                        reportOption.id.isNotNull()
                 )
                 .fetch();
     }
@@ -380,7 +400,8 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .from(reportApplicationOption)
                 .leftJoin(reportApplicationOption.reportApplication, reportApplication)
                 .where(
-                        eqApplicationId(applicationId)
+                        eqApplicationId(applicationId),
+                        reportApplicationOption.id.isNotNull()
                 )
                 .fetch();
     }
@@ -422,7 +443,8 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .from(report)
                 .leftJoin(report.optionList, reportOption)
                 .where(
-                        eqReportId(reportId)
+                        eqReportId(reportId),
+                        reportOption.id.isNotNull()
                 )
                 .fetch();
     }
@@ -434,7 +456,8 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .from(reportApplicationOption)
                 .leftJoin(reportApplicationOption.reportApplication, reportApplication)
                 .where(
-                        eqApplicationId(applicationId)
+                        eqApplicationId(applicationId),
+                        reportApplicationOption.id.isNotNull()
                 )
                 .fetch();
     }
