@@ -78,7 +78,8 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         report.notice,
                         Expressions.constant(subQueryForReportPriceInfos(reportId)),
                         Expressions.constant(subQueryReportOptionInfos(reportId)),
-                        Expressions.constant(subQueryFeedbackPriceInfo(reportId))
+                        Expressions.constant(subQueryFeedbackPriceInfo(reportId)),
+                        report.visibleDate
                 ))
                 .from(report)
                 .where(

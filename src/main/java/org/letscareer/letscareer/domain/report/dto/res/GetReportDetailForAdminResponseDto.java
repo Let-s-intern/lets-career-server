@@ -8,6 +8,7 @@ import org.letscareer.letscareer.domain.report.vo.ReportDetailForAdminVo;
 import org.letscareer.letscareer.domain.report.vo.ReportOptionVo;
 import org.letscareer.letscareer.domain.report.vo.ReportPriceVo;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder(access = AccessLevel.PRIVATE)
@@ -19,7 +20,8 @@ public record GetReportDetailForAdminResponseDto(
         String notice,
         List<ReportPriceVo> reportPriceInfos,
         List<ReportOptionVo> reportOptionInfos,
-        FeedbackPriceVo feedbackPriceInfo
+        FeedbackPriceVo feedbackPriceInfo,
+        LocalDateTime visibleDate
 ) {
     public static GetReportDetailForAdminResponseDto of(ReportDetailForAdminVo vo) {
         return GetReportDetailForAdminResponseDto.builder()
@@ -31,6 +33,7 @@ public record GetReportDetailForAdminResponseDto(
                 .reportPriceInfos(vo.reportPriceInfos())
                 .reportOptionInfos(vo.reportOptionInfos())
                 .feedbackPriceInfo(vo.feedbackPriceInfo())
+                .visibleDate(vo.visibleDate())
                 .build();
     }
 }

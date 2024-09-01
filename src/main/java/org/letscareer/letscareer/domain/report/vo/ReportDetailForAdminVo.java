@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.report.vo;
 
 import org.letscareer.letscareer.domain.report.type.ReportType;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public record ReportDetailForAdminVo(
@@ -12,6 +13,7 @@ public record ReportDetailForAdminVo(
         String notice,
         List<ReportPriceVo> reportPriceInfos,
         List<ReportOptionVo> reportOptionInfos,
-        FeedbackPriceVo feedbackPriceInfo
+        FeedbackPriceVo feedbackPriceInfo,
+        LocalDateTime visibleDate
 ) {
 }
