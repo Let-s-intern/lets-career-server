@@ -59,7 +59,6 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
 
     private List<ReportApplicationOption> createReportApplicationOptions(ReportApplication reportApplication, Long reportId, CreateReportApplicationRequestDto requestDto) {
         List<ReportOption> reportOptions = reportOptionHelper.findReportOptionsByReportIdAndOptionIds(reportId, requestDto.optionIds());
-        System.out.println(reportOptions);
         return reportOptions.stream()
                 .map(reportOption -> reportApplicationHelper.createReportApplicationOptionAndSave(reportApplication, reportOption))
                 .collect(Collectors.toList());
