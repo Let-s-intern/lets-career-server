@@ -24,7 +24,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static org.letscareer.letscareer.domain.application.entity.QApplication.application;
 import static org.letscareer.letscareer.domain.application.entity.report.QReportApplication.reportApplication;
 import static org.letscareer.letscareer.domain.application.entity.report.QReportApplicationOption.reportApplicationOption;
 import static org.letscareer.letscareer.domain.application.entity.report.QReportFeedbackApplication.reportFeedbackApplication;
@@ -281,6 +280,9 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         reportFeedbackApplication.id,
                         report.title,
                         reportApplication.reportPriceType,
+                        reportApplication.status,
+                        reportFeedbackApplication.reportFeedbackStatus,
+                        getConfirmedTimeFor(),
                         Expressions.constant(subQueryReportApplicationOptionsTitle(applicationId)),
                         reportApplication.isCanceled
                 ))
