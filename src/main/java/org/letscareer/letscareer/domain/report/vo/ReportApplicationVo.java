@@ -9,6 +9,7 @@ public record ReportApplicationVo(
         Long reportFeedbackApplicationId,
         String title,
         ReportPriceType reportPriceType,
-        List<String> options
+        List<String> options,
+        Boolean isCanceled
 ) {
 }
