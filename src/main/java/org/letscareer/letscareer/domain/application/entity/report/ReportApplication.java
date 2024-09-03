@@ -38,7 +38,7 @@ public class ReportApplication extends Application {
     private Integer refundPrice;
 
     @Convert(converter = ReportApplicationStatusConverter.class)
-    private ReportApplicationStatus status = ReportApplicationStatus.REPORTING;
+    private ReportApplicationStatus status = ReportApplicationStatus.APPLIED;
     @Convert(converter = ReportPriceTypeConverter.class)
     private ReportPriceType reportPriceType;
 
@@ -66,7 +66,7 @@ public class ReportApplication extends Application {
         this.applyUrl = requestDto.applyUrl();
         this.recruitmentUrl = requestDto.recruitmentUrl();
         this.report = report;
-        this.status = ReportApplicationStatus.REPORTING;
+        this.status = ReportApplicationStatus.APPLIED;
         this.reportApplicationOptionList = new ArrayList<>();
     }
 

@@ -70,7 +70,7 @@ public class Report extends BaseTimeEntity {
 
     public void updateReport(UpdateReportRequestDto requestDto) {
         this.type = updateValue(this.type, requestDto.reportType());
-        this.visibleDate = updateValue(this.visibleDate, requestDto.visibleDate());
+        this.visibleDate = requestDto.visibleDate();
         this.title = updateValue(this.title, requestDto.title());
         this.contents = updateValue(this.contents, requestDto.contents());
         this.notice = updateValue(this.notice, requestDto.notice());

@@ -14,7 +14,8 @@ public record CreateReportApplicationRequestDto(
         String paymentKey,
         String orderId,
         String amount,
-        Integer discountPrice,
+        Integer programPrice,
+        Integer programDiscount,
 
         String applyUrl,
         String recruitmentUrl,
@@ -24,6 +25,7 @@ public record CreateReportApplicationRequestDto(
         LocalDateTime desiredDate3,
 
         String wishJob,
-        String message
+        String message,
+        String contactEmail
 ) {
 }
