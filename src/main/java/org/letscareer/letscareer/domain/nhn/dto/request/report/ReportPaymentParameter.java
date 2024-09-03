@@ -8,20 +8,17 @@ public record ReportPaymentParameter(
         String name,
         String orderId,
         String reportTitle,
-        Long amount,
-        Long applicationId
+        Long amount
 ) {
     public static ReportPaymentParameter of(String name,
                                             String orderId,
                                             String reportTitle,
-                                            Long amount,
-                                            Long applicationId) {
+                                            Long amount) {
         return ReportPaymentParameter.builder()
                 .name(name)
                 .orderId(orderId)
                 .reportTitle(reportTitle)
                 .amount(amount)
-                .applicationId(applicationId)
                 .build();
     }
 }

@@ -95,7 +95,7 @@ public class LiveApplicationServiceImpl implements ApplicationService {
     public void sendPaymentKakaoMessages(Live live, User user, CreatePaymentRequestDto paymentInfo) {
         CreditConfirmParameter paymentRequestParameter = CreditConfirmParameter.of(user.getName(), live.getTitle(), paymentInfo);
         LiveClassPaymentParameter programRequestParameter = isOnlineLiveClass(live) ? LiveClassPaymentParameter.of(user.getName(), live) : null;
-        nhnProvider.sendPaymentKakaoMessages(user, paymentRequestParameter, programRequestParameter, "payment_confirm", "liveclass_payment");
+        nhnProvider.sendProgramPaymentKakaoMessages(user, paymentRequestParameter, programRequestParameter, "payment_confirm", "liveclass_payment");
     }
 
     private void sendCreditRefundKakaoMessage(Live live, User user, Payment payment, RefundType refundType, Integer finalPrice, Integer cancelAmount) {

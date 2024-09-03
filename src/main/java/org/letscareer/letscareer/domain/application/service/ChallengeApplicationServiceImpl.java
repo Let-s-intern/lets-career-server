@@ -99,7 +99,7 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
     private void sendPaymentKakaoMessages(Challenge challenge, User user, CreatePaymentRequestDto paymentInfo) {
         CreditConfirmParameter paymentRequestParameter = CreditConfirmParameter.of(user.getName(), challenge.getTitle(), paymentInfo);
         ChallengePaymentParameter programRequestParameter = isLiveChallenge(challenge) ? ChallengePaymentParameter.of(user.getName(), challenge) : null;
-        nhnProvider.sendPaymentKakaoMessages(user, paymentRequestParameter, programRequestParameter, "payment_confirm", "challenge_payment");
+        nhnProvider.sendProgramPaymentKakaoMessages(user, paymentRequestParameter, programRequestParameter, "payment_confirm", "challenge_payment");
     }
 
     private void sendCreditRefundKakaoMessage(Challenge challenge, User user, Payment payment, RefundType refundType, Integer finalPrice, Integer cancelAmount) {
