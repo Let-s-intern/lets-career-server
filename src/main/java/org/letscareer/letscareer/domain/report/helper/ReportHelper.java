@@ -19,7 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 import static org.letscareer.letscareer.domain.report.error.ReportErrorCode.*;
 
@@ -29,6 +29,7 @@ public class ReportHelper {
     private final ReportRepository reportRepository;
 
     public void validateUpdateVisibleDate(UpdateReportRequestDto requestDto) {
+        if (Objects.isNull(requestDto.reportType())) return;
         if (reportRepository.existByReportTypeAndVisibleDate(requestDto.reportType()).isPresent())
             throw new ConflictException(REPORT_CONFLICT_VISIBLE_DATE);
     }
