@@ -1,5 +1,6 @@
 package org.letscareer.letscareer.domain.nhn.dto.request.report;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
 import lombok.Builder;
 import org.letscareer.letscareer.domain.application.entity.report.ReportFeedbackApplication;
@@ -13,9 +14,13 @@ public record FeedbackConfirmParameter(
         String reportTitle,
         String reportType,
         String reportOption,
+        @JsonFormat(pattern = "yyyy년 MM월 dd일 HH:mm", timezone = "Asia/Seoul")
         LocalDateTime desiredDate1,
+        @JsonFormat(pattern = "yyyy년 MM월 dd일 HH:mm", timezone = "Asia/Seoul")
         LocalDateTime desiredDate2,
+        @JsonFormat(pattern = "yyyy년 MM월 dd일 HH:mm", timezone = "Asia/Seoul")
         LocalDateTime desiredDate3,
+        @JsonFormat(pattern = "yyyy년 MM월 dd일 HH:mm", timezone = "Asia/Seoul")
         LocalDateTime feedbackDate,
         Long applicationId
 ) {

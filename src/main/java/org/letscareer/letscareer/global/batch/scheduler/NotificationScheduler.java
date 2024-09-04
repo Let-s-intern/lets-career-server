@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.global.batch.scheduler;
 
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.application.helper.ReportFeedbackApplicationHelper;
 import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
 import org.letscareer.letscareer.domain.live.helper.LiveHelper;
 import org.letscareer.letscareer.domain.mission.helper.MissionHelper;
@@ -26,6 +27,7 @@ public class NotificationScheduler {
     private final ChallengeHelper challengeHelper;
     private final LiveHelper liveHelper;
     private final MissionHelper missionHelper;
+    private final ReportFeedbackApplicationHelper reportFeedbackApplicationHelper;
     private final JobLauncher jobLauncher;
     private final ReviewNotificationJobConfig reviewNotificationJobConfig;
     private final ChallengeRemindNotificationJobConfig challengeRemindNotificationJobConfig;
@@ -33,6 +35,7 @@ public class NotificationScheduler {
     private final ChallengeEndNotificationJobConfig challengeEndNotificationJobConfig;
     private final ChallengeOTRemindNotificationJobConfig challengeOTRemindNotificationJobConfig;
     private final MissionEndNotificationJobConfig missionEndNotificationJobConfig;
+    private final ReportFeedbackDdayNotificationJobConfig reportFeedbackDdayNotificationJobConfig;
 
     @Scheduled(cron = "0 5 10 * * ?")
     public void sendReviewNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
@@ -113,6 +116,20 @@ public class NotificationScheduler {
                     missionEndNotificationJobConfig.missionEndNotificationJob(),
                     new JobParametersBuilder()
                             .addLong("missionId", missionId)
+                            .addLocalDateTime("now", LocalDateTime.now())
+                            .toJobParameters()
+            );
+        }
+    }
+
+    @Scheduled(cron = "0 0 8 * * ?")
+    public void sendReportFeedbackDdayNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
+        List<Long> reportFeedbackApplicationList = reportFeedbackApplicationHelper.findDdayNotificationReportFeedbackApplicationIds();
+        for(Long reportFeedbackApplicationId: reportFeedbackApplicationList) {
+            jobLauncher.run(
+                    reportFeedbackDdayNotificationJobConfig.reportFeedbackDdayNotificationJob(),
+                    new JobParametersBuilder()
+                            .addLong("reportFeedbackApplicationId", reportFeedbackApplicationId)
                             .addLocalDateTime("now", LocalDateTime.now())
                             .toJobParameters()
             );

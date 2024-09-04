@@ -73,7 +73,8 @@ public class ReportNhnApiTests {
         // given
         Long reportId = 5L;
         Long applicationId = 255L;
-        UpdateFeedbackScheduleRequestDto requestDto = new UpdateFeedbackScheduleRequestDto(ReportFeedbackStatus.PENDING, ReportDesiredDateType.DESIRED_DATE_ADMIN, LocalDateTime.of(2024, 9, 11, 11, 0));
+        LocalDateTime feedbackDate = LocalDateTime.of(2024, 9, 10, 9, 10);
+        UpdateFeedbackScheduleRequestDto requestDto = new UpdateFeedbackScheduleRequestDto(ReportFeedbackStatus.PENDING, ReportDesiredDateType.DESIRED_DATE_ADMIN, feedbackDate);
 
         // when
         updateReportFeedbackSchedule.execute(reportId, applicationId, requestDto);
@@ -81,6 +82,6 @@ public class ReportNhnApiTests {
         // then
         ReportFeedbackApplication reportFeedbackApplication = reportFeedbackApplicationHelper.findReportFeedbackApplicationByReportApplicationIdOrElseNull(applicationId);
         System.out.println(reportFeedbackApplication.getZoomLink());
-        assertThat(reportFeedbackApplication.getDesiredDateType()).isEqualTo(ReportDesiredDateType.DESIRED_DATE_ADMIN);
+        assertThat(reportFeedbackApplication.getFeedbackDate()).isEqualTo(feedbackDate);
     }
 }
