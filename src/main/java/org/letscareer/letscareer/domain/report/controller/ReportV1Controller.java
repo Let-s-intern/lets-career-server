@@ -19,8 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static org.letscareer.letscareer.global.common.entity.SwaggerEnum.REPORT_APPLICATION_NOT_FOUND;
-import static org.letscareer.letscareer.global.common.entity.SwaggerEnum.REPORT_NOT_FOUND;
+import static org.letscareer.letscareer.global.common.entity.SwaggerEnum.*;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/report")
@@ -170,6 +169,7 @@ public class ReportV1Controller {
 
     @Operation(summary = "진단서 프로그램 수정")
     @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    @ApiErrorCode({REPORT_CONFLICT_VISIBLE_DATE})
     @PatchMapping("/{reportId}")
     public ResponseEntity<SuccessResponse<?>> updateReport(@PathVariable final Long reportId,
                                                            @RequestBody final UpdateReportRequestDto requestDto) {
