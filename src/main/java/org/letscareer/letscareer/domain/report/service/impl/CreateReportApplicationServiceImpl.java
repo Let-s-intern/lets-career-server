@@ -17,12 +17,14 @@ import org.letscareer.letscareer.domain.payment.helper.PaymentHelper;
 import org.letscareer.letscareer.domain.pg.dto.response.TossPaymentsResponseDto;
 import org.letscareer.letscareer.domain.pg.provider.TossProvider;
 import org.letscareer.letscareer.domain.report.dto.req.CreateReportApplicationRequestDto;
+import org.letscareer.letscareer.domain.report.dto.res.CreateReportApplicationResponseDto;
 import org.letscareer.letscareer.domain.report.entity.Report;
 import org.letscareer.letscareer.domain.report.entity.ReportFeedback;
 import org.letscareer.letscareer.domain.report.entity.ReportOption;
 import org.letscareer.letscareer.domain.report.entity.ReportPrice;
 import org.letscareer.letscareer.domain.report.helper.ReportHelper;
 import org.letscareer.letscareer.domain.report.helper.ReportOptionHelper;
+import org.letscareer.letscareer.domain.report.mapper.ReportMapper;
 import org.letscareer.letscareer.domain.report.service.CreateReportApplicationService;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.helper.UserHelper;
@@ -46,9 +48,10 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
     private final UserHelper userHelper;
     private final TossProvider tossProvider;
     private final NhnProvider nhnProvider;
+    private final ReportMapper reportMapper;
 
     @Override
-    public void execute(User user, Long reportId, CreateReportApplicationRequestDto requestDto) {
+    public CreateReportApplicationResponseDto execute(User user, Long reportId, CreateReportApplicationRequestDto requestDto) {
         Report report = reportHelper.findReportByReportIdOrThrow(reportId);
         ReportPrice reportPrice = reportHelper.findReportPriceByReportIdAndType(reportId, requestDto.reportPriceType());
         ReportFeedback reportFeedback = report.getReportFeedback();
@@ -63,6 +66,7 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
         updateContactEmail(user, requestDto);
         TossPaymentsResponseDto responseDto = tossProvider.requestPayments(requestDto.paymentKey(), requestDto.orderId(), requestDto.amount());
         sendPaymentKakaoMessages(report, user, responseDto, reportApplicationOptions, reportFeedbackApplication);
+        return reportMapper.toCreateReportApplicationResponseDto(responseDto);
     }
 
     private void sendPaymentKakaoMessages(Report report, User user, TossPaymentsResponseDto responseDto, List<ReportApplicationOption> reportApplicationOptions, ReportFeedbackApplication reportFeedbackApplication) {
