@@ -12,12 +12,14 @@ import org.letscareer.letscareer.domain.payment.helper.PaymentHelper;
 import org.letscareer.letscareer.domain.pg.dto.response.TossPaymentsResponseDto;
 import org.letscareer.letscareer.domain.pg.provider.TossProvider;
 import org.letscareer.letscareer.domain.report.dto.req.CreateReportApplicationRequestDto;
+import org.letscareer.letscareer.domain.report.dto.res.CreateReportApplicationResponseDto;
 import org.letscareer.letscareer.domain.report.entity.Report;
 import org.letscareer.letscareer.domain.report.entity.ReportFeedback;
 import org.letscareer.letscareer.domain.report.entity.ReportOption;
 import org.letscareer.letscareer.domain.report.entity.ReportPrice;
 import org.letscareer.letscareer.domain.report.helper.ReportHelper;
 import org.letscareer.letscareer.domain.report.helper.ReportOptionHelper;
+import org.letscareer.letscareer.domain.report.mapper.ReportMapper;
 import org.letscareer.letscareer.domain.report.service.CreateReportApplicationService;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.stereotype.Service;
@@ -36,9 +38,10 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
     private final PaymentHelper paymentHelper;
     private final CouponHelper couponHelper;
     private final TossProvider tossProvider;
+    private final ReportMapper reportMapper;
 
     @Override
-    public void execute(User user, Long reportId, CreateReportApplicationRequestDto requestDto) {
+    public CreateReportApplicationResponseDto execute(User user, Long reportId, CreateReportApplicationRequestDto requestDto) {
         Report report = reportHelper.findReportByReportIdOrThrow(reportId);
         ReportPrice reportPrice = reportHelper.findReportPriceByReportIdAndType(reportId, requestDto.reportPriceType());
         ReportFeedback reportFeedback = report.getReportFeedback();
@@ -51,6 +54,7 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
 
         TossPaymentsResponseDto responseDto = tossProvider.requestPayments(requestDto.paymentKey(), requestDto.orderId(), requestDto.amount());
         // TODO::알림톡 전송
+        return reportMapper.toCreateReportApplicationResponseDto(responseDto);
     }
 
     private List<ReportApplicationOption> createReportApplicationOptions(ReportApplication reportApplication, Long reportId, CreateReportApplicationRequestDto requestDto) {

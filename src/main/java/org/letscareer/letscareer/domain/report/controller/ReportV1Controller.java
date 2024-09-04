@@ -167,8 +167,8 @@ public class ReportV1Controller {
     public ResponseEntity<SuccessResponse<?>> createReportApplication(@CurrentUser final User user,
                                                                       @PathVariable final Long reportId,
                                                                       @RequestBody final CreateReportApplicationRequestDto requestDto) {
-        createReportApplicationService.execute(user, reportId, requestDto);
-        return SuccessResponse.created(null);
+        CreateReportApplicationResponseDto responseDto = createReportApplicationService.execute(user, reportId, requestDto);
+        return SuccessResponse.created(responseDto);
     }
 
     @Operation(summary = "진단서 프로그램 수정")
