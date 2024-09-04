@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.report.dto.req.*;
 import org.letscareer.letscareer.domain.report.dto.res.*;
@@ -199,7 +200,7 @@ public class ReportV1Controller {
     @PatchMapping("/{reportId}/application/{applicationId}/schedule")
     public ResponseEntity<SuccessResponse<?>> updateReportFeedbackSchedule(@PathVariable final Long reportId,
                                                                            @PathVariable final Long applicationId,
-                                                                           @RequestBody final UpdateFeedbackScheduleRequestDto requestDto) {
+                                                                           @RequestBody @Valid final UpdateFeedbackScheduleRequestDto requestDto) {
         updateReportFeedbackSchedule.execute(reportId, applicationId, requestDto);
         return SuccessResponse.ok(null);
     }
