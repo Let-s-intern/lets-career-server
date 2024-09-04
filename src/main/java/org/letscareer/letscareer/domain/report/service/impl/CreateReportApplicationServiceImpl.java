@@ -69,7 +69,7 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
         List<RequestMessageInfo<?>> messageList = new ArrayList<>();
         ReportPaymentParameter reportPaymentParameter = ReportPaymentParameter.of(user.getName(), responseDto.orderId(), report.getTitle(), Long.valueOf(responseDto.totalAmount()));
         messageList.add(RequestMessageInfo.of(reportPaymentParameter, "report_payment"));
-        String reportOptionListStr = createReportOptionListStr(reportApplicationOptions);
+        String reportOptionListStr = reportOptionHelper.createReportOptionListStr(reportApplicationOptions);
         ReportNotificationParameter reportNotificationParameter = ReportNotificationParameter.of(user.getName(), report, reportOptionListStr);
         messageList.add(RequestMessageInfo.of(reportNotificationParameter, "report_notification"));
         if(!Objects.isNull(reportFeedbackApplication)) {
@@ -77,13 +77,6 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
             messageList.add(RequestMessageInfo.of(feedbackNotiParameter, "feedback_noti"));
         }
         nhnProvider.sendPaymentKakaoMessages(user, messageList);
-    }
-
-    private String createReportOptionListStr(List<ReportApplicationOption> reportApplicationOptions) {
-        if(reportApplicationOptions.isEmpty()) return "없음";
-        return reportApplicationOptions.stream()
-                .map(option -> String.valueOf(option.getTitle()))
-                .collect(Collectors.joining(", "));
     }
 
     private List<ReportApplicationOption> createReportApplicationOptions(ReportApplication reportApplication, Long reportId, CreateReportApplicationRequestDto requestDto) {

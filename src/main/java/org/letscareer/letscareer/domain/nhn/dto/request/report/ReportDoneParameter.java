@@ -8,20 +8,17 @@ public record ReportDoneParameter(
         String name,
         String reportTitle,
         String reportType,
-        String reportOption,
-        Long applicationId
+        String reportOption
 ) {
     public static ReportDoneParameter of(String name,
                                          String reportTitle,
                                          String reportType,
-                                         String reportOption,
-                                         Long applicationId) {
+                                         String reportOption) {
         return ReportDoneParameter.builder()
                 .name(name)
                 .reportTitle(reportTitle)
                 .reportType(reportType)
                 .reportOption(reportOption)
-                .applicationId(applicationId)
                 .build();
     }
 }
