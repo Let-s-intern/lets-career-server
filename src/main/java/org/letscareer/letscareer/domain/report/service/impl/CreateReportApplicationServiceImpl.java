@@ -22,10 +22,12 @@ import org.letscareer.letscareer.domain.report.helper.ReportOptionHelper;
 import org.letscareer.letscareer.domain.report.mapper.ReportMapper;
 import org.letscareer.letscareer.domain.report.service.CreateReportApplicationService;
 import org.letscareer.letscareer.domain.user.entity.User;
+import org.letscareer.letscareer.domain.user.helper.UserHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -37,6 +39,7 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
     private final ReportApplicationHelper reportApplicationHelper;
     private final PaymentHelper paymentHelper;
     private final CouponHelper couponHelper;
+    private final UserHelper userHelper;
     private final TossProvider tossProvider;
     private final ReportMapper reportMapper;
 
@@ -52,6 +55,7 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
         List<ReportApplicationOption> reportApplicationOptions = createReportApplicationOptions(reportApplication, reportId, requestDto);
         ReportFeedbackApplication reportFeedbackApplication = reportApplicationHelper.createReportFeedbackApplicationAndSave(requestDto, reportFeedback, reportApplication);
 
+        updateContactEmail(user, requestDto);
         TossPaymentsResponseDto responseDto = tossProvider.requestPayments(requestDto.paymentKey(), requestDto.orderId(), requestDto.amount());
         // TODO::알림톡 전송
         return reportMapper.toCreateReportApplicationResponseDto(responseDto);
@@ -62,5 +66,10 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
         return reportOptions.stream()
                 .map(reportOption -> reportApplicationHelper.createReportApplicationOptionAndSave(reportApplication, reportOption))
                 .collect(Collectors.toList());
+    }
+
+    private void updateContactEmail(User user, CreateReportApplicationRequestDto requestDto) {
+        if (Objects.isNull(requestDto.contactEmail())) return;
+        userHelper.updateContactEmail(user, requestDto.contactEmail());
     }
 }
