@@ -55,4 +55,8 @@ public class ReportMapper {
                                                                          ReportDetailVo portfolioInfo) {
         return GetReportThumbnailResponseDto.of(resumeInfo, personalStatementInfo, portfolioInfo);
     }
+
+    public CreateReportApplicationResponseDto toCreateReportApplicationResponseDto(TossPaymentsResponseDto tossInfo) {
+        return CreateReportApplicationResponseDto.of(tossInfo);
+    }
 }
