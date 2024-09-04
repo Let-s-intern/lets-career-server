@@ -5,7 +5,7 @@ import org.letscareer.letscareer.domain.application.helper.ChallengeApplicationH
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.mission.helper.MissionHelper;
-import org.letscareer.letscareer.domain.nhn.dto.request.MissionEndParameter;
+import org.letscareer.letscareer.domain.nhn.dto.request.challenge.MissionEndParameter;
 import org.letscareer.letscareer.domain.nhn.provider.NhnProvider;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.batch.core.StepContribution;

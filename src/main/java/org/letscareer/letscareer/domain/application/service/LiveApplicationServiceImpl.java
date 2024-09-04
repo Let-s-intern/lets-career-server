@@ -12,9 +12,9 @@ import org.letscareer.letscareer.domain.coupon.helper.CouponHelper;
 import org.letscareer.letscareer.domain.live.entity.Live;
 import org.letscareer.letscareer.domain.live.helper.LiveHelper;
 import org.letscareer.letscareer.domain.live.type.ProgressType;
-import org.letscareer.letscareer.domain.nhn.dto.request.CreditConfirmParameter;
-import org.letscareer.letscareer.domain.nhn.dto.request.CreditRefundParameter;
-import org.letscareer.letscareer.domain.nhn.dto.request.LiveClassPaymentParameter;
+import org.letscareer.letscareer.domain.nhn.dto.request.credit.CreditConfirmParameter;
+import org.letscareer.letscareer.domain.nhn.dto.request.credit.CreditRefundParameter;
+import org.letscareer.letscareer.domain.nhn.dto.request.live.LiveClassPaymentParameter;
 import org.letscareer.letscareer.domain.nhn.provider.NhnProvider;
 import org.letscareer.letscareer.domain.payment.dto.request.CreatePaymentRequestDto;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
@@ -95,7 +95,7 @@ public class LiveApplicationServiceImpl implements ApplicationService {
     public void sendPaymentKakaoMessages(Live live, User user, CreatePaymentRequestDto paymentInfo) {
         CreditConfirmParameter paymentRequestParameter = CreditConfirmParameter.of(user.getName(), live.getTitle(), paymentInfo);
         LiveClassPaymentParameter programRequestParameter = isOnlineLiveClass(live) ? LiveClassPaymentParameter.of(user.getName(), live) : null;
-        nhnProvider.sendPaymentKakaoMessages(user, paymentRequestParameter, programRequestParameter, "payment_confirm", "liveclass_payment");
+        nhnProvider.sendProgramPaymentKakaoMessages(user, paymentRequestParameter, programRequestParameter, "payment_confirm", "liveclass_payment");
     }
 
     private void sendCreditRefundKakaoMessage(Live live, User user, Payment payment, RefundType refundType, Integer finalPrice, Integer cancelAmount) {

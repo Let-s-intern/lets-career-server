@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.helper.LiveApplicationHelper;
 import org.letscareer.letscareer.domain.live.entity.Live;
 import org.letscareer.letscareer.domain.live.helper.LiveHelper;
-import org.letscareer.letscareer.domain.nhn.dto.request.LiveClassRemindParameter;
+import org.letscareer.letscareer.domain.nhn.dto.request.live.LiveClassRemindParameter;
 import org.letscareer.letscareer.domain.nhn.provider.NhnProvider;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.batch.core.StepContribution;

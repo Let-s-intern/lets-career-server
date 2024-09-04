@@ -47,7 +47,7 @@ public class TossApiTests {
         CreatePaymentRequestDto paymentRequestDto = new CreatePaymentRequestDto(couponId, priceId, paymentKey, orderId, amount);
 
         // when
-        TossPaymentsRequestDto requestDto = TossPaymentsRequestDto.of(paymentRequestDto);
+        TossPaymentsRequestDto requestDto = TossPaymentsRequestDto.of(paymentRequestDto.paymentKey(), paymentRequestDto.orderId(), paymentRequestDto.amount());
         TossPaymentsResponseDto responseDto = tossFeignController.createPayments(requestDto);
 
         // then
