@@ -40,6 +40,7 @@ public class ReportFeedbackApplication extends BaseTimeEntity {
     private LocalDateTime desiredDate2;
     private LocalDateTime desiredDate3;
     private LocalDateTime desiredDateAdmin;
+    private LocalDateTime feedbackDate;
 
     @Convert(converter = ReportDesiredDateTypeConverter.class)
     private ReportDesiredDateType desiredDateType;
@@ -79,6 +80,7 @@ public class ReportFeedbackApplication extends BaseTimeEntity {
         this.desiredDateType = updateValue(this.desiredDateType, requestDto.desiredDateType());
         this.checkedDate = LocalDateTime.now();
         this.reportFeedbackStatus = ReportFeedbackStatus.PENDING;
+        this.feedbackDate = getCheckedFeedbackDate(this.desiredDateType);
     }
 
     public void updateFeedbackStatus(ReportFeedbackStatus reportFeedbackStatus) {

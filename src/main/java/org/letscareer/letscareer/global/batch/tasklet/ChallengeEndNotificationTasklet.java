@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.helper.ChallengeApplicationHelper;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
-import org.letscareer.letscareer.domain.nhn.dto.request.ChallengeEndParameter;
+import org.letscareer.letscareer.domain.nhn.dto.request.challenge.ChallengeEndParameter;
 import org.letscareer.letscareer.domain.nhn.provider.NhnProvider;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.batch.core.StepContribution;
