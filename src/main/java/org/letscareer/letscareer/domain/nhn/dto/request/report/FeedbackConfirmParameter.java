@@ -2,6 +2,8 @@ package org.letscareer.letscareer.domain.nhn.dto.request.report;
 
 import lombok.AccessLevel;
 import lombok.Builder;
+import org.letscareer.letscareer.domain.application.entity.report.ReportFeedbackApplication;
+import org.letscareer.letscareer.domain.report.entity.Report;
 
 import java.time.LocalDateTime;
 
@@ -18,24 +20,18 @@ public record FeedbackConfirmParameter(
         Long applicationId
 ) {
     public static FeedbackConfirmParameter of(String name,
-                                              String reportTitle,
-                                              String reportType,
+                                              Report report,
                                               String reportOption,
-                                              LocalDateTime desiredDate1,
-                                              LocalDateTime desiredDate2,
-                                              LocalDateTime desiredDate3,
-                                              LocalDateTime feedbackDate,
-                                              Long applicationId) {
+                                              ReportFeedbackApplication reportFeedbackApplication) {
         return FeedbackConfirmParameter.builder()
                 .name(name)
-                .reportTitle(reportTitle)
-                .reportType(reportType)
+                .reportTitle(report.getTitle())
+                .reportType(report.getType().getDesc())
                 .reportOption(reportOption)
-                .desiredDate1(desiredDate1)
-                .desiredDate2(desiredDate2)
-                .desiredDate3(desiredDate3)
-                .feedbackDate(feedbackDate)
-                .applicationId(applicationId)
+                .desiredDate1(reportFeedbackApplication.getDesiredDate1())
+                .desiredDate2(reportFeedbackApplication.getDesiredDate2())
+                .desiredDate3(reportFeedbackApplication.getDesiredDate3())
+                .feedbackDate(reportFeedbackApplication.getCheckedFeedbackDate(reportFeedbackApplication.getDesiredDateType()))
                 .build();
     }
 }
