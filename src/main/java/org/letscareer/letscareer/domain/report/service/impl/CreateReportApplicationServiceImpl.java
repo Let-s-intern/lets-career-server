@@ -63,9 +63,10 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
         ReportFeedbackApplication reportFeedbackApplication = reportApplicationHelper.createReportFeedbackApplicationAndSave(requestDto, reportFeedback, reportApplication);
 
         updateContactEmail(user, requestDto);
-        TossPaymentsResponseDto responseDto = tossProvider.requestPayments(requestDto.paymentKey(), requestDto.orderId(), requestDto.amount());
-        sendPaymentKakaoMessages(report, user, responseDto, reportApplicationOptions, reportFeedbackApplication);
-        return reportMapper.toCreateReportApplicationResponseDto(responseDto);
+//        TossPaymentsResponseDto responseDto = tossProvider.requestPayments(requestDto.paymentKey(), requestDto.orderId(), requestDto.amount());
+//        sendPaymentKakaoMessages(report, user, responseDto, reportApplicationOptions, reportFeedbackApplication);
+//        return reportMapper.toCreateReportApplicationResponseDto(responseDto);
+        return null;
     }
 
     private List<ReportApplicationOption> createReportApplicationOptions(ReportApplication reportApplication, Long reportId, CreateReportApplicationRequestDto requestDto) {

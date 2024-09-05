@@ -48,7 +48,8 @@ public class ReportApplicationHelper {
     public ReportFeedbackApplication createReportFeedbackApplicationAndSave(CreateReportApplicationRequestDto requestDto,
                                                                             ReportFeedback reportFeedback,
                                                                             ReportApplication reportApplication) {
-        if (Objects.isNull(requestDto.desiredDate1())) return null;
+        if (Objects.isNull(requestDto.isFeedbackApplied())) return null;
+        if (requestDto.isFeedbackApplied() == Boolean.FALSE) return null;
         ReportFeedbackApplication reportFeedbackApplication
                 = ReportFeedbackApplication.createReportFeedbackApplication(requestDto, reportFeedback, reportApplication);
         return reportFeedbackApplicationRepository.save(reportFeedbackApplication);
