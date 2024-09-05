@@ -59,7 +59,6 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
 
         ReportApplication reportApplication = reportApplicationHelper.createReportApplicationAndSave(requestDto, report, reportPrice, user);
         Payment payment = paymentHelper.createReportPaymentAndSave(requestDto, coupon, reportApplication);
-        reportApplication.setPayment(payment);
         List<ReportApplicationOption> reportApplicationOptions = createReportApplicationOptions(reportApplication, reportId, requestDto);
         ReportFeedbackApplication reportFeedbackApplication = reportApplicationHelper.createReportFeedbackApplicationAndSave(requestDto, reportFeedback, reportApplication);
 
@@ -67,6 +66,18 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
         TossPaymentsResponseDto responseDto = tossProvider.requestPayments(requestDto.paymentKey(), requestDto.orderId(), requestDto.amount());
         sendPaymentKakaoMessages(report, user, responseDto, reportApplicationOptions, reportFeedbackApplication);
         return reportMapper.toCreateReportApplicationResponseDto(responseDto);
+    }
+
+    private List<ReportApplicationOption> createReportApplicationOptions(ReportApplication reportApplication, Long reportId, CreateReportApplicationRequestDto requestDto) {
+        List<ReportOption> reportOptions = reportOptionHelper.findReportOptionsByReportIdAndOptionIds(reportId, requestDto.optionIds());
+        return reportOptions.stream()
+                .map(reportOption -> reportApplicationHelper.createReportApplicationOptionAndSave(reportApplication, reportOption))
+                .collect(Collectors.toList());
+    }
+
+    private void updateContactEmail(User user, CreateReportApplicationRequestDto requestDto) {
+        if (Objects.isNull(requestDto.contactEmail())) return;
+        userHelper.updateContactEmail(user, requestDto.contactEmail());
     }
 
     private void sendPaymentKakaoMessages(Report report, User user, TossPaymentsResponseDto responseDto, List<ReportApplicationOption> reportApplicationOptions, ReportFeedbackApplication reportFeedbackApplication) {
@@ -81,17 +92,5 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
             messageList.add(RequestMessageInfo.of(feedbackNotiParameter, "feedback_noti"));
         }
         nhnProvider.sendPaymentKakaoMessages(user, messageList);
-    }
-
-    private List<ReportApplicationOption> createReportApplicationOptions(ReportApplication reportApplication, Long reportId, CreateReportApplicationRequestDto requestDto) {
-        List<ReportOption> reportOptions = reportOptionHelper.findReportOptionsByReportIdAndOptionIds(reportId, requestDto.optionIds());
-        return reportOptions.stream()
-                .map(reportOption -> reportApplicationHelper.createReportApplicationOptionAndSave(reportApplication, reportOption))
-                .collect(Collectors.toList());
-    }
-
-    private void updateContactEmail(User user, CreateReportApplicationRequestDto requestDto) {
-        if (Objects.isNull(requestDto.contactEmail())) return;
-        userHelper.updateContactEmail(user, requestDto.contactEmail());
     }
 }
