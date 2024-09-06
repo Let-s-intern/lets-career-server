@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.type.ReportDesiredDateType;
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationForAdminVo;
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationOptionForAdminVo;
+import org.letscareer.letscareer.domain.report.entity.Report;
 import org.letscareer.letscareer.domain.report.entity.ReportPrice;
 import org.letscareer.letscareer.domain.report.type.ReportPriceType;
 import org.letscareer.letscareer.domain.report.type.ReportType;
@@ -38,6 +39,17 @@ import static org.letscareer.letscareer.domain.user.entity.QUser.user;
 @RequiredArgsConstructor
 public class ReportQueryRepositoryImpl implements ReportQueryRepository {
     private final JPAQueryFactory queryFactory;
+
+    @Override
+    public Optional<Report> existByReportTypeAndVisibleDate(ReportType reportType) {
+        return Optional.ofNullable(queryFactory
+                .selectFrom(report)
+                .where(
+                        eqReportType(reportType),
+                        report.visibleDate.isNotNull()
+                )
+                .fetchOne());
+    }
 
     @Override
     public Page<ReportForAdminVo> findReportForAdminVos(Pageable pageable) {
@@ -280,8 +292,12 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         reportFeedbackApplication.id,
                         report.title,
                         reportApplication.reportPriceType,
-                        Expressions.constant(subQueryReportApplicationOptionsTitle(applicationId)))
-                )
+                        reportApplication.status,
+                        reportFeedbackApplication.reportFeedbackStatus,
+                        getConfirmedTimeFor(),
+                        Expressions.constant(subQueryReportApplicationOptionsTitle(applicationId)),
+                        reportApplication.isCanceled
+                ))
                 .from(reportApplication)
                 .leftJoin(reportApplication.report, report)
                 .leftJoin(reportApplication.reportFeedbackApplication, reportFeedbackApplication)
@@ -306,10 +322,13 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         Expressions.constant(subQueryForReportApplicationPriceInfo(applicationId)),
                         Expressions.constant(subQueryReportApplicationOptionInfos(applicationId)),
                         Expressions.constant(subQueryFeedbackApplicationPriceInfo(applicationId)),
-                        reportApplication.createDate
+                        reportApplication.createDate,
+                        reportApplication.lastModifiedDate
                 ))
                 .from(reportApplication)
                 .leftJoin(reportApplication.reportFeedbackApplication, reportFeedbackApplication)
+                .leftJoin(reportApplication.payment, payment)
+                .leftJoin(payment.coupon, coupon)
                 .where(
                         eqApplicationId(applicationId)
                 )

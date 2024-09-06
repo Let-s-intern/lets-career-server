@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.report.repository;
 
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationForAdminVo;
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationOptionForAdminVo;
+import org.letscareer.letscareer.domain.report.entity.Report;
 import org.letscareer.letscareer.domain.report.entity.ReportPrice;
 import org.letscareer.letscareer.domain.report.type.ReportPriceType;
 import org.letscareer.letscareer.domain.report.type.ReportType;
@@ -13,6 +14,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ReportQueryRepository {
+    Optional<Report> existByReportTypeAndVisibleDate(ReportType reportType);
+
     Page<ReportForAdminVo> findReportForAdminVos(Pageable pageable);
 
     Optional<ReportDetailForAdminVo> findReportDetailForAdminVo(Long reportId);

@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.report.dto.req.*;
 import org.letscareer.letscareer.domain.report.dto.res.*;
@@ -18,8 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static org.letscareer.letscareer.global.common.entity.SwaggerEnum.REPORT_APPLICATION_NOT_FOUND;
-import static org.letscareer.letscareer.global.common.entity.SwaggerEnum.REPORT_NOT_FOUND;
+import static org.letscareer.letscareer.global.common.entity.SwaggerEnum.*;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/report")
@@ -169,6 +169,7 @@ public class ReportV1Controller {
 
     @Operation(summary = "진단서 프로그램 수정")
     @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    @ApiErrorCode({REPORT_CONFLICT_VISIBLE_DATE})
     @PatchMapping("/{reportId}")
     public ResponseEntity<SuccessResponse<?>> updateReport(@PathVariable final Long reportId,
                                                            @RequestBody final UpdateReportRequestDto requestDto) {
@@ -199,7 +200,7 @@ public class ReportV1Controller {
     @PatchMapping("/{reportId}/application/{applicationId}/schedule")
     public ResponseEntity<SuccessResponse<?>> updateReportFeedbackSchedule(@PathVariable final Long reportId,
                                                                            @PathVariable final Long applicationId,
-                                                                           @RequestBody final UpdateFeedbackScheduleRequestDto requestDto) {
+                                                                           @RequestBody @Valid final UpdateFeedbackScheduleRequestDto requestDto) {
         updateReportFeedbackSchedule.execute(reportId, applicationId, requestDto);
         return SuccessResponse.ok(null);
     }

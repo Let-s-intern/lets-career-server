@@ -18,6 +18,7 @@ import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 
 import static org.letscareer.letscareer.domain.report.error.ReportErrorCode.REPORT_APPLICATION_NOT_FOUND;
 
@@ -47,6 +48,8 @@ public class ReportApplicationHelper {
     public ReportFeedbackApplication createReportFeedbackApplicationAndSave(CreateReportApplicationRequestDto requestDto,
                                                                             ReportFeedback reportFeedback,
                                                                             ReportApplication reportApplication) {
+        if (Objects.isNull(requestDto.isFeedbackApplied())) return null;
+        if (requestDto.isFeedbackApplied() == Boolean.FALSE) return null;
         ReportFeedbackApplication reportFeedbackApplication
                 = ReportFeedbackApplication.createReportFeedbackApplication(requestDto, reportFeedback, reportApplication);
         return reportFeedbackApplicationRepository.save(reportFeedbackApplication);
