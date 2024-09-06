@@ -46,9 +46,10 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .selectFrom(report)
                 .where(
                         eqReportType(reportType),
-                        report.visibleDate.isNotNull()
+                        isVisible()
                 )
-                .fetchOne());
+                .orderBy(report.id.desc())
+                .fetchFirst());
     }
 
     @Override
