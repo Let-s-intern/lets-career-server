@@ -281,7 +281,8 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         eqReportType(reportType),
                         isVisible()
                 )
-                .fetchOne());
+                .orderBy(report.id.desc())
+                .fetchFirst());
     }
 
     @Override
@@ -539,7 +540,7 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
     }
 
     private BooleanExpression isVisible() {
-        return report.visibleDate.isNotNull();
+        return report.visibleDate.isNotNull().and(report.visibleDate.before(LocalDateTime.now()));
     }
 
     private BooleanExpression isApplyFeedback(Boolean isApplyFeedback) {
