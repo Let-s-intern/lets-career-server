@@ -1,4 +1,4 @@
-package org.letscareer.letscareer.global.common.utils.redis;
+package org.letscareer.letscareer.global.common.utils.redis.utils;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;

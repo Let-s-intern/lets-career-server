@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.user.dto.response.OAuth2TokenResponseDto;
-import org.letscareer.letscareer.global.common.utils.redis.CookieUtils;
+import org.letscareer.letscareer.global.common.utils.redis.utils.CookieUtils;
 import org.letscareer.letscareer.global.security.jwt.TokenProvider;
 import org.letscareer.letscareer.global.security.oauth2.CookieAuthorizationRequestRepository;
 import org.letscareer.letscareer.global.security.user.PrincipalDetails;
