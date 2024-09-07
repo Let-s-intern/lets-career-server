@@ -24,6 +24,7 @@ import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static org.letscareer.letscareer.global.error.GlobalErrorCode.NOT_REFRESH_TOKEN;
@@ -96,7 +97,7 @@ public class TokenProvider implements InitializingBean {
                 .compact();
 
         if(type.equals(REFRESH_KEY)) {
-            redisUtils.setRefreshToken(id, token, expirationTime);
+            redisUtils.setWithExpire(id.toString(), token, expirationTime, TimeUnit.SECONDS);
         }
 
         return token;

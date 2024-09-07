@@ -12,10 +12,6 @@ import java.util.concurrent.TimeUnit;
 public class RedisUtils {
     private final RedisTemplate<String, String> redisTemplate;
 
-    public void setRefreshToken(Long id, String token, int expirationTime) {
-        redisTemplate.opsForValue().set(id.toString(), token, expirationTime, TimeUnit.SECONDS);
-    }
-
     public void setWithExpire(String key, String value, int expire, TimeUnit timeUnit) {
         redisTemplate.opsForValue().set(key, value, expire, timeUnit);
     }
