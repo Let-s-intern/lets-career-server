@@ -16,16 +16,8 @@ public class RedisUtils {
         redisTemplate.opsForValue().set(id.toString(), token, expirationTime, TimeUnit.SECONDS);
     }
 
-    public String getRefreshToken(String key) {
-        return redisTemplate.opsForValue().get(key);
-    }
-
-    public void setLogoutAccessToken(String accessToken, long expirationTime) {
-        redisTemplate.opsForValue().set(accessToken, "logout", Duration.ofMillis(expirationTime));
-    }
-
-    public String getLogoutAccessToken(String accessToken) {
-        return redisTemplate.opsForValue().get(accessToken);
+    public void setWithExpire(String key, String value, int expire, TimeUnit timeUnit) {
+        redisTemplate.opsForValue().set(key, value, expire, timeUnit);
     }
 
     public void delete(String key) {

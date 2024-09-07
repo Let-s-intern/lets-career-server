@@ -1,6 +1,6 @@
 package org.letscareer.letscareer.global.config;
 
-import org.letscareer.letscareer.global.common.utils.redis.listener.RedisEventListener;
+import org.letscareer.letscareer.global.common.utils.redis.listener.EventListener;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,12 +41,12 @@ public class RedisConfig {
 
     @Bean
     public RedisMessageListenerContainer redisMessageListenerContainer(RedisConnectionFactory redisConnectionFactory,
-                                                                       RedisEventListener redisEventListener) {
+                                                                       EventListener eventListener) {
         RedisMessageListenerContainer redisMessageListenerContainer = new RedisMessageListenerContainer();
         redisMessageListenerContainer.setConnectionFactory(redisConnectionFactory);
-        redisMessageListenerContainer.addMessageListener(redisEventListener, new PatternTopic(SET_EVENT_PATTERN));
-        redisMessageListenerContainer.addMessageListener(redisEventListener, new PatternTopic(EXPIRED_EVENT_PATTERN));
-        redisMessageListenerContainer.addMessageListener(redisEventListener, new PatternTopic(EXPIRED_SPACE_PATTERN));
+        redisMessageListenerContainer.addMessageListener(eventListener, new PatternTopic(SET_EVENT_PATTERN));
+        redisMessageListenerContainer.addMessageListener(eventListener, new PatternTopic(EXPIRED_EVENT_PATTERN));
+        redisMessageListenerContainer.addMessageListener(eventListener, new PatternTopic(EXPIRED_SPACE_PATTERN));
         return redisMessageListenerContainer;
     }
 }
