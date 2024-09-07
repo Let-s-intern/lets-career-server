@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationForAdminVo;
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationOptionForAdminVo;
 import org.letscareer.letscareer.domain.report.dto.req.CreateReportRequestDto;
+import org.letscareer.letscareer.domain.report.dto.req.UpdateReportRequestDto;
 import org.letscareer.letscareer.domain.report.entity.Report;
 import org.letscareer.letscareer.domain.report.entity.ReportPrice;
 import org.letscareer.letscareer.domain.report.repository.ReportRepository;
@@ -11,20 +12,27 @@ import org.letscareer.letscareer.domain.report.type.ReportPriceType;
 import org.letscareer.letscareer.domain.report.type.ReportType;
 import org.letscareer.letscareer.domain.report.vo.*;
 import org.letscareer.letscareer.domain.user.entity.User;
+import org.letscareer.letscareer.global.error.exception.ConflictException;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 
-import static org.letscareer.letscareer.domain.report.error.ReportErrorCode.REPORT_APPLICATION_NOT_FOUND;
-import static org.letscareer.letscareer.domain.report.error.ReportErrorCode.REPORT_NOT_FOUND;
+import static org.letscareer.letscareer.domain.report.error.ReportErrorCode.*;
 
 @RequiredArgsConstructor
 @Component
 public class ReportHelper {
     private final ReportRepository reportRepository;
+
+    public void validateUpdateVisibleDate(UpdateReportRequestDto requestDto) {
+        if (Objects.isNull(requestDto.reportType())) return;
+        if (reportRepository.existByReportTypeAndVisibleDate(requestDto.reportType()).isPresent())
+            throw new ConflictException(REPORT_CONFLICT_VISIBLE_DATE);
+    }
 
     public ReportApplicationVo findReportApplicationVoByApplicationId(Long applicationId) {
         return reportRepository.findReportApplicationVoByApplicationId(applicationId)

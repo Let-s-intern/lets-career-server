@@ -8,11 +8,14 @@ import org.letscareer.letscareer.global.error.exception.BusinessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
+import java.util.List;
 
 @Slf4j
 @ControllerAdvice
@@ -23,7 +26,15 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.error(">>> handle: MethodArgumentNotValidException ", e);
-        final ErrorResponse errorBaseResponse = ErrorResponse.of(GlobalErrorCode.BAD_REQUEST);
+        List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
+
+        StringBuilder sb = new StringBuilder();
+        for (FieldError fieldError : fieldErrors) {
+            String fieldName = fieldError.getField();
+            String errorMessage = fieldError.getDefaultMessage();
+            sb.append("[" + fieldName + "] " + errorMessage);
+        }
+        final ErrorResponse errorBaseResponse = ErrorResponse.validOf(GlobalErrorCode.BAD_REQUEST, sb.toString());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorBaseResponse);
     }
 

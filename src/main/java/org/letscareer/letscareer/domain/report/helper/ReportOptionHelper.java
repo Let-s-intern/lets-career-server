@@ -8,7 +8,9 @@ import org.letscareer.letscareer.domain.report.entity.ReportOption;
 import org.letscareer.letscareer.domain.report.repository.ReportOptionRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -29,6 +31,7 @@ public class ReportOptionHelper {
     }
 
     public List<ReportOption> findReportOptionsByReportIdAndOptionIds(Long reportId, List<Long> optionIds) {
+        if (Objects.isNull(optionIds) || optionIds.isEmpty()) return new ArrayList<>();
         return reportOptionRepository.findReportOptionsByReportIdAndOptionIds(reportId, optionIds);
     }
 
