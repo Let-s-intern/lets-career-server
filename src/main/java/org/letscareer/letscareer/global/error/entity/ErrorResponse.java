@@ -20,5 +20,12 @@ public class ErrorResponse {
                 .message(errorCode.getMessage())
                 .build();
     }
+
+    public static ErrorResponse validOf(ErrorCode errorCode, String message) {
+        return ErrorResponse.builder()
+                .status(errorCode.getHttpStatus().value())
+                .message(message)
+                .build();
+    }
 }
 

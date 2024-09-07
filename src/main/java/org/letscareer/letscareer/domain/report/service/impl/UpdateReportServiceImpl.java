@@ -29,6 +29,7 @@ public class UpdateReportServiceImpl implements UpdateReportService {
     @Override
     public void execute(Long reportId, UpdateReportRequestDto requestDto) {
         Report report = reportHelper.findReportByReportIdOrThrow(reportId);
+        // reportHelper.validateUpdateVisibleDate(requestDto);
         report.updateReport(requestDto);
         updateReportPrices(requestDto.priceInfo(), report);
         updateReportOptions(requestDto.optionInfo(), report);

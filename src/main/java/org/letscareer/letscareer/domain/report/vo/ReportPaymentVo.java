@@ -1,7 +1,5 @@
 package org.letscareer.letscareer.domain.report.vo;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,6 +14,7 @@ public record ReportPaymentVo(
         ReportPriceVo reportPriceInfo,
         List<ReportOptionVo> reportOptionInfos,
         FeedbackPriceVo feedbackPriceInfo,
-        LocalDateTime createDate
+        LocalDateTime createDate,
+        LocalDateTime lastModifiedDate
 ) {
 }

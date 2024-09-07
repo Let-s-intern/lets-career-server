@@ -63,7 +63,7 @@ public class Payment extends BaseTimeEntity {
     public static Payment createReportPayment(CreateReportApplicationRequestDto requestDto,
                                               Coupon coupon,
                                               ReportApplication reportApplication) {
-        return Payment.builder()
+        Payment payment = Payment.builder()
                 .finalPrice(Integer.valueOf(requestDto.amount()))
                 .programPrice(requestDto.programPrice())
                 .programDiscount(requestDto.programDiscount())
@@ -72,6 +72,8 @@ public class Payment extends BaseTimeEntity {
                 .coupon(coupon)
                 .application(reportApplication)
                 .build();
+        reportApplication.setPayment(payment);
+        return payment;
     }
 
     public void updatePayment(UpdatePaymentRequestDto requestDto) {
