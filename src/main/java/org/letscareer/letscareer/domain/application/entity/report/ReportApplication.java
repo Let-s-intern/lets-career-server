@@ -3,7 +3,7 @@ package org.letscareer.letscareer.domain.application.entity.report;
 import jakarta.persistence.*;
 import lombok.*;
 import org.letscareer.letscareer.domain.application.entity.Application;
-import org.letscareer.letscareer.domain.application.listener.ReportApplicationListener;
+import org.letscareer.letscareer.domain.application.listener.ReportApplicationEntityListener;
 import org.letscareer.letscareer.domain.application.type.ReportApplicationStatus;
 import org.letscareer.letscareer.domain.application.type.converter.ReportApplicationStatusConverter;
 import org.letscareer.letscareer.domain.report.dto.req.CreateReportApplicationRequestDto;
@@ -22,7 +22,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DiscriminatorValue("report_application")
 @Getter
-@EntityListeners(ReportApplicationListener.class)
+@EntityListeners(ReportApplicationEntityListener.class)
 @Entity
 public class ReportApplication extends Application {
     private String wishJob;
