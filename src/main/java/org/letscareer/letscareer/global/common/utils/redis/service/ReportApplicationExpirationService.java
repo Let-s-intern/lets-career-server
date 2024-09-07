@@ -32,7 +32,7 @@ public class ReportApplicationExpirationService extends ExpirationService<Long> 
     @Override
     public void setWithExpire(Long reportApplicationId) {
         String key = reportApplicationKey + reportApplicationId;
-        redisTemplate.opsForValue().set(key, String.valueOf(reportApplicationId), expirationHour, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(key, String.valueOf(reportApplicationId), expirationHour, TimeUnit.HOURS);
     }
 
     public void sendKakaoMessage(Long reportApplicationId) {
