@@ -310,6 +310,7 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 ))
                 .from(reportApplication)
                 .leftJoin(reportApplication.reportFeedbackApplication, reportFeedbackApplication)
+                .leftJoin(reportApplication.payment.coupon, coupon)
                 .where(
                         eqApplicationId(applicationId)
                 )

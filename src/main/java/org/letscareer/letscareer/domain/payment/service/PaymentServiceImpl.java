@@ -19,6 +19,7 @@ import org.letscareer.letscareer.domain.price.helper.LivePriceHelper;
 import org.letscareer.letscareer.domain.price.vo.PriceDetailVo;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.program.vo.ProgramSimpleVo;
+import org.letscareer.letscareer.domain.report.helper.ReportPriceHelper;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +36,7 @@ public class PaymentServiceImpl implements PaymentService {
     private final ChallengePriceHelper challengePriceHelper;
     private final ApplicationHelper applicationHelper;
     private final LivePriceHelper livePriceHelper;
+    private final ReportPriceHelper reportPriceHelper;
     private final TossProvider tossProvider;
 
     @Override
@@ -71,9 +73,11 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     private PriceDetailVo findPriceInfoForProgramType(ProgramSimpleVo programSimpleVo) {
-        if (ProgramType.CHALLENGE.equals(programSimpleVo.programType()))
-            return challengePriceHelper.findPriceDetailVoByChallengeId(programSimpleVo.id());
-        else
-            return livePriceHelper.findLivePriceDetailVoByLiveId(programSimpleVo.id());
+        switch(programSimpleVo.programType()) {
+            case CHALLENGE: return challengePriceHelper.findPriceDetailVoByChallengeId(programSimpleVo.id());
+            case LIVE: return livePriceHelper.findLivePriceDetailVoByLiveId(programSimpleVo.id());
+            case REPORT: return reportPriceHelper.findReportPriceDetailVoByReportId(programSimpleVo.id());
+        }
+        return null;
     }
 }

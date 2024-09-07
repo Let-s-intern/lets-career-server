@@ -5,11 +5,14 @@ import org.letscareer.letscareer.domain.application.entity.report.ReportApplicat
 import org.letscareer.letscareer.domain.application.entity.report.ReportFeedbackApplication;
 import org.letscareer.letscareer.domain.coupon.entity.Coupon;
 import org.letscareer.letscareer.domain.payment.type.ReportRefundType;
+import org.letscareer.letscareer.domain.price.error.PriceErrorCode;
+import org.letscareer.letscareer.domain.price.vo.PriceDetailVo;
 import org.letscareer.letscareer.domain.report.dto.req.CreateReportPriceRequestDto;
 import org.letscareer.letscareer.domain.report.entity.Report;
 import org.letscareer.letscareer.domain.report.entity.ReportPrice;
 import org.letscareer.letscareer.domain.report.repository.ReportPriceRepository;
 import org.letscareer.letscareer.domain.report.vo.ReportApplicationOptionPriceVo;
+import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.letscareer.letscareer.global.error.exception.InvalidValueException;
 import org.springframework.stereotype.Component;
 
@@ -47,5 +50,10 @@ public class ReportPriceHelper {
         if(refundType.equals(ReportRefundType.ZERO)) throw new InvalidValueException(APPLICATION_CANNOT_CANCELED);
         int refundPrice = (int) ((reportFeedbackApplication.getPrice() - reportFeedbackApplication.getDiscountPrice()) * refundType.getPercent());
         return Math.max(refundPrice, 0);
+    }
+
+    public PriceDetailVo findReportPriceDetailVoByReportId(Long reportId) {
+        return reportPriceRepository.findPriceDetailVoByReportId(reportId)
+                .orElseThrow(() -> new EntityNotFoundException(PriceErrorCode.REPORT_PRICE_NOT_FOUND));
     }
 }
