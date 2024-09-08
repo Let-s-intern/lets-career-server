@@ -8,20 +8,17 @@ public record ReportIngParameter(
         String name,
         String reportTitle,
         String reportType,
-        String reportOption,
-        Long applicationId
+        String reportOption
 ) {
     public static ReportIngParameter of(String name,
                                         String reportTitle,
                                         String reportType,
-                                        String reportOption,
-                                        Long applicationId) {
+                                        String reportOption) {
         return ReportIngParameter.builder()
                 .name(name)
                 .reportTitle(reportTitle)
                 .reportType(reportType)
                 .reportOption(reportOption)
-                .applicationId(applicationId)
                 .build();
     }
 }
