@@ -37,6 +37,7 @@ public class ReportApplicationExpiredService {
 
     public void sendKakaoMessage(Long reportApplicationId) {
         ReportApplication reportApplication = reportApplicationHelper.findReportApplicationByReportApplicationIdOrThrow(reportApplicationId);
+        if(!isAppliedReportApplication(reportApplication)) return;
         User user = reportApplication.getUser();
         Report report = reportApplication.getReport();
         String reportOptionListStr = reportOptionHelper.createReportOptionListStr(reportApplication.getReportApplicationOptionList());
@@ -46,6 +47,11 @@ public class ReportApplicationExpiredService {
 
     public void updateReportApplicationStatus(Long reportApplicationId, ReportApplicationStatus status) {
         ReportApplication reportApplication = reportApplicationHelper.findReportApplicationByReportApplicationIdOrThrow(reportApplicationId);
+        if(!isAppliedReportApplication(reportApplication)) return;
         reportApplication.updateReportApplicationStatus(status);
+    }
+
+    private boolean isAppliedReportApplication(ReportApplication reportApplication) {
+        return reportApplication.getStatus().equals(ReportApplicationStatus.APPLIED);
     }
 }
