@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.global.common.utils.redis.listener;
 
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.application.type.ReportApplicationStatus;
 import org.letscareer.letscareer.global.common.utils.redis.service.ReportApplicationExpiredService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.connection.Message;
@@ -20,6 +21,7 @@ public class ReportApplicationExpiredListener extends EventListener {
         if(key.contains(reportApplicationKey)) {
             Long reportApplicationId = Long.valueOf(key.replace(reportApplicationKey, ""));
             reportApplicationExpiredService.sendKakaoMessage(reportApplicationId);
+            reportApplicationExpiredService.updateReportApplicationStatus(reportApplicationId, ReportApplicationStatus.REPORTING);
         }
     }
 }

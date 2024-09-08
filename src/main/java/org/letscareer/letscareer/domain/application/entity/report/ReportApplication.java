@@ -18,6 +18,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.letscareer.letscareer.global.common.utils.entity.EntityUpdateValueUtils.updateValue;
+
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DiscriminatorValue("report_application")
@@ -97,5 +99,9 @@ public class ReportApplication extends Application {
     public void updateReportUrl(UpdateReportDocumentRequestDto requestDto) {
         this.reportUrl = requestDto.reportUrl();
         this.status = ReportApplicationStatus.REPORTED;
+    }
+
+    public void updateReportApplicationStatus(ReportApplicationStatus status) {
+        this.status = updateValue(this.status, status);
     }
 }

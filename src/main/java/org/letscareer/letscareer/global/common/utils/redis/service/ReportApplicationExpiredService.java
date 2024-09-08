@@ -3,6 +3,7 @@ package org.letscareer.letscareer.global.common.utils.redis.service;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.entity.report.ReportApplication;
 import org.letscareer.letscareer.domain.application.helper.ReportApplicationHelper;
+import org.letscareer.letscareer.domain.application.type.ReportApplicationStatus;
 import org.letscareer.letscareer.domain.nhn.dto.request.report.ReportIngParameter;
 import org.letscareer.letscareer.domain.nhn.provider.NhnProvider;
 import org.letscareer.letscareer.domain.report.entity.Report;
@@ -41,5 +42,10 @@ public class ReportApplicationExpiredService {
         String reportOptionListStr = reportOptionHelper.createReportOptionListStr(reportApplication.getReportApplicationOptionList());
         ReportIngParameter reportIngParameter = ReportIngParameter.of(user.getName(), report.getTitle(), report.getType().getDesc(), reportOptionListStr);
         nhnProvider.sendKakaoMessage(user, reportIngParameter, "report_ing");
+    }
+
+    public void updateReportApplicationStatus(Long reportApplicationId, ReportApplicationStatus status) {
+        ReportApplication reportApplication = reportApplicationHelper.findReportApplicationByReportApplicationIdOrThrow(reportApplicationId);
+        reportApplication.updateReportApplicationStatus(status);
     }
 }
