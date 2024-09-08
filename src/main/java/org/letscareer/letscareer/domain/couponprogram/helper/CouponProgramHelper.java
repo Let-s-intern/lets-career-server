@@ -30,8 +30,10 @@ public class CouponProgramHelper {
         couponProgramRepository.deleteAllByCouponId(couponId);
     }
 
-    public boolean existsCouponProgramType(Long couponId, CouponProgramType couponProgramType) {
+    public boolean existsCouponProgramType(Long couponId, CouponProgramType programType) {
+        if(programType.equals(CouponProgramType.REPORT))
+            return couponProgramRepository.existsByCouponIdAndCouponProgramType(couponId, programType);
         return couponProgramRepository.existsByCouponIdAndCouponProgramType(couponId, CouponProgramType.ALL)
-                || couponProgramRepository.existsByCouponIdAndCouponProgramType(couponId, couponProgramType);
+                || couponProgramRepository.existsByCouponIdAndCouponProgramType(couponId, programType);
     }
 }
