@@ -187,7 +187,16 @@ public class ReportV1Controller {
         return SuccessResponse.ok(null);
     }
 
-    @Operation(summary = "진단서 상태 변경")
+    @Operation(
+            summary = "진단서 상태 변경",
+            description = """
+                    [NotNull] reportApplicationStatus <br>
+                    APPLIED(1, "신청완료") <br>
+                    REPORTING(2, "진단중") <br>
+                    REPORTED(3, "진단서 업로드") <br>
+                    COMPLETED(4, "진단완료") <br>
+                    """
+    )
     @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     @PatchMapping("/application/{applicationId}/status")
     public ResponseEntity<SuccessResponse<?>> updateReportStatus(@PathVariable final Long applicationId,
