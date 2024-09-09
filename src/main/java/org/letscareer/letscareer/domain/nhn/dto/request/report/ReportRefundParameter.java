@@ -4,6 +4,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import org.letscareer.letscareer.domain.payment.type.RefundType;
 
+import java.util.Objects;
+
 @Builder(access = AccessLevel.PRIVATE)
 public record ReportRefundParameter(
         String name,
@@ -23,7 +25,7 @@ public record ReportRefundParameter(
                 .name(name)
                 .orderId(orderId)
                 .reportTitle(reportTitle)
-                .orderStatus(refundType.equals(RefundType.ALL) ? "전체취소" : "부분취소")
+                .orderStatus(!Objects.isNull(refundType) && refundType.equals(RefundType.ALL) ? "전체취소" : "부분취소")
                 .paymentPrice(paymentPrice)
                 .refundPrice(refundPrice)
                 .build();

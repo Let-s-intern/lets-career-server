@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.report.repository;
 
 import com.querydsl.core.types.Expression;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
@@ -248,7 +249,8 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .leftJoin(reportApplication.user, user)
                 .where(
                         eqReportType(reportType),
-                        eqUserId(userId)
+                        eqUserId(userId),
+                        eqIsCanceled(false)
                 )
                 .orderBy(reportApplication.id.desc())
                 .offset(pageable.getOffset())
@@ -534,6 +536,10 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
 
     private BooleanExpression eqReportPriceType(ReportPriceType priceType) {
         return priceType != null ? reportPrice.reportPriceType.eq(priceType) : null;
+    }
+
+    private BooleanExpression eqIsCanceled(Boolean isCanceled) {
+        return isCanceled != null ? reportApplication.isCanceled.eq(isCanceled) : null;
     }
 
     private BooleanExpression containOptionCode(String code) {
