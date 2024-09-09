@@ -26,8 +26,10 @@ public enum ReportRefundType {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime paymentCreateDate = payment.getCreateDate();
         ReportApplicationStatus reportApplicationStatus = reportApplication.getStatus();
-        if(now.isBefore(paymentCreateDate.plusHours(3L))) return ALL;
-        else if(now.isAfter(paymentCreateDate.plusHours(3L)) && !reportApplicationStatus.equals(ReportApplicationStatus.COMPLETED)) return PERCENT_80;
+        // if(now.isBefore(paymentCreateDate.plusHours(3L))) return ALL;
+        // else if(now.isAfter(paymentCreateDate.plusHours(3L)) && !reportApplicationStatus.equals(ReportApplicationStatus.COMPLETED)) return PERCENT_80;
+        if(now.isBefore(paymentCreateDate.plusMinutes(20L))) return ALL;
+        else if(now.isAfter(paymentCreateDate.plusMinutes(20L)) && !reportApplicationStatus.equals(ReportApplicationStatus.COMPLETED)) return PERCENT_80;
         else return ZERO;
     }
 
