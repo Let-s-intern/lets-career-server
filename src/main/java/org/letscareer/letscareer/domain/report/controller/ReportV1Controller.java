@@ -39,6 +39,7 @@ public class ReportV1Controller {
     private final UpdateReportService updateReportService;
     private final UpdateReportFeedbackSchedule updateReportFeedbackSchedule;
     private final UpdateReportDocumentService updateReportDocumentService;
+    private final UpdateReportApplicationStatusService updateReportApplicationStatusService;
     private final DeleteReportService deleteReportService;
     private final CancelReportApplicationService cancelReportApplicationService;
 
@@ -183,6 +184,15 @@ public class ReportV1Controller {
     public ResponseEntity<SuccessResponse<?>> updateReportDocument(@PathVariable final Long applicationId,
                                                                    @RequestBody final UpdateReportDocumentRequestDto requestDto) {
         updateReportDocumentService.execute(applicationId, requestDto);
+        return SuccessResponse.ok(null);
+    }
+
+    @Operation(summary = "진단서 상태 변경")
+    @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    @PatchMapping("/application/{applicationId}/status")
+    public ResponseEntity<SuccessResponse<?>> updateReportStatus(@PathVariable final Long applicationId,
+                                                                 @RequestBody final UpdateReportApplicationStatusRequestDto requestDto) {
+        updateReportApplicationStatusService.execute(applicationId, requestDto);
         return SuccessResponse.ok(null);
     }
 
