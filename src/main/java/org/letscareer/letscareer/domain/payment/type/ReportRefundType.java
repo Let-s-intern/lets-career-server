@@ -26,20 +26,26 @@ public enum ReportRefundType {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime paymentCreateDate = payment.getCreateDate();
         ReportApplicationStatus reportApplicationStatus = reportApplication.getStatus();
-        // if(now.isBefore(paymentCreateDate.plusHours(3L))) return ALL;
-        // else if(now.isAfter(paymentCreateDate.plusHours(3L)) && !reportApplicationStatus.equals(ReportApplicationStatus.COMPLETED)) return PERCENT_80;
-        if(now.isBefore(paymentCreateDate.plusMinutes(20L))) return ALL;
-        else if(now.isAfter(paymentCreateDate.plusMinutes(20L)) && !reportApplicationStatus.equals(ReportApplicationStatus.COMPLETED)) return PERCENT_80;
-        else return ZERO;
+        if(now.isBefore(paymentCreateDate.plusMinutes(20L))) {
+            return switch (reportApplicationStatus) {
+                case APPLIED -> ALL;
+                case REPORTING, REPORTED -> PERCENT_80;
+                case COMPLETED -> ZERO;
+            };
+        } else if(!reportApplicationStatus.equals(ReportApplicationStatus.COMPLETED)) {
+            return PERCENT_80;
+        } else {
+            return ZERO;
+        }
     }
 
     public static ReportRefundType ofFeedback(ReportFeedbackApplication reportFeedbackApplication) {
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime checkedDate = reportFeedbackApplication.getCheckedDate();
+        LocalDateTime feedbackDate = reportFeedbackApplication.getFeedbackDate();
         ReportFeedbackStatus reportFeedbackStatus = reportFeedbackApplication.getReportFeedbackStatus();
         if(reportFeedbackStatus.equals(ReportFeedbackStatus.APPLIED) || reportFeedbackStatus.equals(ReportFeedbackStatus.PENDING)) return ALL;
-        else if(reportFeedbackStatus.equals(ReportFeedbackStatus.CONFIRMED) && now.isBefore(checkedDate.minusDays(1L))) return PERCENT_80;
-        else if(now.isAfter(checkedDate.minusDays(1L))) return PERCENT_50;
+        else if(reportFeedbackStatus.equals(ReportFeedbackStatus.CONFIRMED) && now.isBefore(feedbackDate.minusDays(1L))) return PERCENT_80;
+        else if(now.isAfter(feedbackDate.minusDays(1L)) && now.isBefore(feedbackDate)) return PERCENT_50;
         return ZERO;
     }
 }
