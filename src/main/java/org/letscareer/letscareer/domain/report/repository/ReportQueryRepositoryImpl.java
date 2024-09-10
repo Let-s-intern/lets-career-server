@@ -451,8 +451,8 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         reportFeedbackApplication.price,
                         reportFeedbackApplication.discountPrice
                 ))
-                .from(reportFeedbackApplication)
-                .leftJoin(reportFeedbackApplication.reportApplication, reportApplication)
+                .from(reportApplication)
+                .leftJoin(reportApplication.reportFeedbackApplication, reportFeedbackApplication)
                 .where(
                         eqApplicationId(applicationId)
                 )
