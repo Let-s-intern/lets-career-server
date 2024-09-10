@@ -109,4 +109,8 @@ public class ReportApplication extends Application {
     public void updateReportStatus(UpdateReportApplicationStatusRequestDto requestDto) {
         this.status = updateValue(this.status, requestDto.status());
     }
+
+    public void updateRefundPrice(Integer refundPrice) {
+        this.refundPrice = updateValue(this.refundPrice, refundPrice);
+    }
 }

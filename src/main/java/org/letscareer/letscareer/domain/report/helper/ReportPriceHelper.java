@@ -38,7 +38,7 @@ public class ReportPriceHelper {
         couponPrice = (couponPrice == -1) ? 0 : couponPrice;
         int totalOptionPrice = 0;
         totalOptionPrice = reportApplicationOptionPriceVos.stream().mapToInt(optionPriceVo -> (optionPriceVo.price() - optionPriceVo.discountPrice())).sum();
-        int regularPrice = (reportApplication.getPrice() - reportApplication.getDiscountPrice() + totalOptionPrice) + couponPrice;
+        int regularPrice = (reportApplication.getPrice() - reportApplication.getDiscountPrice() + totalOptionPrice);
         int refundPrice = ((int) (regularPrice * refundType.getPercent())) - couponPrice;
         return Math.max(refundPrice, 0);
     }
