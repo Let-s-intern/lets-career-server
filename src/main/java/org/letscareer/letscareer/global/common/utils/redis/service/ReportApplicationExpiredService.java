@@ -52,6 +52,6 @@ public class ReportApplicationExpiredService {
     }
 
     private boolean isAppliedReportApplication(ReportApplication reportApplication) {
-        return reportApplication.getStatus().equals(ReportApplicationStatus.APPLIED);
+        return reportApplication.getIsCanceled().equals(Boolean.FALSE) && reportApplication.getStatus().equals(ReportApplicationStatus.APPLIED);
     }
 }

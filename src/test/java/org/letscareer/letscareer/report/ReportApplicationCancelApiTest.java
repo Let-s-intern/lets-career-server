@@ -7,6 +7,7 @@ import org.letscareer.letscareer.domain.application.entity.report.ReportFeedback
 import org.letscareer.letscareer.domain.application.helper.ReportApplicationHelper;
 import org.letscareer.letscareer.domain.application.helper.ReportFeedbackApplicationHelper;
 import org.letscareer.letscareer.domain.coupon.entity.Coupon;
+import org.letscareer.letscareer.domain.coupon.helper.CouponHelper;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.payment.helper.PaymentHelper;
 import org.letscareer.letscareer.domain.payment.type.ReportRefundType;
@@ -31,12 +32,14 @@ public class ReportApplicationCancelApiTest {
     private PaymentHelper paymentHelper;
     @Autowired
     private ReportPriceHelper reportPriceHelper;
+    @Autowired
+    private CouponHelper couponHelper;
 
     @DisplayName("환불 금액 테스트")
     @Test
     void refundTest() {
         // given
-        Long reportApplicationId = 388L;
+        Long reportApplicationId = 404L;
         ReportApplication reportApplication = reportApplicationHelper.findReportApplicationByReportApplicationIdOrThrow(reportApplicationId);
         ReportFeedbackApplication reportFeedbackApplication = reportFeedbackApplicationHelper.findReportFeedbackApplicationByReportApplicationIdOrElseNull(reportApplicationId);
         List<ReportApplicationOptionPriceVo> reportApplicationOptionPriceVos = reportApplicationHelper.findAllReportApplicationOptionPriceVosByReportApplicationId(reportApplication.getId());
@@ -46,15 +49,16 @@ public class ReportApplicationCancelApiTest {
         ReportCancelVo feedbackCancelVo = getFeedbackCancelInfo(reportFeedbackApplication);
 
         // then
-        assertThat(reportCancelVo.reportRefundType()).isEqualTo(ReportRefundType.ALL);
-        assertThat(reportCancelVo.cancelAmount()).isEqualTo(2800);
+        assertThat(reportCancelVo.reportRefundType()).isEqualTo(ReportRefundType.PERCENT_80);
+        assertThat(reportCancelVo.cancelAmount()).isEqualTo(620);
         assertThat(feedbackCancelVo.reportRefundType()).isEqualTo(ReportRefundType.ZERO);
         assertThat(feedbackCancelVo.cancelAmount()).isEqualTo(0);
     }
 
     private ReportCancelVo getReportCancelInfo(ReportApplication reportApplication, List<ReportApplicationOptionPriceVo> reportApplicationOptionPriceVos) {
         Payment payment = paymentHelper.findPaymentByApplicationIdOrThrow(reportApplication.getId());
-        Coupon coupon = paymentHelper.getPaymentCoupon(payment);
+        Coupon coupon = couponHelper.findCouponByIdOrThrow(4L);
+        //Coupon coupon = null;
         ReportRefundType reportRefundType = ReportRefundType.ofReport(reportApplication, payment);
         int cancelAmount = reportPriceHelper.calculateReportCancelAmount(reportApplication, reportApplicationOptionPriceVos, coupon, reportRefundType);
         return ReportCancelVo.of(reportRefundType, cancelAmount);
