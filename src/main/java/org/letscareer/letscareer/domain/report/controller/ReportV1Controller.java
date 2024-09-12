@@ -152,7 +152,7 @@ public class ReportV1Controller {
     }
 
     @Operation(
-            summary = "[테스트 중] 진단서 신청",
+            summary = "진단서 신청",
             description = """
                     amount : 실제 결제 금액 <br>
                     programPrice : (서류 진단 + 옵션 + 1대1 첨삭) 정가 <br>
@@ -232,7 +232,7 @@ public class ReportV1Controller {
         return ResponseEntity.ok(null);
     }
 
-    @Operation(summary = "[테스트 중] 진단서 신청 취소")
+    @Operation(summary = "진단서 신청 취소")
     @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     @DeleteMapping("/application/{reportApplicationId}")
     public ResponseEntity<SuccessResponse<?>> cancelReportApplication(@CurrentUser final User user,

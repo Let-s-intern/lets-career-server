@@ -36,6 +36,7 @@ public record ReportApplicationForAdminVo(
         ReportPriceType reportPriceType,
         String couponTitle,
         Integer finalPrice,
-        Boolean isRefunded
+        Boolean isRefunded,
+        Boolean feedbackIsRefunded
 ) {
 }

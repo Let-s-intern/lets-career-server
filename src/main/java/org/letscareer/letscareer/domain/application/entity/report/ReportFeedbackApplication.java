@@ -36,8 +36,8 @@ public class ReportFeedbackApplication extends BaseTimeEntity {
     private Integer price;
     private Integer discountPrice;
     private Integer refundPrice;
-    @NotNull
-    private Boolean isCanceled;
+    @Builder.Default
+    private Boolean isCanceled = false;
 
     private LocalDateTime desiredDate1;
     private LocalDateTime desiredDate2;

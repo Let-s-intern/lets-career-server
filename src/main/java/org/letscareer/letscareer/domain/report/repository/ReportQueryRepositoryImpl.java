@@ -134,7 +134,8 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         reportApplication.reportPriceType,
                         coupon.name,
                         payment.finalPrice,
-                        reportApplication.isCanceled
+                        reportApplication.isCanceled,
+                        reportFeedbackApplication.isCanceled
                 ))
                 .from(reportApplication)
                 .leftJoin(reportApplication.user, user)
