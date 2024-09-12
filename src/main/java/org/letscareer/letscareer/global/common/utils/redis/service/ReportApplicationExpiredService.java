@@ -41,7 +41,7 @@ public class ReportApplicationExpiredService {
         User user = reportApplication.getUser();
         Report report = reportApplication.getReport();
         String reportOptionListStr = reportOptionHelper.createReportOptionListStr(reportApplication.getReportApplicationOptionList());
-        ReportIngParameter reportIngParameter = ReportIngParameter.of(user.getName(), report.getTitle(), report.getType().getDesc(), reportOptionListStr);
+        ReportIngParameter reportIngParameter = ReportIngParameter.of(user.getName(), report.getTitle(), reportApplication.getReportPriceType().getDesc(), reportOptionListStr);
         nhnProvider.sendKakaoMessage(user, reportIngParameter, "report_ing");
     }
 

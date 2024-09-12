@@ -41,7 +41,7 @@ public class UpdateReportApplicationStatusServiceImpl implements UpdateReportApp
         User user = reportApplication.getUser();
         Report report = reportApplication.getReport();
         String reportOptionListStr = reportOptionHelper.createReportOptionListStr(reportApplication.getReportApplicationOptionList());
-        ReportDoneParameter reportDoneParameter = ReportDoneParameter.of(user.getName(), report.getTitle(), report.getType().getDesc(), reportOptionListStr);
+        ReportDoneParameter reportDoneParameter = ReportDoneParameter.of(user.getName(), report.getTitle(), reportApplication.getReportPriceType().getDesc(), reportOptionListStr);
         nhnProvider.sendKakaoMessage(reportApplication.getUser(), reportDoneParameter, "report_done");
     }
 }

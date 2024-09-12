@@ -28,7 +28,7 @@ public record FeedbackNotiParameter(
         return FeedbackNotiParameter.builder()
                 .name(name)
                 .reportTitle(report.getTitle())
-                .reportType(report.getType().getDesc())
+                .reportType(reportFeedbackApplication.getReportPriceType().getDesc())
                 .reportOption(reportOption)
                 .desiredDate1(reportFeedbackApplication.getDesiredDate1())
                 .desiredDate2(reportFeedbackApplication.getDesiredDate2())

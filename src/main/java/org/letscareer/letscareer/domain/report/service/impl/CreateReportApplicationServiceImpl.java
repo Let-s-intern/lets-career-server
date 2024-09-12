@@ -26,6 +26,7 @@ import org.letscareer.letscareer.domain.report.helper.ReportHelper;
 import org.letscareer.letscareer.domain.report.helper.ReportOptionHelper;
 import org.letscareer.letscareer.domain.report.mapper.ReportMapper;
 import org.letscareer.letscareer.domain.report.service.CreateReportApplicationService;
+import org.letscareer.letscareer.domain.report.type.ReportPriceType;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.helper.UserHelper;
 import org.springframework.stereotype.Service;
@@ -64,7 +65,7 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
 
         updateContactEmail(user, requestDto);
         TossPaymentsResponseDto responseDto = tossProvider.requestPayments(requestDto.paymentKey(), requestDto.orderId(), requestDto.amount());
-        sendPaymentKakaoMessages(report, user, responseDto, reportApplicationOptions, reportFeedbackApplication);
+        sendPaymentKakaoMessages(report, user, responseDto, reportApplication.getReportPriceType(), reportApplicationOptions, reportFeedbackApplication);
         return reportMapper.toCreateReportApplicationResponseDto(responseDto);
     }
 
@@ -80,12 +81,12 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
         userHelper.updateContactEmail(user, requestDto.contactEmail());
     }
 
-    private void sendPaymentKakaoMessages(Report report, User user, TossPaymentsResponseDto responseDto, List<ReportApplicationOption> reportApplicationOptions, ReportFeedbackApplication reportFeedbackApplication) {
+    private void sendPaymentKakaoMessages(Report report, User user, TossPaymentsResponseDto responseDto, ReportPriceType reportPriceType, List<ReportApplicationOption> reportApplicationOptions, ReportFeedbackApplication reportFeedbackApplication) {
         List<RequestMessageInfo<?>> messageList = new ArrayList<>();
         ReportPaymentParameter reportPaymentParameter = ReportPaymentParameter.of(user.getName(), responseDto.orderId(), report.getTitle(), Long.valueOf(responseDto.totalAmount()));
         messageList.add(RequestMessageInfo.of(reportPaymentParameter, "report_payment"));
         String reportOptionListStr = reportOptionHelper.createReportOptionListStr(reportApplicationOptions);
-        ReportNotificationParameter reportNotificationParameter = ReportNotificationParameter.of(user.getName(), report, reportOptionListStr);
+        ReportNotificationParameter reportNotificationParameter = ReportNotificationParameter.of(user.getName(), report.getTitle(), reportPriceType.getDesc(), reportOptionListStr);
         messageList.add(RequestMessageInfo.of(reportNotificationParameter, "report_notification"));
         if(!Objects.isNull(reportFeedbackApplication)) {
             FeedbackNotiParameter feedbackNotiParameter = FeedbackNotiParameter.of(user.getName(), report, reportOptionListStr, reportFeedbackApplication);
