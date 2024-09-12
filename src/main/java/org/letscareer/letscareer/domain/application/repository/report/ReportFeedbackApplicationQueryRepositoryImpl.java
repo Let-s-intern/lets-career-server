@@ -21,7 +21,8 @@ public class ReportFeedbackApplicationQueryRepositoryImpl implements ReportFeedb
                 .select(reportFeedbackApplication.id)
                 .from(reportFeedbackApplication)
                 .where(
-                        isFeedbackDate()
+                        isFeedbackDate(),
+                        eqIsCanceled(false)
                 )
                 .fetch();
     }
@@ -29,5 +30,9 @@ public class ReportFeedbackApplicationQueryRepositoryImpl implements ReportFeedb
     private BooleanExpression isFeedbackDate() {
         LocalDate now = LocalDate.now();
         return reportFeedbackApplication.feedbackDate.isNotNull().and(Expressions.dateTemplate(LocalDate.class, "DATE_FORMAT({0}, '%Y-%m-%d')", reportFeedbackApplication.feedbackDate).eq(now));
+    }
+
+    private BooleanExpression eqIsCanceled(Boolean isCanceled) {
+        return isCanceled != null ? reportFeedbackApplication.isCanceled.eq(isCanceled) : null;
     }
 }
