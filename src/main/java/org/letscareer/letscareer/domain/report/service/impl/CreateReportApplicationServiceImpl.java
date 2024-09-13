@@ -66,6 +66,7 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
         updateContactEmail(user, requestDto);
         TossPaymentsResponseDto responseDto = tossProvider.requestPayments(requestDto.paymentKey(), requestDto.orderId(), requestDto.amount());
         sendPaymentKakaoMessages(report, user, responseDto, reportApplication.getReportPriceType(), reportApplicationOptions, reportFeedbackApplication);
+        sendPaymentKakaoMessages(report, user, requestDto, reportApplicationOptions, reportFeedbackApplication);
         return reportMapper.toCreateReportApplicationResponseDto(responseDto);
     }
 
@@ -82,8 +83,9 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
     }
 
     private void sendPaymentKakaoMessages(Report report, User user, TossPaymentsResponseDto responseDto, ReportPriceType reportPriceType, List<ReportApplicationOption> reportApplicationOptions, ReportFeedbackApplication reportFeedbackApplication) {
+    private void sendPaymentKakaoMessages(Report report, User user, CreateReportApplicationRequestDto requestDto, List<ReportApplicationOption> reportApplicationOptions, ReportFeedbackApplication reportFeedbackApplication) {
         List<RequestMessageInfo<?>> messageList = new ArrayList<>();
-        ReportPaymentParameter reportPaymentParameter = ReportPaymentParameter.of(user.getName(), responseDto.orderId(), report.getTitle(), Long.valueOf(responseDto.totalAmount()));
+        ReportPaymentParameter reportPaymentParameter = ReportPaymentParameter.of(user.getName(), requestDto.orderId(), report.getTitle(), Long.valueOf(requestDto.amount()));
         messageList.add(RequestMessageInfo.of(reportPaymentParameter, "report_payment"));
         String reportOptionListStr = reportOptionHelper.createReportOptionListStr(reportApplicationOptions);
         ReportNotificationParameter reportNotificationParameter = ReportNotificationParameter.of(user.getName(), report.getTitle(), reportPriceType.getDesc(), reportOptionListStr);
