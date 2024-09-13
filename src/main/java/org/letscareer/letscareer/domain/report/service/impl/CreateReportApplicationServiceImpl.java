@@ -29,6 +29,8 @@ import org.letscareer.letscareer.domain.report.service.CreateReportApplicationSe
 import org.letscareer.letscareer.domain.report.type.ReportPriceType;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.helper.UserHelper;
+import org.letscareer.letscareer.global.common.utils.slack.WebhookProvider;
+import org.letscareer.letscareer.global.common.utils.slack.dto.ReportWebhookDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +44,7 @@ import java.util.stream.Collectors;
 @Service
 public class CreateReportApplicationServiceImpl implements CreateReportApplicationService {
     private final ReportHelper reportHelper;
+    private final ReportMapper reportMapper;
     private final ReportOptionHelper reportOptionHelper;
     private final ReportApplicationHelper reportApplicationHelper;
     private final PaymentHelper paymentHelper;
@@ -49,11 +52,11 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
     private final UserHelper userHelper;
     private final TossProvider tossProvider;
     private final NhnProvider nhnProvider;
-    private final ReportMapper reportMapper;
+    private final WebhookProvider webhookProvider;
 
     @Override
     public CreateReportApplicationResponseDto execute(User user, Long reportId, CreateReportApplicationRequestDto requestDto) {
-        reportHelper.validateDuplicateReportApplication(user, reportId);
+//        reportHelper.validateDuplicateReportApplication(user, reportId);
         Report report = reportHelper.findReportByReportIdOrThrow(reportId);
         ReportPrice reportPrice = reportHelper.findReportPriceByReportIdAndType(reportId, requestDto.reportPriceType());
         ReportFeedback reportFeedback = report.getReportFeedback();
@@ -67,6 +70,7 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
         updateContactEmail(user, requestDto);
         TossPaymentsResponseDto responseDto = tossProvider.requestPayments(requestDto.paymentKey(), requestDto.orderId(), requestDto.amount());
         sendPaymentKakaoMessages(report, user, requestDto, reportApplication.getReportPriceType(), reportApplicationOptions, reportFeedbackApplication);
+        sendSlackBot(report, user, reportApplication);
         return reportMapper.toCreateReportApplicationResponseDto(responseDto);
     }
 
@@ -94,5 +98,10 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
             messageList.add(RequestMessageInfo.of(feedbackNotiParameter, "feedback_noti"));
         }
         nhnProvider.sendPaymentKakaoMessages(user, messageList);
+    }
+
+    private void sendSlackBot(Report report, User user, ReportApplication reportApplication) {
+        ReportWebhookDto reportWebhookDto = ReportWebhookDto.of(report, user, reportApplication.getCreateDate());
+        webhookProvider.sendMessage(reportWebhookDto);
     }
 }
