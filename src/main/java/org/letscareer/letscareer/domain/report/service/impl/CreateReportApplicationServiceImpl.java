@@ -53,6 +53,7 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
 
     @Override
     public CreateReportApplicationResponseDto execute(User user, Long reportId, CreateReportApplicationRequestDto requestDto) {
+        reportHelper.validateDuplicateReportApplication(user, reportId);
         Report report = reportHelper.findReportByReportIdOrThrow(reportId);
         ReportPrice reportPrice = reportHelper.findReportPriceByReportIdAndType(reportId, requestDto.reportPriceType());
         ReportFeedback reportFeedback = report.getReportFeedback();
@@ -65,8 +66,7 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
 
         updateContactEmail(user, requestDto);
         TossPaymentsResponseDto responseDto = tossProvider.requestPayments(requestDto.paymentKey(), requestDto.orderId(), requestDto.amount());
-        sendPaymentKakaoMessages(report, user, responseDto, reportApplication.getReportPriceType(), reportApplicationOptions, reportFeedbackApplication);
-        sendPaymentKakaoMessages(report, user, requestDto, reportApplicationOptions, reportFeedbackApplication);
+        sendPaymentKakaoMessages(report, user, requestDto, reportApplication.getReportPriceType(), reportApplicationOptions, reportFeedbackApplication);
         return reportMapper.toCreateReportApplicationResponseDto(responseDto);
     }
 
@@ -82,15 +82,14 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
         userHelper.updateContactEmail(user, requestDto.contactEmail());
     }
 
-    private void sendPaymentKakaoMessages(Report report, User user, TossPaymentsResponseDto responseDto, ReportPriceType reportPriceType, List<ReportApplicationOption> reportApplicationOptions, ReportFeedbackApplication reportFeedbackApplication) {
-    private void sendPaymentKakaoMessages(Report report, User user, CreateReportApplicationRequestDto requestDto, List<ReportApplicationOption> reportApplicationOptions, ReportFeedbackApplication reportFeedbackApplication) {
+    private void sendPaymentKakaoMessages(Report report, User user, CreateReportApplicationRequestDto requestDto, ReportPriceType reportPriceType, List<ReportApplicationOption> reportApplicationOptions, ReportFeedbackApplication reportFeedbackApplication) {
         List<RequestMessageInfo<?>> messageList = new ArrayList<>();
         ReportPaymentParameter reportPaymentParameter = ReportPaymentParameter.of(user.getName(), requestDto.orderId(), report.getTitle(), Long.valueOf(requestDto.amount()));
         messageList.add(RequestMessageInfo.of(reportPaymentParameter, "report_payment"));
         String reportOptionListStr = reportOptionHelper.createReportOptionListStr(reportApplicationOptions);
         ReportNotificationParameter reportNotificationParameter = ReportNotificationParameter.of(user.getName(), report.getTitle(), reportPriceType.getDesc(), reportOptionListStr);
         messageList.add(RequestMessageInfo.of(reportNotificationParameter, "report_notification"));
-        if(!Objects.isNull(reportFeedbackApplication)) {
+        if (!Objects.isNull(reportFeedbackApplication)) {
             FeedbackNotiParameter feedbackNotiParameter = FeedbackNotiParameter.of(user.getName(), report, reportOptionListStr, reportFeedbackApplication);
             messageList.add(RequestMessageInfo.of(feedbackNotiParameter, "feedback_noti"));
         }
