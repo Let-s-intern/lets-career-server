@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.global.common.utils.slack;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.gpedro.integrations.slack.SlackApi;
 import net.gpedro.integrations.slack.SlackAttachment;
 import net.gpedro.integrations.slack.SlackField;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.Collections;
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class ProgramWebhookProvider implements WebhookProvider {
@@ -29,6 +31,7 @@ public class ProgramWebhookProvider implements WebhookProvider {
         List<SlackAttachment> slackAttachments = createBugReportSlackAttachments(reportWebhookDto);
         SlackMessage slackMessage = createSlackMessage(MAIN_TITLE, slackAttachments);
         slackApi.call(slackMessage);
+        log.info("[slack call]::report");
     }
 
     private List<SlackAttachment> createBugReportSlackAttachments(ReportWebhookDto reportWebhookDto) {
