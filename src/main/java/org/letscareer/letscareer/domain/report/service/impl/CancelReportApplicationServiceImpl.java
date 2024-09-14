@@ -45,10 +45,12 @@ public class CancelReportApplicationServiceImpl implements CancelReportApplicati
         Payment payment = reportApplication.getPayment();
         ReportFeedbackApplication reportFeedbackApplication = reportFeedbackApplicationHelper.findReportFeedbackApplicationByReportApplicationIdOrElseNull(reportApplication.getId());
         List<ReportApplicationOptionPriceVo> reportApplicationOptionPriceVos = reportApplicationHelper.findAllReportApplicationOptionPriceVosByReportApplicationId(reportApplication.getId());
+
         ReportCancelVo reportCancelInfo = getReportCancelInfo(reportApplication, reportApplicationOptionPriceVos, user);
         ReportCancelVo feedbackCancelInfo = getFeedbackCancelInfo(reportFeedbackApplication, user);
         RefundType refundType = getRefundTypeInfo(reportCancelInfo.reportRefundType(), feedbackCancelInfo.reportRefundType());
         int cancelAmount = reportCancelInfo.cancelAmount() + feedbackCancelInfo.cancelAmount();
+
         if(!payment.getPaymentKey().isEmpty()) tossProvider.cancelPayments(refundType, payment.getPaymentKey(), cancelAmount);
         payment.updateRefundPrice(cancelAmount);
         updateReportApplicationCancelInfo(reportApplication, reportCancelInfo);

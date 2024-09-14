@@ -32,7 +32,7 @@ public class ReportApplicationExpiredService {
 
     public void setWithExpire(Long reportApplicationId) {
         String key = reportApplicationKey + reportApplicationId;
-        redisUtils.setWithExpire(key, String.valueOf(reportApplicationId), expirationHour, TimeUnit.MINUTES);
+        redisUtils.setWithExpire(key, String.valueOf(reportApplicationId), expirationHour, TimeUnit.HOURS);
     }
 
     public void sendKakaoMessage(Long reportApplicationId) {
