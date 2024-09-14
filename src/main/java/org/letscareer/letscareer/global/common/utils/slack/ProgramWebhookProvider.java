@@ -20,7 +20,8 @@ public class ProgramWebhookProvider implements WebhookProvider {
     private static final String COLOR = "danger";
     private static final String MAIN_TITLE = "리포트 신청 알림";
     private static final String REPORT_TITLE = "리포트 종류";
-    private static final String REPORT_TYPE = "서비스 유형";
+    private static final String PRICE_TYPE = "기본 서비스 유형";
+    private static final String OPTIONS = "서류 진단서 옵션";
     private static final String IS_APPLIED_FEEDBACK = "1:1 피드백 신청여부";
     private static final String ORDER_ID = "주문번호";
     private static final String USER_INFO = "신청자 / 이메일 / 전화번호";
@@ -47,7 +48,8 @@ public class ProgramWebhookProvider implements WebhookProvider {
     private List<SlackField> createBugReportSlackFields(ReportWebhookDto reportWebhookDto) {
         return List.of(
                 createSlackField(REPORT_TITLE, reportWebhookDto.getReportTitle()),
-                createSlackField(REPORT_TYPE, reportWebhookDto.getReportType()),
+                createSlackField(PRICE_TYPE, reportWebhookDto.getReportType()),
+                createSlackField(OPTIONS, reportWebhookDto.getOptionsString()),
                 createSlackField(IS_APPLIED_FEEDBACK, reportWebhookDto.isAppliedFeedback()),
                 createSlackField(ORDER_ID, reportWebhookDto.getOrderId()),
                 createSlackField(USER_INFO, reportWebhookDto.getUserInfo()),

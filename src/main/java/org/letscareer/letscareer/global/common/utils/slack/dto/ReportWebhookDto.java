@@ -61,6 +61,15 @@ public record ReportWebhookDto(
                 + "번호 : " + user.getPhoneNum();
     }
 
+    public String getOptionsString() {
+        if (reportApplicationOptions.isEmpty()) return "없음";
+        StringBuilder sb = new StringBuilder();
+        reportApplicationOptions.forEach(reportApplicationOption -> {
+            sb.append(reportApplicationOption.getTitle() + "\n");
+        });
+        return sb.toString();
+    }
+
     public String getTimeInfo() {
         LocalDateTime applicationTime = reportApplication.getCreateDate();
         LocalDateTime endDate;
