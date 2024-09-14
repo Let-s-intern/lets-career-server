@@ -73,7 +73,7 @@ public record ReportWebhookDto(
     public String getTimeInfo() {
         LocalDateTime applicationTime = reportApplication.getCreateDate();
         LocalDateTime endDate;
-        if (!Objects.isNull(reportApplicationOptions)) {
+        if (!reportApplicationOptions.isEmpty()) {
             endDate = applicationTime.plusDays(5L);
         } else if (ReportPriceType.PREMIUM.equals(reportApplication.getReportPriceType())) {
             endDate = applicationTime.plusDays(3L);
