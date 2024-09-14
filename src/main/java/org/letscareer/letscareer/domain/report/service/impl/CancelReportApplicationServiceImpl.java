@@ -43,6 +43,7 @@ public class CancelReportApplicationServiceImpl implements CancelReportApplicati
     @Override
     public void execute(User user, Long reportApplicationId) {
         ReportApplication reportApplication = reportApplicationHelper.findReportApplicationByReportApplicationIdOrThrow(reportApplicationId);
+        applicationHelper.validateAuthorizedUser(reportApplication.getUser(), user);
         Report report = reportApplication.getReport();
         Payment payment = reportApplication.getPayment();
         ReportFeedbackApplication reportFeedbackApplication = reportFeedbackApplicationHelper.findReportFeedbackApplicationByReportApplicationIdOrElseNull(reportApplication.getId());
