@@ -22,6 +22,8 @@ public record MyReportVo(
         LocalDateTime desiredDate2,
         LocalDateTime desiredDate3,
         LocalDateTime applicationTime,
-        LocalDateTime confirmedTime
+        LocalDateTime confirmedTime,
+        Boolean isCanceled,
+        Boolean feedbackIsCanceled
 ) {
 }

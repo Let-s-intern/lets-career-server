@@ -36,6 +36,7 @@ public class ReportFeedbackApplication extends BaseTimeEntity {
     private Integer price;
     private Integer discountPrice;
     private Integer refundPrice;
+    @NotNull
     @Builder.Default
     private Boolean isCanceled = false;
 

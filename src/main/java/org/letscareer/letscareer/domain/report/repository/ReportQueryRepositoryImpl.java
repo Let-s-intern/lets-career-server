@@ -256,7 +256,9 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         reportFeedbackApplication.desiredDate2,
                         reportFeedbackApplication.desiredDate3,
                         reportApplication.createDate,
-                        getConfirmedTimeFor()
+                        getConfirmedTimeFor(),
+                        reportApplication.isCanceled,
+                        reportFeedbackApplication.isCanceled
                 ))
                 .from(report)
                 .leftJoin(report.applicationList, reportApplication)
