@@ -56,7 +56,7 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
 
     @Override
     public CreateReportApplicationResponseDto execute(User user, Long reportId, CreateReportApplicationRequestDto requestDto) {
-        reportHelper.validateDuplicateReportApplication(user, reportId);
+        // reportHelper.validateDuplicateReportApplication(user, reportId);
         Report report = reportHelper.findReportByReportIdOrThrow(reportId);
         ReportPrice reportPrice = reportHelper.findReportPriceByReportIdAndType(reportId, requestDto.reportPriceType());
         ReportFeedback reportFeedback = report.getReportFeedback();
