@@ -1,25 +1,25 @@
 package org.letscareer.letscareer.global.common.utils.redis.listener;
 
-import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.type.ReportApplicationStatus;
 import org.letscareer.letscareer.global.common.utils.redis.service.ReportApplicationExpiredService;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.connection.Message;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.stereotype.Component;
 
-@RequiredArgsConstructor
 @Component
-public class ReportApplicationExpiredListener extends EventListener {
+public class ReportApplicationExpiredListener extends RedisExpiredListener {
+    private final static String reportApplicationKey = "ralets99";
     private final ReportApplicationExpiredService reportApplicationExpiredService;
 
-    @Value("${spring.data.redis.report-application.key}")
-    private String reportApplicationKey;
+
+    public ReportApplicationExpiredListener(RedisMessageListenerContainer listenerContainer, ReportApplicationExpiredService reportApplicationExpiredService) {
+        super(listenerContainer);
+        this.reportApplicationExpiredService = reportApplicationExpiredService;
+    }
 
     @Override
-    public void onMessage(Message message, byte[] pattern) {
-        String key = new String(message.getBody());
-        if(key.contains(reportApplicationKey)) {
-            Long reportApplicationId = Long.valueOf(key.replace(reportApplicationKey, ""));
+    protected void handleExpiredKey(String expiredKey) {
+        if (expiredKey.startsWith(reportApplicationKey)) {
+            Long reportApplicationId = Long.valueOf(expiredKey.replace(reportApplicationKey, ""));
             reportApplicationExpiredService.sendKakaoMessage(reportApplicationId);
             reportApplicationExpiredService.updateReportApplicationStatus(reportApplicationId, ReportApplicationStatus.REPORTING);
         }

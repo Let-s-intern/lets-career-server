@@ -1,14 +1,13 @@
 package org.letscareer.letscareer.global.config;
 
-import org.letscareer.letscareer.global.common.utils.redis.listener.EventListener;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisKeyValueAdapter;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.listener.PatternTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -27,7 +26,10 @@ public class RedisConfig {
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        return new LettuceConnectionFactory(host, port);
+        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
+        redisStandaloneConfiguration.setHostName(host);
+        redisStandaloneConfiguration.setPort(port);
+        return new LettuceConnectionFactory(redisStandaloneConfiguration);
     }
 
     @Bean
@@ -40,13 +42,9 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisMessageListenerContainer redisMessageListenerContainer(RedisConnectionFactory redisConnectionFactory,
-                                                                       EventListener eventListener) {
-        RedisMessageListenerContainer redisMessageListenerContainer = new RedisMessageListenerContainer();
-        redisMessageListenerContainer.setConnectionFactory(redisConnectionFactory);
-        redisMessageListenerContainer.addMessageListener(eventListener, new PatternTopic(SET_EVENT_PATTERN));
-        redisMessageListenerContainer.addMessageListener(eventListener, new PatternTopic(EXPIRED_EVENT_PATTERN));
-        redisMessageListenerContainer.addMessageListener(eventListener, new PatternTopic(EXPIRED_SPACE_PATTERN));
-        return redisMessageListenerContainer;
+    public RedisMessageListenerContainer redisMessageListenerContainer(RedisConnectionFactory connectionFactory) {
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+        container.setConnectionFactory(redisConnectionFactory());
+        return container;
     }
 }
