@@ -32,7 +32,7 @@ public class ReportApplicationExpiredService {
 
     public void setWithExpire(Long reportApplicationId) {
         String key = reportApplicationKey + reportApplicationId;
-        redisUtils.setWithExpire(key, String.valueOf(reportApplicationId), expirationHour, TimeUnit.MINUTES);
+        redisUtils.setWithExpire(key, String.valueOf(reportApplicationId), expirationHour, TimeUnit.HOURS);
     }
 
     public void sendKakaoMessage(Long reportApplicationId) {
@@ -41,7 +41,7 @@ public class ReportApplicationExpiredService {
         User user = reportApplication.getUser();
         Report report = reportApplication.getReport();
         String reportOptionListStr = reportOptionHelper.createReportOptionListStr(reportApplication.getReportApplicationOptionList());
-        ReportIngParameter reportIngParameter = ReportIngParameter.of(user.getName(), report.getTitle(), report.getType().getDesc(), reportOptionListStr);
+        ReportIngParameter reportIngParameter = ReportIngParameter.of(user.getName(), report.getTitle(), reportApplication.getReportPriceType().getDesc(), reportOptionListStr);
         nhnProvider.sendKakaoMessage(user, reportIngParameter, "report_ing");
     }
 
@@ -52,6 +52,6 @@ public class ReportApplicationExpiredService {
     }
 
     private boolean isAppliedReportApplication(ReportApplication reportApplication) {
-        return reportApplication.getStatus().equals(ReportApplicationStatus.APPLIED);
+        return reportApplication.getIsCanceled().equals(Boolean.FALSE) && reportApplication.getStatus().equals(ReportApplicationStatus.APPLIED);
     }
 }

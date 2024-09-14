@@ -40,19 +40,22 @@ public class CancelReportApplicationServiceImpl implements CancelReportApplicati
     @Override
     public void execute(User user, Long reportApplicationId) {
         ReportApplication reportApplication = reportApplicationHelper.findReportApplicationByReportApplicationIdOrThrow(reportApplicationId);
+        applicationHelper.validateAuthorizedUser(reportApplication.getUser(), user);
         Report report = reportApplication.getReport();
         Payment payment = reportApplication.getPayment();
         ReportFeedbackApplication reportFeedbackApplication = reportFeedbackApplicationHelper.findReportFeedbackApplicationByReportApplicationIdOrElseNull(reportApplication.getId());
         List<ReportApplicationOptionPriceVo> reportApplicationOptionPriceVos = reportApplicationHelper.findAllReportApplicationOptionPriceVosByReportApplicationId(reportApplication.getId());
+
         ReportCancelVo reportCancelInfo = getReportCancelInfo(reportApplication, reportApplicationOptionPriceVos, user);
         ReportCancelVo feedbackCancelInfo = getFeedbackCancelInfo(reportFeedbackApplication, user);
         RefundType refundType = getRefundTypeInfo(reportCancelInfo.reportRefundType(), feedbackCancelInfo.reportRefundType());
         int cancelAmount = reportCancelInfo.cancelAmount() + feedbackCancelInfo.cancelAmount();
-        TossPaymentsResponseDto responseDto = tossProvider.cancelPayments(refundType, payment.getPaymentKey(), cancelAmount);
-        payment.updateRefundPrice(reportCancelInfo.cancelAmount());
-        reportApplication.updateIsCanceled(true);
-        if(!Objects.isNull(reportFeedbackApplication)) reportFeedbackApplication.updateRefundPrice(feedbackCancelInfo.cancelAmount());
-        sendKakaoMessage(user, payment.getOrderId(), report.getTitle(), refundType, responseDto.totalAmount(), cancelAmount);
+
+        if(!payment.getPaymentKey().isEmpty()) tossProvider.cancelPayments(refundType, payment.getPaymentKey(), cancelAmount);
+        payment.updateRefundPrice(cancelAmount);
+        updateReportApplicationCancelInfo(reportApplication, reportCancelInfo);
+        updateReportFeedbackApplicationCancelInfo(reportFeedbackApplication, feedbackCancelInfo);
+        sendKakaoMessage(user, payment.getOrderId(), report.getTitle(), refundType, payment.getFinalPrice(), cancelAmount);
     }
 
     private void sendKakaoMessage(User user, String orderId, String title, RefundType refundType, Integer finalPrice, int cancelAmount) {
@@ -88,5 +91,16 @@ public class CancelReportApplicationServiceImpl implements CancelReportApplicati
 
     private RefundType getRefundTypeInfo(ReportRefundType reportRefundType, ReportRefundType feedbackRefundType) {
         return (reportRefundType.equals(ReportRefundType.ALL) && feedbackRefundType.equals(ReportRefundType.ALL)) ? RefundType.ALL : null;
+    }
+
+    private void updateReportApplicationCancelInfo(ReportApplication reportApplication, ReportCancelVo reportCancelInfo) {
+        reportApplication.updateIsCanceled(true);
+        reportApplication.updateRefundPrice(reportCancelInfo.cancelAmount());
+    }
+
+    private void updateReportFeedbackApplicationCancelInfo(ReportFeedbackApplication reportFeedbackApplication, ReportCancelVo feedbackCancelInfo) {
+        if(Objects.isNull(reportFeedbackApplication)) return;
+        reportFeedbackApplication.updateIsCanceled(true);
+        reportFeedbackApplication.updateRefundPrice(feedbackCancelInfo.cancelAmount());
     }
 }

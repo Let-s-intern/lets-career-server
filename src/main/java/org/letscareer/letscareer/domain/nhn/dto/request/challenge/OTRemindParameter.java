@@ -22,7 +22,7 @@ public record OTRemindParameter(
                 .userName(userName)
                 .programTitle(challenge.getTitle())
                 .programStartDate(challenge.getStartDate())
-                .zoomLink(challenge.getZoomLink())
+                .zoomLink(challenge.getZoomLink().substring(8))
                 .programId(challenge.getId())
                 .build();
     }

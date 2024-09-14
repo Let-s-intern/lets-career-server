@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.application.entity.report;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.letscareer.letscareer.domain.application.type.ReportDesiredDateType;
 import org.letscareer.letscareer.domain.application.type.ReportFeedbackStatus;
@@ -35,6 +36,9 @@ public class ReportFeedbackApplication extends BaseTimeEntity {
     private Integer price;
     private Integer discountPrice;
     private Integer refundPrice;
+    @NotNull
+    @Builder.Default
+    private Boolean isCanceled = false;
 
     private LocalDateTime desiredDate1;
     private LocalDateTime desiredDate2;
@@ -85,6 +89,10 @@ public class ReportFeedbackApplication extends BaseTimeEntity {
 
     public void updateFeedbackStatus(ReportFeedbackStatus reportFeedbackStatus) {
         this.reportFeedbackStatus = reportFeedbackStatus;
+    }
+
+    public void updateIsCanceled(Boolean isCanceled) {
+        this.isCanceled = updateValue(this.isCanceled, isCanceled);
     }
 
     public void setZoomInfo(ZoomMeetingResponseDto zoomInfo) {

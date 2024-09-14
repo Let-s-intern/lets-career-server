@@ -39,6 +39,7 @@ public class ReportV1Controller {
     private final UpdateReportService updateReportService;
     private final UpdateReportFeedbackSchedule updateReportFeedbackSchedule;
     private final UpdateReportDocumentService updateReportDocumentService;
+    private final UpdateReportApplicationStatusService updateReportApplicationStatusService;
     private final DeleteReportService deleteReportService;
     private final CancelReportApplicationService cancelReportApplicationService;
 
@@ -54,8 +55,9 @@ public class ReportV1Controller {
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportDetailForAdminResponseDto.class)))
     @ApiErrorCode({REPORT_NOT_FOUND})
     @GetMapping("/{reportId}/admin")
-    public ResponseEntity<SuccessResponse<?>> getReportDetailForAdmin(@PathVariable final Long reportId) {
-        final GetReportDetailForAdminResponseDto responseDto = getReportDetailForAdminService.execute(reportId);
+    public ResponseEntity<SuccessResponse<?>> getReportDetailForAdmin(@CurrentUser User user,
+                                                                      @PathVariable final Long reportId) {
+        final GetReportDetailForAdminResponseDto responseDto = getReportDetailForAdminService.execute(user, reportId);
         return SuccessResponse.ok(responseDto);
     }
 
@@ -151,7 +153,7 @@ public class ReportV1Controller {
     }
 
     @Operation(
-            summary = "[테스트 중] 진단서 신청",
+            summary = "진단서 신청",
             description = """
                     amount : 실제 결제 금액 <br>
                     programPrice : (서류 진단 + 옵션 + 1대1 첨삭) 정가 <br>
@@ -187,6 +189,24 @@ public class ReportV1Controller {
     }
 
     @Operation(
+            summary = "진단서 상태 변경",
+            description = """
+                    [NotNull] reportApplicationStatus <br>
+                    APPLIED(1, "신청완료") <br>
+                    REPORTING(2, "진단중") <br>
+                    REPORTED(3, "진단서 업로드") <br>
+                    COMPLETED(4, "진단완료") <br>
+                    """
+    )
+    @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    @PatchMapping("/application/{applicationId}/status")
+    public ResponseEntity<SuccessResponse<?>> updateReportStatus(@PathVariable final Long applicationId,
+                                                                 @RequestBody final UpdateReportApplicationStatusRequestDto requestDto) {
+        updateReportApplicationStatusService.execute(applicationId, requestDto);
+        return SuccessResponse.ok(null);
+    }
+
+    @Operation(
             summary = "1대1 첨삭 일정 관리",
             description = """
                     [NotNull] reportFeedbackStatus <br>
@@ -208,12 +228,13 @@ public class ReportV1Controller {
     @Operation(summary = "진단서 프로그램 삭제")
     @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     @DeleteMapping("/{reportId}")
-    public ResponseEntity<SuccessResponse<?>> deleteReport(@PathVariable final Long reportId) {
-        deleteReportService.execute(reportId);
+    public ResponseEntity<SuccessResponse<?>> deleteReport(@CurrentUser final User user,
+                                                           @PathVariable final Long reportId) {
+        deleteReportService.execute(user, reportId);
         return ResponseEntity.ok(null);
     }
 
-    @Operation(summary = "[테스트 중] 진단서 신청 취소")
+    @Operation(summary = "진단서 신청 취소")
     @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     @DeleteMapping("/application/{reportApplicationId}")
     public ResponseEntity<SuccessResponse<?>> cancelReportApplication(@CurrentUser final User user,

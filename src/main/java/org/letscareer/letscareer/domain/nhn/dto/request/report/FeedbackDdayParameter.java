@@ -26,10 +26,10 @@ public record FeedbackDdayParameter(
         return FeedbackDdayParameter.builder()
                 .name(name)
                 .reportTitle(report.getTitle())
-                .reportType(report.getType().getDesc())
+                .reportType(reportFeedbackApplication.getReportPriceType().getDesc())
                 .reportOption(reportOption)
                 .feedbackDate(reportFeedbackApplication.getFeedbackDate())
-                .zoomLink(reportFeedbackApplication.getZoomLink())
+                .zoomLink(reportFeedbackApplication.getZoomLink().substring(8))
                 .build();
     }
 }

@@ -7,6 +7,7 @@ import org.letscareer.letscareer.domain.application.listener.ReportApplicationEn
 import org.letscareer.letscareer.domain.application.type.ReportApplicationStatus;
 import org.letscareer.letscareer.domain.application.type.converter.ReportApplicationStatusConverter;
 import org.letscareer.letscareer.domain.report.dto.req.CreateReportApplicationRequestDto;
+import org.letscareer.letscareer.domain.report.dto.req.UpdateReportApplicationStatusRequestDto;
 import org.letscareer.letscareer.domain.report.dto.req.UpdateReportDocumentRequestDto;
 import org.letscareer.letscareer.domain.report.entity.Report;
 import org.letscareer.letscareer.domain.report.entity.ReportPrice;
@@ -103,5 +104,13 @@ public class ReportApplication extends Application {
 
     public void updateReportApplicationStatus(ReportApplicationStatus status) {
         this.status = updateValue(this.status, status);
+    }
+
+    public void updateReportStatus(UpdateReportApplicationStatusRequestDto requestDto) {
+        this.status = updateValue(this.status, requestDto.status());
+    }
+
+    public void updateRefundPrice(Integer refundPrice) {
+        this.refundPrice = updateValue(this.refundPrice, refundPrice);
     }
 }

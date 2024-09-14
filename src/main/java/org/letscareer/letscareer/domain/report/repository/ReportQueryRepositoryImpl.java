@@ -1,7 +1,6 @@
 package org.letscareer.letscareer.domain.report.repository;
 
 import com.querydsl.core.types.Expression;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
@@ -10,6 +9,7 @@ import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.application.entity.report.ReportApplication;
 import org.letscareer.letscareer.domain.application.type.ReportDesiredDateType;
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationForAdminVo;
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationOptionForAdminVo;
@@ -18,6 +18,7 @@ import org.letscareer.letscareer.domain.report.entity.ReportPrice;
 import org.letscareer.letscareer.domain.report.type.ReportPriceType;
 import org.letscareer.letscareer.domain.report.type.ReportType;
 import org.letscareer.letscareer.domain.report.vo.*;
+import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
@@ -50,6 +51,19 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         isVisible()
                 )
                 .orderBy(report.id.desc())
+                .fetchFirst());
+    }
+
+    @Override
+    public Optional<ReportApplication> findReportByIdAndUser(User entityUser, Long reportId) {
+        return Optional.ofNullable(queryFactory
+                .selectFrom(reportApplication)
+                .leftJoin(reportApplication.report, report)
+                .leftJoin(reportApplication.user, user)
+                .where(
+                        eqUserId(entityUser.getId()),
+                        eqReportId(reportId)
+                )
                 .fetchFirst());
     }
 
@@ -134,7 +148,8 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         reportApplication.reportPriceType,
                         coupon.name,
                         payment.finalPrice,
-                        reportApplication.isCanceled
+                        reportApplication.isCanceled,
+                        reportFeedbackApplication.isCanceled
                 ))
                 .from(reportApplication)
                 .leftJoin(reportApplication.user, user)
@@ -241,7 +256,9 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         reportFeedbackApplication.desiredDate2,
                         reportFeedbackApplication.desiredDate3,
                         reportApplication.createDate,
-                        getConfirmedTimeFor()
+                        getConfirmedTimeFor(),
+                        reportApplication.isCanceled,
+                        reportFeedbackApplication.isCanceled
                 ))
                 .from(report)
                 .leftJoin(report.applicationList, reportApplication)
@@ -326,8 +343,8 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         Expressions.constant(subQueryForReportApplicationPriceInfo(applicationId)),
                         Expressions.constant(subQueryReportApplicationOptionInfos(applicationId)),
                         Expressions.constant(subQueryFeedbackApplicationPriceInfo(applicationId)),
-                        reportApplication.createDate,
-                        reportApplication.lastModifiedDate
+                        payment.createDate,
+                        payment.lastModifiedDate
                 ))
                 .from(reportApplication)
                 .leftJoin(reportApplication.reportFeedbackApplication, reportFeedbackApplication)
@@ -451,8 +468,8 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         reportFeedbackApplication.price,
                         reportFeedbackApplication.discountPrice
                 ))
-                .from(reportFeedbackApplication)
-                .leftJoin(reportFeedbackApplication.reportApplication, reportApplication)
+                .from(reportApplication)
+                .leftJoin(reportApplication.reportFeedbackApplication, reportFeedbackApplication)
                 .where(
                         eqApplicationId(applicationId)
                 )

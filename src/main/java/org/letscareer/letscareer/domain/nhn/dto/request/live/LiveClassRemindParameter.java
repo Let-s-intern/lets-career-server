@@ -21,7 +21,7 @@ public record LiveClassRemindParameter(
                         .userName(userName)
                         .programTitle(live.getTitle())
                         .programStartDate(live.getStartDate())
-                        .zoomLink(live.getZoomLink())
+                        .zoomLink(live.getZoomLink().substring(8))
                         .build();
         }
 }

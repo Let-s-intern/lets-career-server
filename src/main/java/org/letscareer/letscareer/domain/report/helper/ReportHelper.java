@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.report.helper;
 
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.application.entity.report.ReportApplication;
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationForAdminVo;
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationOptionForAdminVo;
 import org.letscareer.letscareer.domain.report.dto.req.CreateReportRequestDto;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static org.letscareer.letscareer.domain.report.error.ReportErrorCode.*;
 
@@ -32,6 +34,12 @@ public class ReportHelper {
         if (Objects.isNull(requestDto.reportType())) return;
         if (reportRepository.existByReportTypeAndVisibleDate(requestDto.reportType()).isPresent())
             throw new ConflictException(REPORT_CONFLICT_VISIBLE_DATE);
+    }
+
+    public void validateDuplicateReportApplication(User user, Long reportId) {
+        Optional<ReportApplication> reportApplication = reportRepository.findReportByIdAndUser(user, reportId);
+        if(reportApplication.isPresent())
+            throw new ConflictException(DUPLICATE_REPORT_APPLICATION);
     }
 
     public ReportApplicationVo findReportApplicationVoByApplicationId(Long applicationId) {

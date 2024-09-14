@@ -26,8 +26,11 @@ import org.letscareer.letscareer.domain.report.helper.ReportHelper;
 import org.letscareer.letscareer.domain.report.helper.ReportOptionHelper;
 import org.letscareer.letscareer.domain.report.mapper.ReportMapper;
 import org.letscareer.letscareer.domain.report.service.CreateReportApplicationService;
+import org.letscareer.letscareer.domain.report.type.ReportPriceType;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.helper.UserHelper;
+import org.letscareer.letscareer.global.common.utils.slack.WebhookProvider;
+import org.letscareer.letscareer.global.common.utils.slack.dto.ReportWebhookDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +44,7 @@ import java.util.stream.Collectors;
 @Service
 public class CreateReportApplicationServiceImpl implements CreateReportApplicationService {
     private final ReportHelper reportHelper;
+    private final ReportMapper reportMapper;
     private final ReportOptionHelper reportOptionHelper;
     private final ReportApplicationHelper reportApplicationHelper;
     private final PaymentHelper paymentHelper;
@@ -48,7 +52,7 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
     private final UserHelper userHelper;
     private final TossProvider tossProvider;
     private final NhnProvider nhnProvider;
-    private final ReportMapper reportMapper;
+    private final WebhookProvider webhookProvider;
 
     @Override
     public CreateReportApplicationResponseDto execute(User user, Long reportId, CreateReportApplicationRequestDto requestDto) {
@@ -64,7 +68,8 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
 
         updateContactEmail(user, requestDto);
         TossPaymentsResponseDto responseDto = tossProvider.requestPayments(requestDto.paymentKey(), requestDto.orderId(), requestDto.amount());
-        sendPaymentKakaoMessages(report, user, requestDto, reportApplicationOptions, reportFeedbackApplication);
+        sendPaymentKakaoMessages(report, user, requestDto, reportApplication.getReportPriceType(), reportApplicationOptions, reportFeedbackApplication);
+        sendSlackBot(report, reportApplication, reportApplicationOptions, reportFeedbackApplication, user, payment);
         return reportMapper.toCreateReportApplicationResponseDto(responseDto);
     }
 
@@ -80,17 +85,27 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
         userHelper.updateContactEmail(user, requestDto.contactEmail());
     }
 
-    private void sendPaymentKakaoMessages(Report report, User user, CreateReportApplicationRequestDto requestDto, List<ReportApplicationOption> reportApplicationOptions, ReportFeedbackApplication reportFeedbackApplication) {
+    private void sendPaymentKakaoMessages(Report report, User user, CreateReportApplicationRequestDto requestDto, ReportPriceType reportPriceType, List<ReportApplicationOption> reportApplicationOptions, ReportFeedbackApplication reportFeedbackApplication) {
         List<RequestMessageInfo<?>> messageList = new ArrayList<>();
         ReportPaymentParameter reportPaymentParameter = ReportPaymentParameter.of(user.getName(), requestDto.orderId(), report.getTitle(), Long.valueOf(requestDto.amount()));
         messageList.add(RequestMessageInfo.of(reportPaymentParameter, "report_payment"));
         String reportOptionListStr = reportOptionHelper.createReportOptionListStr(reportApplicationOptions);
-        ReportNotificationParameter reportNotificationParameter = ReportNotificationParameter.of(user.getName(), report, reportOptionListStr);
+        ReportNotificationParameter reportNotificationParameter = ReportNotificationParameter.of(user.getName(), report.getTitle(), reportPriceType.getDesc(), reportOptionListStr);
         messageList.add(RequestMessageInfo.of(reportNotificationParameter, "report_notification"));
-        if(!Objects.isNull(reportFeedbackApplication)) {
+        if (!Objects.isNull(reportFeedbackApplication)) {
             FeedbackNotiParameter feedbackNotiParameter = FeedbackNotiParameter.of(user.getName(), report, reportOptionListStr, reportFeedbackApplication);
             messageList.add(RequestMessageInfo.of(feedbackNotiParameter, "feedback_noti"));
         }
         nhnProvider.sendPaymentKakaoMessages(user, messageList);
+    }
+
+    private void sendSlackBot(Report report,
+                              ReportApplication reportApplication,
+                              List<ReportApplicationOption> reportApplicationOptions,
+                              ReportFeedbackApplication reportFeedbackApplication,
+                              User user,
+                              Payment payment) {
+        ReportWebhookDto reportWebhookDto = ReportWebhookDto.of(report, reportApplication, reportApplicationOptions, reportFeedbackApplication, user, payment);
+        webhookProvider.sendMessage(reportWebhookDto);
     }
 }

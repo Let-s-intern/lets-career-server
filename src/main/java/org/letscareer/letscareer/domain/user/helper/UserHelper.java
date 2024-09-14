@@ -143,9 +143,7 @@ public class UserHelper {
                 && !Objects.isNull(user.getGrade())
                 && checkStringNotNullAndNotEmpty(user.getMajor())
                 && checkStringNotNullAndNotEmpty(user.getWishJob())
-                && checkStringNotNullAndNotEmpty(user.getWishCompany())
-                && !Objects.isNull(user.getAccountType())
-                && checkStringNotNullAndNotEmpty(user.getAccountNum());
+                && checkStringNotNullAndNotEmpty(user.getWishCompany());
     }
 
     private Boolean checkStringNotNullAndNotEmpty(String s) {
