@@ -34,6 +34,17 @@ import java.time.LocalDateTime;
                 "INNER JOIN live as l ON l.live_id = la.live_id " +
                 "INNER JOIN payment as p ON p.application_id = a.application_id " +
                 "LEFT JOIN review as r ON r.application_id = a.application_id " +
+                "UNION ALL " +
+                "SELECT a.application_id, a.is_canceled, a.user_id, " +
+                "4 as program_type, 0 as progress_type, ra.report_id as program_id, " +
+                "re.title as program_title, null as program_short_desc, null as program_thumbnail, re.visible_date as program_start_date, DATE_ADD(re.visible_date, INTERVAL 6 MONTH) as program_end_date, " +
+                "p.payment_id as payment_id, p.payment_key, p.program_price, p.final_price, p.create_date as payment_create_date, " +
+                "r.review_id as review_id " +
+                "FROM application as a " +
+                "INNER JOIN report_application as ra ON ra.application_id = a.application_id " +
+                "INNER JOIN report as re ON re.report_id = ra.report_id " +
+                "INNER JOIN payment as p ON p.application_id = a.application_id " +
+                "LEFT JOIN review as r ON r.application_id = a.application_id " +
                 "ORDER BY application_id DESC"
 )
 @Table(name = "vw_application")

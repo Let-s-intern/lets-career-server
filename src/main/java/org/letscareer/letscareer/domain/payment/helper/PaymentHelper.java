@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.payment.helper;
 
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.entity.Application;
+import org.letscareer.letscareer.domain.application.entity.report.ReportApplication;
 import org.letscareer.letscareer.domain.coupon.entity.Coupon;
 import org.letscareer.letscareer.domain.payment.dto.request.CreatePaymentRequestDto;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
@@ -9,6 +10,7 @@ import org.letscareer.letscareer.domain.payment.repository.PaymentRepository;
 import org.letscareer.letscareer.domain.payment.vo.PaymentDetailVo;
 import org.letscareer.letscareer.domain.payment.vo.PaymentProgramVo;
 import org.letscareer.letscareer.domain.price.entity.Price;
+import org.letscareer.letscareer.domain.report.dto.req.CreateReportApplicationRequestDto;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
@@ -26,6 +28,13 @@ public class PaymentHelper {
     public Payment createPaymentAndSave(CreatePaymentRequestDto paymentInfo, Application application, Coupon coupon, Price price) {
         Payment newPayment = Payment.createPayment(paymentInfo, coupon, application, price);
         return paymentRepository.save(newPayment);
+    }
+
+    public Payment createReportPaymentAndSave(CreateReportApplicationRequestDto requestDto,
+                                              Coupon coupon,
+                                              ReportApplication reportApplication) {
+        Payment payment = Payment.createReportPayment(requestDto, coupon, reportApplication);
+        return paymentRepository.save(payment);
     }
 
     public Payment findPaymentByIdOrThrow(Long paymentId) {
@@ -53,13 +62,7 @@ public class PaymentHelper {
         return paymentRepository.countCouponAppliedTime(userId, couponId);
     }
 
-    private int calculateFinalPrice(Price price, Coupon coupon) {
-        int finalPrice = price.getPrice() - price.getDiscount();
-        if (coupon != null) {
-            System.out.println(coupon.getDiscount());
-            if (coupon.getDiscount() == -1) return 0;
-            finalPrice -= coupon.getDiscount();
-        }
-        return finalPrice;
+    public Coupon getPaymentCoupon(Payment payment) {
+        return payment.getCoupon();
     }
 }

@@ -4,9 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.letscareer.letscareer.domain.application.vo.ReviewNotificationUserVo;
 import org.letscareer.letscareer.domain.nhn.dto.request.CreateMessageRequestDto;
-import org.letscareer.letscareer.domain.nhn.dto.request.CreditConfirmParameter;
+import org.letscareer.letscareer.domain.nhn.dto.request.RequestMessageInfo;
 import org.letscareer.letscareer.domain.nhn.dto.request.RecipientInfo;
-import org.letscareer.letscareer.domain.nhn.dto.request.ReviewParameter;
 import org.letscareer.letscareer.domain.nhn.dto.response.CreateMessageResponseDto;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.utils.nhn.NhnFeignController;
@@ -36,7 +35,7 @@ public class NhnProvider<T> {
     }
 
     @Async("threadPoolTaskExecutor")
-    public void sendPaymentKakaoMessages(User user, T paymentRequestParameter, T programRequestParameter, String paymentTemplateCode, String programTemplateCode) {
+    public void sendProgramPaymentKakaoMessages(User user, T paymentRequestParameter, T programRequestParameter, String paymentTemplateCode, String programTemplateCode) {
         try {
             String appKey = nhnSecretKeyReader.getAppKey();
             List<RecipientInfo<?>> paymentRecipientInfoList = createRecipient(user, paymentRequestParameter);
@@ -49,6 +48,22 @@ public class NhnProvider<T> {
                 CreateMessageRequestDto programRequestDto = createMessageRequestDto(programRecipientInfoList, programTemplateCode);
                 CreateMessageResponseDto programResponseDto = nhnFeignController.createMessage(appKey, programRequestDto);
                 log.info("[NHN Result]::" + programResponseDto);
+            }
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Async("threadPoolTaskExecutor")
+    public void sendPaymentKakaoMessages(User user, List<RequestMessageInfo<T>> messageList) {
+        try {
+            String appKey = nhnSecretKeyReader.getAppKey();
+            for(RequestMessageInfo<T> message : messageList) {
+                List<RecipientInfo<?>> recipientInfoList = createRecipient(user, message.requestParameter());
+                CreateMessageRequestDto requestDto = createMessageRequestDto(recipientInfoList, message.templateCode());
+                CreateMessageResponseDto responseDto = nhnFeignController.createMessage(appKey, requestDto);
+                log.info("[NHN Result]::" + responseDto);
+                Thread.sleep(5000);
             }
         } catch (InterruptedException e) {
             throw new RuntimeException(e);

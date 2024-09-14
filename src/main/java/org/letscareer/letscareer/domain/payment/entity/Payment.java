@@ -4,11 +4,13 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.letscareer.letscareer.domain.application.entity.Application;
+import org.letscareer.letscareer.domain.application.entity.report.ReportApplication;
 import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApplicationPaybackRequestDto;
 import org.letscareer.letscareer.domain.coupon.entity.Coupon;
 import org.letscareer.letscareer.domain.payment.dto.request.CreatePaymentRequestDto;
 import org.letscareer.letscareer.domain.payment.dto.request.UpdatePaymentRequestDto;
 import org.letscareer.letscareer.domain.price.entity.Price;
+import org.letscareer.letscareer.domain.report.dto.req.CreateReportApplicationRequestDto;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 import static org.letscareer.letscareer.global.common.utils.entity.EntityUpdateValueUtils.updateValue;
@@ -56,6 +58,22 @@ public class Payment extends BaseTimeEntity {
                 .coupon(coupon)
                 .application(application)
                 .build();
+    }
+
+    public static Payment createReportPayment(CreateReportApplicationRequestDto requestDto,
+                                              Coupon coupon,
+                                              ReportApplication reportApplication) {
+        Payment payment = Payment.builder()
+                .finalPrice(Integer.valueOf(requestDto.amount()))
+                .programPrice(requestDto.programPrice())
+                .programDiscount(requestDto.programDiscount())
+                .paymentKey(updateValue("", requestDto.paymentKey()))
+                .orderId(requestDto.orderId())
+                .coupon(coupon)
+                .application(reportApplication)
+                .build();
+        reportApplication.setPayment(payment);
+        return payment;
     }
 
     public void updatePayment(UpdatePaymentRequestDto requestDto) {
