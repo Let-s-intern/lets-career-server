@@ -48,7 +48,7 @@ public class ProgramWebhookProvider implements WebhookProvider {
     private List<SlackField> createBugReportSlackFields(ReportWebhookDto reportWebhookDto) {
         return List.of(
                 createSlackField(REPORT_TITLE, reportWebhookDto.getReportTitle()),
-                createSlackField(PRICE_TYPE, reportWebhookDto.getReportType()),
+                createSlackField(PRICE_TYPE, reportWebhookDto.getReportPriceType()),
                 createSlackField(OPTIONS, reportWebhookDto.getOptionsString()),
                 createSlackField(IS_APPLIED_FEEDBACK, reportWebhookDto.isAppliedFeedback()),
                 createSlackField(ORDER_ID, reportWebhookDto.getOrderId()),

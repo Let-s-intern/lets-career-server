@@ -43,8 +43,8 @@ public record ReportWebhookDto(
         return report.getTitle();
     }
 
-    public String getReportType() {
-        return report.getType().getDesc();
+    public String getReportPriceType() {
+        return reportApplication.getReportPriceType().getDesc();
     }
 
     public String isAppliedFeedback() {
