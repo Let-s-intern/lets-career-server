@@ -92,14 +92,12 @@ public class CancelReportApplicationServiceImpl implements CancelReportApplicati
     }
 
     private void updateReportApplicationCancelInfo(ReportApplication reportApplication, ReportCancelVo reportCancelInfo) {
-        if(reportCancelInfo.reportRefundType().equals(ReportRefundType.ZERO)) return;
         reportApplication.updateIsCanceled(true);
         reportApplication.updateRefundPrice(reportCancelInfo.cancelAmount());
     }
 
     private void updateReportFeedbackApplicationCancelInfo(ReportFeedbackApplication reportFeedbackApplication, ReportCancelVo feedbackCancelInfo) {
         if(Objects.isNull(reportFeedbackApplication)) return;
-        if(feedbackCancelInfo.reportRefundType().equals(ReportRefundType.ZERO)) return;
         reportFeedbackApplication.updateIsCanceled(true);
         reportFeedbackApplication.updateRefundPrice(feedbackCancelInfo.cancelAmount());
     }
