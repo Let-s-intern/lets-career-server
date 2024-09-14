@@ -56,7 +56,6 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
 
     @Override
     public CreateReportApplicationResponseDto execute(User user, Long reportId, CreateReportApplicationRequestDto requestDto) {
-        // reportHelper.validateDuplicateReportApplication(user, reportId);
         Report report = reportHelper.findReportByReportIdOrThrow(reportId);
         ReportPrice reportPrice = reportHelper.findReportPriceByReportIdAndType(reportId, requestDto.reportPriceType());
         ReportFeedback reportFeedback = report.getReportFeedback();
@@ -70,7 +69,7 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
         updateContactEmail(user, requestDto);
         TossPaymentsResponseDto responseDto = tossProvider.requestPayments(requestDto.paymentKey(), requestDto.orderId(), requestDto.amount());
         sendPaymentKakaoMessages(report, user, requestDto, reportApplication.getReportPriceType(), reportApplicationOptions, reportFeedbackApplication);
-        sendSlackBot(report, user, reportApplication);
+        sendSlackBot(report, reportApplication, reportApplicationOptions, reportFeedbackApplication, user, payment);
         return reportMapper.toCreateReportApplicationResponseDto(responseDto);
     }
 
@@ -100,8 +99,13 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
         nhnProvider.sendPaymentKakaoMessages(user, messageList);
     }
 
-    private void sendSlackBot(Report report, User user, ReportApplication reportApplication) {
-        ReportWebhookDto reportWebhookDto = ReportWebhookDto.of(report, user, reportApplication.getCreateDate());
+    private void sendSlackBot(Report report,
+                              ReportApplication reportApplication,
+                              List<ReportApplicationOption> reportApplicationOptions,
+                              ReportFeedbackApplication reportFeedbackApplication,
+                              User user,
+                              Payment payment) {
+        ReportWebhookDto reportWebhookDto = ReportWebhookDto.of(report, reportApplication, reportApplicationOptions, reportFeedbackApplication, user, payment);
         webhookProvider.sendMessage(reportWebhookDto);
     }
 }
