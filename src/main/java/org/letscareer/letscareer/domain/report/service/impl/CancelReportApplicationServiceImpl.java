@@ -20,14 +20,11 @@ import org.letscareer.letscareer.domain.report.service.CancelReportApplicationSe
 import org.letscareer.letscareer.domain.report.vo.ReportApplicationOptionPriceVo;
 import org.letscareer.letscareer.domain.report.vo.ReportCancelVo;
 import org.letscareer.letscareer.domain.user.entity.User;
-import org.letscareer.letscareer.global.error.exception.InvalidValueException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
-
-import static org.letscareer.letscareer.domain.report.error.ReportErrorCode.REPORT_CANCEL_NOT_AVAILABLE;
 
 @RequiredArgsConstructor
 @Transactional
@@ -43,27 +40,20 @@ public class CancelReportApplicationServiceImpl implements CancelReportApplicati
     @Override
     public void execute(User user, Long reportApplicationId) {
         ReportApplication reportApplication = reportApplicationHelper.findReportApplicationByReportApplicationIdOrThrow(reportApplicationId);
-        applicationHelper.validateAuthorizedUser(reportApplication.getUser(), user);
+        //applicationHelper.validateAuthorizedUser(reportApplication.getUser(), user);
         Report report = reportApplication.getReport();
         Payment payment = reportApplication.getPayment();
         ReportFeedbackApplication reportFeedbackApplication = reportFeedbackApplicationHelper.findReportFeedbackApplicationByReportApplicationIdOrElseNull(reportApplication.getId());
         List<ReportApplicationOptionPriceVo> reportApplicationOptionPriceVos = reportApplicationHelper.findAllReportApplicationOptionPriceVosByReportApplicationId(reportApplication.getId());
         ReportCancelVo reportCancelInfo = getReportCancelInfo(reportApplication, reportApplicationOptionPriceVos, user);
         ReportCancelVo feedbackCancelInfo = getFeedbackCancelInfo(reportFeedbackApplication, user);
-        validateCancelIsAvailable(reportCancelInfo, feedbackCancelInfo);
         RefundType refundType = getRefundTypeInfo(reportCancelInfo.reportRefundType(), feedbackCancelInfo.reportRefundType());
         int cancelAmount = reportCancelInfo.cancelAmount() + feedbackCancelInfo.cancelAmount();
-        TossPaymentsResponseDto responseDto = tossProvider.cancelPayments(refundType, payment.getPaymentKey(), cancelAmount);
+        TossPaymentsResponseDto responseDto = (cancelAmount > 0) ? tossProvider.cancelPayments(refundType, payment.getPaymentKey(), cancelAmount) : null;
         payment.updateRefundPrice(cancelAmount);
         updateReportApplicationCancelInfo(reportApplication, reportCancelInfo);
         updateReportFeedbackApplicationCancelInfo(reportFeedbackApplication, feedbackCancelInfo);
-        sendKakaoMessage(user, payment.getOrderId(), report.getTitle(), refundType, responseDto.totalAmount(), cancelAmount);
-    }
-
-    private void validateCancelIsAvailable(ReportCancelVo reportCancelInfo, ReportCancelVo feedbackCancelInfo) {
-        if (reportCancelInfo.reportRefundType().equals(ReportRefundType.ZERO) && feedbackCancelInfo.reportRefundType().equals(ReportRefundType.ZERO)) {
-            throw new InvalidValueException(REPORT_CANCEL_NOT_AVAILABLE);
-        }
+        sendKakaoMessage(user, payment.getOrderId(), report.getTitle(), refundType, payment.getFinalPrice(), cancelAmount);
     }
 
     private void sendKakaoMessage(User user, String orderId, String title, RefundType refundType, Integer finalPrice, int cancelAmount) {
