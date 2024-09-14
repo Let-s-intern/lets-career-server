@@ -39,7 +39,7 @@ public class ReportApplicationCancelApiTest {
     @Test
     void refundTest() {
         // given
-        Long reportApplicationId = 404L;
+        Long reportApplicationId = 507L;
         ReportApplication reportApplication = reportApplicationHelper.findReportApplicationByReportApplicationIdOrThrow(reportApplicationId);
         ReportFeedbackApplication reportFeedbackApplication = reportFeedbackApplicationHelper.findReportFeedbackApplicationByReportApplicationIdOrElseNull(reportApplicationId);
         List<ReportApplicationOptionPriceVo> reportApplicationOptionPriceVos = reportApplicationHelper.findAllReportApplicationOptionPriceVosByReportApplicationId(reportApplication.getId());
@@ -49,10 +49,10 @@ public class ReportApplicationCancelApiTest {
         ReportCancelVo feedbackCancelVo = getFeedbackCancelInfo(reportFeedbackApplication);
 
         // then
-        assertThat(reportCancelVo.reportRefundType()).isEqualTo(ReportRefundType.PERCENT_80);
-        assertThat(reportCancelVo.cancelAmount()).isEqualTo(620);
-        assertThat(feedbackCancelVo.reportRefundType()).isEqualTo(ReportRefundType.ZERO);
-        assertThat(feedbackCancelVo.cancelAmount()).isEqualTo(0);
+        assertThat(reportCancelVo.reportRefundType()).isEqualTo(ReportRefundType.ZERO);
+        assertThat(reportCancelVo.cancelAmount()).isEqualTo(0);
+        assertThat(feedbackCancelVo.reportRefundType()).isEqualTo(ReportRefundType.ALL);
+        assertThat(feedbackCancelVo.cancelAmount()).isEqualTo(1000);
     }
 
     private ReportCancelVo getReportCancelInfo(ReportApplication reportApplication, List<ReportApplicationOptionPriceVo> reportApplicationOptionPriceVos) {

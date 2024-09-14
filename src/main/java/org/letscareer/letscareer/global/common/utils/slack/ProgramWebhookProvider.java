@@ -18,8 +18,8 @@ import java.util.List;
 public class ProgramWebhookProvider implements WebhookProvider {
     private static final String FALLBACK = "Ok";
     private static final String COLOR = "danger";
-    private static final String MAIN_TITLE = "리포트 신청 알림";
-    private static final String REPORT_TITLE = "리포트 종류";
+    private static final String MAIN_TITLE = "진단서 신청 알림";
+    private static final String REPORT_TITLE = "진단서 종류";
     private static final String PRICE_TYPE = "기본 서비스 유형";
     private static final String OPTIONS = "서류 진단서 옵션";
     private static final String IS_APPLIED_FEEDBACK = "1:1 피드백 신청여부";

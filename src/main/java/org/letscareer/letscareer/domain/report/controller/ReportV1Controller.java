@@ -55,8 +55,9 @@ public class ReportV1Controller {
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportDetailForAdminResponseDto.class)))
     @ApiErrorCode({REPORT_NOT_FOUND})
     @GetMapping("/{reportId}/admin")
-    public ResponseEntity<SuccessResponse<?>> getReportDetailForAdmin(@PathVariable final Long reportId) {
-        final GetReportDetailForAdminResponseDto responseDto = getReportDetailForAdminService.execute(reportId);
+    public ResponseEntity<SuccessResponse<?>> getReportDetailForAdmin(@CurrentUser User user,
+                                                                      @PathVariable final Long reportId) {
+        final GetReportDetailForAdminResponseDto responseDto = getReportDetailForAdminService.execute(user, reportId);
         return SuccessResponse.ok(responseDto);
     }
 
@@ -227,8 +228,9 @@ public class ReportV1Controller {
     @Operation(summary = "진단서 프로그램 삭제")
     @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     @DeleteMapping("/{reportId}")
-    public ResponseEntity<SuccessResponse<?>> deleteReport(@PathVariable final Long reportId) {
-        deleteReportService.execute(reportId);
+    public ResponseEntity<SuccessResponse<?>> deleteReport(@CurrentUser final User user,
+                                                           @PathVariable final Long reportId) {
+        deleteReportService.execute(user, reportId);
         return ResponseEntity.ok(null);
     }
 
