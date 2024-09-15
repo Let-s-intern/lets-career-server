@@ -68,4 +68,8 @@ public class ReportApplicationHelper {
     public List<ReportApplicationOptionPriceVo> findAllReportApplicationOptionPriceVosByReportApplicationId(Long reportApplicationId) {
         return reportApplicationOptionRepository.findAllReportApplicationOptionPriceVosByReportApplicationId(reportApplicationId);
     }
+
+    public List<Long> findIngNotificationReportApplicationIds() {
+        return reportApplicationRepository.findAllIngNotificationReportApplicationId();
+    }
 }
