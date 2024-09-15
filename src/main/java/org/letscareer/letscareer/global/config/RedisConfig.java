@@ -14,7 +14,10 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
-@EnableRedisRepositories(enableKeyspaceEvents = RedisKeyValueAdapter.EnableKeyspaceEvents.ON_STARTUP)
+@EnableRedisRepositories(
+        enableKeyspaceEvents = RedisKeyValueAdapter.EnableKeyspaceEvents.ON_STARTUP,
+        keyspaceNotificationsConfigParameter = ""
+)
 public class RedisConfig {
     private final String EXPIRED_EVENT_PATTERN = "__keyevent@*__:expired";
     private final String EXPIRED_SPACE_PATTERN = "__keyspace@*__:expired";

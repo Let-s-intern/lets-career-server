@@ -10,6 +10,7 @@ import org.letscareer.letscareer.domain.application.type.ReportFeedbackStatus;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
@@ -23,7 +24,7 @@ public enum ReportRefundType {
     private final double percent;
 
     public static ReportRefundType ofReport(ReportApplication reportApplication, Payment payment) {
-        if(payment.getCoupon().getDiscount() < 0) return ZERO;
+        if(!Objects.isNull(payment.getCoupon()) && payment.getCoupon().getDiscount() < 0) return ZERO;
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime paymentCreateDate = payment.getCreateDate();
         ReportApplicationStatus reportApplicationStatus = reportApplication.getStatus();
