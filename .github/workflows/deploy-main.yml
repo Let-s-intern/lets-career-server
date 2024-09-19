@@ -14,7 +14,7 @@ env:
   CODE_DEPLOY_GROUP: ${{ secrets.CODE_DEPLOY_GROUP }}
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  APPLICATION_SECRET_DEV: ${{ secrets.APPLICATION_SECRET_DEV }}
+  APPLICATION_SECRET: ${{ secrets.APPLICATION_SECRET }}
   ECS_APPSPEC: appspec.yml
   AWS_SDK_JS_SUPPRESS_MAINTENANCE_MODE_MESSAGE: 1
 
@@ -44,7 +44,7 @@ jobs:
       - name: 🍀 Make application-secret.yml
         run: |
           touch ./src/main/resources/application-dev.yml
-          echo "${{ env.APPLICATION_SECRET_DEV }}" > ./src/main/resources/application-dev.yml
+          echo "${{ env.APPLICATION_SECRET }}" > ./src/main/resources/application.yml
 
       - name: 🍀 task-definition.json 파일을 생성.
         run: |
