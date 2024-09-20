@@ -1,5 +1,6 @@
 package org.letscareer.letscareer.domain.application.repository;
 
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
@@ -51,9 +52,14 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
                 .where(
                         eqUserId(userId),
                         eqIsCanceled(false),
+                        neProgramType(ProgramType.REPORT),
                         eqStatus(status)
                 )
                 .fetch();
+    }
+
+    private BooleanExpression neProgramType(ProgramType programType) {
+        return vWApplication.programType.ne(programType);
     }
 
     @Override
