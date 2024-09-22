@@ -9,6 +9,7 @@ public record PaymentDetailVo(
         Long id,
         Integer finalPrice,
         Integer couponDiscount,
+        LocalDateTime createDate,
         LocalDateTime lastModifiedDate
 ) {
 }
