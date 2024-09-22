@@ -36,6 +36,8 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
 
     @Override
     public Page<ProgramForConditionVo> findProgramForConditionVos(SearchCondition condition) {
+        long page = condition.pageable().getOffset() == 0L ? condition.pageable().getOffset() : condition.pageable().getOffset() - 1L;
+        System.out.println("[page]::" + page);
         List<ProgramForConditionVo> contents = queryFactory
                 .select(Projections.constructor(ProgramForConditionVo.class,
                         vWProgram.programId,
@@ -69,7 +71,7 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                         vWProgram.startDate.desc()
                 )
                 .limit(condition.pageable().getPageSize())
-                .offset(condition.pageable().getOffset() == 0L ? condition.pageable().getOffset() : condition.pageable().getOffset() - 1)
+                .offset(condition.pageable().getOffset() == 0L ? condition.pageable().getOffset() : condition.pageable().getOffset() - 1L)
                 .fetch();
 
         JPAQuery<Long> countQuery = queryFactory
@@ -112,7 +114,7 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                 .from(vWProgram)
                 .orderBy(vWProgram.createDate.desc())
                 .limit(condition.pageable().getPageSize())
-                .offset(condition.pageable().getOffset() == 0L ? condition.pageable().getOffset() : condition.pageable().getOffset() - 1)
+                .offset(condition.pageable().getOffset() == 0L ? condition.pageable().getOffset() : condition.pageable().getOffset() - 1L)
                 .fetch();
 
         JPAQuery<Long> countQuery = queryFactory
