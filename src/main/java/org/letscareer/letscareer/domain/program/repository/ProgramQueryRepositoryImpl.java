@@ -36,8 +36,9 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
 
     @Override
     public Page<ProgramForConditionVo> findProgramForConditionVos(SearchCondition condition) {
-        long page = condition.pageable().getPageSize() == 0L ? condition.pageable().getPageSize() : condition.pageable().getPageSize() - 1;
+        long page = condition.pageable().getOffset();
         System.out.println("[page]::" + page);
+        System.out.println("[size]::" + condition.pageable().getPageSize());
         List<ProgramForConditionVo> contents = queryFactory
                 .select(Projections.constructor(ProgramForConditionVo.class,
                         vWProgram.programId,
@@ -70,7 +71,7 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                         orderByProgramType(),
                         vWProgram.startDate.desc()
                 )
-                .limit(condition.pageable().getPageSize() == 0L ? condition.pageable().getPageSize() : condition.pageable().getPageSize() - 1)
+                .limit(condition.pageable().getPageSize())
                 .offset(condition.pageable().getOffset())
                 .fetch();
 
@@ -113,7 +114,7 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                 ))
                 .from(vWProgram)
                 .orderBy(vWProgram.createDate.desc())
-                .limit(condition.pageable().getPageSize() == 0L ? condition.pageable().getPageSize() : condition.pageable().getPageSize() - 1)
+                .limit(condition.pageable().getPageSize())
                 .offset(condition.pageable().getOffset())
                 .fetch();
 
