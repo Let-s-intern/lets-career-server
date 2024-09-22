@@ -36,7 +36,7 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
 
     @Override
     public Page<ProgramForConditionVo> findProgramForConditionVos(SearchCondition condition) {
-        long page = condition.pageable().getOffset() == 0L ? condition.pageable().getOffset() : condition.pageable().getOffset() - 1L;
+        long page = condition.pageable().getPageSize() == 0L ? condition.pageable().getPageSize() : condition.pageable().getPageSize() - 1;
         System.out.println("[page]::" + page);
         List<ProgramForConditionVo> contents = queryFactory
                 .select(Projections.constructor(ProgramForConditionVo.class,
@@ -70,8 +70,8 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                         orderByProgramType(),
                         vWProgram.startDate.desc()
                 )
-                .limit(condition.pageable().getPageSize())
-                .offset(condition.pageable().getOffset() == 0L ? condition.pageable().getOffset() : condition.pageable().getOffset() - 1L)
+                .limit(condition.pageable().getPageSize() == 0L ? condition.pageable().getPageSize() : condition.pageable().getPageSize() - 1)
+                .offset(condition.pageable().getOffset())
                 .fetch();
 
         JPAQuery<Long> countQuery = queryFactory
@@ -113,8 +113,8 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                 ))
                 .from(vWProgram)
                 .orderBy(vWProgram.createDate.desc())
-                .limit(condition.pageable().getPageSize())
-                .offset(condition.pageable().getOffset() == 0L ? condition.pageable().getOffset() : condition.pageable().getOffset() - 1L)
+                .limit(condition.pageable().getPageSize() == 0L ? condition.pageable().getPageSize() : condition.pageable().getPageSize() - 1)
+                .offset(condition.pageable().getOffset())
                 .fetch();
 
         JPAQuery<Long> countQuery = queryFactory
