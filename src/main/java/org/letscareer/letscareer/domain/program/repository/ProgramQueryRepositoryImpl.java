@@ -69,7 +69,7 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                         vWProgram.startDate.desc()
                 )
                 .limit(condition.pageable().getPageSize())
-                .offset(condition.pageable().getOffset())
+                .offset(condition.pageable().getOffset() == 0L ? condition.pageable().getOffset() : condition.pageable().getOffset() - 1)
                 .fetch();
 
         JPAQuery<Long> countQuery = queryFactory
@@ -112,7 +112,7 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                 .from(vWProgram)
                 .orderBy(vWProgram.createDate.desc())
                 .limit(condition.pageable().getPageSize())
-                .offset(condition.pageable().getOffset())
+                .offset(condition.pageable().getOffset() == 0L ? condition.pageable().getOffset() : condition.pageable().getOffset() - 1)
                 .fetch();
 
         JPAQuery<Long> countQuery = queryFactory
