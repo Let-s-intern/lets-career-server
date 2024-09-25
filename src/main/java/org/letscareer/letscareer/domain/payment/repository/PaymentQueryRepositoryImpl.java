@@ -57,6 +57,7 @@ public class PaymentQueryRepositoryImpl implements PaymentQueryRepository {
                                 payment.id,
                                 payment.finalPrice,
                                 coupon.discount,
+                                payment.isRefunded,
                                 payment.createDate,
                                 payment.lastModifiedDate))
                         .from(payment)

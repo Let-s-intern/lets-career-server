@@ -343,6 +343,7 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         Expressions.constant(subQueryForReportApplicationPriceInfo(applicationId)),
                         Expressions.constant(subQueryReportApplicationOptionInfos(applicationId)),
                         Expressions.constant(subQueryFeedbackApplicationPriceInfo(applicationId)),
+                        payment.isRefunded,
                         payment.createDate,
                         payment.lastModifiedDate
                 ))
