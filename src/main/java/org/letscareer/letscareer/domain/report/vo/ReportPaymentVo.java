@@ -14,6 +14,7 @@ public record ReportPaymentVo(
         ReportPriceVo reportPriceInfo,
         List<ReportOptionVo> reportOptionInfos,
         FeedbackPriceVo feedbackPriceInfo,
+        Boolean isRefunded,
         LocalDateTime createDate,
         LocalDateTime lastModifiedDate
 ) {
