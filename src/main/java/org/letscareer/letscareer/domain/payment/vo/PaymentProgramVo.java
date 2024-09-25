@@ -12,6 +12,7 @@ public record PaymentProgramVo(
         Integer finalPrice,
         String paymentKey,
         Boolean isCanceled,
+        Boolean isRefunded,
         LocalDateTime createDate
 ) {
 }

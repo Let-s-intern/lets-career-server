@@ -75,6 +75,7 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
                         payment.finalPrice,
                         payment.paymentKey,
                         application.isCanceled,
+                        payment.isRefunded,
                         payment.createDate
                 ))
                 .from(application)

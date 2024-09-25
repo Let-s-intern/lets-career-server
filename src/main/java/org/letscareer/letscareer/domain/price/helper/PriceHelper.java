@@ -48,7 +48,11 @@ public class PriceHelper {
         int couponPrice = Objects.isNull(coupon) ? 0 : coupon.getDiscount();
         couponPrice = couponPrice == -1 ? 0 : couponPrice;
         int regularPrice = payment.getFinalPrice() + couponPrice;
-        int refundPrice = ((int) (regularPrice * refundType.getPercent())) - couponPrice;
+        int refundPrice = roundOffNearestTen(((int) (regularPrice * refundType.getPercent())) - couponPrice);
         return Math.max(refundPrice, 0);
+    }
+
+    private int roundOffNearestTen(int number) {
+        return (number / 10) * 10;
     }
 }

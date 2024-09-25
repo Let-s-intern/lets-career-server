@@ -16,6 +16,7 @@ public record GetPaymentProgramResponseDto(
         String thumbnail,
         Integer price,
         Boolean isCanceled,
+        Boolean isRefunded,
         LocalDateTime createDate
 ) {
     public static GetPaymentProgramResponseDto of(PaymentProgramVo vo) {
@@ -27,6 +28,7 @@ public record GetPaymentProgramResponseDto(
                 .thumbnail(vo.thumbnail())
                 .price(vo.price())
                 .isCanceled(vo.isCanceled())
+                .isRefunded(vo.isRefunded())
                 .createDate(vo.createDate())
                 .build();
     }
