@@ -9,6 +9,8 @@ public record PaymentDetailVo(
         Long id,
         Integer finalPrice,
         Integer couponDiscount,
+        Boolean isRefunded,
+        LocalDateTime createDate,
         LocalDateTime lastModifiedDate
 ) {
 }

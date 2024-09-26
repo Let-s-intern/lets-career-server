@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.global.batch.scheduler;
 
 import lombok.RequiredArgsConstructor;
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.letscareer.letscareer.domain.application.helper.ReportApplicationHelper;
 import org.letscareer.letscareer.domain.application.helper.ReportFeedbackApplicationHelper;
 import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
@@ -41,6 +42,7 @@ public class NotificationScheduler {
     private final ReportIngNotificationJobConfig reportIngNotificationJobConfig;
 
     @Scheduled(cron = "0 5 10 * * ?")
+    @SchedulerLock(name = "reviewNotificationJob", lockAtMostFor = "3m", lockAtLeastFor = "3m")
     public void sendReviewNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
         List<ProgramReviewNotificationVo> programList = programHelper.findProgramReviewNotificationVos();
         for(ProgramReviewNotificationVo program : programList) {
@@ -56,6 +58,7 @@ public class NotificationScheduler {
     }
 
     @Scheduled(cron = "0 5 9 * * ?")
+    @SchedulerLock(name = "challengeRemindNotificationJob", lockAtMostFor = "3m", lockAtLeastFor = "3m")
     public void sendChallengeRemindNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
         List<Long> challengeIdList = challengeHelper.findRemindNotificationChallengeIds();
         for(Long challengeId : challengeIdList) {
@@ -70,6 +73,7 @@ public class NotificationScheduler {
     }
 
     @Scheduled(cron = "0 10 9 * * ?")
+    @SchedulerLock(name = "liveRemindNotificationJob", lockAtMostFor = "3m", lockAtLeastFor = "3m")
     public void sendLiveRemindNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
         List<Long> liveIdList = liveHelper.findRemindNotificationLiveIds();
         for(Long liveId : liveIdList) {
@@ -84,6 +88,7 @@ public class NotificationScheduler {
     }
 
     @Scheduled(cron = "0 0 18 * * ?")
+    @SchedulerLock(name = "challengeEndNotificationJob", lockAtMostFor = "3m", lockAtLeastFor = "3m")
     public void sendChallengeEndNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
         List<Long> challengeIdList = challengeHelper.findEndNotificationChallengeIds();
         for(Long challengeId : challengeIdList) {
@@ -98,6 +103,7 @@ public class NotificationScheduler {
     }
 
     @Scheduled(cron = "0 0 9-12 * * ?")
+    @SchedulerLock(name = "challengeOTRemindNotificationJob", lockAtMostFor = "59m", lockAtLeastFor = "59m")
     public void sendChallengeOTRemindNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
         List<Long> challengeIdList = challengeHelper.findOTRemindNotificationChallengeIds();
         for(Long challengeId : challengeIdList) {
@@ -112,6 +118,7 @@ public class NotificationScheduler {
     }
 
     @Scheduled(cron = "0 5 18 * * ?")
+    @SchedulerLock(name = "missionEndNotificationJob", lockAtMostFor = "3m", lockAtLeastFor = "3m")
     public void sendMissionEndNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
         List<Long> missionIdList = missionHelper.findEndNotificationMissionIds();
         for(Long missionId : missionIdList) {
@@ -126,6 +133,7 @@ public class NotificationScheduler {
     }
 
     @Scheduled(cron = "0 0 8 * * ?")
+    @SchedulerLock(name = "reportFeedbackDdayNotificationJob", lockAtMostFor = "3m", lockAtLeastFor = "3m")
     public void sendReportFeedbackDdayNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
         List<Long> reportFeedbackApplicationList = reportFeedbackApplicationHelper.findDdayNotificationReportFeedbackApplicationIds();
         for(Long reportFeedbackApplicationId: reportFeedbackApplicationList) {
@@ -139,7 +147,8 @@ public class NotificationScheduler {
         }
     }
 
-    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "0 0/1 * * * *")
+    @SchedulerLock(name = "reportIngNotificationJob", lockAtMostFor = "59s", lockAtLeastFor = "59s")
     public void sendReportIngNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
         List<Long> reportApplicationList = reportApplicationHelper.findIngNotificationReportApplicationIds();
         for(Long reportApplicationId : reportApplicationList) {
