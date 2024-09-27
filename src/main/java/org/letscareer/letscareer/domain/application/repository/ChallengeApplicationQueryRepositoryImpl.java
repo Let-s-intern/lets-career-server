@@ -182,9 +182,10 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                 .leftJoin(challengeApplication.user, user)
                 .where(
                         eqChallengeId(challengeId),
-                        eqUserId(userId)
+                        eqUserId(userId),
+                        eqIsCanceled(false)
                 )
-                .fetchOne();
+                .fetchFirst();
     }
 
     @Override
