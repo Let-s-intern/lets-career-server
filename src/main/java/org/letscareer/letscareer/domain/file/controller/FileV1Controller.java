@@ -23,6 +23,7 @@ public class FileV1Controller {
     @PostMapping
     public ResponseEntity<SuccessResponse<?>> createFile(@RequestParam final FileType type,
                                                          @RequestPart final MultipartFile file) {
+        System.out.println("[upload type]::" + type);
         final CreateFileResponseDto responseDto = fileService.createFile(type, file);
         return SuccessResponse.created(responseDto);
     }
