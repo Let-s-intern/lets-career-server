@@ -33,6 +33,8 @@ public class Payment extends BaseTimeEntity {
     @Builder.Default
     private Integer programDiscount = 0;
     @Builder.Default
+    private Integer paybackPrice = 0;
+    @Builder.Default
     private Boolean isRefunded = false;
     @NotNull
     private String paymentKey;

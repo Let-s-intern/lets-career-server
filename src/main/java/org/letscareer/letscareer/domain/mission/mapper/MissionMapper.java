@@ -6,6 +6,7 @@ import org.letscareer.letscareer.domain.challenge.dto.response.*;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challenge.vo.ChallengeScheduleVo;
 import org.letscareer.letscareer.domain.contents.vo.ContentsMissionVo;
+import org.letscareer.letscareer.domain.coupon.entity.Coupon;
 import org.letscareer.letscareer.domain.mission.dto.request.CreateMissionRequestDto;
 import org.letscareer.letscareer.domain.mission.dto.response.*;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
@@ -51,8 +52,9 @@ public class MissionMapper {
 
     public MissionApplicationScoreResponseDto toMissionApplicationScoreResponseDto(UserChallengeApplicationVo userChallengeApplicationVo,
                                                                                    List<MissionScoreResponseDto> scoreResponseDtoList,
-                                                                                   Payment payment) {
-        return MissionApplicationScoreResponseDto.of(userChallengeApplicationVo, scoreResponseDtoList, payment);
+                                                                                   Payment payment,
+                                                                                   Coupon coupon) {
+        return MissionApplicationScoreResponseDto.of(userChallengeApplicationVo, scoreResponseDtoList, payment, coupon);
     }
 
     public GetChallengeDailyMissionResponseDto toGetChallengeDailyMissionResponseDto(DailyMissionVo dailyMissionVo) {

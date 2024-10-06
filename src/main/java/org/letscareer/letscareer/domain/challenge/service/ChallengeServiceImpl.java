@@ -27,6 +27,7 @@ import org.letscareer.letscareer.domain.classification.dto.request.CreateChallen
 import org.letscareer.letscareer.domain.classification.helper.ChallengeClassificationHelper;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.classification.vo.ChallengeClassificationDetailVo;
+import org.letscareer.letscareer.domain.coupon.entity.Coupon;
 import org.letscareer.letscareer.domain.faq.dto.request.CreateProgramFaqRequestDto;
 import org.letscareer.letscareer.domain.faq.dto.response.GetFaqResponseDto;
 import org.letscareer.letscareer.domain.faq.entity.Faq;
@@ -325,7 +326,8 @@ public class ChallengeServiceImpl implements ChallengeService {
         List<MissionScoreVo> scores = attendanceHelper.findAttendanceScoreVos(challengeApplication.id(), challengeId);
         List<MissionScoreResponseDto> scoreResponseDtoList = createMissionScoreResponseDtoList(scores, challengeId, challengeApplication.id());
         Payment payment = paymentHelper.findPaymentByApplicationIdOrThrow(challengeApplication.id());
-        return missionMapper.toMissionApplicationScoreResponseDto(challengeApplication, scoreResponseDtoList, payment);
+        Coupon coupon = payment.getCoupon();
+        return missionMapper.toMissionApplicationScoreResponseDto(challengeApplication, scoreResponseDtoList, payment, coupon);
     }
 
     private List<MissionScoreResponseDto> createMissionScoreResponseDtoList(List<MissionScoreVo> scores, Long challengeId, Long applicationId) {
