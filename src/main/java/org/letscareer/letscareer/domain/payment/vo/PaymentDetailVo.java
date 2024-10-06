@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 public record PaymentDetailVo(
         Long id,
         Integer finalPrice,
+        Integer paybackPrice,
         Integer couponDiscount,
         Boolean isRefunded,
         LocalDateTime createDate,
