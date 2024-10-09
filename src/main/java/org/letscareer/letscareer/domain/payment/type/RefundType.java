@@ -15,7 +15,8 @@ public enum RefundType {
     ZERO(0),
     ALL(1),
     TWO_THIRD((double) 2 / 3),
-    HALF((double) 1 / 2);
+    HALF((double) 1 / 2),
+    PAYBACK(-1);
 
     private final double percent;
 
