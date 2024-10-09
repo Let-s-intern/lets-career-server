@@ -22,6 +22,7 @@ import org.letscareer.letscareer.domain.payment.helper.PaymentHelper;
 import org.letscareer.letscareer.domain.payment.type.RefundType;
 import org.letscareer.letscareer.domain.pg.dto.response.TossPaymentsResponseDto;
 import org.letscareer.letscareer.domain.pg.provider.TossProvider;
+import org.letscareer.letscareer.domain.pg.type.CancelReason;
 import org.letscareer.letscareer.domain.price.entity.Price;
 import org.letscareer.letscareer.domain.price.helper.PriceHelper;
 import org.letscareer.letscareer.domain.user.entity.User;
@@ -68,7 +69,7 @@ public class LiveApplicationServiceImpl implements ApplicationService {
         RefundType refundType = RefundType.ofLive(live);
         Integer finalPrice = payment.getFinalPrice();
         Integer cancelAmount = priceHelper.calculateCancelAmount(payment, coupon, refundType);
-        tossProvider.cancelPayments(refundType, payment.getPaymentKey(), cancelAmount);
+        tossProvider.cancelPayments(refundType, payment.getPaymentKey(), cancelAmount, CancelReason.CUSTOMER.getDesc());
         sendCreditRefundKakaoMessage(live, user, payment, refundType, finalPrice, cancelAmount);
         application.updateIsCanceled(true);
         payment.updateRefundPrice(cancelAmount);

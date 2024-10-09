@@ -49,6 +49,7 @@ import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.payment.helper.PaymentHelper;
 import org.letscareer.letscareer.domain.payment.type.RefundType;
 import org.letscareer.letscareer.domain.pg.provider.TossProvider;
+import org.letscareer.letscareer.domain.pg.type.CancelReason;
 import org.letscareer.letscareer.domain.price.dto.request.CreateChallengePriceRequestDto;
 import org.letscareer.letscareer.domain.price.helper.ChallengePriceHelper;
 import org.letscareer.letscareer.domain.price.vo.ChallengePriceDetailVo;
@@ -403,12 +404,16 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     private boolean checkPaybackCondition(Payment payment, Integer paybackPrice) {
-        return payment.getFinalPrice() >= paybackPrice && !payment.getApplication().getIsCanceled();
+        if(payment.getApplication().getIsCanceled()) return false;
+        else if(payment.getIsRefunded()) return false;
+        else if(payment.getFinalPrice() < paybackPrice) return false;
+        return true;
     }
 
     /* Multi-Thread 리팩토링 필요 */
     private void payback(Payment payment, UpdateChallengeApplicationPaybacksRequestDto requestDto) {
-        tossProvider.cancelPayments(RefundType.PAYBACK, payment.getPaymentKey(), requestDto.price());
+        String cancelReason = Objects.isNull(requestDto.reason()) ? CancelReason.PAYBACK.getDesc() : requestDto.reason();
+        tossProvider.cancelPayments(RefundType.PAYBACK, payment.getPaymentKey(), requestDto.price(), cancelReason);
         payment.updatePaybackInfo(requestDto.price());
     }
 }
