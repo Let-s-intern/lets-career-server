@@ -36,6 +36,7 @@ public record MissionApplicationScoreResponseDto(
                 .orderId(payment.getOrderId())
                 .couponName(coupon != null ? payment.getCoupon().getName() : null)
                 .finalPrice(payment.getFinalPrice())
+                .paybackPrice(payment.getPaybackPrice())
                 .isRefunded(payment.getIsRefunded())
                 .build();
     }
