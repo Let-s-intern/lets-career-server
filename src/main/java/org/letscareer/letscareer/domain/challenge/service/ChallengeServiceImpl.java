@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.challenge.service;
 
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.dto.response.GetChallengeApplicationsResponseDto;
+import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
 import org.letscareer.letscareer.domain.application.helper.ChallengeApplicationHelper;
 import org.letscareer.letscareer.domain.application.mapper.ChallengeApplicationMapper;
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
@@ -13,6 +14,7 @@ import org.letscareer.letscareer.domain.attendance.vo.MissionAttendanceVo;
 import org.letscareer.letscareer.domain.attendance.vo.MissionScoreVo;
 import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApplicationPaybackRequestDto;
+import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApplicationPaybacksRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.response.*;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
@@ -27,6 +29,7 @@ import org.letscareer.letscareer.domain.classification.dto.request.CreateChallen
 import org.letscareer.letscareer.domain.classification.helper.ChallengeClassificationHelper;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.classification.vo.ChallengeClassificationDetailVo;
+import org.letscareer.letscareer.domain.coupon.entity.Coupon;
 import org.letscareer.letscareer.domain.faq.dto.request.CreateProgramFaqRequestDto;
 import org.letscareer.letscareer.domain.faq.dto.response.GetFaqResponseDto;
 import org.letscareer.letscareer.domain.faq.entity.Faq;
@@ -44,6 +47,9 @@ import org.letscareer.letscareer.domain.mission.vo.MissionScheduleVo;
 import org.letscareer.letscareer.domain.mission.vo.MyDailyMissionVo;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.payment.helper.PaymentHelper;
+import org.letscareer.letscareer.domain.payment.type.RefundType;
+import org.letscareer.letscareer.domain.pg.provider.TossProvider;
+import org.letscareer.letscareer.domain.pg.type.CancelReason;
 import org.letscareer.letscareer.domain.price.dto.request.CreateChallengePriceRequestDto;
 import org.letscareer.letscareer.domain.price.helper.ChallengePriceHelper;
 import org.letscareer.letscareer.domain.price.vo.ChallengePriceDetailVo;
@@ -61,6 +67,7 @@ import org.letscareer.letscareer.global.common.entity.PageInfo;
 import org.letscareer.letscareer.global.common.utils.zoom.ZoomUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -91,6 +98,8 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final ReviewMapper reviewMapper;
     private final FaqHelper faqHelper;
     private final FaqMapper faqMapper;
+
+    private final TossProvider tossProvider;
     private final ZoomUtils zoomUtils;
 
     @Override
@@ -298,6 +307,15 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
+    public void paybackChallengeApplications(Long challengeId, UpdateChallengeApplicationPaybacksRequestDto requestDto) {
+        List<Payment> paymentList = requestDto.applicationIdList().stream()
+                .map(paymentHelper::findPaymentByApplicationIdOrThrow)
+                .filter(payment -> checkPaybackCondition(payment, requestDto.price()))
+                .toList();
+        paymentList.forEach(payment -> payback(payment, requestDto));
+    }
+
+    @Override
     public void deleteChallenge(Long challengeId) {
         challengeHelper.deleteChallengeById(challengeId);
     }
@@ -325,7 +343,8 @@ public class ChallengeServiceImpl implements ChallengeService {
         List<MissionScoreVo> scores = attendanceHelper.findAttendanceScoreVos(challengeApplication.id(), challengeId);
         List<MissionScoreResponseDto> scoreResponseDtoList = createMissionScoreResponseDtoList(scores, challengeId, challengeApplication.id());
         Payment payment = paymentHelper.findPaymentByApplicationIdOrThrow(challengeApplication.id());
-        return missionMapper.toMissionApplicationScoreResponseDto(challengeApplication, scoreResponseDtoList, payment);
+        Coupon coupon = payment.getCoupon();
+        return missionMapper.toMissionApplicationScoreResponseDto(challengeApplication, scoreResponseDtoList, payment, coupon);
     }
 
     private List<MissionScoreResponseDto> createMissionScoreResponseDtoList(List<MissionScoreVo> scores, Long challengeId, Long applicationId) {
@@ -382,5 +401,19 @@ public class ChallengeServiceImpl implements ChallengeService {
         return requestDtoList.stream()
                 .map(request -> faqHelper.findFaqByIdAndThrow(request.faqId()))
                 .collect(Collectors.toList());
+    }
+
+    private boolean checkPaybackCondition(Payment payment, Integer paybackPrice) {
+        if(payment.getApplication().getIsCanceled()) return false;
+        else if(payment.getIsRefunded()) return false;
+        else if(payment.getFinalPrice() < paybackPrice) return false;
+        return true;
+    }
+
+    /* Multi-Thread 리팩토링 필요 */
+    private void payback(Payment payment, UpdateChallengeApplicationPaybacksRequestDto requestDto) {
+        String cancelReason = Objects.isNull(requestDto.reason()) ? CancelReason.PAYBACK.getDesc() : requestDto.reason();
+        tossProvider.cancelPayments(RefundType.PAYBACK, payment.getPaymentKey(), requestDto.price(), cancelReason);
+        payment.updatePaybackInfo(requestDto.price());
     }
 }

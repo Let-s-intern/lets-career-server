@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.dto.response.GetChallengeApplicationsResponseDto;
 import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApplicationPaybackRequestDto;
+import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApplicationPaybacksRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.response.*;
 import org.letscareer.letscareer.domain.challenge.service.ChallengeService;
@@ -308,6 +309,17 @@ public class ChallengeV1Controller {
                                                                       @PathVariable final Long applicationId,
                                                                       @RequestBody final UpdateChallengeApplicationPaybackRequestDto requestDto) {
         challengeService.updateApplicationsScore(challengeId, applicationId, requestDto);
+        return SuccessResponse.ok(null);
+    }
+
+    @Operation(summary = "[어드민] 챌린지 미션 참가자 일괄 페이백", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeApplicationsPaybackResponseDto.class)))
+    })
+    @ApiErrorCode({SwaggerEnum.PAYMENT_NOT_FOUND})
+    @PatchMapping("/{challengeId}/applications/payback")
+    public ResponseEntity<SuccessResponse<?>> paybackChallengeApplications(@PathVariable final Long challengeId,
+                                                                           @RequestBody final UpdateChallengeApplicationPaybacksRequestDto requestDto) {
+        challengeService.paybackChallengeApplications(challengeId, requestDto);
         return SuccessResponse.ok(null);
     }
 
