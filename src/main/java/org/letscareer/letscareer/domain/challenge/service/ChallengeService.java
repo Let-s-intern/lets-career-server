@@ -3,6 +3,7 @@ package org.letscareer.letscareer.domain.challenge.service;
 import org.letscareer.letscareer.domain.application.dto.response.GetChallengeApplicationsResponseDto;
 import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApplicationPaybackRequestDto;
+import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApplicationPaybacksRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.response.*;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
@@ -70,6 +71,8 @@ public interface ChallengeService {
     void updateChallenge(Long challengeId, UpdateChallengeRequestDto createChallengeRequestDto);
 
     void updateApplicationsScore(Long challengeId, Long applicationId, UpdateChallengeApplicationPaybackRequestDto requestDto);
+
+    void paybackChallengeApplications(Long challengeId, UpdateChallengeApplicationPaybacksRequestDto requestDto);
 
     void deleteChallenge(Long challengeId);
 }

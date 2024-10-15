@@ -56,6 +56,7 @@ public class PaymentQueryRepositoryImpl implements PaymentQueryRepository {
                         .select(Projections.constructor(PaymentDetailVo.class,
                                 payment.id,
                                 payment.finalPrice,
+                                payment.paybackPrice,
                                 coupon.discount,
                                 payment.isRefunded,
                                 payment.createDate,

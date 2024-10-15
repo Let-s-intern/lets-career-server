@@ -14,6 +14,7 @@ import org.letscareer.letscareer.domain.payment.type.RefundType;
 import org.letscareer.letscareer.domain.payment.type.ReportRefundType;
 import org.letscareer.letscareer.domain.pg.dto.response.TossPaymentsResponseDto;
 import org.letscareer.letscareer.domain.pg.provider.TossProvider;
+import org.letscareer.letscareer.domain.pg.type.CancelReason;
 import org.letscareer.letscareer.domain.report.entity.Report;
 import org.letscareer.letscareer.domain.report.helper.ReportPriceHelper;
 import org.letscareer.letscareer.domain.report.service.CancelReportApplicationService;
@@ -51,7 +52,7 @@ public class CancelReportApplicationServiceImpl implements CancelReportApplicati
         RefundType refundType = getRefundTypeInfo(reportCancelInfo.reportRefundType(), feedbackCancelInfo.reportRefundType());
         int cancelAmount = reportCancelInfo.cancelAmount() + feedbackCancelInfo.cancelAmount();
 
-        if(!payment.getPaymentKey().isEmpty()) tossProvider.cancelPayments(refundType, payment.getPaymentKey(), cancelAmount);
+        if(!payment.getPaymentKey().isEmpty()) tossProvider.cancelPayments(refundType, payment.getPaymentKey(), cancelAmount, CancelReason.CUSTOMER.getDesc());
         payment.updateRefundPrice(cancelAmount);
         updateReportApplicationCancelInfo(reportApplication, reportCancelInfo);
         updateReportFeedbackApplicationCancelInfo(reportFeedbackApplication, feedbackCancelInfo);

@@ -33,6 +33,8 @@ public class Payment extends BaseTimeEntity {
     @Builder.Default
     private Integer programDiscount = 0;
     @Builder.Default
+    private Integer paybackPrice = 0;
+    @Builder.Default
     private Boolean isRefunded = false;
     @NotNull
     private String paymentKey;
@@ -82,6 +84,11 @@ public class Payment extends BaseTimeEntity {
 
     public void updateRefund(UpdateChallengeApplicationPaybackRequestDto requestDto) {
         this.isRefunded = updateValue(this.isRefunded, requestDto.isRefunded());
+    }
+
+    public void updatePaybackInfo(Integer paybackPrice) {
+        this.isRefunded = updateValue(this.isRefunded, true);
+        this.paybackPrice = updateValue(this.paybackPrice, paybackPrice);
     }
 
     public void updateRefundPrice(Integer price) {
