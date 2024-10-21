@@ -20,6 +20,11 @@ public record GetLiveDetailResponseDto(
         Integer participationCount,
         String thumbnail,
         String mentorName,
+        String mentorImg,
+        String mentorCompany,
+        String mentorJob,
+        String mentorCareer,
+        String mentorIntroduction,
         String job,
         String place,
         LocalDateTime startDate,
@@ -43,6 +48,11 @@ public record GetLiveDetailResponseDto(
                 .participationCount(liveInfo.participationCount())
                 .thumbnail(liveInfo.thumbnail())
                 .mentorName(liveInfo.mentorName())
+                .mentorImg(liveInfo.mentorImg())
+                .mentorCompany(liveInfo.mentorCompany())
+                .mentorJob(liveInfo.mentorJob())
+                .mentorCareer(liveInfo.mentorCareer())
+                .mentorIntroduction(liveInfo.mentorIntroduction())
                 .job(liveInfo.job())
                 .place(liveInfo.place())
                 .startDate(liveInfo.startDate())
