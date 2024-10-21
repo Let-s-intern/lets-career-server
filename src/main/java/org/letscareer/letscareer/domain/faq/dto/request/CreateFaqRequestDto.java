@@ -5,6 +5,7 @@ import org.letscareer.letscareer.domain.faq.type.FaqProgramType;
 public record CreateFaqRequestDto(
         String question,
         String answer,
+        String category,
         FaqProgramType type
 ) {
 }
