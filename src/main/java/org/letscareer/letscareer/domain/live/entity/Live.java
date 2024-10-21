@@ -41,6 +41,11 @@ public class Live extends BaseTimeEntity {
     private Integer participationCount;
     private String thumbnail;
     private String mentorName;
+    private String mentorImg;
+    private String mentorCompany;
+    private String mentorJob;
+    private String mentorCareer;
+    private String mentorIntroduction;
     private String mentorPassword;
     private String job;
     private String place;
@@ -81,6 +86,11 @@ public class Live extends BaseTimeEntity {
                 .participationCount(requestDto.participationCount())
                 .thumbnail(requestDto.thumbnail())
                 .mentorName(requestDto.mentorName())
+                .mentorImg(requestDto.mentorImg())
+                .mentorCompany(requestDto.mentorCompany())
+                .mentorJob(requestDto.mentorJob())
+                .mentorCareer(requestDto.mentorCareer())
+                .mentorIntroduction(requestDto.mentorIntroduction())
                 .mentorPassword(mentorPassword)
                 .job(requestDto.job())
                 .place(requestDto.place())
@@ -102,6 +112,11 @@ public class Live extends BaseTimeEntity {
         this.participationCount = updateValue(this.participationCount, requestDto.participationCount());
         this.thumbnail = updateValue(this.thumbnail, requestDto.thumbnail());
         this.mentorName = updateValue(this.mentorName, requestDto.mentorName());
+        this.mentorImg = updateValue(this.mentorImg, requestDto.mentorImg());
+        this.mentorCompany = updateValue(this.mentorCompany, requestDto.mentorCompany());
+        this.mentorJob = updateValue(this.mentorJob, requestDto.mentorJob());
+        this.mentorCareer = updateValue(this.mentorCareer, requestDto.mentorCareer());
+        this.mentorIntroduction = updateValue(this.mentorIntroduction, requestDto.mentorIntroduction());
         this.job = updateValue(this.job, requestDto.job());
         this.place = updateValue(this.place, requestDto.place());
         this.startDate = updateValue(this.startDate, requestDto.startDate());
@@ -110,14 +125,6 @@ public class Live extends BaseTimeEntity {
         this.deadline = updateValue(this.deadline, requestDto.deadline());
         this.progressType = updateValue(this.progressType, requestDto.progressType());
         this.isVisible = updateValue(this.isVisible, requestDto.isVisible());
-    }
-
-    public void updateLiveCurrentCount(int currenCount) {
-        this.currentCount = updateValue(this.currentCount, currentCount);
-    }
-
-    public void updateMailStatus(MailStatus mailStatus) {
-        this.mailStatus = updateValue(this.mailStatus, mailStatus);
     }
 
     public void addLiveApplication(LiveApplication liveApplication) {
