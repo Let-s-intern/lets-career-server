@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.live.dto.response.GetLivesResponseDto;
@@ -47,7 +48,7 @@ public class VodV1Controller {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @PostMapping
-    public ResponseEntity<SuccessResponse<?>> createVodProgram(@RequestBody final CreateVodRequestDto requestDto) {
+    public ResponseEntity<SuccessResponse<?>> createVodProgram(@RequestBody @Valid final CreateVodRequestDto requestDto) {
         vodService.createVod(requestDto);
         return SuccessResponse.created(null);
     }
