@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.dto.response.GetLiveApplicationsResponseDto;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
@@ -167,7 +168,7 @@ public class LiveV1Controller {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @PostMapping
-    public ResponseEntity<SuccessResponse<?>> createLiveProgram(@RequestBody final CreateLiveRequestDto requestDto) {
+    public ResponseEntity<SuccessResponse<?>> createLiveProgram(@RequestBody @Valid final CreateLiveRequestDto requestDto) {
         liveService.createLive(requestDto);
         return SuccessResponse.created(null);
     }
