@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.dto.response.GetChallengeApplicationsResponseDto;
 import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeRequestDto;
@@ -284,7 +285,7 @@ public class ChallengeV1Controller {
             @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
     })
     @PostMapping
-    public ResponseEntity<SuccessResponse<?>> createChallengeProgram(@RequestBody final CreateChallengeRequestDto requestDto) {
+    public ResponseEntity<SuccessResponse<?>> createChallengeProgram(@RequestBody @Valid final CreateChallengeRequestDto requestDto) {
         challengeService.createChallenge(requestDto);
         return SuccessResponse.created(null);
     }
