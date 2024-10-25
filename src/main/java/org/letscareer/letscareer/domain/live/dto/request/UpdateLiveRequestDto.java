@@ -28,6 +28,7 @@ public record UpdateLiveRequestDto(
         LocalDateTime beginning,
         LocalDateTime deadline,
         ProgressType progressType,
+        Boolean vod,
         Boolean isVisible,
         List<CreateLiveClassificationRequestDto> programTypeInfo,
         CreateLivePriceRequestDto priceInfo,

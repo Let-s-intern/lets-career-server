@@ -24,6 +24,7 @@ public record LiveDetailVo(
         LocalDateTime endDate,
         LocalDateTime beginning,
         LocalDateTime deadline,
+        Boolean vod,
         ProgressType progressType
 ) {
 }

@@ -51,6 +51,7 @@ public class LiveQueryRepositoryImpl implements LiveQueryRepository {
                         live.endDate,
                         live.beginning,
                         live.deadline,
+                        live.vod,
                         live.progressType))
                 .from(live)
                 .where(

@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.live.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.letscareer.letscareer.domain.application.entity.LiveApplication;
 import org.letscareer.letscareer.domain.classification.entity.LiveClassification;
@@ -55,6 +56,8 @@ public class Live extends BaseTimeEntity {
     private LocalDateTime endDate;
     private LocalDateTime beginning;
     private LocalDateTime deadline;
+    @NotNull
+    private Boolean vod;
     @Builder.Default
     private Boolean isVisible = false;
     @Convert(converter = ProgressTypeConverter.class)
@@ -98,6 +101,7 @@ public class Live extends BaseTimeEntity {
                 .endDate(requestDto.endDate())
                 .beginning(requestDto.beginning())
                 .deadline(requestDto.deadline())
+                .vod(requestDto.vod())
                 .progressType(requestDto.progressType())
                 .zoomLink(zoomMeetingInfo.join_url())
                 .zoomPassword(zoomMeetingInfo.password())
@@ -125,6 +129,7 @@ public class Live extends BaseTimeEntity {
         this.deadline = updateValue(this.deadline, requestDto.deadline());
         this.progressType = updateValue(this.progressType, requestDto.progressType());
         this.isVisible = updateValue(this.isVisible, requestDto.isVisible());
+        this.vod = updateValue(this.vod, requestDto.vod());
     }
 
     public void addLiveApplication(LiveApplication liveApplication) {

@@ -41,6 +41,8 @@ public record CreateLiveRequestDto(
         @NotNull
         LocalDateTime deadline,
         @NotNull
+        Boolean vod,
+        @NotNull
         ProgressType progressType,
         @NotNull
         List<CreateLiveClassificationRequestDto> programTypeInfo,

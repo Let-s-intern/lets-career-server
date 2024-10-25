@@ -31,6 +31,7 @@ public record GetLiveDetailResponseDto(
         LocalDateTime endDate,
         LocalDateTime beginning,
         LocalDateTime deadline,
+        Boolean vod,
         ProgressType progressType,
         List<LiveClassificationVo> classificationInfo,
         LivePriceDetailVo priceInfo,
@@ -59,6 +60,7 @@ public record GetLiveDetailResponseDto(
                 .endDate(liveInfo.endDate())
                 .beginning(liveInfo.beginning())
                 .deadline(liveInfo.deadline())
+                .vod(liveInfo.vod())
                 .progressType(liveInfo.progressType())
                 .classificationInfo(classificationInfo)
                 .priceInfo(priceInfo)
