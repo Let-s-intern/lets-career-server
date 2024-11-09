@@ -12,9 +12,18 @@ public class TossSecretKeyGenerator {
     @Value("${toss.secretKey}")
     private String widgetSecretKey;
 
+    @Value("${toss.apiSecretKey}")
+    private String apiSecretKey;
+
     public String generateSecretKey() {
         Base64.Encoder encoder = Base64.getEncoder();
         byte[] encodedBytes = encoder.encode((widgetSecretKey + ":").getBytes(StandardCharsets.UTF_8));
+        return KEY_TYPE + new String(encodedBytes);
+    }
+
+    public String generateApiSecretKey() {
+        Base64.Encoder encoder = Base64.getEncoder();
+        byte[] encodedBytes = encoder.encode((apiSecretKey + ":").getBytes(StandardCharsets.UTF_8));
         return KEY_TYPE + new String(encodedBytes);
     }
 }

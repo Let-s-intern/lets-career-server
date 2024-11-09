@@ -25,6 +25,7 @@ public class Faq extends BaseTimeEntity {
     private Long id;
     private String question;
     private String answer;
+    private String category;
     @Convert(converter = FaqProgramTypeConverter.class)
     private FaqProgramType faqProgramType;
 
@@ -39,6 +40,7 @@ public class Faq extends BaseTimeEntity {
         return Faq.builder()
                 .question(requestDto.question())
                 .answer(requestDto.answer())
+                .category(requestDto.category())
                 .faqProgramType(requestDto.type())
                 .build();
     }
@@ -46,6 +48,7 @@ public class Faq extends BaseTimeEntity {
     public void updateFaq(CreateFaqRequestDto requestDto) {
         this.question = updateValue(this.question, requestDto.question());
         this.answer = updateValue(this.answer, requestDto.answer());
+        this.category = updateValue(this.category, requestDto.category());
         this.faqProgramType = updateValue(this.faqProgramType, requestDto.type());
     }
 

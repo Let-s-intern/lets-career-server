@@ -147,7 +147,7 @@ public class ReportV1Controller {
     @Operation(summary = "진단서 프로그램 생성")
     @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
     @PostMapping
-    public ResponseEntity<SuccessResponse<?>> createReport(@RequestBody final CreateReportRequestDto requestDto) {
+    public ResponseEntity<SuccessResponse<?>> createReport(@RequestBody @Valid final CreateReportRequestDto requestDto) {
         createReportService.execute(requestDto);
         return SuccessResponse.created(null);
     }

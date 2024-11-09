@@ -13,12 +13,18 @@ public record LiveDetailVo(
         Integer participationCount,
         String thumbnail,
         String mentorName,
+        String mentorImg,
+        String mentorCompany,
+        String mentorJob,
+        String mentorCareer,
+        String mentorIntroduction,
         String job,
         String place,
         LocalDateTime startDate,
         LocalDateTime endDate,
         LocalDateTime beginning,
         LocalDateTime deadline,
+        Boolean vod,
         ProgressType progressType
 ) {
 }

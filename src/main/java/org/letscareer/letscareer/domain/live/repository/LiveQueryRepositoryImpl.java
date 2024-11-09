@@ -40,12 +40,18 @@ public class LiveQueryRepositoryImpl implements LiveQueryRepository {
                         live.participationCount,
                         live.thumbnail,
                         live.mentorName,
+                        live.mentorImg,
+                        live.mentorCompany,
+                        live.mentorJob,
+                        live.mentorCareer,
+                        live.mentorIntroduction,
                         live.job,
                         live.place,
                         live.startDate,
                         live.endDate,
                         live.beginning,
                         live.deadline,
+                        live.vod,
                         live.progressType))
                 .from(live)
                 .where(
