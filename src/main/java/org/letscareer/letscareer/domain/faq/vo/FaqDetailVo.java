@@ -8,6 +8,7 @@ public record FaqDetailVo(
         Long id,
         String question,
         String answer,
+        String category,
         FaqProgramType faqProgramType
 ) {
 }

@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.banner.dto.request.CreateBannerRequestDto;
 import org.letscareer.letscareer.domain.banner.dto.request.UpdateBannerRequestDto;
@@ -47,7 +48,7 @@ public class BannerV1Controller {
     })
     @PostMapping
     public ResponseEntity<SuccessResponse<?>> createBanner(@RequestParam(name = "type") final BannerType bannerType,
-                                                           @RequestPart final CreateBannerRequestDto requestDto,
+                                                           @RequestPart @Valid final CreateBannerRequestDto requestDto,
                                                            @RequestPart final MultipartFile file,
                                                            @RequestPart(required = false) final MultipartFile mobileFile) {
         bannerServiceFactory.getBannerService(bannerType).createBanner(bannerType, requestDto, file, mobileFile);

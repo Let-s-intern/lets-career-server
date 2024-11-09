@@ -20,12 +20,18 @@ public record GetLiveDetailResponseDto(
         Integer participationCount,
         String thumbnail,
         String mentorName,
+        String mentorImg,
+        String mentorCompany,
+        String mentorJob,
+        String mentorCareer,
+        String mentorIntroduction,
         String job,
         String place,
         LocalDateTime startDate,
         LocalDateTime endDate,
         LocalDateTime beginning,
         LocalDateTime deadline,
+        Boolean vod,
         ProgressType progressType,
         List<LiveClassificationVo> classificationInfo,
         LivePriceDetailVo priceInfo,
@@ -43,12 +49,18 @@ public record GetLiveDetailResponseDto(
                 .participationCount(liveInfo.participationCount())
                 .thumbnail(liveInfo.thumbnail())
                 .mentorName(liveInfo.mentorName())
+                .mentorImg(liveInfo.mentorImg())
+                .mentorCompany(liveInfo.mentorCompany())
+                .mentorJob(liveInfo.mentorJob())
+                .mentorCareer(liveInfo.mentorCareer())
+                .mentorIntroduction(liveInfo.mentorIntroduction())
                 .job(liveInfo.job())
                 .place(liveInfo.place())
                 .startDate(liveInfo.startDate())
                 .endDate(liveInfo.endDate())
                 .beginning(liveInfo.beginning())
                 .deadline(liveInfo.deadline())
+                .vod(liveInfo.vod())
                 .progressType(liveInfo.progressType())
                 .classificationInfo(classificationInfo)
                 .priceInfo(priceInfo)

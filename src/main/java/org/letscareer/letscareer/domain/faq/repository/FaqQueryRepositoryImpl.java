@@ -24,6 +24,7 @@ public class FaqQueryRepositoryImpl implements FaqQueryRepository {
                         faq.id,
                         faq.question,
                         faq.answer,
+                        faq.category,
                         faq.faqProgramType
                 ))
                 .from(faq)
@@ -41,6 +42,7 @@ public class FaqQueryRepositoryImpl implements FaqQueryRepository {
                         faq.id,
                         faq.question,
                         faq.answer,
+                        faq.category,
                         faq.faqProgramType
                 ))
                 .from(faq)
@@ -58,6 +60,7 @@ public class FaqQueryRepositoryImpl implements FaqQueryRepository {
                         faq.id,
                         faq.question,
                         faq.answer,
+                        faq.category,
                         faq.faqProgramType
                 ))
                 .from(faq)
