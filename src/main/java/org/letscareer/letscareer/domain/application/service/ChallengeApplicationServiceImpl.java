@@ -24,8 +24,10 @@ import org.letscareer.letscareer.domain.pg.provider.TossProvider;
 import org.letscareer.letscareer.domain.pg.type.CancelReason;
 import org.letscareer.letscareer.domain.price.entity.ChallengePrice;
 import org.letscareer.letscareer.domain.price.entity.Price;
+import org.letscareer.letscareer.domain.price.helper.ChallengePriceHelper;
 import org.letscareer.letscareer.domain.price.helper.PriceHelper;
 import org.letscareer.letscareer.domain.price.type.ChallengeParticipationType;
+import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.score.helper.AdminScoreHelper;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.helper.UserHelper;
@@ -44,6 +46,7 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
     private final PaymentHelper paymentHelper;
     private final CouponHelper couponHelper;
     private final PriceHelper priceHelper;
+    private final ChallengePriceHelper challengePriceHelper;
     private final UserHelper userHelper;
     private final TossProvider tossProvider;
     private final NhnProvider nhnProvider;
@@ -81,7 +84,7 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
     private void validateConditionForCreateApplication(Challenge challenge, Coupon coupon, Price price, User user, CreateApplicationRequestDto requestDto) {
         challengeApplicationHelper.validateExistingApplication(challenge.getId(), user.getId());
         challengeApplicationHelper.validateChallengeDuration(challenge);
-        priceHelper.validatePrice(price, coupon, requestDto.paymentInfo().amount());
+        challengePriceHelper.validatePrice(price, coupon, requestDto.paymentInfo().amount());
     }
 
     private void createEntityAndSave(Challenge challenge, Coupon coupon, Price price, User user, CreateApplicationRequestDto requestDto) {

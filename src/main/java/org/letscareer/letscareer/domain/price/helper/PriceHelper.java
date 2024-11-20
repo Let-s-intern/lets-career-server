@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 import java.util.Objects;
 
 import static org.letscareer.letscareer.domain.application.error.ApplicationErrorCode.APPLICATION_CANNOT_CANCELED;
-import static org.letscareer.letscareer.domain.price.error.PriceErrorCode.INVALID_PRICE;
 import static org.letscareer.letscareer.domain.price.error.PriceErrorCode.PRICE_NOT_FOUND;
 
 @RequiredArgsConstructor
@@ -24,22 +23,6 @@ public class PriceHelper {
     public Price findPriceByIdOrThrow(Long priceId) {
         return priceRepository.findById(priceId)
                 .orElseThrow(() -> new EntityNotFoundException(PRICE_NOT_FOUND));
-    }
-
-    public void validatePrice(Price price, Coupon coupon, String amount) {
-        int finalPrice = calculateFinalPrice(price, coupon);
-        if (finalPrice != Integer.parseInt(amount)) {
-            throw new InvalidValueException(INVALID_PRICE);
-        }
-    }
-
-    public int calculateFinalPrice(Price price, Coupon coupon) {
-        int finalPrice = price.getPrice() - price.getDiscount();
-        if (coupon != null) {
-            if (coupon.getDiscount() == -1) return 0;
-            finalPrice -= coupon.getDiscount();
-        }
-        return finalPrice;
     }
 
     public int calculateCancelAmount(Payment payment, Coupon coupon, RefundType refundType) {

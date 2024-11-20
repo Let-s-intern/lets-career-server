@@ -24,7 +24,9 @@ import org.letscareer.letscareer.domain.pg.dto.response.TossPaymentsResponseDto;
 import org.letscareer.letscareer.domain.pg.provider.TossProvider;
 import org.letscareer.letscareer.domain.pg.type.CancelReason;
 import org.letscareer.letscareer.domain.price.entity.Price;
+import org.letscareer.letscareer.domain.price.helper.LivePriceHelper;
 import org.letscareer.letscareer.domain.price.helper.PriceHelper;
+import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.helper.UserHelper;
 import org.springframework.stereotype.Service;
@@ -41,6 +43,7 @@ public class LiveApplicationServiceImpl implements ApplicationService {
     private final CouponHelper couponHelper;
     private final PriceHelper priceHelper;
     private final LiveHelper liveHelper;
+    private final LivePriceHelper livePriceHelper;
     private final UserHelper userHelper;
     private final TossProvider tossProvider;
     private final NhnProvider nhnProvider;
@@ -78,7 +81,7 @@ public class LiveApplicationServiceImpl implements ApplicationService {
     private void validateRequestConditionForCreateApplication(Live live, Coupon coupon, Price price, User user, CreateApplicationRequestDto requestDto) {
         liveApplicationHelper.validateExistingApplication(live.getId(), user.getId());
         liveApplicationHelper.validateLiveDuration(live);
-        priceHelper.validatePrice(price, coupon, requestDto.paymentInfo().amount());
+        livePriceHelper.validatePrice(price, coupon, requestDto.paymentInfo().amount());
     }
 
     private void validateConditionForCancelApplication(LiveApplication application, User user) {
