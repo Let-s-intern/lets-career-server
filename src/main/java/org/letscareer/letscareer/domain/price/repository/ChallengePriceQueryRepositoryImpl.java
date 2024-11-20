@@ -4,7 +4,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.domain.price.entity.Price;
+import org.letscareer.letscareer.domain.price.entity.ChallengePrice;
 import org.letscareer.letscareer.domain.price.vo.ChallengePriceDetailVo;
 import org.letscareer.letscareer.domain.price.vo.PriceDetailVo;
 
@@ -53,6 +53,16 @@ public class ChallengePriceQueryRepositoryImpl implements ChallengePriceQueryRep
                         challengePrice.challenge.id.eq(programId)
                 )
                 .fetchFirst());
+    }
+
+    @Override
+    public Optional<ChallengePrice> findByPriceId(Long priceId) {
+        return Optional.ofNullable(jpaQueryFactory
+                .select(challengePrice)
+                .from(challengePrice)
+                .where(
+                        challengePrice._super.id.eq(priceId)
+                ).fetchFirst());
     }
 
     private BooleanExpression eqChallengeId(Long challengeId) {
