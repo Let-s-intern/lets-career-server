@@ -61,8 +61,4 @@ public class PaymentHelper {
     public long countCouponAppliedTime(Long userId, Long couponId) {
         return paymentRepository.countCouponAppliedTime(userId, couponId);
     }
-
-    public Coupon getPaymentCoupon(Payment payment) {
-        return payment.getCoupon();
-    }
 }
