@@ -1,5 +1,6 @@
 package org.letscareer.letscareer.domain.review.repository;
 
+import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.review.vo.ReviewDetailVo;
 import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
 import org.letscareer.letscareer.domain.review.vo.ReviewVo;
@@ -21,4 +22,6 @@ public interface ReviewQueryRepository {
     Page<ReviewAdminVo> findLiveReviewAdminVos(Long liveId, Pageable pageable);
 
     List<String> findReviewContentByLiveId(Long liveId);
+
+    List<ReviewDetailVo> findAllReviewDetailVosByProgramType(ProgramType programType);
 }

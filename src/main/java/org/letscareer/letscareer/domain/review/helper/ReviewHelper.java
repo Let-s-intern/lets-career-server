@@ -63,4 +63,8 @@ public class ReviewHelper {
     public List<String> findLiveReviewContentByLiveId(Long liveId) {
         return reviewRepository.findReviewContentByLiveId(liveId);
     }
+
+    public List<ReviewDetailVo> findReviewDetailVos(ProgramType programType) {
+        return reviewRepository.findAllReviewDetailVosByProgramType(programType);
+    }
 }
