@@ -103,6 +103,7 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                         vWProgram.programId,
                         vWProgram.programType,
                         vWProgram.title,
+                        vWProgram.thumbnail,
                         vWProgram.participationCount,
                         vWProgram.zoomLink,
                         vWProgram.zoomPassword,
@@ -113,15 +114,38 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                         vWProgram.deadline
                 ))
                 .from(vWProgram)
-                .orderBy(vWProgram.createDate.desc())
+                .where(
+                        eqProgramType(condition.type()),
+                        containDuration(condition.startDate(), condition.endDate()),
+                        inProgramClassification(condition.typeList()),
+                        inProgramStatus(condition.statusList(), condition.type())
+                )
+                .groupBy(
+                        vWProgram.programId,
+                        vWProgram.programType
+                )
+                .orderBy(
+                        orderByProgramStatus(condition.type()),
+                        orderByProgramType(),
+                        vWProgram.startDate.desc()
+                )
                 .limit(condition.pageable().getPageSize())
                 .offset(condition.pageable().getOffset())
                 .fetch();
 
         JPAQuery<Long> countQuery = queryFactory
                 .select(vWProgram.countDistinct())
-                .from(vWProgram);
-        ;
+                .from(vWProgram)
+                .where(
+                        eqProgramType(condition.type()),
+                        containDuration(condition.startDate(), condition.endDate()),
+                        inProgramClassification(condition.typeList()),
+                        inProgramStatus(condition.statusList(), condition.type())
+                )
+                .groupBy(
+                        vWProgram.programId,
+                        vWProgram.programType
+                );
 
         return PageableExecutionUtils.getPage(contents, condition.pageable(), countQuery::fetchCount);
     }

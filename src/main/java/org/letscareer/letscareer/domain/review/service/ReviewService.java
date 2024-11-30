@@ -3,7 +3,9 @@ package org.letscareer.letscareer.domain.review.service;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.review.dto.request.CreateReviewRequestDto;
 import org.letscareer.letscareer.domain.review.dto.request.UpdateReviewRequestDto;
+import org.letscareer.letscareer.domain.review.dto.response.GetReviewDetailListResponseDto;
 import org.letscareer.letscareer.domain.review.dto.response.GetReviewDetailResponseDto;
+import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,4 +20,5 @@ public interface ReviewService {
 
     void updateReviewVisibleStatus(Long reviewId, Boolean isVisible);
 
+    GetReviewDetailListResponseDto getReviewDetailList(ProgramType programType);
 }
