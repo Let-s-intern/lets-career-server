@@ -8,6 +8,7 @@ import org.letscareer.letscareer.domain.live.helper.LiveHelper;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.review.dto.request.CreateReviewRequestDto;
 import org.letscareer.letscareer.domain.review.dto.request.UpdateReviewRequestDto;
+import org.letscareer.letscareer.domain.review.dto.response.GetReviewDetailListResponseDto;
 import org.letscareer.letscareer.domain.review.dto.response.GetReviewDetailResponseDto;
 import org.letscareer.letscareer.domain.review.entity.Review;
 import org.letscareer.letscareer.domain.review.helper.ReviewHelper;
@@ -15,6 +16,8 @@ import org.letscareer.letscareer.domain.review.mapper.ReviewMapper;
 import org.letscareer.letscareer.domain.review.vo.ReviewDetailVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Transactional
@@ -54,6 +57,12 @@ public class ReviewServiceImpl implements ReviewService {
     public void updateReviewVisibleStatus(Long reviewId, Boolean isVisible) {
         Review review = reviewHelper.findReviewOrThrow(reviewId);
         review.updateIsVisibleStatus(isVisible);
+    }
+
+    @Override
+    public GetReviewDetailListResponseDto getReviewDetailList(ProgramType programType) {
+        List<ReviewDetailVo> reviewDetailVoList = reviewHelper.findReviewDetailVos(programType);
+        return reviewMapper.toGetReviewDetailListResponseDto(reviewDetailVoList);
     }
 
     private void validateProgram(Long programId, ProgramType programType) {

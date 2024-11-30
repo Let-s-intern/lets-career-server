@@ -14,6 +14,7 @@ public record GetProgramWithCurrentCountResponseDto(
         ProgramType programType,
         ProgramStatusType programStatusType,
         String title,
+        String thumbnail,
         Long currentCount,
         Integer participationCount,
         String zoomLink,
@@ -30,6 +31,7 @@ public record GetProgramWithCurrentCountResponseDto(
                 .programType(vo.programType())
                 .programStatusType(vo.programStatusType())
                 .title(vo.title())
+                .thumbnail(vo.thumbnail())
                 .currentCount(currentCount)
                 .participationCount(vo.participationCount())
                 .zoomLink(vo.zoomLink())

@@ -186,6 +186,27 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                 .fetch();
     }
 
+    @Override
+    public List<ReviewDetailVo> findAllReviewDetailVosByProgramType(ProgramType programType) {
+        List<ReviewDetailVo> reviewDetailVos = queryFactory
+                .select(Projections.constructor(ReviewDetailVo.class,
+                        vWReview.reviewId,
+                        vWReview.nps,
+                        vWReview.npsAns,
+                        vWReview.npsCheckAns,
+                        vWReview.content,
+                        vWReview.score,
+                        vWReview.createDate
+                        ))
+                .from(vWReview)
+                .where(
+                        eqProgramType(programType)
+                )
+                .orderBy(vWReview.reviewId.desc())
+                .fetch();
+        return reviewDetailVos;
+    }
+
     public BooleanExpression eqReviewId(Long reviewId) {
         return reviewId != null ? review.id.eq(reviewId) : null;
     }
@@ -204,5 +225,9 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 
     private BooleanExpression eqProgramType(ProgramType programType) {
         return programType != null ? vWReview.programType.eq(programType) : null;
+    }
+
+    private BooleanExpression eqIsVisible(Boolean isVisible) {
+        return isVisible != null ? vWReview.isVisible.eq(isVisible) : null;
     }
 }
