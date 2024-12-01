@@ -3,6 +3,7 @@ package org.letscareer.letscareer.domain.review.mapper;
 import org.letscareer.letscareer.domain.review.dto.response.GetReviewDetailListResponseDto;
 import org.letscareer.letscareer.domain.review.dto.response.GetReviewDetailResponseDto;
 import org.letscareer.letscareer.domain.review.dto.response.GetReviewResponseDto;
+import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
 import org.letscareer.letscareer.domain.review.vo.ReviewDetailVo;
 import org.letscareer.letscareer.domain.review.vo.ReviewVo;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,7 @@ public class ReviewMapper {
         return GetReviewResponseDto.of(vo, title);
     }
 
-    public GetReviewDetailListResponseDto toGetReviewDetailListResponseDto(List<ReviewDetailVo> reviewDetailVos) {
-        return GetReviewDetailListResponseDto.of(reviewDetailVos);
+    public GetReviewDetailListResponseDto toGetReviewDetailListResponseDto(List<ReviewAdminVo> reviewAdminVos) {
+        return GetReviewDetailListResponseDto.of(reviewAdminVos);
     }
 }

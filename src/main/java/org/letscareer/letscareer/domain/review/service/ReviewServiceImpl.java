@@ -13,6 +13,7 @@ import org.letscareer.letscareer.domain.review.dto.response.GetReviewDetailRespo
 import org.letscareer.letscareer.domain.review.entity.Review;
 import org.letscareer.letscareer.domain.review.helper.ReviewHelper;
 import org.letscareer.letscareer.domain.review.mapper.ReviewMapper;
+import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
 import org.letscareer.letscareer.domain.review.vo.ReviewDetailVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,9 +61,9 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public GetReviewDetailListResponseDto getReviewDetailList(ProgramType programType) {
-        List<ReviewDetailVo> reviewDetailVoList = reviewHelper.findReviewDetailVos(programType);
-        return reviewMapper.toGetReviewDetailListResponseDto(reviewDetailVoList);
+    public GetReviewDetailListResponseDto getReviewAdminList(ProgramType programType, List<String> sortBy) {
+        List<ReviewAdminVo> reviewAdminVoList = reviewHelper.findReviewAdminVos(programType, sortBy);
+        return reviewMapper.toGetReviewDetailListResponseDto(reviewAdminVoList);
     }
 
     private void validateProgram(Long programId, ProgramType programType) {
