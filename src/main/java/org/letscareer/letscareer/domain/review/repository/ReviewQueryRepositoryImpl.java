@@ -1,7 +1,10 @@
 package org.letscareer.letscareer.domain.review.repository;
 
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -14,12 +17,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.letscareer.letscareer.domain.application.entity.QApplication.application;
-import static org.letscareer.letscareer.domain.application.entity.QLiveApplication.liveApplication;
-import static org.letscareer.letscareer.domain.live.entity.QLive.live;
 import static org.letscareer.letscareer.domain.review.entity.QReview.review;
 import static org.letscareer.letscareer.domain.review.entity.QVWReview.vWReview;
 
@@ -52,6 +53,8 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
         List<ReviewAdminVo> contents = queryFactory
                 .select(Projections.constructor(ReviewAdminVo.class,
                         vWReview.reviewId,
+                        vWReview.programTitle,
+                        vWReview.programType,
                         vWReview.userName,
                         vWReview.nps,
                         vWReview.npsAns,
@@ -146,6 +149,8 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
         List<ReviewAdminVo> contents = queryFactory
                 .select(Projections.constructor(ReviewAdminVo.class,
                         vWReview.reviewId,
+                        vWReview.programTitle,
+                        vWReview.programType,
                         vWReview.userName,
                         vWReview.nps,
                         vWReview.npsAns,
@@ -187,24 +192,44 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
     }
 
     @Override
-    public List<ReviewDetailVo> findAllReviewDetailVosByProgramType(ProgramType programType) {
-        List<ReviewDetailVo> reviewDetailVos = queryFactory
-                .select(Projections.constructor(ReviewDetailVo.class,
+    public List<ReviewAdminVo> findAllReviewAdminVosByProgramType(ProgramType programType, List<String> sortBy) {
+        List<OrderSpecifier<?>> orderSpecifiers = createReviewOrderSpecifierList(sortBy);
+        List<ReviewAdminVo> reviewAdminVos = queryFactory
+                .select(Projections.constructor(ReviewAdminVo.class,
                         vWReview.reviewId,
+                        vWReview.programTitle,
+                        vWReview.programType,
+                        vWReview.userName,
                         vWReview.nps,
                         vWReview.npsAns,
                         vWReview.npsCheckAns,
                         vWReview.content,
                         vWReview.score,
+                        vWReview.isVisible,
                         vWReview.createDate
                         ))
                 .from(vWReview)
                 .where(
                         eqProgramType(programType)
                 )
-                .orderBy(vWReview.reviewId.desc())
+                .orderBy(
+                        orderSpecifiers.toArray(OrderSpecifier[]::new)
+                )
                 .fetch();
-        return reviewDetailVos;
+        return reviewAdminVos;
+    }
+
+    private List<OrderSpecifier<?>> createReviewOrderSpecifierList(List<String> sortBy) {
+        List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
+        for(String sort : sortBy) {
+            System.out.println(sort);
+            String[] sortInfo = sort.split(";");
+            String property = sortInfo[0];
+            Order direction = sortInfo[1].equalsIgnoreCase("ASC") ? Order.ASC : Order.DESC;
+            PathBuilder expression = new PathBuilder(ReviewDetailVo.class, "vWReview");
+            orderSpecifiers.add(new OrderSpecifier<>(direction, expression.get(property)));
+        }
+        return orderSpecifiers;
     }
 
     public BooleanExpression eqReviewId(Long reviewId) {
