@@ -20,6 +20,8 @@ import org.letscareer.letscareer.global.common.entity.SwaggerEnum;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/review")
 @RestController
@@ -30,8 +32,9 @@ public class ReviewV1Controller {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReviewDetailListResponseDto.class)))
     })
     @GetMapping
-    public ResponseEntity<SuccessResponse<?>> getReviewDetailList(@RequestParam("type") final ProgramType programType) {
-        GetReviewDetailListResponseDto responseDto = reviewService.getReviewDetailList(programType);
+    public ResponseEntity<SuccessResponse<?>> getReviewDetailList(@RequestParam("type") final ProgramType programType,
+                                                                  @RequestParam(value = "sort", defaultValue = "id;DESC", required = false) List<String> sortBy) {
+        GetReviewDetailListResponseDto responseDto = reviewService.getReviewAdminList(programType, sortBy);
         return SuccessResponse.ok(responseDto);
     }
 
