@@ -32,9 +32,10 @@ public class ReviewV1Controller {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReviewDetailListResponseDto.class)))
     })
     @GetMapping
-    public ResponseEntity<SuccessResponse<?>> getReviewDetailList(@RequestParam("type") final ProgramType programType,
+    public ResponseEntity<SuccessResponse<?>> getReviewDetailList(@CurrentUser User user,
+                                                                  @RequestParam("type") final ProgramType programType,
                                                                   @RequestParam(value = "sort", defaultValue = "id;DESC", required = false) List<String> sortBy) {
-        GetReviewDetailListResponseDto responseDto = reviewService.getReviewAdminList(programType, sortBy);
+        GetReviewDetailListResponseDto responseDto = reviewService.getReviewDetailList(user, programType, sortBy);
         return SuccessResponse.ok(responseDto);
     }
 

@@ -15,10 +15,14 @@ import org.letscareer.letscareer.domain.review.helper.ReviewHelper;
 import org.letscareer.letscareer.domain.review.mapper.ReviewMapper;
 import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
 import org.letscareer.letscareer.domain.review.vo.ReviewDetailVo;
+import org.letscareer.letscareer.domain.user.entity.User;
+import org.letscareer.letscareer.domain.user.type.UserRole;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Transactional
@@ -61,8 +65,10 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public GetReviewDetailListResponseDto getReviewAdminList(ProgramType programType, List<String> sortBy) {
-        List<ReviewAdminVo> reviewAdminVoList = reviewHelper.findReviewAdminVos(programType, sortBy);
+    public GetReviewDetailListResponseDto getReviewDetailList(User user, ProgramType programType, List<String> sortBy) {
+        Boolean isVisible = true;
+        if(!Objects.isNull(user) && user.getRole().equals(UserRole.ADMIN)) isVisible = null;
+        List<ReviewAdminVo> reviewAdminVoList = reviewHelper.findReviewAdminVos(isVisible, programType, sortBy);
         return reviewMapper.toGetReviewDetailListResponseDto(reviewAdminVoList);
     }
 
