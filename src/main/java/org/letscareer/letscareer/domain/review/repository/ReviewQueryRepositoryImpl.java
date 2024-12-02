@@ -222,7 +222,6 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
     private List<OrderSpecifier<?>> createReviewOrderSpecifierList(List<String> sortBy) {
         List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
         for(String sort : sortBy) {
-            System.out.println(sort);
             String[] sortInfo = sort.split(";");
             String property = sortInfo[0];
             Order direction = sortInfo[1].equalsIgnoreCase("ASC") ? Order.ASC : Order.DESC;
