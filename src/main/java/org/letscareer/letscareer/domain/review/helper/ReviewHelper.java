@@ -64,7 +64,7 @@ public class ReviewHelper {
         return reviewRepository.findReviewContentByLiveId(liveId);
     }
 
-    public List<ReviewAdminVo> findReviewAdminVos(ProgramType programType, List<String> sortBy) {
-        return reviewRepository.findAllReviewAdminVosByProgramType(programType, sortBy);
+    public List<ReviewAdminVo> findReviewAdminVos(Boolean isVisible, ProgramType programType, List<String> sortBy) {
+        return reviewRepository.findAllReviewAdminVosByProgramType(isVisible, programType, sortBy);
     }
 }
