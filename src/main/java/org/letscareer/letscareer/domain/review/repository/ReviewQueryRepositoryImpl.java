@@ -192,7 +192,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
     }
 
     @Override
-    public List<ReviewAdminVo> findAllReviewAdminVosByProgramType(ProgramType programType, List<String> sortBy) {
+    public List<ReviewAdminVo> findAllReviewAdminVosByProgramType(Boolean isVisible, ProgramType programType, List<String> sortBy) {
         List<OrderSpecifier<?>> orderSpecifiers = createReviewOrderSpecifierList(sortBy);
         List<ReviewAdminVo> reviewAdminVos = queryFactory
                 .select(Projections.constructor(ReviewAdminVo.class,
@@ -210,7 +210,8 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                         ))
                 .from(vWReview)
                 .where(
-                        eqProgramType(programType)
+                        eqProgramType(programType),
+                        eqIsVisible(isVisible)
                 )
                 .orderBy(
                         orderSpecifiers.toArray(OrderSpecifier[]::new)
@@ -222,7 +223,6 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
     private List<OrderSpecifier<?>> createReviewOrderSpecifierList(List<String> sortBy) {
         List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
         for(String sort : sortBy) {
-            System.out.println(sort);
             String[] sortInfo = sort.split(";");
             String property = sortInfo[0];
             Order direction = sortInfo[1].equalsIgnoreCase("ASC") ? Order.ASC : Order.DESC;

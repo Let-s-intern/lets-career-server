@@ -23,5 +23,5 @@ public interface ReviewQueryRepository {
 
     List<String> findReviewContentByLiveId(Long liveId);
 
-    List<ReviewAdminVo> findAllReviewAdminVosByProgramType(ProgramType programType, List<String> sortBy);
+    List<ReviewAdminVo> findAllReviewAdminVosByProgramType(Boolean isVisible, ProgramType programType, List<String> sortBy);
 }

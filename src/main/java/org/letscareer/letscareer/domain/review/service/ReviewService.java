@@ -5,6 +5,7 @@ import org.letscareer.letscareer.domain.review.dto.request.CreateReviewRequestDt
 import org.letscareer.letscareer.domain.review.dto.request.UpdateReviewRequestDto;
 import org.letscareer.letscareer.domain.review.dto.response.GetReviewDetailListResponseDto;
 import org.letscareer.letscareer.domain.review.dto.response.GetReviewDetailResponseDto;
+import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,5 +22,5 @@ public interface ReviewService {
 
     void updateReviewVisibleStatus(Long reviewId, Boolean isVisible);
 
-    GetReviewDetailListResponseDto getReviewAdminList(ProgramType programType, List<String> sortBy);
+    GetReviewDetailListResponseDto getReviewDetailList(User user, ProgramType programType, List<String> sortBy);
 }
