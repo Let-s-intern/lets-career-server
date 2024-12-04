@@ -31,6 +31,7 @@ public class ReportV1Controller {
     private final GetReportApplicationPaymentForAdminService getReportApplicationPaymentForAdminService;
     private final GetReportDetailService getReportDetailService;
     private final GetReportPriceDetailService getReportPriceDetailService;
+    private final GetReportTitleService getReportTitleService;
     private final GetMyReportService getMyReportService;
     private final GetReportThumbnailService getReportThumbnailService;
     private final GetReportPaymentService getReportPaymentService;
@@ -110,6 +111,15 @@ public class ReportV1Controller {
     @GetMapping("/{reportId}/price")
     public ResponseEntity<SuccessResponse<?>> getReportPriceDetail(@PathVariable final Long reportId) {
         final GetReportPriceDetailResponseDto responseDto = getReportPriceDetailService.execute(reportId);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "유저 - 진단서 제목 정보")
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportTitleResponseDto.class)))
+    @ApiErrorCode({REPORT_NOT_FOUND})
+    @GetMapping("/{reportId}/title")
+    public ResponseEntity<SuccessResponse<?>> getReportTitle(@PathVariable final Long reportId) {
+        final GetReportTitleResponseDto responseDto = getReportTitleService.getReportTitle(reportId);
         return SuccessResponse.ok(responseDto);
     }
 
