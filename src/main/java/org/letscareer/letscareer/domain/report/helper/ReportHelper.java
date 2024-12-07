@@ -110,4 +110,9 @@ public class ReportHelper {
     public void deleteReport(Report report) {
         reportRepository.delete(report);
     }
+
+    public ReportTitleVo findReportTitleVoOrThrow(Long reportId) {
+        return reportRepository.findReportTitleVo(reportId)
+                .orElseThrow(() -> new EntityNotFoundException(REPORT_NOT_FOUND));
+    }
 }

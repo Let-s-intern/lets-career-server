@@ -370,6 +370,19 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .fetchOne();
     }
 
+    @Override
+    public Optional<ReportTitleVo> findReportTitleVo(Long reportId) {
+        return Optional.ofNullable(
+                queryFactory
+                        .select(Projections.constructor(ReportTitleVo.class, report.title))
+                        .from(report)
+                        .where(
+                                eqReportId(reportId)
+                        )
+                        .fetchFirst()
+        );
+    }
+
     private List<ReportPriceVo> subQueryForReportPriceInfos(Long reportId) {
         return queryFactory.select(Projections.constructor(ReportPriceVo.class,
                         reportPrice.reportPriceType,
