@@ -36,8 +36,8 @@ public class CreateReportServiceImpl implements CreateReportService {
         Report report = reportHelper.createReportAndSave(requestDto);
         createReportPricesAndSave(requestDto.priceInfo(), report);
         createReportOptionsAndSave(requestDto.optionInfo(), report);
-        createFaqListAndSave(requestDto.faqInfo(), report);
         createReportFeedbackAndSave(requestDto.feedbackInfo(), report);
+        createFaqListAndSave(requestDto.faqInfo(), report);
     }
 
     private void createReportPricesAndSave(List<CreateReportPriceRequestDto> priceInfo, Report report) {

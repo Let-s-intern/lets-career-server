@@ -75,6 +75,9 @@ public class FaqHelper {
         faqLiveRepository.deleteAllByLiveId(liveId);
     }
 
+    public void deleteReportFaqsByReportId(Long reportId) {
+        faqReportRepository.deleteAllByReportId(reportId);
+    }
     public void deleteFaqById(Long faqId) {
         faqRepository.deleteById(faqId);
     }
