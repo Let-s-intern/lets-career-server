@@ -1,5 +1,6 @@
 package org.letscareer.letscareer.domain.report.dto.req;
 
+import org.letscareer.letscareer.domain.faq.dto.request.CreateProgramFaqRequestDto;
 import org.letscareer.letscareer.domain.report.type.ReportType;
 
 import java.time.LocalDateTime;
@@ -13,6 +14,7 @@ public record UpdateReportRequestDto(
     String notice,
     List<CreateReportPriceRequestDto> priceInfo,
     List<CreateReportOptionRequestDto> optionInfo,
-    CreateReportFeedbackRequestDto feedbackInfo
+    CreateReportFeedbackRequestDto feedbackInfo,
+    List<CreateProgramFaqRequestDto> faqInfo
 ) {
 }

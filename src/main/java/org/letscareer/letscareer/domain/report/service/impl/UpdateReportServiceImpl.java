@@ -1,6 +1,9 @@
 package org.letscareer.letscareer.domain.report.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.faq.dto.request.CreateProgramFaqRequestDto;
+import org.letscareer.letscareer.domain.faq.entity.Faq;
+import org.letscareer.letscareer.domain.faq.helper.FaqHelper;
 import org.letscareer.letscareer.domain.report.dto.req.CreateReportFeedbackRequestDto;
 import org.letscareer.letscareer.domain.report.dto.req.CreateReportOptionRequestDto;
 import org.letscareer.letscareer.domain.report.dto.req.CreateReportPriceRequestDto;
@@ -25,6 +28,7 @@ public class UpdateReportServiceImpl implements UpdateReportService {
     private final ReportHelper reportHelper;
     private final ReportPriceHelper reportPriceHelper;
     private final ReportOptionHelper reportOptionHelper;
+    private final FaqHelper faqHelper;
 
     @Override
     public void execute(Long reportId, UpdateReportRequestDto requestDto) {
@@ -34,6 +38,7 @@ public class UpdateReportServiceImpl implements UpdateReportService {
         updateReportPrices(requestDto.priceInfo(), report);
         updateReportOptions(requestDto.optionInfo(), report);
         updateReportFeedback(requestDto.feedbackInfo(), report);
+        updateReportFaqs(requestDto.faqInfo(), report);
     }
 
     private void updateReportPrices(List<CreateReportPriceRequestDto> priceInfo, Report report) {
@@ -56,6 +61,13 @@ public class UpdateReportServiceImpl implements UpdateReportService {
         reportFeedback.updateReportFeedback(feedbackInfo);
     }
 
+    private void updateReportFaqs(List<CreateProgramFaqRequestDto> faqInfo, Report report) {
+        if(Objects.isNull(faqInfo)) return;
+        faqHelper.deleteReportFaqsByReportId(report.getId());
+        report.setInitFaqList();
+        createFaqListAndSave(faqInfo, report);
+    }
+
     private void createReportPricesAndSave(List<CreateReportPriceRequestDto> priceInfo, Report report) {
         priceInfo.stream()
                 .map(price -> reportPriceHelper.createReportPriceAndSave(price, report))
@@ -65,6 +77,20 @@ public class UpdateReportServiceImpl implements UpdateReportService {
     private void createReportOptionsAndSave(List<CreateReportOptionRequestDto> optionInfo, Report report) {
         optionInfo.stream()
                 .map(option -> reportOptionHelper.createReportOptionAndSave(option, report))
+                .collect(Collectors.toList());
+    }
+
+    private void createFaqListAndSave(List<CreateProgramFaqRequestDto> requestDtoList,
+                                      Report report) {
+        List<Faq> faqs = getFaqsById(requestDtoList);
+        faqs.stream().forEach(faq -> {
+            faqHelper.createFaqReportAndSave(faq, report);
+        });
+    }
+
+    private List<Faq> getFaqsById(List<CreateProgramFaqRequestDto> requestDtoList) {
+        return requestDtoList.stream()
+                .map(request -> faqHelper.findFaqByIdAndThrow(request.faqId()))
                 .collect(Collectors.toList());
     }
 }
