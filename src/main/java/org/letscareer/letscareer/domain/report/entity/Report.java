@@ -100,4 +100,8 @@ public class Report extends BaseTimeEntity {
     public void addFaqReportList(FaqReport faqReport) {
         this.faqList.add(faqReport);
     }
+
+    public void setInitFaqList() {
+        this.faqList = new ArrayList<>();
+    }
 }

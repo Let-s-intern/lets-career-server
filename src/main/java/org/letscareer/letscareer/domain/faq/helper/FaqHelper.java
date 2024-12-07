@@ -6,12 +6,15 @@ import org.letscareer.letscareer.domain.faq.dto.request.CreateFaqRequestDto;
 import org.letscareer.letscareer.domain.faq.entity.Faq;
 import org.letscareer.letscareer.domain.faq.entity.FaqChallenge;
 import org.letscareer.letscareer.domain.faq.entity.FaqLive;
+import org.letscareer.letscareer.domain.faq.entity.FaqReport;
 import org.letscareer.letscareer.domain.faq.repository.FaqChallengeRepository;
 import org.letscareer.letscareer.domain.faq.repository.FaqLiveRepository;
+import org.letscareer.letscareer.domain.faq.repository.FaqReportRepository;
 import org.letscareer.letscareer.domain.faq.repository.FaqRepository;
 import org.letscareer.letscareer.domain.faq.type.FaqProgramType;
 import org.letscareer.letscareer.domain.faq.vo.FaqDetailVo;
 import org.letscareer.letscareer.domain.live.entity.Live;
+import org.letscareer.letscareer.domain.report.entity.Report;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +28,7 @@ public class FaqHelper {
     private final FaqRepository faqRepository;
     private final FaqChallengeRepository faqChallengeRepository;
     private final FaqLiveRepository faqLiveRepository;
+    private final FaqReportRepository faqReportRepository;
 
     public FaqChallenge createFaqChallengeAndSave(Faq faq, Challenge challenge) {
         FaqChallenge faqChallenge = FaqChallenge.createFaqChallenge(faq, challenge);
@@ -34,6 +38,11 @@ public class FaqHelper {
     public FaqLive createFaqLiveAndSave(Faq faq, Live live) {
         FaqLive faqLive = FaqLive.createFaqLive(faq, live);
         return faqLiveRepository.save(faqLive);
+    }
+
+    public FaqReport createFaqReportAndSave(Faq faq, Report report) {
+        FaqReport faqReport = FaqReport.createFaqReport(faq, report);
+        return faqReportRepository.save(faqReport);
     }
 
     public Faq createFaqAndSave(CreateFaqRequestDto requestDto) {
