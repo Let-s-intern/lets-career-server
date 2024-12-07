@@ -162,6 +162,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public GetMyApplicationsResponseDto getMyReviewApplications(User user, ApplicationStatus status) {
+        List<MyApplicationVo> applicationList = applicationHelper.getMyReviewApplications(user.getId(), status);
+        return applicationMapper.toGetMyApplicationsResponseDto(applicationList);
+    }
+
+    @Override
     public UserInfoResponseDto getUserInfo(User user) {
         String stringId = encoderUtil.encodeUserData(user);
         return userMapper.toUserInfoResponseDto(user, stringId);

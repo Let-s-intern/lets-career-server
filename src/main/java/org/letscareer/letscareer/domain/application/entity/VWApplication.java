@@ -45,6 +45,7 @@ import java.time.LocalDateTime;
                 "INNER JOIN report as re ON re.report_id = ra.report_id " +
                 "INNER JOIN payment as p ON p.application_id = a.application_id " +
                 "LEFT JOIN review as r ON r.application_id = a.application_id " +
+                "WHERE re.visible_date IS NOT NULL " +
                 "ORDER BY application_id DESC"
 )
 @Table(name = "vw_application")

@@ -42,6 +42,10 @@ public class ApplicationHelper {
         return applicationRepository.findMyApplications(userId, status);
     }
 
+    public List<MyApplicationVo> getMyReviewApplications(Long userId, ApplicationStatus status) {
+        return applicationRepository.findMyReviewApplications(userId, status);
+    }
+
     public List<PaymentProgramVo> findPaymentProgramVos(Long userId) {
         return applicationRepository.findPaymentProgramVos(userId);
     }
