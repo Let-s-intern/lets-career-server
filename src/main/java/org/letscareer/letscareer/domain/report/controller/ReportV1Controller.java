@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.faq.dto.response.GetFaqResponseDto;
 import org.letscareer.letscareer.domain.report.dto.req.*;
 import org.letscareer.letscareer.domain.report.dto.res.*;
 import org.letscareer.letscareer.domain.report.service.*;
@@ -30,6 +31,7 @@ public class ReportV1Controller {
     private final GetReportApplicationsForAdminService getReportApplicationsForAdminService;
     private final GetReportApplicationPaymentForAdminService getReportApplicationPaymentForAdminService;
     private final GetReportDetailService getReportDetailService;
+    private final GetReportFaqsService getReportFaqsService;
     private final GetReportPriceDetailService getReportPriceDetailService;
     private final GetMyReportService getMyReportService;
     private final GetReportThumbnailService getReportThumbnailService;
@@ -92,6 +94,15 @@ public class ReportV1Controller {
     @GetMapping("/{reportId}")
     public ResponseEntity<SuccessResponse<?>> getReportDetail(@PathVariable final Long reportId) {
         final GetReportDetailResponseDto responseDto = getReportDetailService.execute(reportId);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "유저 - 진단서 faq 목록 조회", description = "[서류 진단 신청하기]", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetFaqResponseDto.class)))
+    })
+    @GetMapping("/{reportId}/faqs")
+    public ResponseEntity<SuccessResponse<?>> getReportFaqs(@PathVariable final Long reportId) {
+        final GetFaqResponseDto responseDto = getReportFaqsService.execute(reportId);
         return SuccessResponse.ok(responseDto);
     }
 
