@@ -63,6 +63,10 @@ public class FaqHelper {
         return faqRepository.findLiveFaqDetailVos(liveId);
     }
 
+    public List<FaqDetailVo> findReportFaqDetailVos(Long reportId) {
+        return faqRepository.findReportFaqDetailVos(reportId);
+    }
+
     public List<FaqDetailVo> findFaqDetailVosByType(FaqProgramType type) {
         return faqRepository.findFaqDetailVosForType(type);
     }
