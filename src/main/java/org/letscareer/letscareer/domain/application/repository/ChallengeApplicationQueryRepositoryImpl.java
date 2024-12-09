@@ -83,8 +83,7 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                 .orderBy(challengeApplication.id.desc())
                 .where(
                         eqChallengeId(challengeId),
-                        eqIsCanceled(false),
-                        eqIsRefunded(false)
+                        eqIsCanceled(false)
                 )
                 .fetch();
     }
