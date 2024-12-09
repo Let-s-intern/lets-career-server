@@ -59,4 +59,8 @@ public class ReportMapper {
     public CreateReportApplicationResponseDto toCreateReportApplicationResponseDto(TossPaymentsResponseDto tossInfo) {
         return CreateReportApplicationResponseDto.of(tossInfo);
     }
+
+    public GetReportTitleResponseDto toGetReportTitleResponseDto(ReportTitleVo reportTitleVo) {
+        return GetReportTitleResponseDto.of(reportTitleVo);
+    }
 }

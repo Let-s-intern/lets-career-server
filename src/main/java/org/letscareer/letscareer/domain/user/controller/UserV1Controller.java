@@ -101,6 +101,16 @@ public class UserV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
+    @Operation(summary = "나의 신청서 전체 조회 - 후기 작성용", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetMyApplicationsResponseDto.class)))
+    })
+    @GetMapping("/review/applications")
+    public ResponseEntity<SuccessResponse<?>> getMyReviewApplications(@CurrentUser User user,
+                                                                      @RequestParam(required = false) final ApplicationStatus status) {
+        GetMyApplicationsResponseDto responseDto = userService.getMyReviewApplications(user, status);
+        return SuccessResponse.ok(responseDto);
+    }
+
     @Operation(summary = "유저 챌린지 필수 정보 입력 확인", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserChallengeInfoResponseDto.class)))
     })

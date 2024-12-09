@@ -30,6 +30,8 @@ public interface UserService {
 
     GetMyApplicationsResponseDto getMyApplications(User user, ApplicationStatus status);
 
+    GetMyApplicationsResponseDto getMyReviewApplications(User user, ApplicationStatus status);
+
     UserChallengeInfoResponseDto checkUserChallengeInfo(User user);
 
     void pwSignUp(UserPwSignUpRequestDto pwSignUpRequestDto);

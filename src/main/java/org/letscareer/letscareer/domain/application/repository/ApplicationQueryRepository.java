@@ -11,6 +11,8 @@ import java.util.List;
 public interface ApplicationQueryRepository {
     List<MyApplicationVo> findMyApplications(Long userId, ApplicationStatus status);
 
+    List<MyApplicationVo> findMyReviewApplications(Long userId, ApplicationStatus status);
+
     List<PaymentProgramVo> findPaymentProgramVos(Long userId);
 
     List<UserApplicationInfo> findUserApplicationInfo(Long userId);
