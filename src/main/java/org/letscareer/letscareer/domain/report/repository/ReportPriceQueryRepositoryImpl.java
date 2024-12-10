@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.report.repository;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.price.vo.PriceDetailVo;
@@ -19,7 +20,8 @@ public class ReportPriceQueryRepositoryImpl implements ReportPriceQueryRepositor
                 queryFactory.select(Projections.constructor(PriceDetailVo.class,
                         reportPrice.id,
                         reportPrice.price,
-                        reportPrice.discountPrice))
+                        reportPrice.discountPrice,
+                        Expressions.constant(0)))
                         .from(reportPrice)
                         .where(
                                 reportPrice.report.id.eq(reportId)

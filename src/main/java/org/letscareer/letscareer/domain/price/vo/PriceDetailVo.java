@@ -9,7 +9,8 @@ import java.time.LocalDateTime;
 public record PriceDetailVo(
         Long id,
         Integer price,
-        Integer discount
+        Integer discount,
+        Integer refund
 ) {
 
 }

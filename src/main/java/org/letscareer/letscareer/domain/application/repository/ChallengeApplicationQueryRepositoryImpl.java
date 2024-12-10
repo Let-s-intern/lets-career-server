@@ -83,8 +83,7 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                 .orderBy(challengeApplication.id.desc())
                 .where(
                         eqChallengeId(challengeId),
-                        eqIsCanceled(false),
-                        eqIsRefunded(false)
+                        eqIsCanceled(false)
                 )
                 .fetch();
     }
@@ -196,8 +195,7 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                 .leftJoin(challengeApplication.payment, payment)
                 .where(
                         eqChallengeId(challengeId),
-                        eqIsCanceled(false),
-                        eqIsRefunded(false)
+                        eqIsCanceled(false)
                 )
                 .fetchOne();
     }
