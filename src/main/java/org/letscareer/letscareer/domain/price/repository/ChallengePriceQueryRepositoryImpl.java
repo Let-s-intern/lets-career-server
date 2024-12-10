@@ -46,7 +46,8 @@ public class ChallengePriceQueryRepositoryImpl implements ChallengePriceQueryRep
                 .select(Projections.constructor(PriceDetailVo.class,
                         challengePrice.id,
                         challengePrice.price,
-                        challengePrice.discount
+                        challengePrice.discount,
+                        challengePrice.refund
                 ))
                 .from(challengePrice)
                 .where(

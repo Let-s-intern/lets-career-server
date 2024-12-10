@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.price.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.price.vo.LivePriceDetailVo;
@@ -41,7 +42,8 @@ public class LivePriceQueryRepositoryImpl implements LivePriceQueryRepository {
                 jpaQueryFactory.select(Projections.constructor(PriceDetailVo.class,
                         livePrice.id,
                         livePrice.price,
-                        livePrice.discount))
+                        livePrice.discount,
+                        Expressions.constant(0)))
                         .from(livePrice)
                         .where(
                                 livePrice.live.id.eq(programId)
