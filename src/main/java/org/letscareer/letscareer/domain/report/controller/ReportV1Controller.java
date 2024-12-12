@@ -39,6 +39,7 @@ public class ReportV1Controller {
     private final GetReportPaymentService getReportPaymentService;
     private final CreateReportService createReportService;
     private final CreateReportApplicationService createReportApplicationService;
+    private final UpdateMyReportApplicationService updateMyReportApplicationService;
     private final UpdateReportService updateReportService;
     private final UpdateReportFeedbackSchedule updateReportFeedbackSchedule;
     private final UpdateReportDocumentService updateReportDocumentService;
@@ -188,6 +189,17 @@ public class ReportV1Controller {
                                                                       @RequestBody final CreateReportApplicationRequestDto requestDto) {
         CreateReportApplicationResponseDto responseDto = createReportApplicationService.execute(user, reportId, requestDto);
         return SuccessResponse.created(responseDto);
+    }
+
+    @Operation(summary = "진단서 신청 업데이트", description = "[MY 진단서 관리 > 서류 제출하기]")
+    @ApiResponse(responseCode = "200")
+    @ApiErrorCode({REPORT_NOT_FOUND})
+    @PatchMapping("/application/{applicationId}/my")
+    public ResponseEntity<SuccessResponse<?>> updateMyReportApplication(@CurrentUser final User user,
+                                                                        @PathVariable final Long applicationId,
+                                                                        @RequestBody final UpdateMyReportApplicationRequestDto requestDto) {
+        updateMyReportApplicationService.execute(user, applicationId, requestDto);
+        return SuccessResponse.ok(null);
     }
 
     @Operation(summary = "진단서 프로그램 수정")
