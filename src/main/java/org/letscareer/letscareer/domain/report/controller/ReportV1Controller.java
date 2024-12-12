@@ -206,18 +206,20 @@ public class ReportV1Controller {
     @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     @ApiErrorCode({REPORT_CONFLICT_VISIBLE_DATE})
     @PatchMapping("/{reportId}")
-    public ResponseEntity<SuccessResponse<?>> updateReport(@PathVariable final Long reportId,
+    public ResponseEntity<SuccessResponse<?>> updateReport(@CurrentUser final User user,
+                                                           @PathVariable final Long reportId,
                                                            @RequestBody final UpdateReportRequestDto requestDto) {
-        updateReportService.execute(reportId, requestDto);
+        updateReportService.execute(user, reportId, requestDto);
         return SuccessResponse.ok(null);
     }
 
     @Operation(summary = "진단서 업로드")
     @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     @PatchMapping("/application/{applicationId}/document")
-    public ResponseEntity<SuccessResponse<?>> updateReportDocument(@PathVariable final Long applicationId,
+    public ResponseEntity<SuccessResponse<?>> updateReportDocument(@CurrentUser final User user,
+                                                                   @PathVariable final Long applicationId,
                                                                    @RequestBody final UpdateReportDocumentRequestDto requestDto) {
-        updateReportDocumentService.execute(applicationId, requestDto);
+        updateReportDocumentService.execute(user, applicationId, requestDto);
         return SuccessResponse.ok(null);
     }
 
@@ -233,9 +235,10 @@ public class ReportV1Controller {
     )
     @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     @PatchMapping("/application/{applicationId}/status")
-    public ResponseEntity<SuccessResponse<?>> updateReportStatus(@PathVariable final Long applicationId,
+    public ResponseEntity<SuccessResponse<?>> updateReportStatus(@CurrentUser final User user,
+                                                                 @PathVariable final Long applicationId,
                                                                  @RequestBody final UpdateReportApplicationStatusRequestDto requestDto) {
-        updateReportApplicationStatusService.execute(applicationId, requestDto);
+        updateReportApplicationStatusService.execute(user, applicationId, requestDto);
         return SuccessResponse.ok(null);
     }
 
@@ -251,10 +254,11 @@ public class ReportV1Controller {
     )
     @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     @PatchMapping("/{reportId}/application/{applicationId}/schedule")
-    public ResponseEntity<SuccessResponse<?>> updateReportFeedbackSchedule(@PathVariable final Long reportId,
+    public ResponseEntity<SuccessResponse<?>> updateReportFeedbackSchedule(@CurrentUser final User user,
+                                                                           @PathVariable final Long reportId,
                                                                            @PathVariable final Long applicationId,
                                                                            @RequestBody @Valid final UpdateFeedbackScheduleRequestDto requestDto) {
-        updateReportFeedbackSchedule.execute(reportId, applicationId, requestDto);
+        updateReportFeedbackSchedule.execute(user, reportId, applicationId, requestDto);
         return SuccessResponse.ok(null);
     }
 
