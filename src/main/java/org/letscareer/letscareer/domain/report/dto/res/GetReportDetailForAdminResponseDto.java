@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.report.dto.res;
 
 import lombok.AccessLevel;
 import lombok.Builder;
+import org.letscareer.letscareer.domain.faq.vo.FaqDetailVo;
 import org.letscareer.letscareer.domain.report.type.ReportType;
 import org.letscareer.letscareer.domain.report.vo.*;
 
@@ -18,9 +19,11 @@ public record GetReportDetailForAdminResponseDto(
         List<ReportPriceVo> reportPriceInfos,
         List<ReportOptionForAdminVo> reportOptionForAdminInfos,
         FeedbackPriceVo feedbackPriceInfo,
+        List<FaqDetailVo> faqInfo,
         LocalDateTime visibleDate
 ) {
-    public static GetReportDetailForAdminResponseDto of(ReportDetailForAdminVo vo) {
+    public static GetReportDetailForAdminResponseDto of(ReportDetailForAdminVo vo,
+                                                        List<FaqDetailVo> faqInfo) {
         return GetReportDetailForAdminResponseDto.builder()
                 .reportId(vo.reportId())
                 .reportType(vo.type())
@@ -30,6 +33,7 @@ public record GetReportDetailForAdminResponseDto(
                 .reportPriceInfos(vo.reportPriceInfos())
                 .reportOptionForAdminInfos(vo.reportOptionForAdminInfos())
                 .feedbackPriceInfo(vo.feedbackPriceInfo())
+                .faqInfo(faqInfo)
                 .visibleDate(vo.visibleDate())
                 .build();
     }

@@ -38,6 +38,7 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
         return queryFactory
                 .select(Projections.constructor(MyApplicationVo.class,
                         vWApplication.applicationId,
+                        vWApplication.paymentCreateDate,
                         vWApplication.isCanceled,
                         vWApplication.programId,
                         vWApplication.programType,
@@ -63,6 +64,7 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
         return queryFactory
                 .select(Projections.constructor(MyApplicationVo.class,
                         vWApplication.applicationId,
+                        vWApplication.paymentCreateDate,
                         vWApplication.isCanceled,
                         vWApplication.programId,
                         vWApplication.programType,
