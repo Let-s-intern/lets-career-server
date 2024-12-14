@@ -11,6 +11,8 @@ import org.letscareer.letscareer.domain.report.entity.Report;
 import org.letscareer.letscareer.domain.report.helper.ReportOptionHelper;
 import org.letscareer.letscareer.domain.report.service.UpdateReportApplicationStatusService;
 import org.letscareer.letscareer.domain.user.entity.User;
+import org.letscareer.letscareer.domain.user.type.UserRole;
+import org.letscareer.letscareer.global.error.exception.UnauthorizedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +27,8 @@ public class UpdateReportApplicationStatusServiceImpl implements UpdateReportApp
     private final NhnProvider nhnProvider;
 
     @Override
-    public void execute(Long applicationId, UpdateReportApplicationStatusRequestDto requestDto) {
+    public void execute(User user, Long applicationId, UpdateReportApplicationStatusRequestDto requestDto) {
+        validateAdminRole(user);
         ReportApplication reportApplication = reportApplicationHelper.findReportApplicationByReportApplicationIdOrThrow(applicationId);
         ReportApplicationStatus currentStatus = reportApplication.getStatus();
         reportApplication.updateReportStatus(requestDto);
@@ -43,5 +46,11 @@ public class UpdateReportApplicationStatusServiceImpl implements UpdateReportApp
         String reportOptionListStr = reportOptionHelper.createReportOptionListStr(reportApplication.getReportApplicationOptionList());
         ReportDoneParameter reportDoneParameter = ReportDoneParameter.of(user.getName(), report.getTitle(), reportApplication.getReportPriceType().getDesc(), reportOptionListStr);
         nhnProvider.sendKakaoMessage(reportApplication.getUser(), reportDoneParameter, "report_done");
+    }
+
+    private void validateAdminRole(User currentUser) {
+        if(!currentUser.getRole().equals(UserRole.ADMIN)) {
+            throw new UnauthorizedException();
+        }
     }
 }

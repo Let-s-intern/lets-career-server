@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.report.vo;
 
 import org.letscareer.letscareer.domain.application.type.ReportApplicationStatus;
 import org.letscareer.letscareer.domain.application.type.ReportFeedbackStatus;
+import org.letscareer.letscareer.domain.report.type.ReportPriceType;
 import org.letscareer.letscareer.domain.report.type.ReportType;
 
 import java.time.LocalDateTime;
@@ -11,6 +12,8 @@ public record MyReportVo(
         Long applicationId,
         String title,
         ReportType reportType,
+        ReportPriceType reportPriceType,
+        ReportPriceType reportFeedbackPriceType,
         ReportApplicationStatus applicationStatus,
         ReportFeedbackStatus feedbackStatus,
         String reportUrl,
