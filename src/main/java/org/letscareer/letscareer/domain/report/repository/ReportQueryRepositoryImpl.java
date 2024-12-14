@@ -13,6 +13,8 @@ import org.letscareer.letscareer.domain.application.entity.report.ReportApplicat
 import org.letscareer.letscareer.domain.application.type.ReportDesiredDateType;
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationForAdminVo;
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationOptionForAdminVo;
+import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
+import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.report.entity.Report;
 import org.letscareer.letscareer.domain.report.entity.ReportPrice;
 import org.letscareer.letscareer.domain.report.type.ReportPriceType;
@@ -383,6 +385,28 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         )
                         .fetchFirst()
         );
+    }
+
+    @Override
+    public ReportRecommendVo findReportRecommendVoByReportType(ReportType reportType) {
+        return queryFactory
+                .select(Projections.constructor(ReportRecommendVo.class,
+                        report.id,
+                        Expressions.constant(ProgramType.REPORT),
+                        Expressions.constant(ProgramStatusType.PROCEEDING),
+                        report.type,
+                        report.title,
+                        report.notice,
+                        report.visibleDate))
+                .from(report)
+                .where(
+                        isVisible(),
+                        eqReportType(reportType)
+                )
+                .orderBy(
+                        report.visibleDate.desc()
+                )
+                .fetchFirst();
     }
 
     private List<ReportPriceVo> subQueryForReportPriceInfos(Long reportId) {

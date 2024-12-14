@@ -43,4 +43,6 @@ public interface ReportQueryRepository {
     ReportPrice findReportPriceByReportIdAndType(Long reportId, ReportPriceType reportPriceType);
 
     Optional<ReportTitleVo> findReportTitleVo(Long reportId);
+
+    ReportRecommendVo findReportRecommendVoByReportType(ReportType reportType);
 }

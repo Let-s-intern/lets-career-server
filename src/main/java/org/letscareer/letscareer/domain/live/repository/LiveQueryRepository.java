@@ -27,4 +27,6 @@ public interface LiveQueryRepository {
     Optional<String> findMentorPasswordById(Long liveId);
 
     List<Long> findAllRemindNotificationLiveId();
+
+    LiveRecommendVo findLiveRecommendVo();
 }

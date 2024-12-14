@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.letscareer.letscareer.domain.vod.error.VodErrorCode.VOD_NOT_FOUND;
 
 @RequiredArgsConstructor
@@ -42,5 +44,9 @@ public class VodHelper {
 
     public void deleteVodById(Long vodId) {
         vodRepository.deleteById(vodId);
+    }
+
+    public List<VodDetailVo> findAllVodRecommendVos() {
+        return vodRepository.findAllVodRecommendVos();
     }
 }
