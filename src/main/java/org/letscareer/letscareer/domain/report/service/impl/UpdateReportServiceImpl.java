@@ -14,12 +14,17 @@ import org.letscareer.letscareer.domain.report.helper.ReportHelper;
 import org.letscareer.letscareer.domain.report.helper.ReportOptionHelper;
 import org.letscareer.letscareer.domain.report.helper.ReportPriceHelper;
 import org.letscareer.letscareer.domain.report.service.UpdateReportService;
+import org.letscareer.letscareer.domain.user.entity.User;
+import org.letscareer.letscareer.domain.user.type.UserRole;
+import org.letscareer.letscareer.global.error.exception.UnauthorizedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static org.letscareer.letscareer.domain.report.error.ReportErrorCode.REPORT_CANNOT_UPDATED;
 
 @RequiredArgsConstructor
 @Transactional
@@ -31,7 +36,8 @@ public class UpdateReportServiceImpl implements UpdateReportService {
     private final FaqHelper faqHelper;
 
     @Override
-    public void execute(Long reportId, UpdateReportRequestDto requestDto) {
+    public void execute(User user, Long reportId, UpdateReportRequestDto requestDto) {
+        validateAdminRole(user);
         Report report = reportHelper.findReportByReportIdOrThrow(reportId);
         // reportHelper.validateUpdateVisibleDate(requestDto);
         report.updateReport(requestDto);
@@ -92,5 +98,11 @@ public class UpdateReportServiceImpl implements UpdateReportService {
         return requestDtoList.stream()
                 .map(request -> faqHelper.findFaqByIdAndThrow(request.faqId()))
                 .collect(Collectors.toList());
+    }
+
+    private void validateAdminRole(User currentUser) {
+        if(!currentUser.getRole().equals(UserRole.ADMIN)) {
+            throw new UnauthorizedException();
+        }
     }
 }

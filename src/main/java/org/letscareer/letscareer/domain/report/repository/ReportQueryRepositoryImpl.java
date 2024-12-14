@@ -245,6 +245,8 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         reportApplication.id,
                         report.title,
                         report.type,
+                        reportApplication.reportPriceType,
+                        reportFeedbackApplication.reportPriceType,
                         reportApplication.status,
                         reportFeedbackApplication.reportFeedbackStatus,
                         reportApplication.reportUrl,

@@ -14,7 +14,9 @@ import org.letscareer.letscareer.domain.report.helper.ReportHelper;
 import org.letscareer.letscareer.domain.report.helper.ReportOptionHelper;
 import org.letscareer.letscareer.domain.report.service.UpdateReportFeedbackSchedule;
 import org.letscareer.letscareer.domain.user.entity.User;
+import org.letscareer.letscareer.domain.user.type.UserRole;
 import org.letscareer.letscareer.global.common.utils.zoom.ZoomUtils;
+import org.letscareer.letscareer.global.error.exception.UnauthorizedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +34,8 @@ public class UpdateReportFeedbackScheduleImpl implements UpdateReportFeedbackSch
     private final NhnProvider nhnProvider;
 
     @Override
-    public void execute(Long reportId, Long applicationId, UpdateFeedbackScheduleRequestDto requestDto) {
+    public void execute(User user, Long reportId, Long applicationId, UpdateFeedbackScheduleRequestDto requestDto) {
+        validateAdminRole(user);
         Report report = reportHelper.findReportByReportIdOrThrow(reportId);
         ReportFeedbackApplication reportFeedbackApplication = reportApplicationHelper.findReportFeedbackApplicationByApplicationId(applicationId);
 
@@ -67,5 +70,11 @@ public class UpdateReportFeedbackScheduleImpl implements UpdateReportFeedbackSch
         LocalDateTime feedbackStartDate = reportFeedbackApplication.getCheckedFeedbackDate(requestDto.desiredDateType());
         ZoomMeetingResponseDto zoomMeetingInfo = zoomUtils.createZoomMeeting(report.getTitle(), feedbackStartDate);
         reportFeedbackApplication.setZoomInfo(zoomMeetingInfo);
+    }
+
+    private void validateAdminRole(User currentUser) {
+        if(!currentUser.getRole().equals(UserRole.ADMIN)) {
+            throw new UnauthorizedException();
+        }
     }
 }

@@ -39,6 +39,7 @@ public class ReportV1Controller {
     private final GetReportPaymentService getReportPaymentService;
     private final CreateReportService createReportService;
     private final CreateReportApplicationService createReportApplicationService;
+    private final UpdateMyReportApplicationService updateMyReportApplicationService;
     private final UpdateReportService updateReportService;
     private final UpdateReportFeedbackSchedule updateReportFeedbackSchedule;
     private final UpdateReportDocumentService updateReportDocumentService;
@@ -190,22 +191,35 @@ public class ReportV1Controller {
         return SuccessResponse.created(responseDto);
     }
 
+    @Operation(summary = "진단서 신청 업데이트", description = "[MY 진단서 관리 > 서류 제출하기]")
+    @ApiResponse(responseCode = "200")
+    @ApiErrorCode({REPORT_NOT_FOUND})
+    @PatchMapping("/application/{applicationId}/my")
+    public ResponseEntity<SuccessResponse<?>> updateMyReportApplication(@CurrentUser final User user,
+                                                                        @PathVariable final Long applicationId,
+                                                                        @RequestBody final UpdateMyReportApplicationRequestDto requestDto) {
+        updateMyReportApplicationService.execute(user, applicationId, requestDto);
+        return SuccessResponse.ok(null);
+    }
+
     @Operation(summary = "진단서 프로그램 수정")
     @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     @ApiErrorCode({REPORT_CONFLICT_VISIBLE_DATE})
     @PatchMapping("/{reportId}")
-    public ResponseEntity<SuccessResponse<?>> updateReport(@PathVariable final Long reportId,
+    public ResponseEntity<SuccessResponse<?>> updateReport(@CurrentUser final User user,
+                                                           @PathVariable final Long reportId,
                                                            @RequestBody final UpdateReportRequestDto requestDto) {
-        updateReportService.execute(reportId, requestDto);
+        updateReportService.execute(user, reportId, requestDto);
         return SuccessResponse.ok(null);
     }
 
     @Operation(summary = "진단서 업로드")
     @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     @PatchMapping("/application/{applicationId}/document")
-    public ResponseEntity<SuccessResponse<?>> updateReportDocument(@PathVariable final Long applicationId,
+    public ResponseEntity<SuccessResponse<?>> updateReportDocument(@CurrentUser final User user,
+                                                                   @PathVariable final Long applicationId,
                                                                    @RequestBody final UpdateReportDocumentRequestDto requestDto) {
-        updateReportDocumentService.execute(applicationId, requestDto);
+        updateReportDocumentService.execute(user, applicationId, requestDto);
         return SuccessResponse.ok(null);
     }
 
@@ -221,9 +235,10 @@ public class ReportV1Controller {
     )
     @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     @PatchMapping("/application/{applicationId}/status")
-    public ResponseEntity<SuccessResponse<?>> updateReportStatus(@PathVariable final Long applicationId,
+    public ResponseEntity<SuccessResponse<?>> updateReportStatus(@CurrentUser final User user,
+                                                                 @PathVariable final Long applicationId,
                                                                  @RequestBody final UpdateReportApplicationStatusRequestDto requestDto) {
-        updateReportApplicationStatusService.execute(applicationId, requestDto);
+        updateReportApplicationStatusService.execute(user, applicationId, requestDto);
         return SuccessResponse.ok(null);
     }
 
@@ -239,10 +254,11 @@ public class ReportV1Controller {
     )
     @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     @PatchMapping("/{reportId}/application/{applicationId}/schedule")
-    public ResponseEntity<SuccessResponse<?>> updateReportFeedbackSchedule(@PathVariable final Long reportId,
+    public ResponseEntity<SuccessResponse<?>> updateReportFeedbackSchedule(@CurrentUser final User user,
+                                                                           @PathVariable final Long reportId,
                                                                            @PathVariable final Long applicationId,
                                                                            @RequestBody @Valid final UpdateFeedbackScheduleRequestDto requestDto) {
-        updateReportFeedbackSchedule.execute(reportId, applicationId, requestDto);
+        updateReportFeedbackSchedule.execute(user, reportId, applicationId, requestDto);
         return SuccessResponse.ok(null);
     }
 
