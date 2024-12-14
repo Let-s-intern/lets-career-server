@@ -5,6 +5,7 @@ import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeReq
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challenge.error.ChallengeErrorCode;
 import org.letscareer.letscareer.domain.challenge.repository.ChallengeRepository;
+import org.letscareer.letscareer.domain.challenge.type.ChallengeType;
 import org.letscareer.letscareer.domain.challenge.vo.*;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.program.dto.response.ZoomMeetingResponseDto;
@@ -18,12 +19,19 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
 public class ChallengeHelper {
     private final ChallengeRepository challengeRepository;
     private final MessageSource messageSource;
+
+    private static final List<ChallengeType> recommendChallengeTypeList = List.of(
+            ChallengeType.CAREER_START,
+            ChallengeType.PERSONAL_STATEMENT,
+            ChallengeType.PORTFOLIO);
 
     public Challenge createChallengeAndSave(CreateChallengeRequestDto challengeRequestDto, ZoomMeetingResponseDto zoomMeetingInfo) {
         Challenge newChallenge = Challenge.createChallenge(challengeRequestDto, zoomMeetingInfo);
@@ -76,6 +84,13 @@ public class ChallengeHelper {
         return challengeRepository.findAllOTRemindNotificationChallengeId();
     }
 
+    public List<ChallengeRecommendVo> findAllChallengeRecommendVos() {
+        return recommendChallengeTypeList.stream()
+                .map(challengeRepository::findChallengeRecommendVoByChallengeType)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
+
     public void deleteChallengeById(Long challengeId) {
         challengeRepository.deleteById(challengeId);
     }
@@ -115,5 +130,4 @@ public class ChallengeHelper {
                 "모두 내일 OT에서 만나요 :미소짓는_상기된_얼굴:\n\n" +
                 messageSource.getMessage("mail.footer", null, Locale.KOREA);
     }
-
 }

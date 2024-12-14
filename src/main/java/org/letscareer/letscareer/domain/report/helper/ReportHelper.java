@@ -19,9 +19,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.letscareer.letscareer.domain.report.error.ReportErrorCode.*;
 
@@ -29,6 +28,7 @@ import static org.letscareer.letscareer.domain.report.error.ReportErrorCode.*;
 @Component
 public class ReportHelper {
     private final ReportRepository reportRepository;
+    public static final List<ReportType> reportTypeList = Arrays.asList(ReportType.values());
 
     public void validateUpdateVisibleDate(UpdateReportRequestDto requestDto) {
         if (Objects.isNull(requestDto.reportType())) return;
@@ -114,5 +114,12 @@ public class ReportHelper {
     public ReportTitleVo findReportTitleVoOrThrow(Long reportId) {
         return reportRepository.findReportTitleVo(reportId)
                 .orElseThrow(() -> new EntityNotFoundException(REPORT_NOT_FOUND));
+    }
+
+    public List<ReportRecommendVo> findAllReportRecommendVos() {
+        return reportTypeList.stream()
+                .map(reportType -> reportRepository.findReportRecommendVoByReportType(reportType))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 }
