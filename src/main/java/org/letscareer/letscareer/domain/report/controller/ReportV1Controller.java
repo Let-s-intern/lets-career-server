@@ -15,9 +15,12 @@ import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.annotation.ApiErrorCode;
 import org.letscareer.letscareer.global.common.annotation.CurrentUser;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
+import org.letscareer.letscareer.global.common.utils.redis.utils.RedisUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.concurrent.TimeUnit;
 
 import static org.letscareer.letscareer.global.common.entity.SwaggerEnum.*;
 
@@ -42,6 +45,7 @@ public class ReportV1Controller {
     private final UpdateReportApplicationStatusService updateReportApplicationStatusService;
     private final DeleteReportService deleteReportService;
     private final CancelReportApplicationService cancelReportApplicationService;
+    private final RedisUtils redisUtils;
 
     @Operation(summary = "어드민 - 진단서 목록 조회")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportsForAdminResponseDto.class)))
@@ -240,6 +244,15 @@ public class ReportV1Controller {
     public ResponseEntity<SuccessResponse<?>> cancelReportApplication(@CurrentUser final User user,
                                                                       @PathVariable final Long reportApplicationId) {
         cancelReportApplicationService.execute(user, reportApplicationId);
+        return ResponseEntity.ok(null);
+    }
+
+    @Operation(summary = "진단서 신청 테스트 - Redis Expired Notification")
+    @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
+    @GetMapping("/{reportApplicationId}/redis")
+    public ResponseEntity<SuccessResponse<?>> createReportApplicationTest(@CurrentUser final User user,
+                                                                          @PathVariable final Long reportApplicationId) {
+        redisUtils.setWithExpire("report_application:" + reportApplicationId, user.getName(), 10, TimeUnit.SECONDS);
         return ResponseEntity.ok(null);
     }
 }

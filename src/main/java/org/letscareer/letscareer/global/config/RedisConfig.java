@@ -18,10 +18,6 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
         keyspaceNotificationsConfigParameter = ""
 )
 public class RedisConfig {
-    private final String EXPIRED_EVENT_PATTERN = "__keyevent@*__:expired";
-    private final String EXPIRED_SPACE_PATTERN = "__keyspace@*__:expired";
-    private final String SET_EVENT_PATTERN = "__keyevent@*__:set";
-
     @Value("${spring.data.redis.host}")
     private String host;
     @Value("${spring.data.redis.port}")
@@ -47,10 +43,10 @@ public class RedisConfig {
         return redisTemplate;
     }
 
-//    @Bean
-//    public RedisMessageListenerContainer redisMessageListenerContainer(RedisConnectionFactory connectionFactory) {
-//        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
-//        container.setConnectionFactory(redisConnectionFactory());
-//        return container;
-//    }
+    @Bean
+    public RedisMessageListenerContainer redisMessageListenerContainer(RedisConnectionFactory redisConnectionFactory) {
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+        container.setConnectionFactory(redisConnectionFactory);
+        return container;
+    }
 }
