@@ -43,6 +43,9 @@ public class ReportApplication extends Application {
 
     private Integer refundPrice;
 
+    private LocalDateTime applyUrlDate;
+    private LocalDateTime reportUrlDate;
+
     @Convert(converter = ReportApplicationStatusConverter.class)
     private ReportApplicationStatus status = ReportApplicationStatus.APPLIED;
     @Convert(converter = ReportPriceTypeConverter.class)
@@ -101,6 +104,7 @@ public class ReportApplication extends Application {
     public void updateReportUrl(UpdateReportDocumentRequestDto requestDto) {
         this.reportUrl = requestDto.reportUrl();
         this.status = ReportApplicationStatus.REPORTED;
+        this.reportUrlDate = LocalDateTime.now();
     }
 
     public void updateReportApplicationStatus(ReportApplicationStatus status) {
@@ -117,6 +121,7 @@ public class ReportApplication extends Application {
 
     public void updateMyReportApplication(UpdateMyReportApplicationRequestDto requestDto) {
         this.applyUrl = updateValue(this.applyUrl, requestDto.applyUrl());
+        this.applyUrlDate = LocalDateTime.now();
         this.recruitmentUrl = updateValue(this.recruitmentUrl, requestDto.recruitmentUrl());
         this.wishJob = updateValue(this.wishJob, requestDto.wishJob());
         this.message = updateValue(this.message, requestDto.message());
