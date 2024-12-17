@@ -19,6 +19,7 @@ import org.letscareer.letscareer.domain.user.entity.User;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static org.letscareer.letscareer.global.common.utils.entity.EntityUpdateValueUtils.updateValue;
 
@@ -73,6 +74,7 @@ public class ReportApplication extends Application {
         this.discountPrice = reportPrice.getDiscountPrice();
         this.reportPriceType = requestDto.reportPriceType();
         this.applyUrl = requestDto.applyUrl();
+        if(!Objects.isNull(requestDto.applyUrl())) this.applyUrlDate = LocalDateTime.now();
         this.recruitmentUrl = requestDto.recruitmentUrl();
         this.report = report;
         this.status = ReportApplicationStatus.APPLIED;
