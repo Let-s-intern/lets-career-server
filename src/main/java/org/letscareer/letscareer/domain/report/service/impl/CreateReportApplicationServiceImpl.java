@@ -75,7 +75,7 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
         updateContactEmail(user, requestDto);
         TossPaymentsResponseDto responseDto = tossProvider.requestPayments(requestDto.paymentKey(), requestDto.orderId(), requestDto.amount());
         sendKakaoMessages(paymentStatus, report, user, requestDto, reportApplication.getReportPriceType(), reportApplicationOptions, reportFeedbackApplication);
-        if(isYet(paymentStatus)) setReportApplicationCache(user, report, reportApplication, reportApplicationOptions, payment);
+        if(isYet(paymentStatus)) setReportApplicationCache(user, report, reportApplication, reportApplicationOptions, reportFeedbackApplication, payment);
         if(!isYet(paymentStatus)) sendSlackBot(report, reportApplication, reportApplicationOptions, reportFeedbackApplication, user, payment);
         return reportMapper.toCreateReportApplicationResponseDto(responseDto);
     }
@@ -130,9 +130,10 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
         return paymentStatus.equals(ReportPaymentStatus.REPORT_YET) || paymentStatus.equals(ReportPaymentStatus.ALL_YET);
     }
 
-    private void setReportApplicationCache(User user, Report report, ReportApplication reportApplication, List<ReportApplicationOption> reportApplicationOptionList, Payment payment) {
+    private void setReportApplicationCache(User user, Report report, ReportApplication reportApplication, List<ReportApplicationOption> reportApplicationOptionList, ReportFeedbackApplication reportFeedbackApplication, Payment payment) {
+        Boolean isFeedbackApplied = !Objects.isNull(reportFeedbackApplication);
         String reportOptionListStr = reportOptionHelper.createReportOptionListStr(reportApplicationOptionList);
-        ReportApplicationNotificationVo notificationVo = ReportApplicationNotificationVo.of(user.getName(), payment, "전체취소", report, reportOptionListStr);
+        ReportApplicationNotificationVo notificationVo = ReportApplicationNotificationVo.of(user.getName(), payment, "전체취소", report, reportOptionListStr, isFeedbackApplied);
         redisUtils.setObjectWithExpire(REPORT_APPLICATION_CACHE_KEY + reportApplication.getId(), notificationVo, 8, TimeUnit.DAYS);
         Optional<ReportApplicationNotificationVo> result = redisUtils.getData(REPORT_APPLICATION_CACHE_KEY + reportApplication.getId(), ReportApplicationNotificationVo.class);
     }

@@ -17,6 +17,7 @@ public record ReportApplicationNotificationVo(
         String reportTitle,
         String reportType,
         String reportOption,
+        Boolean isFeedbackApplied,
         @JsonFormat(pattern = "yyyy년 MM월 dd일 HH:mm", timezone = "Asia/Seoul")
         LocalDateTime submitDate
 ) {
@@ -24,7 +25,8 @@ public record ReportApplicationNotificationVo(
                                                      Payment payment,
                                                      String orderStatus,
                                                      Report report,
-                                                     String reportOption) {
+                                                     String reportOption,
+                                                     Boolean isFeedbackApplied) {
         return ReportApplicationNotificationVo.builder()
                 .userName(userName)
                 .orderId(payment.getOrderId())
@@ -33,6 +35,7 @@ public record ReportApplicationNotificationVo(
                 .reportTitle(report.getTitle())
                 .reportType(report.getType().getDesc())
                 .reportOption(reportOption)
+                .isFeedbackApplied(isFeedbackApplied)
                 .submitDate(payment.getCreateDate().plusDays(7L))
                 .build();
     }
