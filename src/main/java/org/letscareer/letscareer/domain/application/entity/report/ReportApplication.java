@@ -19,6 +19,7 @@ import org.letscareer.letscareer.domain.user.entity.User;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static org.letscareer.letscareer.global.common.utils.entity.EntityUpdateValueUtils.updateValue;
 
@@ -42,6 +43,9 @@ public class ReportApplication extends Application {
     private String recruitmentUrl;
 
     private Integer refundPrice;
+
+    private LocalDateTime applyUrlDate;
+    private LocalDateTime reportUrlDate;
 
     @Convert(converter = ReportApplicationStatusConverter.class)
     private ReportApplicationStatus status = ReportApplicationStatus.APPLIED;
@@ -70,6 +74,7 @@ public class ReportApplication extends Application {
         this.discountPrice = reportPrice.getDiscountPrice();
         this.reportPriceType = requestDto.reportPriceType();
         this.applyUrl = requestDto.applyUrl();
+        if(!Objects.isNull(requestDto.applyUrl())) this.applyUrlDate = LocalDateTime.now();
         this.recruitmentUrl = requestDto.recruitmentUrl();
         this.report = report;
         this.status = ReportApplicationStatus.APPLIED;
@@ -101,6 +106,7 @@ public class ReportApplication extends Application {
     public void updateReportUrl(UpdateReportDocumentRequestDto requestDto) {
         this.reportUrl = requestDto.reportUrl();
         this.status = ReportApplicationStatus.REPORTED;
+        this.reportUrlDate = LocalDateTime.now();
     }
 
     public void updateReportApplicationStatus(ReportApplicationStatus status) {
@@ -117,6 +123,7 @@ public class ReportApplication extends Application {
 
     public void updateMyReportApplication(UpdateMyReportApplicationRequestDto requestDto) {
         this.applyUrl = updateValue(this.applyUrl, requestDto.applyUrl());
+        this.applyUrlDate = LocalDateTime.now();
         this.recruitmentUrl = updateValue(this.recruitmentUrl, requestDto.recruitmentUrl());
         this.wishJob = updateValue(this.wishJob, requestDto.wishJob());
         this.message = updateValue(this.message, requestDto.message());
