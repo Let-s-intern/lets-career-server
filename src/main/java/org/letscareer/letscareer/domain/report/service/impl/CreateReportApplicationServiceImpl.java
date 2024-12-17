@@ -8,9 +8,7 @@ import org.letscareer.letscareer.domain.application.helper.ReportApplicationHelp
 import org.letscareer.letscareer.domain.coupon.entity.Coupon;
 import org.letscareer.letscareer.domain.coupon.helper.CouponHelper;
 import org.letscareer.letscareer.domain.nhn.dto.request.RequestMessageInfo;
-import org.letscareer.letscareer.domain.nhn.dto.request.report.FeedbackNotiParameter;
-import org.letscareer.letscareer.domain.nhn.dto.request.report.ReportNotificationParameter;
-import org.letscareer.letscareer.domain.nhn.dto.request.report.ReportPaymentParameter;
+import org.letscareer.letscareer.domain.nhn.dto.request.report.*;
 import org.letscareer.letscareer.domain.nhn.provider.NhnProvider;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.payment.helper.PaymentHelper;
@@ -26,6 +24,7 @@ import org.letscareer.letscareer.domain.report.helper.ReportHelper;
 import org.letscareer.letscareer.domain.report.helper.ReportOptionHelper;
 import org.letscareer.letscareer.domain.report.mapper.ReportMapper;
 import org.letscareer.letscareer.domain.report.service.CreateReportApplicationService;
+import org.letscareer.letscareer.domain.report.type.ReportPaymentStatus;
 import org.letscareer.letscareer.domain.report.type.ReportPriceType;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.helper.UserHelper;
@@ -68,7 +67,9 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
 
         updateContactEmail(user, requestDto);
         TossPaymentsResponseDto responseDto = tossProvider.requestPayments(requestDto.paymentKey(), requestDto.orderId(), requestDto.amount());
-        sendPaymentKakaoMessages(report, user, requestDto, reportApplication.getReportPriceType(), reportApplicationOptions, reportFeedbackApplication);
+
+        ReportPaymentStatus paymentStatus = getReportPaymentStatus(reportApplication, reportFeedbackApplication);
+        sendKakaoMessages(paymentStatus, report, user, requestDto, reportApplication.getReportPriceType(), reportApplicationOptions, reportFeedbackApplication);
         sendSlackBot(report, reportApplication, reportApplicationOptions, reportFeedbackApplication, user, payment);
         return reportMapper.toCreateReportApplicationResponseDto(responseDto);
     }
@@ -85,18 +86,44 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
         userHelper.updateContactEmail(user, requestDto.contactEmail());
     }
 
-    private void sendPaymentKakaoMessages(Report report, User user, CreateReportApplicationRequestDto requestDto, ReportPriceType reportPriceType, List<ReportApplicationOption> reportApplicationOptions, ReportFeedbackApplication reportFeedbackApplication) {
+    private ReportPaymentStatus getReportPaymentStatus(ReportApplication reportApplication, ReportFeedbackApplication reportFeedbackApplication) {
+        Boolean feedback = !Objects.isNull(reportFeedbackApplication);
+        Boolean yet = Objects.isNull(reportApplication.getApplyUrl());
+        return ReportPaymentStatus.of(feedback, yet);
+    }
+
+    private void sendKakaoMessages(ReportPaymentStatus paymentStatus, Report report, User user, CreateReportApplicationRequestDto requestDto, ReportPriceType reportPriceType, List<ReportApplicationOption> reportApplicationOptions, ReportFeedbackApplication reportFeedbackApplication) {
+        switch (paymentStatus) {
+            case REPORT, ALL -> sendPaymentKakaoMessages(paymentStatus, report, user, requestDto, reportPriceType, reportApplicationOptions, reportFeedbackApplication);
+            case REPORT_YET -> sendReportYetPaymentKakaoMessage(report, user, requestDto);
+            case ALL_YET -> sendFeedbackYetPaymentKakaoMessage(report, user, requestDto);
+        }
+    }
+
+    private void sendPaymentKakaoMessages(ReportPaymentStatus paymentStatus, Report report, User user, CreateReportApplicationRequestDto requestDto, ReportPriceType reportPriceType, List<ReportApplicationOption> reportApplicationOptions, ReportFeedbackApplication reportFeedbackApplication) {
         List<RequestMessageInfo<?>> messageList = new ArrayList<>();
         ReportPaymentParameter reportPaymentParameter = ReportPaymentParameter.of(user.getName(), requestDto.orderId(), report.getTitle(), Long.valueOf(requestDto.amount()));
         messageList.add(RequestMessageInfo.of(reportPaymentParameter, "report_payment"));
+
         String reportOptionListStr = reportOptionHelper.createReportOptionListStr(reportApplicationOptions);
         ReportNotificationParameter reportNotificationParameter = ReportNotificationParameter.of(user.getName(), report.getTitle(), reportPriceType.getDesc(), reportOptionListStr);
         messageList.add(RequestMessageInfo.of(reportNotificationParameter, "report_notification"));
-        if (!Objects.isNull(reportFeedbackApplication)) {
+
+        if (paymentStatus.equals(ReportPaymentStatus.ALL)) {
             FeedbackNotiParameter feedbackNotiParameter = FeedbackNotiParameter.of(user.getName(), report, reportOptionListStr, reportFeedbackApplication);
             messageList.add(RequestMessageInfo.of(feedbackNotiParameter, "feedback_noti"));
         }
         nhnProvider.sendPaymentKakaoMessages(user, messageList);
+    }
+
+    private void sendReportYetPaymentKakaoMessage(Report report, User user, CreateReportApplicationRequestDto requestDto) {
+        ReportYetPaymentParameter reportYetPaymentParameter = ReportYetPaymentParameter.of(user.getName(), requestDto.orderId(), report.getTitle(), Long.valueOf(requestDto.amount()));
+        nhnProvider.sendKakaoMessage(user, reportYetPaymentParameter, "report_yet_payment");
+    }
+
+    private void sendFeedbackYetPaymentKakaoMessage(Report report, User user, CreateReportApplicationRequestDto requestDto) {
+        FeedbackYetPaymentParameter feedbackYetPaymentParameter = FeedbackYetPaymentParameter.of(user.getName(), requestDto.orderId(), report.getTitle(), Long.valueOf(requestDto.amount()));
+        nhnProvider.sendKakaoMessage(user, feedbackYetPaymentParameter, "feedback_yet_payment");
     }
 
     private void sendSlackBot(Report report,
