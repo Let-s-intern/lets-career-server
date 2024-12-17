@@ -26,8 +26,10 @@ import org.letscareer.letscareer.domain.report.mapper.ReportMapper;
 import org.letscareer.letscareer.domain.report.service.CreateReportApplicationService;
 import org.letscareer.letscareer.domain.report.type.ReportPaymentStatus;
 import org.letscareer.letscareer.domain.report.type.ReportPriceType;
+import org.letscareer.letscareer.domain.report.vo.ReportApplicationNotificationVo;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.helper.UserHelper;
+import org.letscareer.letscareer.global.common.utils.redis.utils.RedisUtils;
 import org.letscareer.letscareer.global.common.utils.slack.WebhookProvider;
 import org.letscareer.letscareer.global.common.utils.slack.dto.ReportWebhookDto;
 import org.springframework.stereotype.Service;
@@ -36,12 +38,15 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional
 @Service
 public class CreateReportApplicationServiceImpl implements CreateReportApplicationService {
+    public static final String REPORT_APPLICATION_CACHE_KEY = "report_application:";
     private final ReportHelper reportHelper;
     private final ReportMapper reportMapper;
     private final ReportOptionHelper reportOptionHelper;
@@ -52,6 +57,7 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
     private final TossProvider tossProvider;
     private final NhnProvider nhnProvider;
     private final WebhookProvider webhookProvider;
+    private final RedisUtils redisUtils;
 
     @Override
     public CreateReportApplicationResponseDto execute(User user, Long reportId, CreateReportApplicationRequestDto requestDto) {
@@ -64,13 +70,13 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
         Payment payment = paymentHelper.createReportPaymentAndSave(requestDto, coupon, reportApplication);
         List<ReportApplicationOption> reportApplicationOptions = createReportApplicationOptions(reportApplication, reportId, requestDto);
         ReportFeedbackApplication reportFeedbackApplication = reportApplicationHelper.createReportFeedbackApplicationAndSave(requestDto, reportFeedback, reportApplication);
+        ReportPaymentStatus paymentStatus = ReportPaymentStatus.of(reportApplication, reportFeedbackApplication);
 
         updateContactEmail(user, requestDto);
         TossPaymentsResponseDto responseDto = tossProvider.requestPayments(requestDto.paymentKey(), requestDto.orderId(), requestDto.amount());
-
-        ReportPaymentStatus paymentStatus = getReportPaymentStatus(reportApplication, reportFeedbackApplication);
         sendKakaoMessages(paymentStatus, report, user, requestDto, reportApplication.getReportPriceType(), reportApplicationOptions, reportFeedbackApplication);
-        sendSlackBot(report, reportApplication, reportApplicationOptions, reportFeedbackApplication, user, payment);
+        if(isYet(paymentStatus)) setReportApplicationCache(user, report, reportApplication, reportApplicationOptions, payment);
+        if(!isYet(paymentStatus)) sendSlackBot(report, reportApplication, reportApplicationOptions, reportFeedbackApplication, user, payment);
         return reportMapper.toCreateReportApplicationResponseDto(responseDto);
     }
 
@@ -84,12 +90,6 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
     private void updateContactEmail(User user, CreateReportApplicationRequestDto requestDto) {
         if (Objects.isNull(requestDto.contactEmail())) return;
         userHelper.updateContactEmail(user, requestDto.contactEmail());
-    }
-
-    private ReportPaymentStatus getReportPaymentStatus(ReportApplication reportApplication, ReportFeedbackApplication reportFeedbackApplication) {
-        Boolean feedback = !Objects.isNull(reportFeedbackApplication);
-        Boolean yet = Objects.isNull(reportApplication.getApplyUrl());
-        return ReportPaymentStatus.of(feedback, yet);
     }
 
     private void sendKakaoMessages(ReportPaymentStatus paymentStatus, Report report, User user, CreateReportApplicationRequestDto requestDto, ReportPriceType reportPriceType, List<ReportApplicationOption> reportApplicationOptions, ReportFeedbackApplication reportFeedbackApplication) {
@@ -124,6 +124,17 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
     private void sendFeedbackYetPaymentKakaoMessage(Report report, User user, CreateReportApplicationRequestDto requestDto) {
         FeedbackYetPaymentParameter feedbackYetPaymentParameter = FeedbackYetPaymentParameter.of(user.getName(), requestDto.orderId(), report.getTitle(), Long.valueOf(requestDto.amount()));
         nhnProvider.sendKakaoMessage(user, feedbackYetPaymentParameter, "feedback_yet_payment");
+    }
+
+    private boolean isYet(ReportPaymentStatus paymentStatus) {
+        return paymentStatus.equals(ReportPaymentStatus.REPORT_YET) || paymentStatus.equals(ReportPaymentStatus.ALL_YET);
+    }
+
+    private void setReportApplicationCache(User user, Report report, ReportApplication reportApplication, List<ReportApplicationOption> reportApplicationOptionList, Payment payment) {
+        String reportOptionListStr = reportOptionHelper.createReportOptionListStr(reportApplicationOptionList);
+        ReportApplicationNotificationVo notificationVo = ReportApplicationNotificationVo.of(user.getName(), payment, "전체취소", report, reportOptionListStr);
+        redisUtils.setObjectWithExpire(REPORT_APPLICATION_CACHE_KEY + reportApplication.getId(), notificationVo, 8, TimeUnit.DAYS);
+        Optional<ReportApplicationNotificationVo> result = redisUtils.getData(REPORT_APPLICATION_CACHE_KEY + reportApplication.getId(), ReportApplicationNotificationVo.class);
     }
 
     private void sendSlackBot(Report report,
