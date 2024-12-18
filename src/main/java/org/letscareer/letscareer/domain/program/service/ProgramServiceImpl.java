@@ -3,10 +3,14 @@ package org.letscareer.letscareer.domain.program.service;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.helper.ChallengeApplicationHelper;
 import org.letscareer.letscareer.domain.application.helper.LiveApplicationHelper;
+import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
+import org.letscareer.letscareer.domain.challenge.vo.ChallengeRecommendVo;
 import org.letscareer.letscareer.domain.classification.helper.ChallengeClassificationHelper;
 import org.letscareer.letscareer.domain.classification.helper.LiveClassificationHelper;
 import org.letscareer.letscareer.domain.classification.helper.VodClassificationHelper;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
+import org.letscareer.letscareer.domain.live.helper.LiveHelper;
+import org.letscareer.letscareer.domain.live.vo.LiveRecommendVo;
 import org.letscareer.letscareer.domain.program.dto.response.*;
 import org.letscareer.letscareer.domain.program.entity.SearchCondition;
 import org.letscareer.letscareer.domain.program.helper.ProgramHelper;
@@ -15,6 +19,10 @@ import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.program.vo.ProgramForAdminVo;
 import org.letscareer.letscareer.domain.program.vo.ProgramForConditionVo;
+import org.letscareer.letscareer.domain.report.helper.ReportHelper;
+import org.letscareer.letscareer.domain.report.vo.ReportRecommendVo;
+import org.letscareer.letscareer.domain.vod.helper.VodHelper;
+import org.letscareer.letscareer.domain.vod.vo.VodDetailVo;
 import org.letscareer.letscareer.global.common.entity.PageInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,11 +39,15 @@ import java.util.stream.Collectors;
 public class ProgramServiceImpl implements ProgramService {
     private final ProgramHelper programHelper;
     private final ProgramMapper programMapper;
+    private final ChallengeHelper challengeHelper;
     private final ChallengeClassificationHelper challengeClassificationHelper;
     private final ChallengeApplicationHelper challengeApplicationHelper;
+    private final LiveHelper liveHelper;
     private final LiveClassificationHelper liveClassificationHelper;
     private final LiveApplicationHelper liveApplicationHelper;
+    private final VodHelper vodHelper;
     private final VodClassificationHelper vodClassificationHelper;
+    private final ReportHelper reportHelper;
 
     @Override
     public GetProgramsForConditionResponseDto getProgramsForCondition(List<ProgramType> type,
@@ -65,6 +77,15 @@ public class ProgramServiceImpl implements ProgramService {
         List<GetProgramForAdminResponseDto<?>> conditionResponseDtoList = composeProgramForAdminVosAndClassifications(vos);
         PageInfo pageInfo = PageInfo.of(programForAdminVos);
         return programMapper.toGetProgramsForAdminResponseDto(conditionResponseDtoList, pageInfo);
+    }
+
+    @Override
+    public GetProgramsForRecommendResponseDto getProgramsForRecommend() {
+        List<ChallengeRecommendVo> challengeList = challengeHelper.findAllChallengeRecommendVos();
+        LiveRecommendVo live = liveHelper.findLiveRecommendVo();
+        List<VodDetailVo> vodList = vodHelper.findAllVodRecommendVos();
+        List<ReportRecommendVo> reportList = reportHelper.findAllReportRecommendVos();
+        return programMapper.toGetProgramsForRecommendResponseDto(challengeList, live, vodList, reportList);
     }
 
     private List<GetProgramWithCurrentCountResponseDto> createGetProgramWithCurrentCountResponseDto(List<ProgramForAdminVo> vos) {

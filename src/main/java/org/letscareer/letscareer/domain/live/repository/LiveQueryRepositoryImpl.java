@@ -1,6 +1,8 @@
 package org.letscareer.letscareer.domain.live.repository;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -11,6 +13,7 @@ import org.letscareer.letscareer.domain.classification.type.ProgramClassificatio
 import org.letscareer.letscareer.domain.live.type.ProgressType;
 import org.letscareer.letscareer.domain.live.vo.*;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
+import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
@@ -207,6 +210,33 @@ public class LiveQueryRepositoryImpl implements LiveQueryRepository {
                 .fetch();
     }
 
+    @Override
+    public LiveRecommendVo findLiveRecommendVo() {
+        return jpaQueryFactory
+                .select(Projections.constructor(LiveRecommendVo.class,
+                        live.id,
+                        Expressions.constant(ProgramType.LIVE),
+                        live.title,
+                        live.thumbnail,
+                        live.shortDesc,
+                        live.startDate,
+                        live.endDate,
+                        live.beginning,
+                        live.deadline))
+                .from(live)
+                .where(
+                        eqIsVisible(true)
+                )
+                .orderBy(
+                        orderByRecommendCondition()
+                )
+                .fetchFirst();
+    }
+
+    private BooleanExpression eqIsVisible(Boolean isVisible) {
+        return isVisible != null ? live.isVisible.eq(isVisible) : null;
+    }
+
     private BooleanExpression neProgressType(ProgressType progressType) {
         return progressType != null ? live.progressType.ne(progressType) : null;
     }
@@ -243,6 +273,10 @@ public class LiveQueryRepositoryImpl implements LiveQueryRepository {
         return null;
     }
 
+    private BooleanExpression liveRecruiting(LocalDateTime now) {
+        return live.beginning.loe(now).and(live.deadline.goe(now));
+    }
+
     private BooleanExpression livePrevStatus(LocalDateTime now) {
         return live.startDate.lt(now);
     }
@@ -257,5 +291,14 @@ public class LiveQueryRepositoryImpl implements LiveQueryRepository {
 
     private BooleanExpression isValidApplication() {
         return liveApplication._super.isCanceled.eq(false);
+    }
+
+    private OrderSpecifier<?> orderByRecommendCondition() {
+        LocalDateTime now = LocalDateTime.now();
+        BooleanExpression isRecruiting = liveRecruiting(now);
+        if(isRecruiting.toString().contains("true")) {
+            return new OrderSpecifier<>(Order.ASC, live.deadline);
+        }
+        return new OrderSpecifier<>(Order.DESC, live.createDate);
     }
 }

@@ -81,4 +81,8 @@ public class LiveHelper {
     public List<Long> findRemindNotificationLiveIds() {
         return liveRepository.findAllRemindNotificationLiveId();
     }
+
+    public LiveRecommendVo findLiveRecommendVo() {
+        return liveRepository.findLiveRecommendVo();
+    }
 }

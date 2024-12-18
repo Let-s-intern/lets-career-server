@@ -9,6 +9,7 @@ import org.letscareer.letscareer.domain.classification.type.ProgramClassificatio
 import org.letscareer.letscareer.domain.program.dto.response.GetProgramForAdminResponseDto;
 import org.letscareer.letscareer.domain.program.dto.response.GetProgramsForAdminResponseDto;
 import org.letscareer.letscareer.domain.program.dto.response.GetProgramsForConditionResponseDto;
+import org.letscareer.letscareer.domain.program.dto.response.GetProgramsForRecommendResponseDto;
 import org.letscareer.letscareer.domain.program.service.ProgramService;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
@@ -55,6 +56,15 @@ public class ProgramV1Controller {
                                                                   @RequestParam(required = false) final LocalDateTime endDate,
                                                                   final Pageable pageable) {
         final GetProgramsForAdminResponseDto responseDto = programService.getProgramsForAdmin(type, classification, status, startDate, endDate, pageable);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "프로그램 추천 통합 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetProgramsForRecommendResponseDto.class)))
+    })
+    @GetMapping("/recommend")
+    public ResponseEntity<SuccessResponse<?>> getProgramsForCondition() {
+        final GetProgramsForRecommendResponseDto responseDto = programService.getProgramsForRecommend();
         return SuccessResponse.ok(responseDto);
     }
 }
