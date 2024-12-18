@@ -10,6 +10,7 @@ import org.letscareer.letscareer.domain.mission.helper.MissionHelper;
 import org.letscareer.letscareer.domain.program.helper.ProgramHelper;
 import org.letscareer.letscareer.domain.program.vo.ProgramReviewNotificationVo;
 import org.letscareer.letscareer.global.batch.config.*;
+import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.JobParametersInvalidException;
 import org.springframework.batch.core.launch.JobLauncher;
@@ -40,6 +41,7 @@ public class NotificationScheduler {
     private final MissionEndNotificationJobConfig missionEndNotificationJobConfig;
     private final ReportFeedbackDdayNotificationJobConfig reportFeedbackDdayNotificationJobConfig;
     private final ReportIngNotificationJobConfig reportIngNotificationJobConfig;
+    private final ReportReviewNotificationJobConfig reportReviewNotificationJobConfig;
 
     @Scheduled(cron = "0 5 10 * * ?")
     @SchedulerLock(name = "reviewNotificationJob", lockAtMostFor = "3m", lockAtLeastFor = "3m")
@@ -154,6 +156,21 @@ public class NotificationScheduler {
         for(Long reportApplicationId : reportApplicationList) {
             jobLauncher.run(
                     reportIngNotificationJobConfig.reportIngNotificationJob(),
+                    new JobParametersBuilder()
+                            .addLong("reportApplicationId", reportApplicationId)
+                            .addLocalDateTime("now", LocalDateTime.now())
+                            .toJobParameters()
+            );
+        }
+    }
+
+    @Scheduled(cron = "0 0 10 * * *")
+    @SchedulerLock(name = "reportReviewNotificationJob", lockAtMostFor = "3m", lockAtLeastFor = "3m")
+    public void sendReportReviewNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
+        List<Long> reportApplicationList = reportApplicationHelper.findReviewNotificationReportApplicationIds();
+        for (Long reportApplicationId : reportApplicationList) {
+            jobLauncher.run(
+                    reportReviewNotificationJobConfig.reportReviewNotificationJob(),
                     new JobParametersBuilder()
                             .addLong("reportApplicationId", reportApplicationId)
                             .addLocalDateTime("now", LocalDateTime.now())

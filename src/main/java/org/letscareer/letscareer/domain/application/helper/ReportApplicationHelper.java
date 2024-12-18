@@ -72,4 +72,8 @@ public class ReportApplicationHelper {
     public List<Long> findIngNotificationReportApplicationIds() {
         return reportApplicationRepository.findAllIngNotificationReportApplicationId();
     }
+
+    public List<Long> findReviewNotificationReportApplicationIds() {
+        return reportApplicationRepository.findAllReviewNotificationReportApplicationId();
+    }
 }
