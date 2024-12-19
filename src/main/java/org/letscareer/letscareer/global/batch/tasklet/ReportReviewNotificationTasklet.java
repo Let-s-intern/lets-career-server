@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 @StepScope
 public class ReportReviewNotificationTasklet implements Tasklet {
     private final ReportApplicationHelper reportApplicationHelper;
-    private NhnProvider nhnProvider;
+    private final NhnProvider nhnProvider;
 
     @Value("#{jobParameters[reportApplicationId]}")
     private Long reportApplicationId;
@@ -36,7 +36,6 @@ public class ReportReviewNotificationTasklet implements Tasklet {
         nhnProvider.sendKakaoMessage(user, reportReviewNotificationParameter, "report_review");
 
         return RepeatStatus.FINISHED;
-
     }
 
 }

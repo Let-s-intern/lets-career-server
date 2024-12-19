@@ -38,7 +38,6 @@ public class ReportApplicationQueryRepositoryImpl implements ReportApplicationQu
                         eqStatus(ReportApplicationStatus.COMPLETED), // 진단완료 상태
                         eqIsCanceled(false),                        // 신청 취소하지 않음
                         betweenReportUrlDate(LocalDateTime.now()),  // 전날 10시 ~ 당일 10시
-                        isNullReportFeedbackApplication(),              // 피드백 신청하지 않음
                         isNoReviewForApplication()                  // 리뷰 작성하지 않음
                 )
                 .fetch();
@@ -55,10 +54,6 @@ public class ReportApplicationQueryRepositoryImpl implements ReportApplicationQu
     private BooleanExpression isAfter3Hours() {
         LocalDateTime now = LocalDateTime.now();
         return reportApplication.payment.createDate.before(now.minusHours(3L));
-    }
-
-    private BooleanExpression isNullReportFeedbackApplication() {
-        return reportApplication.reportFeedbackApplication.isNull();
     }
 
     private BooleanExpression betweenReportUrlDate(LocalDateTime now) {
