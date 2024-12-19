@@ -42,6 +42,7 @@ public class NotificationScheduler {
     private final ReportFeedbackDdayNotificationJobConfig reportFeedbackDdayNotificationJobConfig;
     private final ReportIngNotificationJobConfig reportIngNotificationJobConfig;
     private final ReportReviewNotificationJobConfig reportReviewNotificationJobConfig;
+    private final FeedbackReviewNotificationJobConfig feedbackReviewNotificationJobConfig;
 
     @Scheduled(cron = "0 5 10 * * ?")
     @SchedulerLock(name = "reviewNotificationJob", lockAtMostFor = "3m", lockAtLeastFor = "3m")
@@ -173,6 +174,21 @@ public class NotificationScheduler {
                     reportReviewNotificationJobConfig.reportReviewNotificationJob(),
                     new JobParametersBuilder()
                             .addLong("reportApplicationId", reportApplicationId)
+                            .addLocalDateTime("now", LocalDateTime.now())
+                            .toJobParameters()
+            );
+        }
+    }
+
+    @Scheduled(cron = "0 0 * * * *")
+    @SchedulerLock(name = "feedbackReviewNotificationJob", lockAtMostFor = "3m", lockAtLeastFor = "3m")
+    public void sendFeedbackReviewNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
+        List<Long> reportFeedbackApplicationList = reportFeedbackApplicationHelper.findReviewNotificationReportFeedbackApplicationIds();
+        for (Long reportFeedbackApplicationId : reportFeedbackApplicationList) {
+            jobLauncher.run(
+                    feedbackReviewNotificationJobConfig.feedbackReviewnotificationJob(),
+                    new JobParametersBuilder()
+                            .addLong("reportFeedbackApplicationId", reportFeedbackApplicationId)
                             .addLocalDateTime("now", LocalDateTime.now())
                             .toJobParameters()
             );
