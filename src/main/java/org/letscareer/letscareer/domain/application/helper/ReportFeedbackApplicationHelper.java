@@ -38,4 +38,8 @@ public class ReportFeedbackApplicationHelper {
     public List<Long> findDdayNotificationReportFeedbackApplicationIds() {
         return reportFeedbackApplicationRepository.findDdayNotificationReportFeedbackApplicationIds();
     }
+
+    public List<Long> findReviewNotificationReportFeedbackApplicationIds() {
+        return reportFeedbackApplicationRepository.findAllReviewNotificationReportFeedbackApplicationId();
+    }
 }
