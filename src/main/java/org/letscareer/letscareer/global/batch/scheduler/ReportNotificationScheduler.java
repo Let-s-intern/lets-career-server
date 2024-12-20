@@ -25,6 +25,8 @@ public class ReportNotificationScheduler {
     private final JobLauncher jobLauncher;
     private final ReportFeedbackDdayNotificationJobConfig reportFeedbackDdayNotificationJobConfig;
     private final ReportIngNotificationJobConfig reportIngNotificationJobConfig;
+    private final ReportReviewNotificationJobConfig reportReviewNotificationJobConfig;
+    private final FeedbackReviewNotificationJobConfig feedbackReviewNotificationJobConfig;
 
 
     @Scheduled(cron = "0 0 8 * * ?")
@@ -51,6 +53,36 @@ public class ReportNotificationScheduler {
                     reportIngNotificationJobConfig.reportIngNotificationJob(),
                     new JobParametersBuilder()
                             .addLong("reportApplicationId", reportApplicationId)
+                            .addLocalDateTime("now", LocalDateTime.now())
+                            .toJobParameters()
+            );
+        }
+    }
+
+    @Scheduled(cron = "0 0 10 * * *")
+    @SchedulerLock(name = "reportReviewNotificationJob", lockAtMostFor = "3m", lockAtLeastFor = "3m")
+    public void sendReportReviewNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
+        List<Long> reportApplicationList = reportApplicationHelper.findReviewNotificationReportApplicationIds();
+        for (Long reportApplicationId : reportApplicationList) {
+            jobLauncher.run(
+                    reportReviewNotificationJobConfig.reportReviewNotificationJob(),
+                    new JobParametersBuilder()
+                            .addLong("reportApplicationId", reportApplicationId)
+                            .addLocalDateTime("now", LocalDateTime.now())
+                            .toJobParameters()
+            );
+        }
+    }
+
+    @Scheduled(cron = "0 0 * * * *")
+    @SchedulerLock(name = "feedbackReviewNotificationJob", lockAtMostFor = "3m", lockAtLeastFor = "3m")
+    public void sendFeedbackReviewNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
+        List<Long> reportFeedbackApplicationList = reportFeedbackApplicationHelper.findReviewNotificationReportFeedbackApplicationIds();
+        for (Long reportFeedbackApplicationId : reportFeedbackApplicationList) {
+            jobLauncher.run(
+                    feedbackReviewNotificationJobConfig.feedbackReviewnotificationJob(),
+                    new JobParametersBuilder()
+                            .addLong("reportFeedbackApplicationId", reportFeedbackApplicationId)
                             .addLocalDateTime("now", LocalDateTime.now())
                             .toJobParameters()
             );

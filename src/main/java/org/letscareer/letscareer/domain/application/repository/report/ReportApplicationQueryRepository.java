@@ -4,4 +4,5 @@ import java.util.List;
 
 public interface ReportApplicationQueryRepository {
     List<Long> findAllIngNotificationReportApplicationId();
+    List<Long> findAllReviewNotificationReportApplicationId();
 }
