@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.letscareer.letscareer.domain.report.error.ReportErrorCode.REPORT_APPLICATION_NOT_FOUND;
-
 @RequiredArgsConstructor
 @Component
 public class ReportApplicationHelper {
@@ -71,6 +70,10 @@ public class ReportApplicationHelper {
 
     public List<Long> findIngNotificationReportApplicationIds() {
         return reportApplicationRepository.findAllIngNotificationReportApplicationId();
+    }
+
+    public List<Long> findAutoRefundNotificationReportApplicationIds() {
+        return reportApplicationRepository.findAllAutoRefundNotificationReportApplicationId();
     }
 
     public List<Long> findReviewNotificationReportApplicationIds() {

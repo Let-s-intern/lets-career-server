@@ -25,6 +25,7 @@ public class ReportNotificationScheduler {
     private final JobLauncher jobLauncher;
     private final ReportFeedbackDdayNotificationJobConfig reportFeedbackDdayNotificationJobConfig;
     private final ReportIngNotificationJobConfig reportIngNotificationJobConfig;
+    private final ReportAutoRefundNotificationJobConfig reportAutoRefundNotificationJob;
     private final ReportReviewNotificationJobConfig reportReviewNotificationJobConfig;
     private final FeedbackReviewNotificationJobConfig feedbackReviewNotificationJobConfig;
 
@@ -51,6 +52,21 @@ public class ReportNotificationScheduler {
         for(Long reportApplicationId : reportApplicationList) {
             jobLauncher.run(
                     reportIngNotificationJobConfig.reportIngNotificationJob(),
+                    new JobParametersBuilder()
+                            .addLong("reportApplicationId", reportApplicationId)
+                            .addLocalDateTime("now", LocalDateTime.now())
+                            .toJobParameters()
+            );
+        }
+    }
+
+    @Scheduled(cron = "0 0/1 * * * *")
+    @SchedulerLock(name = "reportAutoRefundNotificationJob", lockAtMostFor = "59s", lockAtLeastFor = "59s")
+    public void sendReportAutoRefundNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
+        List<Long> reportApplicationList = reportApplicationHelper.findAutoRefundNotificationReportApplicationIds();
+        for(Long reportApplicationId : reportApplicationList) {
+            jobLauncher.run(
+                    reportAutoRefundNotificationJob.reportAutoRefundNotificationJob(),
                     new JobParametersBuilder()
                             .addLong("reportApplicationId", reportApplicationId)
                             .addLocalDateTime("now", LocalDateTime.now())

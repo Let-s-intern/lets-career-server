@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
 @Transactional
 @Service
 public class CreateReportApplicationServiceImpl implements CreateReportApplicationService {
-    public static final String REPORT_APPLICATION_CACHE_KEY = "report_application:";
+    public static final String REPORT_APPLICATION_CACHE_KEY = "report_application";
     private final ReportHelper reportHelper;
     private final ReportMapper reportMapper;
     private final ReportOptionHelper reportOptionHelper;
@@ -135,7 +135,6 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
         String reportOptionListStr = reportOptionHelper.createReportOptionListStr(reportApplicationOptionList);
         ReportApplicationNotificationVo notificationVo = ReportApplicationNotificationVo.of(user.getName(), payment, "전체취소", report, reportOptionListStr, isFeedbackApplied);
         redisUtils.setObjectWithExpire(REPORT_APPLICATION_CACHE_KEY + reportApplication.getId(), notificationVo, 8, TimeUnit.DAYS);
-        Optional<ReportApplicationNotificationVo> result = redisUtils.getData(REPORT_APPLICATION_CACHE_KEY + reportApplication.getId(), ReportApplicationNotificationVo.class);
     }
 
     private void sendSlackBot(Report report,

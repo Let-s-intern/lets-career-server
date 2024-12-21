@@ -18,7 +18,7 @@ import java.time.Duration;
 public class RedisCacheConfig {
     @Bean
     public CacheManager reportAutoCancelCacheManager(RedisConnectionFactory redisConnectionFactory) {
-        RedisCacheConfiguration redisCacheConfiguration = generateCacheConfiguration().entryTtl(Duration.ofDays(7L));
+        RedisCacheConfiguration redisCacheConfiguration = generateCacheConfiguration().entryTtl(Duration.ofDays(8L));
         return RedisCacheManager.RedisCacheManagerBuilder
                 .fromConnectionFactory(redisConnectionFactory)
                 .cacheDefaults(redisCacheConfiguration)
