@@ -26,9 +26,9 @@ public enum ReportRefundType {
     public static ReportRefundType ofReport(ReportApplication reportApplication, Payment payment) {
         if(!Objects.isNull(payment.getCoupon()) && payment.getCoupon().getDiscount() < 0) return ZERO;
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime paymentCreateDate = payment.getCreateDate();
+        LocalDateTime applyUrlDate = !Objects.isNull(reportApplication.getApplyUrlDate()) ? reportApplication.getApplyUrlDate() : payment.getCreateDate();
         ReportApplicationStatus reportApplicationStatus = reportApplication.getStatus();
-        if(now.isBefore(paymentCreateDate.plusHours(3L))) {
+        if(now.isBefore(applyUrlDate.plusHours(3L))) {
             return switch (reportApplicationStatus) {
                 case APPLIED -> ALL;
                 case REPORTING, REPORTED -> PERCENT_80;

@@ -6,7 +6,6 @@ import org.letscareer.letscareer.domain.application.entity.report.ReportFeedback
 import org.letscareer.letscareer.domain.application.helper.ApplicationHelper;
 import org.letscareer.letscareer.domain.application.helper.ReportApplicationHelper;
 import org.letscareer.letscareer.domain.coupon.entity.Coupon;
-import org.letscareer.letscareer.domain.nhn.dto.request.report.ReportAutoRefundParameter;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.payment.type.RefundType;
 import org.letscareer.letscareer.domain.payment.type.ReportRefundType;
