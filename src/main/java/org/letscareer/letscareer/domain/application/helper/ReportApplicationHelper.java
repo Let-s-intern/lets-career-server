@@ -54,6 +54,10 @@ public class ReportApplicationHelper {
         return reportFeedbackApplicationRepository.save(reportFeedbackApplication);
     }
 
+    public ReportApplication findReportApplicationByReportApplicationIdOrElseNull(Long applicationId) {
+        return reportApplicationRepository.findById(applicationId).orElse(null);
+    }
+
     public ReportApplication findReportApplicationByReportApplicationIdOrThrow(Long reportApplicationId) {
         return reportApplicationRepository.findById(reportApplicationId)
                 .orElseThrow(() -> new EntityNotFoundException(REPORT_APPLICATION_NOT_FOUND));
