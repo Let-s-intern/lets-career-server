@@ -6,6 +6,7 @@ import org.letscareer.letscareer.domain.application.entity.report.ReportFeedback
 import org.letscareer.letscareer.domain.application.helper.ApplicationHelper;
 import org.letscareer.letscareer.domain.application.helper.ReportApplicationHelper;
 import org.letscareer.letscareer.domain.coupon.entity.Coupon;
+import org.letscareer.letscareer.domain.nhn.dto.request.report.ReportAutoRefundParameter;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.payment.type.RefundType;
 import org.letscareer.letscareer.domain.payment.type.ReportRefundType;
@@ -40,17 +41,19 @@ public class ReportAutoRefundTasklet implements Tasklet {
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) {
         ReportApplication reportApplication = reportApplicationHelper.findReportApplicationByReportApplicationIdOrElseNull(reportApplicationId);
-        List<ReportApplicationOptionPriceVo> reportApplicationOptionPriceVos = reportApplicationHelper.findAllReportApplicationOptionPriceVosByReportApplicationId(reportApplication.getId());
-        ReportFeedbackApplication reportFeedbackApplication = reportApplication.getReportFeedbackApplication();
-        Payment payment = reportApplication.getPayment();
-        ReportCancelVo reportCancelInfo = getReportCancelInfo(reportApplication, reportApplicationOptionPriceVos);
-        ReportCancelVo feedbackCancelInfo = getFeedbackCancelInfo(reportFeedbackApplication);
+        if(!Objects.isNull(reportApplication)) {
+            List<ReportApplicationOptionPriceVo> reportApplicationOptionPriceVos = reportApplicationHelper.findAllReportApplicationOptionPriceVosByReportApplicationId(reportApplication.getId());
+            ReportFeedbackApplication reportFeedbackApplication = reportApplication.getReportFeedbackApplication();
+            Payment payment = reportApplication.getPayment();
+            ReportCancelVo reportCancelInfo = getReportCancelInfo(reportApplication, reportApplicationOptionPriceVos);
+            ReportCancelVo feedbackCancelInfo = getFeedbackCancelInfo(reportFeedbackApplication);
 
-        int cancelAmount = payment.getFinalPrice();
-        if(!payment.getPaymentKey().isEmpty()) tossProvider.cancelPayments(RefundType.ALL, payment.getPaymentKey(), cancelAmount, CancelReason.CUSTOMER.getDesc());
-        payment.updateRefundPrice(cancelAmount);
-        updateReportApplicationCancelInfo(reportApplication, reportCancelInfo);
-        updateReportFeedbackApplicationCancelInfo(reportFeedbackApplication, feedbackCancelInfo);
+            int cancelAmount = payment.getFinalPrice();
+            if(!payment.getPaymentKey().isEmpty()) tossProvider.cancelPayments(RefundType.ALL, payment.getPaymentKey(), cancelAmount, CancelReason.CUSTOMER.getDesc());
+            payment.updateRefundPrice(cancelAmount);
+            updateReportApplicationCancelInfo(reportApplication, reportCancelInfo);
+            updateReportFeedbackApplicationCancelInfo(reportFeedbackApplication, feedbackCancelInfo);
+        }
         return RepeatStatus.FINISHED;
     }
 

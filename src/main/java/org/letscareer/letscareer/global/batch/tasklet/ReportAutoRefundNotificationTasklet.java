@@ -7,6 +7,7 @@ import org.letscareer.letscareer.domain.nhn.dto.request.report.ReportAutoRefundP
 import org.letscareer.letscareer.domain.nhn.provider.NhnProvider;
 import org.letscareer.letscareer.domain.report.service.GetReportApplicationNotificationVoService;
 import org.letscareer.letscareer.domain.report.vo.ReportApplicationNotificationVo;
+import org.letscareer.letscareer.global.common.utils.redis.utils.RedisUtils;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.scope.context.ChunkContext;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
+import static org.letscareer.letscareer.domain.report.service.impl.CreateReportApplicationServiceImpl.REPORT_APPLICATION_CACHE_KEY;
+
 @RequiredArgsConstructor
 @Component
 @StepScope
@@ -24,6 +27,7 @@ public class ReportAutoRefundNotificationTasklet implements Tasklet {
     private final GetReportApplicationNotificationVoService getReportApplicationNotificationVoService;
     private final ReportApplicationHelper reportApplicationHelper;
     private final NhnProvider nhnProvider;
+    private final RedisUtils redisUtils;
 
     @Value("#{jobParameters[reportApplicationId]}")
     private Long reportApplicationId;
@@ -35,7 +39,7 @@ public class ReportAutoRefundNotificationTasklet implements Tasklet {
         if(!Objects.isNull(reportApplication) && !Objects.isNull(notificationVo)) {
             ReportAutoRefundParameter reportAutoRefundParameter = ReportAutoRefundParameter.of(notificationVo.userName(), notificationVo.orderId(), notificationVo.reportTitle(), notificationVo.paymentPrice());
             nhnProvider.sendKakaoMessage(reportApplication.getUser(), reportAutoRefundParameter, "report_auto_refund");
-            reportApplication.updateIsCanceled(true);
+            redisUtils.delete(REPORT_APPLICATION_CACHE_KEY + reportApplicationId);
         }
         return RepeatStatus.FINISHED;
     }
