@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @Builder
 public record ReviewAdminVo(
         Long id,
+        Long applicationId,
         String programTitle,
         ProgramType programType,
         String name,

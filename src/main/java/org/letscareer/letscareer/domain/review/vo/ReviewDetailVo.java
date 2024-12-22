@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 @Builder
 public record ReviewDetailVo(
         Long id,
+        Long applicationId,
         Integer nps,
         String npsAns,
         Boolean npsCheckAns,

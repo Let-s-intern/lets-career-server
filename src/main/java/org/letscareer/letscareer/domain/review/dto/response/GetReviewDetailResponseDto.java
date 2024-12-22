@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Builder(access = AccessLevel.PRIVATE)
 public record GetReviewDetailResponseDto(
         Long id,
+        Long applicationId,
         Integer nps,
         String npsAns,
         Boolean npsCheckAns,
@@ -19,6 +20,7 @@ public record GetReviewDetailResponseDto(
     public static GetReviewDetailResponseDto of(ReviewDetailVo reviewVo) {
         return GetReviewDetailResponseDto.builder()
                 .id(reviewVo.id())
+                .applicationId(reviewVo.applicationId())
                 .nps(reviewVo.nps())
                 .npsAns(reviewVo.npsAns())
                 .npsCheckAns(reviewVo.npsCheckAns())

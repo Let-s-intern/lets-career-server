@@ -33,6 +33,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
         return Optional.ofNullable(queryFactory
                 .select(Projections.constructor(ReviewDetailVo.class,
                         review.id,
+                        review.application.id,
                         review.nps,
                         review.npsAns,
                         review.npsCheckAns,
@@ -53,6 +54,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
         List<ReviewAdminVo> contents = queryFactory
                 .select(Projections.constructor(ReviewAdminVo.class,
                         vWReview.reviewId,
+                        vWReview.applicationId,
                         vWReview.programTitle,
                         vWReview.programType,
                         vWReview.userName,
@@ -149,6 +151,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
         List<ReviewAdminVo> contents = queryFactory
                 .select(Projections.constructor(ReviewAdminVo.class,
                         vWReview.reviewId,
+                        vWReview.applicationId,
                         vWReview.programTitle,
                         vWReview.programType,
                         vWReview.userName,
@@ -197,6 +200,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
         List<ReviewAdminVo> reviewAdminVos = queryFactory
                 .select(Projections.constructor(ReviewAdminVo.class,
                         vWReview.reviewId,
+                        vWReview.applicationId,
                         vWReview.programTitle,
                         vWReview.programType,
                         vWReview.userName,
