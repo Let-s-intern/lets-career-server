@@ -24,6 +24,7 @@ public class ReportApplicationQueryRepositoryImpl implements ReportApplicationQu
                 .where(
                         eqIsCanceled(false),
                         eqStatus(ReportApplicationStatus.APPLIED),
+                        applyUrlIsNotNull(),
                         isAfter3Hours()
                 )
                 .fetch();
@@ -67,7 +68,7 @@ public class ReportApplicationQueryRepositoryImpl implements ReportApplicationQu
 
     private BooleanExpression isAfter3Hours() {
         LocalDateTime now = LocalDateTime.now();
-        return reportApplication.payment.createDate.before(now.minusHours(3L));
+        return reportApplication.applyUrlDate.before(now.minusHours(3L));
     }
 
     private BooleanExpression applyUrlIsNotNull() {
