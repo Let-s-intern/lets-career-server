@@ -34,6 +34,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                 .select(Projections.constructor(ReviewDetailVo.class,
                         review.id,
                         review.application.id,
+                        review.application.user.id,
                         review.nps,
                         review.npsAns,
                         review.npsCheckAns,

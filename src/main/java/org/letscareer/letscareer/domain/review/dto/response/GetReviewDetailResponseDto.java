@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 public record GetReviewDetailResponseDto(
         Long id,
         Long applicationId,
+        Long userId,
         Integer nps,
         String npsAns,
         Boolean npsCheckAns,
@@ -21,6 +22,7 @@ public record GetReviewDetailResponseDto(
         return GetReviewDetailResponseDto.builder()
                 .id(reviewVo.id())
                 .applicationId(reviewVo.applicationId())
+                .userId(reviewVo.userId())
                 .nps(reviewVo.nps())
                 .npsAns(reviewVo.npsAns())
                 .npsCheckAns(reviewVo.npsCheckAns())

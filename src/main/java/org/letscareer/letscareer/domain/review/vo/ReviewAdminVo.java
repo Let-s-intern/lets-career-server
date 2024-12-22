@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 public record ReviewAdminVo(
         Long id,
         Long applicationId,
+        Long userId,
         String programTitle,
         ProgramType programType,
         String name,
