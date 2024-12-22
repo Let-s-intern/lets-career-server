@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.letscareer.letscareer.domain.application.helper.ReportApplicationHelper;
 import org.letscareer.letscareer.domain.application.helper.ReportFeedbackApplicationHelper;
-import org.letscareer.letscareer.global.batch.config.*;
+import org.letscareer.letscareer.global.batch.config.report.*;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.JobParametersInvalidException;
 import org.springframework.batch.core.launch.JobLauncher;

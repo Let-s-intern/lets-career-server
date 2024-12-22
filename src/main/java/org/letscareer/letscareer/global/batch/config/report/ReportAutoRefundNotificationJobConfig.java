@@ -1,4 +1,4 @@
-package org.letscareer.letscareer.global.batch.config;
+package org.letscareer.letscareer.global.batch.config.report;
 
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.global.batch.tasklet.ReportAutoRefundNotificationTasklet;
