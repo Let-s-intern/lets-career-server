@@ -40,6 +40,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                         review.npsCheckAns,
                         review.content,
                         review.score,
+                        review.programDetail,
                         review.createDate
                 ))
                 .from(review)

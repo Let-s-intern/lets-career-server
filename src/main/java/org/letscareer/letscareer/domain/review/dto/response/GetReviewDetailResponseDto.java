@@ -16,6 +16,7 @@ public record GetReviewDetailResponseDto(
         Boolean npsCheckAns,
         String content,
         Integer score,
+        String programDetail,
         LocalDateTime createdDate
 ) {
     public static GetReviewDetailResponseDto of(ReviewDetailVo reviewVo) {
@@ -28,6 +29,7 @@ public record GetReviewDetailResponseDto(
                 .npsCheckAns(reviewVo.npsCheckAns())
                 .content(reviewVo.content())
                 .score(reviewVo.score())
+                .programDetail(reviewVo.programDetail())
                 .createdDate(reviewVo.createdDate())
                 .build();
     }

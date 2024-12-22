@@ -14,6 +14,7 @@ public record ReviewDetailVo(
         Boolean npsCheckAns,
         String content,
         Integer score,
+        String programDetail,
         LocalDateTime createdDate
 ) {
 }
