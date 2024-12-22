@@ -1,4 +1,4 @@
-package org.letscareer.letscareer.global.batch.tasklet;
+package org.letscareer.letscareer.global.batch.tasklet.report;
 
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.entity.report.ReportApplication;

@@ -1,7 +1,7 @@
 package org.letscareer.letscareer.global.batch.config.report;
 
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.global.batch.tasklet.ReportFeedbackDdayNotificationTasklet;
+import org.letscareer.letscareer.global.batch.tasklet.report.ReportFeedbackDdayNotificationTasklet;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;

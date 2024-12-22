@@ -1,8 +1,8 @@
 package org.letscareer.letscareer.global.batch.config.report;
 
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.global.batch.tasklet.ReportAutoRefundNotificationTasklet;
-import org.letscareer.letscareer.global.batch.tasklet.ReportAutoRefundTasklet;
+import org.letscareer.letscareer.global.batch.tasklet.report.ReportAutoRefundNotificationTasklet;
+import org.letscareer.letscareer.global.batch.tasklet.report.ReportAutoRefundTasklet;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
