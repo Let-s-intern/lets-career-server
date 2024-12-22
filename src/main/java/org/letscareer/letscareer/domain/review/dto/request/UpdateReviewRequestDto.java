@@ -5,6 +5,7 @@ public record UpdateReviewRequestDto(
         Boolean npsCheckAns,
         Integer nps,
         String content,
-        Integer score
+        Integer score,
+        String programDetail
 ) {
 }

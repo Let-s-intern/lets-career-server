@@ -13,6 +13,7 @@ public record CreateReviewRequestDto(
         @NotNull
         String content,
         @NotNull
-        Integer score
+        Integer score,
+        String programDetail
 ) {
 }
