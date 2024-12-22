@@ -75,8 +75,10 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
         updateContactEmail(user, requestDto);
         TossPaymentsResponseDto responseDto = tossProvider.requestPayments(requestDto.paymentKey(), requestDto.orderId(), requestDto.amount());
         sendKakaoMessages(paymentStatus, report, user, requestDto, reportApplication.getReportPriceType(), reportApplicationOptions, reportFeedbackApplication);
-        if(isYet(paymentStatus)) setReportApplicationCache(user, report, reportApplication, reportApplicationOptions, reportFeedbackApplication, payment);
-        if(isYet(paymentStatus)) sendSlackBot(report, reportApplication, reportApplicationOptions, reportFeedbackApplication, user, payment);
+        if(isYet(paymentStatus)) {
+            setReportApplicationCache(user, report, reportApplication, reportApplicationOptions, reportFeedbackApplication, payment);
+            sendSlackBot(report, reportApplication, reportApplicationOptions, reportFeedbackApplication, user, payment);
+        }
         return reportMapper.toCreateReportApplicationResponseDto(responseDto);
     }
 
