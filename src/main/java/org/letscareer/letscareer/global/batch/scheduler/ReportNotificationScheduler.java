@@ -61,7 +61,7 @@ public class ReportNotificationScheduler {
         }
     }
 
-    @Scheduled(cron = "0 0/1 * * * *")
+    @Scheduled(cron = "0 10 10 * * *")
     @SchedulerLock(name = "reportRemindNotificationJob", lockAtMostFor = "59s", lockAtLeastFor = "59s")
     public void sendReportRemindNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
         List<Long> reportApplicationList = reportApplicationHelper.findRemindNotificationReportApplicationIds();
