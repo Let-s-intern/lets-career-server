@@ -1,7 +1,7 @@
-package org.letscareer.letscareer.global.batch.config;
+package org.letscareer.letscareer.global.batch.config.report;
 
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.global.batch.tasklet.FeedbackReviewNotificationtasklet;
+import org.letscareer.letscareer.global.batch.tasklet.report.ReportIngNotificationTasklet;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -15,22 +15,22 @@ import org.springframework.transaction.PlatformTransactionManager;
 @EnableBatchProcessing
 @RequiredArgsConstructor
 @Configuration
-public class FeedbackReviewNotificationJobConfig {
+public class ReportIngNotificationJobConfig {
     private final JobRepository jobRepository;
     private final PlatformTransactionManager transactionManager;
-    private final FeedbackReviewNotificationtasklet feedbackReviewNotificationtasklet;
+    private final ReportIngNotificationTasklet reportIngNotificationTasklet;
 
     @Bean
-    public Job feedbackReviewnotificationJob() {
-        return new JobBuilder("feedbackReviewNotificationJob", jobRepository)
-                .start(feedbackReviewnotificationStep())
+    public Job reportIngNotificationJob() {
+        return new JobBuilder("reportIngNotificationJob", jobRepository)
+                .start(sendReportIngNotificationStep())
                 .build();
     }
 
     @Bean
-    protected Step feedbackReviewnotificationStep() {
-        return new StepBuilder("sendFeedbackReviewNotificationStep", jobRepository)
-                .tasklet(feedbackReviewNotificationtasklet, transactionManager)
+    protected Step sendReportIngNotificationStep() {
+        return new StepBuilder("sendReportIngNotificationStep", jobRepository)
+                .tasklet(reportIngNotificationTasklet, transactionManager)
                 .build();
     }
 }

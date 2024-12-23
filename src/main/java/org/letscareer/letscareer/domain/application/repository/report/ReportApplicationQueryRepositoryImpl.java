@@ -1,11 +1,13 @@
 package org.letscareer.letscareer.domain.application.repository.report;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.type.ReportApplicationStatus;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,7 +26,50 @@ public class ReportApplicationQueryRepositoryImpl implements ReportApplicationQu
                 .where(
                         eqIsCanceled(false),
                         eqStatus(ReportApplicationStatus.APPLIED),
+                        applyUrlIsNotNull(),
                         isAfter3Hours()
+                )
+                .fetch();
+    }
+
+    @Override
+    public List<Long> findAllRemindNotificationReportApplicationId() {
+        return queryFactory
+                .select(reportApplication.id)
+                .from(reportApplication)
+                .where(
+                        eqIsCanceled(false),
+                        eqStatus(ReportApplicationStatus.APPLIED),
+                        applyUrlIsNotNull().isFalse(),
+                        isAfter3Days()
+                )
+                .fetch();
+    }
+
+    @Override
+    public List<Long> findAllLastRemindNotificationReportApplicationId() {
+        return queryFactory
+                .select(reportApplication.id)
+                .from(reportApplication)
+                .where(
+                        eqIsCanceled(false),
+                        eqStatus(ReportApplicationStatus.APPLIED),
+                        applyUrlIsNotNull().isFalse(),
+                        isBefore12Hours()
+                )
+                .fetch();
+    }
+
+    @Override
+    public List<Long> findAllAutoRefundNotificationReportApplicationId() {
+        return queryFactory
+                .select(reportApplication.id)
+                .from(reportApplication)
+                .where(
+                        eqIsCanceled(false),
+                        eqStatus(ReportApplicationStatus.APPLIED),
+                        applyUrlIsNotNull().isFalse(),
+                        isAfter7Days()
                 )
                 .fetch();
     }
@@ -53,7 +98,26 @@ public class ReportApplicationQueryRepositoryImpl implements ReportApplicationQu
 
     private BooleanExpression isAfter3Hours() {
         LocalDateTime now = LocalDateTime.now();
-        return reportApplication.payment.createDate.before(now.minusHours(3L));
+        return reportApplication.applyUrlDate.before(now.minusHours(3L));
+    }
+
+    private BooleanExpression applyUrlIsNotNull() {
+        return reportApplication.applyUrl.isNotNull().and(reportApplication.applyUrlDate.isNotNull());
+    }
+
+    private BooleanExpression isAfter3Days() {
+        LocalDate nowMinus3Days = LocalDate.now().minusDays(3);
+        return Expressions.dateTemplate(LocalDate.class, "DATE_FORMAT({0}, '%Y-%m-%d')", reportApplication.payment.createDate).eq(nowMinus3Days);
+    }
+
+    private BooleanExpression isBefore12Hours() {
+        LocalDateTime nowPlus12HoursAndMinus7Days = LocalDateTime.now().withMinute(0).withSecond(0).withNano(0).plusHours(12).minusDays(7);
+        return reportApplication.payment.createDate.goe(nowPlus12HoursAndMinus7Days);
+    }
+
+    private BooleanExpression isAfter7Days() {
+        LocalDateTime now = LocalDateTime.now();
+        return reportApplication.payment.createDate.before(now.minusDays(7L));
     }
 
     private BooleanExpression betweenReportUrlDate(LocalDateTime now) {

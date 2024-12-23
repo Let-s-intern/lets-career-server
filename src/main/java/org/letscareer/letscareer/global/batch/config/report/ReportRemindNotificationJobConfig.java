@@ -1,7 +1,7 @@
-package org.letscareer.letscareer.global.batch.config;
+package org.letscareer.letscareer.global.batch.config.report;
 
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.global.batch.tasklet.ReportFeedbackDdayNotificationTasklet;
+import org.letscareer.letscareer.global.batch.tasklet.report.ReportRemindNotificationTasklet;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -15,22 +15,22 @@ import org.springframework.transaction.PlatformTransactionManager;
 @EnableBatchProcessing
 @RequiredArgsConstructor
 @Configuration
-public class ReportFeedbackDdayNotificationJobConfig {
+public class ReportRemindNotificationJobConfig {
     private final JobRepository jobRepository;
     private final PlatformTransactionManager transactionManager;
-    private final ReportFeedbackDdayNotificationTasklet reportFeedbackDdayNotificationTasklet;
+    private final ReportRemindNotificationTasklet reportRemindNotificationTasklet;
 
     @Bean
-    public Job reportFeedbackDdayNotificationJob() {
-        return new JobBuilder("reportFeedbackDdayNotificationJob", jobRepository)
-                .start(sendReportFeedbackDdayNotificationStep())
+    public Job reportRemindNotificationJob() {
+        return new JobBuilder("reportRemindNotificationJob", jobRepository)
+                .start(sendReportRemindNotificationStep())
                 .build();
     }
 
     @Bean
-    protected Step sendReportFeedbackDdayNotificationStep() {
-        return new StepBuilder("sendReportFeedbackDdayNotificationStep", jobRepository)
-                .tasklet(reportFeedbackDdayNotificationTasklet, transactionManager)
+    protected Step sendReportRemindNotificationStep() {
+        return new StepBuilder("sendReportRemindNotificationStep", jobRepository)
+                .tasklet(reportRemindNotificationTasklet, transactionManager)
                 .build();
     }
 }

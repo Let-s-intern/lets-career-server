@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.letscareer.letscareer.domain.report.error.ReportErrorCode.REPORT_APPLICATION_NOT_FOUND;
-
 @RequiredArgsConstructor
 @Component
 public class ReportApplicationHelper {
@@ -55,6 +54,10 @@ public class ReportApplicationHelper {
         return reportFeedbackApplicationRepository.save(reportFeedbackApplication);
     }
 
+    public ReportApplication findReportApplicationByReportApplicationIdOrElseNull(Long applicationId) {
+        return reportApplicationRepository.findById(applicationId).orElse(null);
+    }
+
     public ReportApplication findReportApplicationByReportApplicationIdOrThrow(Long reportApplicationId) {
         return reportApplicationRepository.findById(reportApplicationId)
                 .orElseThrow(() -> new EntityNotFoundException(REPORT_APPLICATION_NOT_FOUND));
@@ -71,6 +74,18 @@ public class ReportApplicationHelper {
 
     public List<Long> findIngNotificationReportApplicationIds() {
         return reportApplicationRepository.findAllIngNotificationReportApplicationId();
+    }
+
+    public List<Long> findRemindNotificationReportApplicationIds() {
+        return reportApplicationRepository.findAllRemindNotificationReportApplicationId();
+    }
+
+    public List<Long> findLastRemindNotificationReportApplicationIds() {
+        return reportApplicationRepository.findAllLastRemindNotificationReportApplicationId();
+    }
+
+    public List<Long> findAutoRefundNotificationReportApplicationIds() {
+        return reportApplicationRepository.findAllAutoRefundNotificationReportApplicationId();
     }
 
     public List<Long> findReviewNotificationReportApplicationIds() {

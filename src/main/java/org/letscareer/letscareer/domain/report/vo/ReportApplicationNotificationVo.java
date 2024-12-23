@@ -1,12 +1,11 @@
 package org.letscareer.letscareer.domain.report.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
 import lombok.Builder;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.report.entity.Report;
 
-import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Builder(access = AccessLevel.PRIVATE)
 public record ReportApplicationNotificationVo(
@@ -18,8 +17,7 @@ public record ReportApplicationNotificationVo(
         String reportType,
         String reportOption,
         Boolean isFeedbackApplied,
-        @JsonFormat(pattern = "yyyy년 MM월 dd일 HH:mm", timezone = "Asia/Seoul")
-        LocalDateTime submitDate
+        String submitDate
 ) {
     public static ReportApplicationNotificationVo of(String userName,
                                                      Payment payment,
@@ -36,7 +34,7 @@ public record ReportApplicationNotificationVo(
                 .reportType(report.getType().getDesc())
                 .reportOption(reportOption)
                 .isFeedbackApplied(isFeedbackApplied)
-                .submitDate(payment.getCreateDate().plusDays(7L))
+                .submitDate(payment.getCreateDate().plusDays(7L).format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH:mm")))
                 .build();
     }
 }
