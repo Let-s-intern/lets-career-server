@@ -76,6 +76,10 @@ public class ReportApplicationHelper {
         return reportApplicationRepository.findAllIngNotificationReportApplicationId();
     }
 
+    public List<Long> findRemindNotificationReportApplicationIds() {
+        return reportApplicationRepository.findAllRemindNotificationReportApplicationId();
+    }
+
     public List<Long> findAutoRefundNotificationReportApplicationIds() {
         return reportApplicationRepository.findAllAutoRefundNotificationReportApplicationId();
     }

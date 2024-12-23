@@ -1,11 +1,13 @@
 package org.letscareer.letscareer.domain.application.repository.report;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.type.ReportApplicationStatus;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -31,6 +33,20 @@ public class ReportApplicationQueryRepositoryImpl implements ReportApplicationQu
     }
 
     @Override
+    public List<Long> findAllRemindNotificationReportApplicationId() {
+        return queryFactory
+                .select(reportApplication.id)
+                .from(reportApplication)
+                .where(
+                        eqIsCanceled(false),
+                        eqStatus(ReportApplicationStatus.APPLIED),
+                        applyUrlIsNotNull().isFalse(),
+                        isAfter3Days()
+                )
+                .fetch();
+    }
+
+    @Override
     public List<Long> findAllAutoRefundNotificationReportApplicationId() {
         return queryFactory
                 .select(reportApplication.id)
@@ -38,7 +54,7 @@ public class ReportApplicationQueryRepositoryImpl implements ReportApplicationQu
                 .where(
                         eqIsCanceled(false),
                         eqStatus(ReportApplicationStatus.APPLIED),
-                        applyUrlIsNotNull(),
+                        applyUrlIsNotNull().isFalse(),
                         isAfter7Days()
                 )
                 .fetch();
@@ -73,6 +89,11 @@ public class ReportApplicationQueryRepositoryImpl implements ReportApplicationQu
 
     private BooleanExpression applyUrlIsNotNull() {
         return reportApplication.applyUrl.isNotNull().and(reportApplication.applyUrlDate.isNotNull());
+    }
+
+    private BooleanExpression isAfter3Days() {
+        LocalDate nowMinus3Days = LocalDate.now().minusDays(3);
+        return Expressions.dateTemplate(LocalDate.class, "DATE_FORMAT({0}, '%Y-%m-%d')", reportApplication.payment.createDate).eq(nowMinus3Days);
     }
 
     private BooleanExpression isAfter7Days() {
