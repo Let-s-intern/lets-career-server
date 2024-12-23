@@ -80,6 +80,10 @@ public class ReportApplicationHelper {
         return reportApplicationRepository.findAllRemindNotificationReportApplicationId();
     }
 
+    public List<Long> findLastRemindNotificationReportApplicationIds() {
+        return reportApplicationRepository.findAllLastRemindNotificationReportApplicationId();
+    }
+
     public List<Long> findAutoRefundNotificationReportApplicationIds() {
         return reportApplicationRepository.findAllAutoRefundNotificationReportApplicationId();
     }

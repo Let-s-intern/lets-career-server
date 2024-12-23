@@ -47,6 +47,20 @@ public class ReportApplicationQueryRepositoryImpl implements ReportApplicationQu
     }
 
     @Override
+    public List<Long> findAllLastRemindNotificationReportApplicationId() {
+        return queryFactory
+                .select(reportApplication.id)
+                .from(reportApplication)
+                .where(
+                        eqIsCanceled(false),
+                        eqStatus(ReportApplicationStatus.APPLIED),
+                        applyUrlIsNotNull().isFalse(),
+                        isBefore12Hours()
+                )
+                .fetch();
+    }
+
+    @Override
     public List<Long> findAllAutoRefundNotificationReportApplicationId() {
         return queryFactory
                 .select(reportApplication.id)
@@ -94,6 +108,11 @@ public class ReportApplicationQueryRepositoryImpl implements ReportApplicationQu
     private BooleanExpression isAfter3Days() {
         LocalDate nowMinus3Days = LocalDate.now().minusDays(3);
         return Expressions.dateTemplate(LocalDate.class, "DATE_FORMAT({0}, '%Y-%m-%d')", reportApplication.payment.createDate).eq(nowMinus3Days);
+    }
+
+    private BooleanExpression isBefore12Hours() {
+        LocalDateTime nowPlus12HoursAndMinus7Days = LocalDateTime.now().withMinute(0).withSecond(0).withNano(0).plusHours(12).minusDays(7);
+        return reportApplication.payment.createDate.goe(nowPlus12HoursAndMinus7Days);
     }
 
     private BooleanExpression isAfter7Days() {
