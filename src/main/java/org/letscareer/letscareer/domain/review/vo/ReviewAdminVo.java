@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 public record ReviewAdminVo(
         Long id,
         Long applicationId,
-        Long userId,
         String programTitle,
         ProgramType programType,
         String name,
@@ -18,7 +17,6 @@ public record ReviewAdminVo(
         Boolean npsCheckAns,
         String content,
         Integer score,
-        String programDetail,
         Boolean isVisible,
         LocalDateTime createdDate
 ) {
