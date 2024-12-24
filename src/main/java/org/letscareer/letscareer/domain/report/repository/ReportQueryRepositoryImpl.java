@@ -340,6 +340,7 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         payment.id,
                         payment.finalPrice,
                         coupon.discount,
+                        coupon.name,
                         payment.programPrice,
                         payment.programDiscount,
                         reportApplication.refundPrice,
