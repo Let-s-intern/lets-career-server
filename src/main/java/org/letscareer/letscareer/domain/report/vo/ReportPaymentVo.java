@@ -7,6 +7,7 @@ public record ReportPaymentVo(
         Long paymentId,
         Integer finalPrice,
         Integer couponDiscount,
+        String couponName,
         Integer programPrice,
         Integer programDiscount,
         Integer reportRefundPrice,

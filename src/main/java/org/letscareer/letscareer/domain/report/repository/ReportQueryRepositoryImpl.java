@@ -340,6 +340,7 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         payment.id,
                         payment.finalPrice,
                         coupon.discount,
+                        coupon.name,
                         payment.programPrice,
                         payment.programDiscount,
                         reportApplication.refundPrice,
@@ -473,6 +474,7 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
     private List<ReportOptionVo> subQueryReportApplicationOptionInfos(Long applicationId) {
         return queryFactory.select(Projections.constructor(ReportOptionVo.class,
                         reportApplicationOption.id,
+                        reportApplicationOption.title,
                         reportApplicationOption.price,
                         reportApplicationOption.discountPrice,
                         reportApplicationOption.title
