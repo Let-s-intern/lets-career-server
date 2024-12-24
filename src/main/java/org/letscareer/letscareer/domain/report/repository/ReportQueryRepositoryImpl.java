@@ -474,7 +474,6 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
     private List<ReportOptionVo> subQueryReportApplicationOptionInfos(Long applicationId) {
         return queryFactory.select(Projections.constructor(ReportOptionVo.class,
                         reportApplicationOption.id,
-                        reportApplicationOption.title,
                         reportApplicationOption.price,
                         reportApplicationOption.discountPrice,
                         reportApplicationOption.title
