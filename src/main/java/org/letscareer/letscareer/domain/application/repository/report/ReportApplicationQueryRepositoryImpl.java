@@ -40,7 +40,7 @@ public class ReportApplicationQueryRepositoryImpl implements ReportApplicationQu
                 .where(
                         eqIsCanceled(false),
                         eqStatus(ReportApplicationStatus.APPLIED),
-                        applyUrlIsNotNull().isFalse(),
+                        applyUrlIsNotNull().eq(false),
                         isAfter3Days()
                 )
                 .fetch();
@@ -54,7 +54,7 @@ public class ReportApplicationQueryRepositoryImpl implements ReportApplicationQu
                 .where(
                         eqIsCanceled(false),
                         eqStatus(ReportApplicationStatus.APPLIED),
-                        applyUrlIsNotNull().isFalse(),
+                        applyUrlIsNotNull().eq(false),
                         isBefore12Hours()
                 )
                 .fetch();
@@ -68,7 +68,7 @@ public class ReportApplicationQueryRepositoryImpl implements ReportApplicationQu
                 .where(
                         eqIsCanceled(false),
                         eqStatus(ReportApplicationStatus.APPLIED),
-                        applyUrlIsNotNull().isFalse(),
+                        applyUrlIsNotNull().eq(false),
                         isAfter7Days()
                 )
                 .fetch();
