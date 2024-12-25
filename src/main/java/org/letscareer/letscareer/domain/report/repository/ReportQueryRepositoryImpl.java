@@ -338,6 +338,7 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
         return Optional.ofNullable(queryFactory
                 .select(Projections.constructor(ReportPaymentVo.class,
                         payment.id,
+                        payment.orderId,
                         payment.finalPrice,
                         coupon.discount,
                         coupon.name,
