@@ -211,6 +211,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                         vWReview.npsAns,
                         vWReview.npsCheckAns,
                         vWReview.content,
+                        vWReview.programDetail,
                         vWReview.score,
                         vWReview.isVisible,
                         vWReview.createDate

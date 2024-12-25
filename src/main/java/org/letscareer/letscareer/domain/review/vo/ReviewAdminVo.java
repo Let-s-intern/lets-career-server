@@ -16,6 +16,7 @@ public record ReviewAdminVo(
         String npsAns,
         Boolean npsCheckAns,
         String content,
+        String programDetail,
         Integer score,
         Boolean isVisible,
         LocalDateTime createdDate
