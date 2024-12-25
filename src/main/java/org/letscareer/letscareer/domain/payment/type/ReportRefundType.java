@@ -28,7 +28,8 @@ public enum ReportRefundType {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime applyUrlDate = !Objects.isNull(reportApplication.getApplyUrlDate()) ? reportApplication.getApplyUrlDate() : payment.getCreateDate();
         ReportApplicationStatus reportApplicationStatus = reportApplication.getStatus();
-        if(now.isBefore(applyUrlDate.plusHours(3L))) {
+        // if(now.isBefore(applyUrlDate.plusHours(3L))) {
+        if(now.isBefore(applyUrlDate.plusMinutes(10L))) {
             return switch (reportApplicationStatus) {
                 case APPLIED -> ALL;
                 case REPORTING, REPORTED -> PERCENT_80;

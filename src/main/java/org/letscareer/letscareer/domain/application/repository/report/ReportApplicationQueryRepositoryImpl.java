@@ -98,7 +98,8 @@ public class ReportApplicationQueryRepositoryImpl implements ReportApplicationQu
 
     private BooleanExpression isAfter3Hours() {
         LocalDateTime now = LocalDateTime.now();
-        return reportApplication.applyUrlDate.before(now.minusHours(3L));
+        // return reportApplication.applyUrlDate.before(now.minusHours(3L));
+        return reportApplication.applyUrlDate.before(now.minusMinutes(10L));
     }
 
     private BooleanExpression applyUrlIsNull() {
@@ -110,12 +111,14 @@ public class ReportApplicationQueryRepositoryImpl implements ReportApplicationQu
     }
 
     private BooleanExpression isAfter3Days() {
-        LocalDate nowMinus3Days = LocalDate.now().minusDays(3);
+        // LocalDate nowMinus3Days = LocalDate.now().minusDays(3);
+        LocalDate nowMinus3Days = LocalDate.now().minusDays(1);
         return Expressions.dateTemplate(LocalDate.class, "DATE_FORMAT({0}, '%Y-%m-%d')", reportApplication.payment.createDate).eq(nowMinus3Days);
     }
 
     private BooleanExpression isBefore12Hours() {
-        LocalDateTime nowPlus12HoursAndMinus7Days = LocalDateTime.now().withMinute(0).withSecond(0).withNano(0).plusHours(12).minusDays(7);
+        // LocalDateTime nowPlus12HoursAndMinus7Days = LocalDateTime.now().withMinute(0).withSecond(0).withNano(0).plusHours(12).minusDays(7);
+        LocalDateTime nowPlus12HoursAndMinus7Days = LocalDateTime.now().withMinute(0).withSecond(0).withNano(0).plusHours(12).minusDays(2);
         return reportApplication.payment.createDate.goe(nowPlus12HoursAndMinus7Days);
     }
 
