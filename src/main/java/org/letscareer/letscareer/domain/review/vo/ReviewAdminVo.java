@@ -11,6 +11,7 @@ public record ReviewAdminVo(
         Long applicationId,
         String programTitle,
         ProgramType programType,
+        Long userId,
         String name,
         Integer nps,
         String npsAns,

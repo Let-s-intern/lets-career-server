@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
         "SELECT r.review_id, r.application_id, " +
                 "ca.challenge_id as program_id, 1 AS program_type, ch.title as program_title, " +
                 "u.name as user_name," +
-                "u.user_id as user_id" +
+                "u.user_id as user_id, " +
                 "r.nps, r.nps_ans, r.nps_check_ans, r.content, r.program_detail, r.score, r.is_visible, r.create_date " +
                 "FROM review as r " +
                 "LEFT JOIN application as a ON r.application_id = a.application_id " +
@@ -27,7 +27,7 @@ import java.time.LocalDateTime;
                 "SELECT r.review_id, r.application_id, " +
                 "la.live_id as program_id, 2 AS program_type, li.title as program_title, " +
                 "u.name as user_name, " +
-                "u.user_id as user_id" +
+                "u.user_id as user_id, " +
                 "r.nps, r.nps_ans, r.nps_check_ans, r.content, r.program_detail, r.score, r.is_visible, r.create_date " +
                 "FROM review as r " +
                 "LEFT JOIN application as a ON r.application_id = a.application_id " +
@@ -40,7 +40,7 @@ import java.time.LocalDateTime;
                 "SELECT r.review_id, r.application_id, " +
                 "re.report_id as program_id, 4 AS program_type, re.title as program_title, " +
                 "u.name as user_name, " +
-                "u.user_id as user_id" +
+                "u.user_id as user_id, " +
                 "r.nps, r.nps_ans, r.nps_check_ans, r.content, r.program_detail, r.score, r.is_visible, r.create_date " +
                 "FROM review as r " +
                 "LEFT JOIN application as a ON r.application_id = a.application_id " +
@@ -53,7 +53,7 @@ import java.time.LocalDateTime;
                 "SELECT r.review_id, r.application_id, " +
                 "ch.challenge_id as program_id, 1 AS program_type, ch.title as program_title, " +
                 "'익명' as user_name, " +
-                "u.user_id as user_id" +
+                "null as user_id, " +
                 "r.nps, r.nps_ans, r.nps_check_ans, r.content, r.program_detail, r.score, r.is_visible, r.create_date " +
                 "FROM review as r " +
                 "LEFT JOIN challenge as ch ON r.program_id = ch.challenge_id " +
@@ -64,7 +64,7 @@ import java.time.LocalDateTime;
                 "SELECT r.review_id, r.application_id, " +
                 "li.live_id as program_id, 2 AS program_type, li.title as program_title, " +
                 "'익명' as user_name, " +
-                "null as user_id" +
+                "null as user_id, " +
                 "r.nps, r.nps_ans, r.nps_check_ans, r.content, r.program_detail, r.score, r.is_visible, r.create_date " +
                 "FROM review as r " +
                 "LEFT JOIN live as li ON r.program_id = li.live_id " +
@@ -75,7 +75,7 @@ import java.time.LocalDateTime;
                 "SELECT r.review_id, r.application_id, " +
                 "re.report_id as program_id, 4 AS program_type, re.title as program_title, " +
                 "'익명' as user_name, " +
-                "null as user_id" +
+                "null as user_id, " +
                 "r.nps, r.nps_ans, r.nps_check_ans, r.content, r.program_detail, r.score, r.is_visible, r.create_date " +
                 "FROM review as r " +
                 "LEFT JOIN report as re ON r.program_id = re.report_id " +
