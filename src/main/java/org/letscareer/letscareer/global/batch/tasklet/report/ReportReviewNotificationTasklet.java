@@ -32,7 +32,7 @@ public class ReportReviewNotificationTasklet implements Tasklet {
         Report report = reportApplication.getReport();
         User user = reportApplication.getUser();
 
-        ReportReviewNotificationParameter reportReviewNotificationParameter = ReportReviewNotificationParameter.of(user.getName(), report.getTitle(), reportApplication.getReportPriceType().getDesc());
+        ReportReviewNotificationParameter reportReviewNotificationParameter = ReportReviewNotificationParameter.of(user.getName(), report, reportApplication.getId());
         nhnProvider.sendKakaoMessage(user, reportReviewNotificationParameter, "report_review");
 
         return RepeatStatus.FINISHED;
