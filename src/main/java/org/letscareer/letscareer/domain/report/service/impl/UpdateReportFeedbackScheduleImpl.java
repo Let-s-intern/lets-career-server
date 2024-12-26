@@ -47,6 +47,7 @@ public class UpdateReportFeedbackScheduleImpl implements UpdateReportFeedbackSch
         if (Objects.isNull(requestDto.reportFeedbackStatus())) return;
         if (!ReportFeedbackStatus.CONFIRMED.equals(requestDto.reportFeedbackStatus())) return;
         reportFeedbackApplication.updateFeedbackStatus(requestDto.reportFeedbackStatus());
+        sendKakaoMessage(reportFeedbackApplication);
     }
 
     private void updateFeedbackSchedule(Report report, ReportFeedbackApplication reportFeedbackApplication, UpdateFeedbackScheduleRequestDto requestDto) {
@@ -54,7 +55,6 @@ public class UpdateReportFeedbackScheduleImpl implements UpdateReportFeedbackSch
         if (!ReportFeedbackStatus.PENDING.equals(requestDto.reportFeedbackStatus())) return;
         reportFeedbackApplication.updateSchedule(requestDto);
         createZoomMeeting(report, reportFeedbackApplication, requestDto);
-        sendKakaoMessage(reportFeedbackApplication);
     }
 
     private void sendKakaoMessage(ReportFeedbackApplication reportFeedbackApplication) {
