@@ -34,7 +34,7 @@ public class FeedbackReviewNotificationtasklet implements Tasklet {
         Report report = reportApplication.getReport();
         User user = reportApplication.getUser();
 
-        FeedbackReviewNotificationParameter feedbackReviewNotificationParameter = FeedbackReviewNotificationParameter.of(user.getName(), report.getTitle(), reportApplication.getReportPriceType().getDesc());
+        FeedbackReviewNotificationParameter feedbackReviewNotificationParameter = FeedbackReviewNotificationParameter.of(user.getName(), report, reportApplication.getId());
         nhnProvider.sendKakaoMessage(user, feedbackReviewNotificationParameter, "feedback_review");
 
         reportFeedbackApplication.updateFeedbackStatus(ReportFeedbackStatus.COMPLETED);
