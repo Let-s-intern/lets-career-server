@@ -49,7 +49,7 @@ public record ReportWebhookDto(
     }
 
     public String getTimeInfoTitle() {
-        if(isYet(paymentStatus)) return "신청일자 / 진단서 업로드 마감일자 (베이직 : +2일, 프리미엄 : +3일, 옵션추가시 : +5일)";
+        if(isYet(paymentStatus)) return "신청일자";
         else return "신청일자 / 서류제출일자 / 진단서 업로드 마감일자 (베이직 : +2일, 프리미엄 : +3일, 옵션추가시 : +5일)";
     }
 
@@ -90,17 +90,16 @@ public record ReportWebhookDto(
 
     public String getTimeInfo() {
         LocalDateTime applicationTime = reportApplication.getCreateDate();
-        LocalDateTime endDate = calculateEndDate(applicationTime);
 
         if(isYet(paymentStatus)){
-            return "신청일자 : " + applicationTime + "\n"
-                    + "마감일자 : " + endDate;
+            return "신청일자 : " + applicationTime;
         }
         else{
             LocalDateTime appliedDate = reportApplication.getApplyUrlDate();
+            LocalDateTime endDate = calculateEndDate(appliedDate);
             return "신청일자 : " + applicationTime + "\n"
                     + "서류제출일자 : " + appliedDate + "\n"
-                    + "마감일자 : " + endDate;
+                    + "진단서업로드마감일자 : " + endDate;
         }
     }
 
