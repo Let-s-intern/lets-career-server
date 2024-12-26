@@ -75,10 +75,9 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
         updateContactEmail(user, requestDto);
         TossPaymentsResponseDto responseDto = tossProvider.requestPayments(requestDto.paymentKey(), requestDto.orderId(), requestDto.amount());
         sendKakaoMessages(paymentStatus, report, user, requestDto, reportApplication.getReportPriceType(), reportApplicationOptions, reportFeedbackApplication);
-        if(isYet(paymentStatus)) {
-            setReportApplicationCache(user, report, reportApplication, reportApplicationOptions, reportFeedbackApplication, payment);
-            sendSlackBot(report, reportApplication, reportApplicationOptions, reportFeedbackApplication, user, payment);
-        }
+
+        setReportApplicationCache(user, report, reportApplication, reportApplicationOptions, reportFeedbackApplication, payment);
+        sendSlackBot(report, reportApplication, reportApplicationOptions, reportFeedbackApplication, user, payment, paymentStatus);
         return reportMapper.toCreateReportApplicationResponseDto(responseDto);
     }
 
@@ -128,9 +127,6 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
         nhnProvider.sendKakaoMessage(user, feedbackYetPaymentParameter, "feedback_yet_payment");
     }
 
-    private boolean isYet(ReportPaymentStatus paymentStatus) {
-        return paymentStatus.equals(ReportPaymentStatus.REPORT_YET) || paymentStatus.equals(ReportPaymentStatus.ALL_YET);
-    }
 
     private void setReportApplicationCache(User user, Report report, ReportApplication reportApplication, List<ReportApplicationOption> reportApplicationOptionList, ReportFeedbackApplication reportFeedbackApplication, Payment payment) {
         Boolean isFeedbackApplied = !Objects.isNull(reportFeedbackApplication);
@@ -144,8 +140,9 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
                               List<ReportApplicationOption> reportApplicationOptions,
                               ReportFeedbackApplication reportFeedbackApplication,
                               User user,
-                              Payment payment) {
-        ReportWebhookDto reportWebhookDto = ReportWebhookDto.of(report, reportApplication, reportApplicationOptions, reportFeedbackApplication, user, payment);
+                              Payment payment,
+                              ReportPaymentStatus paymentStatus) {
+        ReportWebhookDto reportWebhookDto = ReportWebhookDto.of(report, reportApplication, reportApplicationOptions, reportFeedbackApplication, user, payment, paymentStatus);
         webhookProvider.sendMessage(reportWebhookDto);
     }
 }

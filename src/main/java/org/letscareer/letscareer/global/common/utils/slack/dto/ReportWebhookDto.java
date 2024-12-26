@@ -7,6 +7,7 @@ import org.letscareer.letscareer.domain.application.entity.report.ReportApplicat
 import org.letscareer.letscareer.domain.application.entity.report.ReportFeedbackApplication;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.report.entity.Report;
+import org.letscareer.letscareer.domain.report.type.ReportPaymentStatus;
 import org.letscareer.letscareer.domain.report.type.ReportPriceType;
 import org.letscareer.letscareer.domain.user.entity.User;
 
@@ -21,14 +22,16 @@ public record ReportWebhookDto(
         List<ReportApplicationOption> reportApplicationOptions,
         ReportFeedbackApplication reportFeedbackApplication,
         User user,
-        Payment payment
+        Payment payment,
+        ReportPaymentStatus paymentStatus
 ) {
     public static ReportWebhookDto of(Report report,
                                       ReportApplication reportApplication,
                                       List<ReportApplicationOption> reportApplicationOptions,
                                       ReportFeedbackApplication reportFeedbackApplication,
                                       User user,
-                                      Payment payment) {
+                                      Payment payment,
+                                      ReportPaymentStatus paymentStatus) {
         return ReportWebhookDto.builder()
                 .report(report)
                 .reportApplication(reportApplication)
@@ -36,7 +39,22 @@ public record ReportWebhookDto(
                 .reportFeedbackApplication(reportFeedbackApplication)
                 .user(user)
                 .payment(payment)
+                .paymentStatus(paymentStatus)
                 .build();
+    }
+
+    public String getMainTitle() {
+        if(isYet(paymentStatus)) return "진단서 신청 알림";
+        else return "서류 제출 알림";
+    }
+
+    public String getTimeInfoTitle() {
+        if(isYet(paymentStatus)) return "신청일자 / 진단서 업로드 마감일자 (베이직 : +2일, 프리미엄 : +3일, 옵션추가시 : +5일)";
+        else return "신청일자 / 서류제출일자 / 진단서 업로드 마감일자 (베이직 : +2일, 프리미엄 : +3일, 옵션추가시 : +5일)";
+    }
+
+    private boolean isYet(ReportPaymentStatus paymentStatus) {
+        return paymentStatus.equals(ReportPaymentStatus.REPORT_YET) || paymentStatus.equals(ReportPaymentStatus.ALL_YET);
     }
 
     public String getReportTitle() {
@@ -72,15 +90,27 @@ public record ReportWebhookDto(
 
     public String getTimeInfo() {
         LocalDateTime applicationTime = reportApplication.getCreateDate();
-        LocalDateTime endDate;
-        if (!reportApplicationOptions.isEmpty()) {
-            endDate = applicationTime.plusDays(5L);
-        } else if (ReportPriceType.PREMIUM.equals(reportApplication.getReportPriceType())) {
-            endDate = applicationTime.plusDays(3L);
-        } else {
-            endDate = applicationTime.plusDays(2L);
+        LocalDateTime endDate = calculateEndDate(applicationTime);
+
+        if(isYet(paymentStatus)){
+            return "신청일자 : " + applicationTime + "\n"
+                    + "마감일자 : " + endDate;
         }
-        return "신청일자 : " + applicationTime + "\n"
-                + "마감일자 : " + endDate;
+        else{
+            LocalDateTime appliedDate = reportApplication.getApplyUrlDate();
+            return "신청일자 : " + applicationTime + "\n"
+                    + "서류제출일자 : " + appliedDate + "\n"
+                    + "마감일자 : " + endDate;
+        }
+    }
+
+    private LocalDateTime calculateEndDate(LocalDateTime applicationTime){
+        if (!reportApplicationOptions.isEmpty()) {
+            return applicationTime.plusDays(5L);
+        } else if (ReportPriceType.PREMIUM.equals(reportApplication.getReportPriceType())) {
+            return applicationTime.plusDays(3L);
+        } else {
+            return applicationTime.plusDays(2L);
+        }
     }
 }
