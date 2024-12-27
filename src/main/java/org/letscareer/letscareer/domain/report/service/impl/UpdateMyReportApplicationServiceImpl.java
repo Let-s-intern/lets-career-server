@@ -2,19 +2,26 @@ package org.letscareer.letscareer.domain.report.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.entity.report.ReportApplication;
+import org.letscareer.letscareer.domain.application.entity.report.ReportApplicationOption;
 import org.letscareer.letscareer.domain.application.entity.report.ReportFeedbackApplication;
 import org.letscareer.letscareer.domain.application.helper.ReportApplicationHelper;
 import org.letscareer.letscareer.domain.nhn.dto.request.RequestMessageInfo;
 import org.letscareer.letscareer.domain.nhn.dto.request.report.FeedbackNotiParameter;
 import org.letscareer.letscareer.domain.nhn.dto.request.report.ReportNotificationParameter;
 import org.letscareer.letscareer.domain.nhn.provider.NhnProvider;
+import org.letscareer.letscareer.domain.payment.entity.Payment;
+import org.letscareer.letscareer.domain.payment.helper.PaymentHelper;
 import org.letscareer.letscareer.domain.report.dto.req.UpdateMyReportApplicationRequestDto;
 import org.letscareer.letscareer.domain.report.entity.Report;
+import org.letscareer.letscareer.domain.report.helper.ReportHelper;
 import org.letscareer.letscareer.domain.report.helper.ReportOptionHelper;
 import org.letscareer.letscareer.domain.report.service.UpdateMyReportApplicationService;
+import org.letscareer.letscareer.domain.report.type.ReportPaymentStatus;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.type.UserRole;
 import org.letscareer.letscareer.global.common.utils.redis.utils.RedisUtils;
+import org.letscareer.letscareer.global.common.utils.slack.WebhookProvider;
+import org.letscareer.letscareer.global.common.utils.slack.dto.ReportWebhookDto;
 import org.letscareer.letscareer.global.error.exception.UnauthorizedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +41,9 @@ public class UpdateMyReportApplicationServiceImpl implements UpdateMyReportAppli
     private final ReportOptionHelper reportOptionHelper;
     private final NhnProvider nhnProvider;
     private final RedisUtils redisUtils;
+    private final WebhookProvider webhookProvider;
+    private final ReportHelper reportHelper;
+    private final PaymentHelper paymentHelper;
 
     @Override
     public void execute(User user, Long applicationId, UpdateMyReportApplicationRequestDto requestDto) {
@@ -43,7 +53,13 @@ public class UpdateMyReportApplicationServiceImpl implements UpdateMyReportAppli
         ReportFeedbackApplication reportFeedbackApplication = reportApplication.getReportFeedbackApplication();
         if(!Objects.isNull(reportFeedbackApplication)) reportFeedbackApplication.updateDesiredDates(requestDto);
 
+        Report report = reportHelper.findReportByReportIdOrThrow(reportApplication.getReport().getId());
+        Payment payment = paymentHelper.findPaymentByApplicationIdOrThrow(reportApplication.getId());
+        List<ReportApplicationOption> reportApplicationOptions = reportApplicationHelper.findAllReportApplicationOptionsByApplicationId(applicationId);
+        ReportPaymentStatus paymentStatus = ReportPaymentStatus.of(reportApplication, reportFeedbackApplication);
+
         sendKakaoMessages(user, reportApplication, reportFeedbackApplication);
+        sendSlackBot(report, reportApplication, reportApplicationOptions, reportFeedbackApplication, user, payment, paymentStatus);
         redisUtils.delete(REPORT_APPLICATION_CACHE_KEY + applicationId);
     }
 
@@ -65,5 +81,16 @@ public class UpdateMyReportApplicationServiceImpl implements UpdateMyReportAppli
             messageList.add(RequestMessageInfo.of(feedbackNotiParameter, "feedback_noti"));
         }
         nhnProvider.sendPaymentKakaoMessages(user, messageList);
+    }
+
+    private void sendSlackBot(Report report,
+                              ReportApplication reportApplication,
+                              List<ReportApplicationOption> reportApplicationOptions,
+                              ReportFeedbackApplication reportFeedbackApplication,
+                              User user,
+                              Payment payment,
+                              ReportPaymentStatus paymentStatus) {
+        ReportWebhookDto reportWebhookDto = ReportWebhookDto.of(report, reportApplication, reportApplicationOptions, reportFeedbackApplication, user, payment, paymentStatus);
+        webhookProvider.sendMessage(reportWebhookDto);
     }
 }
