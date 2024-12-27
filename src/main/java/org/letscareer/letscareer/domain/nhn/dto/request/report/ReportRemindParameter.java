@@ -18,6 +18,7 @@ public record ReportRemindParameter(
                 .reportTitle(notificationVo.reportTitle())
                 .reportType(notificationVo.reportType())
                 .reportOption(notificationVo.reportOption())
+                .submitDate(notificationVo.submitDate())
                 .build();
     }
 }
