@@ -124,7 +124,8 @@ public class ReportApplicationQueryRepositoryImpl implements ReportApplicationQu
 
     private BooleanExpression isAfter7Days() {
         LocalDateTime now = LocalDateTime.now();
-        return reportApplication.payment.createDate.before(now.minusDays(7L));
+//        return reportApplication.payment.createDate.before(now.minusDays(7L));
+        return reportApplication.payment.createDate.before(now.minusDays(1L));
     }
 
     private BooleanExpression betweenReportUrlDate(LocalDateTime now) {
