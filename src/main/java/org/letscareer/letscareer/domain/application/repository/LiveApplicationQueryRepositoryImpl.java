@@ -69,8 +69,7 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
                 .leftJoin(liveApplication.payment.coupon, coupon)
                 .orderBy(liveApplication.id.desc())
                 .where(
-                        eqLiveId(liveId),
-                        eqIsCanceled(isCanceled)
+                        eqLiveId(liveId)
                 )
                 .fetch();
     }

@@ -82,8 +82,7 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                 .leftJoin(challengeApplication.payment.coupon, coupon)
                 .orderBy(challengeApplication.id.desc())
                 .where(
-                        eqChallengeId(challengeId),
-                        eqIsCanceled(false)
+                        eqChallengeId(challengeId)
                 )
                 .fetch();
     }
