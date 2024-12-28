@@ -119,8 +119,8 @@ public class ReportApplicationQueryRepositoryImpl implements ReportApplicationQu
         LocalDateTime now = LocalDateTime.now().withMinute(0).withSecond(0).withNano(0);
 //        LocalDateTime startOfPeriod = now.minusDays(6).minusHours(12);
 //        LocalDateTime endOfPeriod = now.minusDays(6).minusHours(11);
-        LocalDateTime startOfPeriod = now.minusDays(1).minusHours(12);
-        LocalDateTime endOfPeriod = now.minusDays(1).minusHours(11);
+        LocalDateTime startOfPeriod = now.minusDays(0).minusHours(12);
+        LocalDateTime endOfPeriod = now.minusDays(0).minusHours(11);
         return reportApplication.payment.createDate.goe(startOfPeriod)
                 .and(reportApplication.payment.createDate.lt(endOfPeriod));
     }
@@ -128,7 +128,7 @@ public class ReportApplicationQueryRepositoryImpl implements ReportApplicationQu
     private BooleanExpression isAfter7Days() {
         LocalDateTime now = LocalDateTime.now();
 //        return reportApplication.payment.createDate.before(now.minusDays(7L));
-        return reportApplication.payment.createDate.before(now.minusDays(2L));
+        return reportApplication.payment.createDate.before(now.minusDays(1L));
     }
 
     private BooleanExpression betweenReportUrlDate(LocalDateTime now) {
