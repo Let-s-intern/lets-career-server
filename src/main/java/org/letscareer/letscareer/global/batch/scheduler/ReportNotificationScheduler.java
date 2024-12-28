@@ -48,7 +48,7 @@ public class ReportNotificationScheduler {
     }
 
     @Scheduled(cron = "0 0/1 * * * *")
-    @SchedulerLock(name = "reportIngNotificationJob", lockAtMostFor = "59s", lockAtLeastFor = "10s")
+    @SchedulerLock(name = "reportIngNotificationJob", lockAtMostFor = "25s", lockAtLeastFor = "10s")
     public void sendReportIngNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
         System.out.println("________________________ sendReportIngNotification started");
         List<Long> reportApplicationList = reportApplicationHelper.findIngNotificationReportApplicationIds();
@@ -95,7 +95,7 @@ public class ReportNotificationScheduler {
     }
 
     @Scheduled(cron = "30 0/1 * * * *")
-    @SchedulerLock(name = "reportAutoRefundNotificationJob", lockAtMostFor = "59s", lockAtLeastFor = "10s")
+    @SchedulerLock(name = "reportAutoRefundNotificationJob", lockAtMostFor = "25s", lockAtLeastFor = "10s")
     public void sendReportAutoRefundNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
         System.out.println("======================== sendReportAutoRefundNotification started");
         List<Long> reportApplicationList = reportApplicationHelper.findAutoRefundNotificationReportApplicationIds();
