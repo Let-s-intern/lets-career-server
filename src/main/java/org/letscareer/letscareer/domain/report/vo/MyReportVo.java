@@ -6,6 +6,7 @@ import org.letscareer.letscareer.domain.report.type.ReportPriceType;
 import org.letscareer.letscareer.domain.report.type.ReportType;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record MyReportVo(
         Long reportId,
@@ -27,6 +28,7 @@ public record MyReportVo(
         LocalDateTime applicationTime,
         LocalDateTime confirmedTime,
         Boolean isCanceled,
-        Boolean feedbackIsCanceled
+        Boolean feedbackIsCanceled,
+        List<Long> optionIds
 ) {
 }
