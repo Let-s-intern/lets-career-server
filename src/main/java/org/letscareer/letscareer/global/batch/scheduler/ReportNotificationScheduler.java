@@ -47,22 +47,22 @@ public class ReportNotificationScheduler {
         }
     }
 
-    @Scheduled(cron = "0 0/1 * * * *")
-    @SchedulerLock(name = "reportIngNotificationJob", lockAtMostFor = "25s", lockAtLeastFor = "10s")
-    public void sendReportIngNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
-        System.out.println("________________________ sendReportIngNotification started");
-        List<Long> reportApplicationList = reportApplicationHelper.findIngNotificationReportApplicationIds();
-        System.out.println("________________________ sendReportIngNotification reportApplicationList size = " + reportApplicationList.size());
-        for(Long reportApplicationId : reportApplicationList) {
-            jobLauncher.run(
-                    reportIngNotificationJobConfig.reportIngNotificationJob(),
-                    new JobParametersBuilder()
-                            .addLong("reportApplicationId", reportApplicationId)
-                            .addLocalDateTime("now", LocalDateTime.now())
-                            .toJobParameters()
-            );
-        }
-    }
+//    @Scheduled(cron = "0 0/1 * * * *")
+//    @SchedulerLock(name = "reportIngNotificationJob", lockAtMostFor = "25s", lockAtLeastFor = "10s")
+//    public void sendReportIngNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
+//        System.out.println("________________________ sendReportIngNotification started");
+//        List<Long> reportApplicationList = reportApplicationHelper.findIngNotificationReportApplicationIds();
+//        System.out.println("________________________ sendReportIngNotification reportApplicationList size = " + reportApplicationList.size());
+//        for(Long reportApplicationId : reportApplicationList) {
+//            jobLauncher.run(
+//                    reportIngNotificationJobConfig.reportIngNotificationJob(),
+//                    new JobParametersBuilder()
+//                            .addLong("reportApplicationId", reportApplicationId)
+//                            .addLocalDateTime("now", LocalDateTime.now())
+//                            .toJobParameters()
+//            );
+//        }
+//    }
 
     @Scheduled(cron = "0 5 12 * * *")
     @SchedulerLock(name = "reportRemindNotificationJob", lockAtMostFor = "1m", lockAtLeastFor = "1m")
