@@ -117,8 +117,10 @@ public class ReportApplicationQueryRepositoryImpl implements ReportApplicationQu
 
     private BooleanExpression isBefore12Hours() {
         LocalDateTime now = LocalDateTime.now().withMinute(0).withSecond(0).withNano(0);
-        LocalDateTime startOfPeriod = now.minusDays(6).minusHours(12);
-        LocalDateTime endOfPeriod = now.minusDays(6).minusHours(11);
+//        LocalDateTime startOfPeriod = now.minusDays(6).minusHours(12);
+//        LocalDateTime endOfPeriod = now.minusDays(6).minusHours(11);
+        LocalDateTime startOfPeriod = now.minusDays(0).minusHours(12);
+        LocalDateTime endOfPeriod = now.minusDays(0).minusHours(11);
         return reportApplication.payment.createDate.goe(startOfPeriod)
                 .and(reportApplication.payment.createDate.lt(endOfPeriod));
     }
