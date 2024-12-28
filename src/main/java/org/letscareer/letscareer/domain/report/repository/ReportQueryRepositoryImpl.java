@@ -26,6 +26,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -262,7 +263,8 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         reportApplication.createDate,
                         getConfirmedTimeFor(),
                         reportApplication.isCanceled,
-                        reportFeedbackApplication.isCanceled
+                        reportFeedbackApplication.isCanceled,
+                        Expressions.constant(new ArrayList<Long>())
                 ))
                 .from(report)
                 .leftJoin(report.applicationList, reportApplication)
@@ -277,6 +279,12 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+
+        contents.forEach(reportVo -> {
+            List<Long> optionIds = getOptionIdsForReportApplication(reportVo.applicationId());
+
+            updateReportVoWithOptionIds(reportVo, optionIds, contents);
+        });
 
         JPAQuery<Long> countQuery = queryFactory
                 .select(reportApplication.id.countDistinct())
@@ -571,6 +579,40 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .when(reportFeedbackApplication.desiredDateType.eq(ReportDesiredDateType.DESIRED_DATE_ADMIN))
                 .then(reportFeedbackApplication.desiredDateAdmin)
                 .otherwise((LocalDateTime) null);
+    }
+
+    private List<Long> getOptionIdsForReportApplication(Long reportApplicationId) {
+        return queryFactory
+                .select(reportApplicationOption.id)
+                .from(reportApplicationOption)
+                .where(eqApplicationId(reportApplicationId))
+                .fetch();
+    }
+
+    private void updateReportVoWithOptionIds(MyReportVo reportVo, List<Long> optionIds, List<MyReportVo> contents) {
+        contents.set(contents.indexOf(reportVo), new MyReportVo(
+                reportVo.reportId(),
+                reportVo.applicationId(),
+                reportVo.title(),
+                reportVo.reportType(),
+                reportVo.reportPriceType(),
+                reportVo.reportFeedbackPriceType(),
+                reportVo.applicationStatus(),
+                reportVo.feedbackStatus(),
+                reportVo.reportUrl(),
+                reportVo.applyUrl(),
+                reportVo.recruitmentUrl(),
+                reportVo.zoomLink(),
+                reportVo.zoomPassword(),
+                reportVo.desiredDate1(),
+                reportVo.desiredDate2(),
+                reportVo.desiredDate3(),
+                reportVo.applicationTime(),
+                reportVo.confirmedTime(),
+                reportVo.isCanceled(),
+                reportVo.feedbackIsCanceled(),
+                optionIds
+        ));
     }
 
     private BooleanExpression eqReportId(Long reportId) {
