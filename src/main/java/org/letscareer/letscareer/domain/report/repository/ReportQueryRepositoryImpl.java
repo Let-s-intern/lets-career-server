@@ -328,6 +328,7 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         reportApplication.status,
                         reportFeedbackApplication.reportFeedbackStatus,
                         getConfirmedTimeFor(),
+                        reportApplication.applyUrlDate,
                         Expressions.constant(subQueryReportApplicationOptionsTitle(applicationId)),
                         reportApplication.isCanceled
                 ))
