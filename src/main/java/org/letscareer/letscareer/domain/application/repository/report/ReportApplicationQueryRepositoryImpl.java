@@ -69,7 +69,7 @@ public class ReportApplicationQueryRepositoryImpl implements ReportApplicationQu
                         eqIsCanceled(false),
                         eqStatus(ReportApplicationStatus.APPLIED),
                         applyUrlIsNull(),
-                        isAfter7Days()
+                        isAfter8Days()
                 )
                 .fetch();
     }
@@ -122,9 +122,9 @@ public class ReportApplicationQueryRepositoryImpl implements ReportApplicationQu
                 .and(reportApplication.payment.createDate.lt(endOfPeriod));
     }
 
-    private BooleanExpression isAfter7Days() {
-        LocalDateTime now = LocalDateTime.now();
-        return reportApplication.payment.createDate.before(now.minusDays(7L));
+    private BooleanExpression isAfter8Days() {
+        LocalDate nowMinus8Days = LocalDate.now().minusDays(8);
+        return Expressions.dateTemplate(LocalDate.class, "DATE_FORMAT({0}, '%Y-%m-%d')", reportApplication.payment.createDate).eq(nowMinus8Days);
     }
 
     private BooleanExpression betweenReportUrlDate(LocalDateTime now) {
