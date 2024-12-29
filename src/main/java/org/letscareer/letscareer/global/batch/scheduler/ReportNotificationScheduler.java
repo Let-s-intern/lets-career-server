@@ -51,7 +51,7 @@ public class ReportNotificationScheduler {
 //    @SchedulerLock(name = "reportIngNotificationJob", lockAtMostFor = "59s", lockAtLeastFor = "59s")
 //    @Scheduled(cron = "30 0,10,20,30,40,50 * * * *")
     @Scheduled(cron = "0 0/1 * * * *")
-    @SchedulerLock(name = "reportIngNotificationJob", lockAtMostFor = "59s", lockAtLeastFor = "59s")
+//    @SchedulerLock(name = "reportIngNotificationJob", lockAtMostFor = "59s", lockAtLeastFor = "59s")
     public void sendReportIngNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
         List<Long> reportApplicationList = reportApplicationHelper.findIngNotificationReportApplicationIds();
         for(Long reportApplicationId : reportApplicationList) {
