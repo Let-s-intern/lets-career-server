@@ -98,7 +98,8 @@ public class ReportApplicationQueryRepositoryImpl implements ReportApplicationQu
 
     private BooleanExpression isAfter3Hours() {
         LocalDateTime now = LocalDateTime.now();
-        return reportApplication.applyUrlDate.isNotNull().and(reportApplication.applyUrlDate.before(now.minusHours(3L)));
+//        return reportApplication.applyUrlDate.isNotNull().and(reportApplication.applyUrlDate.before(now.minusHours(3L)));
+        return reportApplication.applyUrlDate.isNotNull().and(reportApplication.applyUrlDate.before(now.minusMinutes(10L)));
     }
 
     private BooleanExpression applyUrlIsNull() {
