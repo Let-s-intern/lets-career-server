@@ -2,8 +2,6 @@ package org.letscareer.letscareer.global.batch.scheduler;
 
 import lombok.RequiredArgsConstructor;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
-import org.letscareer.letscareer.domain.application.helper.ReportApplicationHelper;
-import org.letscareer.letscareer.domain.application.helper.ReportFeedbackApplicationHelper;
 import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
 import org.letscareer.letscareer.domain.live.helper.LiveHelper;
 import org.letscareer.letscareer.domain.mission.helper.MissionHelper;
@@ -29,8 +27,6 @@ public class NotificationScheduler {
     private final ChallengeHelper challengeHelper;
     private final LiveHelper liveHelper;
     private final MissionHelper missionHelper;
-    private final ReportApplicationHelper reportApplicationHelper;
-    private final ReportFeedbackApplicationHelper reportFeedbackApplicationHelper;
     private final JobLauncher jobLauncher;
     private final ReviewNotificationJobConfig reviewNotificationJobConfig;
     private final ChallengeRemindNotificationJobConfig challengeRemindNotificationJobConfig;
@@ -38,8 +34,6 @@ public class NotificationScheduler {
     private final ChallengeEndNotificationJobConfig challengeEndNotificationJobConfig;
     private final ChallengeOTRemindNotificationJobConfig challengeOTRemindNotificationJobConfig;
     private final MissionEndNotificationJobConfig missionEndNotificationJobConfig;
-    private final ReportFeedbackDdayNotificationJobConfig reportFeedbackDdayNotificationJobConfig;
-    private final ReportIngNotificationJobConfig reportIngNotificationJobConfig;
 
     @Scheduled(cron = "0 5 10 * * ?")
     @SchedulerLock(name = "reviewNotificationJob", lockAtMostFor = "3m", lockAtLeastFor = "3m")
@@ -121,41 +115,11 @@ public class NotificationScheduler {
     @SchedulerLock(name = "missionEndNotificationJob", lockAtMostFor = "3m", lockAtLeastFor = "3m")
     public void sendMissionEndNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
         List<Long> missionIdList = missionHelper.findEndNotificationMissionIds();
-        for(Long missionId : missionIdList) {
+        for (Long missionId : missionIdList) {
             jobLauncher.run(
                     missionEndNotificationJobConfig.missionEndNotificationJob(),
                     new JobParametersBuilder()
                             .addLong("missionId", missionId)
-                            .addLocalDateTime("now", LocalDateTime.now())
-                            .toJobParameters()
-            );
-        }
-    }
-
-    @Scheduled(cron = "0 0 8 * * ?")
-    @SchedulerLock(name = "reportFeedbackDdayNotificationJob", lockAtMostFor = "3m", lockAtLeastFor = "3m")
-    public void sendReportFeedbackDdayNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
-        List<Long> reportFeedbackApplicationList = reportFeedbackApplicationHelper.findDdayNotificationReportFeedbackApplicationIds();
-        for(Long reportFeedbackApplicationId: reportFeedbackApplicationList) {
-            jobLauncher.run(
-                    reportFeedbackDdayNotificationJobConfig.reportFeedbackDdayNotificationJob(),
-                    new JobParametersBuilder()
-                            .addLong("reportFeedbackApplicationId", reportFeedbackApplicationId)
-                            .addLocalDateTime("now", LocalDateTime.now())
-                            .toJobParameters()
-            );
-        }
-    }
-
-    @Scheduled(cron = "0 0/1 * * * *")
-    @SchedulerLock(name = "reportIngNotificationJob", lockAtMostFor = "59s", lockAtLeastFor = "59s")
-    public void sendReportIngNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
-        List<Long> reportApplicationList = reportApplicationHelper.findIngNotificationReportApplicationIds();
-        for(Long reportApplicationId : reportApplicationList) {
-            jobLauncher.run(
-                    reportIngNotificationJobConfig.reportIngNotificationJob(),
-                    new JobParametersBuilder()
-                            .addLong("reportApplicationId", reportApplicationId)
                             .addLocalDateTime("now", LocalDateTime.now())
                             .toJobParameters()
             );

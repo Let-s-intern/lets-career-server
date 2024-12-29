@@ -11,14 +11,14 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
-#        show_sql: false
-#        format_sql: true
+        #        show_sql: false
+        #        format_sql: true
         default_batch_fetch_size: 1000
 
   servlet:
     multipart:
-      max-file-size: 1GB
-      max-request-size: 1GB
+      maxFileSize: 1000MB
+      maxRequestSize: 1000MB
 
   datasource:
     - secret

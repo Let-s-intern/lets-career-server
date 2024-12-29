@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.faq.dto.response.GetFaqResponseDto;
 import org.letscareer.letscareer.domain.report.dto.req.*;
 import org.letscareer.letscareer.domain.report.dto.res.*;
 import org.letscareer.letscareer.domain.report.service.*;
@@ -30,12 +31,15 @@ public class ReportV1Controller {
     private final GetReportApplicationsForAdminService getReportApplicationsForAdminService;
     private final GetReportApplicationPaymentForAdminService getReportApplicationPaymentForAdminService;
     private final GetReportDetailService getReportDetailService;
+    private final GetReportFaqsService getReportFaqsService;
     private final GetReportPriceDetailService getReportPriceDetailService;
+    private final GetReportTitleService getReportTitleService;
     private final GetMyReportService getMyReportService;
     private final GetReportThumbnailService getReportThumbnailService;
     private final GetReportPaymentService getReportPaymentService;
     private final CreateReportService createReportService;
     private final CreateReportApplicationService createReportApplicationService;
+    private final UpdateMyReportApplicationService updateMyReportApplicationService;
     private final UpdateReportService updateReportService;
     private final UpdateReportFeedbackSchedule updateReportFeedbackSchedule;
     private final UpdateReportDocumentService updateReportDocumentService;
@@ -95,6 +99,15 @@ public class ReportV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
+    @Operation(summary = "유저 - 진단서 faq 목록 조회", description = "[서류 진단 신청하기]", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetFaqResponseDto.class)))
+    })
+    @GetMapping("/{reportId}/faqs")
+    public ResponseEntity<SuccessResponse<?>> getReportFaqs(@PathVariable final Long reportId) {
+        final GetFaqResponseDto responseDto = getReportFaqsService.execute(reportId);
+        return SuccessResponse.ok(responseDto);
+    }
+
     @Operation(summary = "유저 - 홈화면 조회", description = "[홈화면]")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportThumbnailResponseDto.class)))
     @ApiErrorCode({REPORT_NOT_FOUND})
@@ -110,6 +123,15 @@ public class ReportV1Controller {
     @GetMapping("/{reportId}/price")
     public ResponseEntity<SuccessResponse<?>> getReportPriceDetail(@PathVariable final Long reportId) {
         final GetReportPriceDetailResponseDto responseDto = getReportPriceDetailService.execute(reportId);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "유저 - 진단서 제목 정보")
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportTitleResponseDto.class)))
+    @ApiErrorCode({REPORT_NOT_FOUND})
+    @GetMapping("/{reportId}/title")
+    public ResponseEntity<SuccessResponse<?>> getReportTitle(@PathVariable final Long reportId) {
+        final GetReportTitleResponseDto responseDto = getReportTitleService.getReportTitle(reportId);
         return SuccessResponse.ok(responseDto);
     }
 
@@ -169,22 +191,35 @@ public class ReportV1Controller {
         return SuccessResponse.created(responseDto);
     }
 
+    @Operation(summary = "진단서 신청 업데이트", description = "[MY 진단서 관리 > 서류 제출하기]")
+    @ApiResponse(responseCode = "200")
+    @ApiErrorCode({REPORT_NOT_FOUND})
+    @PatchMapping("/application/{applicationId}/my")
+    public ResponseEntity<SuccessResponse<?>> updateMyReportApplication(@CurrentUser final User user,
+                                                                        @PathVariable final Long applicationId,
+                                                                        @RequestBody final UpdateMyReportApplicationRequestDto requestDto) {
+        updateMyReportApplicationService.execute(user, applicationId, requestDto);
+        return SuccessResponse.ok(null);
+    }
+
     @Operation(summary = "진단서 프로그램 수정")
     @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     @ApiErrorCode({REPORT_CONFLICT_VISIBLE_DATE})
     @PatchMapping("/{reportId}")
-    public ResponseEntity<SuccessResponse<?>> updateReport(@PathVariable final Long reportId,
+    public ResponseEntity<SuccessResponse<?>> updateReport(@CurrentUser final User user,
+                                                           @PathVariable final Long reportId,
                                                            @RequestBody final UpdateReportRequestDto requestDto) {
-        updateReportService.execute(reportId, requestDto);
+        updateReportService.execute(user, reportId, requestDto);
         return SuccessResponse.ok(null);
     }
 
     @Operation(summary = "진단서 업로드")
     @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     @PatchMapping("/application/{applicationId}/document")
-    public ResponseEntity<SuccessResponse<?>> updateReportDocument(@PathVariable final Long applicationId,
+    public ResponseEntity<SuccessResponse<?>> updateReportDocument(@CurrentUser final User user,
+                                                                   @PathVariable final Long applicationId,
                                                                    @RequestBody final UpdateReportDocumentRequestDto requestDto) {
-        updateReportDocumentService.execute(applicationId, requestDto);
+        updateReportDocumentService.execute(user, applicationId, requestDto);
         return SuccessResponse.ok(null);
     }
 
@@ -200,9 +235,10 @@ public class ReportV1Controller {
     )
     @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     @PatchMapping("/application/{applicationId}/status")
-    public ResponseEntity<SuccessResponse<?>> updateReportStatus(@PathVariable final Long applicationId,
+    public ResponseEntity<SuccessResponse<?>> updateReportStatus(@CurrentUser final User user,
+                                                                 @PathVariable final Long applicationId,
                                                                  @RequestBody final UpdateReportApplicationStatusRequestDto requestDto) {
-        updateReportApplicationStatusService.execute(applicationId, requestDto);
+        updateReportApplicationStatusService.execute(user, applicationId, requestDto);
         return SuccessResponse.ok(null);
     }
 
@@ -218,10 +254,11 @@ public class ReportV1Controller {
     )
     @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     @PatchMapping("/{reportId}/application/{applicationId}/schedule")
-    public ResponseEntity<SuccessResponse<?>> updateReportFeedbackSchedule(@PathVariable final Long reportId,
+    public ResponseEntity<SuccessResponse<?>> updateReportFeedbackSchedule(@CurrentUser final User user,
+                                                                           @PathVariable final Long reportId,
                                                                            @PathVariable final Long applicationId,
                                                                            @RequestBody @Valid final UpdateFeedbackScheduleRequestDto requestDto) {
-        updateReportFeedbackSchedule.execute(reportId, applicationId, requestDto);
+        updateReportFeedbackSchedule.execute(user, reportId, applicationId, requestDto);
         return SuccessResponse.ok(null);
     }
 

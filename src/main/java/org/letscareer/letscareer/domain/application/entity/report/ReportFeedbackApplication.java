@@ -10,6 +10,7 @@ import org.letscareer.letscareer.domain.application.type.converter.ReportFeedbac
 import org.letscareer.letscareer.domain.program.dto.response.ZoomMeetingResponseDto;
 import org.letscareer.letscareer.domain.report.dto.req.CreateReportApplicationRequestDto;
 import org.letscareer.letscareer.domain.report.dto.req.UpdateFeedbackScheduleRequestDto;
+import org.letscareer.letscareer.domain.report.dto.req.UpdateMyReportApplicationRequestDto;
 import org.letscareer.letscareer.domain.report.entity.ReportFeedback;
 import org.letscareer.letscareer.domain.report.type.ReportPriceType;
 import org.letscareer.letscareer.domain.report.type.ReportPriceTypeConverter;
@@ -93,6 +94,12 @@ public class ReportFeedbackApplication extends BaseTimeEntity {
 
     public void updateIsCanceled(Boolean isCanceled) {
         this.isCanceled = updateValue(this.isCanceled, isCanceled);
+    }
+
+    public void updateDesiredDates(UpdateMyReportApplicationRequestDto requestDto) {
+        this.desiredDate1 = updateValue(this.desiredDate1, requestDto.desiredDate1());
+        this.desiredDate2 = updateValue(this.desiredDate2, requestDto.desiredDate2());
+        this.desiredDate3 = updateValue(this.desiredDate3, requestDto.desiredDate3());
     }
 
     public void setZoomInfo(ZoomMeetingResponseDto zoomInfo) {

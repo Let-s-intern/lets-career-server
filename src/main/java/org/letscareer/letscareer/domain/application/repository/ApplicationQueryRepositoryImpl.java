@@ -38,6 +38,7 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
         return queryFactory
                 .select(Projections.constructor(MyApplicationVo.class,
                         vWApplication.applicationId,
+                        vWApplication.paymentCreateDate,
                         vWApplication.isCanceled,
                         vWApplication.programId,
                         vWApplication.programType,
@@ -53,6 +54,31 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
                         eqUserId(userId),
                         eqIsCanceled(false),
                         neProgramType(ProgramType.REPORT),
+                        eqStatus(status)
+                )
+                .fetch();
+    }
+
+    @Override
+    public List<MyApplicationVo> findMyReviewApplications(Long userId, ApplicationStatus status) {
+        return queryFactory
+                .select(Projections.constructor(MyApplicationVo.class,
+                        vWApplication.applicationId,
+                        vWApplication.paymentCreateDate,
+                        vWApplication.isCanceled,
+                        vWApplication.programId,
+                        vWApplication.programType,
+                        vWApplication.programTitle,
+                        vWApplication.programShortDesc,
+                        vWApplication.programThumbnail,
+                        vWApplication.programStartDate,
+                        vWApplication.programEndDate,
+                        vWApplication.reviewId,
+                        vWApplication.paymentId))
+                .from(vWApplication)
+                .where(
+                        eqUserId(userId),
+                        eqIsCanceled(false),
                         eqStatus(status)
                 )
                 .fetch();

@@ -12,6 +12,7 @@ import java.util.List;
 import static org.letscareer.letscareer.domain.faq.entity.QFaq.faq;
 import static org.letscareer.letscareer.domain.faq.entity.QFaqChallenge.faqChallenge;
 import static org.letscareer.letscareer.domain.faq.entity.QFaqLive.faqLive;
+import static org.letscareer.letscareer.domain.faq.entity.QFaqReport.faqReport;
 
 @RequiredArgsConstructor
 public class FaqQueryRepositoryImpl implements FaqQueryRepository {
@@ -54,6 +55,24 @@ public class FaqQueryRepositoryImpl implements FaqQueryRepository {
     }
 
     @Override
+    public List<FaqDetailVo> findReportFaqDetailVos(Long reportId) {
+        return jpaQueryFactory
+                .select(Projections.constructor(FaqDetailVo.class,
+                        faq.id,
+                        faq.question,
+                        faq.answer,
+                        faq.category,
+                        faq.faqProgramType
+                ))
+                .from(faq)
+                .leftJoin(faq.faqReportList, faqReport)
+                .where(
+                        eqReportId(reportId)
+                )
+                .fetch();
+    }
+
+    @Override
     public List<FaqDetailVo> findFaqDetailVosForType(FaqProgramType type) {
         return jpaQueryFactory
                 .select(Projections.constructor(FaqDetailVo.class,
@@ -76,6 +95,10 @@ public class FaqQueryRepositoryImpl implements FaqQueryRepository {
 
     private BooleanExpression eqLiveId(Long liveId) {
         return liveId != null ? faqLive.live.id.eq(liveId) : null;
+    }
+
+    private BooleanExpression eqReportId(Long reportId) {
+        return reportId != null ? faqReport.report.id.eq(reportId) : null;
     }
 
     private BooleanExpression eqFaqProgramType(FaqProgramType type) {

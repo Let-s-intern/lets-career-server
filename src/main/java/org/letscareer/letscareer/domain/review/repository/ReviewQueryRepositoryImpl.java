@@ -33,11 +33,14 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
         return Optional.ofNullable(queryFactory
                 .select(Projections.constructor(ReviewDetailVo.class,
                         review.id,
+                        review.application.id,
+                        review.application.user.id,
                         review.nps,
                         review.npsAns,
                         review.npsCheckAns,
                         review.content,
                         review.score,
+                        review.programDetail,
                         review.createDate
                 ))
                 .from(review)
@@ -53,8 +56,10 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
         List<ReviewAdminVo> contents = queryFactory
                 .select(Projections.constructor(ReviewAdminVo.class,
                         vWReview.reviewId,
+                        vWReview.applicationId,
                         vWReview.programTitle,
                         vWReview.programType,
+                        vWReview.userId,
                         vWReview.userName,
                         vWReview.nps,
                         vWReview.npsAns,
@@ -149,8 +154,10 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
         List<ReviewAdminVo> contents = queryFactory
                 .select(Projections.constructor(ReviewAdminVo.class,
                         vWReview.reviewId,
+                        vWReview.applicationId,
                         vWReview.programTitle,
                         vWReview.programType,
+                        vWReview.userId,
                         vWReview.userName,
                         vWReview.nps,
                         vWReview.npsAns,
@@ -197,13 +204,16 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
         List<ReviewAdminVo> reviewAdminVos = queryFactory
                 .select(Projections.constructor(ReviewAdminVo.class,
                         vWReview.reviewId,
+                        vWReview.applicationId,
                         vWReview.programTitle,
                         vWReview.programType,
+                        vWReview.userId,
                         vWReview.userName,
                         vWReview.nps,
                         vWReview.npsAns,
                         vWReview.npsCheckAns,
                         vWReview.content,
+                        vWReview.programDetail,
                         vWReview.score,
                         vWReview.isVisible,
                         vWReview.createDate

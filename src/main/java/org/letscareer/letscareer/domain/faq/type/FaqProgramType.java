@@ -9,8 +9,9 @@ import org.letscareer.letscareer.global.common.utils.enm.EnumField;
 @Getter
 public enum FaqProgramType implements EnumField {
     CHALLENGE(1, "챌린지"),
-    LIVE(2, "live"),
-    VOD(3, "vod");
+    LIVE(2, "라이브 클래스"),
+    VOD(3, "VOD"),
+    REPORT(4, "서류진단");
 
     private final Integer code;
     private final String desc;

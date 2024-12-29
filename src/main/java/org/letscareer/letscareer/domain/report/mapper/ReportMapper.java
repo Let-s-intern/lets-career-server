@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.report.mapper;
 
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationForAdminVo;
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationOptionForAdminVo;
+import org.letscareer.letscareer.domain.faq.vo.FaqDetailVo;
 import org.letscareer.letscareer.domain.pg.dto.response.TossPaymentsResponseDto;
 import org.letscareer.letscareer.domain.report.dto.res.*;
 import org.letscareer.letscareer.domain.report.vo.*;
@@ -24,8 +25,9 @@ public class ReportMapper {
         return GetReportsForAdminResponseDto.of(vos.getContent(), pageInfo);
     }
 
-    public GetReportDetailForAdminResponseDto toGetReportDetailForAdminResponseDto(ReportDetailForAdminVo vo) {
-        return GetReportDetailForAdminResponseDto.of(vo);
+    public GetReportDetailForAdminResponseDto toGetReportDetailForAdminResponseDto(ReportDetailForAdminVo vo,
+                                                                                   List<FaqDetailVo> faqInfo) {
+        return GetReportDetailForAdminResponseDto.of(vo, faqInfo);
     }
 
     public GetReportApplicationsForAdminResponseDto toGetReportApplicationsForAdminResponseDto(Page<ReportApplicationForAdminVo> vos) {
@@ -58,5 +60,9 @@ public class ReportMapper {
 
     public CreateReportApplicationResponseDto toCreateReportApplicationResponseDto(TossPaymentsResponseDto tossInfo) {
         return CreateReportApplicationResponseDto.of(tossInfo);
+    }
+
+    public GetReportTitleResponseDto toGetReportTitleResponseDto(ReportTitleVo reportTitleVo) {
+        return GetReportTitleResponseDto.of(reportTitleVo);
     }
 }

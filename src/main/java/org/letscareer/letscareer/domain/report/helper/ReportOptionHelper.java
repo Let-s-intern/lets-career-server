@@ -26,7 +26,11 @@ public class ReportOptionHelper {
     public String createReportOptionListStr(List<ReportApplicationOption> reportApplicationOptions) {
         if(reportApplicationOptions.isEmpty()) return "없음";
         return reportApplicationOptions.stream()
-                .map(option -> String.valueOf(option.getTitle()))
+                .map(option -> {
+                    if(option.getTitle().startsWith("+")) return option.getTitle().substring(1);
+                    else return option.getTitle();
+                })
+                .distinct()
                 .collect(Collectors.joining(", "));
     }
 

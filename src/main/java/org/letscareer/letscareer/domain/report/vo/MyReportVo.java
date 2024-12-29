@@ -2,15 +2,19 @@ package org.letscareer.letscareer.domain.report.vo;
 
 import org.letscareer.letscareer.domain.application.type.ReportApplicationStatus;
 import org.letscareer.letscareer.domain.application.type.ReportFeedbackStatus;
+import org.letscareer.letscareer.domain.report.type.ReportPriceType;
 import org.letscareer.letscareer.domain.report.type.ReportType;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record MyReportVo(
         Long reportId,
         Long applicationId,
         String title,
         ReportType reportType,
+        ReportPriceType reportPriceType,
+        ReportPriceType reportFeedbackPriceType,
         ReportApplicationStatus applicationStatus,
         ReportFeedbackStatus feedbackStatus,
         String reportUrl,
@@ -24,6 +28,7 @@ public record MyReportVo(
         LocalDateTime applicationTime,
         LocalDateTime confirmedTime,
         Boolean isCanceled,
-        Boolean feedbackIsCanceled
+        Boolean feedbackIsCanceled,
+        List<Long> optionIds
 ) {
 }

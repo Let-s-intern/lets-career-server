@@ -36,6 +36,10 @@ public class Faq extends BaseTimeEntity {
     @Builder.Default
     private List<FaqLive> faqLiveList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "faq", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<FaqReport> faqReportList = new ArrayList<>();
+
     public static Faq createFaq(CreateFaqRequestDto requestDto) {
         return Faq.builder()
                 .question(requestDto.question())
@@ -49,7 +53,7 @@ public class Faq extends BaseTimeEntity {
         this.question = updateValue(this.question, requestDto.question());
         this.answer = updateValue(this.answer, requestDto.answer());
         this.category = updateValue(this.category, requestDto.category());
-        this.faqProgramType = updateValue(this.faqProgramType, requestDto.type());
+        // this.faqProgramType = updateValue(this.faqProgramType, requestDto.type());
     }
 
     public void addFaqChallengeList(FaqChallenge faqChallenge) {
@@ -58,5 +62,9 @@ public class Faq extends BaseTimeEntity {
 
     public void addFaqLiveList(FaqLive faqLive) {
         this.faqLiveList.add(faqLive);
+    }
+
+    public void addFaqReportList(FaqReport faqReport) {
+        this.faqReportList.add(faqReport);
     }
 }

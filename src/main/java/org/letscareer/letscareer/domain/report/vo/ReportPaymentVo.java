@@ -5,8 +5,10 @@ import java.util.List;
 
 public record ReportPaymentVo(
         Long paymentId,
+        String paymentOrderId,
         Integer finalPrice,
         Integer couponDiscount,
+        String couponName,
         Integer programPrice,
         Integer programDiscount,
         Integer reportRefundPrice,

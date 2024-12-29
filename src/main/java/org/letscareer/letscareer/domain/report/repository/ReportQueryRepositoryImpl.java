@@ -13,6 +13,8 @@ import org.letscareer.letscareer.domain.application.entity.report.ReportApplicat
 import org.letscareer.letscareer.domain.application.type.ReportDesiredDateType;
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationForAdminVo;
 import org.letscareer.letscareer.domain.application.vo.ReportApplicationOptionForAdminVo;
+import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
+import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.report.entity.Report;
 import org.letscareer.letscareer.domain.report.entity.ReportPrice;
 import org.letscareer.letscareer.domain.report.type.ReportPriceType;
@@ -24,6 +26,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -245,6 +248,8 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         reportApplication.id,
                         report.title,
                         report.type,
+                        reportApplication.reportPriceType,
+                        reportFeedbackApplication.reportPriceType,
                         reportApplication.status,
                         reportFeedbackApplication.reportFeedbackStatus,
                         reportApplication.reportUrl,
@@ -258,7 +263,8 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         reportApplication.createDate,
                         getConfirmedTimeFor(),
                         reportApplication.isCanceled,
-                        reportFeedbackApplication.isCanceled
+                        reportFeedbackApplication.isCanceled,
+                        Expressions.constant(new ArrayList<Long>())
                 ))
                 .from(report)
                 .leftJoin(report.applicationList, reportApplication)
@@ -273,6 +279,12 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+
+        contents.forEach(reportVo -> {
+            List<Long> optionIds = getOptionIdsForReportApplication(reportVo.applicationId());
+
+            updateReportVoWithOptionIds(reportVo, optionIds, contents);
+        });
 
         JPAQuery<Long> countQuery = queryFactory
                 .select(reportApplication.id.countDistinct())
@@ -316,6 +328,7 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         reportApplication.status,
                         reportFeedbackApplication.reportFeedbackStatus,
                         getConfirmedTimeFor(),
+                        reportApplication.applyUrlDate,
                         Expressions.constant(subQueryReportApplicationOptionsTitle(applicationId)),
                         reportApplication.isCanceled
                 ))
@@ -334,8 +347,10 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
         return Optional.ofNullable(queryFactory
                 .select(Projections.constructor(ReportPaymentVo.class,
                         payment.id,
+                        payment.orderId,
                         payment.finalPrice,
                         coupon.discount,
+                        coupon.name,
                         payment.programPrice,
                         payment.programDiscount,
                         reportApplication.refundPrice,
@@ -368,6 +383,41 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         eqReportPriceType(reportPriceType)
                 )
                 .fetchOne();
+    }
+
+    @Override
+    public Optional<ReportTitleVo> findReportTitleVo(Long reportId) {
+        return Optional.ofNullable(
+                queryFactory
+                        .select(Projections.constructor(ReportTitleVo.class, report.title))
+                        .from(report)
+                        .where(
+                                eqReportId(reportId)
+                        )
+                        .fetchFirst()
+        );
+    }
+
+    @Override
+    public ReportRecommendVo findReportRecommendVoByReportType(ReportType reportType) {
+        return queryFactory
+                .select(Projections.constructor(ReportRecommendVo.class,
+                        report.id,
+                        Expressions.constant(ProgramType.REPORT),
+                        Expressions.constant(ProgramStatusType.PROCEEDING),
+                        report.type,
+                        report.title,
+                        report.notice,
+                        report.visibleDate))
+                .from(report)
+                .where(
+                        isVisible(),
+                        eqReportType(reportType)
+                )
+                .orderBy(
+                        report.visibleDate.desc()
+                )
+                .fetchFirst();
     }
 
     private List<ReportPriceVo> subQueryForReportPriceInfos(Long reportId) {
@@ -530,6 +580,40 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .when(reportFeedbackApplication.desiredDateType.eq(ReportDesiredDateType.DESIRED_DATE_ADMIN))
                 .then(reportFeedbackApplication.desiredDateAdmin)
                 .otherwise((LocalDateTime) null);
+    }
+
+    private List<Long> getOptionIdsForReportApplication(Long reportApplicationId) {
+        return queryFactory
+                .select(reportApplicationOption.id)
+                .from(reportApplicationOption)
+                .where(eqApplicationId(reportApplicationId))
+                .fetch();
+    }
+
+    private void updateReportVoWithOptionIds(MyReportVo reportVo, List<Long> optionIds, List<MyReportVo> contents) {
+        contents.set(contents.indexOf(reportVo), new MyReportVo(
+                reportVo.reportId(),
+                reportVo.applicationId(),
+                reportVo.title(),
+                reportVo.reportType(),
+                reportVo.reportPriceType(),
+                reportVo.reportFeedbackPriceType(),
+                reportVo.applicationStatus(),
+                reportVo.feedbackStatus(),
+                reportVo.reportUrl(),
+                reportVo.applyUrl(),
+                reportVo.recruitmentUrl(),
+                reportVo.zoomLink(),
+                reportVo.zoomPassword(),
+                reportVo.desiredDate1(),
+                reportVo.desiredDate2(),
+                reportVo.desiredDate3(),
+                reportVo.applicationTime(),
+                reportVo.confirmedTime(),
+                reportVo.isCanceled(),
+                reportVo.feedbackIsCanceled(),
+                optionIds
+        ));
     }
 
     private BooleanExpression eqReportId(Long reportId) {

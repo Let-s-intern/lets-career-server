@@ -8,13 +8,16 @@ import java.time.LocalDateTime;
 @Builder
 public record ReviewAdminVo(
         Long id,
+        Long applicationId,
         String programTitle,
         ProgramType programType,
+        Long userId,
         String name,
         Integer nps,
         String npsAns,
         Boolean npsCheckAns,
         String content,
+        String programDetail,
         Integer score,
         Boolean isVisible,
         LocalDateTime createdDate

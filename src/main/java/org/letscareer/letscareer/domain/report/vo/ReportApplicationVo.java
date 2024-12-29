@@ -15,6 +15,7 @@ public record ReportApplicationVo(
         ReportApplicationStatus reportApplicationStatus,
         ReportFeedbackStatus reportFeedbackStatus,
         LocalDateTime reportFeedbackDesiredDate,
+        LocalDateTime applyUrlDate,
         List<String> options,
         Boolean isCanceled
 ) {

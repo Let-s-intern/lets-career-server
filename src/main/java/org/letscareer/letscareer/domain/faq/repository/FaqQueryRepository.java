@@ -10,5 +10,7 @@ public interface FaqQueryRepository {
 
     List<FaqDetailVo> findLiveFaqDetailVos(Long liveId);
 
+    List<FaqDetailVo> findReportFaqDetailVos(Long reportId);
+
     List<FaqDetailVo> findFaqDetailVosForType(FaqProgramType type);
 }

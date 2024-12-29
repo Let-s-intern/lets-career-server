@@ -4,6 +4,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.application.entity.report.ReportApplicationOption;
 import org.letscareer.letscareer.domain.report.vo.ReportApplicationOptionPriceVo;
 
 import java.util.List;
@@ -26,6 +27,15 @@ public class ReportApplicationOptionQueryRepositoryImpl implements ReportApplica
                 .where(
                         eqReportApplicationId(reportApplicationId)
                 )
+                .fetch();
+    }
+
+    @Override
+    public List<ReportApplicationOption> findAllReportApplicationOptionsByApplicationId(Long applicationId) {
+        return queryFactory
+                .select(reportApplicationOption)
+                .from(reportApplicationOption)
+                .where(eqReportApplicationId(applicationId))
                 .fetch();
     }
 

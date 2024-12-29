@@ -3,6 +3,7 @@ package org.letscareer.letscareer.domain.report.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.letscareer.letscareer.domain.application.entity.report.ReportApplication;
+import org.letscareer.letscareer.domain.faq.entity.FaqReport;
 import org.letscareer.letscareer.domain.report.dto.req.CreateReportRequestDto;
 import org.letscareer.letscareer.domain.report.dto.req.UpdateReportRequestDto;
 import org.letscareer.letscareer.domain.report.type.ReportType;
@@ -54,6 +55,10 @@ public class Report extends BaseTimeEntity {
     @JoinColumn(name = "report_feedback_id")
     private ReportFeedback reportFeedback;
 
+    @OneToMany(mappedBy = "report", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<FaqReport> faqList = new ArrayList<>();
+
     public static Report createReport(CreateReportRequestDto requestDto) {
         return Report.builder()
                 .type(requestDto.reportType())
@@ -88,8 +93,15 @@ public class Report extends BaseTimeEntity {
         this.reportFeedback = null;
     }
 
-
     public void addApplication(ReportApplication reportApplication) {
         this.applicationList.add(reportApplication);
+    }
+
+    public void addFaqReportList(FaqReport faqReport) {
+        this.faqList.add(faqReport);
+    }
+
+    public void setInitFaqList() {
+        this.faqList = new ArrayList<>();
     }
 }

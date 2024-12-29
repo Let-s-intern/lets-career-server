@@ -4,6 +4,6 @@ public record ReportOptionVo(
         Long reportOptionId,
         Integer price,
         Integer discountPrice,
-        String title
+        String optionTitle
 ) {
 }

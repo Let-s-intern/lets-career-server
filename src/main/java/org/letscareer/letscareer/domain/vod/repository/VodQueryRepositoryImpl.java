@@ -74,6 +74,28 @@ public class VodQueryRepositoryImpl implements VodQueryRepository {
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
     }
 
+    @Override
+    public List<VodDetailVo> findAllVodRecommendVos() {
+        return jpaQueryFactory.select(
+                Projections.constructor(VodDetailVo.class,
+                        vod.id,
+                        vod.title,
+                        vod.shortDesc,
+                        vod.thumbnail,
+                        vod.job,
+                        vod.link,
+                        vod.isVisible))
+                .from(vod)
+                .where(
+                        eqIsVisible(true)
+                )
+                .fetch();
+    }
+
+    private BooleanExpression eqIsVisible(Boolean isVisible) {
+        return isVisible != null ? vod.isVisible.eq(isVisible) : null;
+    }
+
     private BooleanExpression eqVodId(Long vodId) {
         return vodId != null ? vod.id.eq(vodId) : null;
     }

@@ -9,21 +9,27 @@ import java.time.LocalDateTime;
 @Builder(access = AccessLevel.PRIVATE)
 public record GetReviewDetailResponseDto(
         Long id,
+        Long applicationId,
+        Long userId,
         Integer nps,
         String npsAns,
         Boolean npsCheckAns,
         String content,
         Integer score,
+        String programDetail,
         LocalDateTime createdDate
 ) {
     public static GetReviewDetailResponseDto of(ReviewDetailVo reviewVo) {
         return GetReviewDetailResponseDto.builder()
                 .id(reviewVo.id())
+                .applicationId(reviewVo.applicationId())
+                .userId(reviewVo.userId())
                 .nps(reviewVo.nps())
                 .npsAns(reviewVo.npsAns())
                 .npsCheckAns(reviewVo.npsCheckAns())
                 .content(reviewVo.content())
                 .score(reviewVo.score())
+                .programDetail(reviewVo.programDetail())
                 .createdDate(reviewVo.createdDate())
                 .build();
     }

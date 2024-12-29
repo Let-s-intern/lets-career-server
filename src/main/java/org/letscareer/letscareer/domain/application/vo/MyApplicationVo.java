@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Builder
 public record MyApplicationVo(
         Long id,
+        LocalDateTime createDate,
         ApplicationStatus status,
         Long programId,
         ProgramType programType,
@@ -23,6 +24,7 @@ public record MyApplicationVo(
         Long paymentId
 ) {
     public MyApplicationVo(Long id,
+                           LocalDateTime createDate,
                            Boolean isCanceled,
                            Long programId,
                            ProgramType programType,
@@ -35,6 +37,7 @@ public record MyApplicationVo(
                            Long paymentId) {
         this(
                 id,
+                createDate,
                 ApplicationStatus.of(isCanceled, programEndDate),
                 programId,
                 programType,

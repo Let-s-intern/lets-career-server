@@ -5,6 +5,9 @@ import org.letscareer.letscareer.domain.application.entity.report.ReportApplicat
 import org.letscareer.letscareer.domain.application.helper.ReportApplicationHelper;
 import org.letscareer.letscareer.domain.report.dto.req.UpdateReportDocumentRequestDto;
 import org.letscareer.letscareer.domain.report.service.UpdateReportDocumentService;
+import org.letscareer.letscareer.domain.user.entity.User;
+import org.letscareer.letscareer.domain.user.type.UserRole;
+import org.letscareer.letscareer.global.error.exception.UnauthorizedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,8 +18,15 @@ public class UpdateReportDocumentServiceImpl implements UpdateReportDocumentServ
     private final ReportApplicationHelper reportApplicationHelper;
 
     @Override
-    public void execute(Long applicationId, UpdateReportDocumentRequestDto requestDto) {
+    public void execute(User user, Long applicationId, UpdateReportDocumentRequestDto requestDto) {
+        validateAdminRole(user);
         ReportApplication reportApplication = reportApplicationHelper.findReportApplicationByReportApplicationIdOrThrow(applicationId);
         reportApplication.updateReportUrl(requestDto);
+    }
+
+    private void validateAdminRole(User currentUser) {
+        if(!currentUser.getRole().equals(UserRole.ADMIN)) {
+            throw new UnauthorizedException();
+        }
     }
 }
