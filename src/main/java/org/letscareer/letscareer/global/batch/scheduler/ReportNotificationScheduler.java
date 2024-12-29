@@ -93,7 +93,7 @@ public class ReportNotificationScheduler {
     }
 
 //    @Scheduled(cron = "15 0 9 * * *")
-    @Scheduled(cron = "15 30 14 * * *")
+    @Scheduled(cron = "15 20 15 * * *")
     @SchedulerLock(name = "reportAutoRefundNotificationJob", lockAtMostFor = "3m", lockAtLeastFor = "3m")
     public void sendReportAutoRefundNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
         List<Long> reportApplicationList = reportApplicationHelper.findAutoRefundNotificationReportApplicationIds();
