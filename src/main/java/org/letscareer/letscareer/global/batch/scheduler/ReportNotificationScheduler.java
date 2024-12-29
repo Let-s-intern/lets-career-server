@@ -47,11 +47,8 @@ public class ReportNotificationScheduler {
         }
     }
 
-//    @Scheduled(fixedRate = 60000)
-//    @SchedulerLock(name = "reportIngNotificationJob", lockAtMostFor = "59s", lockAtLeastFor = "59s")
-//    @Scheduled(cron = "30 0,10,20,30,40,50 * * * *")
-    @Scheduled(cron = "0 0/1 * * * *")
-//    @SchedulerLock(name = "reportIngNotificationJob", lockAtMostFor = "59s", lockAtLeastFor = "59s")
+    @Scheduled(cron = "0 0/15 * * * *")
+    @SchedulerLock(name = "reportIngNotificationJob", lockAtMostFor = "3m", lockAtLeastFor = "3m")
     public void sendReportIngNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
         List<Long> reportApplicationList = reportApplicationHelper.findIngNotificationReportApplicationIds();
         for(Long reportApplicationId : reportApplicationList) {
@@ -95,10 +92,9 @@ public class ReportNotificationScheduler {
         }
     }
 
-//    @Scheduled(cron = "0 0/1 * * * *")
-//    @SchedulerLock(name = "reportAutoRefundNotificationJob", lockAtMostFor = "59s", lockAtLeastFor = "59s")
-    @Scheduled(cron = "30 0/5 * * * *")
-    @SchedulerLock(name = "reportAutoRefundNotificationJob", lockAtMostFor = "4m", lockAtLeastFor = "4m")
+//    @Scheduled(cron = "15 0 9 * * *")
+    @Scheduled(cron = "15 15 13 * * *")
+    @SchedulerLock(name = "reportAutoRefundNotificationJob", lockAtMostFor = "3m", lockAtLeastFor = "3m")
     public void sendReportAutoRefundNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
         List<Long> reportApplicationList = reportApplicationHelper.findAutoRefundNotificationReportApplicationIds();
         for(Long reportApplicationId : reportApplicationList) {
