@@ -128,10 +128,11 @@ public class ReportApplicationQueryRepositoryImpl implements ReportApplicationQu
     }
 
     private BooleanExpression betweenReportUrlDate(LocalDateTime now) {
-        LocalDateTime startOfPeriod = now.withHour(10).withMinute(0).withSecond(0).minusDays(1); // 전날 10시 0분 0초
-        LocalDateTime endOfPeriod = now.withHour(10).withMinute(0).withSecond(0);               // 오늘 10시 0분 0초
-        return reportApplication.reportUrlDate.goe(startOfPeriod) // >= 전날 10시 0분 0초
-                .and(reportApplication.reportUrlDate.lt(endOfPeriod)); // < 오늘 10시 0분 0초
+        LocalDateTime startOfPeriod = now.withHour(0).withMinute(0).withSecond(0).minusDays(1); // 전날 00:00
+        LocalDateTime endOfPeriod = now.withHour(0).withMinute(0).withSecond(0);               // 오늘 00:00
+
+        return reportApplication.reportUrlDate.goe(startOfPeriod)
+                .and(reportApplication.reportUrlDate.lt(endOfPeriod));
     }
 
     private BooleanExpression isNoReviewForApplication() {
