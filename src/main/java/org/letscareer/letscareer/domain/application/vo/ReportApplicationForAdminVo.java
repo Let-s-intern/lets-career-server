@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.application.vo;
 
 import org.letscareer.letscareer.domain.application.type.ReportApplicationStatus;
+import org.letscareer.letscareer.domain.application.type.ReportApplicationSubmitType;
 import org.letscareer.letscareer.domain.application.type.ReportDesiredDateType;
 import org.letscareer.letscareer.domain.application.type.ReportFeedbackStatus;
 import org.letscareer.letscareer.domain.report.type.ReportPriceType;
@@ -17,6 +18,7 @@ public record ReportApplicationForAdminVo(
         String wishJob,
         String message,
         ReportApplicationStatus reportApplicationStatus,
+        ReportApplicationSubmitType submitType,
         String applyFileUrl,
         String reportFileUrl,
         String recruitmentFileUrl,

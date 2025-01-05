@@ -132,6 +132,7 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         reportApplication.wishJob,
                         reportApplication.message,
                         reportApplication.status,
+                        reportApplication.submitType,
                         reportApplication.applyUrl,
                         reportApplication.reportUrl,
                         reportApplication.recruitmentUrl,

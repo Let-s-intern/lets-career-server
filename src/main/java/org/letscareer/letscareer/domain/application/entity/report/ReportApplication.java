@@ -1,11 +1,14 @@
 package org.letscareer.letscareer.domain.application.entity.report;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.letscareer.letscareer.domain.application.entity.Application;
 //import org.letscareer.letscareer.domain.application.listener.ReportApplicationEntityListener;
 import org.letscareer.letscareer.domain.application.type.ReportApplicationStatus;
+import org.letscareer.letscareer.domain.application.type.ReportApplicationSubmitType;
 import org.letscareer.letscareer.domain.application.type.converter.ReportApplicationStatusConverter;
+import org.letscareer.letscareer.domain.application.type.converter.ReportApplicationSubmitTypeConverter;
 import org.letscareer.letscareer.domain.report.dto.req.CreateReportApplicationRequestDto;
 import org.letscareer.letscareer.domain.report.dto.req.UpdateMyReportApplicationRequestDto;
 import org.letscareer.letscareer.domain.report.dto.req.UpdateReportApplicationStatusRequestDto;
@@ -47,6 +50,9 @@ public class ReportApplication extends Application {
     private LocalDateTime applyUrlDate;
     private LocalDateTime reportUrlDate;
 
+    @Convert(converter = ReportApplicationSubmitTypeConverter.class)
+    private ReportApplicationSubmitType submitType = ReportApplicationSubmitType.LATE;
+
     @Convert(converter = ReportApplicationStatusConverter.class)
     private ReportApplicationStatus status = ReportApplicationStatus.APPLIED;
     @Convert(converter = ReportPriceTypeConverter.class)
@@ -74,7 +80,10 @@ public class ReportApplication extends Application {
         this.discountPrice = reportPrice.getDiscountPrice();
         this.reportPriceType = requestDto.reportPriceType();
         this.applyUrl = requestDto.applyUrl();
-        if(!Objects.isNull(requestDto.applyUrl())) this.applyUrlDate = LocalDateTime.now();
+        if(!Objects.isNull(requestDto.applyUrl())) {
+            this.applyUrlDate = LocalDateTime.now();
+            this.submitType = ReportApplicationSubmitType.NORMAL;
+        }
         this.recruitmentUrl = requestDto.recruitmentUrl();
         this.report = report;
         this.status = ReportApplicationStatus.APPLIED;
