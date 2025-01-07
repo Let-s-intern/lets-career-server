@@ -95,4 +95,8 @@ public class ReportApplicationHelper {
     public List<Long> findReviewNotificationReportApplicationIds() {
         return reportApplicationRepository.findAllReviewNotificationReportApplicationId();
     }
+
+    public void deleteReportApplication(ReportApplication reportApplication) {
+        reportApplicationRepository.delete(reportApplication);
+    }
 }

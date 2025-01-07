@@ -45,6 +45,7 @@ public class ReportV1Controller {
     private final UpdateReportDocumentService updateReportDocumentService;
     private final UpdateReportApplicationStatusService updateReportApplicationStatusService;
     private final DeleteReportService deleteReportService;
+    private final DeleteReportApplicationService deleteReportApplicationService;
     private final CancelReportApplicationService cancelReportApplicationService;
 
     @Operation(summary = "어드민 - 진단서 목록 조회")
@@ -268,6 +269,14 @@ public class ReportV1Controller {
     public ResponseEntity<SuccessResponse<?>> deleteReport(@CurrentUser final User user,
                                                            @PathVariable final Long reportId) {
         deleteReportService.execute(user, reportId);
+        return ResponseEntity.ok(null);
+    }
+
+    @Operation(summary = "[어드민] 진단서 신청 삭제")
+    @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    @DeleteMapping("/admin/application/{reportApplicationId}")
+    public ResponseEntity<SuccessResponse<?>> deleteReportApplication(@PathVariable final Long reportApplicationId) {
+        deleteReportApplicationService.execute(reportApplicationId);
         return ResponseEntity.ok(null);
     }
 
