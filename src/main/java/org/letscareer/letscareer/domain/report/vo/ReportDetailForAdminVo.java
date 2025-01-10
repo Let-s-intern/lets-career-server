@@ -14,6 +14,7 @@ public record ReportDetailForAdminVo(
         List<ReportPriceVo> reportPriceInfos,
         List<ReportOptionForAdminVo> reportOptionForAdminInfos,
         FeedbackPriceVo feedbackPriceInfo,
+        Boolean isVisible,
         LocalDateTime visibleDate
 ) {
 }
