@@ -51,9 +51,10 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .selectFrom(report)
                 .where(
                         eqReportType(reportType),
-                        isVisible()
+                        eqIsVisible(true),
+                        isVisibleDate()
                 )
-                .orderBy(report.id.desc())
+                .orderBy(report.visibleDate.desc())
                 .fetchFirst());
     }
 
@@ -312,9 +313,10 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .from(report)
                 .where(
                         eqReportType(reportType),
-                        isVisible()
+                        eqIsVisible(true),
+                        isVisibleDate()
                 )
-                .orderBy(report.id.desc())
+                .orderBy(report.visibleDate.desc())
                 .fetchFirst());
     }
 
@@ -412,7 +414,8 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         report.visibleDate))
                 .from(report)
                 .where(
-                        isVisible(),
+                        eqIsVisible(true),
+                        isVisibleDate(),
                         eqReportType(reportType)
                 )
                 .orderBy(
@@ -649,7 +652,11 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
         return code != null ? reportApplicationOption.code.contains(code) : null;
     }
 
-    private BooleanExpression isVisible() {
+    private BooleanExpression eqIsVisible(Boolean isVisible) {
+        return isVisible != null ? report.isVisible.eq(isVisible) : null;
+    }
+
+    private BooleanExpression isVisibleDate() {
         return report.visibleDate.isNotNull().and(report.visibleDate.before(LocalDateTime.now()));
     }
 
