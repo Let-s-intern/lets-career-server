@@ -303,8 +303,8 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
     }
 
     @Override
-    public Optional<ReportDetailVo> findReportDetailByReportTypeVoForVisible(ReportType reportType) {
-        return Optional.ofNullable(queryFactory
+    public List<ReportDetailVo> findAllReportDetailByReportTypeVoForVisible(ReportType reportType) {
+        return queryFactory
                 .select(Projections.constructor(ReportDetailVo.class,
                         report.id,
                         report.title,
@@ -318,7 +318,7 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         isVisibleDate()
                 )
                 .orderBy(report.visibleDate.desc())
-                .fetchFirst());
+                .fetch();
     }
 
     @Override

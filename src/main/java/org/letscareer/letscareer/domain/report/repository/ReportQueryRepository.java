@@ -34,7 +34,7 @@ public interface ReportQueryRepository {
 
     Page<MyReportVo> findMyReportVos(Long userId, ReportType reportType, Pageable pageable);
 
-    Optional<ReportDetailVo> findReportDetailByReportTypeVoForVisible(ReportType reportType);
+    List<ReportDetailVo> findAllReportDetailByReportTypeVoForVisible(ReportType reportType);
 
     Optional<ReportApplicationVo> findReportApplicationVoByApplicationId(Long applicationId);
 

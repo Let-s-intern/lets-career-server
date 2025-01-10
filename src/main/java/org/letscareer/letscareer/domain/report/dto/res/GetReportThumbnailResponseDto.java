@@ -4,19 +4,21 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import org.letscareer.letscareer.domain.report.vo.ReportDetailVo;
 
+import java.util.List;
+
 @Builder(access = AccessLevel.PRIVATE)
 public record GetReportThumbnailResponseDto(
-        ReportDetailVo resumeInfo,
-        ReportDetailVo personalStatementInfo,
-        ReportDetailVo portfolioInfo
+        List<ReportDetailVo> resumeInfoList,
+        List<ReportDetailVo> personalStatementInfoList,
+        List<ReportDetailVo> portfolioInfoList
 ) {
-    public static GetReportThumbnailResponseDto of(ReportDetailVo resumeInfo,
-                                                   ReportDetailVo personalStatementInfo,
-                                                   ReportDetailVo portfolioInfo) {
+    public static GetReportThumbnailResponseDto of(List<ReportDetailVo> resumeInfoList,
+                                                   List<ReportDetailVo> personalStatementInfoList,
+                                                   List<ReportDetailVo> portfolioInfoList) {
         return GetReportThumbnailResponseDto.builder()
-                .resumeInfo(resumeInfo)
-                .personalStatementInfo(personalStatementInfo)
-                .portfolioInfo(portfolioInfo)
+                .resumeInfoList(resumeInfoList)
+                .personalStatementInfoList(personalStatementInfoList)
+                .portfolioInfoList(portfolioInfoList)
                 .build();
     }
 }

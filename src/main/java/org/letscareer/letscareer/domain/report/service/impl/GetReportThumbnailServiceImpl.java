@@ -9,6 +9,8 @@ import org.letscareer.letscareer.domain.report.vo.ReportDetailVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.letscareer.letscareer.domain.report.type.ReportType.*;
 
 @RequiredArgsConstructor
@@ -20,9 +22,9 @@ public class GetReportThumbnailServiceImpl implements GetReportThumbnailService 
 
     @Override
     public GetReportThumbnailResponseDto execute() {
-        ReportDetailVo resumeInfo = reportHelper.findReportDetailByReportTypeVoForVisibleOrNull(RESUME);
-        ReportDetailVo personalStatementInfo = reportHelper.findReportDetailByReportTypeVoForVisibleOrNull(PERSONAL_STATEMENT);
-        ReportDetailVo portfolioInfo = reportHelper.findReportDetailByReportTypeVoForVisibleOrNull(PORTFOLIO);
-        return reportMapper.toGetReportThumbnailResponseDto(resumeInfo, personalStatementInfo, portfolioInfo);
+        List<ReportDetailVo> resumeInfoList = reportHelper.findAllReportDetailByReportTypeVoForVisibleOrNull(RESUME);
+        List<ReportDetailVo> personalStatementInfoList = reportHelper.findAllReportDetailByReportTypeVoForVisibleOrNull(PERSONAL_STATEMENT);
+        List<ReportDetailVo> portfolioInfoList = reportHelper.findAllReportDetailByReportTypeVoForVisibleOrNull(PORTFOLIO);
+        return reportMapper.toGetReportThumbnailResponseDto(resumeInfoList, personalStatementInfoList, portfolioInfoList);
     }
 }
