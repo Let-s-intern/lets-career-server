@@ -8,6 +8,7 @@ import java.util.List;
 
 public record UpdateReportRequestDto(
     ReportType reportType,
+    Boolean isVisible,
     LocalDateTime visibleDate,
     String title,
     String contents,
