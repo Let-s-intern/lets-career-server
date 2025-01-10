@@ -16,6 +16,7 @@ public record ReportRecommendVo(
         ReportType reportType,
         String title,
         String notice,
+        Boolean isVisible,
         LocalDateTime visibleDate
 ) {
 }

@@ -20,6 +20,7 @@ public record GetReportDetailForAdminResponseDto(
         List<ReportOptionForAdminVo> reportOptionForAdminInfos,
         FeedbackPriceVo feedbackPriceInfo,
         List<FaqDetailVo> faqInfo,
+        Boolean isVisible,
         LocalDateTime visibleDate
 ) {
     public static GetReportDetailForAdminResponseDto of(ReportDetailForAdminVo vo,
@@ -34,6 +35,7 @@ public record GetReportDetailForAdminResponseDto(
                 .reportOptionForAdminInfos(vo.reportOptionForAdminInfos())
                 .feedbackPriceInfo(vo.feedbackPriceInfo())
                 .faqInfo(faqInfo)
+                .isVisible(vo.isVisible())
                 .visibleDate(vo.visibleDate())
                 .build();
     }
