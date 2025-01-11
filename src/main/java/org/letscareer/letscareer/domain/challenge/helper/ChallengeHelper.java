@@ -57,6 +57,10 @@ public class ChallengeHelper {
         return challengeRepository.findChallengeProfiles(typeList, statusList, pageable);
     }
 
+    public List<ChallengeSimpleProfileVo> findActiveChallengeSimpleProfiles(ChallengeType challengeType) {
+        return challengeRepository.findActiveChallengeProfiles(challengeType);
+    }
+
     public ChallengeApplicationFormVo findChallengeApplicationFormVoOrThrow(Long challengeId) {
         return challengeRepository.findChallengeApplicationFormVo(challengeId)
                 .orElseThrow(() -> new EntityNotFoundException(ChallengeErrorCode.CHALLENGE_NOT_FOUND));

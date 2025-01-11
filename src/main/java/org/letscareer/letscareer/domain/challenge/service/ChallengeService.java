@@ -6,6 +6,7 @@ import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApp
 import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApplicationPaybacksRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.response.*;
+import org.letscareer.letscareer.domain.challenge.type.ChallengeType;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.faq.dto.response.GetFaqResponseDto;
 import org.letscareer.letscareer.domain.mission.type.MissionQueryType;
@@ -19,6 +20,8 @@ import java.util.List;
 @Service
 public interface ChallengeService {
     GetChallengeResponseDto getChallengeList(List<ProgramClassification> typeList, List<ProgramStatusType> statusList, Pageable pageable);
+
+    GetTypeChallengeResponseDto getTypeChallengeList(ChallengeType challengeType);
 
     GetChallengeDetailResponseDto getChallengeDetail(Long challengeId);
 
