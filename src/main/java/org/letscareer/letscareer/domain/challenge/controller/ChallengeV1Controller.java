@@ -13,6 +13,7 @@ import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApp
 import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.response.*;
 import org.letscareer.letscareer.domain.challenge.service.ChallengeService;
+import org.letscareer.letscareer.domain.challenge.type.ChallengeType;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.faq.dto.response.GetFaqResponseDto;
 import org.letscareer.letscareer.domain.mission.type.MissionQueryType;
@@ -42,6 +43,15 @@ public class ChallengeV1Controller {
                                                                @RequestParam(required = false) final List<ProgramStatusType> statusList,
                                                                final Pageable pageable) {
         final GetChallengeResponseDto responseDto = challengeService.getChallengeList(typeList, statusList, pageable);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "모집중인 챌린지 목록 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetTypeChallengeResponseDto.class)))
+    })
+    @GetMapping("/active")
+    public ResponseEntity<SuccessResponse<?>> getTypeChallengeList(@RequestParam final ChallengeType type) {
+        final GetTypeChallengeResponseDto responseDto = challengeService.getTypeChallengeList(type);
         return SuccessResponse.ok(responseDto);
     }
 

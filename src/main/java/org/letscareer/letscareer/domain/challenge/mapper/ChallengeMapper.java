@@ -27,6 +27,10 @@ public class ChallengeMapper {
         return GetChallengeDetailResponseDto.of(challengeInfo, classificationInfo, priceInfo, faqInfo);
     }
 
+    public GetTypeChallengeResponseDto toGetTypeChallengeResponseDto(List<ChallengeSimpleProfileVo> challengeSimpleProfileVos) {
+        return GetTypeChallengeResponseDto.of(challengeSimpleProfileVos);
+    }
+
     public GetChallengeResponseDto toGetChallengesResponseDto(Page<ChallengeProfileVo> challengeProfileVos) {
         return GetChallengeResponseDto.of(challengeProfileVos);
     }

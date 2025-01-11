@@ -98,6 +98,23 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
     }
 
     @Override
+    public List<ChallengeSimpleProfileVo> findActiveChallengeProfiles(ChallengeType challengeType) {
+        return queryFactory
+                .select(Projections.constructor(ChallengeSimpleProfileVo.class,
+                    challenge.id,
+                    challenge.title,
+                    challenge.beginning,
+                    challenge.deadline))
+                .from(challenge)
+                .where(
+                        eqChallengeType(challengeType),
+                        challengeRecruiting(LocalDateTime.now())
+                )
+                .orderBy(challenge.id.asc())
+                .fetch();
+    }
+
+    @Override
     public Optional<ChallengeTitleVo> findChallengeTitleVo(Long challengeId) {
         return Optional.ofNullable(queryFactory
                 .select(Projections.constructor(ChallengeTitleVo.class,
