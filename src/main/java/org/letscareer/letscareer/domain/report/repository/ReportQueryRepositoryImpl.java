@@ -80,6 +80,7 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         report.title,
                         countNonRefundedApplications(),
                         countNonRefundedFeedbackApplications(),
+                        report.isVisible,
                         report.visibleDate,
                         report.createDate
                 ))
