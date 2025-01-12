@@ -101,10 +101,12 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
     public List<ChallengeSimpleProfileVo> findActiveChallengeProfiles(ChallengeType challengeType) {
         return queryFactory
                 .select(Projections.constructor(ChallengeSimpleProfileVo.class,
-                    challenge.id,
-                    challenge.title,
-                    challenge.beginning,
-                    challenge.deadline))
+                        challenge.id,
+                        challenge.title,
+                        challenge.beginning,
+                        challenge.deadline,
+                        challenge.startDate,
+                        challenge.endDate))
                 .from(challenge)
                 .where(
                         eqChallengeType(challengeType),
