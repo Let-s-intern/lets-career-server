@@ -9,6 +9,8 @@ public record ChallengeSimpleProfileVo(
         Long id,
         String title,
         LocalDateTime beginning,
-        LocalDateTime deadline
+        LocalDateTime deadline,
+        LocalDateTime startDate,
+        LocalDateTime endDate
 ) {
 }
