@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.report.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.letscareer.letscareer.domain.application.entity.report.ReportApplication;
 import org.letscareer.letscareer.domain.faq.entity.FaqReport;
@@ -36,6 +37,10 @@ public class Report extends BaseTimeEntity {
     private String contents;
 
     private String notice;
+
+    @NotNull
+    @Builder.Default
+    private Boolean isVisible = false;
 
     private LocalDateTime visibleDate;
 
@@ -75,6 +80,7 @@ public class Report extends BaseTimeEntity {
 
     public void updateReport(UpdateReportRequestDto requestDto) {
         this.type = updateValue(this.type, requestDto.reportType());
+        this.isVisible = updateValue(this.isVisible, requestDto.isVisible());
         this.visibleDate = requestDto.visibleDate();
         this.title = updateValue(this.title, requestDto.title());
         this.contents = updateValue(this.contents, requestDto.contents());

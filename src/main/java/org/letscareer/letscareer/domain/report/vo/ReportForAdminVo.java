@@ -10,6 +10,7 @@ public record ReportForAdminVo(
         String title,
         Long applicationCount,
         Long feedbackApplicationCount,
+        Boolean isVisible,
         LocalDateTime visibleDate,
         LocalDateTime createDateTime
 ) {

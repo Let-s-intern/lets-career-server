@@ -15,6 +15,8 @@ public interface ChallengeQueryRepository {
 
     Page<ChallengeProfileVo> findChallengeProfiles(List<ProgramClassification> typeList, List<ProgramStatusType> statusList, Pageable pageable);
 
+    List<ChallengeSimpleProfileVo> findActiveChallengeProfiles(ChallengeType challengeType);
+
     Optional<ChallengeTitleVo> findChallengeTitleVo(Long challengeId);
 
     Optional<ChallengeThumbnailVo> findChallengeThumbnailVo(Long challengeId);

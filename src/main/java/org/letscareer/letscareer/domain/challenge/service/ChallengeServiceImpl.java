@@ -20,6 +20,7 @@ import org.letscareer.letscareer.domain.challenge.dto.response.*;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
 import org.letscareer.letscareer.domain.challenge.mapper.ChallengeMapper;
+import org.letscareer.letscareer.domain.challenge.type.ChallengeType;
 import org.letscareer.letscareer.domain.challenge.vo.*;
 import org.letscareer.letscareer.domain.challengeguide.helper.ChallengeGuideHelper;
 import org.letscareer.letscareer.domain.challengeguide.vo.ChallengeGuideVo;
@@ -106,6 +107,12 @@ public class ChallengeServiceImpl implements ChallengeService {
     public GetChallengeResponseDto getChallengeList(List<ProgramClassification> typeList, List<ProgramStatusType> statusList, Pageable pageable) {
         Page<ChallengeProfileVo> challengeProfileVos = challengeHelper.findChallengeProfiles(typeList, statusList, pageable);
         return challengeMapper.toGetChallengesResponseDto(challengeProfileVos);
+    }
+
+    @Override
+    public GetTypeChallengeResponseDto getTypeChallengeList(ChallengeType challengeType) {
+        List<ChallengeSimpleProfileVo> challengeSimpleProfileVos = challengeHelper.findActiveChallengeSimpleProfiles(challengeType);
+        return challengeMapper.toGetTypeChallengeResponseDto(challengeSimpleProfileVos);
     }
 
     @Override

@@ -52,10 +52,10 @@ public class ReportMapper {
         return GetMyReportResponseDto.of(vos.getContent(), pageInfo);
     }
 
-    public GetReportThumbnailResponseDto toGetReportThumbnailResponseDto(ReportDetailVo resumeInfo,
-                                                                         ReportDetailVo personalStatementInfo,
-                                                                         ReportDetailVo portfolioInfo) {
-        return GetReportThumbnailResponseDto.of(resumeInfo, personalStatementInfo, portfolioInfo);
+    public GetReportThumbnailResponseDto toGetReportThumbnailResponseDto(List<ReportDetailVo> resumeInfoList,
+                                                                         List<ReportDetailVo> personalStatementInfoList,
+                                                                         List<ReportDetailVo> portfolioInfoList) {
+        return GetReportThumbnailResponseDto.of(resumeInfoList, personalStatementInfoList, portfolioInfoList);
     }
 
     public CreateReportApplicationResponseDto toCreateReportApplicationResponseDto(TossPaymentsResponseDto tossInfo) {
