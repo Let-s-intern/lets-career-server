@@ -1,11 +1,10 @@
 package org.letscareer.letscareer.domain.report.repository;
 
 import com.querydsl.core.types.Expression;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.CaseBuilder;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.NumberExpression;
+import com.querydsl.core.types.dsl.*;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +32,7 @@ import java.util.Optional;
 import static org.letscareer.letscareer.domain.application.entity.report.QReportApplication.reportApplication;
 import static org.letscareer.letscareer.domain.application.entity.report.QReportApplicationOption.reportApplicationOption;
 import static org.letscareer.letscareer.domain.application.entity.report.QReportFeedbackApplication.reportFeedbackApplication;
+import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
 import static org.letscareer.letscareer.domain.coupon.entity.QCoupon.coupon;
 import static org.letscareer.letscareer.domain.payment.entity.QPayment.payment;
 import static org.letscareer.letscareer.domain.report.entity.QReport.report;
@@ -315,10 +315,12 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                 .from(report)
                 .where(
                         eqReportType(reportType),
-                        eqIsVisible(true),
                         isVisibleDate()
                 )
-                .orderBy(report.visibleDate.desc())
+                .orderBy(
+                        orderByIsVisibleCondition(),
+                        report.visibleDate.desc()
+                )
                 .fetch();
     }
 
@@ -665,5 +667,12 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
 
     private BooleanExpression isApplyFeedback(Boolean isApplyFeedback) {
         return isApplyFeedback != null ? reportFeedbackApplication.isNotNull() : null;
+    }
+
+    private OrderSpecifier<?> orderByIsVisibleCondition() {
+        return new CaseBuilder()
+                .when(report.isVisible).then(0)
+                .otherwise(1)
+                .asc();
     }
 }
