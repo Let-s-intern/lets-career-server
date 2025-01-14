@@ -221,7 +221,8 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         report.notice,
                         report.contents,
                         report.type,
-                        report.isVisible))
+                        report.isVisible,
+                        report.visibleDate))
                 .from(report)
                 .where(
                         eqReportId(reportId)
@@ -313,7 +314,8 @@ public class ReportQueryRepositoryImpl implements ReportQueryRepository {
                         report.notice,
                         report.contents,
                         report.type,
-                        report.isVisible))
+                        report.isVisible,
+                        report.visibleDate))
                 .from(report)
                 .where(
                         eqReportType(reportType),
