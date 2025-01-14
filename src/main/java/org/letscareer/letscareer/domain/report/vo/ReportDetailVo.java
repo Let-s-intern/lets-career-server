@@ -7,6 +7,7 @@ public record ReportDetailVo(
         String title,
         String notice,
         String contents,
-        ReportType reportType
+        ReportType reportType,
+        Boolean isVisible
 ) {
 }
