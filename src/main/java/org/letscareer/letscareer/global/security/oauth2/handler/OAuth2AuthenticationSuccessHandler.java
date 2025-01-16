@@ -24,13 +24,12 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-
     @Value("${spring.security.oauth2.authorizedRedirectUri}")
     private String redirectUri;
-
-    @Value("${spring.security.oauth2.authorizedRedirectUri-test}")
-    private String redirectTestUri;
-
+    @Value("${spring.security.oauth2.authorizedRedirectUri-test-1}")
+    private String redirectTestUri1;
+    @Value("${spring.security.oauth2.authorizedRedirectUri-test-2}")
+    private String redirectTestUri2;
     @Value("${spring.security.oauth2.authorizedRedirectUri-local}")
     private String redirectLocalUri;
     private final TokenProvider tokenProvider;
@@ -105,9 +104,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private boolean isAuthorizedRedirectUri(String uri) {
         URI clientRedirectUri = URI.create(uri);
         URI authorizedUri = URI.create(redirectUri);
-        URI authorizedTestUri = URI.create(redirectTestUri);
+        URI authorizedTestUri1 = URI.create(redirectTestUri1);
+        URI authorizedTestUri2 = URI.create(redirectTestUri2);
         URI authorizedLocalUri = URI.create(redirectLocalUri);
-        return isAuthorized(authorizedUri, clientRedirectUri) || isAuthorized(authorizedTestUri, clientRedirectUri) || isAuthorized(authorizedLocalUri, clientRedirectUri);
+        return isAuthorized(authorizedUri, clientRedirectUri) || isAuthorized(authorizedTestUri1, clientRedirectUri)
+                || isAuthorized(authorizedTestUri2, clientRedirectUri) || isAuthorized(authorizedLocalUri, clientRedirectUri);
     }
 
     private boolean isAuthorized(URI authorizedUri, URI redirectUri) {
