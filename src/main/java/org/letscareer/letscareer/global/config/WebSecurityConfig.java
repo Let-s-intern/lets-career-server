@@ -164,6 +164,7 @@ public class WebSecurityConfig {
                         "http://localhost:3000",
                         "https://lets-intern.vercel.app",
                         "https://lets-intern-client-test.vercel.app",
+                        "https://letscareer-s10-dev.vercel.app",
                         "https://letsintern.co.kr",
                         "https://www.letsintern.co.kr",
                         "https://letscareer.co.kr",
