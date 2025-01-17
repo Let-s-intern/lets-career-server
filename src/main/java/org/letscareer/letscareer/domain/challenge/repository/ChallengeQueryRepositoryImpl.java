@@ -110,6 +110,7 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
                 .from(challenge)
                 .where(
                         eqChallengeType(challengeType),
+                        eqIsVisible(true),
                         challengeRecruiting(LocalDateTime.now())
                 )
                 .orderBy(challenge.id.asc())
