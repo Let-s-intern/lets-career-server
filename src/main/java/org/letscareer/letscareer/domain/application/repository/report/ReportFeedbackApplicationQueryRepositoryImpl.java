@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.letscareer.letscareer.domain.application.entity.report.QReportFeedbackApplication.reportFeedbackApplication;
+import static org.letscareer.letscareer.domain.review.entity.QOldReview.oldReview;
 import static org.letscareer.letscareer.domain.review.entity.QReview.review;
 
 @RequiredArgsConstructor
@@ -66,8 +67,8 @@ public class ReportFeedbackApplicationQueryRepositoryImpl implements ReportFeedb
 
     private BooleanExpression isNoReviewForApplication() {
         return JPAExpressions
-                .selectFrom(review)
-                .where(review.application.id.eq(reportFeedbackApplication.reportApplication.id))
+                .selectFrom(oldReview)
+                .where(oldReview.application.id.eq(reportFeedbackApplication.reportApplication.id))
                 .notExists();
     }
 }
