@@ -21,29 +21,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.letscareer.letscareer.domain.review.entity.QReview.review;
+import static org.letscareer.letscareer.domain.review.entity.QOldReview.oldReview;
 import static org.letscareer.letscareer.domain.review.entity.QVWReview.vWReview;
 
 @RequiredArgsConstructor
-public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
+public class OldReviewQueryRepositoryImpl implements OldReviewQueryRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
     public Optional<ReviewDetailVo> findReviewVo(Long reviewId) {
         return Optional.ofNullable(queryFactory
                 .select(Projections.constructor(ReviewDetailVo.class,
-                        review.id,
-                        review.application.id,
-                        review.application.user.id,
-                        review.nps,
-                        review.npsAns,
-                        review.npsCheckAns,
-                        review.content,
-                        review.score,
-                        review.programDetail,
-                        review.createDate
+                        oldReview.id,
+                        oldReview.application.id,
+                        oldReview.application.user.id,
+                        oldReview.nps,
+                        oldReview.npsAns,
+                        oldReview.npsCheckAns,
+                        oldReview.content,
+                        oldReview.score,
+                        oldReview.programDetail,
+                        oldReview.createDate
                 ))
-                .from(review)
+                .from(oldReview)
                 .where(
                         eqReviewId(reviewId)
                 )
@@ -65,6 +65,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                         vWReview.npsAns,
                         vWReview.npsCheckAns,
                         vWReview.content,
+                        vWReview.programDetail,
                         vWReview.score,
                         vWReview.isVisible,
                         vWReview.createDate
@@ -163,6 +164,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                         vWReview.npsAns,
                         vWReview.npsCheckAns,
                         vWReview.content,
+                        vWReview.programDetail,
                         vWReview.score,
                         vWReview.isVisible,
                         vWReview.createDate
@@ -243,7 +245,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
     }
 
     public BooleanExpression eqReviewId(Long reviewId) {
-        return reviewId != null ? review.id.eq(reviewId) : null;
+        return reviewId != null ? oldReview.id.eq(reviewId) : null;
     }
 
     private BooleanExpression eqChallengeId(Long challengeId) {

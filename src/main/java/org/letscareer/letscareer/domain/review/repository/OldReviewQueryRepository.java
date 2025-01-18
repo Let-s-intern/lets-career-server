@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Optional;
 
-public interface ReviewQueryRepository {
+public interface OldReviewQueryRepository {
     Optional<ReviewDetailVo> findReviewVo(Long reviewId);
 
     Page<ReviewAdminVo> findChallengeReviewAdminVos(Long challengeId, Pageable pageable);

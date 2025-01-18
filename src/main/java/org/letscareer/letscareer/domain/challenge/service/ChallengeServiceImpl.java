@@ -2,7 +2,6 @@ package org.letscareer.letscareer.domain.challenge.service;
 
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.dto.response.GetChallengeApplicationsResponseDto;
-import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
 import org.letscareer.letscareer.domain.application.helper.ChallengeApplicationHelper;
 import org.letscareer.letscareer.domain.application.mapper.ChallengeApplicationMapper;
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
@@ -56,9 +55,9 @@ import org.letscareer.letscareer.domain.price.helper.ChallengePriceHelper;
 import org.letscareer.letscareer.domain.price.vo.ChallengePriceDetailVo;
 import org.letscareer.letscareer.domain.program.dto.response.ZoomMeetingResponseDto;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
-import org.letscareer.letscareer.domain.review.dto.response.GetReviewResponseDto;
-import org.letscareer.letscareer.domain.review.helper.ReviewHelper;
-import org.letscareer.letscareer.domain.review.mapper.ReviewMapper;
+import org.letscareer.letscareer.domain.review.dto.response.GetOldReviewResponseDto;
+import org.letscareer.letscareer.domain.review.helper.OldReviewHelper;
+import org.letscareer.letscareer.domain.review.mapper.OldReviewMapper;
 import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
 import org.letscareer.letscareer.domain.review.vo.ReviewVo;
 import org.letscareer.letscareer.domain.score.entity.AdminScore;
@@ -68,7 +67,6 @@ import org.letscareer.letscareer.global.common.entity.PageInfo;
 import org.letscareer.letscareer.global.common.utils.zoom.ZoomUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -95,8 +93,8 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final MissionHelper missionHelper;
     private final MissionMapper missionMapper;
     private final PaymentHelper paymentHelper;
-    private final ReviewHelper reviewHelper;
-    private final ReviewMapper reviewMapper;
+    private final OldReviewHelper oldReviewHelper;
+    private final OldReviewMapper oldReviewMapper;
     private final FaqHelper faqHelper;
     private final FaqMapper faqMapper;
 
@@ -177,14 +175,14 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     @Override
     public GetChallengeAdminReviewResponseDto getReviewsForAdmin(Long challengeId, Pageable pageable) {
-        Page<ReviewAdminVo> challengeReviewVos = reviewHelper.findChallengeReviewAdminVos(challengeId, pageable);
+        Page<ReviewAdminVo> challengeReviewVos = oldReviewHelper.findChallengeReviewAdminVos(challengeId, pageable);
         return challengeMapper.toGetChallengeAdminReviewResponseDto(challengeReviewVos);
     }
 
     @Override
     public GetChallengeReviewResponseDto getReviews(Pageable pageable) {
-        Page<ReviewVo> challengeReviewVos = reviewHelper.findChallengeReviewVos(pageable);
-        List<GetReviewResponseDto> reviewResDtoList = createGetReviewResponseDtoList(challengeReviewVos.getContent());
+        Page<ReviewVo> challengeReviewVos = oldReviewHelper.findChallengeReviewVos(pageable);
+        List<GetOldReviewResponseDto> reviewResDtoList = createGetReviewResponseDtoList(challengeReviewVos.getContent());
         PageInfo pageInfo = PageInfo.of(challengeReviewVos);
         return challengeMapper.toGetChallengeReviewResponseDto(reviewResDtoList, pageInfo);
     }
@@ -334,9 +332,9 @@ public class ChallengeServiceImpl implements ChallengeService {
                 .collect(Collectors.toList());
     }
 
-    private List<GetReviewResponseDto> createGetReviewResponseDtoList(List<ReviewVo> vos) {
+    private List<GetOldReviewResponseDto> createGetReviewResponseDtoList(List<ReviewVo> vos) {
         return vos.stream()
-                .map(vo -> reviewMapper.toGetReviewResponseDto(vo, challengeHelper.findChallengeTitleVoOrThrow(vo.id()).title()))
+                .map(vo -> oldReviewMapper.toGetReviewResponseDto(vo, challengeHelper.findChallengeTitleVoOrThrow(vo.id()).title()))
                 .collect(Collectors.toList());
     }
 
