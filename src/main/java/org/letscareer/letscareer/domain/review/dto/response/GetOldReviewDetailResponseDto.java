@@ -7,7 +7,7 @@ import org.letscareer.letscareer.domain.review.vo.ReviewDetailVo;
 import java.time.LocalDateTime;
 
 @Builder(access = AccessLevel.PRIVATE)
-public record GetReviewDetailResponseDto(
+public record GetOldReviewDetailResponseDto(
         Long id,
         Long applicationId,
         Long userId,
@@ -19,8 +19,8 @@ public record GetReviewDetailResponseDto(
         String programDetail,
         LocalDateTime createdDate
 ) {
-    public static GetReviewDetailResponseDto of(ReviewDetailVo reviewVo) {
-        return GetReviewDetailResponseDto.builder()
+    public static GetOldReviewDetailResponseDto of(ReviewDetailVo reviewVo) {
+        return GetOldReviewDetailResponseDto.builder()
                 .id(reviewVo.id())
                 .applicationId(reviewVo.applicationId())
                 .userId(reviewVo.userId())

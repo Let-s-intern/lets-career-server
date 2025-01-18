@@ -7,15 +7,15 @@ import org.letscareer.letscareer.domain.review.vo.ReviewVo;
 import java.time.LocalDateTime;
 
 @Builder(access = AccessLevel.PRIVATE)
-public record GetReviewResponseDto(
+public record GetOldReviewResponseDto(
         String title,
         String name,
         String content,
         Integer score,
         LocalDateTime createdDate
 ) {
-    public static GetReviewResponseDto of(ReviewVo vo, String title) {
-        return GetReviewResponseDto.builder()
+    public static GetOldReviewResponseDto of(ReviewVo vo, String title) {
+        return GetOldReviewResponseDto.builder()
                 .title(title)
                 .name(vo.name())
                 .content(vo.content())

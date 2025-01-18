@@ -3,9 +3,9 @@ package org.letscareer.letscareer.domain.review.helper;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.entity.Application;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
-import org.letscareer.letscareer.domain.review.dto.request.CreateReviewRequestDto;
-import org.letscareer.letscareer.domain.review.entity.Review;
-import org.letscareer.letscareer.domain.review.repository.ReviewRepository;
+import org.letscareer.letscareer.domain.review.dto.request.CreateOldReviewRequestDto;
+import org.letscareer.letscareer.domain.review.entity.OldReview;
+import org.letscareer.letscareer.domain.review.repository.OldOldReviewRepository;
 import org.letscareer.letscareer.domain.review.vo.ReviewDetailVo;
 import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
 import org.letscareer.letscareer.domain.review.vo.ReviewVo;
@@ -20,51 +20,51 @@ import static org.letscareer.letscareer.domain.review.error.ReviewErrorCode.REVI
 
 @RequiredArgsConstructor
 @Component
-public class ReviewHelper {
-    private final ReviewRepository reviewRepository;
+public class OldReviewHelper {
+    private final OldOldReviewRepository oldReviewRepository;
 
-    public Review createReviewAndSave(Application application, CreateReviewRequestDto reviewRequestDto) {
-        Review review = Review.createReview(application, reviewRequestDto);
-        return reviewRepository.save(review);
+    public OldReview createReviewAndSave(Application application, CreateOldReviewRequestDto reviewRequestDto) {
+        OldReview review = OldReview.createReview(application, reviewRequestDto);
+        return oldReviewRepository.save(review);
     }
 
-    public Review createReviewByLinkAndSave(Long programId, ProgramType programType, CreateReviewRequestDto requestDto) {
-        Review review = Review.createReviewByLink(programId, programType, requestDto);
-        return reviewRepository.save(review);
+    public OldReview createReviewByLinkAndSave(Long programId, ProgramType programType, CreateOldReviewRequestDto requestDto) {
+        OldReview review = OldReview.createReviewByLink(programId, programType, requestDto);
+        return oldReviewRepository.save(review);
     }
 
-    public Review findReviewOrThrow(Long reviewId) {
-        return reviewRepository.findById(reviewId)
+    public OldReview findReviewOrThrow(Long reviewId) {
+        return oldReviewRepository.findById(reviewId)
                 .orElseThrow(() -> new EntityNotFoundException(REVIEW_NOT_FOUND));
     }
 
     public ReviewDetailVo findReviewDetailVoOrThrow(Long reviewId) {
-        return reviewRepository.findReviewVo(reviewId)
+        return oldReviewRepository.findReviewVo(reviewId)
                 .orElseThrow(() -> new EntityNotFoundException(REVIEW_NOT_FOUND));
     }
 
     public Page<ReviewAdminVo> findChallengeReviewAdminVos(Long challengeId, Pageable pageable) {
-        return reviewRepository.findChallengeReviewAdminVos(challengeId, pageable);
+        return oldReviewRepository.findChallengeReviewAdminVos(challengeId, pageable);
     }
 
     public Page<ReviewVo> findChallengeReviewVos(Pageable pageable) {
-        return reviewRepository.findChallengeReviewVos(pageable);
+        return oldReviewRepository.findChallengeReviewVos(pageable);
     }
 
     public Page<ReviewAdminVo> findLiveReviewAdminVos(Long liveId, Pageable pageable) {
-        return reviewRepository.findLiveReviewAdminVos(liveId, pageable);
+        return oldReviewRepository.findLiveReviewAdminVos(liveId, pageable);
     }
 
     public Page<ReviewVo> findLiveReviewVos(Pageable pageable) {
-        return reviewRepository.findLiveReviewVos(pageable);
+        return oldReviewRepository.findLiveReviewVos(pageable);
     }
 
 
     public List<String> findLiveReviewContentByLiveId(Long liveId) {
-        return reviewRepository.findReviewContentByLiveId(liveId);
+        return oldReviewRepository.findReviewContentByLiveId(liveId);
     }
 
     public List<ReviewAdminVo> findReviewAdminVos(Boolean isVisible, ProgramType programType, List<String> sortBy) {
-        return reviewRepository.findAllReviewAdminVosByProgramType(isVisible, programType, sortBy);
+        return oldReviewRepository.findAllReviewAdminVosByProgramType(isVisible, programType, sortBy);
     }
 }
