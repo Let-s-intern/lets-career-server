@@ -257,7 +257,7 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
 
 
     private BooleanExpression reviewIsNull() {
-        return challengeApplication._super.review.isNull();
+        return challengeApplication._super.oldReview.isNull();
     }
 
     private NumberExpression<Integer> calculateTotalCost() {

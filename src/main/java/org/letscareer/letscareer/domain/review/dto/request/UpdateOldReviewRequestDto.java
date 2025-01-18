@@ -1,6 +1,6 @@
 package org.letscareer.letscareer.domain.review.dto.request;
 
-public record UpdateReviewRequestDto(
+public record UpdateOldReviewRequestDto(
         String npsAns,
         Boolean npsCheckAns,
         Integer nps,

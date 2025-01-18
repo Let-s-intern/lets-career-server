@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
+import org.letscareer.letscareer.domain.review.entity.OldReview;
 import org.letscareer.letscareer.domain.review.entity.Review;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
@@ -32,9 +33,14 @@ public abstract class Application extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_id")
     private Review review;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "old_review_id")
+    private OldReview oldReview;
 
     public Application(User user) {
         this.user = user;
@@ -45,8 +51,8 @@ public abstract class Application extends BaseTimeEntity {
         this.payment = payment;
     }
 
-    public void setReview(Review review) {
-        this.review = review;
+    public void setOldReview(OldReview oldReview) {
+        this.oldReview = oldReview;
     }
 
     public void updateIsCanceled(boolean isCanceled) {

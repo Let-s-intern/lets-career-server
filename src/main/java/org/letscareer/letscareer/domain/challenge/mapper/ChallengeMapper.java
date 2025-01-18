@@ -7,9 +7,8 @@ import org.letscareer.letscareer.domain.challlengenotice.vo.ChallengeNoticeVo;
 import org.letscareer.letscareer.domain.classification.vo.ChallengeClassificationDetailVo;
 import org.letscareer.letscareer.domain.faq.vo.FaqDetailVo;
 import org.letscareer.letscareer.domain.price.vo.ChallengePriceDetailVo;
-import org.letscareer.letscareer.domain.review.dto.response.GetReviewResponseDto;
+import org.letscareer.letscareer.domain.review.dto.response.GetOldReviewResponseDto;
 import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
-import org.letscareer.letscareer.domain.review.vo.ReviewVo;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.entity.PageInfo;
 import org.springframework.data.domain.Page;
@@ -39,7 +38,7 @@ public class ChallengeMapper {
         return GetChallengeTitleResponseDto.of(titleVo);
     }
 
-    public GetChallengeReviewResponseDto toGetChallengeReviewResponseDto(List<GetReviewResponseDto> reviewResDtoList, PageInfo pageInfo) {
+    public GetChallengeReviewResponseDto toGetChallengeReviewResponseDto(List<GetOldReviewResponseDto> reviewResDtoList, PageInfo pageInfo) {
         return GetChallengeReviewResponseDto.of(reviewResDtoList, pageInfo);
     }
 

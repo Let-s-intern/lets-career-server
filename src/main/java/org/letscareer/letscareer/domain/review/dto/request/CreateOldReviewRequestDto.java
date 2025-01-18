@@ -2,7 +2,7 @@ package org.letscareer.letscareer.domain.review.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 
-public record CreateReviewRequestDto(
+public record CreateOldReviewRequestDto(
         Long programId,
         @NotNull
         String npsAns,

@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.letscareer.letscareer.domain.application.entity.report.QReportApplication.reportApplication;
+import static org.letscareer.letscareer.domain.review.entity.QOldReview.oldReview;
 import static org.letscareer.letscareer.domain.review.entity.QReview.review;
 
 @RequiredArgsConstructor
@@ -137,8 +138,8 @@ public class ReportApplicationQueryRepositoryImpl implements ReportApplicationQu
 
     private BooleanExpression isNoReviewForApplication() {
         return JPAExpressions
-                .selectFrom(review)
-                .where(review.application.id.eq(reportApplication.id))
+                .selectFrom(oldReview)
+                .where(oldReview.application.id.eq(reportApplication.id))
                 .notExists();
     }
 }

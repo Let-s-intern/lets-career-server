@@ -7,11 +7,11 @@ import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
 import java.util.List;
 
 @Builder(access = AccessLevel.PRIVATE)
-public record GetReviewDetailListResponseDto(
+public record GetOldReviewDetailListResponseDto(
         List<ReviewAdminVo> reviewList
 ) {
-    public static GetReviewDetailListResponseDto of(List<ReviewAdminVo> reviewList) {
-        return GetReviewDetailListResponseDto.builder()
+    public static GetOldReviewDetailListResponseDto of(List<ReviewAdminVo> reviewList) {
+        return GetOldReviewDetailListResponseDto.builder()
                 .reviewList(reviewList)
                 .build();
     }

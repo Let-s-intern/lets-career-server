@@ -28,9 +28,9 @@ import org.letscareer.letscareer.domain.price.helper.LivePriceHelper;
 import org.letscareer.letscareer.domain.price.vo.LivePriceDetailVo;
 import org.letscareer.letscareer.domain.program.dto.response.ZoomMeetingResponseDto;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
-import org.letscareer.letscareer.domain.review.dto.response.GetReviewResponseDto;
-import org.letscareer.letscareer.domain.review.helper.ReviewHelper;
-import org.letscareer.letscareer.domain.review.mapper.ReviewMapper;
+import org.letscareer.letscareer.domain.review.dto.response.GetOldReviewResponseDto;
+import org.letscareer.letscareer.domain.review.helper.OldReviewHelper;
+import org.letscareer.letscareer.domain.review.mapper.OldReviewMapper;
 import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
 import org.letscareer.letscareer.domain.review.vo.ReviewVo;
 import org.letscareer.letscareer.domain.user.entity.User;
@@ -61,8 +61,8 @@ public class LiveServiceImpl implements LiveService {
     private final LiveApplicationMapper liveApplicationMapper;
     private final LiveClassificationHelper liveClassificationHelper;
     private final LivePriceHelper livePriceHelper;
-    private final ReviewHelper reviewHelper;
-    private final ReviewMapper reviewMapper;
+    private final OldReviewHelper oldReviewHelper;
+    private final OldReviewMapper oldReviewMapper;
     private final FaqHelper faqHelper;
     private final FaqMapper faqMapper;
     private final ZoomUtils zoomUtils;
@@ -108,15 +108,15 @@ public class LiveServiceImpl implements LiveService {
 
     @Override
     public GetLiveReviewsResponseDto getLiveReviews(Pageable pageable) {
-        Page<ReviewVo> reviewVos = reviewHelper.findLiveReviewVos(pageable);
-        List<GetReviewResponseDto> reviewResDtoList = createGetReviewResponseDtoList(reviewVos.getContent());
+        Page<ReviewVo> reviewVos = oldReviewHelper.findLiveReviewVos(pageable);
+        List<GetOldReviewResponseDto> reviewResDtoList = createGetReviewResponseDtoList(reviewVos.getContent());
         PageInfo pageInfo = PageInfo.of(reviewVos);
         return liveMapper.toGetLiveReviewsResponseDto(reviewResDtoList, pageInfo);
     }
 
-    private List<GetReviewResponseDto> createGetReviewResponseDtoList(List<ReviewVo> vos) {
+    private List<GetOldReviewResponseDto> createGetReviewResponseDtoList(List<ReviewVo> vos) {
         return vos.stream()
-                .map(vo -> reviewMapper.toGetReviewResponseDto(vo, liveHelper.findLiveTitleVoOrThrow(vo.id()).title()))
+                .map(vo -> oldReviewMapper.toGetReviewResponseDto(vo, liveHelper.findLiveTitleVoOrThrow(vo.id()).title()))
                 .collect(Collectors.toList());
     }
 
@@ -136,7 +136,7 @@ public class LiveServiceImpl implements LiveService {
 
     @Override
     public GetLiveAdminReviewsResponseDto getReviewsForAdmin(Long liveId, Pageable pageable) {
-        Page<ReviewAdminVo> reviewVos = reviewHelper.findLiveReviewAdminVos(liveId, pageable);
+        Page<ReviewAdminVo> reviewVos = oldReviewHelper.findLiveReviewAdminVos(liveId, pageable);
         return liveMapper.toGetLiveAdminReviewsResponseDto(reviewVos);
     }
 
@@ -152,7 +152,7 @@ public class LiveServiceImpl implements LiveService {
         LiveMentorVo liveMentorVo = liveHelper.findLiveMentorVoOrThrow(liveId);
         List<String> questionList = mentorContentsType.equals(MentorContentsType.PREV) ? liveApplicationHelper.findQuestionListByLiveId(liveId) : new ArrayList<>();
         List<String> motivateList = mentorContentsType.equals(MentorContentsType.PREV) ? liveApplicationHelper.findMotivateListByLiveId(liveId) : new ArrayList<>();
-        List<String> reviewList = mentorContentsType.equals(MentorContentsType.REVIEW) ? reviewHelper.findLiveReviewContentByLiveId(liveId) : new ArrayList<>();
+        List<String> reviewList = mentorContentsType.equals(MentorContentsType.REVIEW) ? oldReviewHelper.findLiveReviewContentByLiveId(liveId) : new ArrayList<>();
         return liveMapper.toGetLiveMentorContentsResponse(liveMentorVo, questionList, motivateList, reviewList);
     }
 

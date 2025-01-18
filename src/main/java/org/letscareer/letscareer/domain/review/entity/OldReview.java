@@ -16,10 +16,10 @@ import static org.letscareer.letscareer.global.common.utils.entity.EntityUpdateV
 @Builder(access = AccessLevel.PRIVATE)
 @Getter
 @Entity
-public class Review extends BaseTimeEntity {
+public class OldReview extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "review_id")
+    @Column(name = "old_review_id")
     private Long id;
     private Integer nps;
     private String npsAns;
@@ -37,8 +37,8 @@ public class Review extends BaseTimeEntity {
     @JoinColumn(name = "application_id")
     private Application application;
 
-    public static Review createReview(Application application, CreateOldReviewRequestDto reviewRequestDto) {
-        Review review = Review.builder()
+    public static OldReview createReview(Application application, CreateOldReviewRequestDto reviewRequestDto) {
+        OldReview review = OldReview.builder()
                 .nps(reviewRequestDto.nps())
                 .npsAns(reviewRequestDto.npsAns())
                 .npsCheckAns(reviewRequestDto.npsCheckAns())
@@ -47,11 +47,12 @@ public class Review extends BaseTimeEntity {
                 .programDetail(reviewRequestDto.programDetail())
                 .application(application)
                 .build();
+        application.setOldReview(review);
         return review;
     }
 
-    public static Review createReviewByLink(Long programId, ProgramType programType, CreateOldReviewRequestDto reviewRequestDto) {
-        Review review = Review.builder()
+    public static OldReview createReviewByLink(Long programId, ProgramType programType, CreateOldReviewRequestDto reviewRequestDto) {
+        OldReview review = OldReview.builder()
                 .nps(reviewRequestDto.nps())
                 .npsAns(reviewRequestDto.npsAns())
                 .npsCheckAns(reviewRequestDto.npsCheckAns())
