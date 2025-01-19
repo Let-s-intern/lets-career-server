@@ -1,13 +1,12 @@
 package org.letscareer.letscareer.domain.review.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.letscareer.letscareer.domain.application.entity.report.ReportApplication;
 import org.letscareer.letscareer.domain.report.entity.Report;
 import org.letscareer.letscareer.domain.report.type.ReportType;
 import org.letscareer.letscareer.domain.report.type.ReportTypeConverter;
+import org.letscareer.letscareer.domain.review.dto.request.CreateReviewRequestDto;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -21,4 +20,21 @@ public class ReportReview extends Review {
 
     @Convert(converter = ReportTypeConverter.class)
     private ReportType reportType;
+
+    @Builder(access = AccessLevel.PRIVATE)
+    public ReportReview(Report report, ReportApplication reportApplication, CreateReviewRequestDto requestDto) {
+        super(reportApplication, requestDto);
+        this.report = report;
+        this.reportType = report.getType();
+    }
+
+    public static ReportReview createReportReview(Report report, ReportApplication reportApplication, CreateReviewRequestDto requestDto) {
+        ReportReview reportReview = ReportReview.builder()
+                .report(report)
+                .reportApplication(reportApplication)
+                .requestDto(requestDto)
+                .build();
+        reportApplication.setReview(reportReview);
+        return reportReview;
+    }
 }
