@@ -10,8 +10,10 @@ import org.letscareer.letscareer.domain.review.dto.response.GetReviewForAdminRes
 import org.letscareer.letscareer.domain.review.entity.ReportReview;
 import org.letscareer.letscareer.domain.review.helper.ReportReviewHelper;
 import org.letscareer.letscareer.domain.review.helper.ReviewItemHelper;
+import org.letscareer.letscareer.domain.review.mapper.ReviewMapper;
 import org.letscareer.letscareer.domain.review.type.ReviewQuestionType;
 import org.letscareer.letscareer.domain.review.vo.CreateReviewItemVo;
+import org.letscareer.letscareer.domain.review.vo.ReportReviewAdminVo;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.error.exception.ConflictException;
 import org.letscareer.letscareer.global.error.exception.UnauthorizedException;
@@ -31,10 +33,12 @@ public class ReportReviewServiceImpl implements ReviewService {
     private final ReportReviewHelper reportReviewHelper;
     private final ReportApplicationHelper reportApplicationHelper;
     private final ReviewItemHelper reviewItemHelper;
+    private final ReviewMapper reviewMapper;
 
     @Override
     public GetReviewForAdminResponseDto getReviewForAdmin() {
-        return null;
+        List<ReportReviewAdminVo> reportReviewAdminVos = reportReviewHelper.findAllReportReviewAdminVos();
+        return reviewMapper.toGetReviewForAdminResponseDto(reportReviewAdminVos);
     }
 
     @Override
