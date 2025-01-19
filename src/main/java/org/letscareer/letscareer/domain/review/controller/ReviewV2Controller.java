@@ -1,14 +1,18 @@
 package org.letscareer.letscareer.domain.review.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.review.dto.request.CreateReviewRequestDto;
 import org.letscareer.letscareer.domain.review.dto.request.UpdateReviewItemRequestDto;
 import org.letscareer.letscareer.domain.review.dto.request.UpdateReviewRequestDto;
+import org.letscareer.letscareer.domain.review.dto.response.GetReviewForAdminResponseDto;
 import org.letscareer.letscareer.domain.review.service.ReviewItemService;
 import org.letscareer.letscareer.domain.review.service.ReviewServiceFactory;
+import org.letscareer.letscareer.domain.review.type.ReviewProgramType;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.annotation.ApiErrorCode;
 import org.letscareer.letscareer.global.common.annotation.CurrentUser;
@@ -23,6 +27,15 @@ import org.springframework.web.bind.annotation.*;
 public class ReviewV2Controller {
     private final ReviewServiceFactory reviewServiceFactory;
     private final ReviewItemService reviewItemService;
+
+    @Operation(summary = "[어드민] 리뷰 전체 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReviewForAdminResponseDto.class)))
+    })
+    @GetMapping("/admin")
+    private ResponseEntity<SuccessResponse<?>> getReviewForAdmin(@RequestParam final ReviewProgramType type) {
+        GetReviewForAdminResponseDto responseDto = reviewServiceFactory.getReviewService(type).getReviewForAdmin();
+        return SuccessResponse.ok(responseDto);
+    }
 
     @Operation(summary = "리뷰 생성", responses = {
             @ApiResponse(responseCode = "201", useReturnTypeSchema = true)

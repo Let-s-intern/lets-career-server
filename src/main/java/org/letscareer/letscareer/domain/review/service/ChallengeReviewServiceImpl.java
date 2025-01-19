@@ -6,10 +6,13 @@ import org.letscareer.letscareer.domain.application.helper.ChallengeApplicationH
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.review.dto.request.CreateReviewRequestDto;
 import org.letscareer.letscareer.domain.review.dto.request.UpdateReviewRequestDto;
+import org.letscareer.letscareer.domain.review.dto.response.GetReviewForAdminResponseDto;
 import org.letscareer.letscareer.domain.review.entity.ChallengeReview;
 import org.letscareer.letscareer.domain.review.helper.ChallengeReviewHelper;
 import org.letscareer.letscareer.domain.review.helper.ReviewItemHelper;
+import org.letscareer.letscareer.domain.review.mapper.ReviewMapper;
 import org.letscareer.letscareer.domain.review.type.ReviewQuestionType;
+import org.letscareer.letscareer.domain.review.vo.ChallengeReviewAdminVo;
 import org.letscareer.letscareer.domain.review.vo.CreateReviewItemVo;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.error.exception.ConflictException;
@@ -30,6 +33,13 @@ public class ChallengeReviewServiceImpl implements ReviewService {
     private final ChallengeReviewHelper challengeReviewHelper;
     private final ChallengeApplicationHelper challengeApplicationHelper;
     private final ReviewItemHelper reviewItemHelper;
+    private final ReviewMapper reviewMapper;
+
+    @Override
+    public GetReviewForAdminResponseDto getReviewForAdmin() {
+        List<ChallengeReviewAdminVo> challengeReviewAdminVos = challengeReviewHelper.findAllChallengeReviewAdminVos();
+        return reviewMapper.toGetReviewForAdminResponseDto(challengeReviewAdminVos);
+    }
 
     @Override
     public void createReview(User user, Long applicationId, CreateReviewRequestDto requestDto) {

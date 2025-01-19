@@ -6,6 +6,7 @@ import org.letscareer.letscareer.domain.application.helper.LiveApplicationHelper
 import org.letscareer.letscareer.domain.live.entity.Live;
 import org.letscareer.letscareer.domain.review.dto.request.CreateReviewRequestDto;
 import org.letscareer.letscareer.domain.review.dto.request.UpdateReviewRequestDto;
+import org.letscareer.letscareer.domain.review.dto.response.GetReviewForAdminResponseDto;
 import org.letscareer.letscareer.domain.review.entity.LiveReview;
 import org.letscareer.letscareer.domain.review.helper.LiveReviewHelper;
 import org.letscareer.letscareer.domain.review.helper.ReviewItemHelper;
@@ -29,6 +30,11 @@ public class LiveReviewServiceImpl implements ReviewService {
     private final LiveReviewHelper liveReviewHelper;
     private final LiveApplicationHelper liveApplicationHelper;
     private final ReviewItemHelper reviewItemHelper;
+
+    @Override
+    public GetReviewForAdminResponseDto getReviewForAdmin() {
+        return null;
+    }
 
     @Override
     public void createReview(User user, Long applicationId, CreateReviewRequestDto requestDto) {
