@@ -96,6 +96,7 @@ public enum SwaggerEnum {
 
     // review
     REVIEW_NOT_FOUND(ReviewErrorCode.REVIEW_NOT_FOUND),
+    REVIEW_ITEM_NOT_FOUND(ReviewErrorCode.REVIEW_ITEM_NOT_FOUND),
     REVIEW_ALREADY_EXISTS(ReviewErrorCode.REVIEW_ALREADY_EXISTS),
 
     // user

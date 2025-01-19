@@ -5,7 +5,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.review.dto.request.CreateReviewRequestDto;
+import org.letscareer.letscareer.domain.review.dto.request.UpdateReviewItemRequestDto;
 import org.letscareer.letscareer.domain.review.dto.request.UpdateReviewRequestDto;
+import org.letscareer.letscareer.domain.review.service.ReviewItemService;
 import org.letscareer.letscareer.domain.review.service.ReviewServiceFactory;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.annotation.ApiErrorCode;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class ReviewV2Controller {
     private final ReviewServiceFactory reviewServiceFactory;
+    private final ReviewItemService reviewItemService;
 
     @Operation(summary = "리뷰 생성", responses = {
             @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
@@ -34,13 +37,24 @@ public class ReviewV2Controller {
     }
 
     @Operation(summary = "[어드민] 리뷰 업데이트", responses = {
-            @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @ApiErrorCode({SwaggerEnum.REVIEW_NOT_FOUND})
     @PatchMapping("/{reviewId}")
     private ResponseEntity<SuccessResponse<?>> updateReview(@PathVariable final Long reviewId,
                                                             @RequestBody @Valid final UpdateReviewRequestDto requestDto) {
         reviewServiceFactory.getReviewService(requestDto.type()).updateReview(reviewId, requestDto);
+        return SuccessResponse.ok(null);
+    }
+
+    @Operation(summary = "[어드민] 리뷰 아이템 업데이트", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    })
+    @ApiErrorCode({SwaggerEnum.REVIEW_ITEM_NOT_FOUND})
+    @PatchMapping("/item/{reviewItemId}")
+    private ResponseEntity<SuccessResponse<?>> updateReviewItem(@PathVariable final Long reviewItemId,
+                                                                @RequestBody @Valid final UpdateReviewItemRequestDto requestDto) {
+        reviewItemService.updateReviewItem(reviewItemId, requestDto);
         return SuccessResponse.ok(null);
     }
 }
