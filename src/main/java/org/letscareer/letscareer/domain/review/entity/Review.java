@@ -23,14 +23,12 @@ public abstract class Review extends BaseTimeEntity {
     private Integer npsScore;
     private String goodPoint;
     private String badPoint;
-    @Builder.Default
-    private Boolean isVisible = false;
+    private Boolean isVisible;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id")
     private Application application;
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
-    @Builder.Default
-    private List<ReviewItem> reviewItemList = new ArrayList<>();
+    private List<ReviewItem> reviewItemList;
 }
