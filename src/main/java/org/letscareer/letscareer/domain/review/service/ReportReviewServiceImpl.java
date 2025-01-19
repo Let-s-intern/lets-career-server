@@ -13,7 +13,7 @@ import org.letscareer.letscareer.domain.review.helper.ReviewItemHelper;
 import org.letscareer.letscareer.domain.review.mapper.ReviewMapper;
 import org.letscareer.letscareer.domain.review.type.ReviewQuestionType;
 import org.letscareer.letscareer.domain.review.vo.CreateReviewItemVo;
-import org.letscareer.letscareer.domain.review.vo.ReportReviewAdminVo;
+import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.error.exception.ConflictException;
 import org.letscareer.letscareer.global.error.exception.UnauthorizedException;
@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static org.letscareer.letscareer.domain.review.error.ReviewErrorCode.REVIEW_ALREADY_EXISTS;
 import static org.letscareer.letscareer.global.error.GlobalErrorCode.UNAUTHORIZED;
@@ -37,8 +38,13 @@ public class ReportReviewServiceImpl implements ReviewService {
 
     @Override
     public GetReviewForAdminResponseDto getReviewForAdmin() {
-        List<ReportReviewAdminVo> reportReviewAdminVos = reportReviewHelper.findAllReportReviewAdminVos();
-        return reviewMapper.toGetReviewForAdminResponseDto(reportReviewAdminVos);
+        List<ReviewAdminVo> reviewAdminVos = reportReviewHelper.findAllReportReviewAdminVos().stream()
+                .map(reportReviewAdminVo -> reviewMapper.toReviewAdminVo(
+                        reportReviewAdminVo,
+                        reviewItemHelper.findAllReviewItemAdminVosByReviewId(reportReviewAdminVo.reviewId())
+                ))
+                .collect(Collectors.toList());
+        return reviewMapper.toGetReviewForAdminResponseDto(reviewAdminVos);
     }
 
     @Override
