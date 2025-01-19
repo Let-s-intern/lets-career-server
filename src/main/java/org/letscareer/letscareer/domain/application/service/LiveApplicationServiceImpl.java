@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.application.service;
 
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.dto.request.CreateApplicationRequestDto;
+import org.letscareer.letscareer.domain.application.dto.request.UpdateApplicationRequestDto;
 import org.letscareer.letscareer.domain.application.dto.response.CreateApplicationResponseDto;
 import org.letscareer.letscareer.domain.application.entity.LiveApplication;
 import org.letscareer.letscareer.domain.application.helper.ApplicationHelper;
@@ -60,6 +61,11 @@ public class LiveApplicationServiceImpl implements ApplicationService {
         TossPaymentsResponseDto responseDto = tossProvider.requestPayments(paymentInfo.paymentKey(), paymentInfo.orderId(), paymentInfo.amount());
         sendPaymentKakaoMessages(live, user, createApplicationRequestDto.paymentInfo());
         return applicationMapper.toCreateApplicationResponseDto(responseDto);
+    }
+
+    @Override
+    public void updateApplication(Long applicationId, User user, UpdateApplicationRequestDto requestDto) {
+
     }
 
     @Override

@@ -8,6 +8,7 @@ import org.letscareer.letscareer.domain.review.dto.request.CreateReviewRequestDt
 import org.letscareer.letscareer.domain.review.entity.ChallengeReview;
 import org.letscareer.letscareer.domain.review.helper.ChallengeReviewHelper;
 import org.letscareer.letscareer.domain.review.helper.ReviewItemHelper;
+import org.letscareer.letscareer.domain.review.type.ReviewQuestionType;
 import org.letscareer.letscareer.domain.review.vo.CreateReviewItemVo;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.error.exception.ConflictException;
@@ -35,7 +36,7 @@ public class ChallengeReviewServiceImpl implements ReviewService {
         validateCreateReviewCondition(user, challengeApplication);
         Challenge challenge = challengeApplication.getChallenge();
         ChallengeReview challengeReview = challengeReviewHelper.createChallengeReviewAndSave(challenge, challengeApplication, requestDto);
-        createReviewItemListAndSave(challengeReview, requestDto.reviewItemList());
+        createReviewItemListAndSave(challengeReview, challengeApplication.getGoal(), requestDto.reviewItemList());
     }
 
     private void validateCreateReviewCondition(User currentUser, ChallengeApplication challengeApplication) {
@@ -48,7 +49,9 @@ public class ChallengeReviewServiceImpl implements ReviewService {
         }
     }
 
-    private void createReviewItemListAndSave(ChallengeReview challengeReview, List<CreateReviewItemVo> createReviewItemVoList) {
+    private void createReviewItemListAndSave(ChallengeReview challengeReview, String goal, List<CreateReviewItemVo> createReviewItemVoList) {
+        CreateReviewItemVo goalReviewItemVo = new CreateReviewItemVo(ReviewQuestionType.GOAL, goal);
+        reviewItemHelper.createReviewItemAndSave(challengeReview, goalReviewItemVo);
         createReviewItemVoList.forEach(createReviewItemVo -> {
             reviewItemHelper.createReviewItemAndSave(challengeReview, createReviewItemVo);
         });
