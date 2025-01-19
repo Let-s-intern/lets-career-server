@@ -13,8 +13,8 @@ import org.letscareer.letscareer.domain.review.dto.response.GetOldReviewDetailRe
 import org.letscareer.letscareer.domain.review.entity.old.OldReview;
 import org.letscareer.letscareer.domain.review.helper.OldReviewHelper;
 import org.letscareer.letscareer.domain.review.mapper.OldReviewMapper;
-import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
-import org.letscareer.letscareer.domain.review.vo.ReviewDetailVo;
+import org.letscareer.letscareer.domain.review.vo.old.ReviewAdminVo;
+import org.letscareer.letscareer.domain.review.vo.old.ReviewDetailVo;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.type.UserRole;
 import org.springframework.stereotype.Service;

@@ -2,7 +2,7 @@ package org.letscareer.letscareer.domain.review.dto.response;
 
 import lombok.AccessLevel;
 import lombok.Builder;
-import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
+import org.letscareer.letscareer.domain.review.vo.old.ReviewAdminVo;
 
 import java.util.List;
 

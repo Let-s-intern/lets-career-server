@@ -3,9 +3,9 @@ package org.letscareer.letscareer.domain.review.mapper;
 import org.letscareer.letscareer.domain.review.dto.response.GetOldReviewDetailListResponseDto;
 import org.letscareer.letscareer.domain.review.dto.response.GetOldReviewDetailResponseDto;
 import org.letscareer.letscareer.domain.review.dto.response.GetOldReviewResponseDto;
-import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
-import org.letscareer.letscareer.domain.review.vo.ReviewDetailVo;
-import org.letscareer.letscareer.domain.review.vo.ReviewVo;
+import org.letscareer.letscareer.domain.review.vo.old.ReviewAdminVo;
+import org.letscareer.letscareer.domain.review.vo.old.ReviewDetailVo;
+import org.letscareer.letscareer.domain.review.vo.old.ReviewVo;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

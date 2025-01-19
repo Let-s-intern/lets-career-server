@@ -6,7 +6,10 @@ import org.letscareer.letscareer.domain.report.entity.Report;
 import org.letscareer.letscareer.domain.review.dto.request.CreateReviewRequestDto;
 import org.letscareer.letscareer.domain.review.entity.ReportReview;
 import org.letscareer.letscareer.domain.review.repository.ReportReviewRepository;
+import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
+
+import static org.letscareer.letscareer.domain.review.error.ReviewErrorCode.REVIEW_NOT_FOUND;
 
 @RequiredArgsConstructor
 @Component
@@ -16,5 +19,9 @@ public class ReportReviewHelper {
     public ReportReview createReportReviewAndSave(Report report, ReportApplication reportApplication, CreateReviewRequestDto requestDto) {
         ReportReview reportReview = ReportReview.createReportReview(report, reportApplication, requestDto);
         return reportReviewRepository.save(reportReview);
+    }
+
+    public ReportReview findReportReviewByReviewIdOrThrow(Long reviewId) {
+        return reportReviewRepository.findById(reviewId).orElseThrow(() -> new EntityNotFoundException(REVIEW_NOT_FOUND));
     }
 }

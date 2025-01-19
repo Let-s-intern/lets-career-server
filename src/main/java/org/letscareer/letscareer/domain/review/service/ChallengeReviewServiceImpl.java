@@ -5,6 +5,7 @@ import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
 import org.letscareer.letscareer.domain.application.helper.ChallengeApplicationHelper;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.review.dto.request.CreateReviewRequestDto;
+import org.letscareer.letscareer.domain.review.dto.request.UpdateReviewRequestDto;
 import org.letscareer.letscareer.domain.review.entity.ChallengeReview;
 import org.letscareer.letscareer.domain.review.helper.ChallengeReviewHelper;
 import org.letscareer.letscareer.domain.review.helper.ReviewItemHelper;
@@ -37,6 +38,12 @@ public class ChallengeReviewServiceImpl implements ReviewService {
         Challenge challenge = challengeApplication.getChallenge();
         ChallengeReview challengeReview = challengeReviewHelper.createChallengeReviewAndSave(challenge, challengeApplication, requestDto);
         createReviewItemListAndSave(challengeReview, challengeApplication.getGoal(), requestDto.reviewItemList());
+    }
+
+    @Override
+    public void updateReview(Long reviewId, UpdateReviewRequestDto requestDto) {
+        ChallengeReview challengeReview = challengeReviewHelper.findChallengeReviewByReviewIdOrThrow(reviewId);
+        challengeReview.updateReview(requestDto);
     }
 
     private void validateCreateReviewCondition(User currentUser, ChallengeApplication challengeApplication) {

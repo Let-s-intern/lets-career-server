@@ -5,6 +5,7 @@ import org.letscareer.letscareer.domain.application.entity.LiveApplication;
 import org.letscareer.letscareer.domain.application.helper.LiveApplicationHelper;
 import org.letscareer.letscareer.domain.live.entity.Live;
 import org.letscareer.letscareer.domain.review.dto.request.CreateReviewRequestDto;
+import org.letscareer.letscareer.domain.review.dto.request.UpdateReviewRequestDto;
 import org.letscareer.letscareer.domain.review.entity.LiveReview;
 import org.letscareer.letscareer.domain.review.helper.LiveReviewHelper;
 import org.letscareer.letscareer.domain.review.helper.ReviewItemHelper;
@@ -36,6 +37,12 @@ public class LiveReviewServiceImpl implements ReviewService {
         Live live = liveApplication.getLive();
         LiveReview liveReview = liveReviewHelper.createLiveReviewAndSave(live, liveApplication, requestDto);
         createReviewItemListAndSave(liveReview, requestDto.reviewItemList());
+    }
+
+    @Override
+    public void updateReview(Long reviewId, UpdateReviewRequestDto requestDto) {
+        LiveReview liveReview = liveReviewHelper.findLiveReviewByReviewIdOrThrow(reviewId);
+        liveReview.updateReview(requestDto);
     }
 
     private void validateCreateReviewCondition(User currentUser, LiveApplication liveApplication) {

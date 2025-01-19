@@ -1,9 +1,9 @@
 package org.letscareer.letscareer.domain.review.repository.old;
 
 import org.letscareer.letscareer.domain.program.type.ProgramType;
-import org.letscareer.letscareer.domain.review.vo.ReviewDetailVo;
-import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
-import org.letscareer.letscareer.domain.review.vo.ReviewVo;
+import org.letscareer.letscareer.domain.review.vo.old.ReviewDetailVo;
+import org.letscareer.letscareer.domain.review.vo.old.ReviewAdminVo;
+import org.letscareer.letscareer.domain.review.vo.old.ReviewVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

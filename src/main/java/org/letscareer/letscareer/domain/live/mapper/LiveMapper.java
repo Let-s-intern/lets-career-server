@@ -6,7 +6,7 @@ import org.letscareer.letscareer.domain.live.dto.response.*;
 import org.letscareer.letscareer.domain.live.vo.*;
 import org.letscareer.letscareer.domain.price.vo.LivePriceDetailVo;
 import org.letscareer.letscareer.domain.review.dto.response.GetOldReviewResponseDto;
-import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
+import org.letscareer.letscareer.domain.review.vo.old.ReviewAdminVo;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.entity.PageInfo;
 import org.springframework.data.domain.Page;

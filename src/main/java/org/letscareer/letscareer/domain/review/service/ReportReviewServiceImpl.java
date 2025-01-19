@@ -5,6 +5,7 @@ import org.letscareer.letscareer.domain.application.entity.report.ReportApplicat
 import org.letscareer.letscareer.domain.application.helper.ReportApplicationHelper;
 import org.letscareer.letscareer.domain.report.entity.Report;
 import org.letscareer.letscareer.domain.review.dto.request.CreateReviewRequestDto;
+import org.letscareer.letscareer.domain.review.dto.request.UpdateReviewRequestDto;
 import org.letscareer.letscareer.domain.review.entity.ReportReview;
 import org.letscareer.letscareer.domain.review.helper.ReportReviewHelper;
 import org.letscareer.letscareer.domain.review.helper.ReviewItemHelper;
@@ -36,6 +37,12 @@ public class ReportReviewServiceImpl implements ReviewService {
         Report report = reportApplication.getReport();
         ReportReview reportReview = reportReviewHelper.createReportReviewAndSave(report, reportApplication, requestDto);
         createReviewItemListAndSave(reportReview, requestDto.reviewItemList());
+    }
+
+    @Override
+    public void updateReview(Long reviewId, UpdateReviewRequestDto requestDto) {
+        ReportReview reportReview = reportReviewHelper.findReportReviewByReviewIdOrThrow(reviewId);
+        reportReview.updateReview(requestDto);
     }
 
     private void validateCreateReviewCondition(User currentUser, ReportApplication reportApplication, CreateReviewRequestDto requestDto) {

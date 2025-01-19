@@ -1,4 +1,4 @@
-package org.letscareer.letscareer.domain.review.vo;
+package org.letscareer.letscareer.domain.review.vo.old;
 
 import lombok.Builder;
 import org.letscareer.letscareer.domain.program.type.ProgramType;

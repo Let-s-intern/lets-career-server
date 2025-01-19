@@ -2,7 +2,7 @@ package org.letscareer.letscareer.domain.review.dto.response;
 
 import lombok.AccessLevel;
 import lombok.Builder;
-import org.letscareer.letscareer.domain.review.vo.ReviewVo;
+import org.letscareer.letscareer.domain.review.vo.old.ReviewVo;
 
 import java.time.LocalDateTime;
 
