@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.letscareer.letscareer.domain.application.entity.report.QReportFeedbackApplication.reportFeedbackApplication;
-import static org.letscareer.letscareer.domain.review.entity.QOldReview.oldReview;
+import static org.letscareer.letscareer.domain.review.entity.old.QOldReview.oldReview;
 import static org.letscareer.letscareer.domain.review.entity.QReview.review;
 
 @RequiredArgsConstructor

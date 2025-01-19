@@ -10,7 +10,7 @@ import org.letscareer.letscareer.domain.review.dto.request.CreateOldReviewReques
 import org.letscareer.letscareer.domain.review.dto.request.UpdateOldReviewRequestDto;
 import org.letscareer.letscareer.domain.review.dto.response.GetOldReviewDetailListResponseDto;
 import org.letscareer.letscareer.domain.review.dto.response.GetOldReviewDetailResponseDto;
-import org.letscareer.letscareer.domain.review.entity.OldReview;
+import org.letscareer.letscareer.domain.review.entity.old.OldReview;
 import org.letscareer.letscareer.domain.review.helper.OldReviewHelper;
 import org.letscareer.letscareer.domain.review.mapper.OldReviewMapper;
 import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;

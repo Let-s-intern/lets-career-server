@@ -9,7 +9,7 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
-import org.letscareer.letscareer.domain.review.entity.VWReview;
+import org.letscareer.letscareer.domain.review.entity.old.VWReview;
 import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
 import org.letscareer.letscareer.domain.review.vo.ReviewDetailVo;
 import org.letscareer.letscareer.domain.review.vo.ReviewVo;
@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.letscareer.letscareer.domain.review.entity.QOldReview.oldReview;
-import static org.letscareer.letscareer.domain.review.entity.QVWReview.vWReview;
+import static org.letscareer.letscareer.domain.review.entity.old.QOldReview.oldReview;
+import static org.letscareer.letscareer.domain.review.entity.old.QVWReview.vWReview;
 
 @RequiredArgsConstructor
 public class OldReviewQueryRepositoryImpl implements OldReviewQueryRepository {

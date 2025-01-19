@@ -1,4 +1,4 @@
-package org.letscareer.letscareer.domain.review.entity;
+package org.letscareer.letscareer.domain.review.entity.old;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.Immutable;
