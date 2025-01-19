@@ -5,12 +5,16 @@ import lombok.*;
 import org.letscareer.letscareer.domain.application.entity.Application;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder(access = AccessLevel.PRIVATE)
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING)
 @Getter
 @Entity
-public class Review extends BaseTimeEntity {
+public abstract class Review extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "review_id")
@@ -25,4 +29,8 @@ public class Review extends BaseTimeEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id")
     private Application application;
+
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<ReviewItem> reviewItemList = new ArrayList<>();
 }
