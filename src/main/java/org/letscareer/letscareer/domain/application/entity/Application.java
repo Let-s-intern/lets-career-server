@@ -51,6 +51,10 @@ public abstract class Application extends BaseTimeEntity {
         this.payment = payment;
     }
 
+    public void setReview(Review review) {
+        this.review = review;
+    }
+
     public void setOldReview(OldReview oldReview) {
         this.oldReview = oldReview;
     }

@@ -1,25 +1,19 @@
 package org.letscareer.letscareer.domain.review.vo;
 
+import lombok.AccessLevel;
 import lombok.Builder;
-import org.letscareer.letscareer.domain.program.type.ProgramType;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
-@Builder
-public record ReviewAdminVo(
-        Long id,
-        Long applicationId,
-        String programTitle,
-        ProgramType programType,
-        Long userId,
-        String name,
-        Integer nps,
-        String npsAns,
-        Boolean npsCheckAns,
-        String content,
-        String programDetail,
-        Integer score,
-        Boolean isVisible,
-        LocalDateTime createdDate
+@Builder(access = AccessLevel.PRIVATE)
+public record ReviewAdminVo<T>(
+        T reviewInfo,
+        List<ReviewItemAdminVo> reviewItemList
 ) {
+    public static <T> ReviewAdminVo of(T reviewInfo, List<ReviewItemAdminVo> reviewItemList) {
+        return ReviewAdminVo.builder()
+                .reviewInfo(reviewInfo)
+                .reviewItemList(reviewItemList)
+                .build();
+    }
 }

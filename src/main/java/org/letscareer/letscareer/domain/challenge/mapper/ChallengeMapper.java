@@ -8,7 +8,7 @@ import org.letscareer.letscareer.domain.classification.vo.ChallengeClassificatio
 import org.letscareer.letscareer.domain.faq.vo.FaqDetailVo;
 import org.letscareer.letscareer.domain.price.vo.ChallengePriceDetailVo;
 import org.letscareer.letscareer.domain.review.dto.response.GetOldReviewResponseDto;
-import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
+import org.letscareer.letscareer.domain.review.vo.old.ReviewAdminVo;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.entity.PageInfo;
 import org.springframework.data.domain.Page;

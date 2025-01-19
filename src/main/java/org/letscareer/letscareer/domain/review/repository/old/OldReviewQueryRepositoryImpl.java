@@ -1,4 +1,4 @@
-package org.letscareer.letscareer.domain.review.repository;
+package org.letscareer.letscareer.domain.review.repository.old;
 
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -10,9 +10,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.review.entity.old.VWReview;
-import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
-import org.letscareer.letscareer.domain.review.vo.ReviewDetailVo;
-import org.letscareer.letscareer.domain.review.vo.ReviewVo;
+import org.letscareer.letscareer.domain.review.vo.old.ReviewAdminVo;
+import org.letscareer.letscareer.domain.review.vo.old.ReviewDetailVo;
+import org.letscareer.letscareer.domain.review.vo.old.ReviewVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;

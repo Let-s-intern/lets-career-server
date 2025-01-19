@@ -2,9 +2,13 @@ package org.letscareer.letscareer.domain.review.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.letscareer.letscareer.domain.review.dto.request.UpdateReviewItemRequestDto;
 import org.letscareer.letscareer.domain.review.type.ReviewQuestionType;
 import org.letscareer.letscareer.domain.review.type.ReviewQuestionTypeConverter;
+import org.letscareer.letscareer.domain.review.vo.CreateReviewItemVo;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
+
+import static org.letscareer.letscareer.global.common.utils.entity.EntityUpdateValueUtils.updateValue;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -29,4 +33,18 @@ public class ReviewItem extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_id")
     private Review review;
+
+    public static ReviewItem createReviewItem(Review review, CreateReviewItemVo createReviewItemVo) {
+        ReviewItem reviewItem = ReviewItem.builder()
+                .review(review)
+                .questionType(createReviewItemVo.questionType())
+                .answer(createReviewItemVo.answer())
+                .build();
+        review.addReviewItem(reviewItem);
+        return reviewItem;
+    }
+
+    public void updateReviewItem(UpdateReviewItemRequestDto requestDto) {
+        this.isVisible = updateValue(this.isVisible, requestDto.isVisible());
+    }
 }
