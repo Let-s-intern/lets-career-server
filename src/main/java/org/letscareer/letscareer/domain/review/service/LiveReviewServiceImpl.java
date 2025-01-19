@@ -10,7 +10,9 @@ import org.letscareer.letscareer.domain.review.dto.response.GetReviewForAdminRes
 import org.letscareer.letscareer.domain.review.entity.LiveReview;
 import org.letscareer.letscareer.domain.review.helper.LiveReviewHelper;
 import org.letscareer.letscareer.domain.review.helper.ReviewItemHelper;
+import org.letscareer.letscareer.domain.review.mapper.ReviewMapper;
 import org.letscareer.letscareer.domain.review.vo.CreateReviewItemVo;
+import org.letscareer.letscareer.domain.review.vo.LiveReviewAdminVo;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.error.exception.ConflictException;
 import org.letscareer.letscareer.global.error.exception.UnauthorizedException;
@@ -30,10 +32,12 @@ public class LiveReviewServiceImpl implements ReviewService {
     private final LiveReviewHelper liveReviewHelper;
     private final LiveApplicationHelper liveApplicationHelper;
     private final ReviewItemHelper reviewItemHelper;
+    private final ReviewMapper reviewMapper;
 
     @Override
     public GetReviewForAdminResponseDto getReviewForAdmin() {
-        return null;
+        List<LiveReviewAdminVo> liveReviewAdminVos = liveReviewHelper.findAllLiveReviewAdminVos();
+        return reviewMapper.toGetReviewForAdminResponseDto(liveReviewAdminVos);
     }
 
     @Override
