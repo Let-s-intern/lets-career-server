@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.letscareer.letscareer.domain.review.entity.QOldReview.oldReview;
-import static org.letscareer.letscareer.domain.review.entity.QVWReview.vWReview;
+import static org.letscareer.letscareer.domain.review.entity.old.QOldReview.oldReview;
+import static org.letscareer.letscareer.domain.review.entity.old.QVWReview.vWReview;
 
 @RequiredArgsConstructor
 public class OldReviewQueryRepositoryImpl implements OldReviewQueryRepository {
