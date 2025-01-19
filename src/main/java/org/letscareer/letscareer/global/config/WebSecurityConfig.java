@@ -88,7 +88,7 @@ public class WebSecurityConfig {
     };
 
     private final String[] UserPostPatterns = {
-            "/api/v1/file"
+            "/api/v1/file", "/api/v2/review"
     };
 
     private final String[] UserPatchPatterns = {

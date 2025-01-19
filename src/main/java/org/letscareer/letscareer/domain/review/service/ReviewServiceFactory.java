@@ -1,7 +1,7 @@
 package org.letscareer.letscareer.domain.review.service;
 
-import org.letscareer.letscareer.domain.program.type.ProgramType;
+import org.letscareer.letscareer.domain.review.type.ReviewProgramType;
 
 public interface ReviewServiceFactory {
-    ReviewService getReviewService(ProgramType programType);
+    ReviewService getReviewService(ReviewProgramType programType);
 }

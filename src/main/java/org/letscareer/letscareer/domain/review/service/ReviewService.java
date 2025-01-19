@@ -1,9 +1,10 @@
 package org.letscareer.letscareer.domain.review.service;
 
 import org.letscareer.letscareer.domain.review.dto.request.CreateReviewRequestDto;
+import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface ReviewService {
-    void createReview(Long applicationId, CreateReviewRequestDto requestDto);
+    void createReview(User user, Long applicationId, CreateReviewRequestDto requestDto);
 }

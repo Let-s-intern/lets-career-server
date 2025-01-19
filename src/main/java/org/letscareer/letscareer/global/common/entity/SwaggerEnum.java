@@ -17,6 +17,7 @@ import org.letscareer.letscareer.domain.payment.error.PaymentErrorCode;
 import org.letscareer.letscareer.domain.price.error.ChallengePriceErrorCode;
 import org.letscareer.letscareer.domain.price.error.PriceErrorCode;
 import org.letscareer.letscareer.domain.report.error.ReportErrorCode;
+import org.letscareer.letscareer.domain.review.error.ReviewErrorCode;
 import org.letscareer.letscareer.domain.score.error.ScoreErrorCode;
 import org.letscareer.letscareer.domain.user.error.UserErrorCode;
 import org.letscareer.letscareer.domain.vod.error.VodErrorCode;
@@ -93,6 +94,10 @@ public enum SwaggerEnum {
     // vod
     VOD_NOT_FOUND(VodErrorCode.VOD_NOT_FOUND),
 
+    // review
+    REVIEW_NOT_FOUND(ReviewErrorCode.REVIEW_NOT_FOUND),
+    REVIEW_ALREADY_EXISTS(ReviewErrorCode.REVIEW_ALREADY_EXISTS),
+
     // user
     INVALID_EMAIL(UserErrorCode.INVALID_EMAIL),
     INVALID_PASSWORD(UserErrorCode.INVALID_PASSWORD),
@@ -105,6 +110,7 @@ public enum SwaggerEnum {
     INVALID_AUTH_PROVIDER_NAVER(UserErrorCode.INVALID_AUTH_PROVIDER_NAVER),
 
     // global
+    UNAUTHORIZED(GlobalErrorCode.UNAUTHORIZED),
     BAD_REQUEST(GlobalErrorCode.BAD_REQUEST),
     MISMATCH_PASSWORD(GlobalErrorCode.MISMATCH_PASSWORD),
     NOT_REFRESH_TOKEN(GlobalErrorCode.NOT_REFRESH_TOKEN),
