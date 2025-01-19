@@ -8,7 +8,7 @@ import org.letscareer.letscareer.domain.challenge.type.converter.ChallengeTypeCo
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@DiscriminatorValue("challenge_application")
+@DiscriminatorValue("challenge_review")
 @Getter
 @Entity
 public class ChallengeReview extends Review {
