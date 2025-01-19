@@ -1,4 +1,4 @@
-package org.letscareer.letscareer.domain.review.repository;
+package org.letscareer.letscareer.domain.review.repository.old;
 
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;

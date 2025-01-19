@@ -1,4 +1,4 @@
-package org.letscareer.letscareer.domain.review.repository;
+package org.letscareer.letscareer.domain.review.repository.old;
 
 import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.review.vo.ReviewDetailVo;
