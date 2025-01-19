@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Transactional
-@Service("REPORT")
+@Service("REPORT_REVIEW")
 public class ReportReviewServiceImpl implements ReviewService {
     @Override
     public void createReview(Long applicationId, CreateReviewRequestDto requestDto) {

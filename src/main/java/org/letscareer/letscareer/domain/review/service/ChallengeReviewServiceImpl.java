@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Transactional
-@Service("CHALLENGE")
+@Service("CHALLENGE_REVIEW")
 public class ChallengeReviewServiceImpl implements ReviewService {
     @Override
     public void createReview(Long applicationId, CreateReviewRequestDto requestDto) {
