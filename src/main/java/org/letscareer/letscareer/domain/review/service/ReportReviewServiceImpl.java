@@ -9,6 +9,7 @@ import org.letscareer.letscareer.domain.review.dto.request.UpdateReviewRequestDt
 import org.letscareer.letscareer.domain.review.entity.ReportReview;
 import org.letscareer.letscareer.domain.review.helper.ReportReviewHelper;
 import org.letscareer.letscareer.domain.review.helper.ReviewItemHelper;
+import org.letscareer.letscareer.domain.review.type.ReviewQuestionType;
 import org.letscareer.letscareer.domain.review.vo.CreateReviewItemVo;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.error.exception.ConflictException;
@@ -36,7 +37,7 @@ public class ReportReviewServiceImpl implements ReviewService {
         validateCreateReviewCondition(user, reportApplication, requestDto);
         Report report = reportApplication.getReport();
         ReportReview reportReview = reportReviewHelper.createReportReviewAndSave(report, reportApplication, requestDto);
-        createReviewItemListAndSave(reportReview, requestDto.reviewItemList());
+        createReviewItemListAndSave(reportReview, reportApplication.getMessage(), requestDto.reviewItemList());
     }
 
     @Override
@@ -55,7 +56,12 @@ public class ReportReviewServiceImpl implements ReviewService {
         }
     }
 
-    private void createReviewItemListAndSave(ReportReview reportReview, List<CreateReviewItemVo> reviewItemList) {
+    private void createReviewItemListAndSave(ReportReview reportReview, String message, List<CreateReviewItemVo> reviewItemList) {
+        if(!Objects.isNull(message) && !message.isBlank()) {
+            CreateReviewItemVo worryReviewItemVo = new CreateReviewItemVo(ReviewQuestionType.WORRY, message);
+            reviewItemHelper.createReviewItemAndSave(reportReview, worryReviewItemVo);
+        }
+
         reviewItemList.forEach(createReviewItemVo -> {
             reviewItemHelper.createReviewItemAndSave(reportReview, createReviewItemVo);
         });
