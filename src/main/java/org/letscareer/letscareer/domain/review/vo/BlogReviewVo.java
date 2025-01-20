@@ -4,7 +4,7 @@ import org.letscareer.letscareer.domain.program.type.ProgramType;
 
 import java.time.LocalDateTime;
 
-public record BlogReviewAdminVo(
+public record BlogReviewVo(
         Long blogReviewId,
         LocalDateTime postDate,
         ProgramType programType,
@@ -12,7 +12,6 @@ public record BlogReviewAdminVo(
         String name,
         String title,
         String url,
-        String thumbnail,
-        Boolean isVisible
+        String thumbnail
 ) {
 }

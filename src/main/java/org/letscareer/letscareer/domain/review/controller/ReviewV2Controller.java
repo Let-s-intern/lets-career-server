@@ -7,8 +7,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.challenge.type.ChallengeType;
+import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.review.dto.request.*;
 import org.letscareer.letscareer.domain.review.dto.response.GetBlogReviewForAdminResponseDto;
+import org.letscareer.letscareer.domain.review.dto.response.GetBlogReviewResponseDto;
 import org.letscareer.letscareer.domain.review.dto.response.GetReviewForAdminResponseDto;
 import org.letscareer.letscareer.domain.review.dto.response.GetReviewResponseDto;
 import org.letscareer.letscareer.domain.review.service.ReviewItemService;
@@ -52,6 +54,18 @@ public class ReviewV2Controller {
         return SuccessResponse.ok(responseDto);
     }
 
+    @Operation(
+            summary = "로직 X - 블로그 후기 전체 조회",
+            description = "[100% 솔직 후기 > 블로그 후기]",
+            responses = {@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetBlogReviewResponseDto.class)))
+            })
+    @GetMapping("/blog")
+    private ResponseEntity<SuccessResponse<?>> getBlogReviews(@RequestParam(required = false) final List<ProgramType> type,
+                                                              final Pageable pageable) {
+        GetBlogReviewResponseDto responseDto = null;
+        return SuccessResponse.ok(responseDto);
+    }
+
     @Operation(summary = "[어드민] 프로그램 참여 후기 전체 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReviewForAdminResponseDto.class)))
     })
@@ -64,7 +78,7 @@ public class ReviewV2Controller {
     @Operation(summary = "로직 X - [어드민] 블로그 후기 전체 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetBlogReviewForAdminResponseDto.class)))
     })
-    @GetMapping("/admin/blog-review")
+    @GetMapping("/admin/blog")
     private ResponseEntity<SuccessResponse<?>> getBlogReviewsForAdmin() {
         GetBlogReviewForAdminResponseDto responseDto = null;
         return SuccessResponse.ok(responseDto);
@@ -85,7 +99,7 @@ public class ReviewV2Controller {
     @Operation(summary = "로직 X - [어드민] 블로그 후기 생성", responses = {
             @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
     })
-    @PostMapping("/blog-review")
+    @PostMapping("/blog")
     private ResponseEntity<SuccessResponse<?>> createBlogReview(@RequestBody @Valid final CreateBlogReviewRequestDto requestDto) {
         return SuccessResponse.created(null);
     }
@@ -104,7 +118,7 @@ public class ReviewV2Controller {
     @Operation(summary = "로직 X - [어드민] 블로그 후기 업데이트", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
-    @PatchMapping("/blog-review/{blogReviewId}")
+    @PatchMapping("/blog/{blogReviewId}")
     private ResponseEntity<SuccessResponse<?>> updateBlogReview(@PathVariable final Long blogReviewId,
                                                                 @RequestBody @Valid final UpdateBlogReviewRequestDto requestDto) {
         return SuccessResponse.ok(null);
@@ -124,7 +138,7 @@ public class ReviewV2Controller {
     @Operation(summary = "로직 X - [어드민] 블로그 후기 삭제", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
-    @DeleteMapping("/blog-review/{blogReviewId}")
+    @DeleteMapping("/blog/{blogReviewId}")
     private ResponseEntity<SuccessResponse<?>> deleteBlogReview(@PathVariable final Long blogReviewId) {
         return SuccessResponse.ok(null);
     }
