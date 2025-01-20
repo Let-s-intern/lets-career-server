@@ -30,6 +30,8 @@ public class BlogReview {
 
     private String title;
 
+    private String description;
+
     private String url;
 
     private LocalDateTime postDate;

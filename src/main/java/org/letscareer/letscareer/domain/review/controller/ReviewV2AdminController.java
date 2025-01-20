@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.review.dto.request.*;
 import org.letscareer.letscareer.domain.review.dto.response.GetBlogReviewForAdminResponseDto;
 import org.letscareer.letscareer.domain.review.dto.response.GetReviewForAdminResponseDto;
+import org.letscareer.letscareer.domain.review.service.BlogReviewService;
 import org.letscareer.letscareer.domain.review.service.ReviewItemService;
 import org.letscareer.letscareer.domain.review.service.ReviewServiceFactory;
 import org.letscareer.letscareer.domain.review.type.ReviewProgramType;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 public class ReviewV2AdminController {
     private final ReviewServiceFactory reviewServiceFactory;
     private final ReviewItemService reviewItemService;
+    private final BlogReviewService blogReviewService;
 
     @Operation(summary = "[어드민] 프로그램 참여 후기 전체 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReviewForAdminResponseDto.class)))
@@ -48,6 +50,7 @@ public class ReviewV2AdminController {
     })
     @PostMapping("/blog")
     private ResponseEntity<SuccessResponse<?>> createBlogReview(@RequestBody @Valid final CreateBlogReviewRequestDto requestDto) {
+        blogReviewService.createBlogReview(requestDto);
         return SuccessResponse.created(null);
     }
 
