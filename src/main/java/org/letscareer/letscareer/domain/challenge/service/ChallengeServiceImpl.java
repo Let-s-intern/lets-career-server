@@ -58,8 +58,8 @@ import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.domain.review.dto.response.GetOldReviewResponseDto;
 import org.letscareer.letscareer.domain.review.helper.OldReviewHelper;
 import org.letscareer.letscareer.domain.review.mapper.OldReviewMapper;
-import org.letscareer.letscareer.domain.review.vo.old.ReviewAdminVo;
-import org.letscareer.letscareer.domain.review.vo.old.ReviewVo;
+import org.letscareer.letscareer.domain.review.vo.old.OldReviewAdminVo;
+import org.letscareer.letscareer.domain.review.vo.old.OldReviewVo;
 import org.letscareer.letscareer.domain.score.entity.AdminScore;
 import org.letscareer.letscareer.domain.score.helper.AdminScoreHelper;
 import org.letscareer.letscareer.domain.user.entity.User;
@@ -175,13 +175,13 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     @Override
     public GetChallengeAdminReviewResponseDto getReviewsForAdmin(Long challengeId, Pageable pageable) {
-        Page<ReviewAdminVo> challengeReviewVos = oldReviewHelper.findChallengeReviewAdminVos(challengeId, pageable);
+        Page<OldReviewAdminVo> challengeReviewVos = oldReviewHelper.findChallengeReviewAdminVos(challengeId, pageable);
         return challengeMapper.toGetChallengeAdminReviewResponseDto(challengeReviewVos);
     }
 
     @Override
     public GetChallengeReviewResponseDto getReviews(Pageable pageable) {
-        Page<ReviewVo> challengeReviewVos = oldReviewHelper.findChallengeReviewVos(pageable);
+        Page<OldReviewVo> challengeReviewVos = oldReviewHelper.findChallengeReviewVos(pageable);
         List<GetOldReviewResponseDto> reviewResDtoList = createGetReviewResponseDtoList(challengeReviewVos.getContent());
         PageInfo pageInfo = PageInfo.of(challengeReviewVos);
         return challengeMapper.toGetChallengeReviewResponseDto(reviewResDtoList, pageInfo);
@@ -332,7 +332,7 @@ public class ChallengeServiceImpl implements ChallengeService {
                 .collect(Collectors.toList());
     }
 
-    private List<GetOldReviewResponseDto> createGetReviewResponseDtoList(List<ReviewVo> vos) {
+    private List<GetOldReviewResponseDto> createGetReviewResponseDtoList(List<OldReviewVo> vos) {
         return vos.stream()
                 .map(vo -> oldReviewMapper.toGetReviewResponseDto(vo, challengeHelper.findChallengeTitleVoOrThrow(vo.id()).title()))
                 .collect(Collectors.toList());

@@ -36,7 +36,7 @@ public class LiveReviewServiceImpl implements ReviewService {
     private final ReviewMapper reviewMapper;
 
     @Override
-    public GetReviewForAdminResponseDto getReviewForAdmin() {
+    public GetReviewForAdminResponseDto getReviewsForAdmin() {
         List<ReviewAdminVo> reviewAdminVos = liveReviewHelper.findAllLiveReviewAdminVos().stream()
                 .map(liveReviewAdminVo -> reviewMapper.toReviewAdminVo(
                         liveReviewAdminVo,

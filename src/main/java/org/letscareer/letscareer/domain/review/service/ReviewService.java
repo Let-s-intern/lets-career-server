@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface ReviewService {
-    GetReviewForAdminResponseDto getReviewForAdmin();
+    GetReviewForAdminResponseDto getReviewsForAdmin();
 
     void createReview(User user, Long applicationId, CreateReviewRequestDto requestDto);
 

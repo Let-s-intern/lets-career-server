@@ -5,11 +5,16 @@ import lombok.Builder;
 import java.time.LocalDateTime;
 
 @Builder
-public record ReviewVo(
+public record OldReviewDetailVo(
         Long id,
-        String name,
+        Long applicationId,
+        Long userId,
+        Integer nps,
+        String npsAns,
+        Boolean npsCheckAns,
         String content,
         Integer score,
+        String programDetail,
         LocalDateTime createdDate
 ) {
 }

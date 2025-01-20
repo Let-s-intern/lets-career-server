@@ -2,7 +2,7 @@ package org.letscareer.letscareer.domain.review.dto.response;
 
 import lombok.AccessLevel;
 import lombok.Builder;
-import org.letscareer.letscareer.domain.review.vo.old.ReviewDetailVo;
+import org.letscareer.letscareer.domain.review.vo.old.OldReviewDetailVo;
 
 import java.time.LocalDateTime;
 
@@ -19,7 +19,7 @@ public record GetOldReviewDetailResponseDto(
         String programDetail,
         LocalDateTime createdDate
 ) {
-    public static GetOldReviewDetailResponseDto of(ReviewDetailVo reviewVo) {
+    public static GetOldReviewDetailResponseDto of(OldReviewDetailVo reviewVo) {
         return GetOldReviewDetailResponseDto.builder()
                 .id(reviewVo.id())
                 .applicationId(reviewVo.applicationId())

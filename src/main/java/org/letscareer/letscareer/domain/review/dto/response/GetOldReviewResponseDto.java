@@ -2,7 +2,7 @@ package org.letscareer.letscareer.domain.review.dto.response;
 
 import lombok.AccessLevel;
 import lombok.Builder;
-import org.letscareer.letscareer.domain.review.vo.old.ReviewVo;
+import org.letscareer.letscareer.domain.review.vo.old.OldReviewVo;
 
 import java.time.LocalDateTime;
 
@@ -14,7 +14,7 @@ public record GetOldReviewResponseDto(
         Integer score,
         LocalDateTime createdDate
 ) {
-    public static GetOldReviewResponseDto of(ReviewVo vo, String title) {
+    public static GetOldReviewResponseDto of(OldReviewVo vo, String title) {
         return GetOldReviewResponseDto.builder()
                 .title(title)
                 .name(vo.name())
