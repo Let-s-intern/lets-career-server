@@ -20,6 +20,7 @@ import org.letscareer.letscareer.global.common.annotation.ApiErrorCode;
 import org.letscareer.letscareer.global.common.annotation.CurrentUser;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
 import org.letscareer.letscareer.global.common.entity.SwaggerEnum;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,8 +36,8 @@ public class ReviewV2Controller {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReviewResponseDto.class)))
     })
     @GetMapping
-    private ResponseEntity<SuccessResponse<?>> getReviews() {
-        GetReviewResponseDto responseDto = reviewService.getReviews();
+    private ResponseEntity<SuccessResponse<?>> getReviews(final Pageable pageable) {
+        GetReviewResponseDto responseDto = reviewService.getReviews(pageable);
         return SuccessResponse.ok(responseDto);
     }
 

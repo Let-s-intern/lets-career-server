@@ -6,6 +6,7 @@ import org.letscareer.letscareer.domain.review.entity.ReviewItem;
 import org.letscareer.letscareer.domain.review.repository.ReviewItemRepository;
 import org.letscareer.letscareer.domain.review.vo.CreateReviewItemVo;
 import org.letscareer.letscareer.domain.review.vo.ReviewItemAdminVo;
+import org.letscareer.letscareer.domain.review.vo.ReviewItemVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +26,10 @@ public class ReviewItemHelper {
 
     public ReviewItem findReviewItemByReviewItemIdOrThrow(Long reviewItemId) {
         return reviewItemRepository.findById(reviewItemId).orElseThrow(() -> new EntityNotFoundException(REVIEW_ITEM_NOT_FOUND));
+    }
+
+    public List<ReviewItemVo> findAllReviewItemVosByReviewId(Long reviewId) {
+        return reviewItemRepository.findAllReviewItemVosByReviewId(reviewId);
     }
 
     public List<ReviewItemAdminVo> findAllReviewItemAdminVosByReviewId(Long reviewId) {

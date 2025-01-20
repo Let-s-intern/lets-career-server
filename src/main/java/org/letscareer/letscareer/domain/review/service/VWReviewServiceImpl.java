@@ -5,8 +5,19 @@ import org.letscareer.letscareer.domain.review.dto.response.GetReviewResponseDto
 import org.letscareer.letscareer.domain.review.helper.ReviewHelper;
 import org.letscareer.letscareer.domain.review.helper.ReviewItemHelper;
 import org.letscareer.letscareer.domain.review.mapper.ReviewMapper;
+import org.letscareer.letscareer.domain.review.type.ReviewProgramType;
+import org.letscareer.letscareer.domain.review.vo.ReviewInfoVo;
+import org.letscareer.letscareer.domain.review.vo.ReviewVo;
+import org.letscareer.letscareer.global.common.entity.PageInfo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @Transactional
 @Service
@@ -16,7 +27,15 @@ public class VWReviewServiceImpl implements VWReviewService {
     private final ReviewMapper reviewMapper;
 
     @Override
-    public GetReviewResponseDto getReviews() {
-        return null;
+    public GetReviewResponseDto getReviews(Pageable pageable) {
+        Page<ReviewInfoVo> reviewInfoVos = reviewHelper.getReviewInfoVos(pageable);
+        List<ReviewVo> reviewVos = reviewInfoVos.getContent().stream()
+                .map(reviewInfoVo -> reviewMapper.toReviewVo(
+                        reviewInfoVo,
+                        reviewInfoVo.type().equals(ReviewProgramType.MISSION_REVIEW) ? new ArrayList<>() : reviewItemHelper.findAllReviewItemVosByReviewId(reviewInfoVo.reviewId())
+                ))
+                .collect(Collectors.toList());
+        PageInfo pageInfo = PageInfo.of(reviewInfoVos);
+        return reviewMapper.toGetReviewResponseDto(reviewVos, pageInfo);
     }
 }
