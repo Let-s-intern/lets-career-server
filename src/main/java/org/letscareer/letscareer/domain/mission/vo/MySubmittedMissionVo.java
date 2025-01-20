@@ -8,6 +8,7 @@ public record MySubmittedMissionVo(
         Integer th,
         String title,
         String attendanceLink,
+        String attendanceReview,
         AttendanceStatus attendanceStatus,
         AttendanceResult attendanceResult
 ) {
