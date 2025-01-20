@@ -86,7 +86,7 @@ import java.time.LocalDateTime;
 )
 @Table(name = "vw_review")
 @Entity
-public class VWReview extends BaseTimeEntity {
+public class OldVWReview extends BaseTimeEntity {
     @Id
     private Long reviewId;
     private Long applicationId;
