@@ -10,9 +10,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.review.entity.old.VWReview;
-import org.letscareer.letscareer.domain.review.vo.old.ReviewAdminVo;
-import org.letscareer.letscareer.domain.review.vo.old.ReviewDetailVo;
-import org.letscareer.letscareer.domain.review.vo.old.ReviewVo;
+import org.letscareer.letscareer.domain.review.vo.old.OldReviewAdminVo;
+import org.letscareer.letscareer.domain.review.vo.old.OldReviewDetailVo;
+import org.letscareer.letscareer.domain.review.vo.old.OldReviewVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
@@ -29,9 +29,9 @@ public class OldReviewQueryRepositoryImpl implements OldReviewQueryRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Optional<ReviewDetailVo> findReviewVo(Long reviewId) {
+    public Optional<OldReviewDetailVo> findReviewVo(Long reviewId) {
         return Optional.ofNullable(queryFactory
-                .select(Projections.constructor(ReviewDetailVo.class,
+                .select(Projections.constructor(OldReviewDetailVo.class,
                         oldReview.id,
                         oldReview.application.id,
                         oldReview.application.user.id,
@@ -52,9 +52,9 @@ public class OldReviewQueryRepositoryImpl implements OldReviewQueryRepository {
     }
 
     @Override
-    public Page<ReviewAdminVo> findChallengeReviewAdminVos(Long challengeId, Pageable pageable) {
-        List<ReviewAdminVo> contents = queryFactory
-                .select(Projections.constructor(ReviewAdminVo.class,
+    public Page<OldReviewAdminVo> findChallengeReviewAdminVos(Long challengeId, Pageable pageable) {
+        List<OldReviewAdminVo> contents = queryFactory
+                .select(Projections.constructor(OldReviewAdminVo.class,
                         vWReview.reviewId,
                         vWReview.applicationId,
                         vWReview.programTitle,
@@ -89,9 +89,9 @@ public class OldReviewQueryRepositoryImpl implements OldReviewQueryRepository {
     }
 
     @Override
-    public Page<ReviewVo> findChallengeReviewVos(Pageable pageable) {
-        List<ReviewVo> contents = queryFactory
-                .select(Projections.constructor(ReviewVo.class,
+    public Page<OldReviewVo> findChallengeReviewVos(Pageable pageable) {
+        List<OldReviewVo> contents = queryFactory
+                .select(Projections.constructor(OldReviewVo.class,
                         vWReview.programId,
                         vWReview.userName,
                         vWReview.content,
@@ -120,9 +120,9 @@ public class OldReviewQueryRepositoryImpl implements OldReviewQueryRepository {
     }
 
     @Override
-    public Page<ReviewVo> findLiveReviewVos(Pageable pageable) {
-        List<ReviewVo> contents = queryFactory
-                .select(Projections.constructor(ReviewVo.class,
+    public Page<OldReviewVo> findLiveReviewVos(Pageable pageable) {
+        List<OldReviewVo> contents = queryFactory
+                .select(Projections.constructor(OldReviewVo.class,
                         vWReview.programId,
                         vWReview.userName,
                         vWReview.content,
@@ -151,9 +151,9 @@ public class OldReviewQueryRepositoryImpl implements OldReviewQueryRepository {
     }
 
     @Override
-    public Page<ReviewAdminVo> findLiveReviewAdminVos(Long liveId, Pageable pageable) {
-        List<ReviewAdminVo> contents = queryFactory
-                .select(Projections.constructor(ReviewAdminVo.class,
+    public Page<OldReviewAdminVo> findLiveReviewAdminVos(Long liveId, Pageable pageable) {
+        List<OldReviewAdminVo> contents = queryFactory
+                .select(Projections.constructor(OldReviewAdminVo.class,
                         vWReview.reviewId,
                         vWReview.applicationId,
                         vWReview.programTitle,
@@ -201,10 +201,10 @@ public class OldReviewQueryRepositoryImpl implements OldReviewQueryRepository {
     }
 
     @Override
-    public List<ReviewAdminVo> findAllReviewAdminVosByProgramType(Boolean isVisible, ProgramType programType, List<String> sortBy) {
+    public List<OldReviewAdminVo> findAllReviewAdminVosByProgramType(Boolean isVisible, ProgramType programType, List<String> sortBy) {
         List<OrderSpecifier<?>> orderSpecifiers = createReviewOrderSpecifierList(sortBy);
-        List<ReviewAdminVo> reviewAdminVos = queryFactory
-                .select(Projections.constructor(ReviewAdminVo.class,
+        List<OldReviewAdminVo> oldReviewAdminVos = queryFactory
+                .select(Projections.constructor(OldReviewAdminVo.class,
                         vWReview.reviewId,
                         vWReview.applicationId,
                         vWReview.programTitle,
@@ -229,7 +229,7 @@ public class OldReviewQueryRepositoryImpl implements OldReviewQueryRepository {
                         orderSpecifiers.toArray(OrderSpecifier[]::new)
                 )
                 .fetch();
-        return reviewAdminVos;
+        return oldReviewAdminVos;
     }
 
     private List<OrderSpecifier<?>> createReviewOrderSpecifierList(List<String> sortBy) {
@@ -238,7 +238,7 @@ public class OldReviewQueryRepositoryImpl implements OldReviewQueryRepository {
             String[] sortInfo = sort.split(";");
             String property = sortInfo[0];
             Order direction = sortInfo[1].equalsIgnoreCase("ASC") ? Order.ASC : Order.DESC;
-            PathBuilder expression = new PathBuilder(ReviewDetailVo.class, "vWReview");
+            PathBuilder expression = new PathBuilder(OldReviewDetailVo.class, "vWReview");
             orderSpecifiers.add(new OrderSpecifier<>(direction, expression.get(property)));
         }
         return orderSpecifiers;

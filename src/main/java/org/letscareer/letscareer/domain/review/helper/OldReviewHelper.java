@@ -6,9 +6,9 @@ import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.review.dto.request.CreateOldReviewRequestDto;
 import org.letscareer.letscareer.domain.review.entity.old.OldReview;
 import org.letscareer.letscareer.domain.review.repository.old.OldOldReviewRepository;
-import org.letscareer.letscareer.domain.review.vo.old.ReviewDetailVo;
-import org.letscareer.letscareer.domain.review.vo.old.ReviewAdminVo;
-import org.letscareer.letscareer.domain.review.vo.old.ReviewVo;
+import org.letscareer.letscareer.domain.review.vo.old.OldReviewDetailVo;
+import org.letscareer.letscareer.domain.review.vo.old.OldReviewAdminVo;
+import org.letscareer.letscareer.domain.review.vo.old.OldReviewVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,24 +38,24 @@ public class OldReviewHelper {
                 .orElseThrow(() -> new EntityNotFoundException(REVIEW_NOT_FOUND));
     }
 
-    public ReviewDetailVo findReviewDetailVoOrThrow(Long reviewId) {
+    public OldReviewDetailVo findReviewDetailVoOrThrow(Long reviewId) {
         return oldReviewRepository.findReviewVo(reviewId)
                 .orElseThrow(() -> new EntityNotFoundException(REVIEW_NOT_FOUND));
     }
 
-    public Page<ReviewAdminVo> findChallengeReviewAdminVos(Long challengeId, Pageable pageable) {
+    public Page<OldReviewAdminVo> findChallengeReviewAdminVos(Long challengeId, Pageable pageable) {
         return oldReviewRepository.findChallengeReviewAdminVos(challengeId, pageable);
     }
 
-    public Page<ReviewVo> findChallengeReviewVos(Pageable pageable) {
+    public Page<OldReviewVo> findChallengeReviewVos(Pageable pageable) {
         return oldReviewRepository.findChallengeReviewVos(pageable);
     }
 
-    public Page<ReviewAdminVo> findLiveReviewAdminVos(Long liveId, Pageable pageable) {
+    public Page<OldReviewAdminVo> findLiveReviewAdminVos(Long liveId, Pageable pageable) {
         return oldReviewRepository.findLiveReviewAdminVos(liveId, pageable);
     }
 
-    public Page<ReviewVo> findLiveReviewVos(Pageable pageable) {
+    public Page<OldReviewVo> findLiveReviewVos(Pageable pageable) {
         return oldReviewRepository.findLiveReviewVos(pageable);
     }
 
@@ -64,7 +64,7 @@ public class OldReviewHelper {
         return oldReviewRepository.findReviewContentByLiveId(liveId);
     }
 
-    public List<ReviewAdminVo> findReviewAdminVos(Boolean isVisible, ProgramType programType, List<String> sortBy) {
+    public List<OldReviewAdminVo> findReviewAdminVos(Boolean isVisible, ProgramType programType, List<String> sortBy) {
         return oldReviewRepository.findAllReviewAdminVosByProgramType(isVisible, programType, sortBy);
     }
 }

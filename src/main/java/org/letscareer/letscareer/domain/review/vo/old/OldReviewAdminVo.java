@@ -6,7 +6,7 @@ import org.letscareer.letscareer.domain.program.type.ProgramType;
 import java.time.LocalDateTime;
 
 @Builder
-public record ReviewAdminVo(
+public record OldReviewAdminVo(
         Long id,
         Long applicationId,
         String programTitle,

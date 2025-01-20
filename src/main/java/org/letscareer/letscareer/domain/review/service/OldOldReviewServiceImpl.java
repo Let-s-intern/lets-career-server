@@ -13,8 +13,8 @@ import org.letscareer.letscareer.domain.review.dto.response.GetOldReviewDetailRe
 import org.letscareer.letscareer.domain.review.entity.old.OldReview;
 import org.letscareer.letscareer.domain.review.helper.OldReviewHelper;
 import org.letscareer.letscareer.domain.review.mapper.OldReviewMapper;
-import org.letscareer.letscareer.domain.review.vo.old.ReviewAdminVo;
-import org.letscareer.letscareer.domain.review.vo.old.ReviewDetailVo;
+import org.letscareer.letscareer.domain.review.vo.old.OldReviewAdminVo;
+import org.letscareer.letscareer.domain.review.vo.old.OldReviewDetailVo;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.type.UserRole;
 import org.springframework.stereotype.Service;
@@ -35,7 +35,7 @@ public class OldOldReviewServiceImpl implements OldReviewService {
 
     @Override
     public GetOldReviewDetailResponseDto getReviewDetail(Long reviewId) {
-        ReviewDetailVo reviewVo = oldReviewHelper.findReviewDetailVoOrThrow(reviewId);
+        OldReviewDetailVo reviewVo = oldReviewHelper.findReviewDetailVoOrThrow(reviewId);
         return oldReviewMapper.toGetReviewDetailResponseDto(reviewVo);
     }
 
@@ -67,8 +67,8 @@ public class OldOldReviewServiceImpl implements OldReviewService {
     public GetOldReviewDetailListResponseDto getReviewDetailList(User user, ProgramType programType, List<String> sortBy) {
         Boolean isVisible = true;
         if(!Objects.isNull(user) && user.getRole().equals(UserRole.ADMIN)) isVisible = null;
-        List<ReviewAdminVo> reviewAdminVoList = oldReviewHelper.findReviewAdminVos(isVisible, programType, sortBy);
-        return oldReviewMapper.toGetReviewDetailListResponseDto(reviewAdminVoList);
+        List<OldReviewAdminVo> oldReviewAdminVoList = oldReviewHelper.findReviewAdminVos(isVisible, programType, sortBy);
+        return oldReviewMapper.toGetReviewDetailListResponseDto(oldReviewAdminVoList);
     }
 
     private void validateProgram(Long programId, ProgramType programType) {

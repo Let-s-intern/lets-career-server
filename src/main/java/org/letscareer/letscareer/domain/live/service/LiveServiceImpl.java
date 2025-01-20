@@ -31,8 +31,8 @@ import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.domain.review.dto.response.GetOldReviewResponseDto;
 import org.letscareer.letscareer.domain.review.helper.OldReviewHelper;
 import org.letscareer.letscareer.domain.review.mapper.OldReviewMapper;
-import org.letscareer.letscareer.domain.review.vo.old.ReviewAdminVo;
-import org.letscareer.letscareer.domain.review.vo.old.ReviewVo;
+import org.letscareer.letscareer.domain.review.vo.old.OldReviewAdminVo;
+import org.letscareer.letscareer.domain.review.vo.old.OldReviewVo;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.entity.PageInfo;
 import org.letscareer.letscareer.global.common.utils.zoom.ZoomUtils;
@@ -108,13 +108,13 @@ public class LiveServiceImpl implements LiveService {
 
     @Override
     public GetLiveReviewsResponseDto getLiveReviews(Pageable pageable) {
-        Page<ReviewVo> reviewVos = oldReviewHelper.findLiveReviewVos(pageable);
+        Page<OldReviewVo> reviewVos = oldReviewHelper.findLiveReviewVos(pageable);
         List<GetOldReviewResponseDto> reviewResDtoList = createGetReviewResponseDtoList(reviewVos.getContent());
         PageInfo pageInfo = PageInfo.of(reviewVos);
         return liveMapper.toGetLiveReviewsResponseDto(reviewResDtoList, pageInfo);
     }
 
-    private List<GetOldReviewResponseDto> createGetReviewResponseDtoList(List<ReviewVo> vos) {
+    private List<GetOldReviewResponseDto> createGetReviewResponseDtoList(List<OldReviewVo> vos) {
         return vos.stream()
                 .map(vo -> oldReviewMapper.toGetReviewResponseDto(vo, liveHelper.findLiveTitleVoOrThrow(vo.id()).title()))
                 .collect(Collectors.toList());
@@ -136,7 +136,7 @@ public class LiveServiceImpl implements LiveService {
 
     @Override
     public GetLiveAdminReviewsResponseDto getReviewsForAdmin(Long liveId, Pageable pageable) {
-        Page<ReviewAdminVo> reviewVos = oldReviewHelper.findLiveReviewAdminVos(liveId, pageable);
+        Page<OldReviewAdminVo> reviewVos = oldReviewHelper.findLiveReviewAdminVos(liveId, pageable);
         return liveMapper.toGetLiveAdminReviewsResponseDto(reviewVos);
     }
 
