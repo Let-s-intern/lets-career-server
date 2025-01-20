@@ -7,7 +7,6 @@ import org.letscareer.letscareer.domain.report.entity.Report;
 import org.letscareer.letscareer.domain.review.dto.request.CreateReviewRequestDto;
 import org.letscareer.letscareer.domain.review.dto.request.UpdateReviewRequestDto;
 import org.letscareer.letscareer.domain.review.dto.response.GetReviewForAdminResponseDto;
-import org.letscareer.letscareer.domain.review.dto.response.GetReviewResponseDto;
 import org.letscareer.letscareer.domain.review.entity.ReportReview;
 import org.letscareer.letscareer.domain.review.helper.ReportReviewHelper;
 import org.letscareer.letscareer.domain.review.helper.ReviewItemHelper;
@@ -18,7 +17,6 @@ import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.error.exception.ConflictException;
 import org.letscareer.letscareer.global.error.exception.UnauthorizedException;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,11 +35,6 @@ public class ReportReviewServiceImpl implements ReviewService {
     private final ReportApplicationHelper reportApplicationHelper;
     private final ReviewItemHelper reviewItemHelper;
     private final ReviewMapper reviewMapper;
-
-    @Override
-    public GetReviewResponseDto getReviewsByType(Pageable pageable) {
-        return null;
-    }
 
     @Override
     public GetReviewForAdminResponseDto getReviewsForAdmin() {
