@@ -37,7 +37,7 @@ public class ReportReviewServiceImpl implements ReviewService {
     private final ReviewMapper reviewMapper;
 
     @Override
-    public GetReviewForAdminResponseDto getReviewForAdmin() {
+    public GetReviewForAdminResponseDto getReviewsForAdmin() {
         List<ReviewAdminVo> reviewAdminVos = reportReviewHelper.findAllReportReviewAdminVos().stream()
                 .map(reportReviewAdminVo -> reviewMapper.toReviewAdminVo(
                         reportReviewAdminVo,

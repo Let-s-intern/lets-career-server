@@ -10,8 +10,11 @@ import org.letscareer.letscareer.domain.review.dto.request.CreateReviewRequestDt
 import org.letscareer.letscareer.domain.review.dto.request.UpdateReviewItemRequestDto;
 import org.letscareer.letscareer.domain.review.dto.request.UpdateReviewRequestDto;
 import org.letscareer.letscareer.domain.review.dto.response.GetReviewForAdminResponseDto;
+import org.letscareer.letscareer.domain.review.dto.response.GetReviewResponseDto;
 import org.letscareer.letscareer.domain.review.service.ReviewItemService;
 import org.letscareer.letscareer.domain.review.service.ReviewServiceFactory;
+import org.letscareer.letscareer.domain.review.service.VWReportReviewServiceImpl;
+import org.letscareer.letscareer.domain.review.service.VWReviewService;
 import org.letscareer.letscareer.domain.review.type.ReviewProgramType;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.annotation.ApiErrorCode;
@@ -26,14 +29,24 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class ReviewV2Controller {
     private final ReviewServiceFactory reviewServiceFactory;
+    private final VWReviewService reviewService;
     private final ReviewItemService reviewItemService;
+
+    @Operation(summary = "프로그램 참여 후기 전체 조회", description = "[100% 솔직 후기]", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReviewResponseDto.class)))
+    })
+    @GetMapping
+    private ResponseEntity<SuccessResponse<?>> getReviews() {
+        GetReviewResponseDto responseDto = reviewService.getReviews();
+        return SuccessResponse.ok(responseDto);
+    }
 
     @Operation(summary = "[어드민] 리뷰 전체 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReviewForAdminResponseDto.class)))
     })
     @GetMapping("/admin")
-    private ResponseEntity<SuccessResponse<?>> getReviewForAdmin(@RequestParam final ReviewProgramType type) {
-        GetReviewForAdminResponseDto responseDto = reviewServiceFactory.getReviewService(type).getReviewForAdmin();
+    private ResponseEntity<SuccessResponse<?>> getReviewsForAdmin(@RequestParam final ReviewProgramType type) {
+        GetReviewForAdminResponseDto responseDto = reviewServiceFactory.getReviewService(type).getReviewsForAdmin();
         return SuccessResponse.ok(responseDto);
     }
 

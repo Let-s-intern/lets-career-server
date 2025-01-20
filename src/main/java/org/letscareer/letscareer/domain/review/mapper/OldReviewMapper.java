@@ -12,8 +12,8 @@ import java.util.List;
 
 @Component
 public class OldReviewMapper {
-    public GetOldReviewDetailResponseDto toGetReviewDetailResponseDto(OldReviewDetailVo oldReviewDetailVo) {
-        return GetOldReviewDetailResponseDto.of(oldReviewDetailVo);
+    public GetOldReviewDetailResponseDto toGetReviewDetailResponseDto(OldReviewDetailVo reviewDetailVo) {
+        return GetOldReviewDetailResponseDto.of(reviewDetailVo);
     }
 
     public GetOldReviewResponseDto toGetReviewResponseDto(OldReviewVo vo, String title) {
