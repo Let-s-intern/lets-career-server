@@ -20,7 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
-@RequestMapping("/api/v2/review/admin")
+@RequestMapping("/api/v2/admin/review")
 @RestController
 public class ReviewV2AdminController {
     private final ReviewServiceFactory reviewServiceFactory;
