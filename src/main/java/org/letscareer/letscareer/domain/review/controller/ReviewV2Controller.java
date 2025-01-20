@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.review.dto.request.CreateReviewRequestDto;
 import org.letscareer.letscareer.domain.review.dto.request.UpdateReviewItemRequestDto;
 import org.letscareer.letscareer.domain.review.dto.request.UpdateReviewRequestDto;
@@ -24,6 +25,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RequestMapping("/api/v2/review")
 @RestController
@@ -32,12 +35,20 @@ public class ReviewV2Controller {
     private final VWReviewService reviewService;
     private final ReviewItemService reviewItemService;
 
-    @Operation(summary = "프로그램 참여 후기 전체 조회", description = "[100% 솔직 후기]", responses = {
-            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReviewResponseDto.class)))
+    @Operation(
+            summary = "프로그램 참여 후기 전체 조회",
+            description = """
+                    [100% 솔직 후기 > 프로그램 참여 후기]
+                    - 챌린지 & 전체 : type=CHALLENGE_REVIEW & type=MISSION_REVIEW <br>
+                    - 챌린지 & 미션 수행 후기 : type=MISSION_REVIEW <br>
+                    - 챌린지 & 프로그램 참여 후기 : type=CHALLENGE_REVIEW <br>
+                    """,
+            responses = {@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReviewResponseDto.class)))
     })
     @GetMapping
-    private ResponseEntity<SuccessResponse<?>> getReviews(final Pageable pageable) {
-        GetReviewResponseDto responseDto = reviewService.getReviews(pageable);
+    private ResponseEntity<SuccessResponse<?>> getReviews(@RequestParam(required = false) final List<ReviewProgramType> type,
+                                                          final Pageable pageable) {
+        GetReviewResponseDto responseDto = reviewService.getReviews(type, pageable);
         return SuccessResponse.ok(responseDto);
     }
 

@@ -1,9 +1,11 @@
 package org.letscareer.letscareer.domain.review.repository;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.review.type.ReviewProgramType;
 import org.letscareer.letscareer.domain.review.vo.ReviewInfoVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +20,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<ReviewInfoVo> findAllReviewInfoVos(Pageable pageable) {
+    public Page<ReviewInfoVo> findAllReviewInfoVos(List<ReviewProgramType> typeList, Pageable pageable) {
         List<ReviewInfoVo> reviewInfoVos = queryFactory
                 .select(Projections.constructor(ReviewInfoVo.class,
                         vWReview.reviewId,
@@ -34,6 +36,9 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                         vWReview.userWishJob,
                         vWReview.userWishCompany))
                 .from(vWReview)
+                .where(
+                        inReviewProgramType(typeList)
+                )
                 .groupBy(
                         vWReview.type,
                         vWReview.reviewId
@@ -52,5 +57,14 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                 );
 
         return PageableExecutionUtils.getPage(reviewInfoVos, pageable, countQuery::fetchOne);
+    }
+
+    private BooleanExpression inReviewProgramType(List<ReviewProgramType> typeList) {
+        if(typeList == null || typeList.isEmpty()) return null;
+        BooleanExpression challengeReviewCondition = vWReview.type.eq(ReviewProgramType.CHALLENGE_REVIEW).and(vWReview.type.in(typeList));
+        BooleanExpression liveReviewCondition = vWReview.type.eq(ReviewProgramType.LIVE_REVIEW).and(vWReview.type.in(typeList));
+        BooleanExpression reportReviewCondition = vWReview.type.eq(ReviewProgramType.REPORT_REVIEW).and(vWReview.type.in(typeList));
+        BooleanExpression missionReviewCondition = vWReview.type.eq(ReviewProgramType.MISSION_REVIEW).and(vWReview.type.in(typeList));
+        return challengeReviewCondition.or(liveReviewCondition).or(reportReviewCondition).or(missionReviewCondition);
     }
 }

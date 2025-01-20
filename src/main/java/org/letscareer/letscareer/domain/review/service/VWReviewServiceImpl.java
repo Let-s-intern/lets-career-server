@@ -27,8 +27,8 @@ public class VWReviewServiceImpl implements VWReviewService {
     private final ReviewMapper reviewMapper;
 
     @Override
-    public GetReviewResponseDto getReviews(Pageable pageable) {
-        Page<ReviewInfoVo> reviewInfoVos = reviewHelper.getReviewInfoVos(pageable);
+    public GetReviewResponseDto getReviews(List<ReviewProgramType> typeList, Pageable pageable) {
+        Page<ReviewInfoVo> reviewInfoVos = reviewHelper.getReviewInfoVos(typeList, pageable);
         List<ReviewVo> reviewVos = reviewInfoVos.getContent().stream()
                 .map(reviewInfoVo -> reviewMapper.toReviewVo(
                         reviewInfoVo,
