@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.review.service;
 
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.challenge.type.ChallengeType;
 import org.letscareer.letscareer.domain.review.dto.response.GetReviewResponseDto;
 import org.letscareer.letscareer.domain.review.helper.ReviewHelper;
 import org.letscareer.letscareer.domain.review.helper.ReviewItemHelper;
@@ -27,8 +28,8 @@ public class VWReviewServiceImpl implements VWReviewService {
     private final ReviewMapper reviewMapper;
 
     @Override
-    public GetReviewResponseDto getReviews(List<ReviewProgramType> typeList, Pageable pageable) {
-        Page<ReviewInfoVo> reviewInfoVos = reviewHelper.getReviewInfoVos(typeList, pageable);
+    public GetReviewResponseDto getReviews(List<ReviewProgramType> typeList, List<ChallengeType> challengeTypeList, Pageable pageable) {
+        Page<ReviewInfoVo> reviewInfoVos = reviewHelper.getReviewInfoVos(typeList, challengeTypeList, pageable);
         List<ReviewVo> reviewVos = reviewInfoVos.getContent().stream()
                 .map(reviewInfoVo -> reviewMapper.toReviewVo(
                         reviewInfoVo,

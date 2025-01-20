@@ -1,5 +1,6 @@
 package org.letscareer.letscareer.domain.review.vo;
 
+import org.letscareer.letscareer.domain.challenge.type.ChallengeType;
 import org.letscareer.letscareer.domain.review.type.ReviewProgramType;
 
 import java.time.LocalDateTime;
@@ -12,6 +13,7 @@ public record ReviewInfoVo(
         String badPoint,
         String programTitle,
         String programThumbnail,
+        ChallengeType challengeType,
         String missionTitle,
         Integer missionTh,
         String name,

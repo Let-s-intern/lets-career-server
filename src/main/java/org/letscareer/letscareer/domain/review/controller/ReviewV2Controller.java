@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.challenge.type.ChallengeType;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.review.dto.request.CreateReviewRequestDto;
 import org.letscareer.letscareer.domain.review.dto.request.UpdateReviewItemRequestDto;
@@ -47,8 +48,9 @@ public class ReviewV2Controller {
     })
     @GetMapping
     private ResponseEntity<SuccessResponse<?>> getReviews(@RequestParam(required = false) final List<ReviewProgramType> type,
+                                                          @RequestParam(required = false) final List<ChallengeType> challengeType,
                                                           final Pageable pageable) {
-        GetReviewResponseDto responseDto = reviewService.getReviews(type, pageable);
+        GetReviewResponseDto responseDto = reviewService.getReviews(type, challengeType, pageable);
         return SuccessResponse.ok(responseDto);
     }
 
