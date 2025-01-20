@@ -13,7 +13,6 @@ import org.letscareer.letscareer.domain.review.dto.response.GetReviewForAdminRes
 import org.letscareer.letscareer.domain.review.dto.response.GetReviewResponseDto;
 import org.letscareer.letscareer.domain.review.service.ReviewItemService;
 import org.letscareer.letscareer.domain.review.service.ReviewServiceFactory;
-import org.letscareer.letscareer.domain.review.service.VWReportReviewServiceImpl;
 import org.letscareer.letscareer.domain.review.service.VWReviewService;
 import org.letscareer.letscareer.domain.review.type.ReviewProgramType;
 import org.letscareer.letscareer.domain.user.entity.User;

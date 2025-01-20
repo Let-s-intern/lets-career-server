@@ -5,7 +5,7 @@ import org.letscareer.letscareer.domain.application.entity.Application;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.review.dto.request.CreateOldReviewRequestDto;
 import org.letscareer.letscareer.domain.review.entity.old.OldReview;
-import org.letscareer.letscareer.domain.review.repository.old.OldOldReviewRepository;
+import org.letscareer.letscareer.domain.review.repository.old.OldReviewRepository;
 import org.letscareer.letscareer.domain.review.vo.old.OldReviewDetailVo;
 import org.letscareer.letscareer.domain.review.vo.old.OldReviewAdminVo;
 import org.letscareer.letscareer.domain.review.vo.old.OldReviewVo;
@@ -21,7 +21,7 @@ import static org.letscareer.letscareer.domain.review.error.ReviewErrorCode.REVI
 @RequiredArgsConstructor
 @Component
 public class OldReviewHelper {
-    private final OldOldReviewRepository oldReviewRepository;
+    private final OldReviewRepository oldReviewRepository;
 
     public OldReview createReviewAndSave(Application application, CreateOldReviewRequestDto reviewRequestDto) {
         OldReview review = OldReview.createReview(application, reviewRequestDto);

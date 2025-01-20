@@ -11,7 +11,8 @@ public enum ReviewProgramType implements EnumField {
     CHALLENGE_REVIEW(1, "challenge"),
     LIVE_REVIEW(2, "live"),
     VOD_REVIEW(3, "vod"),
-    REPORT_REVIEW(4, "report");
+    REPORT_REVIEW(4, "report"),
+    MISSION_REVIEW(5, "mission");
 
     private final Integer code;
     private final String desc;
