@@ -49,6 +49,7 @@ public class BlogReviewQueryRepositoryImpl implements BlogReviewQueryRepository 
                         blogReview.programTitle,
                         blogReview.name,
                         blogReview.title,
+                        blogReview.description,
                         blogReview.url,
                         blogReview.thumbnail))
                 .from(blogReview)
@@ -66,6 +67,17 @@ public class BlogReviewQueryRepositoryImpl implements BlogReviewQueryRepository 
                 .from(blogReview);
 
         return PageableExecutionUtils.getPage(blogReviewVoList, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public Long countBlogReviews() {
+        return queryFactory
+                .select(blogReview.count())
+                .from(blogReview)
+                .where(
+                        eqIsVisible(true)
+                )
+                .fetchOne();
     }
 
     private BooleanExpression eqIsVisible(Boolean isVisible) {

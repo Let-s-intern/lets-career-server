@@ -10,6 +10,7 @@ import org.letscareer.letscareer.domain.challenge.type.ChallengeType;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.review.dto.request.*;
 import org.letscareer.letscareer.domain.review.dto.response.GetBlogReviewResponseDto;
+import org.letscareer.letscareer.domain.review.dto.response.GetReviewCountResponseDto;
 import org.letscareer.letscareer.domain.review.dto.response.GetReviewResponseDto;
 import org.letscareer.letscareer.domain.review.service.BlogReviewService;
 import org.letscareer.letscareer.domain.review.service.ReviewServiceFactory;
@@ -55,12 +56,23 @@ public class ReviewV2Controller {
     @Operation(
             summary = "블로그 후기 전체 조회",
             description = "[100% 솔직 후기 > 블로그 후기]",
-            responses = {@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetBlogReviewResponseDto.class)))
-            })
+            responses = {@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetBlogReviewResponseDto.class)))}
+    )
     @GetMapping("/blog")
     private ResponseEntity<SuccessResponse<?>> getBlogReviews(@RequestParam(required = false) final List<ProgramType> type,
                                                               final Pageable pageable) {
         GetBlogReviewResponseDto responseDto = blogReviewService.getBlogReviews(type, pageable);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(
+            summary = "후기 전체 개수 조회",
+            description = "[100% 솔직 후기 > 배너]",
+            responses = {@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReviewCountResponseDto.class)))}
+    )
+    @GetMapping("/count")
+    private ResponseEntity<SuccessResponse<?>> getReviewCount() {
+        GetReviewCountResponseDto responseDto = reviewService.getReviewCount();
         return SuccessResponse.ok(responseDto);
     }
 

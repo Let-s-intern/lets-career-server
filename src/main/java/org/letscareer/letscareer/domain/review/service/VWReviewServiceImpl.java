@@ -2,7 +2,9 @@ package org.letscareer.letscareer.domain.review.service;
 
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.challenge.type.ChallengeType;
+import org.letscareer.letscareer.domain.review.dto.response.GetReviewCountResponseDto;
 import org.letscareer.letscareer.domain.review.dto.response.GetReviewResponseDto;
+import org.letscareer.letscareer.domain.review.helper.BlogReviewHelper;
 import org.letscareer.letscareer.domain.review.helper.ReviewHelper;
 import org.letscareer.letscareer.domain.review.helper.ReviewItemHelper;
 import org.letscareer.letscareer.domain.review.mapper.ReviewMapper;
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
 public class VWReviewServiceImpl implements VWReviewService {
     private final ReviewHelper reviewHelper;
     private final ReviewItemHelper reviewItemHelper;
+    private final BlogReviewHelper blogReviewHelper;
     private final ReviewMapper reviewMapper;
 
     @Override
@@ -38,5 +41,12 @@ public class VWReviewServiceImpl implements VWReviewService {
                 .collect(Collectors.toList());
         PageInfo pageInfo = PageInfo.of(reviewInfoVos);
         return reviewMapper.toGetReviewResponseDto(reviewVos, pageInfo);
+    }
+
+    @Override
+    public GetReviewCountResponseDto getReviewCount() {
+        Long reviewCount = reviewHelper.countReviews();
+        Long blogReviewCount = blogReviewHelper.countBlogReviews();
+        return reviewMapper.toGetReviewCountResponseDto(reviewCount, blogReviewCount);
     }
 }

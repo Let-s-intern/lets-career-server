@@ -19,4 +19,8 @@ public class ReviewHelper {
     public Page<ReviewInfoVo> getReviewInfoVos(List<ReviewProgramType> typeList, List<ChallengeType> challengeTypeList, Pageable pageable) {
         return reviewRepository.findAllReviewInfoVos(typeList, challengeTypeList, pageable);
     }
+
+    public Long countReviews() {
+        return reviewRepository.countReviews();
+    }
 }

@@ -39,6 +39,10 @@ public class BlogReviewHelper {
         return blogReviewRepository.findById(blogReviewId).orElseThrow(() -> new EntityNotFoundException(BLOG_REVIEW_NOT_FOUND));
     }
 
+    public Long countBlogReviews() {
+        return blogReviewRepository.countBlogReviews();
+    }
+
     public void deleteBlogReview(BlogReview blogReview) {
         blogReviewRepository.delete(blogReview);
     }

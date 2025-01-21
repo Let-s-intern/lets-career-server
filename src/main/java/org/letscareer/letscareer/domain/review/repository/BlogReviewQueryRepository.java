@@ -11,4 +11,5 @@ import java.util.List;
 public interface BlogReviewQueryRepository {
     List<BlogReviewAdminVo> findAllBlogReviewAdminVos();
     Page<BlogReviewVo> findAllBlogReviewVos(List<ProgramType> typeList, Pageable pageable);
+    Long countBlogReviews();
 }

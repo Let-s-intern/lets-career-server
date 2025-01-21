@@ -1,9 +1,6 @@
 package org.letscareer.letscareer.domain.review.mapper;
 
-import org.letscareer.letscareer.domain.review.dto.response.GetBlogReviewForAdminResponseDto;
-import org.letscareer.letscareer.domain.review.dto.response.GetBlogReviewResponseDto;
-import org.letscareer.letscareer.domain.review.dto.response.GetReviewForAdminResponseDto;
-import org.letscareer.letscareer.domain.review.dto.response.GetReviewResponseDto;
+import org.letscareer.letscareer.domain.review.dto.response.*;
 import org.letscareer.letscareer.domain.review.vo.*;
 import org.letscareer.letscareer.global.common.entity.PageInfo;
 import org.springframework.stereotype.Component;
@@ -34,5 +31,9 @@ public class ReviewMapper {
 
     public GetBlogReviewResponseDto toGetBlogReviewResponseDto(List<BlogReviewVo> blogReviewVos, PageInfo pageInfo) {
         return GetBlogReviewResponseDto.of(blogReviewVos, pageInfo);
+    }
+
+    public GetReviewCountResponseDto toGetReviewCountResponseDto(Long reviewCount, Long blogReviewCount) {
+        return GetReviewCountResponseDto.of(reviewCount, blogReviewCount);
     }
 }
