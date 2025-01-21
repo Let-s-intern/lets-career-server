@@ -3,6 +3,7 @@ package org.letscareer.letscareer.domain.review.service;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.file.type.FileType;
 import org.letscareer.letscareer.domain.review.dto.request.CreateBlogReviewRequestDto;
+import org.letscareer.letscareer.domain.review.dto.request.UpdateBlogReviewRequestDto;
 import org.letscareer.letscareer.domain.review.dto.response.GetBlogReviewForAdminResponseDto;
 import org.letscareer.letscareer.domain.review.entity.BlogReview;
 import org.letscareer.letscareer.domain.review.helper.BlogReviewHelper;
@@ -40,5 +41,22 @@ public class BlogReviewServiceImpl implements BlogReviewService {
             String thumbnail = s3Utils.saveImgFromUrl(openGraphVo.image(), FileType.BLOG_REVIEW.getDesc(), blogReview.getId() + openGraphVo.title()).getUrl();
             blogReview.setThumbnail(thumbnail);
         }
+    }
+
+    @Override
+    public void updateBlogReview(Long blogReviewId, UpdateBlogReviewRequestDto requestDto) {
+        BlogReview blogReview = blogReviewHelper.findBlogReviewByBlogReviewIdOrThrow(blogReviewId);
+        blogReview.updateBlogReview(requestDto);
+        if(checkBlogReviewUrlUpdateCondition(blogReview, requestDto)) {
+            BlogReviewOpenGraphVo openGraphVo = openGraphUtils.getBlogReviewOpenGraphVo(requestDto.url());
+            String thumbnail = s3Utils.saveImgFromUrl(openGraphVo.image(), FileType.BLOG_REVIEW.getDesc(), blogReview.getId() + openGraphVo.title()).getUrl();
+            blogReview.updateBlogReviewByUrl(openGraphVo, thumbnail);
+        }
+    }
+
+    private boolean checkBlogReviewUrlUpdateCondition(BlogReview blogReview, UpdateBlogReviewRequestDto requestDto) {
+        if(Objects.isNull(requestDto.url()) || requestDto.url().isBlank()) return false;
+        if(Objects.equals(blogReview.getUrl(), requestDto.url())) return false;
+        return true;
     }
 }

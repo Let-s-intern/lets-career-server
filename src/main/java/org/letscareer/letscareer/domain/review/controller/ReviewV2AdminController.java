@@ -65,12 +65,14 @@ public class ReviewV2AdminController {
         return SuccessResponse.ok(null);
     }
 
-    @Operation(summary = "로직 X - [어드민] 블로그 후기 업데이트", responses = {
+    @Operation(summary = "[어드민] 블로그 후기 업데이트", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
+    @ApiErrorCode({SwaggerEnum.BLOG_REVIEW_ITEM_NOT_FOUND})
     @PatchMapping("/blog/{blogReviewId}")
     private ResponseEntity<SuccessResponse<?>> updateBlogReview(@PathVariable final Long blogReviewId,
                                                                 @RequestBody @Valid final UpdateBlogReviewRequestDto requestDto) {
+        blogReviewService.updateBlogReview(blogReviewId, requestDto);
         return SuccessResponse.ok(null);
     }
 

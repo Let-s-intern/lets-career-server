@@ -6,9 +6,12 @@ import lombok.*;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.program.type.converter.ProgramTypeConverter;
 import org.letscareer.letscareer.domain.review.dto.request.CreateBlogReviewRequestDto;
+import org.letscareer.letscareer.domain.review.dto.request.UpdateBlogReviewRequestDto;
 import org.letscareer.letscareer.domain.review.vo.BlogReviewOpenGraphVo;
 
 import java.time.LocalDateTime;
+
+import static org.letscareer.letscareer.global.common.utils.entity.EntityUpdateValueUtils.updateValue;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -56,5 +59,20 @@ public class BlogReview {
 
     public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
+    }
+
+    public void updateBlogReview(UpdateBlogReviewRequestDto requestDto) {
+        this.postDate = updateValue(this.postDate, requestDto.postDate());
+        this.programType = updateValue(this.programType, requestDto.programType());
+        this.programTitle = updateValue(this.programTitle, requestDto.programTitle());
+        this.name = updateValue(this.name, requestDto.name());
+        this.isVisible = updateValue(this.isVisible, requestDto.isVisible());
+    }
+
+    public void updateBlogReviewByUrl(BlogReviewOpenGraphVo openGraphVo, String thumbnail) {
+        this.title = updateValue(this.title, openGraphVo.title());
+        this.description = updateValue(this.description, openGraphVo.description());
+        this.url = updateValue(this.url, openGraphVo.url());
+        this.thumbnail = updateValue(this.thumbnail, thumbnail);
     }
 }
