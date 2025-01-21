@@ -6,6 +6,7 @@ import org.letscareer.letscareer.domain.application.helper.LiveApplicationHelper
 import org.letscareer.letscareer.domain.live.entity.Live;
 import org.letscareer.letscareer.domain.review.dto.request.CreateReviewRequestDto;
 import org.letscareer.letscareer.domain.review.dto.request.UpdateReviewRequestDto;
+import org.letscareer.letscareer.domain.review.dto.response.GetMyReviewResponseDto;
 import org.letscareer.letscareer.domain.review.dto.response.GetReviewForAdminResponseDto;
 import org.letscareer.letscareer.domain.review.entity.LiveReview;
 import org.letscareer.letscareer.domain.review.helper.LiveReviewHelper;
@@ -44,6 +45,11 @@ public class LiveReviewServiceImpl implements ReviewService {
                 ))
                 .collect(Collectors.toList());
         return reviewMapper.toGetReviewForAdminResponseDto(reviewAdminVos);
+    }
+
+    @Override
+    public GetMyReviewResponseDto getReview(Long reviewId, User user) {
+        return null;
     }
 
     @Override

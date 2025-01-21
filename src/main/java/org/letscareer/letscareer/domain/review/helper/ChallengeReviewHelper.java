@@ -7,6 +7,7 @@ import org.letscareer.letscareer.domain.review.dto.request.CreateReviewRequestDt
 import org.letscareer.letscareer.domain.review.entity.ChallengeReview;
 import org.letscareer.letscareer.domain.review.repository.ChallengeReviewRepository;
 import org.letscareer.letscareer.domain.review.vo.ChallengeReviewAdminVo;
+import org.letscareer.letscareer.domain.review.vo.ChallengeReviewVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -30,5 +31,9 @@ public class ChallengeReviewHelper {
 
     public List<ChallengeReviewAdminVo> findAllChallengeReviewAdminVos() {
         return challengeReviewRepository.findAllChallengeReviewAdminVos();
+    }
+
+    public ChallengeReviewVo findChallengeReviewVoOrThrow(Long reviewId) {
+        return challengeReviewRepository.findChallengeReviewVoByReviewId(reviewId).orElseThrow(() -> new EntityNotFoundException(REVIEW_NOT_FOUND));
     }
 }

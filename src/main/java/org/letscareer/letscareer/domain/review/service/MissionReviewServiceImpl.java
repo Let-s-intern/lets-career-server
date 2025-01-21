@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.attendance.helper.AttendanceHelper;
 import org.letscareer.letscareer.domain.review.dto.request.CreateReviewRequestDto;
 import org.letscareer.letscareer.domain.review.dto.request.UpdateReviewRequestDto;
+import org.letscareer.letscareer.domain.review.dto.response.GetMyReviewResponseDto;
 import org.letscareer.letscareer.domain.review.dto.response.GetReviewForAdminResponseDto;
 import org.letscareer.letscareer.domain.review.mapper.ReviewMapper;
 import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
@@ -27,6 +28,11 @@ public class MissionReviewServiceImpl implements ReviewService {
                 .map(missionReviewAdminVo -> reviewMapper.toReviewAdminVo(missionReviewAdminVo, new ArrayList<>()))
                 .toList();
         return reviewMapper.toGetReviewForAdminResponseDto(reviewAdminVos);
+    }
+
+    @Override
+    public GetMyReviewResponseDto getReview(Long reviewId, User user) {
+        return null;
     }
 
     @Override
