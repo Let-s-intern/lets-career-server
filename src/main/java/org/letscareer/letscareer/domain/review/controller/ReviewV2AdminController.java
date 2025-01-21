@@ -36,12 +36,12 @@ public class ReviewV2AdminController {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "로직 X - [어드민] 블로그 후기 전체 조회", responses = {
+    @Operation(summary = "[어드민] 블로그 후기 전체 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetBlogReviewForAdminResponseDto.class)))
     })
     @GetMapping("/blog")
     private ResponseEntity<SuccessResponse<?>> getBlogReviewsForAdmin() {
-        GetBlogReviewForAdminResponseDto responseDto = null;
+        GetBlogReviewForAdminResponseDto responseDto = blogReviewService.getBlogReviewForAdmin();
         return SuccessResponse.ok(responseDto);
     }
 
