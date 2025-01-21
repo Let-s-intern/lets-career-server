@@ -30,8 +30,8 @@ public class ReviewV2AdminController {
     @Operation(summary = "[어드민] 프로그램 참여 후기 전체 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReviewForAdminResponseDto.class)))
     })
-    @GetMapping
-    private ResponseEntity<SuccessResponse<?>> getReviewsForAdmin(@RequestParam final ReviewProgramType type) {
+    @GetMapping("/{type}")
+    private ResponseEntity<SuccessResponse<?>> getReviewsForAdmin(@PathVariable final ReviewProgramType type) {
         GetReviewForAdminResponseDto responseDto = reviewServiceFactory.getReviewService(type).getReviewsForAdmin();
         return SuccessResponse.ok(responseDto);
     }
@@ -58,10 +58,11 @@ public class ReviewV2AdminController {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
     @ApiErrorCode({SwaggerEnum.REVIEW_NOT_FOUND})
-    @PatchMapping("/{reviewId}")
-    private ResponseEntity<SuccessResponse<?>> updateReview(@PathVariable final Long reviewId,
+    @PatchMapping("/{type}/{reviewId}")
+    private ResponseEntity<SuccessResponse<?>> updateReview(@PathVariable final ReviewProgramType type,
+                                                            @PathVariable final Long reviewId,
                                                             @RequestBody @Valid final UpdateReviewRequestDto requestDto) {
-        reviewServiceFactory.getReviewService(requestDto.type()).updateReview(reviewId, requestDto);
+        reviewServiceFactory.getReviewService(type).updateReview(reviewId, requestDto);
         return SuccessResponse.ok(null);
     }
 
