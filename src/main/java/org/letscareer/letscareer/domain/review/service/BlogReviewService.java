@@ -8,4 +8,5 @@ public interface BlogReviewService {
     GetBlogReviewForAdminResponseDto getBlogReviewForAdmin();
     void createBlogReview(CreateBlogReviewRequestDto requestDto);
     void updateBlogReview(Long blogReviewId, UpdateBlogReviewRequestDto requestDto);
+    void deleteBlogReview(Long blogReviewId);
 }

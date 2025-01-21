@@ -54,6 +54,13 @@ public class BlogReviewServiceImpl implements BlogReviewService {
         }
     }
 
+    @Override
+    public void deleteBlogReview(Long blogReviewId) {
+        BlogReview blogReview = blogReviewHelper.findBlogReviewByBlogReviewIdOrThrow(blogReviewId);
+        s3Utils.deleteFile(FileType.BLOG_REVIEW.getDesc() + blogReview.getId() + blogReview.getTitle());
+        blogReviewHelper.deleteBlogReview(blogReview);
+    }
+
     private boolean checkBlogReviewUrlUpdateCondition(BlogReview blogReview, UpdateBlogReviewRequestDto requestDto) {
         if(Objects.isNull(requestDto.url()) || requestDto.url().isBlank()) return false;
         if(Objects.equals(blogReview.getUrl(), requestDto.url())) return false;

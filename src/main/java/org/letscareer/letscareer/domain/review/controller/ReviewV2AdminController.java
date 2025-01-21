@@ -87,11 +87,13 @@ public class ReviewV2AdminController {
         return SuccessResponse.ok(null);
     }
 
-    @Operation(summary = "로직 X - [어드민] 블로그 후기 삭제", responses = {
+    @Operation(summary = "[어드민] 블로그 후기 삭제", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
     })
+    @ApiErrorCode({SwaggerEnum.BLOG_REVIEW_ITEM_NOT_FOUND})
     @DeleteMapping("/blog/{blogReviewId}")
     private ResponseEntity<SuccessResponse<?>> deleteBlogReview(@PathVariable final Long blogReviewId) {
+        blogReviewService.deleteBlogReview(blogReviewId);
         return SuccessResponse.ok(null);
     }
 }
