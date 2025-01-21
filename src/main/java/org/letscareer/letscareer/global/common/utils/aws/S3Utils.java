@@ -3,6 +3,7 @@ package org.letscareer.letscareer.global.common.utils.aws;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.file.entity.File;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 @Component
 @RequiredArgsConstructor
@@ -30,6 +33,20 @@ public class S3Utils {
             return File.createFile(originalFileName, amazonS3.getUrl(bucket, originalFileName).toString());
 
         } catch (SdkClientException | IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public File saveImgFromUrl(String imgUrl, String filePath, String fileName) {
+        try {
+            String originalFileName = filePath + fileName;
+            URL url = new URL(imgUrl);
+            InputStream inputStream = url.openStream();
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentType("image/jpeg");
+            amazonS3.putObject(bucket, originalFileName, inputStream, metadata);
+            return File.createFile(originalFileName, amazonS3.getUrl(bucket, originalFileName).toString());
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }

@@ -8,7 +8,7 @@ public record BlogReviewOpenGraphVo(
         String title,
         String description,
         String url,
-        String thumbnail
+        String image
 ) {
     public static BlogReviewOpenGraphVo of(String title,
                                            String description,
@@ -18,7 +18,7 @@ public record BlogReviewOpenGraphVo(
                 .title(title)
                 .description(description)
                 .url(url)
-                .thumbnail(image)
+                .image(image)
                 .build();
     }
 }

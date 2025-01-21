@@ -45,7 +45,7 @@ public class ReviewV2AdminController {
         return SuccessResponse.ok(responseDto);
     }
 
-    @Operation(summary = "로직 X - [어드민] 블로그 후기 생성", responses = {
+    @Operation(summary = "[어드민] 블로그 후기 생성", responses = {
             @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
     })
     @PostMapping("/blog")
