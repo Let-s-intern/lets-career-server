@@ -228,6 +228,16 @@ public class ChallengeV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
+    @Operation(summary = "챌린지 목표 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeGoalResponseDto.class)))
+    })
+    @GetMapping("/{challengeId}/goal")
+    public ResponseEntity<SuccessResponse<?>> getGoal(@PathVariable final Long challengeId,
+                                                      @CurrentUser User user) {
+        final GetChallengeGoalResponseDto responseDto = challengeService.getGoal(challengeId, user.getId());
+        return SuccessResponse.ok(responseDto);
+    }
+
     @Operation(summary = "챌린지 대시보드 미션 점수 현황", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeTotalScoreResponseDto.class)))
     })

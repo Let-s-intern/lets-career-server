@@ -65,6 +65,7 @@ import org.letscareer.letscareer.domain.score.helper.AdminScoreHelper;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.entity.PageInfo;
 import org.letscareer.letscareer.global.common.utils.zoom.ZoomUtils;
+import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -74,6 +75,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static org.letscareer.letscareer.domain.application.error.ApplicationErrorCode.APPLICATION_NOT_FOUND;
 
 @RequiredArgsConstructor
 @Transactional
@@ -197,6 +200,14 @@ public class ChallengeServiceImpl implements ChallengeService {
     public GetChallengeNoticesResponseDto getNotices(Long challengeId, Pageable pageable) {
         Page<ChallengeNoticeVo> challengeNoticeList = challengeNoticeHelper.findAllChallengeNoticeVos(challengeId, pageable);
         return challengeMapper.toGetChallengeNoticesResponseDto(challengeNoticeList);
+    }
+
+    @Override
+    public GetChallengeGoalResponseDto getGoal(Long challengeId, Long userId) {
+        Long applicationId = challengeApplicationHelper.findApplicationIdByChallengeIdAndUserId(challengeId, userId);
+        if(Objects.isNull(applicationId)) throw new EntityNotFoundException(APPLICATION_NOT_FOUND);
+        String goal = challengeApplicationHelper.findGoalByApplicationId(applicationId);
+        return challengeApplicationMapper.toGetChallengeGoalResponseDto(goal);
     }
 
     @Override

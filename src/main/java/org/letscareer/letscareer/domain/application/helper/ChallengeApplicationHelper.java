@@ -97,4 +97,8 @@ public class ChallengeApplicationHelper {
     public List<User> getAttendanceNullNotificationUsers(Long challengeId, Long missionId) {
         return challengeApplicationRepository.findAllAttendanceNullNotificationUser(challengeId, missionId);
     }
+
+    public String findGoalByApplicationId(Long applicationId) {
+        return challengeApplicationRepository.findGoalByApplicationId(applicationId);
+    }
 }
