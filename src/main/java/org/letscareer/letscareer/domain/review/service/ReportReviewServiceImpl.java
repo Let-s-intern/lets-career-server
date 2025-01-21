@@ -13,8 +13,7 @@ import org.letscareer.letscareer.domain.review.helper.ReportReviewHelper;
 import org.letscareer.letscareer.domain.review.helper.ReviewItemHelper;
 import org.letscareer.letscareer.domain.review.mapper.ReviewMapper;
 import org.letscareer.letscareer.domain.review.type.ReviewQuestionType;
-import org.letscareer.letscareer.domain.review.vo.CreateReviewItemVo;
-import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
+import org.letscareer.letscareer.domain.review.vo.*;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.error.exception.ConflictException;
 import org.letscareer.letscareer.global.error.exception.UnauthorizedException;
@@ -50,13 +49,17 @@ public class ReportReviewServiceImpl implements ReviewService {
 
     @Override
     public GetMyReviewResponseDto getReview(Long reviewId, User user) {
-        return null;
+        ReportReviewVo reportReviewVo = reportReviewHelper.findReportReviewVoOrThrow(reviewId);
+        validateAuthorizedUser(user, reportReviewVo.userId());
+        List<ReviewItemVo> reviewItemVos = reviewItemHelper.findAllReviewItemVosByReviewId(reviewId);
+        ReviewMyVo reviewInfo = reviewMapper.toReviewMyVo(reportReviewVo, reviewItemVos);
+        return reviewMapper.toGetMyReviewResponseDto(reviewInfo);
     }
 
     @Override
     public void createReview(User user, Long applicationId, CreateReviewRequestDto requestDto) {
         ReportApplication reportApplication = reportApplicationHelper.findReportApplicationByReportApplicationIdOrThrow(applicationId);
-        validateCreateReviewCondition(user, reportApplication, requestDto);
+        validateCreateReviewCondition(user, reportApplication);
         Report report = reportApplication.getReport();
         ReportReview reportReview = reportReviewHelper.createReportReviewAndSave(report, reportApplication, requestDto);
         createReviewItemListAndSave(reportReview, reportApplication.getMessage(), requestDto.reviewItemList());
@@ -68,11 +71,18 @@ public class ReportReviewServiceImpl implements ReviewService {
         reportReview.updateReview(requestDto);
     }
 
-    private void validateCreateReviewCondition(User currentUser, ReportApplication reportApplication, CreateReviewRequestDto requestDto) {
-        if(!Objects.equals(currentUser.getId(), reportApplication.getUser().getId())) {
+    private void validateCreateReviewCondition(User currentUser, ReportApplication reportApplication) {
+        validateAuthorizedUser(currentUser, reportApplication.getUser().getId());
+        validateReviewAlreadyExists(reportApplication);
+    }
+
+    private void validateAuthorizedUser(User currentUser, Long applicationUserId) {
+        if(!Objects.equals(currentUser.getId(), applicationUserId)) {
             throw new UnauthorizedException(UNAUTHORIZED);
         }
+    }
 
+    private void validateReviewAlreadyExists(ReportApplication reportApplication) {
         if(!Objects.isNull(reportApplication.getReview())) {
             throw new ConflictException(REVIEW_ALREADY_EXISTS);
         }
