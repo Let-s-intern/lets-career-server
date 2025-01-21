@@ -36,7 +36,7 @@ public class VWReviewServiceImpl implements VWReviewService {
         List<ReviewVo> reviewVos = reviewInfoVos.getContent().stream()
                 .map(reviewInfoVo -> reviewMapper.toReviewVo(
                         reviewInfoVo,
-                        reviewInfoVo.type().equals(ReviewProgramType.MISSION_REVIEW) ? new ArrayList<>() : reviewItemHelper.findAllReviewItemVosByReviewId(reviewInfoVo.reviewId())
+                        reviewInfoVo.type().equals(ReviewProgramType.MISSION_REVIEW) ? new ArrayList<>() : reviewItemHelper.findAllReviewItemVosByReviewId(reviewInfoVo.reviewId(), true)
                 ))
                 .collect(Collectors.toList());
         PageInfo pageInfo = PageInfo.of(reviewInfoVos);

@@ -51,7 +51,7 @@ public class ChallengeReviewServiceImpl implements ReviewService {
     public GetMyReviewResponseDto getReview(Long reviewId, User user) {
         ChallengeReviewVo challengeReviewVo = challengeReviewHelper.findChallengeReviewVoOrThrow(reviewId);
         validateAuthorizedUser(user, challengeReviewVo.userId());
-        List<ReviewItemVo> reviewItemVos = reviewItemHelper.findAllReviewItemVosByReviewId(reviewId);
+        List<ReviewItemVo> reviewItemVos = reviewItemHelper.findAllReviewItemVosByReviewId(reviewId, null);
         ReviewMyVo reviewInfo = reviewMapper.toReviewMyVo(challengeReviewVo, reviewItemVos);
         return reviewMapper.toGetMyReviewResponseDto(reviewInfo);
     }

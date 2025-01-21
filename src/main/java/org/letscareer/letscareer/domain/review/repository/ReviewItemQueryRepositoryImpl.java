@@ -16,7 +16,7 @@ public class ReviewItemQueryRepositoryImpl implements ReviewItemQueryRepository 
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<ReviewItemVo> findAllReviewItemVosByReviewId(Long reviewId) {
+    public List<ReviewItemVo> findAllReviewItemVosByReviewId(Long reviewId, Boolean isVisible) {
         return queryFactory
                 .select(Projections.constructor(ReviewItemVo.class,
                         reviewItem.id,
@@ -25,7 +25,7 @@ public class ReviewItemQueryRepositoryImpl implements ReviewItemQueryRepository 
                 .from(reviewItem)
                 .where(
                         eqReviewId(reviewId),
-                        eqIsVisible(true)
+                        eqIsVisible(isVisible)
                 )
                 .orderBy(reviewItem.id.asc())
                 .fetch();

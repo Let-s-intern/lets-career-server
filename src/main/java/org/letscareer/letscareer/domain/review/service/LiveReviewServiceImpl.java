@@ -50,7 +50,7 @@ public class LiveReviewServiceImpl implements ReviewService {
     public GetMyReviewResponseDto getReview(Long reviewId, User user) {
         LiveReviewVo liveReviewVo = liveReviewHelper.findLiveReviewVoOrThrow(reviewId);
         validateAuthorizedUser(user, liveReviewVo.userId());
-        List<ReviewItemVo> reviewItemVos = reviewItemHelper.findAllReviewItemVosByReviewId(reviewId);
+        List<ReviewItemVo> reviewItemVos = reviewItemHelper.findAllReviewItemVosByReviewId(reviewId, null);
         ReviewMyVo reviewInfo = reviewMapper.toReviewMyVo(liveReviewVo, reviewItemVos);
         return reviewMapper.toGetMyReviewResponseDto(reviewInfo);
     }
