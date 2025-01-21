@@ -11,6 +11,7 @@ import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.review.dto.request.*;
 import org.letscareer.letscareer.domain.review.dto.response.GetBlogReviewResponseDto;
 import org.letscareer.letscareer.domain.review.dto.response.GetReviewResponseDto;
+import org.letscareer.letscareer.domain.review.service.BlogReviewService;
 import org.letscareer.letscareer.domain.review.service.ReviewServiceFactory;
 import org.letscareer.letscareer.domain.review.service.VWReviewService;
 import org.letscareer.letscareer.domain.review.type.ReviewProgramType;
@@ -31,6 +32,7 @@ import java.util.List;
 public class ReviewV2Controller {
     private final ReviewServiceFactory reviewServiceFactory;
     private final VWReviewService reviewService;
+    private final BlogReviewService blogReviewService;
 
     @Operation(
             summary = "프로그램 참여 후기 전체 조회 (challenge, mission, live, report)",
@@ -51,14 +53,14 @@ public class ReviewV2Controller {
     }
 
     @Operation(
-            summary = "로직 X - 블로그 후기 전체 조회",
+            summary = "블로그 후기 전체 조회",
             description = "[100% 솔직 후기 > 블로그 후기]",
             responses = {@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetBlogReviewResponseDto.class)))
             })
     @GetMapping("/blog")
     private ResponseEntity<SuccessResponse<?>> getBlogReviews(@RequestParam(required = false) final List<ProgramType> type,
                                                               final Pageable pageable) {
-        GetBlogReviewResponseDto responseDto = null;
+        GetBlogReviewResponseDto responseDto = blogReviewService.getBlogReviews(type, pageable);
         return SuccessResponse.ok(responseDto);
     }
 

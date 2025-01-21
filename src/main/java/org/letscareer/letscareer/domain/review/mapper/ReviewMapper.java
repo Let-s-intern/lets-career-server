@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.review.mapper;
 
 import org.letscareer.letscareer.domain.review.dto.response.GetBlogReviewForAdminResponseDto;
+import org.letscareer.letscareer.domain.review.dto.response.GetBlogReviewResponseDto;
 import org.letscareer.letscareer.domain.review.dto.response.GetReviewForAdminResponseDto;
 import org.letscareer.letscareer.domain.review.dto.response.GetReviewResponseDto;
 import org.letscareer.letscareer.domain.review.vo.*;
@@ -29,5 +30,9 @@ public class ReviewMapper {
 
     public GetBlogReviewForAdminResponseDto toGetBlogReviewForAdminResponseDto(List<BlogReviewAdminVo> blogReviewAdminVos) {
         return GetBlogReviewForAdminResponseDto.of(blogReviewAdminVos);
+    }
+
+    public GetBlogReviewResponseDto toGetBlogReviewResponseDto(List<BlogReviewVo> blogReviewVos, PageInfo pageInfo) {
+        return GetBlogReviewResponseDto.of(blogReviewVos, pageInfo);
     }
 }
