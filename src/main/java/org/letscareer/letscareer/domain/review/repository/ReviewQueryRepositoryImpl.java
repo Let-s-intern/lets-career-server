@@ -62,6 +62,14 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
         return PageableExecutionUtils.getPage(reviewInfoVos, pageable, countQuery::fetchOne);
     }
 
+    @Override
+    public Long countReviews() {
+        return queryFactory
+                .select(vWReview.count())
+                .from(vWReview)
+                .fetchOne();
+    }
+
     private BooleanExpression inReviewProgramType(List<ReviewProgramType> typeList) {
         if(typeList == null || typeList.isEmpty()) return null;
         BooleanExpression challengeReviewCondition = vWReview.type.eq(ReviewProgramType.CHALLENGE_REVIEW).and(vWReview.type.in(typeList));

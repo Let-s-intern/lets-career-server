@@ -9,7 +9,6 @@ public record UpdateBlogReviewRequestDto(
         ProgramType programType,
         String programTitle,
         String name,
-        String title,
         String url,
         Boolean isVisible
 ) {

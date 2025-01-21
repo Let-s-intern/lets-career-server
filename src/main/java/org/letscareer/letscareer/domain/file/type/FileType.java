@@ -14,7 +14,8 @@ public enum FileType {
     LIVE(5, "program/live/"),
     VOD(6, "program/vod/"),
     BLOG(7, "blog/"),
-    REPORT(8, "report/");
+    REPORT(8, "report/"),
+    BLOG_REVIEW(9, "review/blog/");
 
     private final Integer code;
     private final String desc;

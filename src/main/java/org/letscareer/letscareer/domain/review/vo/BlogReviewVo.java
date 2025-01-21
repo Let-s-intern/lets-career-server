@@ -11,6 +11,7 @@ public record BlogReviewVo(
         String programTitle,
         String name,
         String title,
+        String description,
         String url,
         String thumbnail
 ) {
