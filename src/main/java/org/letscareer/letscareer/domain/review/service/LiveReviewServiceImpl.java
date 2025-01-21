@@ -12,8 +12,7 @@ import org.letscareer.letscareer.domain.review.entity.LiveReview;
 import org.letscareer.letscareer.domain.review.helper.LiveReviewHelper;
 import org.letscareer.letscareer.domain.review.helper.ReviewItemHelper;
 import org.letscareer.letscareer.domain.review.mapper.ReviewMapper;
-import org.letscareer.letscareer.domain.review.vo.CreateReviewItemVo;
-import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
+import org.letscareer.letscareer.domain.review.vo.*;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.error.exception.ConflictException;
 import org.letscareer.letscareer.global.error.exception.UnauthorizedException;
@@ -49,7 +48,11 @@ public class LiveReviewServiceImpl implements ReviewService {
 
     @Override
     public GetMyReviewResponseDto getReview(Long reviewId, User user) {
-        return null;
+        LiveReviewVo liveReviewVo = liveReviewHelper.findLiveReviewVoOrThrow(reviewId);
+        validateAuthorizedUser(user, liveReviewVo.userId());
+        List<ReviewItemVo> reviewItemVos = reviewItemHelper.findAllReviewItemVosByReviewId(reviewId);
+        ReviewMyVo reviewInfo = reviewMapper.toReviewMyVo(liveReviewVo, reviewItemVos);
+        return reviewMapper.toGetMyReviewResponseDto(reviewInfo);
     }
 
     @Override
@@ -68,10 +71,17 @@ public class LiveReviewServiceImpl implements ReviewService {
     }
 
     private void validateCreateReviewCondition(User currentUser, LiveApplication liveApplication) {
-        if(!Objects.equals(currentUser.getId(), liveApplication.getUser().getId())) {
+        validateAuthorizedUser(currentUser, liveApplication.getUser().getId());
+        validateReviewAlreadyExists(liveApplication);
+    }
+
+    private void validateAuthorizedUser(User currentUser, Long applicationUserId) {
+        if(!Objects.equals(currentUser.getId(), applicationUserId)) {
             throw new UnauthorizedException(UNAUTHORIZED);
         }
+    }
 
+    private void validateReviewAlreadyExists(LiveApplication liveApplication) {
         if(!Objects.isNull(liveApplication.getReview())) {
             throw new ConflictException(REVIEW_ALREADY_EXISTS);
         }
