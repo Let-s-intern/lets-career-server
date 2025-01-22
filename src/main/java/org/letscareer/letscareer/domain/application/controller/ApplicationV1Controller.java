@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.dto.request.CreateApplicationRequestDto;
-import org.letscareer.letscareer.domain.application.dto.request.UpdateApplicationRequestDto;
 import org.letscareer.letscareer.domain.application.dto.response.CreateApplicationResponseDto;
 import org.letscareer.letscareer.domain.application.service.ApplicationServiceFactory;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
@@ -35,18 +34,6 @@ public class ApplicationV1Controller {
                                                                 @RequestBody final CreateApplicationRequestDto requestDto) {
         final CreateApplicationResponseDto responseDto = applicationServiceFactory.getApplicationService(type).createApplication(programId, user, requestDto);
         return SuccessResponse.created(responseDto);
-    }
-
-    @Operation(summary = "신청서 수정", responses = {
-            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
-    })
-    @PatchMapping("/{applicationId}")
-    public ResponseEntity<SuccessResponse<?>> updateApplication(@PathVariable final Long applicationId,
-                                                                @RequestParam final ProgramType type,
-                                                                @CurrentUser final User user,
-                                                                @RequestBody final UpdateApplicationRequestDto requestDto) {
-        applicationServiceFactory.getApplicationService(type).updateApplication(applicationId, user, requestDto);
-        return SuccessResponse.ok(null);
     }
 
     @Operation(summary = "신청서 삭제", responses = {
