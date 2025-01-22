@@ -238,7 +238,7 @@ public class OldReviewQueryRepositoryImpl implements OldReviewQueryRepository {
             String[] sortInfo = sort.split(";");
             String property = sortInfo[0];
             Order direction = sortInfo[1].equalsIgnoreCase("ASC") ? Order.ASC : Order.DESC;
-            PathBuilder expression = new PathBuilder(OldReviewDetailVo.class, "vWReview");
+            PathBuilder expression = new PathBuilder(OldReviewDetailVo.class, "oldVWReview");
             orderSpecifiers.add(new OrderSpecifier<>(direction, expression.get(property)));
         }
         return orderSpecifiers;
