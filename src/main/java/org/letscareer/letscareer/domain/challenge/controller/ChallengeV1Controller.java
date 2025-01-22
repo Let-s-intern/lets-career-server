@@ -209,6 +209,16 @@ public class ChallengeV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
+    @Operation(summary = "챌린지 리뷰 작성 여부 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeReviewStatusResponseDto.class)))
+    })
+    @GetMapping("/{challengeId}/my/review-status")
+    public ResponseEntity<SuccessResponse<?>> checkChallengeReviewCompletedUser(@PathVariable final Long challengeId,
+                                                                @CurrentUser User user) {
+        final GetChallengeReviewStatusResponseDto responseDto = challengeService.checkChallengeReviewCompletedUser(challengeId, user.getId());
+        return SuccessResponse.ok(responseDto);
+    }
+
     @Operation(summary = "챌린지 가이드 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeGuidesResponseDto.class)))
     })

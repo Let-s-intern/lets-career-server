@@ -11,4 +11,5 @@ import java.util.List;
 public interface ReviewQueryRepository {
     Page<ReviewInfoVo> findAllReviewInfoVos(List<ReviewProgramType> typeList, List<ChallengeType> challengeTypeList, Pageable pageable);
     Long countReviews();
+    Boolean existReviewByApplicationId(Long applicationId);
 }

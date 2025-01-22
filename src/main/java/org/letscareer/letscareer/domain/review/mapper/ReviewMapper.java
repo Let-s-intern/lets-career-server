@@ -1,5 +1,6 @@
 package org.letscareer.letscareer.domain.review.mapper;
 
+import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeReviewStatusResponseDto;
 import org.letscareer.letscareer.domain.review.dto.response.*;
 import org.letscareer.letscareer.domain.review.vo.*;
 import org.letscareer.letscareer.global.common.entity.PageInfo;
@@ -35,5 +36,9 @@ public class ReviewMapper {
 
     public GetReviewCountResponseDto toGetReviewCountResponseDto(Long reviewCount, Long blogReviewCount) {
         return GetReviewCountResponseDto.of(reviewCount, blogReviewCount);
+    }
+
+    public GetChallengeReviewStatusResponseDto toGetChallengeReviewStatusResponseDto(Boolean isCompleted) {
+        return GetChallengeReviewStatusResponseDto.of(isCompleted);
     }
 }

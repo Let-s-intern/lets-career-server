@@ -70,6 +70,15 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                 .fetchOne();
     }
 
+    @Override
+    public Boolean existReviewByApplicationId(Long applicationId) {
+        return queryFactory
+                .selectOne()
+                .from(vWReview)
+                .where(vWReview.applicationId.eq(applicationId))
+                .fetchFirst() != null;
+    }
+
     private BooleanExpression inReviewProgramType(List<ReviewProgramType> typeList) {
         if(typeList == null || typeList.isEmpty()) return null;
         BooleanExpression challengeReviewCondition = vWReview.type.eq(ReviewProgramType.CHALLENGE_REVIEW).and(vWReview.type.in(typeList));
