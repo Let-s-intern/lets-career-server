@@ -163,7 +163,7 @@ public class LiveApplicationQueryRepositoryImpl implements LiveApplicationQueryR
     }
 
     private BooleanExpression reviewIsNull() {
-        return liveApplication._super.oldReview.isNull();
+        return liveApplication._super.review.isNull();
     }
 
     private BooleanExpression eqApplicationId(Long applicationId) {
