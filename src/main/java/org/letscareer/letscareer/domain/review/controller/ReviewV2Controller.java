@@ -10,6 +10,7 @@ import org.letscareer.letscareer.domain.challenge.type.ChallengeType;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.review.dto.request.*;
 import org.letscareer.letscareer.domain.review.dto.response.GetBlogReviewResponseDto;
+import org.letscareer.letscareer.domain.review.dto.response.GetMyReviewResponseDto;
 import org.letscareer.letscareer.domain.review.dto.response.GetReviewCountResponseDto;
 import org.letscareer.letscareer.domain.review.dto.response.GetReviewResponseDto;
 import org.letscareer.letscareer.domain.review.service.BlogReviewService;
@@ -50,6 +51,19 @@ public class ReviewV2Controller {
                                                           @RequestParam(required = false) final List<ChallengeType> challengeType,
                                                           final Pageable pageable) {
         GetReviewResponseDto responseDto = reviewService.getReviews(type, challengeType, pageable);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(
+            summary = "프로그램 참여 후기 1건 조회",
+            description = "[마이페이지 > 후기 작성]",
+            responses = {@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetMyReviewResponseDto.class)))}
+    )
+    @GetMapping("/{type}/{reviewId}")
+    private ResponseEntity<SuccessResponse<?>> getReview(@PathVariable final ReviewProgramType type,
+                                                         @PathVariable final Long reviewId,
+                                                         @CurrentUser final User user) {
+        GetMyReviewResponseDto responseDto = reviewServiceFactory.getReviewService(type).getReview(reviewId, user);
         return SuccessResponse.ok(responseDto);
     }
 

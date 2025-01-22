@@ -7,6 +7,7 @@ import org.letscareer.letscareer.domain.review.dto.request.CreateReviewRequestDt
 import org.letscareer.letscareer.domain.review.entity.LiveReview;
 import org.letscareer.letscareer.domain.review.repository.LiveReviewRepository;
 import org.letscareer.letscareer.domain.review.vo.LiveReviewAdminVo;
+import org.letscareer.letscareer.domain.review.vo.LiveReviewVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -30,5 +31,9 @@ public class LiveReviewHelper {
 
     public List<LiveReviewAdminVo> findAllLiveReviewAdminVos() {
         return liveReviewRepository.findAllLiveReviewAdminVos();
+    }
+
+    public LiveReviewVo findLiveReviewVoOrThrow(Long reviewId) {
+        return liveReviewRepository.findLiveReviewVoByReviewId(reviewId).orElseThrow(() -> new EntityNotFoundException(REVIEW_NOT_FOUND));
     }
 }

@@ -33,4 +33,6 @@ public interface ChallengeApplicationQueryRepository {
     List<User> findAllNotificationUser(Long challengeId);
 
     List<User> findAllAttendanceNullNotificationUser(Long challengeId, Long missionId);
+
+    String findGoalByApplicationId(Long applicationId);
 }

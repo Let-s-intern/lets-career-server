@@ -6,14 +6,14 @@ import org.letscareer.letscareer.domain.application.helper.ChallengeApplicationH
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.review.dto.request.CreateReviewRequestDto;
 import org.letscareer.letscareer.domain.review.dto.request.UpdateReviewRequestDto;
+import org.letscareer.letscareer.domain.review.dto.response.GetMyReviewResponseDto;
 import org.letscareer.letscareer.domain.review.dto.response.GetReviewForAdminResponseDto;
 import org.letscareer.letscareer.domain.review.entity.ChallengeReview;
 import org.letscareer.letscareer.domain.review.helper.ChallengeReviewHelper;
 import org.letscareer.letscareer.domain.review.helper.ReviewItemHelper;
 import org.letscareer.letscareer.domain.review.mapper.ReviewMapper;
 import org.letscareer.letscareer.domain.review.type.ReviewQuestionType;
-import org.letscareer.letscareer.domain.review.vo.CreateReviewItemVo;
-import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
+import org.letscareer.letscareer.domain.review.vo.*;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.error.exception.ConflictException;
 import org.letscareer.letscareer.global.error.exception.UnauthorizedException;
@@ -48,6 +48,15 @@ public class ChallengeReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    public GetMyReviewResponseDto getReview(Long reviewId, User user) {
+        ChallengeReviewVo challengeReviewVo = challengeReviewHelper.findChallengeReviewVoOrThrow(reviewId);
+        validateAuthorizedUser(user, challengeReviewVo.userId());
+        List<ReviewItemVo> reviewItemVos = reviewItemHelper.findAllReviewItemVosByReviewId(reviewId, null);
+        ReviewMyVo reviewInfo = reviewMapper.toReviewMyVo(challengeReviewVo, reviewItemVos);
+        return reviewMapper.toGetMyReviewResponseDto(reviewInfo);
+    }
+
+    @Override
     public void createReview(User user, Long applicationId, CreateReviewRequestDto requestDto) {
         ChallengeApplication challengeApplication = challengeApplicationHelper.findChallengeApplicationByIdOrThrow(applicationId);
         validateCreateReviewCondition(user, challengeApplication);
@@ -63,10 +72,17 @@ public class ChallengeReviewServiceImpl implements ReviewService {
     }
 
     private void validateCreateReviewCondition(User currentUser, ChallengeApplication challengeApplication) {
-        if(!Objects.equals(currentUser.getId(), challengeApplication.getUser().getId())) {
+        validateAuthorizedUser(currentUser, challengeApplication.getUser().getId());
+        validateReviewAlreadyExists(challengeApplication);
+    }
+
+    private void validateAuthorizedUser(User currentUser, Long applicationUserId) {
+        if(!Objects.equals(currentUser.getId(), applicationUserId)) {
             throw new UnauthorizedException(UNAUTHORIZED);
         }
+    }
 
+    private void validateReviewAlreadyExists(ChallengeApplication challengeApplication) {
         if(!Objects.isNull(challengeApplication.getReview())) {
             throw new ConflictException(REVIEW_ALREADY_EXISTS);
         }

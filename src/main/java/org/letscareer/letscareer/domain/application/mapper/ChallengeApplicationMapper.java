@@ -3,10 +3,7 @@ package org.letscareer.letscareer.domain.application.mapper;
 import org.letscareer.letscareer.domain.application.dto.response.GetChallengeApplicationsResponseDto;
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
 import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
-import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeAccessResponseDto;
-import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeApplicationEmailListResponseDto;
-import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeApplicationsPaybackResponseDto;
-import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeExisingApplicationResponseDto;
+import org.letscareer.letscareer.domain.challenge.dto.response.*;
 import org.letscareer.letscareer.domain.mission.dto.response.MissionApplicationScoreResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -36,5 +33,9 @@ public class ChallengeApplicationMapper {
 
     public GetChallengeExisingApplicationResponseDto toChallengeExistingApplicationResponseDto(Boolean applied) {
         return GetChallengeExisingApplicationResponseDto.of(applied);
+    }
+
+    public GetChallengeGoalResponseDto toGetChallengeGoalResponseDto(String goal) {
+        return GetChallengeGoalResponseDto.of(goal);
     }
 }

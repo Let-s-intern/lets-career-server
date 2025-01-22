@@ -17,12 +17,20 @@ public class ReviewMapper {
         return ReviewAdminVo.of(reviewInfo, reviewItemAdminVos);
     }
 
+    public <T> ReviewMyVo toReviewMyVo(T reviewInfo, List<ReviewItemVo> reviewItemVos) {
+        return ReviewMyVo.of(reviewInfo, reviewItemVos);
+    }
+
     public GetReviewResponseDto toGetReviewResponseDto(List<ReviewVo> reviewVos, PageInfo pageInfo) {
         return GetReviewResponseDto.of(reviewVos, pageInfo);
     }
 
     public GetReviewForAdminResponseDto toGetReviewForAdminResponseDto(List<ReviewAdminVo> reviewAdminVos) {
         return GetReviewForAdminResponseDto.of(reviewAdminVos);
+    }
+
+    public GetMyReviewResponseDto toGetMyReviewResponseDto(ReviewMyVo reviewInfo) {
+        return GetMyReviewResponseDto.of(reviewInfo);
     }
 
     public GetBlogReviewForAdminResponseDto toGetBlogReviewForAdminResponseDto(List<BlogReviewAdminVo> blogReviewAdminVos) {

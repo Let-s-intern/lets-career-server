@@ -28,8 +28,8 @@ public class ReviewItemHelper {
         return reviewItemRepository.findById(reviewItemId).orElseThrow(() -> new EntityNotFoundException(REVIEW_ITEM_NOT_FOUND));
     }
 
-    public List<ReviewItemVo> findAllReviewItemVosByReviewId(Long reviewId) {
-        return reviewItemRepository.findAllReviewItemVosByReviewId(reviewId);
+    public List<ReviewItemVo> findAllReviewItemVosByReviewId(Long reviewId, Boolean isVisible) {
+        return reviewItemRepository.findAllReviewItemVosByReviewId(reviewId, isVisible);
     }
 
     public List<ReviewItemAdminVo> findAllReviewItemAdminVosByReviewId(Long reviewId) {

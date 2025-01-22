@@ -2,7 +2,6 @@ package org.letscareer.letscareer.domain.application.service;
 
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.dto.request.CreateApplicationRequestDto;
-import org.letscareer.letscareer.domain.application.dto.request.UpdateApplicationRequestDto;
 import org.letscareer.letscareer.domain.application.dto.response.CreateApplicationResponseDto;
 import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
 import org.letscareer.letscareer.domain.application.helper.ApplicationHelper;
@@ -28,7 +27,6 @@ import org.letscareer.letscareer.domain.price.entity.Price;
 import org.letscareer.letscareer.domain.price.helper.ChallengePriceHelper;
 import org.letscareer.letscareer.domain.price.helper.PriceHelper;
 import org.letscareer.letscareer.domain.price.type.ChallengeParticipationType;
-import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.score.helper.AdminScoreHelper;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.helper.UserHelper;
@@ -65,13 +63,6 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
         TossPaymentsResponseDto responseDto = tossProvider.requestPayments(paymentInfo.paymentKey(), paymentInfo.orderId(), paymentInfo.amount());
         sendPaymentKakaoMessages(challenge, user, createApplicationRequestDto.paymentInfo());
         return applicationMapper.toCreateApplicationResponseDto(responseDto);
-    }
-
-    @Override
-    public void updateApplication(Long applicationId, User user, UpdateApplicationRequestDto requestDto) {
-        ChallengeApplication challengeApplication = challengeApplicationHelper.findChallengeApplicationByIdOrThrow(applicationId);
-        applicationHelper.validateAuthorizedUser(challengeApplication.getUser(), user);
-        challengeApplication.updateGoal(requestDto.goal());
     }
 
     @Override

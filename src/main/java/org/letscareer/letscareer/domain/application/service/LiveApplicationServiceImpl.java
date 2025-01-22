@@ -2,7 +2,6 @@ package org.letscareer.letscareer.domain.application.service;
 
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.dto.request.CreateApplicationRequestDto;
-import org.letscareer.letscareer.domain.application.dto.request.UpdateApplicationRequestDto;
 import org.letscareer.letscareer.domain.application.dto.response.CreateApplicationResponseDto;
 import org.letscareer.letscareer.domain.application.entity.LiveApplication;
 import org.letscareer.letscareer.domain.application.helper.ApplicationHelper;
@@ -27,7 +26,6 @@ import org.letscareer.letscareer.domain.pg.type.CancelReason;
 import org.letscareer.letscareer.domain.price.entity.Price;
 import org.letscareer.letscareer.domain.price.helper.LivePriceHelper;
 import org.letscareer.letscareer.domain.price.helper.PriceHelper;
-import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.helper.UserHelper;
 import org.springframework.stereotype.Service;
@@ -61,11 +59,6 @@ public class LiveApplicationServiceImpl implements ApplicationService {
         TossPaymentsResponseDto responseDto = tossProvider.requestPayments(paymentInfo.paymentKey(), paymentInfo.orderId(), paymentInfo.amount());
         sendPaymentKakaoMessages(live, user, createApplicationRequestDto.paymentInfo());
         return applicationMapper.toCreateApplicationResponseDto(responseDto);
-    }
-
-    @Override
-    public void updateApplication(Long applicationId, User user, UpdateApplicationRequestDto requestDto) {
-
     }
 
     @Override

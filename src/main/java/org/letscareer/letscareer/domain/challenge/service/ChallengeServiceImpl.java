@@ -1,7 +1,9 @@
 package org.letscareer.letscareer.domain.challenge.service;
 
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApplicationRequestDto;
 import org.letscareer.letscareer.domain.application.dto.response.GetChallengeApplicationsResponseDto;
+import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
 import org.letscareer.letscareer.domain.application.helper.ChallengeApplicationHelper;
 import org.letscareer.letscareer.domain.application.mapper.ChallengeApplicationMapper;
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
@@ -65,6 +67,7 @@ import org.letscareer.letscareer.domain.score.helper.AdminScoreHelper;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.entity.PageInfo;
 import org.letscareer.letscareer.global.common.utils.zoom.ZoomUtils;
+import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -74,6 +77,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static org.letscareer.letscareer.domain.application.error.ApplicationErrorCode.APPLICATION_NOT_FOUND;
 
 @RequiredArgsConstructor
 @Transactional
@@ -200,6 +205,14 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
+    public GetChallengeGoalResponseDto getGoal(Long challengeId, Long userId) {
+        Long applicationId = challengeApplicationHelper.findApplicationIdByChallengeIdAndUserId(challengeId, userId);
+        if(Objects.isNull(applicationId)) throw new EntityNotFoundException(APPLICATION_NOT_FOUND);
+        String goal = challengeApplicationHelper.findGoalByApplicationId(applicationId);
+        return challengeApplicationMapper.toGetChallengeGoalResponseDto(goal);
+    }
+
+    @Override
     public GetChallengeTotalScoreResponseDto getTotalScore(Long challengeId, Long userId) {
         List<Mission> missionList = missionHelper.findMissionsByChallengeId(challengeId);
         Long applicationId = challengeApplicationHelper.findApplicationIdByChallengeIdAndUserId(challengeId, userId);
@@ -318,6 +331,14 @@ public class ChallengeServiceImpl implements ChallengeService {
                 .filter(payment -> checkPaybackCondition(payment, requestDto.price()))
                 .toList();
         paymentList.forEach(payment -> payback(payment, requestDto));
+    }
+
+    @Override
+    public void updateGoal(Long challengeId, UpdateChallengeApplicationRequestDto requestDto, Long userId) {
+        Long applicationId = challengeApplicationHelper.findApplicationIdByChallengeIdAndUserId(challengeId, userId);
+        if(Objects.isNull(applicationId)) throw new EntityNotFoundException(APPLICATION_NOT_FOUND);
+        ChallengeApplication challengeApplication = challengeApplicationHelper.findChallengeApplicationByIdOrThrow(applicationId);
+        challengeApplication.updateGoal(requestDto.goal());
     }
 
     @Override
