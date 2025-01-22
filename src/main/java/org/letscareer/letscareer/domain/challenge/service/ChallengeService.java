@@ -72,6 +72,8 @@ public interface ChallengeService {
 
     GetChallengeExisingApplicationResponseDto getChallengeExistingApplication(Long challengeId, Long userId);
 
+    GetChallengeReviewStatusResponseDto checkChallengeReviewCompletedUser(Long challengeId, Long userId);
+
     void createChallenge(CreateChallengeRequestDto createChallengeRequestDto);
 
     void updateChallenge(Long challengeId, UpdateChallengeRequestDto createChallengeRequestDto);
