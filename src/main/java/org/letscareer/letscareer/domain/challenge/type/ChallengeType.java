@@ -13,7 +13,8 @@ public enum ChallengeType implements EnumField {
     MEETING_PREPARATION(3, "면접준비"),
     ETC(4, "기타"),
     PERSONAL_STATEMENT(5, "자기소개서"),
-    PORTFOLIO(6, "포트폴리오");
+    PORTFOLIO(6, "포트폴리오"),
+    PERSONAL_STATEMENT_LARGE_CORP(7, "대기업 자기소개서");
 
     private final Integer code;
     private final String desc;

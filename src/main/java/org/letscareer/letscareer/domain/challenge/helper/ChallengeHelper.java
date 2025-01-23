@@ -31,7 +31,8 @@ public class ChallengeHelper {
     private static final List<ChallengeType> recommendChallengeTypeList = List.of(
             ChallengeType.CAREER_START,
             ChallengeType.PERSONAL_STATEMENT,
-            ChallengeType.PORTFOLIO);
+            ChallengeType.PORTFOLIO,
+            ChallengeType.PERSONAL_STATEMENT_LARGE_CORP);
 
     public Challenge createChallengeAndSave(CreateChallengeRequestDto challengeRequestDto, ZoomMeetingResponseDto zoomMeetingInfo) {
         Challenge newChallenge = Challenge.createChallenge(challengeRequestDto, zoomMeetingInfo);
