@@ -3,6 +3,7 @@ package org.letscareer.letscareer.domain.vod.service;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.admincalssification.helper.VodAdminClassificationHelper;
 import org.letscareer.letscareer.domain.admincalssification.request.CreateVodAdminClassificationRequestDto;
+import org.letscareer.letscareer.domain.admincalssification.vo.VodAdminClassificationDetailVo;
 import org.letscareer.letscareer.domain.classification.dto.request.CreateVodClassificationRequestDto;
 import org.letscareer.letscareer.domain.classification.helper.VodClassificationHelper;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
@@ -44,7 +45,8 @@ public class VodServiceImpl implements VodService {
     public GetVodDetailResponseDto getVodDetail(Long vodId) {
         VodDetailVo vodInfo = vodHelper.findVodDetailVoOrThrow(vodId);
         List<VodClassificationDetailVo> programTypeInfo = vodClassificationHelper.findVodClassificationVos(vodId);
-        return vodMapper.toVodDetailResponseDto(vodInfo, programTypeInfo);
+        List<VodAdminClassificationDetailVo> adminProgramTypeInfo = vodAdminClassificationHelper.findAdminClassificationDetailVos(vodId);
+        return vodMapper.toVodDetailResponseDto(vodInfo, programTypeInfo, adminProgramTypeInfo);
     }
 
     @Override
