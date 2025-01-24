@@ -1,5 +1,6 @@
 package org.letscareer.letscareer.domain.challenge.mapper;
 
+import org.letscareer.letscareer.domain.admincalssification.vo.ChallengeAdminClassificationDetailVo;
 import org.letscareer.letscareer.domain.challenge.dto.response.*;
 import org.letscareer.letscareer.domain.challenge.vo.*;
 import org.letscareer.letscareer.domain.challengeguide.vo.ChallengeGuideVo;
@@ -21,9 +22,10 @@ public class ChallengeMapper {
 
     public GetChallengeDetailResponseDto toChallengeDetailResponseDto(ChallengeDetailVo challengeInfo,
                                                                       List<ChallengeClassificationDetailVo> classificationInfo,
+                                                                      List<ChallengeAdminClassificationDetailVo> adminClassificationInfo,
                                                                       List<ChallengePriceDetailVo> priceInfo,
                                                                       List<FaqDetailVo> faqInfo) {
-        return GetChallengeDetailResponseDto.of(challengeInfo, classificationInfo, priceInfo, faqInfo);
+        return GetChallengeDetailResponseDto.of(challengeInfo, classificationInfo, adminClassificationInfo, priceInfo, faqInfo);
     }
 
     public GetTypeChallengeResponseDto toGetTypeChallengeResponseDto(List<ChallengeSimpleProfileVo> challengeSimpleProfileVos) {

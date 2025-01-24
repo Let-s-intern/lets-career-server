@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.challenge.dto.response;
 
 import lombok.AccessLevel;
 import lombok.Builder;
+import org.letscareer.letscareer.domain.admincalssification.vo.ChallengeAdminClassificationDetailVo;
 import org.letscareer.letscareer.domain.challenge.type.ChallengeType;
 import org.letscareer.letscareer.domain.challenge.vo.ChallengeDetailVo;
 import org.letscareer.letscareer.domain.classification.vo.ChallengeClassificationDetailVo;
@@ -27,11 +28,13 @@ public record GetChallengeDetailResponseDto(
         String chatPassword,
         ChallengeType challengeType,
         List<ChallengeClassificationDetailVo> classificationInfo,
+        List<ChallengeAdminClassificationDetailVo> adminClassificationInfo,
         List<ChallengePriceDetailVo> priceInfo,
         List<FaqDetailVo> faqInfo
 ) {
     public static GetChallengeDetailResponseDto of(ChallengeDetailVo challengeInfo,
                                                    List<ChallengeClassificationDetailVo> classificationInfo,
+                                                   List<ChallengeAdminClassificationDetailVo> adminClassificationInfo,
                                                    List<ChallengePriceDetailVo> priceInfo,
                                                    List<FaqDetailVo> faqInfo) {
         return GetChallengeDetailResponseDto.builder()
@@ -49,6 +52,7 @@ public record GetChallengeDetailResponseDto(
                 .chatPassword(challengeInfo.chatPassword())
                 .challengeType(challengeInfo.challengeType())
                 .classificationInfo(classificationInfo)
+                .adminClassificationInfo(adminClassificationInfo)
                 .priceInfo(priceInfo)
                 .faqInfo(faqInfo)
                 .build();

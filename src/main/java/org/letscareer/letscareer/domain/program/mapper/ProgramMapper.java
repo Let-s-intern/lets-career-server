@@ -20,8 +20,8 @@ public class ProgramMapper {
         return GetProgramsForAdminResponseDto.of(programList, pageInfo);
     }
 
-    public GetProgramForAdminResponseDto<?> toGetProgramForAdminResponseDto(GetProgramWithCurrentCountResponseDto programVo, List<?> classificationList) {
-        return GetProgramForAdminResponseDto.of(programVo, classificationList);
+    public GetProgramForAdminResponseDto<?> toGetProgramForAdminResponseDto(GetProgramWithCurrentCountResponseDto programVo, List<?> classificationList, List<?> adminClassificationList) {
+        return GetProgramForAdminResponseDto.of(programVo, classificationList, adminClassificationList);
     }
 
     public GetProgramsForConditionResponseDto toGetProgramsForConditionResponseDto(List<GetProgramForConditionResponseDto<?>> programList,

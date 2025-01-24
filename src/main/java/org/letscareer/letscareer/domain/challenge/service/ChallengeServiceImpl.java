@@ -1,6 +1,9 @@
 package org.letscareer.letscareer.domain.challenge.service;
 
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.admincalssification.helper.ChallengeAdminClassificationHelper;
+import org.letscareer.letscareer.domain.admincalssification.request.CreateChallengeAdminClassificationRequestDto;
+import org.letscareer.letscareer.domain.admincalssification.vo.ChallengeAdminClassificationDetailVo;
 import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApplicationRequestDto;
 import org.letscareer.letscareer.domain.application.dto.response.GetChallengeApplicationsResponseDto;
 import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
@@ -89,6 +92,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final ChallengeHelper challengeHelper;
     private final ChallengeMapper challengeMapper;
     private final ChallengeClassificationHelper challengeClassificationHelper;
+    private final ChallengeAdminClassificationHelper challengeAdminClassificationHelper;
     private final ChallengeApplicationHelper challengeApplicationHelper;
     private final ChallengeApplicationMapper challengeApplicationMapper;
     private final ChallengeNoticeHelper challengeNoticeHelper;
@@ -126,9 +130,10 @@ public class ChallengeServiceImpl implements ChallengeService {
     public GetChallengeDetailResponseDto getChallengeDetail(Long challengeId) {
         ChallengeDetailVo challengeDetailVo = challengeHelper.findChallengeDetailByIdOrThrow(challengeId);
         List<ChallengeClassificationDetailVo> classificationInfo = challengeClassificationHelper.findClassificationDetailVos(challengeId);
+        List<ChallengeAdminClassificationDetailVo> adminClassificationInfo = challengeAdminClassificationHelper.findAdminClassificationDetailVos(challengeId);
         List<ChallengePriceDetailVo> priceInfo = challengePriceHelper.findChallengePriceDetailVos(challengeId);
         List<FaqDetailVo> faqInfo = faqHelper.findChallengeFaqDetailVos(challengeId);
-        return challengeMapper.toChallengeDetailResponseDto(challengeDetailVo, classificationInfo, priceInfo, faqInfo);
+        return challengeMapper.toChallengeDetailResponseDto(challengeDetailVo, classificationInfo, adminClassificationInfo, priceInfo, faqInfo);
     }
 
     @Override
@@ -315,6 +320,7 @@ public class ChallengeServiceImpl implements ChallengeService {
         ZoomMeetingResponseDto zoomMeetingInfo = zoomUtils.createZoomMeeting(createChallengeRequestDto.title(), createChallengeRequestDto.startDate());
         Challenge challenge = challengeHelper.createChallengeAndSave(createChallengeRequestDto, zoomMeetingInfo);
         createClassificationListAndSave(createChallengeRequestDto.programTypeInfo(), challenge);
+        createAdminClassificationListAndSave(createChallengeRequestDto.adminProgramTypeInfo(), challenge);
         createPriceListAndSave(createChallengeRequestDto.priceInfo(), challenge);
         createFaqListAndSave(createChallengeRequestDto.faqInfo(), challenge);
     }
@@ -324,6 +330,7 @@ public class ChallengeServiceImpl implements ChallengeService {
         Challenge challenge = challengeHelper.findChallengeByIdOrThrow(challengeId);
         challenge.updateChallenge(createChallengeRequestDto);
         updateChallengeClassifications(challenge, createChallengeRequestDto.programTypeInfo());
+        updateChallengeAdminClassifications(challenge, createChallengeRequestDto.adminProgramTypeInfo());
         updateChallengePrices(challenge, createChallengeRequestDto.priceInfo());
         updateChallengeFaqs(challenge, createChallengeRequestDto.faqInfo());
     }
@@ -362,6 +369,13 @@ public class ChallengeServiceImpl implements ChallengeService {
                                                  Challenge challenge) {
         requestDtoList.stream()
                 .map(requestDto -> challengeClassificationHelper.createChallengeClassificationAndSave(requestDto, challenge))
+                .collect(Collectors.toList());
+    }
+
+    private void createAdminClassificationListAndSave(List<CreateChallengeAdminClassificationRequestDto> requestDtoList,
+                                                      Challenge challenge) {
+        requestDtoList.stream()
+                .map(requestDto -> challengeAdminClassificationHelper.createChallengeAdminClassificationAndSave(requestDto, challenge))
                 .collect(Collectors.toList());
     }
 
@@ -419,6 +433,13 @@ public class ChallengeServiceImpl implements ChallengeService {
         challengeClassificationHelper.deleteChallengeClassificationsByChallengeId(challenge.getId());
         challenge.setInitClassificationList();
         createClassificationListAndSave(programInfo, challenge);
+    }
+
+    private void updateChallengeAdminClassifications(Challenge challenge, List<CreateChallengeAdminClassificationRequestDto> adminProgramInfo) {
+        if (Objects.isNull(adminProgramInfo)) return;
+        challengeAdminClassificationHelper.deleteChallengeAdminClassificationsByChallengeId(challenge.getId());
+        challenge.setInitAdminClassificationList();
+        createAdminClassificationListAndSave(adminProgramInfo, challenge);
     }
 
     private void updateChallengePrices(Challenge challenge, List<CreateChallengePriceRequestDto> priceInfo) {

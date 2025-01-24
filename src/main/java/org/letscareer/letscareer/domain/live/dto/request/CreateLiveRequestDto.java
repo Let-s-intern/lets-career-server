@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.live.dto.request;
 
 import jakarta.validation.constraints.NotNull;
+import org.letscareer.letscareer.domain.admincalssification.request.CreateLiveAdminClassificationRequestDto;
 import org.letscareer.letscareer.domain.classification.dto.request.CreateLiveClassificationRequestDto;
 import org.letscareer.letscareer.domain.faq.dto.request.CreateProgramFaqRequestDto;
 import org.letscareer.letscareer.domain.live.type.ProgressType;
@@ -46,6 +47,8 @@ public record CreateLiveRequestDto(
         ProgressType progressType,
         @NotNull
         List<CreateLiveClassificationRequestDto> programTypeInfo,
+        @NotNull
+        List<CreateLiveAdminClassificationRequestDto> adminProgramTypeInfo,
         @NotNull
         CreateLivePriceRequestDto priceInfo,
         @NotNull
