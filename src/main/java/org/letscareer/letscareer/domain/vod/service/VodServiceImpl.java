@@ -1,6 +1,8 @@
 package org.letscareer.letscareer.domain.vod.service;
 
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.admincalssification.helper.VodAdminClassificationHelper;
+import org.letscareer.letscareer.domain.admincalssification.request.CreateVodAdminClassificationRequestDto;
 import org.letscareer.letscareer.domain.classification.dto.request.CreateVodClassificationRequestDto;
 import org.letscareer.letscareer.domain.classification.helper.VodClassificationHelper;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
@@ -30,6 +32,7 @@ public class VodServiceImpl implements VodService {
     private final VodHelper vodHelper;
     private final VodMapper vodMapper;
     private final VodClassificationHelper vodClassificationHelper;
+    private final VodAdminClassificationHelper vodAdminClassificationHelper;
 
     @Override
     public GetVodsResponseDto getVodList(ProgramClassification type, Pageable pageable) {
@@ -48,6 +51,7 @@ public class VodServiceImpl implements VodService {
     public void createVod(CreateVodRequestDto createVodRequestDto) {
         Vod vod = vodHelper.createVodAndSave(createVodRequestDto);
         createClassificationListAndSave(createVodRequestDto.programTypeInfo(), vod);
+        createAdminClassificationListAndSave(createVodRequestDto.adminProgramTypeInfo(), vod);
     }
 
     @Override
@@ -55,6 +59,7 @@ public class VodServiceImpl implements VodService {
         Vod vod = vodHelper.findVodByIdOrThrow(vodId);
         vod.updateVod(updateVodRequestDto);
         updateVodClassification(vod, updateVodRequestDto.programTypeInfo());
+        updateVodAdminClassification(vod, updateVodRequestDto.adminProgramTypeInfo());
     }
 
     @Override
@@ -69,10 +74,24 @@ public class VodServiceImpl implements VodService {
                 .collect(Collectors.toList());
     }
 
+    public void createAdminClassificationListAndSave(List<CreateVodAdminClassificationRequestDto> requestDtoList,
+                                                     Vod vod) {
+        requestDtoList.stream()
+                .map(requestDto -> vodAdminClassificationHelper.createVodAdminClassificationAndSave(requestDto, vod))
+                .collect(Collectors.toList());
+    }
+
     private void updateVodClassification(Vod vod, List<CreateVodClassificationRequestDto> programTypeInfo) {
         if (Objects.isNull(programTypeInfo)) return;
         vodClassificationHelper.deleteVodClassificationsByVodId(vod.getId());
         vod.setInitClassifications();
         createClassificationListAndSave(programTypeInfo, vod);
+    }
+
+    private void updateVodAdminClassification(Vod vod, List<CreateVodAdminClassificationRequestDto> adminProgramTypeInfo) {
+        if (Objects.isNull(adminProgramTypeInfo)) return;
+        vodAdminClassificationHelper.deleteVodAdminClassificationsByVodId(vod.getId());
+        vod.setInitAdminClassifications();
+        createAdminClassificationListAndSave(adminProgramTypeInfo, vod);
     }
 }

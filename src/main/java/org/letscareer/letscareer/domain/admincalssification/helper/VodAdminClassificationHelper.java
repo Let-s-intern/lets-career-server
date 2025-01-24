@@ -15,17 +15,17 @@ import java.util.List;
 public class VodAdminClassificationHelper {
     private final VodAdminClassificationRepository vodClassificationRepository;
 
-    public VodAdminClassification createVodClassificationAndSave(CreateVodAdminClassificationRequestDto requestDto,
+    public VodAdminClassification createVodAdminClassificationAndSave(CreateVodAdminClassificationRequestDto requestDto,
                                                                  Vod vod) {
         VodAdminClassification vodClassification = VodAdminClassification.createVodAdminClassification(requestDto, vod);
         return vodClassificationRepository.save(vodClassification);
     }
 
-    public List<VodAdminClassificationDetailVo> findVodClassificationVos(Long vodId) {
+    public List<VodAdminClassificationDetailVo> findVodAdminClassificationVos(Long vodId) {
         return vodClassificationRepository.findVodClassificationDetailVos(vodId);
     }
 
-    public void deleteVodClassificationsByVodId(Long vodId) {
+    public void deleteVodAdminClassificationsByVodId(Long vodId) {
         vodClassificationRepository.deleteAllByVodId(vodId);
     }
 }
