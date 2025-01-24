@@ -3,6 +3,7 @@ package org.letscareer.letscareer.domain.live.service;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.admincalssification.helper.LiveAdminClassificationHelper;
 import org.letscareer.letscareer.domain.admincalssification.request.CreateLiveAdminClassificationRequestDto;
+import org.letscareer.letscareer.domain.admincalssification.vo.LiveAdminClassificationVo;
 import org.letscareer.letscareer.domain.application.dto.response.GetLiveApplicationsResponseDto;
 import org.letscareer.letscareer.domain.application.helper.LiveApplicationHelper;
 import org.letscareer.letscareer.domain.application.mapper.LiveApplicationMapper;
@@ -80,9 +81,10 @@ public class LiveServiceImpl implements LiveService {
     public GetLiveDetailResponseDto getLiveDetail(Long liveId) {
         LiveDetailVo liveInfo = liveHelper.findLiveDetailVoOrThrow(liveId);
         List<LiveClassificationVo> classificationInfo = liveClassificationHelper.findLiveClassificationVos(liveId);
+        List<LiveAdminClassificationVo> adminClassificationInfo = liveAdminClassificationHelper.findLiveAdminClassificationVos(liveId);
         LivePriceDetailVo priceInfo = livePriceHelper.findLivePriceDetailVos(liveId);
         List<FaqDetailVo> faqInfo = faqHelper.findLiveFaqDetailVos(liveId);
-        return liveMapper.toLiveDetailResponseDto(liveInfo, classificationInfo, priceInfo, faqInfo);
+        return liveMapper.toLiveDetailResponseDto(liveInfo, classificationInfo, adminClassificationInfo, priceInfo, faqInfo);
     }
 
     @Override
