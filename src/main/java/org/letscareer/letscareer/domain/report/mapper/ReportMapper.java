@@ -65,4 +65,8 @@ public class ReportMapper {
     public GetReportTitleResponseDto toGetReportTitleResponseDto(ReportTitleVo reportTitleVo) {
         return GetReportTitleResponseDto.of(reportTitleVo);
     }
+
+    public GetReportApplicationMessageResponseDto toGetReportApplicationMessageResponseDto(String message) {
+        return GetReportApplicationMessageResponseDto.of(message);
+    }
 }

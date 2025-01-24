@@ -37,6 +37,7 @@ public class ReportV1Controller {
     private final GetMyReportService getMyReportService;
     private final GetReportThumbnailService getReportThumbnailService;
     private final GetReportPaymentService getReportPaymentService;
+    private final GetReportApplicationMessageService getReportApplicationMessageService;
     private final CreateReportService createReportService;
     private final CreateReportApplicationService createReportApplicationService;
     private final UpdateMyReportApplicationService updateMyReportApplicationService;
@@ -164,6 +165,15 @@ public class ReportV1Controller {
     public ResponseEntity<SuccessResponse<?>> getReportPayment(@CurrentUser final User user,
                                                                @PathVariable final Long applicationId) {
         final GetReportPaymentResponseDto responseDto = getReportPaymentService.execute(user, applicationId);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "서류 진단 고민 조회", description = "후기 작성용")
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetReportApplicationMessageResponseDto.class)))
+    @GetMapping("/application/{applicationId}/message")
+    public ResponseEntity<SuccessResponse<?>> getReportApplicationMessage(@CurrentUser final User user,
+                                                                          @PathVariable final Long applicationId) {
+        final GetReportApplicationMessageResponseDto responseDto = getReportApplicationMessageService.execute(user, applicationId);
         return SuccessResponse.ok(responseDto);
     }
 
