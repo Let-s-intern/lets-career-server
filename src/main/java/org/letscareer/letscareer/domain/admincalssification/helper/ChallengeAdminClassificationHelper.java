@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static org.letscareer.letscareer.domain.classification.error.ChallengeClassificationErrorCode.CHALLENGE_CLASSIFICATION_NOT_FOUND;
+import static org.letscareer.letscareer.domain.admincalssification.error.ChallengeClassificationErrorCode.ADMIN_CLASSIFICATION_NOT_FOUND;
 
 @RequiredArgsConstructor
 @Component
@@ -19,7 +19,7 @@ public class ChallengeAdminClassificationHelper {
     private final ChallengeAdminClassificationRepository challengeClassificationRepository;
 
     public ChallengeAdminClassification createChallengeAdminClassificationAndSave(CreateChallengeAdminClassificationRequestDto requestDto,
-                                                                             Challenge challenge) {
+                                                                                  Challenge challenge) {
         ChallengeAdminClassification challengeAdminClassification = ChallengeAdminClassification.createChallengeAdminClassification(requestDto, challenge);
         return challengeClassificationRepository.save(challengeAdminClassification);
     }
@@ -30,7 +30,7 @@ public class ChallengeAdminClassificationHelper {
 
     public ChallengeAdminClassification findChallengeAdminClassificationByIdOrThrow(Long challengeId) {
         return challengeClassificationRepository.findById(challengeId)
-                .orElseThrow(() -> new EntityNotFoundException(CHALLENGE_CLASSIFICATION_NOT_FOUND));
+                .orElseThrow(() -> new EntityNotFoundException(ADMIN_CLASSIFICATION_NOT_FOUND));
     }
 
     public void deleteChallengeAdminClassificationsByChallengeId(Long challengeId) {

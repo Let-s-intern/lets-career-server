@@ -16,7 +16,7 @@ public class VodAdminClassificationHelper {
     private final VodAdminClassificationRepository vodClassificationRepository;
 
     public VodAdminClassification createVodAdminClassificationAndSave(CreateVodAdminClassificationRequestDto requestDto,
-                                                                 Vod vod) {
+                                                                      Vod vod) {
         VodAdminClassification vodClassification = VodAdminClassification.createVodAdminClassification(requestDto, vod);
         return vodClassificationRepository.save(vodClassification);
     }

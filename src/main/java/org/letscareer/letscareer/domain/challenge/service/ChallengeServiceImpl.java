@@ -3,6 +3,7 @@ package org.letscareer.letscareer.domain.challenge.service;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.admincalssification.helper.ChallengeAdminClassificationHelper;
 import org.letscareer.letscareer.domain.admincalssification.request.CreateChallengeAdminClassificationRequestDto;
+import org.letscareer.letscareer.domain.admincalssification.vo.ChallengeAdminClassificationDetailVo;
 import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApplicationRequestDto;
 import org.letscareer.letscareer.domain.application.dto.response.GetChallengeApplicationsResponseDto;
 import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
@@ -129,9 +130,10 @@ public class ChallengeServiceImpl implements ChallengeService {
     public GetChallengeDetailResponseDto getChallengeDetail(Long challengeId) {
         ChallengeDetailVo challengeDetailVo = challengeHelper.findChallengeDetailByIdOrThrow(challengeId);
         List<ChallengeClassificationDetailVo> classificationInfo = challengeClassificationHelper.findClassificationDetailVos(challengeId);
+        List<ChallengeAdminClassificationDetailVo> adminClassificationInfo = challengeAdminClassificationHelper.findAdminClassificationDetailVos(challengeId);
         List<ChallengePriceDetailVo> priceInfo = challengePriceHelper.findChallengePriceDetailVos(challengeId);
         List<FaqDetailVo> faqInfo = faqHelper.findChallengeFaqDetailVos(challengeId);
-        return challengeMapper.toChallengeDetailResponseDto(challengeDetailVo, classificationInfo, priceInfo, faqInfo);
+        return challengeMapper.toChallengeDetailResponseDto(challengeDetailVo, classificationInfo, adminClassificationInfo, priceInfo, faqInfo);
     }
 
     @Override

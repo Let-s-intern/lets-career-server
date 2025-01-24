@@ -16,7 +16,7 @@ public class LiveAdminClassificationHelper {
     private final LiveAdminClassificationRepository liveClassificationRepository;
 
     public LiveAdminClassification createLiveAdminClassificationAndSave(CreateLiveAdminClassificationRequestDto requestDto,
-                                                                   Live live) {
+                                                                        Live live) {
         LiveAdminClassification liveClassification = LiveAdminClassification.createLiveAdminClassification(requestDto, live);
         return liveClassificationRepository.save(liveClassification);
     }
