@@ -33,6 +33,7 @@ import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.helper.UserHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @Transactional
@@ -103,7 +104,14 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
     private void sendPaymentKakaoMessages(Challenge challenge, User user, CreatePaymentRequestDto paymentInfo) {
         CreditConfirmParameter paymentRequestParameter = CreditConfirmParameter.of(user.getName(), challenge.getTitle(), paymentInfo);
         ChallengePaymentParameter programRequestParameter = isLiveChallenge(challenge) ? ChallengePaymentParameter.of(user.getName(), challenge) : null;
-        nhnProvider.sendProgramPaymentKakaoMessages(user, paymentRequestParameter, programRequestParameter, "payment_confirm", "challenge_payment");
+
+        LocalDateTime today = LocalDateTime.now();
+        LocalDateTime challengeStartDate = challenge.getStartDate();
+        String messageType;
+        if (challengeStartDate.minusHours(1).isAfter(today)) { messageType = "d_challenge_payment"; } // DEV_TEST
+        else { messageType = "challenge_overpay"; }
+
+        nhnProvider.sendProgramPaymentKakaoMessages(user, paymentRequestParameter, programRequestParameter, "payment_confirm", messageType);
     }
 
     private void sendCreditRefundKakaoMessage(Challenge challenge, User user, Payment payment, RefundType refundType, Integer finalPrice, Integer cancelAmount) {

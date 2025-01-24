@@ -14,7 +14,12 @@ public record OTRemindParameter(
         @JsonFormat(pattern = "yyyy년 MM월 dd일 HH:mm", timezone = "Asia/Seoul")
         LocalDateTime programStartDate,
         String zoomLink,
-        Long programId
+        String chatLink,
+        Long programId,
+        @JsonFormat(pattern = "yyyy년 MM월 dd일 HH:mm", timezone = "Asia/Seoul")
+        LocalDateTime programOtStart,
+        @JsonFormat(pattern = "yyyy년 MM월 dd일 HH:mm", timezone = "Asia/Seoul")
+        LocalDateTime programOtEnd
 ) {
     public static OTRemindParameter of(String userName,
                                        Challenge challenge) {
@@ -23,7 +28,10 @@ public record OTRemindParameter(
                 .programTitle(challenge.getTitle())
                 .programStartDate(challenge.getStartDate())
                 .zoomLink(challenge.getZoomLink().substring(8))
+                .chatLink(challenge.getChatLink())
                 .programId(challenge.getId())
+                .programOtStart(challenge.getStartDate())
+                .programOtEnd(challenge.getStartDate().plusMinutes(40))
                 .build();
     }
 }
