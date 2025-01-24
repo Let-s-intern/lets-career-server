@@ -3,6 +3,7 @@ package org.letscareer.letscareer.domain.live.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.letscareer.letscareer.domain.admincalssification.entity.LiveAdminClassification;
 import org.letscareer.letscareer.domain.application.entity.LiveApplication;
 import org.letscareer.letscareer.domain.classification.entity.LiveClassification;
 import org.letscareer.letscareer.domain.faq.entity.FaqLive;
@@ -75,6 +76,9 @@ public class Live extends BaseTimeEntity {
     private List<LiveClassification> classificationList = new ArrayList<>();
     @OneToMany(mappedBy = "live", cascade = CascadeType.ALL)
     @Builder.Default
+    private List<LiveAdminClassification> adminClassificationList = new ArrayList<>();
+    @OneToMany(mappedBy = "live", cascade = CascadeType.ALL)
+    @Builder.Default
     private List<LivePrice> priceList = new ArrayList<>();
     @OneToMany(mappedBy = "live", cascade = CascadeType.ALL)
     @Builder.Default
@@ -140,12 +144,20 @@ public class Live extends BaseTimeEntity {
         this.classificationList.add(liveClassification);
     }
 
+    public void addLiveAdminClassification(LiveAdminClassification liveAdminClassification) {
+        this.adminClassificationList.add(liveAdminClassification);
+    }
+
     public void addFaqLiveList(FaqLive faqLive) {
         this.faqList.add(faqLive);
     }
 
     public void setInitClassificationList() {
         this.classificationList = new ArrayList<>();
+    }
+
+    public void setInitAdminClassificationList() {
+        this.adminClassificationList = new ArrayList<>();
     }
 
     public void setInitPriceList() {

@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.vod.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.letscareer.letscareer.domain.admincalssification.entity.VodAdminClassification;
 import org.letscareer.letscareer.domain.classification.entity.VodClassification;
 import org.letscareer.letscareer.domain.vod.dto.request.CreateVodRequestDto;
 import org.letscareer.letscareer.domain.vod.dto.request.UpdateVodRequestDto;
@@ -35,6 +36,10 @@ public class Vod extends BaseTimeEntity {
     @Builder.Default
     private List<VodClassification> classificationList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "vod", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<VodAdminClassification> adminClassificationList = new ArrayList<>();
+
     public static Vod createVod(CreateVodRequestDto requestDto) {
         return Vod.builder()
                 .title(requestDto.title())
@@ -60,5 +65,13 @@ public class Vod extends BaseTimeEntity {
 
     public void setInitClassifications() {
         this.classificationList = new ArrayList<>();
+    }
+
+    public void addAdminClassification(VodAdminClassification vodAdminClassification) {
+        this.adminClassificationList.add(vodAdminClassification);
+    }
+
+    public void setInitAdminClassifications() {
+        this.adminClassificationList = new ArrayList<>();
     }
 }
