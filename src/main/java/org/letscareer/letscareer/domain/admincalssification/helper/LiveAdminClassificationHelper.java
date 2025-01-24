@@ -15,17 +15,17 @@ import java.util.List;
 public class LiveAdminClassificationHelper {
     private final LiveAdminClassificationRepository liveClassificationRepository;
 
-    public LiveAdminClassification createLiveClassificationAndSave(CreateLiveAdminClassificationRequestDto requestDto,
+    public LiveAdminClassification createLiveAdminClassificationAndSave(CreateLiveAdminClassificationRequestDto requestDto,
                                                                    Live live) {
         LiveAdminClassification liveClassification = LiveAdminClassification.createLiveAdminClassification(requestDto, live);
         return liveClassificationRepository.save(liveClassification);
     }
 
-    public List<LiveAdminClassificationVo> findLiveClassificationVos(Long liveId) {
+    public List<LiveAdminClassificationVo> findLiveAdminClassificationVos(Long liveId) {
         return liveClassificationRepository.findLiveClassificationVos(liveId);
     }
 
-    public void deleteLiveClassificationsByLiveId(Long liveId) {
+    public void deleteLiveAdminClassificationsByLiveId(Long liveId) {
         liveClassificationRepository.deleteAllByLiveId(liveId);
     }
 }

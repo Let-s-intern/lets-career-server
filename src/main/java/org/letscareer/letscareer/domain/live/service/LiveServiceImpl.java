@@ -1,6 +1,8 @@
 package org.letscareer.letscareer.domain.live.service;
 
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.admincalssification.helper.LiveAdminClassificationHelper;
+import org.letscareer.letscareer.domain.admincalssification.request.CreateLiveAdminClassificationRequestDto;
 import org.letscareer.letscareer.domain.application.dto.response.GetLiveApplicationsResponseDto;
 import org.letscareer.letscareer.domain.application.helper.LiveApplicationHelper;
 import org.letscareer.letscareer.domain.application.mapper.LiveApplicationMapper;
@@ -60,6 +62,7 @@ public class LiveServiceImpl implements LiveService {
     private final LiveApplicationHelper liveApplicationHelper;
     private final LiveApplicationMapper liveApplicationMapper;
     private final LiveClassificationHelper liveClassificationHelper;
+    private final LiveAdminClassificationHelper liveAdminClassificationHelper;
     private final LivePriceHelper livePriceHelper;
     private final OldReviewHelper oldReviewHelper;
     private final OldReviewMapper oldReviewMapper;
@@ -169,6 +172,7 @@ public class LiveServiceImpl implements LiveService {
         String mentorPassword = generateMentorPassword();
         Live live = liveHelper.createLiveAndSave(requestDto, mentorPassword, zoomMeetingInfo);
         createClassificationListAndSave(requestDto.programTypeInfo(), live);
+        createAdminClassificationListAndSave(requestDto.adminProgramTypeInfo(), live);
         createPriceListAndSave(requestDto.priceInfo(), live);
         createFaqListAndSave(requestDto.faqInfo(), live);
     }
@@ -178,6 +182,7 @@ public class LiveServiceImpl implements LiveService {
         Live live = liveHelper.findLiveByIdOrThrow(liveId);
         live.updateLive(requestDto);
         updateClassifications(live, requestDto.programTypeInfo());
+        updateAdminClassifications(live, requestDto.adminProgramTypeInfo());
         updatePrice(live, requestDto.priceInfo());
         updateFaqs(live, requestDto.faqInfo());
     }
@@ -191,6 +196,13 @@ public class LiveServiceImpl implements LiveService {
                                                  Live live) {
         requestDtoList.stream()
                 .map(requestDto -> liveClassificationHelper.createLiveClassificationAndSave(requestDto, live))
+                .collect(Collectors.toList());
+    }
+
+    private void createAdminClassificationListAndSave(List<CreateLiveAdminClassificationRequestDto> requestDtoList,
+                                                      Live live) {
+        requestDtoList.stream()
+                .map(requestDto -> liveAdminClassificationHelper.createLiveAdminClassificationAndSave(requestDto, live))
                 .collect(Collectors.toList());
     }
 
@@ -212,6 +224,13 @@ public class LiveServiceImpl implements LiveService {
         liveClassificationHelper.deleteLiveClassificationsByLiveId(live.getId());
         live.setInitClassificationList();
         createClassificationListAndSave(programTypeInfo, live);
+    }
+
+    private void updateAdminClassifications(Live live, List<CreateLiveAdminClassificationRequestDto> adminProgramTypeInfo) {
+        if (Objects.isNull(adminProgramTypeInfo)) return;
+        liveAdminClassificationHelper.deleteLiveAdminClassificationsByLiveId(live.getId());
+        live.setInitAdminClassificationList();
+        createAdminClassificationListAndSave(adminProgramTypeInfo, live);
     }
 
     private void updatePrice(Live live, CreateLivePriceRequestDto priceInfo) {
