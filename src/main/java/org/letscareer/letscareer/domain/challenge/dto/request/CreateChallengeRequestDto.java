@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.challenge.dto.request;
 
 import jakarta.validation.constraints.NotNull;
+import org.letscareer.letscareer.domain.admincalssification.request.CreateChallengeAdminClassificationRequestDto;
 import org.letscareer.letscareer.domain.challenge.type.ChallengeType;
 import org.letscareer.letscareer.domain.classification.dto.request.CreateChallengeClassificationRequestDto;
 import org.letscareer.letscareer.domain.faq.dto.request.CreateProgramFaqRequestDto;
@@ -34,6 +35,8 @@ public record CreateChallengeRequestDto(
         ChallengeType challengeType,
         @NotNull
         List<CreateChallengeClassificationRequestDto> programTypeInfo,
+        @NotNull
+        List<CreateChallengeAdminClassificationRequestDto> adminProgramTypeInfo,
         @NotNull
         List<CreateChallengePriceRequestDto> priceInfo,
         @NotNull

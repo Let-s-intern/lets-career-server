@@ -137,6 +137,10 @@ public class Challenge extends BaseTimeEntity {
         this.classificationList = new ArrayList<>();
     }
 
+    public void setInitAdminClassificationList() {
+        this.adminClassificationList = new ArrayList<>();
+    }
+
     public void setInitPriceList() {
         this.priceList = new ArrayList<>();
     }

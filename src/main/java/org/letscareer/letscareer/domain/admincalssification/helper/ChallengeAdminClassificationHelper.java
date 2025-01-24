@@ -18,22 +18,22 @@ import static org.letscareer.letscareer.domain.classification.error.ChallengeCla
 public class ChallengeAdminClassificationHelper {
     private final ChallengeAdminClassificationRepository challengeClassificationRepository;
 
-    public ChallengeAdminClassification createChallengeClassificationAndSave(CreateChallengeAdminClassificationRequestDto requestDto,
+    public ChallengeAdminClassification createChallengeAdminClassificationAndSave(CreateChallengeAdminClassificationRequestDto requestDto,
                                                                              Challenge challenge) {
         ChallengeAdminClassification challengeAdminClassification = ChallengeAdminClassification.createChallengeAdminClassification(requestDto, challenge);
         return challengeClassificationRepository.save(challengeAdminClassification);
     }
 
-    public List<ChallengeAdminClassificationDetailVo> findClassificationDetailVos(Long challengeId) {
+    public List<ChallengeAdminClassificationDetailVo> findAdminClassificationDetailVos(Long challengeId) {
         return challengeClassificationRepository.findClassificationDetailVos(challengeId);
     }
 
-    public ChallengeAdminClassification findChallengeClassificationByIdOrThrow(Long challengeId) {
+    public ChallengeAdminClassification findChallengeAdminClassificationByIdOrThrow(Long challengeId) {
         return challengeClassificationRepository.findById(challengeId)
                 .orElseThrow(() -> new EntityNotFoundException(CHALLENGE_CLASSIFICATION_NOT_FOUND));
     }
 
-    public void deleteChallengeClassificationsByChallengeId(Long challengeId) {
+    public void deleteChallengeAdminClassificationsByChallengeId(Long challengeId) {
         challengeClassificationRepository.deleteAllByChallengeId(challengeId);
     }
 }
