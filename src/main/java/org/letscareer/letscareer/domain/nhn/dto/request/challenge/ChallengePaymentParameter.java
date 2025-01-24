@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Builder(access = AccessLevel.PRIVATE)
 public record ChallengePaymentParameter(
         String userName,
+        Long programId,
         String programTitle,
         @JsonFormat(pattern = "yyyy년 MM월 dd일", timezone = "Asia/Seoul")
         LocalDateTime programStartDate,
@@ -27,6 +28,7 @@ public record ChallengePaymentParameter(
                                                Challenge challenge) {
         return ChallengePaymentParameter.builder()
                 .userName(userName)
+                .programId(challenge.getId())
                 .programTitle(challenge.getTitle())
                 .programStartDate(challenge.getStartDate())
                 .programEndDate(challenge.getEndDate())
