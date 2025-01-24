@@ -21,7 +21,7 @@ public class VodAdminClassificationHelper {
         return vodClassificationRepository.save(vodClassification);
     }
 
-    public List<VodAdminClassificationDetailVo> findVodAdminClassificationVos(Long vodId) {
+    public List<VodAdminClassificationDetailVo> findAdminClassificationDetailVos(Long vodId) {
         return vodClassificationRepository.findVodClassificationDetailVos(vodId);
     }
 

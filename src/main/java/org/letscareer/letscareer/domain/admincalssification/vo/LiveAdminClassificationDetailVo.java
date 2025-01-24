@@ -4,7 +4,7 @@ import lombok.Builder;
 import org.letscareer.letscareer.domain.admincalssification.type.ProgramAdminClassification;
 
 @Builder
-public record LiveAdminClassificationVo(
+public record LiveAdminClassificationDetailVo(
         ProgramAdminClassification programAdminClassification
 ) {
 }

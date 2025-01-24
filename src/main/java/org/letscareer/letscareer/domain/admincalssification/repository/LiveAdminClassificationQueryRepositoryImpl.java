@@ -4,7 +4,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.domain.admincalssification.vo.LiveAdminClassificationVo;
+import org.letscareer.letscareer.domain.admincalssification.vo.LiveAdminClassificationDetailVo;
 
 import java.util.List;
 
@@ -15,9 +15,9 @@ public class LiveAdminClassificationQueryRepositoryImpl implements LiveAdminClas
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<LiveAdminClassificationVo> findLiveClassificationVos(Long liveId) {
+    public List<LiveAdminClassificationDetailVo> findLiveClassificationVos(Long liveId) {
         return jpaQueryFactory
-                .select(Projections.constructor(LiveAdminClassificationVo.class,
+                .select(Projections.constructor(LiveAdminClassificationDetailVo.class,
                         liveAdminClassification.programAdminClassification
                 ))
                 .from(liveAdminClassification)

@@ -7,13 +7,16 @@ import org.letscareer.letscareer.domain.program.vo.ProgramForAdminVo;
 @Builder(access = AccessLevel.PRIVATE)
 public record GetProgramForAdminResponseDto<T>(
         GetProgramWithCurrentCountResponseDto programInfo,
-        T classificationList
+        T classificationList,
+        T adminClassificationList
 ) {
     public static <T> GetProgramForAdminResponseDto<?> of(GetProgramWithCurrentCountResponseDto programInfo,
-                                                          T classificationList) {
+                                                          T classificationList,
+                                                          T adminClassificationList) {
         return GetProgramForAdminResponseDto.builder()
                 .programInfo(programInfo)
                 .classificationList(classificationList)
+                .adminClassificationList(adminClassificationList)
                 .build();
     }
 }

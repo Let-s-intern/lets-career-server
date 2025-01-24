@@ -1,6 +1,6 @@
 package org.letscareer.letscareer.domain.live.mapper;
 
-import org.letscareer.letscareer.domain.admincalssification.vo.LiveAdminClassificationVo;
+import org.letscareer.letscareer.domain.admincalssification.vo.LiveAdminClassificationDetailVo;
 import org.letscareer.letscareer.domain.classification.vo.LiveClassificationVo;
 import org.letscareer.letscareer.domain.faq.vo.FaqDetailVo;
 import org.letscareer.letscareer.domain.live.dto.response.*;
@@ -19,7 +19,7 @@ import java.util.List;
 public class LiveMapper {
     public GetLiveDetailResponseDto toLiveDetailResponseDto(LiveDetailVo liveInfo,
                                                             List<LiveClassificationVo> classificationInfo,
-                                                            List<LiveAdminClassificationVo> adminClassificationInfo,
+                                                            List<LiveAdminClassificationDetailVo> adminClassificationInfo,
                                                             LivePriceDetailVo priceInfo,
                                                             List<FaqDetailVo> faqInfo) {
         return GetLiveDetailResponseDto.of(liveInfo, classificationInfo, adminClassificationInfo, priceInfo, faqInfo);

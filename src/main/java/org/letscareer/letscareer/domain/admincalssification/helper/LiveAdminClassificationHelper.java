@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.admincalssification.entity.LiveAdminClassification;
 import org.letscareer.letscareer.domain.admincalssification.repository.LiveAdminClassificationRepository;
 import org.letscareer.letscareer.domain.admincalssification.request.CreateLiveAdminClassificationRequestDto;
-import org.letscareer.letscareer.domain.admincalssification.vo.LiveAdminClassificationVo;
+import org.letscareer.letscareer.domain.admincalssification.vo.LiveAdminClassificationDetailVo;
 import org.letscareer.letscareer.domain.live.entity.Live;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +21,7 @@ public class LiveAdminClassificationHelper {
         return liveClassificationRepository.save(liveClassification);
     }
 
-    public List<LiveAdminClassificationVo> findLiveAdminClassificationVos(Long liveId) {
+    public List<LiveAdminClassificationDetailVo> findAdminClassificationDetailVos(Long liveId) {
         return liveClassificationRepository.findLiveClassificationVos(liveId);
     }
 
