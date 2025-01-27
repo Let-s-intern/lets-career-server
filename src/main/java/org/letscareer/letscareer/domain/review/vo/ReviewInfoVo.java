@@ -16,6 +16,8 @@ public record ReviewInfoVo(
         ChallengeType challengeType,
         String missionTitle,
         Integer missionTh,
+
+        String attendanceReview,
         String name,
         String wishJob,
         String wishCompany
