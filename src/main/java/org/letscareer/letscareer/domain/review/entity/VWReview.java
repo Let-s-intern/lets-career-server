@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
                 "1 AS type, " +
                 "ch.challenge_id as program_id, ch.title as program_title, ch.thumbnail as program_thumbnail, " +
                 "ch.challenge_type, null as report_type, " +
-                "0 as mission_id, null as mission_title, null as mission_th, " +
+                "0 as mission_id, null as mission_title, null as mission_th, null as attendance_review, " +
                 "u.user_id as user_id, u.name as user_name, u.wish_job as user_wish_job, u.wish_company as user_wish_company " +
                 "FROM review as r " +
                 "LEFT JOIN application as a ON r.application_id = a.application_id " +
@@ -36,7 +36,7 @@ import java.time.LocalDateTime;
                 "2 AS type, " +
                 "l.live_id as program_id, l.title as program_title, l.thumbnail as program_thumbnail, " +
                 "null as challenge_type, null as report_type, " +
-                "0 as mission_id, null as mission_title, null as mission_th, " +
+                "0 as mission_id, null as mission_title, null as mission_th, null as attendance_review, " +
                 "u.user_id as user_id, u.name as user_name, u.wish_job as user_wish_job, u.wish_company as user_wish_company " +
                 "FROM review as r " +
                 "LEFT JOIN application as a ON r.application_id = a.application_id " +
@@ -50,7 +50,7 @@ import java.time.LocalDateTime;
                 "4 AS type, " +
                 "re.report_id as program_id, re.title as program_title, null as program_thumbnail, " +
                 "null as challenge_type, re.type as report_type, " +
-                "0 as mission_id, null as mission_title, null as mission_th, " +
+                "0 as mission_id, null as mission_title, null as mission_th, null as attendance_review, " +
                 "u.user_id as user_id, u.name as user_name, u.wish_job as user_wish_job, u.wish_company as user_wish_company " +
                 "FROM review as r " +
                 "LEFT JOIN application as a ON r.application_id = a.application_id " +
@@ -64,7 +64,7 @@ import java.time.LocalDateTime;
                 "5 AS type, " +
                 "0 as program_id, null as program_title, null as program_thumbnail, " +
                 "ch.challenge_type, null as report_type, " +
-                "m.mission_id, m.title as mission_title, m.th as mission_th, " +
+                "m.mission_id, m.title as mission_title, m.th as mission_th, att.review as attendance_review, " +
                 "u.user_id as user_id, u.name as user_name, u.wish_job as user_wish_job, u.wish_company as user_wish_company " +
                 "FROM attendance as att " +
                 "LEFT JOIN mission as m ON att.mission_id = m.mission_id " +
@@ -100,6 +100,7 @@ public class VWReview extends BaseTimeEntity {
     private Long missionId;
     private String missionTitle;
     private Integer missionTh;
+    private String attendanceReview;
 
     private Long userId;
     private String userName;

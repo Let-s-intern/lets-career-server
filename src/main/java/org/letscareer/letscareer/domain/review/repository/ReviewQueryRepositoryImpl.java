@@ -34,6 +34,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                         vWReview.challengeType,
                         vWReview.missionTitle,
                         vWReview.missionTh,
+                        vWReview.attendanceReview,
                         vWReview.userName,
                         vWReview.userWishJob,
                         vWReview.userWishCompany))
@@ -54,12 +55,16 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
         JPAQuery<Long> countQuery = queryFactory
                 .select(vWReview.countDistinct())
                 .from(vWReview)
+                .where(
+                        inReviewProgramType(typeList),
+                        inChallengeType(challengeTypeList)
+                )
                 .groupBy(
                         vWReview.type,
                         vWReview.reviewId
                 );
 
-        return PageableExecutionUtils.getPage(reviewInfoVos, pageable, countQuery::fetchOne);
+        return PageableExecutionUtils.getPage(reviewInfoVos, pageable, countQuery::fetchCount);
     }
 
     @Override
