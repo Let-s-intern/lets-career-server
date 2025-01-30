@@ -25,8 +25,6 @@ public abstract class Review extends BaseTimeEntity {
     private Long id;
     private Integer score;
     private Integer npsScore;
-    private String goodPoint;
-    private String badPoint;
     private Boolean isVisible;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -39,8 +37,6 @@ public abstract class Review extends BaseTimeEntity {
     public Review(Application application, CreateReviewRequestDto requestDto) {
         this.score = requestDto.score();
         this.npsScore = requestDto.npsScore();
-        this.goodPoint = requestDto.goodPoint();
-        this.badPoint = requestDto.badPoint();
         this.isVisible = false;
         this.application = application;
         this.reviewItemList = new ArrayList<>();

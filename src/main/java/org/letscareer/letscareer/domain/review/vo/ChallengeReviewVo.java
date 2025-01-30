@@ -13,8 +13,6 @@ public record ChallengeReviewVo(
         ChallengeType challengeType,
         String title,
         Integer score,
-        Integer npsScore,
-        String goodPoint,
-        String badPoint
+        Integer npsScore
 ) {
 }
