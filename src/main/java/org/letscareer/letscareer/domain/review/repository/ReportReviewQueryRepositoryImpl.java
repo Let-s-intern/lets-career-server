@@ -27,8 +27,6 @@ public class ReportReviewQueryRepositoryImpl implements ReportReviewQueryReposit
                         reportReview._super.application.user.name,
                         reportReview.score,
                         reportReview.npsScore,
-                        reportReview.goodPoint,
-                        reportReview.badPoint,
                         reportReview.isVisible))
                 .from(reportReview)
                 .orderBy(reportReview.id.desc())
@@ -46,9 +44,7 @@ public class ReportReviewQueryRepositoryImpl implements ReportReviewQueryReposit
                             reportReview.reportType,
                             reportReview.report.title,
                             reportReview.score,
-                            reportReview.npsScore,
-                            reportReview.goodPoint,
-                            reportReview.badPoint))
+                            reportReview.npsScore))
                         .from(reportReview)
                         .where(
                                 eqReportId(reviewId)

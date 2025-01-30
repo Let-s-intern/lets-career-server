@@ -9,8 +9,6 @@ public record LiveReviewAdminVo(
         String name,
         Integer score,
         Integer npsScore,
-        String goodPoint,
-        String badPoint,
         Boolean isVisible
 ) {
 }

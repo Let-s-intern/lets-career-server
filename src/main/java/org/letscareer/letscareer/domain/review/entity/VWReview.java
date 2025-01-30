@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 
 @Immutable
 @Subselect(
-        "SELECT r.review_id, r.application_id, r.good_point, r.bad_point, r.create_date, r.is_visible, " +
+        "SELECT r.review_id, r.application_id, r.create_date, r.is_visible, " +
                 "1 AS type, " +
                 "ch.challenge_id as program_id, ch.title as program_title, ch.thumbnail as program_thumbnail, " +
                 "ch.challenge_type, null as report_type, " +
@@ -32,7 +32,7 @@ import java.time.LocalDateTime;
                 "WHERE r.is_visible = true AND r.dtype = 'challenge_review' " +
 
                 "UNION ALL " +
-                "SELECT r.review_id, r.application_id, r.good_point, r.bad_point, r.create_date, r.is_visible, " +
+                "SELECT r.review_id, r.application_id, r.create_date, r.is_visible, " +
                 "2 AS type, " +
                 "l.live_id as program_id, l.title as program_title, l.thumbnail as program_thumbnail, " +
                 "null as challenge_type, null as report_type, " +
@@ -46,7 +46,7 @@ import java.time.LocalDateTime;
                 "WHERE r.is_visible = true AND r.dtype = 'live_review' " +
 
                 "UNION ALL " +
-                "SELECT r.review_id, r.application_id, r.good_point, r.bad_point, r.create_date, r.is_visible, " +
+                "SELECT r.review_id, r.application_id, r.create_date, r.is_visible, " +
                 "4 AS type, " +
                 "re.report_id as program_id, re.title as program_title, null as program_thumbnail, " +
                 "null as challenge_type, re.type as report_type, " +
@@ -60,7 +60,7 @@ import java.time.LocalDateTime;
                 "WHERE r.is_visible = true AND r.dtype = 'report_review' " +
 
                 "UNION ALL " +
-                "SELECT att.attendance_id as review_id, 0, null, null, att.create_date, att.review_is_visible as is_visible, " +
+                "SELECT att.attendance_id as review_id, 0, att.create_date, att.review_is_visible as is_visible, " +
                 "5 AS type, " +
                 "0 as program_id, null as program_title, null as program_thumbnail, " +
                 "ch.challenge_type, null as report_type, " +
@@ -80,8 +80,6 @@ public class VWReview extends BaseTimeEntity {
     @Id
     private Long reviewId;
     private Long applicationId;
-    private String goodPoint;
-    private String badPoint;
     private LocalDateTime createDate;
     private Boolean isVisible;
 

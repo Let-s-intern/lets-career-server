@@ -29,8 +29,6 @@ public class ChallengeReviewQueryRepositoryImpl implements ChallengeReviewQueryR
                         userNameExpression(),
                         challengeReview.score,
                         challengeReview.npsScore,
-                        challengeReview.goodPoint,
-                        challengeReview.badPoint,
                         challengeReview.isVisible))
                 .from(challengeReview)
                 .leftJoin(challengeReview.application, application)
@@ -50,9 +48,7 @@ public class ChallengeReviewQueryRepositoryImpl implements ChallengeReviewQueryR
                                 challengeReview.challengeType,
                                 challengeReview.challenge.title,
                                 challengeReview.score,
-                                challengeReview.npsScore,
-                                challengeReview.goodPoint,
-                                challengeReview.badPoint))
+                                challengeReview.npsScore))
                         .from(challengeReview)
                         .where(
                                 eqReviewId(reviewId)

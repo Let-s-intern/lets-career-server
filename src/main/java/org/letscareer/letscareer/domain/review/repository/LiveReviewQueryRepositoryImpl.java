@@ -30,8 +30,6 @@ public class LiveReviewQueryRepositoryImpl implements LiveReviewQueryRepository 
                         userNameExpression(),
                         liveReview.score,
                         liveReview.npsScore,
-                        liveReview.goodPoint,
-                        liveReview.badPoint,
                         liveReview.isVisible))
                 .from(liveReview)
                 .leftJoin(liveReview.application, application)
@@ -50,9 +48,7 @@ public class LiveReviewQueryRepositoryImpl implements LiveReviewQueryRepository 
                                 liveReview.createDate,
                                 liveReview.live.title,
                                 liveReview.score,
-                                liveReview.npsScore,
-                                liveReview.goodPoint,
-                                liveReview.badPoint))
+                                liveReview.npsScore))
                         .from(liveReview)
                         .where(
                                 eqReviewId(reviewId)
@@ -61,13 +57,13 @@ public class LiveReviewQueryRepositoryImpl implements LiveReviewQueryRepository 
         );
     }
 
-    private BooleanExpression eqReviewId(Long reviewId) {
-        return reviewId != null ? liveReview.id.eq(reviewId) : null;
-    }
-
     private StringExpression userNameExpression() {
         return new CaseBuilder()
                 .when(application.isNotNull()).then(user.name)
                 .otherwise("익명");
+    }
+
+    private BooleanExpression eqReviewId(Long reviewId) {
+        return reviewId != null ? liveReview.id.eq(reviewId) : null;
     }
 }

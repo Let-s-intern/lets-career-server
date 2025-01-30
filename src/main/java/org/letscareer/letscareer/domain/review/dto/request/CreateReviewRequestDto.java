@@ -14,10 +14,6 @@ public record CreateReviewRequestDto(
         @NotNull
         Integer npsScore,
         @NotNull
-        String goodPoint,
-        @NotNull
-        String badPoint,
-        @NotNull
         List<CreateReviewItemVo> reviewItemList
 ) {
 }

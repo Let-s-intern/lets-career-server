@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.review.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.letscareer.letscareer.domain.review.dto.request.UpdateReviewItemRequestDto;
 import org.letscareer.letscareer.domain.review.type.ReviewQuestionType;
@@ -27,7 +28,7 @@ public class ReviewItem extends BaseTimeEntity {
 
     private String answer;
 
-    @Builder.Default
+    @NotNull
     private Boolean isVisible = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -39,6 +40,7 @@ public class ReviewItem extends BaseTimeEntity {
                 .review(review)
                 .questionType(createReviewItemVo.questionType())
                 .answer(createReviewItemVo.answer())
+                .isVisible(isVisibleByQuestionType(createReviewItemVo.questionType()))
                 .build();
         review.addReviewItem(reviewItem);
         return reviewItem;
@@ -46,5 +48,9 @@ public class ReviewItem extends BaseTimeEntity {
 
     public void updateReviewItem(UpdateReviewItemRequestDto requestDto) {
         this.isVisible = updateValue(this.isVisible, requestDto.isVisible());
+    }
+
+    private static boolean isVisibleByQuestionType(ReviewQuestionType questionType) {
+        return questionType.equals(ReviewQuestionType.GOAL) || questionType.equals(ReviewQuestionType.GOAL_RESULT);
     }
 }

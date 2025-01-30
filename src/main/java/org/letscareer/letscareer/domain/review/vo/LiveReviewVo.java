@@ -11,8 +11,6 @@ public record LiveReviewVo(
         LocalDateTime createDate,
         String title,
         Integer score,
-        Integer npsScore,
-        String goodPoint,
-        String badPoint
+        Integer npsScore
 ) {
 }

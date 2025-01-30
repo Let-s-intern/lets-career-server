@@ -13,8 +13,6 @@ public record ReportReviewVo(
         ReportType reportType,
         String title,
         Integer score,
-        Integer npsScore,
-        String goodPoint,
-        String badPoint
+        Integer npsScore
 ) {
 }

@@ -27,8 +27,6 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                         vWReview.reviewId,
                         vWReview.type,
                         vWReview.createDate,
-                        vWReview.goodPoint,
-                        vWReview.badPoint,
                         vWReview.programTitle,
                         vWReview.programThumbnail,
                         vWReview.challengeType,
