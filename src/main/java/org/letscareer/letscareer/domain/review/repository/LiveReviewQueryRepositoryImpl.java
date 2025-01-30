@@ -2,6 +2,8 @@ package org.letscareer.letscareer.domain.review.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.review.vo.LiveReviewAdminVo;
@@ -10,7 +12,9 @@ import org.letscareer.letscareer.domain.review.vo.LiveReviewVo;
 import java.util.List;
 import java.util.Optional;
 
+import static org.letscareer.letscareer.domain.application.entity.QApplication.application;
 import static org.letscareer.letscareer.domain.review.entity.QLiveReview.liveReview;
+import static org.letscareer.letscareer.domain.user.entity.QUser.user;
 
 @RequiredArgsConstructor
 public class LiveReviewQueryRepositoryImpl implements LiveReviewQueryRepository {
@@ -23,13 +27,15 @@ public class LiveReviewQueryRepositoryImpl implements LiveReviewQueryRepository 
                         liveReview.id,
                         liveReview.createDate,
                         liveReview.live.title,
-                        liveReview._super.application.user.name,
+                        userNameExpression(),
                         liveReview.score,
                         liveReview.npsScore,
                         liveReview.goodPoint,
                         liveReview.badPoint,
                         liveReview.isVisible))
                 .from(liveReview)
+                .leftJoin(liveReview.application, application)
+                .leftJoin(application.user, user)
                 .orderBy(liveReview.id.desc())
                 .fetch();
     }
@@ -57,5 +63,11 @@ public class LiveReviewQueryRepositoryImpl implements LiveReviewQueryRepository 
 
     private BooleanExpression eqReviewId(Long reviewId) {
         return reviewId != null ? liveReview.id.eq(reviewId) : null;
+    }
+
+    private StringExpression userNameExpression() {
+        return new CaseBuilder()
+                .when(application.isNotNull()).then(user.name)
+                .otherwise("익명");
     }
 }
