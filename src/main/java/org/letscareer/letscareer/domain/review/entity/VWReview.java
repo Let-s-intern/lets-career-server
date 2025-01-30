@@ -26,8 +26,8 @@ import java.time.LocalDateTime;
                 "u.user_id as user_id, u.name as user_name, u.wish_job as user_wish_job, u.wish_company as user_wish_company " +
                 "FROM review as r " +
                 "LEFT JOIN application as a ON r.application_id = a.application_id " +
-                "LEFT JOIN challenge_application as ca ON ca.application_id = a.application_id " +
-                "LEFT JOIN challenge as ch ON ca.challenge_id = ch.challenge_id " +
+                "LEFT JOIN challenge_review as cr ON cr.review_id = r.review_id " +
+                "LEFT JOIN challenge as ch ON ch.challenge_id = cr.challenge_id " +
                 "LEFT JOIN user as u ON a.user_id = u.user_id " +
                 "WHERE r.is_visible = true AND r.dtype = 'challenge_review' " +
 
@@ -40,8 +40,8 @@ import java.time.LocalDateTime;
                 "u.user_id as user_id, u.name as user_name, u.wish_job as user_wish_job, u.wish_company as user_wish_company " +
                 "FROM review as r " +
                 "LEFT JOIN application as a ON r.application_id = a.application_id " +
-                "LEFT JOIN live_application as la ON la.application_id = a.application_id " +
-                "LEFT JOIN live as l ON la.live_id = l.live_id " +
+                "LEFT JOIN live_review as lr ON lr.review_id = r.review_id " +
+                "LEFT JOIN live as l ON lr.live_id = l.live_id " +
                 "LEFT JOIN user as u ON a.user_id = u.user_id " +
                 "WHERE r.is_visible = true AND r.dtype = 'live_review' " +
 

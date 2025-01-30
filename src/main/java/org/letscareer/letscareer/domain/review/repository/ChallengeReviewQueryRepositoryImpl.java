@@ -1,7 +1,7 @@
 package org.letscareer.letscareer.domain.review.repository;
 
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.*;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.review.vo.ChallengeReviewAdminVo;
@@ -10,7 +10,9 @@ import org.letscareer.letscareer.domain.review.vo.ChallengeReviewVo;
 import java.util.List;
 import java.util.Optional;
 
+import static org.letscareer.letscareer.domain.application.entity.QApplication.application;
 import static org.letscareer.letscareer.domain.review.entity.QChallengeReview.challengeReview;
+import static org.letscareer.letscareer.domain.user.entity.QUser.user;
 
 @RequiredArgsConstructor
 public class ChallengeReviewQueryRepositoryImpl implements ChallengeReviewQueryRepository {
@@ -24,13 +26,15 @@ public class ChallengeReviewQueryRepositoryImpl implements ChallengeReviewQueryR
                         challengeReview.createDate,
                         challengeReview.challengeType,
                         challengeReview.challenge.title,
-                        challengeReview._super.application.user.name,
+                        userNameExpression(),
                         challengeReview.score,
                         challengeReview.npsScore,
                         challengeReview.goodPoint,
                         challengeReview.badPoint,
                         challengeReview.isVisible))
                 .from(challengeReview)
+                .leftJoin(challengeReview.application, application)
+                .leftJoin(application.user, user)
                 .orderBy(challengeReview.id.desc())
                 .fetch();
     }
@@ -55,6 +59,12 @@ public class ChallengeReviewQueryRepositoryImpl implements ChallengeReviewQueryR
                         )
                         .fetchFirst()
         );
+    }
+
+    private StringExpression userNameExpression() {
+        return new CaseBuilder()
+                .when(application.isNotNull()).then(user.name)
+                .otherwise("익명");
     }
 
     private BooleanExpression eqReviewId(Long reviewId) {
