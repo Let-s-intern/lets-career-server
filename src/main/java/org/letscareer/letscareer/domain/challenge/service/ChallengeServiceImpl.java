@@ -61,8 +61,8 @@ import org.letscareer.letscareer.domain.price.vo.ChallengePriceDetailVo;
 import org.letscareer.letscareer.domain.program.dto.response.ZoomMeetingResponseDto;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.domain.review.dto.response.GetOldReviewResponseDto;
+import org.letscareer.letscareer.domain.review.helper.ChallengeReviewHelper;
 import org.letscareer.letscareer.domain.review.helper.OldReviewHelper;
-import org.letscareer.letscareer.domain.review.helper.ReviewHelper;
 import org.letscareer.letscareer.domain.review.mapper.OldReviewMapper;
 import org.letscareer.letscareer.domain.review.mapper.ReviewMapper;
 import org.letscareer.letscareer.domain.review.vo.old.OldReviewAdminVo;
@@ -108,7 +108,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final OldReviewMapper oldReviewMapper;
     private final FaqHelper faqHelper;
     private final FaqMapper faqMapper;
-    private final ReviewHelper reviewHelper;
+    private final ChallengeReviewHelper challengeReviewHelper;
     private final ReviewMapper reviewMapper;
 
     private final TossProvider tossProvider;
@@ -305,7 +305,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     public GetChallengeReviewStatusResponseDto checkChallengeReviewCompletedUser(Long challengeId, Long userId) {
         Long applicationId = challengeApplicationHelper.findApplicationIdByChallengeIdAndUserId(challengeId, userId);
         if(Objects.isNull(applicationId)) throw new EntityNotFoundException(APPLICATION_NOT_FOUND);
-        Boolean isCompleted = reviewHelper.existReviewByApplicationId(applicationId);
+        Boolean isCompleted = challengeApplicationHelper.existReviewByApplicationId(applicationId);
         return reviewMapper.toGetChallengeReviewStatusResponseDto(isCompleted);
     }
 

@@ -23,8 +23,4 @@ public class ReviewHelper {
     public Long countReviews() {
         return reviewRepository.countReviews();
     }
-
-    public Boolean existReviewByApplicationId(Long applicationId) {
-        return reviewRepository.existReviewByApplicationId(applicationId);
-    }
 }

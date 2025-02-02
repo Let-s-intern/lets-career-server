@@ -101,4 +101,8 @@ public class ChallengeApplicationHelper {
     public String findGoalByApplicationId(Long applicationId) {
         return challengeApplicationRepository.findGoalByApplicationId(applicationId);
     }
+
+    public Boolean existReviewByApplicationId(Long applicationId) {
+        return challengeApplicationRepository.existReviewByApplicationId(applicationId);
+    }
 }
