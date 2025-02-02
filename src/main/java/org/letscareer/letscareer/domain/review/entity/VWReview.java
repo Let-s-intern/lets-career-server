@@ -62,7 +62,7 @@ import java.time.LocalDateTime;
                 "UNION ALL " +
                 "SELECT att.attendance_id as review_id, 0, att.create_date, att.review_is_visible as is_visible, " +
                 "5 AS type, " +
-                "0 as program_id, null as program_title, null as program_thumbnail, " +
+                "0 as program_id, null as program_title, ch.thumbnail as program_thumbnail, " +
                 "ch.challenge_type, null as report_type, " +
                 "m.mission_id, m.title as mission_title, m.th as mission_th, att.review as attendance_review, " +
                 "u.user_id as user_id, u.name as user_name, u.wish_job as user_wish_job, u.wish_company as user_wish_company " +
