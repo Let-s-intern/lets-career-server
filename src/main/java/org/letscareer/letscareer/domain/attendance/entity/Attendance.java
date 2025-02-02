@@ -64,6 +64,7 @@ public class Attendance extends BaseTimeEntity {
         this.status = updateValue(this.status, updateAttendanceRequestDto.status());
         this.result = updateValue(this.result, updateAttendanceRequestDto.result());
         this.comments = updateValue(this.comments, updateAttendanceRequestDto.comments());
+        this.review = updateValue(this.review, updateAttendanceRequestDto.review());
         this.reviewIsVisible = updateValue(this.reviewIsVisible, updateAttendanceRequestDto.reviewIsVisible());
     }
 
@@ -79,4 +80,7 @@ public class Attendance extends BaseTimeEntity {
         this.result = updateValue(this.result, result);
     }
 
+    public void updateAttendanceReview(String review) {
+        this.review = updateValue(this.review, review);
+    }
 }
