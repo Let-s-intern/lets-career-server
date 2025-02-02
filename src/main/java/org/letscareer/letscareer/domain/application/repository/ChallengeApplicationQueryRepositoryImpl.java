@@ -258,6 +258,17 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                 .fetchFirst();
     }
 
+    @Override
+    public Boolean existReviewByApplicationId(Long applicationId) {
+        return queryFactory
+                .select(challengeApplication.review)
+                .from(challengeApplication)
+                .where(
+                        eqApplicationId(applicationId)
+                )
+                .fetchFirst() != null;
+    }
+
     private BooleanExpression attendanceIsNull(Long missionId) {
         return missionId != null ? user.id.notIn(JPAExpressions.select(attendance.user.id).from(attendance).where(eqMissionId(missionId))) : null;
     }
