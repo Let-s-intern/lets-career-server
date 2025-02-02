@@ -89,6 +89,7 @@ public class AttendanceServiceImpl implements AttendanceService {
             attendance.updateAttendanceStatus(AttendanceStatus.UPDATED);
             attendance.updateAttendanceResult(AttendanceResult.WAITING);
         }
+        attendance.updateAttendanceReview(requestDto.review());
     }
 
     private void updateAttendanceByAdmin(Attendance attendance, UpdateAttendanceRequestDto updateRequestDto) {
