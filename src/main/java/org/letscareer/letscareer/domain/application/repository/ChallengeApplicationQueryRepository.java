@@ -36,5 +36,5 @@ public interface ChallengeApplicationQueryRepository {
 
     String findGoalByApplicationId(Long applicationId);
 
-    Boolean existReviewByApplicationId(Long applicationId);
+    Long findReviewByApplicationId(Long applicationId);
 }

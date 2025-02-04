@@ -259,14 +259,14 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
     }
 
     @Override
-    public Boolean existReviewByApplicationId(Long applicationId) {
+    public Long findReviewByApplicationId(Long applicationId) {
         return queryFactory
-                .select(challengeApplication.review)
+                .select(challengeApplication.review.id)
                 .from(challengeApplication)
                 .where(
                         eqApplicationId(applicationId)
                 )
-                .fetchFirst() != null;
+                .fetchFirst();
     }
 
     private BooleanExpression attendanceIsNull(Long missionId) {

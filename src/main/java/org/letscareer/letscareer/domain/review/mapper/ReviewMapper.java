@@ -46,7 +46,7 @@ public class ReviewMapper {
         return GetReviewCountResponseDto.of(reviewCount, blogReviewCount);
     }
 
-    public GetChallengeReviewStatusResponseDto toGetChallengeReviewStatusResponseDto(Boolean isCompleted) {
-        return GetChallengeReviewStatusResponseDto.of(isCompleted);
+    public GetChallengeReviewStatusResponseDto toGetChallengeReviewStatusResponseDto(Long reviewId) {
+        return GetChallengeReviewStatusResponseDto.of(reviewId);
     }
 }

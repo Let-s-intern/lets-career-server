@@ -302,11 +302,11 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
-    public GetChallengeReviewStatusResponseDto checkChallengeReviewCompletedUser(Long challengeId, Long userId) {
+    public GetChallengeReviewStatusResponseDto getChallengeReviewStatus(Long challengeId, Long userId) {
         Long applicationId = challengeApplicationHelper.findApplicationIdByChallengeIdAndUserId(challengeId, userId);
         if(Objects.isNull(applicationId)) throw new EntityNotFoundException(APPLICATION_NOT_FOUND);
-        Boolean isCompleted = challengeApplicationHelper.existReviewByApplicationId(applicationId);
-        return reviewMapper.toGetChallengeReviewStatusResponseDto(isCompleted);
+        Long reviewId = challengeApplicationHelper.findReviewByApplicationId(applicationId);
+        return reviewMapper.toGetChallengeReviewStatusResponseDto(reviewId);
     }
 
     @Override

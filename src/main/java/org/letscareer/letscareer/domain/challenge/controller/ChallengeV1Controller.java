@@ -214,9 +214,9 @@ public class ChallengeV1Controller {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeReviewStatusResponseDto.class)))
     })
     @GetMapping("/{challengeId}/my/review-status")
-    public ResponseEntity<SuccessResponse<?>> checkChallengeReviewCompletedUser(@PathVariable final Long challengeId,
+    public ResponseEntity<SuccessResponse<?>> getChallengeReviewStatus(@PathVariable final Long challengeId,
                                                                 @CurrentUser User user) {
-        final GetChallengeReviewStatusResponseDto responseDto = challengeService.checkChallengeReviewCompletedUser(challengeId, user.getId());
+        final GetChallengeReviewStatusResponseDto responseDto = challengeService.getChallengeReviewStatus(challengeId, user.getId());
         return SuccessResponse.ok(responseDto);
     }
 
