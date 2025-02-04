@@ -102,7 +102,7 @@ public class ChallengeApplicationHelper {
         return challengeApplicationRepository.findGoalByApplicationId(applicationId);
     }
 
-    public Boolean existReviewByApplicationId(Long applicationId) {
-        return challengeApplicationRepository.existReviewByApplicationId(applicationId);
+    public Long findReviewByApplicationId(Long applicationId) {
+        return challengeApplicationRepository.findReviewByApplicationId(applicationId);
     }
 }

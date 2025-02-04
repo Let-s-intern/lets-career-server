@@ -5,11 +5,11 @@ import lombok.Builder;
 
 @Builder(access = AccessLevel.PRIVATE)
 public record GetChallengeReviewStatusResponseDto(
-        Boolean isCompleted
+        Long reviewId
 ) {
-    public static GetChallengeReviewStatusResponseDto of(Boolean isCompleted) {
+    public static GetChallengeReviewStatusResponseDto of(Long reviewId) {
         return GetChallengeReviewStatusResponseDto.builder()
-                .isCompleted(isCompleted)
+                .reviewId(reviewId)
                 .build();
     }
 }
