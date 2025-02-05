@@ -1,9 +1,6 @@
 package org.letscareer.letscareer.domain.attendance.repository;
 
-import org.letscareer.letscareer.domain.attendance.vo.AttendanceAdminVo;
-import org.letscareer.letscareer.domain.attendance.vo.AttendanceDashboardVo;
-import org.letscareer.letscareer.domain.attendance.vo.MissionScoreVo;
-import org.letscareer.letscareer.domain.attendance.vo.MissionAttendanceVo;
+import org.letscareer.letscareer.domain.attendance.vo.*;
 
 import java.util.List;
 
@@ -12,4 +9,5 @@ public interface AttendanceQueryRepository {
     List<MissionScoreVo> findAttendanceScoreVos(Long applicationId, Long challengeId);
     List<MissionAttendanceVo> findMissionAttendanceVo(Long challengeId, Long missionId);
     AttendanceDashboardVo findAttendanceDashboardVo(Long missionId, Long userId);
+    List<MissionReviewAdminVo> findAllMissionReviewAdminVos();
 }

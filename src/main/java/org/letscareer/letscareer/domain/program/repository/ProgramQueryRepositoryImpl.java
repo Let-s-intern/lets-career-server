@@ -156,6 +156,7 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                         vWProgram.programType))
                 .from(vWProgram)
                 .where(
+                    isChallengeOrLive(),
                     isDayAfterEndDate()
                 )
                 .fetch();
@@ -164,6 +165,10 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
     private BooleanExpression isDayAfterEndDate() {
         LocalDate nowMinusOneDay = LocalDate.now().minusDays(1);
         return Expressions.dateTemplate(LocalDate.class, "DATE_FORMAT({0}, '%Y-%m-%d')", vWProgram.endDate).eq(nowMinusOneDay);
+    }
+
+    private BooleanExpression isChallengeOrLive() {
+        return vWProgram.programType.eq(ProgramType.CHALLENGE).or(vWProgram.programType.eq(ProgramType.LIVE));
     }
 
     private BooleanExpression eqProgramType(List<ProgramType> programType) {

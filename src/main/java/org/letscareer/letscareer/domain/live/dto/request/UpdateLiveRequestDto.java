@@ -1,5 +1,6 @@
 package org.letscareer.letscareer.domain.live.dto.request;
 
+import org.letscareer.letscareer.domain.admincalssification.request.CreateLiveAdminClassificationRequestDto;
 import org.letscareer.letscareer.domain.classification.dto.request.CreateLiveClassificationRequestDto;
 import org.letscareer.letscareer.domain.faq.dto.request.CreateProgramFaqRequestDto;
 import org.letscareer.letscareer.domain.live.type.ProgressType;
@@ -31,6 +32,7 @@ public record UpdateLiveRequestDto(
         Boolean vod,
         Boolean isVisible,
         List<CreateLiveClassificationRequestDto> programTypeInfo,
+        List<CreateLiveAdminClassificationRequestDto> adminProgramTypeInfo,
         CreateLivePriceRequestDto priceInfo,
         List<CreateProgramFaqRequestDto> faqInfo
 ) {

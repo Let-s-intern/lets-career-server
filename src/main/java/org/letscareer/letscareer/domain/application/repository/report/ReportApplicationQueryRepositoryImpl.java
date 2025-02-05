@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.letscareer.letscareer.domain.application.entity.report.QReportApplication.reportApplication;
-import static org.letscareer.letscareer.domain.review.entity.QOldReview.oldReview;
+import static org.letscareer.letscareer.domain.review.entity.old.QOldReview.oldReview;
 import static org.letscareer.letscareer.domain.review.entity.QReview.review;
 
 @RequiredArgsConstructor
@@ -84,7 +84,7 @@ public class ReportApplicationQueryRepositoryImpl implements ReportApplicationQu
                         eqStatus(ReportApplicationStatus.COMPLETED), // 진단완료 상태
                         eqIsCanceled(false),                        // 신청 취소하지 않음
                         betweenReportUrlDate(LocalDateTime.now()),  // 전날 10시 ~ 당일 10시
-                        isNoReviewForApplication()                  // 리뷰 작성하지 않음
+                        reviewIsNull()
                 )
                 .fetch();
     }
@@ -136,10 +136,7 @@ public class ReportApplicationQueryRepositoryImpl implements ReportApplicationQu
                 .and(reportApplication.reportUrlDate.lt(endOfPeriod));
     }
 
-    private BooleanExpression isNoReviewForApplication() {
-        return JPAExpressions
-                .selectFrom(oldReview)
-                .where(oldReview.application.id.eq(reportApplication.id))
-                .notExists();
+    private BooleanExpression reviewIsNull() {
+        return reportApplication._super.review.isNull();
     }
 }

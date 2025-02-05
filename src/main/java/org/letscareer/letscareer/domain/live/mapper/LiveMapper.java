@@ -1,12 +1,13 @@
 package org.letscareer.letscareer.domain.live.mapper;
 
+import org.letscareer.letscareer.domain.admincalssification.vo.LiveAdminClassificationDetailVo;
 import org.letscareer.letscareer.domain.classification.vo.LiveClassificationVo;
 import org.letscareer.letscareer.domain.faq.vo.FaqDetailVo;
 import org.letscareer.letscareer.domain.live.dto.response.*;
 import org.letscareer.letscareer.domain.live.vo.*;
 import org.letscareer.letscareer.domain.price.vo.LivePriceDetailVo;
 import org.letscareer.letscareer.domain.review.dto.response.GetOldReviewResponseDto;
-import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
+import org.letscareer.letscareer.domain.review.vo.old.OldReviewAdminVo;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.entity.PageInfo;
 import org.springframework.data.domain.Page;
@@ -18,9 +19,10 @@ import java.util.List;
 public class LiveMapper {
     public GetLiveDetailResponseDto toLiveDetailResponseDto(LiveDetailVo liveInfo,
                                                             List<LiveClassificationVo> classificationInfo,
+                                                            List<LiveAdminClassificationDetailVo> adminClassificationInfo,
                                                             LivePriceDetailVo priceInfo,
                                                             List<FaqDetailVo> faqInfo) {
-        return GetLiveDetailResponseDto.of(liveInfo, classificationInfo, priceInfo, faqInfo);
+        return GetLiveDetailResponseDto.of(liveInfo, classificationInfo, adminClassificationInfo, priceInfo, faqInfo);
     }
 
     public GetLivesResponseDto toGetLivesResponseDto(Page<LiveProfileVo> liveProfileVos) {
@@ -31,7 +33,7 @@ public class LiveMapper {
         return GetLiveReviewsResponseDto.of(reviewResDtoList, pageInfo);
     }
 
-    public GetLiveAdminReviewsResponseDto toGetLiveAdminReviewsResponseDto(Page<ReviewAdminVo> reviewVos) {
+    public GetLiveAdminReviewsResponseDto toGetLiveAdminReviewsResponseDto(Page<OldReviewAdminVo> reviewVos) {
         return GetLiveAdminReviewsResponseDto.of(reviewVos);
     }
 

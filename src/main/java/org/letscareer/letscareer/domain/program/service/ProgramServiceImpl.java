@@ -1,6 +1,9 @@
 package org.letscareer.letscareer.domain.program.service;
 
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.admincalssification.helper.ChallengeAdminClassificationHelper;
+import org.letscareer.letscareer.domain.admincalssification.helper.LiveAdminClassificationHelper;
+import org.letscareer.letscareer.domain.admincalssification.helper.VodAdminClassificationHelper;
 import org.letscareer.letscareer.domain.application.helper.ChallengeApplicationHelper;
 import org.letscareer.letscareer.domain.application.helper.LiveApplicationHelper;
 import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
@@ -41,12 +44,15 @@ public class ProgramServiceImpl implements ProgramService {
     private final ProgramMapper programMapper;
     private final ChallengeHelper challengeHelper;
     private final ChallengeClassificationHelper challengeClassificationHelper;
+    private final ChallengeAdminClassificationHelper challengeAdminClassificationHelper;
     private final ChallengeApplicationHelper challengeApplicationHelper;
     private final LiveHelper liveHelper;
     private final LiveClassificationHelper liveClassificationHelper;
+    private final LiveAdminClassificationHelper liveAdminClassificationHelper;
     private final LiveApplicationHelper liveApplicationHelper;
     private final VodHelper vodHelper;
     private final VodClassificationHelper vodClassificationHelper;
+    private final VodAdminClassificationHelper vodAdminClassificationHelper;
     private final ReportHelper reportHelper;
 
     @Override
@@ -121,7 +127,8 @@ public class ProgramServiceImpl implements ProgramService {
 
     private GetProgramForAdminResponseDto<?> createGetProgramForAdminResponseDto(GetProgramWithCurrentCountResponseDto programVo) {
         List<?> classificationList = getProgramClassificationsForType(programVo.programType(), programVo.id());
-        return programMapper.toGetProgramForAdminResponseDto(programVo, classificationList);
+        List<?> adminClassificationList = getProgramAdminClassificationsForType(programVo.programType(), programVo.id());
+        return programMapper.toGetProgramForAdminResponseDto(programVo, classificationList, adminClassificationList);
     }
 
     private List<?> getProgramClassificationsForType(ProgramType type, Long programId) {
@@ -131,6 +138,16 @@ public class ProgramServiceImpl implements ProgramService {
             return liveClassificationHelper.findLiveClassificationVos(programId);
         else if (ProgramType.VOD.equals(type))
             return vodClassificationHelper.findVodClassificationVos(programId);
+        return null;
+    }
+
+    private List<?> getProgramAdminClassificationsForType(ProgramType type, Long programId) {
+        if (ProgramType.CHALLENGE.equals(type))
+            return challengeAdminClassificationHelper.findAdminClassificationDetailVos(programId);
+        else if (ProgramType.LIVE.equals(type))
+            return liveAdminClassificationHelper.findAdminClassificationDetailVos(programId);
+        else if (ProgramType.VOD.equals(type))
+            return vodAdminClassificationHelper.findAdminClassificationDetailVos(programId);
         return null;
     }
 }

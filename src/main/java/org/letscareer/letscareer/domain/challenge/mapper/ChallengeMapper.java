@@ -1,5 +1,6 @@
 package org.letscareer.letscareer.domain.challenge.mapper;
 
+import org.letscareer.letscareer.domain.admincalssification.vo.ChallengeAdminClassificationDetailVo;
 import org.letscareer.letscareer.domain.challenge.dto.response.*;
 import org.letscareer.letscareer.domain.challenge.vo.*;
 import org.letscareer.letscareer.domain.challengeguide.vo.ChallengeGuideVo;
@@ -8,7 +9,7 @@ import org.letscareer.letscareer.domain.classification.vo.ChallengeClassificatio
 import org.letscareer.letscareer.domain.faq.vo.FaqDetailVo;
 import org.letscareer.letscareer.domain.price.vo.ChallengePriceDetailVo;
 import org.letscareer.letscareer.domain.review.dto.response.GetOldReviewResponseDto;
-import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
+import org.letscareer.letscareer.domain.review.vo.old.OldReviewAdminVo;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.entity.PageInfo;
 import org.springframework.data.domain.Page;
@@ -21,9 +22,10 @@ public class ChallengeMapper {
 
     public GetChallengeDetailResponseDto toChallengeDetailResponseDto(ChallengeDetailVo challengeInfo,
                                                                       List<ChallengeClassificationDetailVo> classificationInfo,
+                                                                      List<ChallengeAdminClassificationDetailVo> adminClassificationInfo,
                                                                       List<ChallengePriceDetailVo> priceInfo,
                                                                       List<FaqDetailVo> faqInfo) {
-        return GetChallengeDetailResponseDto.of(challengeInfo, classificationInfo, priceInfo, faqInfo);
+        return GetChallengeDetailResponseDto.of(challengeInfo, classificationInfo, adminClassificationInfo, priceInfo, faqInfo);
     }
 
     public GetTypeChallengeResponseDto toGetTypeChallengeResponseDto(List<ChallengeSimpleProfileVo> challengeSimpleProfileVos) {
@@ -42,7 +44,7 @@ public class ChallengeMapper {
         return GetChallengeReviewResponseDto.of(reviewResDtoList, pageInfo);
     }
 
-    public GetChallengeAdminReviewResponseDto toGetChallengeAdminReviewResponseDto(Page<ReviewAdminVo> challengeReviewVos) {
+    public GetChallengeAdminReviewResponseDto toGetChallengeAdminReviewResponseDto(Page<OldReviewAdminVo> challengeReviewVos) {
         return GetChallengeAdminReviewResponseDto.of(challengeReviewVos);
     }
 

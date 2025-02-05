@@ -1,5 +1,6 @@
 package org.letscareer.letscareer.domain.challenge.dto.request;
 
+import org.letscareer.letscareer.domain.admincalssification.request.CreateChallengeAdminClassificationRequestDto;
 import org.letscareer.letscareer.domain.challenge.type.ChallengeType;
 import org.letscareer.letscareer.domain.classification.dto.request.CreateChallengeClassificationRequestDto;
 import org.letscareer.letscareer.domain.faq.dto.request.CreateProgramFaqRequestDto;
@@ -24,6 +25,7 @@ public record UpdateChallengeRequestDto(
         ChallengeType challengeType,
         Boolean isVisible,
         List<CreateChallengeClassificationRequestDto> programTypeInfo,
+        List<CreateChallengeAdminClassificationRequestDto> adminProgramTypeInfo,
         List<CreateChallengePriceRequestDto> priceInfo,
         List<CreateProgramFaqRequestDto> faqInfo
 ) {

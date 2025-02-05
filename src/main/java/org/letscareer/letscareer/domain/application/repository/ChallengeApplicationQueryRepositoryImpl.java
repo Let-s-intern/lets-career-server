@@ -247,6 +247,28 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                 .fetch();
     }
 
+    @Override
+    public String findGoalByApplicationId(Long applicationId) {
+        return queryFactory
+                .select(challengeApplication.goal)
+                .from(challengeApplication)
+                .where(
+                        eqApplicationId(applicationId)
+                )
+                .fetchFirst();
+    }
+
+    @Override
+    public Long findReviewByApplicationId(Long applicationId) {
+        return queryFactory
+                .select(challengeApplication.review.id)
+                .from(challengeApplication)
+                .where(
+                        eqApplicationId(applicationId)
+                )
+                .fetchFirst();
+    }
+
     private BooleanExpression attendanceIsNull(Long missionId) {
         return missionId != null ? user.id.notIn(JPAExpressions.select(attendance.user.id).from(attendance).where(eqMissionId(missionId))) : null;
     }
@@ -257,7 +279,7 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
 
 
     private BooleanExpression reviewIsNull() {
-        return challengeApplication._super.oldReview.isNull();
+        return challengeApplication._super.review.isNull();
     }
 
     private NumberExpression<Integer> calculateTotalCost() {
@@ -285,6 +307,10 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
 
     private BooleanExpression eqChallengeId(Long challengeId) {
         return challengeId != null ? challenge.id.eq(challengeId) : null;
+    }
+
+    private BooleanExpression eqApplicationId(Long applicationId) {
+        return applicationId != null ? challengeApplication.id.eq(applicationId) : null;
     }
 
     private BooleanExpression eqIsCanceled(Boolean isCanceled) {

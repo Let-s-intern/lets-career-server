@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.challenge.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.letscareer.letscareer.domain.admincalssification.entity.ChallengeAdminClassification;
 import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
 import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeRequestDto;
@@ -61,6 +62,9 @@ public class Challenge extends BaseTimeEntity {
     private List<ChallengeClassification> classificationList = new ArrayList<>();
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
     @Builder.Default
+    private List<ChallengeAdminClassification> adminClassificationList = new ArrayList<>();
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
+    @Builder.Default
     private List<ChallengePrice> priceList = new ArrayList<>();
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
     @Builder.Default
@@ -113,6 +117,10 @@ public class Challenge extends BaseTimeEntity {
         this.classificationList.add(challengeClassification);
     }
 
+    public void addChallengeAdminClassification(ChallengeAdminClassification challengeAdminClassification) {
+        this.adminClassificationList.add(challengeAdminClassification);
+    }
+
     public void addChallengeApplicationList(ChallengeApplication challengeApplication) {
         this.applicationList.add(challengeApplication);
     }
@@ -127,6 +135,10 @@ public class Challenge extends BaseTimeEntity {
 
     public void setInitClassificationList() {
         this.classificationList = new ArrayList<>();
+    }
+
+    public void setInitAdminClassificationList() {
+        this.adminClassificationList = new ArrayList<>();
     }
 
     public void setInitPriceList() {

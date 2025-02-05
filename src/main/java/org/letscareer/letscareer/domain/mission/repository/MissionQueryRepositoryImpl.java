@@ -160,6 +160,7 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
                         mission.th,
                         mission.title,
                         attendance.link,
+                        attendance.review,
                         attendance.status,
                         attendance.result))
                 .from(mission)

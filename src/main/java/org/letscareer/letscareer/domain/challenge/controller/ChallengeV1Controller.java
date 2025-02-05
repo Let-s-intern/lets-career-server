@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApplicationRequestDto;
 import org.letscareer.letscareer.domain.application.dto.response.GetChallengeApplicationsResponseDto;
 import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApplicationPaybackRequestDto;
@@ -209,6 +210,16 @@ public class ChallengeV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
+    @Operation(summary = "챌린지 리뷰 작성 여부 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeReviewStatusResponseDto.class)))
+    })
+    @GetMapping("/{challengeId}/my/review-status")
+    public ResponseEntity<SuccessResponse<?>> getChallengeReviewStatus(@PathVariable final Long challengeId,
+                                                                @CurrentUser User user) {
+        final GetChallengeReviewStatusResponseDto responseDto = challengeService.getChallengeReviewStatus(challengeId, user.getId());
+        return SuccessResponse.ok(responseDto);
+    }
+
     @Operation(summary = "챌린지 가이드 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeGuidesResponseDto.class)))
     })
@@ -225,6 +236,17 @@ public class ChallengeV1Controller {
     public ResponseEntity<SuccessResponse<?>> getNotices(@PathVariable final Long challengeId,
                                                          final Pageable pageable) {
         final GetChallengeNoticesResponseDto responseDto = challengeService.getNotices(challengeId, pageable);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "챌린지 목표 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeGoalResponseDto.class)))
+    })
+    @ApiErrorCode({SwaggerEnum.APPLICATION_NOT_FOUND})
+    @GetMapping("/{challengeId}/goal")
+    public ResponseEntity<SuccessResponse<?>> getGoal(@PathVariable final Long challengeId,
+                                                      @CurrentUser User user) {
+        final GetChallengeGoalResponseDto responseDto = challengeService.getGoal(challengeId, user.getId());
         return SuccessResponse.ok(responseDto);
     }
 
@@ -331,6 +353,18 @@ public class ChallengeV1Controller {
     public ResponseEntity<SuccessResponse<?>> paybackChallengeApplications(@PathVariable final Long challengeId,
                                                                            @RequestBody final UpdateChallengeApplicationPaybacksRequestDto requestDto) {
         challengeService.paybackChallengeApplications(challengeId, requestDto);
+        return SuccessResponse.ok(null);
+    }
+
+    @Operation(summary = "챌린지 목표 입력", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    })
+    @ApiErrorCode({SwaggerEnum.APPLICATION_NOT_FOUND})
+    @PatchMapping("/{challengeId}/goal")
+    public ResponseEntity<SuccessResponse<?>> updateGoal(@PathVariable final Long challengeId,
+                                                         @RequestBody final UpdateChallengeApplicationRequestDto requestDto,
+                                                         @CurrentUser final User user) {
+        challengeService.updateGoal(challengeId, requestDto, user.getId());
         return SuccessResponse.ok(null);
     }
 

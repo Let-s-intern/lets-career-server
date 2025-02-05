@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.attendance.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.letscareer.letscareer.domain.attendance.dto.request.CreateAttendanceRequestDto;
 import org.letscareer.letscareer.domain.attendance.dto.request.UpdateAttendanceRequestDto;
@@ -27,6 +28,10 @@ public class Attendance extends BaseTimeEntity {
     @Column(name = "attendance_id")
     private Long id;
     private String link;
+    private String review;
+    @NotNull
+    @Builder.Default
+    private Boolean reviewIsVisible = true;
     @Convert(converter = AttendanceStatusConverter.class)
     private AttendanceStatus status;
     @Builder.Default
@@ -47,6 +52,7 @@ public class Attendance extends BaseTimeEntity {
                                               User user) {
         return Attendance.builder()
                 .link(createRequestDto.link())
+                .review(createRequestDto.review())
                 .status(status)
                 .mission(mission)
                 .user(user)
@@ -58,6 +64,8 @@ public class Attendance extends BaseTimeEntity {
         this.status = updateValue(this.status, updateAttendanceRequestDto.status());
         this.result = updateValue(this.result, updateAttendanceRequestDto.result());
         this.comments = updateValue(this.comments, updateAttendanceRequestDto.comments());
+        this.review = updateValue(this.review, updateAttendanceRequestDto.review());
+        this.reviewIsVisible = updateValue(this.reviewIsVisible, updateAttendanceRequestDto.reviewIsVisible());
     }
 
     public void updateAttendanceLink(String link) {
@@ -72,4 +80,7 @@ public class Attendance extends BaseTimeEntity {
         this.result = updateValue(this.result, result);
     }
 
+    public void updateAttendanceReview(String review) {
+        this.review = updateValue(this.review, review);
+    }
 }

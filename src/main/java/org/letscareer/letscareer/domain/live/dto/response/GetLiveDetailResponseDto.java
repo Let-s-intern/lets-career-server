@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.live.dto.response;
 
 import lombok.AccessLevel;
 import lombok.Builder;
+import org.letscareer.letscareer.domain.admincalssification.vo.LiveAdminClassificationDetailVo;
 import org.letscareer.letscareer.domain.classification.vo.LiveClassificationVo;
 import org.letscareer.letscareer.domain.faq.vo.FaqDetailVo;
 import org.letscareer.letscareer.domain.live.type.ProgressType;
@@ -34,11 +35,13 @@ public record GetLiveDetailResponseDto(
         Boolean vod,
         ProgressType progressType,
         List<LiveClassificationVo> classificationInfo,
+        List<LiveAdminClassificationDetailVo> adminClassificationInfo,
         LivePriceDetailVo priceInfo,
         List<FaqDetailVo> faqInfo
 ) {
     public static GetLiveDetailResponseDto of(LiveDetailVo liveInfo,
                                               List<LiveClassificationVo> classificationInfo,
+                                              List<LiveAdminClassificationDetailVo> adminClassificationInfo,
                                               LivePriceDetailVo priceInfo,
                                               List<FaqDetailVo> faqInfo) {
         return GetLiveDetailResponseDto.builder()
@@ -63,6 +66,7 @@ public record GetLiveDetailResponseDto(
                 .vod(liveInfo.vod())
                 .progressType(liveInfo.progressType())
                 .classificationInfo(classificationInfo)
+                .adminClassificationInfo(adminClassificationInfo)
                 .priceInfo(priceInfo)
                 .faqInfo(faqInfo)
                 .build();

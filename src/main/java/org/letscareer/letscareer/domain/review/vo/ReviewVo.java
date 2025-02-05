@@ -1,15 +1,19 @@
 package org.letscareer.letscareer.domain.review.vo;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
-@Builder
+@Builder(access = AccessLevel.PRIVATE)
 public record ReviewVo(
-        Long id,
-        String name,
-        String content,
-        Integer score,
-        LocalDateTime createdDate
+        ReviewInfoVo reviewInfo,
+        List<ReviewItemVo> reviewItemList
 ) {
+    public static ReviewVo of(ReviewInfoVo reviewInfo, List<ReviewItemVo> reviewItemList) {
+        return ReviewVo.builder()
+                .reviewInfo(reviewInfo)
+                .reviewItemList(reviewItemList)
+                .build();
+    }
 }

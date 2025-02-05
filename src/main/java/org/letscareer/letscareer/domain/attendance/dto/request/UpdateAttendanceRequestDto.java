@@ -7,6 +7,8 @@ public record UpdateAttendanceRequestDto(
         String link,
         AttendanceStatus status,
         AttendanceResult result,
-        String comments
+        String comments,
+        String review,
+        Boolean reviewIsVisible
 ) {
 }

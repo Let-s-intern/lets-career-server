@@ -24,7 +24,7 @@ public class ApplicationV1Controller {
     private final ApplicationServiceFactory applicationServiceFactory;
 
     @Operation(summary = "신청서 생성", responses = {
-            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = CreateApplicationResponseDto.class)))
+            @ApiResponse(responseCode = "201", content = @Content(schema = @Schema(implementation = CreateApplicationResponseDto.class)))
     })
     @ApiErrorCode({SwaggerEnum.INVALID_APPLICATION_TIME})
     @PostMapping("/{programId}")

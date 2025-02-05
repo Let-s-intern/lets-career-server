@@ -1,7 +1,12 @@
 package org.letscareer.letscareer.domain.challenge.service;
 
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.admincalssification.helper.ChallengeAdminClassificationHelper;
+import org.letscareer.letscareer.domain.admincalssification.request.CreateChallengeAdminClassificationRequestDto;
+import org.letscareer.letscareer.domain.admincalssification.vo.ChallengeAdminClassificationDetailVo;
+import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApplicationRequestDto;
 import org.letscareer.letscareer.domain.application.dto.response.GetChallengeApplicationsResponseDto;
+import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
 import org.letscareer.letscareer.domain.application.helper.ChallengeApplicationHelper;
 import org.letscareer.letscareer.domain.application.mapper.ChallengeApplicationMapper;
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
@@ -56,15 +61,18 @@ import org.letscareer.letscareer.domain.price.vo.ChallengePriceDetailVo;
 import org.letscareer.letscareer.domain.program.dto.response.ZoomMeetingResponseDto;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.domain.review.dto.response.GetOldReviewResponseDto;
+import org.letscareer.letscareer.domain.review.helper.ChallengeReviewHelper;
 import org.letscareer.letscareer.domain.review.helper.OldReviewHelper;
 import org.letscareer.letscareer.domain.review.mapper.OldReviewMapper;
-import org.letscareer.letscareer.domain.review.vo.ReviewAdminVo;
-import org.letscareer.letscareer.domain.review.vo.ReviewVo;
+import org.letscareer.letscareer.domain.review.mapper.ReviewMapper;
+import org.letscareer.letscareer.domain.review.vo.old.OldReviewAdminVo;
+import org.letscareer.letscareer.domain.review.vo.old.OldReviewVo;
 import org.letscareer.letscareer.domain.score.entity.AdminScore;
 import org.letscareer.letscareer.domain.score.helper.AdminScoreHelper;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.entity.PageInfo;
 import org.letscareer.letscareer.global.common.utils.zoom.ZoomUtils;
+import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -75,6 +83,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static org.letscareer.letscareer.domain.application.error.ApplicationErrorCode.APPLICATION_NOT_FOUND;
+
 @RequiredArgsConstructor
 @Transactional
 @Service
@@ -82,6 +92,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final ChallengeHelper challengeHelper;
     private final ChallengeMapper challengeMapper;
     private final ChallengeClassificationHelper challengeClassificationHelper;
+    private final ChallengeAdminClassificationHelper challengeAdminClassificationHelper;
     private final ChallengeApplicationHelper challengeApplicationHelper;
     private final ChallengeApplicationMapper challengeApplicationMapper;
     private final ChallengeNoticeHelper challengeNoticeHelper;
@@ -97,6 +108,8 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final OldReviewMapper oldReviewMapper;
     private final FaqHelper faqHelper;
     private final FaqMapper faqMapper;
+    private final ChallengeReviewHelper challengeReviewHelper;
+    private final ReviewMapper reviewMapper;
 
     private final TossProvider tossProvider;
     private final ZoomUtils zoomUtils;
@@ -117,9 +130,10 @@ public class ChallengeServiceImpl implements ChallengeService {
     public GetChallengeDetailResponseDto getChallengeDetail(Long challengeId) {
         ChallengeDetailVo challengeDetailVo = challengeHelper.findChallengeDetailByIdOrThrow(challengeId);
         List<ChallengeClassificationDetailVo> classificationInfo = challengeClassificationHelper.findClassificationDetailVos(challengeId);
+        List<ChallengeAdminClassificationDetailVo> adminClassificationInfo = challengeAdminClassificationHelper.findAdminClassificationDetailVos(challengeId);
         List<ChallengePriceDetailVo> priceInfo = challengePriceHelper.findChallengePriceDetailVos(challengeId);
         List<FaqDetailVo> faqInfo = faqHelper.findChallengeFaqDetailVos(challengeId);
-        return challengeMapper.toChallengeDetailResponseDto(challengeDetailVo, classificationInfo, priceInfo, faqInfo);
+        return challengeMapper.toChallengeDetailResponseDto(challengeDetailVo, classificationInfo, adminClassificationInfo, priceInfo, faqInfo);
     }
 
     @Override
@@ -175,13 +189,13 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     @Override
     public GetChallengeAdminReviewResponseDto getReviewsForAdmin(Long challengeId, Pageable pageable) {
-        Page<ReviewAdminVo> challengeReviewVos = oldReviewHelper.findChallengeReviewAdminVos(challengeId, pageable);
+        Page<OldReviewAdminVo> challengeReviewVos = oldReviewHelper.findChallengeReviewAdminVos(challengeId, pageable);
         return challengeMapper.toGetChallengeAdminReviewResponseDto(challengeReviewVos);
     }
 
     @Override
     public GetChallengeReviewResponseDto getReviews(Pageable pageable) {
-        Page<ReviewVo> challengeReviewVos = oldReviewHelper.findChallengeReviewVos(pageable);
+        Page<OldReviewVo> challengeReviewVos = oldReviewHelper.findChallengeReviewVos(pageable);
         List<GetOldReviewResponseDto> reviewResDtoList = createGetReviewResponseDtoList(challengeReviewVos.getContent());
         PageInfo pageInfo = PageInfo.of(challengeReviewVos);
         return challengeMapper.toGetChallengeReviewResponseDto(reviewResDtoList, pageInfo);
@@ -197,6 +211,14 @@ public class ChallengeServiceImpl implements ChallengeService {
     public GetChallengeNoticesResponseDto getNotices(Long challengeId, Pageable pageable) {
         Page<ChallengeNoticeVo> challengeNoticeList = challengeNoticeHelper.findAllChallengeNoticeVos(challengeId, pageable);
         return challengeMapper.toGetChallengeNoticesResponseDto(challengeNoticeList);
+    }
+
+    @Override
+    public GetChallengeGoalResponseDto getGoal(Long challengeId, Long userId) {
+        Long applicationId = challengeApplicationHelper.findApplicationIdByChallengeIdAndUserId(challengeId, userId);
+        if(Objects.isNull(applicationId)) throw new EntityNotFoundException(APPLICATION_NOT_FOUND);
+        String goal = challengeApplicationHelper.findGoalByApplicationId(applicationId);
+        return challengeApplicationMapper.toGetChallengeGoalResponseDto(goal);
     }
 
     @Override
@@ -280,6 +302,14 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
+    public GetChallengeReviewStatusResponseDto getChallengeReviewStatus(Long challengeId, Long userId) {
+        Long applicationId = challengeApplicationHelper.findApplicationIdByChallengeIdAndUserId(challengeId, userId);
+        if(Objects.isNull(applicationId)) throw new EntityNotFoundException(APPLICATION_NOT_FOUND);
+        Long reviewId = challengeApplicationHelper.findReviewByApplicationId(applicationId);
+        return reviewMapper.toGetChallengeReviewStatusResponseDto(reviewId);
+    }
+
+    @Override
     public GetChallengeExisingApplicationResponseDto getChallengeExistingApplication(Long challengeId, Long userId) {
         Boolean applied = challengeApplicationHelper.existChallengeApplicationByChallengeIdAndUserId(challengeId, userId);
         return challengeApplicationMapper.toChallengeExistingApplicationResponseDto(applied);
@@ -290,6 +320,7 @@ public class ChallengeServiceImpl implements ChallengeService {
         ZoomMeetingResponseDto zoomMeetingInfo = zoomUtils.createZoomMeeting(createChallengeRequestDto.title(), createChallengeRequestDto.startDate());
         Challenge challenge = challengeHelper.createChallengeAndSave(createChallengeRequestDto, zoomMeetingInfo);
         createClassificationListAndSave(createChallengeRequestDto.programTypeInfo(), challenge);
+        createAdminClassificationListAndSave(createChallengeRequestDto.adminProgramTypeInfo(), challenge);
         createPriceListAndSave(createChallengeRequestDto.priceInfo(), challenge);
         createFaqListAndSave(createChallengeRequestDto.faqInfo(), challenge);
     }
@@ -299,6 +330,7 @@ public class ChallengeServiceImpl implements ChallengeService {
         Challenge challenge = challengeHelper.findChallengeByIdOrThrow(challengeId);
         challenge.updateChallenge(createChallengeRequestDto);
         updateChallengeClassifications(challenge, createChallengeRequestDto.programTypeInfo());
+        updateChallengeAdminClassifications(challenge, createChallengeRequestDto.adminProgramTypeInfo());
         updateChallengePrices(challenge, createChallengeRequestDto.priceInfo());
         updateChallengeFaqs(challenge, createChallengeRequestDto.faqInfo());
     }
@@ -321,6 +353,14 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
+    public void updateGoal(Long challengeId, UpdateChallengeApplicationRequestDto requestDto, Long userId) {
+        Long applicationId = challengeApplicationHelper.findApplicationIdByChallengeIdAndUserId(challengeId, userId);
+        if(Objects.isNull(applicationId)) throw new EntityNotFoundException(APPLICATION_NOT_FOUND);
+        ChallengeApplication challengeApplication = challengeApplicationHelper.findChallengeApplicationByIdOrThrow(applicationId);
+        challengeApplication.updateGoal(requestDto.goal());
+    }
+
+    @Override
     public void deleteChallenge(Long challengeId) {
         challengeHelper.deleteChallengeById(challengeId);
     }
@@ -332,7 +372,14 @@ public class ChallengeServiceImpl implements ChallengeService {
                 .collect(Collectors.toList());
     }
 
-    private List<GetOldReviewResponseDto> createGetReviewResponseDtoList(List<ReviewVo> vos) {
+    private void createAdminClassificationListAndSave(List<CreateChallengeAdminClassificationRequestDto> requestDtoList,
+                                                      Challenge challenge) {
+        requestDtoList.stream()
+                .map(requestDto -> challengeAdminClassificationHelper.createChallengeAdminClassificationAndSave(requestDto, challenge))
+                .collect(Collectors.toList());
+    }
+
+    private List<GetOldReviewResponseDto> createGetReviewResponseDtoList(List<OldReviewVo> vos) {
         return vos.stream()
                 .map(vo -> oldReviewMapper.toGetReviewResponseDto(vo, challengeHelper.findChallengeTitleVoOrThrow(vo.id()).title()))
                 .collect(Collectors.toList());
@@ -386,6 +433,13 @@ public class ChallengeServiceImpl implements ChallengeService {
         challengeClassificationHelper.deleteChallengeClassificationsByChallengeId(challenge.getId());
         challenge.setInitClassificationList();
         createClassificationListAndSave(programInfo, challenge);
+    }
+
+    private void updateChallengeAdminClassifications(Challenge challenge, List<CreateChallengeAdminClassificationRequestDto> adminProgramInfo) {
+        if (Objects.isNull(adminProgramInfo)) return;
+        challengeAdminClassificationHelper.deleteChallengeAdminClassificationsByChallengeId(challenge.getId());
+        challenge.setInitAdminClassificationList();
+        createAdminClassificationListAndSave(adminProgramInfo, challenge);
     }
 
     private void updateChallengePrices(Challenge challenge, List<CreateChallengePriceRequestDto> priceInfo) {

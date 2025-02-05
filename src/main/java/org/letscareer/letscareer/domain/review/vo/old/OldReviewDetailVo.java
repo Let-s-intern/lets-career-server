@@ -1,11 +1,11 @@
-package org.letscareer.letscareer.domain.review.vo;
+package org.letscareer.letscareer.domain.review.vo.old;
 
 import lombok.Builder;
 
 import java.time.LocalDateTime;
 
 @Builder
-public record ReviewDetailVo(
+public record OldReviewDetailVo(
         Long id,
         Long applicationId,
         Long userId,

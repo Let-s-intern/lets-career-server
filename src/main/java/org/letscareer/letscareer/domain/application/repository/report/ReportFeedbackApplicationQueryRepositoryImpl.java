@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.letscareer.letscareer.domain.application.entity.report.QReportFeedbackApplication.reportFeedbackApplication;
-import static org.letscareer.letscareer.domain.review.entity.QOldReview.oldReview;
+import static org.letscareer.letscareer.domain.review.entity.old.QOldReview.oldReview;
 import static org.letscareer.letscareer.domain.review.entity.QReview.review;
 
 @RequiredArgsConstructor
@@ -42,7 +42,7 @@ public class ReportFeedbackApplicationQueryRepositoryImpl implements ReportFeedb
                         eqStatus(ReportFeedbackStatus.CONFIRMED),
                         eqIsCanceled(false),
                         isBefore1Hours(),
-                        isNoReviewForApplication()
+                        reviewIsNull()
                 )
                 .fetch();
     }
@@ -65,10 +65,7 @@ public class ReportFeedbackApplicationQueryRepositoryImpl implements ReportFeedb
         return reportFeedbackApplication.feedbackDate.eq(now.minusHours(1));
     }
 
-    private BooleanExpression isNoReviewForApplication() {
-        return JPAExpressions
-                .selectFrom(oldReview)
-                .where(oldReview.application.id.eq(reportFeedbackApplication.reportApplication.id))
-                .notExists();
+    private BooleanExpression reviewIsNull(){
+        return reportFeedbackApplication.reportApplication._super.review.isNull();
     }
 }

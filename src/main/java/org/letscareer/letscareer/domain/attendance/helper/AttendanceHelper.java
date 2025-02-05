@@ -6,16 +6,14 @@ import org.letscareer.letscareer.domain.attendance.entity.Attendance;
 import org.letscareer.letscareer.domain.attendance.error.AttendanceErrorCode;
 import org.letscareer.letscareer.domain.attendance.repository.AttendanceRepository;
 import org.letscareer.letscareer.domain.attendance.type.AttendanceStatus;
-import org.letscareer.letscareer.domain.attendance.vo.AttendanceAdminVo;
-import org.letscareer.letscareer.domain.attendance.vo.AttendanceDashboardVo;
-import org.letscareer.letscareer.domain.attendance.vo.MissionScoreVo;
-import org.letscareer.letscareer.domain.attendance.vo.MissionAttendanceVo;
+import org.letscareer.letscareer.domain.attendance.vo.*;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.error.exception.ConflictException;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -62,5 +60,9 @@ public class AttendanceHelper {
 
     public Attendance findAttendanceByMissionIdAndUserIdOrNull(Long missionId, Long userId) {
         return attendanceRepository.findAttendanceByMissionIdAndUserId(missionId, userId).orElse(null);
+    }
+
+    public List<MissionReviewAdminVo> findAllMissionReviewAdminVos() {
+        return attendanceRepository.findAllMissionReviewAdminVos();
     }
 }

@@ -7,10 +7,7 @@ import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.attendance.type.AttendanceResult;
-import org.letscareer.letscareer.domain.attendance.vo.AttendanceAdminVo;
-import org.letscareer.letscareer.domain.attendance.vo.AttendanceDashboardVo;
-import org.letscareer.letscareer.domain.attendance.vo.MissionScoreVo;
-import org.letscareer.letscareer.domain.attendance.vo.MissionAttendanceVo;
+import org.letscareer.letscareer.domain.attendance.vo.*;
 
 import java.util.List;
 
@@ -106,6 +103,28 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
                         eqUserId(userId)
                 )
                 .fetchFirst();
+    }
+
+    @Override
+    public List<MissionReviewAdminVo> findAllMissionReviewAdminVos() {
+        return queryFactory
+                .select(Projections.constructor(MissionReviewAdminVo.class,
+                        attendance.id,
+                        attendance.createDate,
+                        challenge.challengeType,
+                        challenge.title,
+                        mission.th,
+                        mission.title,
+                        user.name,
+                        attendance.review,
+                        attendance.reviewIsVisible))
+                .from(attendance)
+                .leftJoin(attendance.mission, mission)
+                .leftJoin(mission.challenge, challenge)
+                .leftJoin(attendance.user, user)
+                .where(attendance.review.isNotEmpty())
+                .orderBy(attendance.createDate.desc())
+                .fetch();
     }
 
     private BooleanExpression eqUserId(Long userId) {

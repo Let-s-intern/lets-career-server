@@ -1,88 +1,78 @@
 package org.letscareer.letscareer.domain.review.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.Subselect;
-import org.letscareer.letscareer.domain.program.type.ProgramType;
-import org.letscareer.letscareer.domain.program.type.converter.ProgramTypeConverter;
+import org.letscareer.letscareer.domain.challenge.type.ChallengeType;
+import org.letscareer.letscareer.domain.challenge.type.converter.ChallengeTypeConverter;
+import org.letscareer.letscareer.domain.report.type.ReportType;
+import org.letscareer.letscareer.domain.report.type.ReportTypeConverter;
+import org.letscareer.letscareer.domain.review.type.ReviewProgramType;
+import org.letscareer.letscareer.domain.review.type.ReviewProgramTypeConverter;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 import java.time.LocalDateTime;
 
 @Immutable
 @Subselect(
-        "SELECT r.old_review_id as review_id, r.application_id, " +
-                "ca.challenge_id as program_id, 1 AS program_type, ch.title as program_title, " +
-                "u.name as user_name," +
-                "u.user_id as user_id, " +
-                "r.nps, r.nps_ans, r.nps_check_ans, r.content, r.program_detail, r.score, r.is_visible, r.create_date " +
-                "FROM old_review as r " +
+        "SELECT r.review_id, r.application_id, r.create_date, r.is_visible, " +
+                "1 AS type, " +
+                "ch.challenge_id as program_id, ch.title as program_title, ch.thumbnail as program_thumbnail, " +
+                "ch.challenge_type, null as live_job, null as report_type, " +
+                "0 as mission_id, null as mission_title, null as mission_th, null as attendance_review, " +
+                "u.user_id as user_id, u.name as user_name, u.wish_job as user_wish_job, u.wish_company as user_wish_company " +
+                "FROM review as r " +
                 "LEFT JOIN application as a ON r.application_id = a.application_id " +
-                "LEFT JOIN challenge_application as ca ON ca.application_id = a.application_id " +
-                "LEFT JOIN challenge as ch ON ca.challenge_id = ch.challenge_id " +
+                "LEFT JOIN challenge_review as cr ON cr.review_id = r.review_id " +
+                "LEFT JOIN challenge as ch ON ch.challenge_id = cr.challenge_id " +
                 "LEFT JOIN user as u ON a.user_id = u.user_id " +
-                "WHERE r.application_id is NOT NULL AND a.dtype = 'challenge_application' " +
+                "WHERE r.is_visible = true AND r.dtype = 'challenge_review' " +
 
                 "UNION ALL " +
-                "SELECT r.old_review_id as review_id, r.application_id, " +
-                "la.live_id as program_id, 2 AS program_type, li.title as program_title, " +
-                "u.name as user_name, " +
-                "u.user_id as user_id, " +
-                "r.nps, r.nps_ans, r.nps_check_ans, r.content, r.program_detail, r.score, r.is_visible, r.create_date " +
-                "FROM old_review as r " +
+                "SELECT r.review_id, r.application_id, r.create_date, r.is_visible, " +
+                "2 AS type, " +
+                "l.live_id as program_id, l.title as program_title, l.thumbnail as program_thumbnail, " +
+                "null as challenge_type, l.job as live_job, null as report_type, " +
+                "0 as mission_id, null as mission_title, null as mission_th, null as attendance_review, " +
+                "u.user_id as user_id, u.name as user_name, u.wish_job as user_wish_job, u.wish_company as user_wish_company " +
+                "FROM review as r " +
                 "LEFT JOIN application as a ON r.application_id = a.application_id " +
-                "LEFT JOIN live_application as la ON la.application_id = a.application_id " +
-                "LEFT JOIN live as li ON li.live_id = la.live_id " +
+                "LEFT JOIN live_review as lr ON lr.review_id = r.review_id " +
+                "LEFT JOIN live as l ON lr.live_id = l.live_id " +
                 "LEFT JOIN user as u ON a.user_id = u.user_id " +
-                "WHERE r.application_id is NOT NULL AND a.dtype = 'live_application' " +
+                "WHERE r.is_visible = true AND r.dtype = 'live_review' " +
 
                 "UNION ALL " +
-                "SELECT r.old_review_id as review_id, r.application_id, " +
-                "re.report_id as program_id, 4 AS program_type, re.title as program_title, " +
-                "u.name as user_name, " +
-                "u.user_id as user_id, " +
-                "r.nps, r.nps_ans, r.nps_check_ans, r.content, r.program_detail, r.score, r.is_visible, r.create_date " +
-                "FROM old_review as r " +
+                "SELECT r.review_id, r.application_id, r.create_date, r.is_visible, " +
+                "4 AS type, " +
+                "re.report_id as program_id, re.title as program_title, null as program_thumbnail, " +
+                "null as challenge_type, null as live_job, re.type as report_type, " +
+                "0 as mission_id, null as mission_title, null as mission_th, null as attendance_review, " +
+                "u.user_id as user_id, u.name as user_name, u.wish_job as user_wish_job, u.wish_company as user_wish_company " +
+                "FROM review as r " +
                 "LEFT JOIN application as a ON r.application_id = a.application_id " +
                 "LEFT JOIN report_application as ra ON ra.application_id = a.application_id " +
-                "LEFT JOIN report as re ON re.report_id = ra.report_id " +
+                "LEFT JOIN report as re ON ra.report_id = re.report_id " +
                 "LEFT JOIN user as u ON a.user_id = u.user_id " +
-                "WHERE r.application_id is NOT NULL AND a.dtype = 'report_application' " +
+                "WHERE r.is_visible = true AND r.dtype = 'report_review' " +
 
                 "UNION ALL " +
-                "SELECT r.old_review_id as review_id, r.application_id, " +
-                "ch.challenge_id as program_id, 1 AS program_type, ch.title as program_title, " +
-                "'익명' as user_name, " +
-                "null as user_id, " +
-                "r.nps, r.nps_ans, r.nps_check_ans, r.content, r.program_detail, r.score, r.is_visible, r.create_date " +
-                "FROM old_review as r " +
-                "LEFT JOIN challenge as ch ON r.program_id = ch.challenge_id " +
-                "WHERE r.application_id is NULL AND r.program_type is NOT NULL AND r.program_id is NOT NULL " +
-                "AND r.program_type = 1 " +
+                "SELECT att.attendance_id as review_id, 0, att.create_date, att.review_is_visible as is_visible, " +
+                "5 AS type, " +
+                "0 as program_id, ch.title as program_title, ch.thumbnail as program_thumbnail, " +
+                "ch.challenge_type, null as live_job, null as report_type, " +
+                "m.mission_id, m.title as mission_title, m.th as mission_th, att.review as attendance_review, " +
+                "u.user_id as user_id, u.name as user_name, u.wish_job as user_wish_job, u.wish_company as user_wish_company " +
+                "FROM attendance as att " +
+                "LEFT JOIN mission as m ON att.mission_id = m.mission_id " +
+                "LEFT JOIN challenge as ch ON m.challenge_id = ch.challenge_id " +
+                "LEFT JOIN user as u ON att.user_id = u.user_id " +
+                "WHERE att.review_is_visible = true " +
 
-                "UNION ALL " +
-                "SELECT r.old_review_id as review_id, r.application_id, " +
-                "li.live_id as program_id, 2 AS program_type, li.title as program_title, " +
-                "'익명' as user_name, " +
-                "null as user_id, " +
-                "r.nps, r.nps_ans, r.nps_check_ans, r.content, r.program_detail, r.score, r.is_visible, r.create_date " +
-                "FROM old_review as r " +
-                "LEFT JOIN live as li ON r.program_id = li.live_id " +
-                "WHERE r.application_id is NULL AND r.program_type is NOT NULL AND r.program_id is NOT NULL " +
-                "AND r.program_type = 2 " +
-
-                "UNION ALL " +
-                "SELECT r.old_review_id as review_id, r.application_id, " +
-                "re.report_id as program_id, 4 AS program_type, re.title as program_title, " +
-                "'익명' as user_name, " +
-                "null as user_id, " +
-                "r.nps, r.nps_ans, r.nps_check_ans, r.content, r.program_detail, r.score, r.is_visible, r.create_date " +
-                "FROM old_review as r " +
-                "LEFT JOIN report as re ON r.program_id = re.report_id " +
-                "WHERE r.application_id is NULL AND r.program_type is NOT NULL AND r.program_id is NOT NULL " +
-                "AND r.program_type = 4 " +
-
-                "ORDER BY review_id DESC"
+                "ORDER BY create_date DESC"
 )
 @Table(name = "vw_review")
 @Entity
@@ -90,18 +80,30 @@ public class VWReview extends BaseTimeEntity {
     @Id
     private Long reviewId;
     private Long applicationId;
-    @Convert(converter = ProgramTypeConverter.class)
-    private ProgramType programType;
+    private LocalDateTime createDate;
+    private Boolean isVisible;
+
+    @Convert(converter = ReviewProgramTypeConverter.class)
+    private ReviewProgramType type;
     private Long programId;
     private String programTitle;
-    private String userName;
+    private String programThumbnail;
+
+    @Convert(converter = ChallengeTypeConverter.class)
+    private ChallengeType challengeType;
+
+    private String liveJob;
+
+    @Convert(converter = ReportTypeConverter.class)
+    private ReportType reportType;
+
+    private Long missionId;
+    private String missionTitle;
+    private Integer missionTh;
+    private String attendanceReview;
+
     private Long userId;
-    private Integer nps;
-    private String npsAns;
-    private Boolean npsCheckAns;
-    private String content;
-    private String programDetail;
-    private Integer score;
-    private Boolean isVisible;
-    private LocalDateTime createDate;
+    private String userName;
+    private String userWishJob;
+    private String userWishCompany;
 }
