@@ -15,13 +15,14 @@ import org.springframework.data.support.PageableExecutionUtils;
 import java.util.List;
 
 import static org.letscareer.letscareer.domain.review.entity.QVWReview.vWReview;
+import static org.letscareer.letscareer.domain.user.entity.QUser.user;
 
 @RequiredArgsConstructor
 public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<ReviewInfoVo> findAllReviewInfoVos(List<ReviewProgramType> typeList, List<ChallengeType> challengeTypeList, Pageable pageable) {
+    public Page<ReviewInfoVo> findAllReviewInfoVos(List<ReviewProgramType> typeList, List<ChallengeType> challengeTypeList, String liveJob, Pageable pageable) {
         List<ReviewInfoVo> reviewInfoVos = queryFactory
                 .select(Projections.constructor(ReviewInfoVo.class,
                         vWReview.reviewId,
@@ -39,7 +40,8 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                 .from(vWReview)
                 .where(
                         inReviewProgramType(typeList),
-                        inChallengeType(challengeTypeList)
+                        inChallengeType(challengeTypeList),
+                        containsLiveJob(liveJob)
                 )
                 .groupBy(
                         vWReview.type,
@@ -55,7 +57,8 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                 .from(vWReview)
                 .where(
                         inReviewProgramType(typeList),
-                        inChallengeType(challengeTypeList)
+                        inChallengeType(challengeTypeList),
+                        containsLiveJob(liveJob)
                 )
                 .groupBy(
                         vWReview.type,
@@ -87,5 +90,9 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
         BooleanExpression challengeReviewCondition = vWReview.type.eq(ReviewProgramType.CHALLENGE_REVIEW).and(vWReview.challengeType.in(challengeTypeList));
         BooleanExpression missionReviewCondition = vWReview.type.eq(ReviewProgramType.MISSION_REVIEW).and(vWReview.challengeType.in(challengeTypeList));
         return challengeReviewCondition.or(missionReviewCondition);
+    }
+
+    private BooleanExpression containsLiveJob(String liveJob) {
+        return liveJob != null ? vWReview.liveJob.containsIgnoreCase(liveJob) : null;
     }
 }

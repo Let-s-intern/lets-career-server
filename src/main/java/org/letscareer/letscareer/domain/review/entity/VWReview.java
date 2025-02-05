@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
         "SELECT r.review_id, r.application_id, r.create_date, r.is_visible, " +
                 "1 AS type, " +
                 "ch.challenge_id as program_id, ch.title as program_title, ch.thumbnail as program_thumbnail, " +
-                "ch.challenge_type, null as report_type, " +
+                "ch.challenge_type, null as live_job, null as report_type, " +
                 "0 as mission_id, null as mission_title, null as mission_th, null as attendance_review, " +
                 "u.user_id as user_id, u.name as user_name, u.wish_job as user_wish_job, u.wish_company as user_wish_company " +
                 "FROM review as r " +
@@ -35,7 +35,7 @@ import java.time.LocalDateTime;
                 "SELECT r.review_id, r.application_id, r.create_date, r.is_visible, " +
                 "2 AS type, " +
                 "l.live_id as program_id, l.title as program_title, l.thumbnail as program_thumbnail, " +
-                "null as challenge_type, null as report_type, " +
+                "null as challenge_type, l.job as live_job, null as report_type, " +
                 "0 as mission_id, null as mission_title, null as mission_th, null as attendance_review, " +
                 "u.user_id as user_id, u.name as user_name, u.wish_job as user_wish_job, u.wish_company as user_wish_company " +
                 "FROM review as r " +
@@ -49,7 +49,7 @@ import java.time.LocalDateTime;
                 "SELECT r.review_id, r.application_id, r.create_date, r.is_visible, " +
                 "4 AS type, " +
                 "re.report_id as program_id, re.title as program_title, null as program_thumbnail, " +
-                "null as challenge_type, re.type as report_type, " +
+                "null as challenge_type, null as live_job, re.type as report_type, " +
                 "0 as mission_id, null as mission_title, null as mission_th, null as attendance_review, " +
                 "u.user_id as user_id, u.name as user_name, u.wish_job as user_wish_job, u.wish_company as user_wish_company " +
                 "FROM review as r " +
@@ -62,8 +62,8 @@ import java.time.LocalDateTime;
                 "UNION ALL " +
                 "SELECT att.attendance_id as review_id, 0, att.create_date, att.review_is_visible as is_visible, " +
                 "5 AS type, " +
-                "0 as program_id, null as program_title, ch.thumbnail as program_thumbnail, " +
-                "ch.challenge_type, null as report_type, " +
+                "0 as program_id, ch.title as program_title, ch.thumbnail as program_thumbnail, " +
+                "ch.challenge_type, null as live_job, null as report_type, " +
                 "m.mission_id, m.title as mission_title, m.th as mission_th, att.review as attendance_review, " +
                 "u.user_id as user_id, u.name as user_name, u.wish_job as user_wish_job, u.wish_company as user_wish_company " +
                 "FROM attendance as att " +
@@ -91,6 +91,8 @@ public class VWReview extends BaseTimeEntity {
 
     @Convert(converter = ChallengeTypeConverter.class)
     private ChallengeType challengeType;
+
+    private String liveJob;
 
     @Convert(converter = ReportTypeConverter.class)
     private ReportType reportType;

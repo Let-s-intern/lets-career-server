@@ -31,8 +31,8 @@ public class VWReviewServiceImpl implements VWReviewService {
     private final ReviewMapper reviewMapper;
 
     @Override
-    public GetReviewResponseDto getReviews(List<ReviewProgramType> typeList, List<ChallengeType> challengeTypeList, Pageable pageable) {
-        Page<ReviewInfoVo> reviewInfoVos = reviewHelper.getReviewInfoVos(typeList, challengeTypeList, pageable);
+    public GetReviewResponseDto getReviews(List<ReviewProgramType> typeList, List<ChallengeType> challengeTypeList, String liveJob, Pageable pageable) {
+        Page<ReviewInfoVo> reviewInfoVos = reviewHelper.getReviewInfoVos(typeList, challengeTypeList, liveJob, pageable);
         List<ReviewVo> reviewVos = reviewInfoVos.getContent().stream()
                 .map(reviewInfoVo -> reviewMapper.toReviewVo(
                         reviewInfoVo,

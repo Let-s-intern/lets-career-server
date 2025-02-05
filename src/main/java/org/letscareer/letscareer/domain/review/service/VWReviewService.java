@@ -11,6 +11,6 @@ import java.util.List;
 
 @Service
 public interface VWReviewService {
-    GetReviewResponseDto getReviews(List<ReviewProgramType> typeList, List<ChallengeType> challengeTypeList, Pageable pageable);
+    GetReviewResponseDto getReviews(List<ReviewProgramType> typeList, List<ChallengeType> challengeTypeList, String liveJob, Pageable pageable);
     GetReviewCountResponseDto getReviewCount();
 }
