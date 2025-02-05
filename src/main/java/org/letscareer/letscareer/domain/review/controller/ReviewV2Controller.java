@@ -49,7 +49,7 @@ public class ReviewV2Controller {
     @GetMapping
     private ResponseEntity<SuccessResponse<?>> getReviews(@RequestParam(required = false) final List<ReviewProgramType> type,
                                                           @RequestParam(required = false) final List<ChallengeType> challengeType,
-                                                          @RequestParam(required = false) final String liveJob,
+                                                          @RequestParam(required = false) final List<String> liveJob,
                                                           final Pageable pageable) {
         GetReviewResponseDto responseDto = reviewService.getReviews(type, challengeType, liveJob, pageable);
         return SuccessResponse.ok(responseDto);

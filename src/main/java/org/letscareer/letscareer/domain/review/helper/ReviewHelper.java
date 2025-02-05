@@ -16,8 +16,8 @@ import java.util.List;
 public class ReviewHelper {
     private final ReviewRepository reviewRepository;
 
-    public Page<ReviewInfoVo> getReviewInfoVos(List<ReviewProgramType> typeList, List<ChallengeType> challengeTypeList, String liveJob, Pageable pageable) {
-        return reviewRepository.findAllReviewInfoVos(typeList, challengeTypeList, liveJob, pageable);
+    public Page<ReviewInfoVo> getReviewInfoVos(List<ReviewProgramType> typeList, List<ChallengeType> challengeTypeList, List<String> liveJobList, Pageable pageable) {
+        return reviewRepository.findAllReviewInfoVos(typeList, challengeTypeList, liveJobList, pageable);
     }
 
     public Long countReviews() {
