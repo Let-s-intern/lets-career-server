@@ -15,14 +15,13 @@ import org.springframework.data.support.PageableExecutionUtils;
 import java.util.List;
 
 import static org.letscareer.letscareer.domain.review.entity.QVWReview.vWReview;
-import static org.letscareer.letscareer.domain.user.entity.QUser.user;
 
 @RequiredArgsConstructor
 public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<ReviewInfoVo> findAllReviewInfoVos(List<ReviewProgramType> typeList, List<ChallengeType> challengeTypeList, String liveJob, Pageable pageable) {
+    public Page<ReviewInfoVo> findAllReviewInfoVos(List<ReviewProgramType> typeList, List<ChallengeType> challengeTypeList, List<String> liveJobList, Pageable pageable) {
         List<ReviewInfoVo> reviewInfoVos = queryFactory
                 .select(Projections.constructor(ReviewInfoVo.class,
                         vWReview.reviewId,
@@ -41,7 +40,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                 .where(
                         inReviewProgramType(typeList),
                         inChallengeType(challengeTypeList),
-                        containsLiveJob(liveJob)
+                        containsLiveJob(liveJobList)
                 )
                 .groupBy(
                         vWReview.type,
@@ -58,7 +57,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                 .where(
                         inReviewProgramType(typeList),
                         inChallengeType(challengeTypeList),
-                        containsLiveJob(liveJob)
+                        containsLiveJob(liveJobList)
                 )
                 .groupBy(
                         vWReview.type,
@@ -92,7 +91,13 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
         return challengeReviewCondition.or(missionReviewCondition);
     }
 
-    private BooleanExpression containsLiveJob(String liveJob) {
-        return liveJob != null ? vWReview.liveJob.containsIgnoreCase(liveJob) : null;
+    private BooleanExpression containsLiveJob(List<String> liveJobList) {
+        if (liveJobList == null || liveJobList.isEmpty()) return null;
+        BooleanExpression liveJobCondition = null;
+        for (String liveJob : liveJobList) {
+            BooleanExpression condition = vWReview.liveJob.containsIgnoreCase(liveJob);
+            liveJobCondition = (liveJobCondition == null) ? condition : liveJobCondition.or(condition);
+        }
+        return liveJobCondition;
     }
 }
