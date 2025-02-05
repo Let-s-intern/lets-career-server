@@ -108,7 +108,7 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
         LocalDateTime today = LocalDateTime.now();
         LocalDateTime challengeStartDate = challenge.getStartDate();
         String messageType;
-        if (challengeStartDate.minusHours(1).isAfter(today)) { messageType = "d_challenge_payment"; } // DEV_TEST
+        if (challengeStartDate.minusHours(1).isAfter(today)) { messageType = "challenge_payment"; }
         else { messageType = "challenge_overpay"; }
 
         nhnProvider.sendProgramPaymentKakaoMessages(user, paymentRequestParameter, programRequestParameter, "payment_confirm", messageType);
