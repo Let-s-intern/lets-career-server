@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import org.letscareer.letscareer.domain.payment.vo.PaymentProgramVo;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
+import org.letscareer.letscareer.domain.report.type.ReportType;
 
 import java.time.LocalDateTime;
 
@@ -12,6 +13,7 @@ public record GetPaymentProgramResponseDto(
         Long paymentId,
         Long applicationId,
         ProgramType programType,
+        ReportType reportType,
         String title,
         String thumbnail,
         Integer price,
@@ -24,6 +26,7 @@ public record GetPaymentProgramResponseDto(
                 .paymentId(vo.paymentId())
                 .applicationId(vo.applicationId())
                 .programType(ProgramType.valueOf(vo.programType()))
+                .reportType(vo.reportType())
                 .title(vo.title())
                 .thumbnail(vo.thumbnail())
                 .price(vo.price())
