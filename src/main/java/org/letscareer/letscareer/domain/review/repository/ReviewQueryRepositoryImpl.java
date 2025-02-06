@@ -30,6 +30,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
                         vWReview.programTitle,
                         vWReview.programThumbnail,
                         vWReview.challengeType,
+                        vWReview.reportType,
                         vWReview.missionTitle,
                         vWReview.missionTh,
                         vWReview.attendanceReview,
