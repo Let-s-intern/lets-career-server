@@ -15,6 +15,8 @@ public record MissionAttendanceVo(
         AttendanceResult result,
         String comments,
         LocalDateTime createDate,
-        LocalDateTime lastModifiedDate
+        LocalDateTime lastModifiedDate,
+        String review,
+        Boolean reviewIsVisible
 ) {
 }
