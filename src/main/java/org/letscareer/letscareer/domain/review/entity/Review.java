@@ -37,7 +37,7 @@ public abstract class Review extends BaseTimeEntity {
     public Review(Application application, CreateReviewRequestDto requestDto) {
         this.score = requestDto.score();
         this.npsScore = requestDto.npsScore();
-        this.isVisible = false;
+        this.isVisible = true;
         this.application = application;
         this.reviewItemList = new ArrayList<>();
     }
