@@ -4,6 +4,7 @@ import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.EnumExpression;
 import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.letscareer.letscareer.domain.application.vo.MyApplicationVo;
 import org.letscareer.letscareer.domain.payment.vo.PaymentProgramVo;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.program.vo.ProgramSimpleVo;
+import org.letscareer.letscareer.domain.report.type.ReportType;
 import org.letscareer.letscareer.domain.user.dto.response.UserApplicationInfo;
 
 import java.time.LocalDateTime;
@@ -97,6 +99,7 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
                         programTypeEnumExpression(),
                         programTitleExpression(),
                         programThumbnailExpression(),
+                        reportTypeExpression(),
                         payment.programPrice,
                         payment.finalPrice,
                         payment.paymentKey,
@@ -176,6 +179,12 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
                 .when(challenge.id.isNotNull()).then(challenge.thumbnail)
                 .when(live.id.isNotNull()).then(live.thumbnail)
                 .otherwise((String) null);
+    }
+
+    private EnumExpression<ReportType> reportTypeExpression() {
+        return new CaseBuilder()
+                .when(report.id.isNotNull()).then(report.type)
+                .otherwise((ReportType) null);
     }
 
     private BooleanExpression eqApplicationId(Long applicationId) {
