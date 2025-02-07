@@ -71,6 +71,7 @@ public record ReportWebhookDto(
     }
 
     public String getCouponName() {
+        if (payment.getCoupon() == null) return "없음";
         return payment.getCoupon().getName();
     }
 
