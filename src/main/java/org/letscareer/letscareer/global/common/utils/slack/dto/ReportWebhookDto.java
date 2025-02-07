@@ -5,6 +5,7 @@ import lombok.Builder;
 import org.letscareer.letscareer.domain.application.entity.report.ReportApplication;
 import org.letscareer.letscareer.domain.application.entity.report.ReportApplicationOption;
 import org.letscareer.letscareer.domain.application.entity.report.ReportFeedbackApplication;
+import org.letscareer.letscareer.domain.coupon.entity.Coupon;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.report.entity.Report;
 import org.letscareer.letscareer.domain.report.type.ReportPaymentStatus;
@@ -67,6 +68,10 @@ public record ReportWebhookDto(
 
     public String isAppliedFeedback() {
         return Objects.isNull(reportFeedbackApplication) ? Boolean.FALSE.toString() : Boolean.TRUE.toString();
+    }
+
+    public String getCouponName() {
+        return payment.getCoupon().getName();
     }
 
     public String getOrderId() {

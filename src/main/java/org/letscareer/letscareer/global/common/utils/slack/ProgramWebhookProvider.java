@@ -22,6 +22,7 @@ public class ProgramWebhookProvider implements WebhookProvider {
     private static final String PRICE_TYPE = "기본 서비스 유형";
     private static final String OPTIONS = "서류 진단서 옵션";
     private static final String IS_APPLIED_FEEDBACK = "1:1 피드백 신청여부";
+    private static final String COUPON_NAME = "쿠폰 사용 내역";
     private static final String ORDER_ID = "주문번호";
     private static final String USER_INFO = "신청자 / 이메일 / 전화번호";
     private final SlackApi slackApi;
@@ -50,6 +51,7 @@ public class ProgramWebhookProvider implements WebhookProvider {
                 createSlackField(PRICE_TYPE, reportWebhookDto.getReportPriceType()),
                 createSlackField(OPTIONS, reportWebhookDto.getOptionsString()),
                 createSlackField(IS_APPLIED_FEEDBACK, reportWebhookDto.isAppliedFeedback()),
+                createSlackField(COUPON_NAME, reportWebhookDto.getCouponName()),
                 createSlackField(ORDER_ID, reportWebhookDto.getOrderId()),
                 createSlackField(USER_INFO, reportWebhookDto.getUserInfo()),
                 createSlackField(reportWebhookDto.getTimeInfoTitle(), reportWebhookDto.getTimeInfo())
