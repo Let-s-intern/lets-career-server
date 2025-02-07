@@ -7,6 +7,8 @@ import org.letscareer.letscareer.domain.live.type.ProgressType;
 import org.letscareer.letscareer.domain.live.type.converter.ProgressTypeConverter;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.program.type.converter.ProgramTypeConverter;
+import org.letscareer.letscareer.domain.report.type.ReportType;
+import org.letscareer.letscareer.domain.report.type.ReportTypeConverter;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 import java.time.LocalDateTime;
@@ -17,6 +19,7 @@ import java.time.LocalDateTime;
                 "1 as program_type, 0 as progress_type, ca.challenge_id as program_id, " +
                 "c.title as program_title, c.short_desc as program_short_desc, c.thumbnail as program_thumbnail, c.start_date as program_start_date, c.end_date as program_end_date, " +
                 "p.payment_id as payment_id, p.payment_key, p.program_price, p.final_price, p.create_date as payment_create_date, " +
+                "null as report_Type, " +
                 "r.review_id " +
                 "FROM application as a " +
                 "INNER JOIN challenge_application as ca ON ca.application_id = a.application_id " +
@@ -28,6 +31,7 @@ import java.time.LocalDateTime;
                 "2 as program_type, l.progress_type, la.live_id as program_id, " +
                 "l.title as program_title, l.short_desc as program_short_desc, l.thumbnail as program_thumbnail, l.start_date as program_start_date, l.end_date as program_end_date, " +
                 "p.payment_id as payment_id, p.payment_key, p.program_price, p.final_price, p.create_date as payment_create_date, " +
+                "null as report_Type, " +
                 "r.review_id " +
                 "FROM application as a " +
                 "INNER JOIN live_application as la ON la.application_id = a.application_id " +
@@ -39,6 +43,7 @@ import java.time.LocalDateTime;
                 "4 as program_type, 0 as progress_type, ra.report_id as program_id, " +
                 "re.title as program_title, null as program_short_desc, null as program_thumbnail, re.visible_date as program_start_date, DATE_ADD(re.visible_date, INTERVAL 6 MONTH) as program_end_date, " +
                 "p.payment_id as payment_id, p.payment_key, p.program_price, p.final_price, p.create_date as payment_create_date, " +
+                "re.type as report_Type, " +
                 "r.review_id " +
                 "FROM application as a " +
                 "INNER JOIN report_application as ra ON ra.application_id = a.application_id " +
@@ -74,6 +79,9 @@ public class VWApplication extends BaseTimeEntity {
     private String programThumbnail;
     private LocalDateTime programStartDate;
     private LocalDateTime programEndDate;
+
+    @Convert(converter = ReportTypeConverter.class)
+    private ReportType reportType;
 
     private Long reviewId;
 }
