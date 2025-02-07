@@ -29,7 +29,7 @@ public class ReviewItem extends BaseTimeEntity {
     private String answer;
 
     @NotNull
-    private Boolean isVisible = false;
+    private Boolean isVisible;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_id")
