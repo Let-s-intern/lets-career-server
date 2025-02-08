@@ -64,7 +64,10 @@ public class BlogReviewQueryRepositoryImpl implements BlogReviewQueryRepository 
 
         JPAQuery<Long> countQuery = queryFactory
                 .select(blogReview.count())
-                .from(blogReview);
+                .from(blogReview)
+                .where(
+                        eqIsVisible(true)
+                );
 
         return PageableExecutionUtils.getPage(blogReviewVoList, pageable, countQuery::fetchOne);
     }
