@@ -48,6 +48,11 @@ public class ChallengePriceHelper {
                 .orElseThrow(() -> new EntityNotFoundException(CHALLENGE_PRICE_NOT_FOUND));
     }
 
+    public Integer findPriceRefundByChallengeId(Long challengeId) {
+        return challengePriceRepository.findPriceRefundByChallengeId(challengeId)
+                .orElseThrow(() -> new EntityNotFoundException(CHALLENGE_PRICE_NOT_FOUND));
+    }
+
     public ChallengePrice findChallengePriceByPriceIdOrThrow(Long priceId) {
         return challengePriceRepository.findByPriceId(priceId)
                 .orElseThrow(() -> new EntityNotFoundException(CHALLENGE_PRICE_NOT_FOUND));

@@ -17,11 +17,12 @@ public record GetPaymentProgramResponseDto(
         String title,
         String thumbnail,
         Integer price,
+        Integer paybackPrice,
         Boolean isCanceled,
         Boolean isRefunded,
         LocalDateTime createDate
 ) {
-    public static GetPaymentProgramResponseDto of(PaymentProgramVo vo) {
+    public static GetPaymentProgramResponseDto of(PaymentProgramVo vo, Integer paybackPrice) {
         return GetPaymentProgramResponseDto.builder()
                 .paymentId(vo.paymentId())
                 .applicationId(vo.applicationId())
@@ -30,6 +31,7 @@ public record GetPaymentProgramResponseDto(
                 .title(vo.title())
                 .thumbnail(vo.thumbnail())
                 .price(vo.price())
+                .paybackPrice(paybackPrice)
                 .isCanceled(vo.isCanceled())
                 .isRefunded(vo.isRefunded())
                 .createDate(vo.createDate())
