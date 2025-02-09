@@ -10,6 +10,7 @@ public record ReviewInfoVo(
         Long reviewId,
         ReviewProgramType type,
         LocalDateTime createDate,
+        Long programId,
         String programTitle,
         String programThumbnail,
         ChallengeType challengeType,

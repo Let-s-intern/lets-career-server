@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 public record ChallengeReviewVo(
         @JsonIgnore
         Long userId,
+        Long programId,
         Long reviewId,
         LocalDateTime createDate,
         ChallengeType challengeType,

@@ -20,6 +20,7 @@ public class ReportReviewQueryRepositoryImpl implements ReportReviewQueryReposit
     public List<ReportReviewAdminVo> findAllReportReviewAdminVos() {
         return queryFactory
                 .select(Projections.constructor(ReportReviewAdminVo.class,
+                        reportReview.report.id,
                         reportReview.id,
                         reportReview.createDate,
                         reportReview.reportType,
@@ -39,6 +40,7 @@ public class ReportReviewQueryRepositoryImpl implements ReportReviewQueryReposit
                 queryFactory
                     .select(Projections.constructor(ReportReviewVo.class,
                             reportReview.application.user.id,
+                            reportReview.report.id,
                             reportReview.id,
                             reportReview.createDate,
                             reportReview.reportType,

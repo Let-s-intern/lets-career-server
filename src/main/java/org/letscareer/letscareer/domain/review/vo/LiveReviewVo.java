@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 public record LiveReviewVo(
         @JsonIgnore
         Long userId,
+        Long programId,
         Long reviewId,
         LocalDateTime createDate,
         String title,

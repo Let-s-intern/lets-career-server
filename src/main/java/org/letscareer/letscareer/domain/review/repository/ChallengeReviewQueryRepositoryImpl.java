@@ -22,6 +22,7 @@ public class ChallengeReviewQueryRepositoryImpl implements ChallengeReviewQueryR
     public List<ChallengeReviewAdminVo> findAllChallengeReviewAdminVos() {
         return queryFactory
                 .select(Projections.constructor(ChallengeReviewAdminVo.class,
+                        challengeReview.challenge.id,
                         challengeReview.id,
                         challengeReview.createDate,
                         challengeReview.challengeType,
@@ -43,6 +44,7 @@ public class ChallengeReviewQueryRepositoryImpl implements ChallengeReviewQueryR
                 queryFactory
                         .select(Projections.constructor(ChallengeReviewVo.class,
                                 challengeReview.application.user.id,
+                                challengeReview.challenge.id,
                                 challengeReview.id,
                                 challengeReview.createDate,
                                 challengeReview.challengeType,

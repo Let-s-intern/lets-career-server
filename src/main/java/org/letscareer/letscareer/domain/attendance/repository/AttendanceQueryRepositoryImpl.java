@@ -111,6 +111,7 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
     public List<MissionReviewAdminVo> findAllMissionReviewAdminVos() {
         return queryFactory
                 .select(Projections.constructor(MissionReviewAdminVo.class,
+                        challenge.id,
                         attendance.id,
                         attendance.createDate,
                         challenge.challengeType,
