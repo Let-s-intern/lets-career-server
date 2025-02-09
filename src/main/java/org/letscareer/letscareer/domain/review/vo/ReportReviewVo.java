@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 public record ReportReviewVo(
         @JsonIgnore
         Long userId,
+        Long programId,
         Long reviewId,
         LocalDateTime createDate,
         ReportType reportType,

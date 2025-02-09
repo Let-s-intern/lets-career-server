@@ -5,6 +5,7 @@ import org.letscareer.letscareer.domain.challenge.type.ChallengeType;
 import java.time.LocalDateTime;
 
 public record MissionReviewAdminVo(
+        Long programId,
         Long attendanceId,
         LocalDateTime createDate,
         ChallengeType challengeType,
