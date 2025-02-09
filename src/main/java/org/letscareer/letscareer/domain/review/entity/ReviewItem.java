@@ -51,6 +51,7 @@ public class ReviewItem extends BaseTimeEntity {
     }
 
     private static boolean isVisibleByQuestionType(ReviewQuestionType questionType) {
-        return questionType.equals(ReviewQuestionType.GOAL) || questionType.equals(ReviewQuestionType.GOAL_RESULT);
+        return questionType.equals(ReviewQuestionType.GOAL) || questionType.equals(ReviewQuestionType.GOAL_RESULT)
+                || questionType.equals(ReviewQuestionType.WORRY) || questionType.equals(ReviewQuestionType.WORRY_RESULT);
     }
 }
