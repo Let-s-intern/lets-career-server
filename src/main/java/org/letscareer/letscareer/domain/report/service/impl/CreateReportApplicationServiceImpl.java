@@ -69,22 +69,20 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
         Coupon coupon = couponHelper.findCouponByIdOrNull(requestDto.couponId());
         List<ReportOption> reportOptionList = reportOptionHelper.findReportOptionsByReportIdAndOptionIds(reportId, requestDto.optionIds());
         reportPriceHelper.validatePrice(reportPrice, reportFeedback, coupon, reportOptionList, requestDto.isFeedbackApplied(), requestDto.amount());
-        System.out.println("************************************** " + requestDto.programPrice() + " " + requestDto.programDiscount());
 
-//        ReportApplication reportApplication = reportApplicationHelper.createReportApplicationAndSave(requestDto, report, reportPrice, user);
-//        Payment payment = paymentHelper.createReportPaymentAndSave(requestDto, coupon, reportApplication);
-//        List<ReportApplicationOption> reportApplicationOptions = createReportApplicationOptions(reportApplication, reportId, requestDto);
-//        ReportFeedbackApplication reportFeedbackApplication = reportApplicationHelper.createReportFeedbackApplicationAndSave(requestDto, reportFeedback, reportApplication);
-//        ReportPaymentStatus paymentStatus = ReportPaymentStatus.of(reportApplication, reportFeedbackApplication);
-//
-//        updateContactEmail(user, requestDto);
-//        TossPaymentsResponseDto responseDto = tossProvider.requestPayments(requestDto.paymentKey(), requestDto.orderId(), requestDto.amount());
-//        sendKakaoMessages(paymentStatus, report, user, requestDto, reportApplication.getReportPriceType(), reportApplicationOptions, reportFeedbackApplication);
-//
-//        setReportApplicationCache(user, report, reportApplication, reportApplicationOptions, reportFeedbackApplication, payment);
-//        sendSlackBot(report, reportApplication, reportApplicationOptions, reportFeedbackApplication, user, payment, paymentStatus);
-//        return reportMapper.toCreateReportApplicationResponseDto(responseDto);
-        return null;
+        ReportApplication reportApplication = reportApplicationHelper.createReportApplicationAndSave(requestDto, report, reportPrice, user);
+        Payment payment = paymentHelper.createReportPaymentAndSave(requestDto, coupon, reportApplication);
+        List<ReportApplicationOption> reportApplicationOptions = createReportApplicationOptions(reportApplication, reportId, requestDto);
+        ReportFeedbackApplication reportFeedbackApplication = reportApplicationHelper.createReportFeedbackApplicationAndSave(requestDto, reportFeedback, reportApplication);
+        ReportPaymentStatus paymentStatus = ReportPaymentStatus.of(reportApplication, reportFeedbackApplication);
+
+        updateContactEmail(user, requestDto);
+        TossPaymentsResponseDto responseDto = tossProvider.requestPayments(requestDto.paymentKey(), requestDto.orderId(), requestDto.amount());
+        sendKakaoMessages(paymentStatus, report, user, requestDto, reportApplication.getReportPriceType(), reportApplicationOptions, reportFeedbackApplication);
+
+        setReportApplicationCache(user, report, reportApplication, reportApplicationOptions, reportFeedbackApplication, payment);
+        sendSlackBot(report, reportApplication, reportApplicationOptions, reportFeedbackApplication, user, payment, paymentStatus);
+        return reportMapper.toCreateReportApplicationResponseDto(responseDto);
     }
 
     private List<ReportApplicationOption> createReportApplicationOptions(ReportApplication reportApplication, Long reportId, CreateReportApplicationRequestDto requestDto) {
