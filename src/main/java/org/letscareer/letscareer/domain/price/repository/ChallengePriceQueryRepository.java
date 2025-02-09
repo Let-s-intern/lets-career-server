@@ -12,5 +12,7 @@ public interface ChallengePriceQueryRepository {
 
     Optional<PriceDetailVo> findPriceDetailVoByChallengeId(Long programId);
 
+    Optional<Integer> findPriceRefundByChallengeId(Long challengeId);
+
     Optional<ChallengePrice> findByPriceId(Long priceId);
 }

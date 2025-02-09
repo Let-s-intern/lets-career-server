@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -67,6 +68,7 @@ public class PaymentServiceImpl implements PaymentService {
         return programInfos.stream()
                 .map(programInfo -> paymentMapper.toGetPaymentResponseDto(
                         programInfo,
+                        Objects.equals(programInfo.programType(), "CHALLENGE") ? challengePriceHelper.findPriceRefundByChallengeId(programInfo.programId()) : 0,
                         tossProvider.requestPaymentDetail(programInfo.paymentKey())
                 ))
                 .collect(Collectors.toList());

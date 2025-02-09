@@ -19,13 +19,14 @@ public class PaymentMapper {
         return GetPaymentDetailResponseDto.of(programSimpleVo, priceInfo, paymentInfo, tossInfo);
     }
 
-    public GetPaymentProgramResponseDto toGetPaymentProgramResponseDto(PaymentProgramVo programInfo) {
-        return GetPaymentProgramResponseDto.of(programInfo);
+    public GetPaymentProgramResponseDto toGetPaymentProgramResponseDto(PaymentProgramVo programInfo, Integer paybackPrice) {
+        return GetPaymentProgramResponseDto.of(programInfo, paybackPrice);
     }
 
     public GetPaymentResponseDto toGetPaymentResponseDto(PaymentProgramVo programInfo,
+                                                         Integer paybackPrice,
                                                          TossPaymentsResponseDto tossInfo) {
-        GetPaymentProgramResponseDto programResponseDto = toGetPaymentProgramResponseDto(programInfo);
+        GetPaymentProgramResponseDto programResponseDto = toGetPaymentProgramResponseDto(programInfo, paybackPrice);
         return GetPaymentResponseDto.of(programResponseDto, tossInfo);
     }
 

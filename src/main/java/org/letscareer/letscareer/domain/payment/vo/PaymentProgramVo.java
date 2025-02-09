@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 public record PaymentProgramVo(
         Long paymentId,
         Long applicationId,
+        Long programId,
         String programType,
         String title,
         String thumbnail,

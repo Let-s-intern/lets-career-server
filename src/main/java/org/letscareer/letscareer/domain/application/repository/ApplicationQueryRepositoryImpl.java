@@ -2,10 +2,7 @@ package org.letscareer.letscareer.domain.application.repository;
 
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.CaseBuilder;
-import com.querydsl.core.types.dsl.EnumExpression;
-import com.querydsl.core.types.dsl.StringExpression;
+import com.querydsl.core.types.dsl.*;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.type.ApplicationStatus;
@@ -98,6 +95,7 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
                 .select(Projections.constructor(PaymentProgramVo.class,
                         payment.id,
                         application.id,
+                        programIdExpression(),
                         programTypeEnumExpression(),
                         programTitleExpression(),
                         programThumbnailExpression(),
@@ -158,6 +156,14 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
                         eqApplicationId(applicationId)
                 )
                 .fetchFirst();
+    }
+
+    private NumberExpression<Long> programIdExpression() {
+        return new CaseBuilder()
+                .when(challenge.id.isNotNull()).then(challenge.id)
+                .when(live.id.isNotNull()).then(live.id)
+                .when(report.id.isNotNull()).then(report.id)
+                .otherwise(0L);
     }
 
     private StringExpression programTypeEnumExpression() {
