@@ -31,7 +31,7 @@ public class Attendance extends BaseTimeEntity {
     private String review;
     @NotNull
     @Builder.Default
-    private Boolean reviewIsVisible = true;
+    private Boolean reviewIsVisible = false;
     @Convert(converter = AttendanceStatusConverter.class)
     private AttendanceStatus status;
     @Builder.Default
