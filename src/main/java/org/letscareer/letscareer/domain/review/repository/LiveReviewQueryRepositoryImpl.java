@@ -24,6 +24,7 @@ public class LiveReviewQueryRepositoryImpl implements LiveReviewQueryRepository 
     public List<LiveReviewAdminVo> findAllLiveReviewAdminVos() {
         return queryFactory
                 .select(Projections.constructor(LiveReviewAdminVo.class,
+                        liveReview.live.id,
                         liveReview.id,
                         liveReview.createDate,
                         liveReview.live.title,
@@ -44,6 +45,7 @@ public class LiveReviewQueryRepositoryImpl implements LiveReviewQueryRepository 
                 queryFactory
                         .select(Projections.constructor(LiveReviewVo.class,
                                 liveReview.application.user.id,
+                                liveReview.live.id,
                                 liveReview.id,
                                 liveReview.createDate,
                                 liveReview.live.title,

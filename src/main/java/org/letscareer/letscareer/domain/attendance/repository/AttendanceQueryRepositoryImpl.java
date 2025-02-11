@@ -74,7 +74,9 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
                         attendance.result,
                         attendance.comments,
                         attendance.createDate,
-                        attendance.lastModifiedDate
+                        attendance.lastModifiedDate,
+                        attendance.review,
+                        attendance.reviewIsVisible
                 ))
                 .from(attendance)
                 .leftJoin(attendance.mission, mission)
@@ -109,6 +111,7 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
     public List<MissionReviewAdminVo> findAllMissionReviewAdminVos() {
         return queryFactory
                 .select(Projections.constructor(MissionReviewAdminVo.class,
+                        challenge.id,
                         attendance.id,
                         attendance.createDate,
                         challenge.challengeType,

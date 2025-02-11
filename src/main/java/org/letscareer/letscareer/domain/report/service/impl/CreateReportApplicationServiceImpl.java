@@ -22,6 +22,7 @@ import org.letscareer.letscareer.domain.report.entity.ReportOption;
 import org.letscareer.letscareer.domain.report.entity.ReportPrice;
 import org.letscareer.letscareer.domain.report.helper.ReportHelper;
 import org.letscareer.letscareer.domain.report.helper.ReportOptionHelper;
+import org.letscareer.letscareer.domain.report.helper.ReportPriceHelper;
 import org.letscareer.letscareer.domain.report.mapper.ReportMapper;
 import org.letscareer.letscareer.domain.report.service.CreateReportApplicationService;
 import org.letscareer.letscareer.domain.report.type.ReportPaymentStatus;
@@ -48,6 +49,7 @@ import java.util.stream.Collectors;
 public class CreateReportApplicationServiceImpl implements CreateReportApplicationService {
     public static final String REPORT_APPLICATION_CACHE_KEY = "report_application";
     private final ReportHelper reportHelper;
+    private final ReportPriceHelper reportPriceHelper;
     private final ReportMapper reportMapper;
     private final ReportOptionHelper reportOptionHelper;
     private final ReportApplicationHelper reportApplicationHelper;
@@ -65,6 +67,8 @@ public class CreateReportApplicationServiceImpl implements CreateReportApplicati
         ReportPrice reportPrice = reportHelper.findReportPriceByReportIdAndType(reportId, requestDto.reportPriceType());
         ReportFeedback reportFeedback = report.getReportFeedback();
         Coupon coupon = couponHelper.findCouponByIdOrNull(requestDto.couponId());
+        List<ReportOption> reportOptionList = reportOptionHelper.findReportOptionsByReportIdAndOptionIds(reportId, requestDto.optionIds());
+        reportPriceHelper.validatePrice(reportPrice, reportFeedback, coupon, reportOptionList, requestDto.isFeedbackApplied(), requestDto.amount());
 
         ReportApplication reportApplication = reportApplicationHelper.createReportApplicationAndSave(requestDto, report, reportPrice, user);
         Payment payment = paymentHelper.createReportPaymentAndSave(requestDto, coupon, reportApplication);

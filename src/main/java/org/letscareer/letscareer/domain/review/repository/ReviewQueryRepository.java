@@ -9,6 +9,6 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface ReviewQueryRepository {
-    Page<ReviewInfoVo> findAllReviewInfoVos(List<ReviewProgramType> typeList, List<ChallengeType> challengeTypeList, String liveJob, Pageable pageable);
+    Page<ReviewInfoVo> findAllReviewInfoVos(List<ReviewProgramType> typeList, List<ChallengeType> challengeTypeList, List<String> liveJobList, Pageable pageable);
     Long countReviews();
 }

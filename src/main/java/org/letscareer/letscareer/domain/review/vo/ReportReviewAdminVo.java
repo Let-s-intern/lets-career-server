@@ -5,6 +5,7 @@ import org.letscareer.letscareer.domain.report.type.ReportType;
 import java.time.LocalDateTime;
 
 public record ReportReviewAdminVo(
+        Long programId,
         Long reviewId,
         LocalDateTime createDate,
         ReportType reportType,

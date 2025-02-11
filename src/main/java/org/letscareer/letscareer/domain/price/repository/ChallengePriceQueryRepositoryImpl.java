@@ -57,6 +57,15 @@ public class ChallengePriceQueryRepositoryImpl implements ChallengePriceQueryRep
     }
 
     @Override
+    public Optional<Integer> findPriceRefundByChallengeId(Long challengeId) {
+        return Optional.ofNullable(jpaQueryFactory
+                .select(challengePrice.refund)
+                .from(challengePrice)
+                .where(challengePrice.challenge.id.eq(challengeId))
+                .fetchFirst());
+    }
+
+    @Override
     public Optional<ChallengePrice> findByPriceId(Long priceId) {
         return Optional.ofNullable(jpaQueryFactory
                 .select(challengePrice)
