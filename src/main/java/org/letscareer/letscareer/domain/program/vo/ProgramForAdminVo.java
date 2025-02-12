@@ -21,7 +21,8 @@ public record ProgramForAdminVo(
         LocalDateTime startDate,
         LocalDateTime endDate,
         LocalDateTime beginning,
-        LocalDateTime deadline
+        LocalDateTime deadline,
+        LocalDateTime createdAt
 ) {
     public ProgramForAdminVo(Long id,
                              ProgramType programType,
@@ -34,7 +35,8 @@ public record ProgramForAdminVo(
                              LocalDateTime startDate,
                              LocalDateTime endDate,
                              LocalDateTime beginning,
-                             LocalDateTime deadline) {
-        this(id, programType, ProgramStatusType.of(programType, beginning, deadline), title, thumbnail, participationCount, zoomLink, zoomPassword, isVisible, startDate, endDate, beginning, deadline);
+                             LocalDateTime deadline,
+                             LocalDateTime createdAt) {
+        this(id, programType, ProgramStatusType.of(programType, beginning, deadline), title, thumbnail, participationCount, zoomLink, zoomPassword, isVisible, startDate, endDate, beginning, deadline, createdAt);
     }
 }

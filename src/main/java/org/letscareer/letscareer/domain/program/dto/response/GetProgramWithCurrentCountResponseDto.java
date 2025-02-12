@@ -23,7 +23,8 @@ public record GetProgramWithCurrentCountResponseDto(
         LocalDateTime startDate,
         LocalDateTime endDate,
         LocalDateTime beginning,
-        LocalDateTime deadline
+        LocalDateTime deadline,
+        LocalDateTime createdAt
 ) {
     public static GetProgramWithCurrentCountResponseDto of(ProgramForAdminVo vo, Long currentCount) {
         return GetProgramWithCurrentCountResponseDto.builder()
@@ -41,6 +42,7 @@ public record GetProgramWithCurrentCountResponseDto(
                 .endDate(vo.endDate())
                 .beginning(vo.beginning())
                 .deadline(vo.deadline())
+                .createdAt(vo.createdAt())
                 .build();
     }
 }
