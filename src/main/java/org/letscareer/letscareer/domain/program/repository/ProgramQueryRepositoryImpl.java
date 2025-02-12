@@ -111,7 +111,8 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                         vWProgram.startDate,
                         vWProgram.endDate,
                         vWProgram.beginning,
-                        vWProgram.deadline
+                        vWProgram.deadline,
+                        vWProgram.createDate
                 ))
                 .from(vWProgram)
                 .where(
