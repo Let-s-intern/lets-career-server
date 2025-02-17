@@ -1,16 +1,16 @@
 package org.letscareer.letscareer.domain.curation.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.domain.coupon.dto.response.CouponApplyResponseDto;
 import org.letscareer.letscareer.domain.curation.dto.request.CreateCurationRequestDto;
+import org.letscareer.letscareer.domain.curation.dto.request.UpdateCurationRequestDto;
 import org.letscareer.letscareer.domain.curation.service.CurationService;
 import org.letscareer.letscareer.domain.curation.type.CurationLocationType;
+import org.letscareer.letscareer.global.common.annotation.ApiErrorCode;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
+import org.letscareer.letscareer.global.common.entity.SwaggerEnum;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +26,15 @@ public class CurationV1AdminController {
                                                              @RequestBody @Valid final CreateCurationRequestDto requestDto) {
         curationService.createCuration(locationType, requestDto);
         return SuccessResponse.created(null);
+    }
+
+    @Operation(summary = "큐레이션 수정", responses = {@ApiResponse(responseCode = "200", useReturnTypeSchema = true)})
+    @ApiErrorCode(SwaggerEnum.CURATION_NOT_FOUND)
+    @PatchMapping("/{curationId}")
+    public ResponseEntity<SuccessResponse<?>> updateCuration(@PathVariable final Long curationId,
+                                                             @RequestBody final UpdateCurationRequestDto requestDto) {
+        curationService.updateCuration(curationId, requestDto);
+        return SuccessResponse.ok(null);
     }
 
 }

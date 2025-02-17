@@ -9,6 +9,7 @@ import org.letscareer.letscareer.domain.challengeguide.error.ChallengeGuideError
 import org.letscareer.letscareer.domain.classification.error.ChallengeClassificationErrorCode;
 import org.letscareer.letscareer.domain.contents.error.ContentsErrorCode;
 import org.letscareer.letscareer.domain.coupon.error.CouponErrorCode;
+import org.letscareer.letscareer.domain.curation.error.CurationErrorCode;
 import org.letscareer.letscareer.domain.faq.error.FaqErrorCode;
 import org.letscareer.letscareer.domain.live.error.LiveErrorCode;
 import org.letscareer.letscareer.domain.mission.error.MissionErrorCode;
@@ -99,6 +100,9 @@ public enum SwaggerEnum {
     REVIEW_ITEM_NOT_FOUND(ReviewErrorCode.REVIEW_ITEM_NOT_FOUND),
     BLOG_REVIEW_ITEM_NOT_FOUND(ReviewErrorCode.BLOG_REVIEW_NOT_FOUND),
     REVIEW_ALREADY_EXISTS(ReviewErrorCode.REVIEW_ALREADY_EXISTS),
+
+    // curation
+    CURATION_NOT_FOUND(CurationErrorCode.CURATION_NOT_FOUND),
 
     // user
     INVALID_EMAIL(UserErrorCode.INVALID_EMAIL),
