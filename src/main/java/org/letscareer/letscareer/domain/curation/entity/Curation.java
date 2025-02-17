@@ -3,6 +3,7 @@ package org.letscareer.letscareer.domain.curation.entity;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.*;
 import lombok.*;
+import org.letscareer.letscareer.domain.curation.dto.request.CreateCurationRequestDto;
 import org.letscareer.letscareer.domain.curation.type.CurationLocationType;
 import org.letscareer.letscareer.domain.curation.type.converter.CurationLocationTypeConverter;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
@@ -38,4 +39,16 @@ public class Curation extends BaseTimeEntity {
     private LocalDateTime startDate;
 
     private LocalDateTime endDate;
+
+    public static Curation createCuration(CurationLocationType locationType, CreateCurationRequestDto requestDto) {
+        return Curation.builder()
+                .locationType(locationType)
+                .title(requestDto.title())
+                .subTitle(requestDto.subTitle())
+                .listSize(requestDto.listSize())
+                .content(requestDto.content())
+                .startDate(requestDto.startDate())
+                .endDate(requestDto.endDate())
+                .build();
+    }
 }
