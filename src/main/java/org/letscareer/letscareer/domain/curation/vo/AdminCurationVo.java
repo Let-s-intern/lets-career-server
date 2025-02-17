@@ -6,7 +6,7 @@ import org.letscareer.letscareer.domain.curation.type.CurationLocationType;
 import java.time.LocalDateTime;
 
 @Builder
-public record CurationAdminVo(
+public record AdminCurationVo(
     Long curationId,
     CurationLocationType locationType,
     String title,

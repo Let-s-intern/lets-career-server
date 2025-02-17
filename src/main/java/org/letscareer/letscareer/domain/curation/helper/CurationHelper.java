@@ -6,7 +6,7 @@ import org.letscareer.letscareer.domain.curation.entity.Curation;
 import org.letscareer.letscareer.domain.curation.repository.CurationRepository;
 import org.letscareer.letscareer.domain.curation.type.CurationLocationType;
 import org.letscareer.letscareer.domain.curation.vo.AdminCurationDetailVo;
-import org.letscareer.letscareer.domain.curation.vo.CurationAdminVo;
+import org.letscareer.letscareer.domain.curation.vo.AdminCurationVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -19,8 +19,8 @@ import static org.letscareer.letscareer.domain.curation.error.CurationErrorCode.
 public class CurationHelper {
     private final CurationRepository curationRepository;
 
-    public List<CurationAdminVo> findCurationAdminVosByLocationType(CurationLocationType locationType) {
-        return curationRepository.findCurationAdminVosByLocationType(locationType);
+    public List<AdminCurationVo> findAdminCurationVosByLocationType(CurationLocationType locationType) {
+        return curationRepository.findAdminCurationVosByLocationType(locationType);
     }
 
     public AdminCurationDetailVo findAdminCurationDetailVoByIdOrThrow(Long curationId) {

@@ -6,7 +6,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.curation.type.CurationLocationType;
 import org.letscareer.letscareer.domain.curation.vo.AdminCurationDetailVo;
-import org.letscareer.letscareer.domain.curation.vo.CurationAdminVo;
+import org.letscareer.letscareer.domain.curation.vo.AdminCurationVo;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,9 +18,9 @@ public class CurationQueryRepositoryImpl implements CurationQueryRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<CurationAdminVo> findCurationAdminVosByLocationType(CurationLocationType locationType) {
+    public List<AdminCurationVo> findAdminCurationVosByLocationType(CurationLocationType locationType) {
         return queryFactory
-                .select(Projections.constructor(CurationAdminVo.class,
+                .select(Projections.constructor(AdminCurationVo.class,
                         curation.id,
                         curation.locationType,
                         curation.title,

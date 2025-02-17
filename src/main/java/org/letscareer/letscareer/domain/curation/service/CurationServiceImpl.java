@@ -10,7 +10,7 @@ import org.letscareer.letscareer.domain.curation.helper.CurationHelper;
 import org.letscareer.letscareer.domain.curation.mapper.CurationMapper;
 import org.letscareer.letscareer.domain.curation.type.CurationLocationType;
 import org.letscareer.letscareer.domain.curation.vo.AdminCurationDetailVo;
-import org.letscareer.letscareer.domain.curation.vo.CurationAdminVo;
+import org.letscareer.letscareer.domain.curation.vo.AdminCurationVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,8 +25,8 @@ public class CurationServiceImpl implements CurationService {
 
     @Override
     public GetAdminCurationsResponseDto getAdminCurations(CurationLocationType locationType) {
-        List<CurationAdminVo> curationAdminVoList = curationHelper.findCurationAdminVosByLocationType(locationType);
-        return curationMapper.toGetAdminCurationsResponseDto(curationAdminVoList);
+        List<AdminCurationVo> adminCurationVoList = curationHelper.findAdminCurationVosByLocationType(locationType);
+        return curationMapper.toGetAdminCurationsResponseDto(adminCurationVoList);
     }
 
     @Override
