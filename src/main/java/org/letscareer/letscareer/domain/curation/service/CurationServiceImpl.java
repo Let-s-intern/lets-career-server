@@ -25,4 +25,10 @@ public class CurationServiceImpl implements CurationService {
         Curation curation = curationHelper.findCurationByIdOrThrow(curationId);
         curation.updateCuration(requestDto);
     }
+
+    @Override
+    public void deleteCuration(Long curationId) {
+        Curation curation = curationHelper.findCurationByIdOrThrow(curationId);
+        curationHelper.deleteCuration(curation);
+    }
 }

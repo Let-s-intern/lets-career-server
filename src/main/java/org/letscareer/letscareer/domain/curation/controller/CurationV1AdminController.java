@@ -37,4 +37,12 @@ public class CurationV1AdminController {
         return SuccessResponse.ok(null);
     }
 
+    @Operation(summary = "큐레이션 삭제", responses = {@ApiResponse(responseCode = "200", useReturnTypeSchema = true)})
+    @ApiErrorCode(SwaggerEnum.CURATION_NOT_FOUND)
+    @DeleteMapping("/{curationId}")
+    public ResponseEntity<SuccessResponse<?>> deleteCuration(@PathVariable final Long curationId) {
+        curationService.deleteCuration(curationId);
+        return SuccessResponse.ok(null);
+    }
+
 }

@@ -23,4 +23,8 @@ public class CurationHelper {
     public Curation findCurationByIdOrThrow(Long curationId) {
         return curationRepository.findById(curationId).orElseThrow(() -> new EntityNotFoundException(CURATION_NOT_FOUND));
     }
+
+    public void deleteCuration(Curation curation) {
+        curationRepository.delete(curation);
+    }
 }
