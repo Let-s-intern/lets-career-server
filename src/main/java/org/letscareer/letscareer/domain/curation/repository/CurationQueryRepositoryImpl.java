@@ -5,9 +5,11 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.curation.type.CurationLocationType;
+import org.letscareer.letscareer.domain.curation.vo.AdminCurationDetailVo;
 import org.letscareer.letscareer.domain.curation.vo.CurationAdminVo;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.letscareer.letscareer.domain.curation.entity.QCuration.curation;
 
@@ -33,6 +35,30 @@ public class CurationQueryRepositoryImpl implements CurationQueryRepository {
                         curation.id.desc()
                 )
                 .fetch();
+    }
+
+    @Override
+    public Optional<AdminCurationDetailVo> findAdminCurationDetailVoById(Long curationId) {
+        return Optional.ofNullable(queryFactory
+                .select(Projections.constructor(AdminCurationDetailVo.class,
+                        curation.id,
+                        curation.locationType,
+                        curation.title,
+                        curation.subTitle,
+                        curation.startDate,
+                        curation.endDate,
+                        curation.listSize,
+                        curation.content,
+                        curation.isVisible))
+                .from(curation)
+                .where(
+                        eqCurationId(curationId)
+                )
+                .fetchFirst());
+    }
+
+    private BooleanExpression eqCurationId(Long curationId) {
+        return curationId != null ? curation.id.eq(curationId) : null;
     }
 
     private BooleanExpression eqLocationType(CurationLocationType locationType) {

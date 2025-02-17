@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.curation.dto.request.CreateCurationRequestDto;
 import org.letscareer.letscareer.domain.curation.dto.request.UpdateCurationRequestDto;
+import org.letscareer.letscareer.domain.curation.dto.response.GetAdminCurationResponseDto;
 import org.letscareer.letscareer.domain.curation.dto.response.GetAdminCurationsResponseDto;
 import org.letscareer.letscareer.domain.curation.service.CurationService;
 import org.letscareer.letscareer.domain.curation.type.CurationLocationType;
@@ -29,6 +30,15 @@ public class CurationV1AdminController {
     @GetMapping
     public ResponseEntity<SuccessResponse<?>> getCurations(@RequestParam(required = false) final CurationLocationType locationType) {
         GetAdminCurationsResponseDto responseDto = curationService.getAdminCurations(locationType);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "큐레이션 상세 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetAdminCurationResponseDto.class)))
+    })
+    @GetMapping("/{curationId}")
+    public ResponseEntity<SuccessResponse<?>> getCuration(@PathVariable final Long curationId) {
+        GetAdminCurationResponseDto responseDto = curationService.getAdminCuration(curationId);
         return SuccessResponse.ok(responseDto);
     }
 
