@@ -5,13 +5,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.blogbanner.dto.request.CreateBlogBannerRequestDto;
+import org.letscareer.letscareer.domain.blogbanner.dto.request.UpdateBlogBannerRequestDto;
 import org.letscareer.letscareer.domain.blogbanner.service.BlogBannerService;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/admin/blog-banner")
@@ -24,5 +22,13 @@ public class BlogBannerV1AdminController {
     public ResponseEntity<SuccessResponse<?>> createBlogBanner(@RequestBody @Valid final CreateBlogBannerRequestDto requestDto){
         blogBannerService.createBlogBanner(requestDto);
         return SuccessResponse.created(null);
+    }
+
+    @Operation(summary = "블로그 배너 수정", responses = {@ApiResponse(responseCode = "200", useReturnTypeSchema = true)})
+    @PatchMapping("/{blogBannerId}")
+    public ResponseEntity<SuccessResponse<?>> updateBlogBanner(@PathVariable final Long blogBannerId,
+                                                               @RequestBody final UpdateBlogBannerRequestDto requestDto){
+        blogBannerService.updateBlogBanner(blogBannerId, requestDto);
+        return SuccessResponse.ok(null);
     }
 }

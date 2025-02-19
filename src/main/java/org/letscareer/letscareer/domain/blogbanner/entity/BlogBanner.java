@@ -3,9 +3,12 @@ package org.letscareer.letscareer.domain.blogbanner.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.letscareer.letscareer.domain.blogbanner.dto.request.CreateBlogBannerRequestDto;
+import org.letscareer.letscareer.domain.blogbanner.dto.request.UpdateBlogBannerRequestDto;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 import java.time.LocalDateTime;
+
+import static org.letscareer.letscareer.global.common.utils.entity.EntityUpdateValueUtils.updateValue;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -43,5 +46,15 @@ public class BlogBanner extends BaseTimeEntity {
                 .file(requestDto.file())
                 .weight(requestDto.weight())
                 .build();
+    }
+
+    public void updateBlogBanner(UpdateBlogBannerRequestDto requestDto){
+        this.title = updateValue(this.title, requestDto.title());
+        this.link = updateValue(this.link, requestDto.link());
+        this.isVisible = updateValue(this.isVisible, requestDto.isVisible());
+        this.startDate = updateValue(this.startDate, requestDto.startDate());
+        this.endDate = updateValue(this.endDate, requestDto.endDate());
+        this.file = updateValue(this.file, requestDto.file());
+        this.weight = updateValue(this.weight, requestDto.weight());
     }
 }
