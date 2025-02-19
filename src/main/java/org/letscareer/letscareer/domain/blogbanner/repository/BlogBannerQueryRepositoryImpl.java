@@ -20,7 +20,6 @@ public class BlogBannerQueryRepositoryImpl implements BlogBannerQueryRepository 
                         blogBanner.id,
                         blogBanner.title,
                         blogBanner.link,
-                        blogBanner.file,
                         blogBanner.startDate,
                         blogBanner.endDate,
                         blogBanner.weight,

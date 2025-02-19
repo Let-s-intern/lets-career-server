@@ -6,7 +6,6 @@ public record AdminBlogBannerVo(
         Long blogBannerId,
         String title,
         String link,
-        String file,
         LocalDateTime startDate,
         LocalDateTime endDate,
         Integer weight,
