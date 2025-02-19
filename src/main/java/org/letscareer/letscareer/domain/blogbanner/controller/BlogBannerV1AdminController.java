@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.blogbanner.dto.request.CreateBlogBannerRequestDto;
 import org.letscareer.letscareer.domain.blogbanner.dto.request.UpdateBlogBannerRequestDto;
+import org.letscareer.letscareer.domain.blogbanner.dto.response.GetAdminBlogBannerResponseDto;
 import org.letscareer.letscareer.domain.blogbanner.dto.response.GetAdminBlogBannersResponseDto;
 import org.letscareer.letscareer.domain.blogbanner.service.BlogBannerService;
 import org.letscareer.letscareer.global.common.annotation.ApiErrorCode;
@@ -28,6 +29,15 @@ public class BlogBannerV1AdminController {
     @GetMapping
     public ResponseEntity<SuccessResponse<?>> getBlogBanners(){
         GetAdminBlogBannersResponseDto responseDto = blogBannerService.getAdminBlogBanners();
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "블로그 배너 상세 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetAdminBlogBannerResponseDto.class)))
+    })
+    @GetMapping("/{blogBannerId}")
+    public ResponseEntity<SuccessResponse<?>> getBlogBanner(@PathVariable final Long blogBannerId){
+        GetAdminBlogBannerResponseDto responseDto = blogBannerService.getAdminBlogBanner(blogBannerId);
         return SuccessResponse.ok(responseDto);
     }
 

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.blogbanner.dto.request.CreateBlogBannerRequestDto;
 import org.letscareer.letscareer.domain.blogbanner.entity.BlogBanner;
 import org.letscareer.letscareer.domain.blogbanner.repository.BlogBannerRepository;
+import org.letscareer.letscareer.domain.blogbanner.vo.AdminBlogBannerDetailVo;
 import org.letscareer.letscareer.domain.blogbanner.vo.AdminBlogBannerVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,10 @@ public class BlogBannerHelper {
 
     public List<AdminBlogBannerVo> findAdminBlogBannerVos(){
         return blogBannerRepository.findAdminBlogBannerVos();
+    }
+
+    public AdminBlogBannerDetailVo findAdminBlogBannerDetailVoByIdOrThrow(Long blogBannerId){
+        return blogBannerRepository.findAdminBlogBannerDetailVoById(blogBannerId).orElseThrow(() -> new EntityNotFoundException(BLOG_BANNER_NOT_FOUND));
     }
     public void createBlogBannerAndSave(CreateBlogBannerRequestDto requestDto){
         BlogBanner blogBanner = BlogBanner.createBlogBanner(requestDto);

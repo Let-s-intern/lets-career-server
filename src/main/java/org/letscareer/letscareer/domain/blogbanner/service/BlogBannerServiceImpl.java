@@ -4,10 +4,12 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.blogbanner.dto.request.CreateBlogBannerRequestDto;
 import org.letscareer.letscareer.domain.blogbanner.dto.request.UpdateBlogBannerRequestDto;
+import org.letscareer.letscareer.domain.blogbanner.dto.response.GetAdminBlogBannerResponseDto;
 import org.letscareer.letscareer.domain.blogbanner.dto.response.GetAdminBlogBannersResponseDto;
 import org.letscareer.letscareer.domain.blogbanner.entity.BlogBanner;
 import org.letscareer.letscareer.domain.blogbanner.helper.BlogBannerHelper;
 import org.letscareer.letscareer.domain.blogbanner.mapper.BlogBannerMapper;
+import org.letscareer.letscareer.domain.blogbanner.vo.AdminBlogBannerDetailVo;
 import org.letscareer.letscareer.domain.blogbanner.vo.AdminBlogBannerVo;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,12 @@ public class BlogBannerServiceImpl implements BlogBannerService{
     public GetAdminBlogBannersResponseDto getAdminBlogBanners(){
         List<AdminBlogBannerVo> adminBlogBannerVoList = blogBannerHelper.findAdminBlogBannerVos();
         return blogBannerMapper.toGetAdminBlogBannersResponseDto(adminBlogBannerVoList);
+    }
+
+    @Override
+    public GetAdminBlogBannerResponseDto getAdminBlogBanner(Long blogBannerId){
+        AdminBlogBannerDetailVo adminBlogBannerDetailVo = blogBannerHelper.findAdminBlogBannerDetailVoByIdOrThrow(blogBannerId);
+        return blogBannerMapper.toGetAdminBlogBannerResponseDto(adminBlogBannerDetailVo);
     }
 
     @Override
