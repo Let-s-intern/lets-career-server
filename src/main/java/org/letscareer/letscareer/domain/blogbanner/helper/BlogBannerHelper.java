@@ -22,4 +22,8 @@ public class BlogBannerHelper {
     public BlogBanner findBlogBannerByIdOrThrow(Long blogBannerId){
         return blogBannerRepository.findById(blogBannerId).orElseThrow(() -> new EntityNotFoundException(BLOG_BANNER_NOT_FOUND));
     }
+
+    public void deleteBlogBanner(BlogBanner blogBanner){
+        blogBannerRepository.delete(blogBanner);
+    }
 }

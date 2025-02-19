@@ -6,4 +6,5 @@ import org.letscareer.letscareer.domain.blogbanner.dto.request.UpdateBlogBannerR
 public interface BlogBannerService {
     void createBlogBanner(CreateBlogBannerRequestDto requestDto);
     void updateBlogBanner(Long blogBannerId, UpdateBlogBannerRequestDto requestDto);
+    void deleteBlogBanner(Long blogBannerId);
 }

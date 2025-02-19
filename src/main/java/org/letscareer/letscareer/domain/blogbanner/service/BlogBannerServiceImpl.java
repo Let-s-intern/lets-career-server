@@ -26,4 +26,10 @@ public class BlogBannerServiceImpl implements BlogBannerService{
         BlogBanner blogBanner = blogBannerHelper.findBlogBannerByIdOrThrow(blogBannerId);
         blogBanner.updateBlogBanner(requestDto);
     }
+
+    @Override
+    public void deleteBlogBanner(Long blogBannerId){
+        BlogBanner blogBanner = blogBannerHelper.findBlogBannerByIdOrThrow(blogBannerId);
+        blogBannerHelper.deleteBlogBanner(blogBanner);
+    }
 }

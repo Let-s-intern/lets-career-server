@@ -34,4 +34,12 @@ public class BlogBannerV1AdminController {
         blogBannerService.updateBlogBanner(blogBannerId, requestDto);
         return SuccessResponse.ok(null);
     }
+
+    @Operation(summary = "블로그 배너 삭제", responses = {@ApiResponse(responseCode = "200", useReturnTypeSchema = true)})
+    @ApiErrorCode(SwaggerEnum.BLOG_BANNER_NOT_FOUND)
+    @DeleteMapping("/{blogBannerId}")
+    public ResponseEntity<SuccessResponse<?>> deleteBlogBanner(@PathVariable final Long blogBannerId){
+        blogBannerService.deleteBlogBanner(blogBannerId);
+        return SuccessResponse.ok(null);
+    }
 }
