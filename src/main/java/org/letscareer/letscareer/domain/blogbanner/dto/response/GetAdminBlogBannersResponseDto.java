@@ -7,11 +7,11 @@ import org.letscareer.letscareer.domain.blogbanner.vo.AdminBlogBannerVo;
 import java.util.List;
 
 @Builder(access = AccessLevel.PRIVATE)
-public record GetAdminBlogBannerResponseDto(
+public record GetAdminBlogBannersResponseDto(
         List<AdminBlogBannerVo> blogBannerList
 ) {
-    public static GetAdminBlogBannerResponseDto of(List<AdminBlogBannerVo> blogBannerList) {
-        return GetAdminBlogBannerResponseDto.builder()
+    public static GetAdminBlogBannersResponseDto of(List<AdminBlogBannerVo> blogBannerList) {
+        return GetAdminBlogBannersResponseDto.builder()
                 .blogBannerList(blogBannerList)
                 .build();
     }

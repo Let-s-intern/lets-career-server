@@ -4,7 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.blogbanner.dto.request.CreateBlogBannerRequestDto;
 import org.letscareer.letscareer.domain.blogbanner.dto.request.UpdateBlogBannerRequestDto;
-import org.letscareer.letscareer.domain.blogbanner.dto.response.GetAdminBlogBannerResponseDto;
+import org.letscareer.letscareer.domain.blogbanner.dto.response.GetAdminBlogBannersResponseDto;
 import org.letscareer.letscareer.domain.blogbanner.entity.BlogBanner;
 import org.letscareer.letscareer.domain.blogbanner.helper.BlogBannerHelper;
 import org.letscareer.letscareer.domain.blogbanner.mapper.BlogBannerMapper;
@@ -21,7 +21,7 @@ public class BlogBannerServiceImpl implements BlogBannerService{
     private final BlogBannerMapper blogBannerMapper;
 
     @Override
-    public GetAdminBlogBannerResponseDto getAdminBlogBanners(){
+    public GetAdminBlogBannersResponseDto getAdminBlogBanners(){
         List<AdminBlogBannerVo> adminBlogBannerVoList = blogBannerHelper.findAdminBlogBannerVos();
         return blogBannerMapper.toGetAdminBlogBannersResponseDto(adminBlogBannerVoList);
     }

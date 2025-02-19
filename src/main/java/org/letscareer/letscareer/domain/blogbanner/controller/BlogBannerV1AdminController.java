@@ -1,6 +1,5 @@
 package org.letscareer.letscareer.domain.blogbanner.controller;
 
-import feign.Response;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -9,7 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.blogbanner.dto.request.CreateBlogBannerRequestDto;
 import org.letscareer.letscareer.domain.blogbanner.dto.request.UpdateBlogBannerRequestDto;
-import org.letscareer.letscareer.domain.blogbanner.dto.response.GetAdminBlogBannerResponseDto;
+import org.letscareer.letscareer.domain.blogbanner.dto.response.GetAdminBlogBannersResponseDto;
 import org.letscareer.letscareer.domain.blogbanner.service.BlogBannerService;
 import org.letscareer.letscareer.global.common.annotation.ApiErrorCode;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
@@ -24,11 +23,11 @@ public class BlogBannerV1AdminController {
     private final BlogBannerService blogBannerService;
 
     @Operation(summary = "블로그 배너 목록 조회", responses = {
-            @ApiResponse(responseCode = "200",content = @Content(schema = @Schema(implementation = GetAdminBlogBannerResponseDto.class)))
+            @ApiResponse(responseCode = "200",content = @Content(schema = @Schema(implementation = GetAdminBlogBannersResponseDto.class)))
     })
     @GetMapping
     public ResponseEntity<SuccessResponse<?>> getBlogBanners(){
-        GetAdminBlogBannerResponseDto responseDto = blogBannerService.getAdminBlogBanners();
+        GetAdminBlogBannersResponseDto responseDto = blogBannerService.getAdminBlogBanners();
         return SuccessResponse.ok(responseDto);
     }
 
