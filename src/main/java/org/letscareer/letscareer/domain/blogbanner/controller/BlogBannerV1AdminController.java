@@ -7,7 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.blogbanner.dto.request.CreateBlogBannerRequestDto;
 import org.letscareer.letscareer.domain.blogbanner.dto.request.UpdateBlogBannerRequestDto;
 import org.letscareer.letscareer.domain.blogbanner.service.BlogBannerService;
+import org.letscareer.letscareer.global.common.annotation.ApiErrorCode;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
+import org.letscareer.letscareer.global.common.entity.SwaggerEnum;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +27,7 @@ public class BlogBannerV1AdminController {
     }
 
     @Operation(summary = "블로그 배너 수정", responses = {@ApiResponse(responseCode = "200", useReturnTypeSchema = true)})
+    @ApiErrorCode(SwaggerEnum.BLOG_BANNER_NOT_FOUND)
     @PatchMapping("/{blogBannerId}")
     public ResponseEntity<SuccessResponse<?>> updateBlogBanner(@PathVariable final Long blogBannerId,
                                                                @RequestBody final UpdateBlogBannerRequestDto requestDto){
