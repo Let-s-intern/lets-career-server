@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.blogbanner.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.letscareer.letscareer.domain.blogbanner.dto.request.CreateBlogBannerRequestDto;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 import java.time.LocalDateTime;
@@ -32,4 +33,15 @@ public class BlogBanner extends BaseTimeEntity {
     private String file;
 
     private Integer weight;
+
+    public static BlogBanner createBlogBanner(CreateBlogBannerRequestDto requestDto){
+        return BlogBanner.builder()
+                .title(requestDto.title())
+                .link(requestDto.link())
+                .startDate(requestDto.startDate())
+                .endDate(requestDto.endDate())
+                .file(requestDto.file())
+                .weight(requestDto.weight())
+                .build();
+    }
 }
