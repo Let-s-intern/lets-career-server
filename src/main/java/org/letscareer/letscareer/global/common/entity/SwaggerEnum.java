@@ -4,6 +4,7 @@ import org.letscareer.letscareer.domain.application.error.ApplicationErrorCode;
 import org.letscareer.letscareer.domain.attendance.error.AttendanceErrorCode;
 import org.letscareer.letscareer.domain.banner.error.BannerErrorCode;
 import org.letscareer.letscareer.domain.blog.error.BlogErrorCode;
+import org.letscareer.letscareer.domain.blogbanner.error.BlogBannerErrorCode;
 import org.letscareer.letscareer.domain.challenge.error.ChallengeErrorCode;
 import org.letscareer.letscareer.domain.challengeguide.error.ChallengeGuideErrorCode;
 import org.letscareer.letscareer.domain.classification.error.ChallengeClassificationErrorCode;
@@ -46,6 +47,9 @@ public enum SwaggerEnum {
     // Blog
     BLOG_NOT_FOUND(BlogErrorCode.BLOG_NOT_FOUND),
     HASHTAG_CANNOT_DELETED(BlogErrorCode.HASHTAG_CANNOT_DELETED),
+
+    // Blog Banner
+    BLOG_BANNER_NOT_FOUND(BlogBannerErrorCode.BLOG_BANNER_NOT_FOUND),
 
     // challenge
     CHALLENGE_NOT_FOUND(ChallengeErrorCode.CHALLENGE_NOT_FOUND),
