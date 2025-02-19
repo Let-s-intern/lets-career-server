@@ -20,7 +20,7 @@ public class BlogBanner extends BaseTimeEntity {
 
     private String title;
 
-    private String url;
+    private String link;
 
     @Builder.Default
     private Boolean isVisible = false;
