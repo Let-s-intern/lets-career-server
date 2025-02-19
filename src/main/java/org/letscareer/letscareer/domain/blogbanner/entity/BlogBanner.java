@@ -31,6 +31,5 @@ public class BlogBanner extends BaseTimeEntity {
 
     private String file;
 
-    @Builder.Default
-    private Integer weight = 1;
+    private Integer weight;
 }
