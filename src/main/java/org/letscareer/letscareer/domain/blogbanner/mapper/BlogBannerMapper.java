@@ -2,14 +2,20 @@ package org.letscareer.letscareer.domain.blogbanner.mapper;
 
 import org.letscareer.letscareer.domain.blogbanner.dto.response.GetAdminBlogBannerResponseDto;
 import org.letscareer.letscareer.domain.blogbanner.dto.response.GetAdminBlogBannersResponseDto;
+import org.letscareer.letscareer.domain.blogbanner.dto.response.GetBlogBannersResponseDto;
 import org.letscareer.letscareer.domain.blogbanner.vo.AdminBlogBannerDetailVo;
 import org.letscareer.letscareer.domain.blogbanner.vo.AdminBlogBannerVo;
+import org.letscareer.letscareer.domain.blogbanner.vo.BlogBannerVo;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
 public class BlogBannerMapper {
+    public GetBlogBannersResponseDto toGetBlogBannersResponseDto(List<BlogBannerVo>blogBannerVoList){
+        return GetBlogBannersResponseDto.of(blogBannerVoList);
+    }
+
     public GetAdminBlogBannersResponseDto toGetAdminBlogBannersResponseDto(List<AdminBlogBannerVo> adminBlogBannerVoList){
         return GetAdminBlogBannersResponseDto.of(adminBlogBannerVoList);
     }

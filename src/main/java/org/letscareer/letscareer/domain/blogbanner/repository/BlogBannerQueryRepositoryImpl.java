@@ -6,8 +6,10 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.blogbanner.vo.AdminBlogBannerDetailVo;
 import org.letscareer.letscareer.domain.blogbanner.vo.AdminBlogBannerVo;
+import org.letscareer.letscareer.domain.blogbanner.vo.BlogBannerVo;
 
 import javax.swing.text.html.Option;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +18,29 @@ import static org.letscareer.letscareer.domain.blogbanner.entity.QBlogBanner.blo
 @RequiredArgsConstructor
 public class BlogBannerQueryRepositoryImpl implements BlogBannerQueryRepository {
     private final JPAQueryFactory queryFactory;
+
+    @Override
+    public List<BlogBannerVo> findBlogBannerVos(){
+        return queryFactory
+                .select(Projections.constructor(BlogBannerVo.class,
+                        blogBanner.id,
+                        blogBanner.title,
+                        blogBanner.link,
+                        blogBanner.file,
+                        blogBanner.startDate,
+                        blogBanner.endDate,
+                        blogBanner.weight,
+                        blogBanner.isVisible))
+                .from(blogBanner)
+                .where(
+                        eqIsVisible(true),
+                        isActive()
+                )
+                .orderBy(
+                        blogBanner.weight.desc()
+                )
+                .fetch();
+    }
 
     @Override
     public List<AdminBlogBannerVo> findAdminBlogBannerVos(){
@@ -56,5 +81,14 @@ public class BlogBannerQueryRepositoryImpl implements BlogBannerQueryRepository 
 
     private BooleanExpression eqBlogBannerId(Long blogBannerId) {
         return blogBannerId != null ? blogBanner.id.eq(blogBannerId) : null;
+    }
+
+    private BooleanExpression eqIsVisible(Boolean isVisible) {
+        return isVisible != null ? blogBanner.isVisible.eq(isVisible) : null;
+    }
+
+    private BooleanExpression isActive(){
+        LocalDateTime now = LocalDateTime.now();
+        return blogBanner.startDate.before(now).and(blogBanner.endDate.after(now));
     }
 }

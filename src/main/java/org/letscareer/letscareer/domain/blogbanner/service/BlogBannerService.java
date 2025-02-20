@@ -4,8 +4,12 @@ import org.letscareer.letscareer.domain.blogbanner.dto.request.CreateBlogBannerR
 import org.letscareer.letscareer.domain.blogbanner.dto.request.UpdateBlogBannerRequestDto;
 import org.letscareer.letscareer.domain.blogbanner.dto.response.GetAdminBlogBannerResponseDto;
 import org.letscareer.letscareer.domain.blogbanner.dto.response.GetAdminBlogBannersResponseDto;
+import org.letscareer.letscareer.domain.blogbanner.dto.response.GetBlogBannersResponseDto;
 
 public interface BlogBannerService {
+
+    GetBlogBannersResponseDto getBlogBanners();
+
     GetAdminBlogBannersResponseDto getAdminBlogBanners();
     GetAdminBlogBannerResponseDto getAdminBlogBanner(Long blogBannerId);
     void createBlogBanner(CreateBlogBannerRequestDto requestDto);

@@ -6,6 +6,7 @@ import org.letscareer.letscareer.domain.blogbanner.entity.BlogBanner;
 import org.letscareer.letscareer.domain.blogbanner.repository.BlogBannerRepository;
 import org.letscareer.letscareer.domain.blogbanner.vo.AdminBlogBannerDetailVo;
 import org.letscareer.letscareer.domain.blogbanner.vo.AdminBlogBannerVo;
+import org.letscareer.letscareer.domain.blogbanner.vo.BlogBannerVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,10 @@ import static org.letscareer.letscareer.domain.blogbanner.error.BlogBannerErrorC
 @Component
 public class BlogBannerHelper {
     private final BlogBannerRepository blogBannerRepository;
+
+    public List<BlogBannerVo> findBlogBannerVos(){
+        return blogBannerRepository.findBlogBannerVos();
+    }
 
     public List<AdminBlogBannerVo> findAdminBlogBannerVos(){
         return blogBannerRepository.findAdminBlogBannerVos();
