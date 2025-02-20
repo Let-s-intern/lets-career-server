@@ -1,5 +1,6 @@
 package org.letscareer.letscareer.domain.blogbanner.mapper;
 
+import org.springframework.data.domain.Page;
 import org.letscareer.letscareer.domain.blogbanner.dto.response.GetAdminBlogBannerResponseDto;
 import org.letscareer.letscareer.domain.blogbanner.dto.response.GetAdminBlogBannersResponseDto;
 import org.letscareer.letscareer.domain.blogbanner.dto.response.GetBlogBannersResponseDto;
@@ -12,7 +13,7 @@ import java.util.List;
 
 @Component
 public class BlogBannerMapper {
-    public GetBlogBannersResponseDto toGetBlogBannersResponseDto(List<BlogBannerVo>blogBannerVoList){
+    public GetBlogBannersResponseDto toGetBlogBannersResponseDto(Page<BlogBannerVo> blogBannerVoList){
         return GetBlogBannersResponseDto.of(blogBannerVoList);
     }
 

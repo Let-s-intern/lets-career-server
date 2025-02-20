@@ -5,10 +5,11 @@ import org.letscareer.letscareer.domain.blogbanner.dto.request.UpdateBlogBannerR
 import org.letscareer.letscareer.domain.blogbanner.dto.response.GetAdminBlogBannerResponseDto;
 import org.letscareer.letscareer.domain.blogbanner.dto.response.GetAdminBlogBannersResponseDto;
 import org.letscareer.letscareer.domain.blogbanner.dto.response.GetBlogBannersResponseDto;
+import org.springframework.data.domain.Pageable;
 
 public interface BlogBannerService {
 
-    GetBlogBannersResponseDto getBlogBanners();
+    GetBlogBannersResponseDto getBlogBanners(Pageable pageable);
 
     GetAdminBlogBannersResponseDto getAdminBlogBanners();
     GetAdminBlogBannerResponseDto getAdminBlogBanner(Long blogBannerId);

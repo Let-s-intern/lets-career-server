@@ -1,7 +1,8 @@
 package org.letscareer.letscareer.domain.blogbanner.helper;
 
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.domain.blogbanner.dto.request.CreateBlogBannerRequestDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;import org.letscareer.letscareer.domain.blogbanner.dto.request.CreateBlogBannerRequestDto;
 import org.letscareer.letscareer.domain.blogbanner.entity.BlogBanner;
 import org.letscareer.letscareer.domain.blogbanner.repository.BlogBannerRepository;
 import org.letscareer.letscareer.domain.blogbanner.vo.AdminBlogBannerDetailVo;
@@ -19,8 +20,8 @@ import static org.letscareer.letscareer.domain.blogbanner.error.BlogBannerErrorC
 public class BlogBannerHelper {
     private final BlogBannerRepository blogBannerRepository;
 
-    public List<BlogBannerVo> findBlogBannerVos(){
-        return blogBannerRepository.findBlogBannerVos();
+    public Page<BlogBannerVo> findBlogBannerVos(Pageable pageable) {
+        return blogBannerRepository.findBlogBannerVos(pageable);
     }
 
     public List<AdminBlogBannerVo> findAdminBlogBannerVos(){

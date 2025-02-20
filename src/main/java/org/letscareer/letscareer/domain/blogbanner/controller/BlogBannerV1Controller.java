@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.springframework.data.domain.Pageable;
+
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/blog-banner")
 @RestController
@@ -23,8 +25,8 @@ public class BlogBannerV1Controller {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetBlogBannersResponseDto.class)))
     })
     @GetMapping
-    public ResponseEntity<SuccessResponse<?>> getBlogBanners(){
-        GetBlogBannersResponseDto responseDto = blogBannerService.getBlogBanners();
+    public ResponseEntity<SuccessResponse<?>> getBlogBanners(final Pageable pageable) {
+        GetBlogBannersResponseDto responseDto = blogBannerService.getBlogBanners(pageable);
         return SuccessResponse.ok(responseDto);
     }
 }

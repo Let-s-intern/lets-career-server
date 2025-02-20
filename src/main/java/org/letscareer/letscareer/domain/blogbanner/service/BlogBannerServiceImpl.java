@@ -2,6 +2,8 @@ package org.letscareer.letscareer.domain.blogbanner.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.letscareer.letscareer.domain.blogbanner.dto.request.CreateBlogBannerRequestDto;
 import org.letscareer.letscareer.domain.blogbanner.dto.request.UpdateBlogBannerRequestDto;
 import org.letscareer.letscareer.domain.blogbanner.dto.response.GetAdminBlogBannerResponseDto;
@@ -25,8 +27,8 @@ public class BlogBannerServiceImpl implements BlogBannerService{
     private final BlogBannerMapper blogBannerMapper;
 
     @Override
-    public GetBlogBannersResponseDto getBlogBanners() {
-        List<BlogBannerVo> blogBannerVoList = blogBannerHelper.findBlogBannerVos();
+    public GetBlogBannersResponseDto getBlogBanners(Pageable pageable) {
+        Page<BlogBannerVo> blogBannerVoList = blogBannerHelper.findBlogBannerVos(pageable);
         return blogBannerMapper.toGetBlogBannersResponseDto(blogBannerVoList);
     }
 
