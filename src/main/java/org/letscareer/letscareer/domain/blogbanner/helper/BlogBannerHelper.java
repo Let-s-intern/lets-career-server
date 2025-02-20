@@ -1,11 +1,13 @@
 package org.letscareer.letscareer.domain.blogbanner.helper;
 
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.domain.blogbanner.dto.request.CreateBlogBannerRequestDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;import org.letscareer.letscareer.domain.blogbanner.dto.request.CreateBlogBannerRequestDto;
 import org.letscareer.letscareer.domain.blogbanner.entity.BlogBanner;
 import org.letscareer.letscareer.domain.blogbanner.repository.BlogBannerRepository;
 import org.letscareer.letscareer.domain.blogbanner.vo.AdminBlogBannerDetailVo;
 import org.letscareer.letscareer.domain.blogbanner.vo.AdminBlogBannerVo;
+import org.letscareer.letscareer.domain.blogbanner.vo.BlogBannerVo;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +19,10 @@ import static org.letscareer.letscareer.domain.blogbanner.error.BlogBannerErrorC
 @Component
 public class BlogBannerHelper {
     private final BlogBannerRepository blogBannerRepository;
+
+    public Page<BlogBannerVo> findBlogBannerVos(Pageable pageable) {
+        return blogBannerRepository.findBlogBannerVos(pageable);
+    }
 
     public List<AdminBlogBannerVo> findAdminBlogBannerVos(){
         return blogBannerRepository.findAdminBlogBannerVos();

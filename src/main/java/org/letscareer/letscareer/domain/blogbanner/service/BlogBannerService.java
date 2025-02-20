@@ -4,8 +4,13 @@ import org.letscareer.letscareer.domain.blogbanner.dto.request.CreateBlogBannerR
 import org.letscareer.letscareer.domain.blogbanner.dto.request.UpdateBlogBannerRequestDto;
 import org.letscareer.letscareer.domain.blogbanner.dto.response.GetAdminBlogBannerResponseDto;
 import org.letscareer.letscareer.domain.blogbanner.dto.response.GetAdminBlogBannersResponseDto;
+import org.letscareer.letscareer.domain.blogbanner.dto.response.GetBlogBannersResponseDto;
+import org.springframework.data.domain.Pageable;
 
 public interface BlogBannerService {
+
+    GetBlogBannersResponseDto getBlogBanners(Pageable pageable);
+
     GetAdminBlogBannersResponseDto getAdminBlogBanners();
     GetAdminBlogBannerResponseDto getAdminBlogBanner(Long blogBannerId);
     void createBlogBanner(CreateBlogBannerRequestDto requestDto);
