@@ -56,7 +56,7 @@ public class BlogBannerQueryRepositoryImpl implements BlogBannerQueryRepository 
                 )
                 .groupBy(blogBanner.id);
 
-        return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchOne);
+        return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
     }
 
     @Override
