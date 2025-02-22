@@ -16,7 +16,8 @@ public enum FileType {
     BLOG(7, "blog/"),
     REPORT(8, "report/"),
     BLOG_REVIEW(9, "review/blog/"),
-    CURATION_ITEM(10, "curation/item/");
+    BLOG_BANNER(10, "banner/blog/"),
+    CURATION_ITEM(11, "curation/item/");
 
     private final Integer code;
     private final String desc;
