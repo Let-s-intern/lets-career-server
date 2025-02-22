@@ -8,7 +8,6 @@ public record UpdateBlogBannerRequestDto(
         Boolean isVisible,
         LocalDateTime startDate,
         LocalDateTime endDate,
-        String file,
-        Integer weight
+        String file
 ) {
 }

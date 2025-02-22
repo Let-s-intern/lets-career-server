@@ -8,7 +8,6 @@ public record AdminBlogBannerVo(
         String link,
         LocalDateTime startDate,
         LocalDateTime endDate,
-        Integer weight,
         Boolean isVisible
 ) {
 }

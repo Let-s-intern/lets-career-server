@@ -9,7 +9,5 @@ public record CreateBlogBannerRequestDto(
         @NotNull String link,
         @NotNull LocalDateTime startDate,
         @NotNull LocalDateTime endDate,
-        @NotNull String file,
-        @NotNull Integer weight
-        ) {
+        @NotNull String file) {
 }

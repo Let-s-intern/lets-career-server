@@ -12,7 +12,6 @@ public record BlogBannerVo(
         String file,
         LocalDateTime startDate,
         LocalDateTime endDate,
-        Integer weight,
         Boolean isVisible
 ) {
 }
