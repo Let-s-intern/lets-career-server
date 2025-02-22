@@ -6,13 +6,12 @@ import org.letscareer.letscareer.domain.curation.type.CurationLocationType;
 import java.time.LocalDateTime;
 
 @Builder
-public record AdminCurationDetailVo(
+public record CurationVo(
     Long curationId,
     CurationLocationType locationType,
     String title,
     String subTitle,
     LocalDateTime startDate,
-    LocalDateTime endDate,
-    Boolean isVisible
+    LocalDateTime endDate
 ) {
 }
