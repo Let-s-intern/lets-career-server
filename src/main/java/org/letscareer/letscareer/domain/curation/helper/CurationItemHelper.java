@@ -6,6 +6,7 @@ import org.letscareer.letscareer.domain.curation.entity.Curation;
 import org.letscareer.letscareer.domain.curation.entity.CurationItem;
 import org.letscareer.letscareer.domain.curation.repository.CurationItemRepository;
 import org.letscareer.letscareer.domain.curation.vo.AdminCurationItemVo;
+import org.letscareer.letscareer.domain.curation.vo.CurationItemVo;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -26,5 +27,9 @@ public class CurationItemHelper {
 
     public List<AdminCurationItemVo> findAllAdminCurationItemVosByCurationId(Long curationId) {
         return curationItemRepository.findAllAdminCurationItemVosByCurationId(curationId);
+    }
+
+    public List<CurationItemVo> findAllCurationItemVosByCurationId(Long curationId) {
+        return curationItemRepository.findAllCurationItemVosByCurationId(curationId);
     }
 }

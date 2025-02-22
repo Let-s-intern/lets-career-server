@@ -6,18 +6,17 @@ import org.letscareer.letscareer.domain.curation.dto.request.CreateCurationReque
 import org.letscareer.letscareer.domain.curation.dto.request.UpdateCurationRequestDto;
 import org.letscareer.letscareer.domain.curation.dto.response.GetAdminCurationResponseDto;
 import org.letscareer.letscareer.domain.curation.dto.response.GetAdminCurationsResponseDto;
-import org.letscareer.letscareer.domain.curation.dto.response.GetCurationsResponseDto;
+import org.letscareer.letscareer.domain.curation.dto.response.GetCurationResponseDto;
 import org.letscareer.letscareer.domain.curation.entity.Curation;
 import org.letscareer.letscareer.domain.curation.helper.CurationHelper;
 import org.letscareer.letscareer.domain.curation.helper.CurationItemHelper;
 import org.letscareer.letscareer.domain.curation.mapper.CurationMapper;
 import org.letscareer.letscareer.domain.curation.type.CurationLocationType;
-import org.letscareer.letscareer.domain.curation.vo.AdminCurationDetailVo;
-import org.letscareer.letscareer.domain.curation.vo.AdminCurationVo;
-import org.letscareer.letscareer.domain.curation.vo.AdminCurationItemVo;
+import org.letscareer.letscareer.domain.curation.vo.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -44,9 +43,10 @@ public class CurationServiceImpl implements CurationService {
     }
 
     @Override
-    public GetCurationsResponseDto getCurations(CurationLocationType locationType) {
-        //List<CurationVo> curationVoList = curationHelper.findCurationVosByLocationType(locationType);
-        return null;
+    public GetCurationResponseDto getCuration(CurationLocationType locationType) {
+        CurationVo curationVo = curationHelper.findCurationVoByLocationType(locationType);
+        List<CurationItemVo> curationItemVos = curationVo != null ? curationItemHelper.findAllCurationItemVosByCurationId(curationVo.curationId()) : null;
+        return curationMapper.toGetCurationResponseDto(curationVo, curationItemVos);
     }
 
     @Override

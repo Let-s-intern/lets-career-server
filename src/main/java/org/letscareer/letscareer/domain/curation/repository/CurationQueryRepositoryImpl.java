@@ -7,7 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.curation.type.CurationLocationType;
 import org.letscareer.letscareer.domain.curation.vo.AdminCurationDetailVo;
 import org.letscareer.letscareer.domain.curation.vo.AdminCurationVo;
+import org.letscareer.letscareer.domain.curation.vo.CurationVo;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,11 +57,42 @@ public class CurationQueryRepositoryImpl implements CurationQueryRepository {
                 .fetchFirst());
     }
 
+    @Override
+    public CurationVo findCurationVoByLocationType(CurationLocationType locationType) {
+        return queryFactory
+                .select(Projections.constructor(CurationVo.class,
+                        curation.id,
+                        curation.locationType,
+                        curation.title,
+                        curation.subTitle,
+                        curation.startDate,
+                        curation.endDate))
+                .from(curation)
+                .where(
+                        eqLocationType(locationType),
+                        eqIsVisible(true),
+                        isVisibleDuration()
+                )
+                .orderBy(
+                        curation.id.desc()
+                )
+                .fetchFirst();
+    }
+
     private BooleanExpression eqCurationId(Long curationId) {
         return curationId != null ? curation.id.eq(curationId) : null;
     }
 
     private BooleanExpression eqLocationType(CurationLocationType locationType) {
         return locationType != null ? curation.locationType.eq(locationType) : null;
+    }
+
+    private BooleanExpression eqIsVisible(Boolean isVisible) {
+        return isVisible != null ? curation.isVisible.eq(isVisible) : null;
+    }
+
+    private BooleanExpression isVisibleDuration() {
+        LocalDateTime now = LocalDateTime.now();
+        return curation.startDate.loe(now).and(curation.endDate.goe(now));
     }
 }

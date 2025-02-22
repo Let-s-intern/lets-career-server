@@ -12,8 +12,6 @@ public record CurationVo(
     String title,
     String subTitle,
     LocalDateTime startDate,
-    LocalDateTime endDate,
-    Integer listSize,
-    String content
+    LocalDateTime endDate
 ) {
 }
