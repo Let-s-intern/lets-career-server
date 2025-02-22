@@ -4,11 +4,13 @@ import org.letscareer.letscareer.domain.curation.dto.request.CreateCurationReque
 import org.letscareer.letscareer.domain.curation.dto.request.UpdateCurationRequestDto;
 import org.letscareer.letscareer.domain.curation.dto.response.GetAdminCurationResponseDto;
 import org.letscareer.letscareer.domain.curation.dto.response.GetAdminCurationsResponseDto;
+import org.letscareer.letscareer.domain.curation.dto.response.GetCurationsResponseDto;
 import org.letscareer.letscareer.domain.curation.type.CurationLocationType;
 
 public interface CurationService {
     GetAdminCurationsResponseDto getAdminCurations(CurationLocationType locationType);
     GetAdminCurationResponseDto getAdminCuration(Long curationId);
+    GetCurationsResponseDto getCurations(CurationLocationType locationType);
     void createCuration(CurationLocationType locationType, CreateCurationRequestDto requestDto);
     void updateCuration(Long curationId, UpdateCurationRequestDto requestDto);
     void deleteCuration(Long curationId);

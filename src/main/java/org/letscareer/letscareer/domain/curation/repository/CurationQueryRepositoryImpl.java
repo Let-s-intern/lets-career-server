@@ -47,8 +47,6 @@ public class CurationQueryRepositoryImpl implements CurationQueryRepository {
                         curation.subTitle,
                         curation.startDate,
                         curation.endDate,
-                        curation.listSize,
-                        curation.content,
                         curation.isVisible))
                 .from(curation)
                 .where(

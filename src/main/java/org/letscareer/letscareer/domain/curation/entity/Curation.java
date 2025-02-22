@@ -10,6 +10,8 @@ import org.letscareer.letscareer.domain.curation.type.converter.CurationLocation
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.letscareer.letscareer.global.common.utils.entity.EntityUpdateValueUtils.updateValue;
 
@@ -25,44 +27,48 @@ public class Curation extends BaseTimeEntity {
     @Column(name = "curation_id")
     private Long id;
 
+    @Convert(converter = CurationLocationTypeConverter.class)
+    private CurationLocationType locationType;
+
     private String title;
 
     private String subTitle;
 
-    private Integer listSize;
+    private LocalDateTime startDate;
 
-    private String content;
-
-    @Convert(converter = CurationLocationTypeConverter.class)
-    private CurationLocationType locationType;
+    private LocalDateTime endDate;
 
     @Builder.Default
     private Boolean isVisible = false;
 
-    private LocalDateTime startDate;
-
-    private LocalDateTime endDate;
+    @OneToMany(mappedBy = "curation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<CurationItem> curationItemList = new ArrayList<>();
 
     public static Curation createCuration(CurationLocationType locationType, CreateCurationRequestDto requestDto) {
         return Curation.builder()
                 .locationType(locationType)
                 .title(requestDto.title())
                 .subTitle(requestDto.subTitle())
-                .listSize(requestDto.listSize())
-                .content(requestDto.content())
                 .startDate(requestDto.startDate())
                 .endDate(requestDto.endDate())
                 .build();
     }
 
     public void updateCuration(UpdateCurationRequestDto requestDto) {
+        this.locationType = updateValue(this.locationType, requestDto.locationType());
         this.title = updateValue(this.title, requestDto.title());
         this.subTitle = updateValue(this.subTitle, requestDto.subTitle());
-        this.listSize = updateValue(this.listSize, requestDto.listSize());
-        this.content = updateValue(this.content, requestDto.content());
         this.startDate = updateValue(this.startDate, requestDto.startDate());
         this.endDate = updateValue(this.endDate, requestDto.endDate());
-        this.locationType = updateValue(this.locationType, requestDto.locationType());
         this.isVisible = updateValue(this.isVisible, requestDto.isVisible());
+    }
+
+    public void setInitCurationItemList() {
+        this.curationItemList = new ArrayList<>();
+    }
+
+    public void addCurationItemList(CurationItem curationItem) {
+        this.curationItemList.add(curationItem);
     }
 }

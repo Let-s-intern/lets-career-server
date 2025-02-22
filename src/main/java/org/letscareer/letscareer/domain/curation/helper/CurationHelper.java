@@ -27,9 +27,9 @@ public class CurationHelper {
         return curationRepository.findAdminCurationDetailVoById(curationId).orElseThrow(() -> new EntityNotFoundException(CURATION_NOT_FOUND));
     }
 
-    public void createCurationAndSave(CurationLocationType locationType, CreateCurationRequestDto requestDto) {
+    public Curation createCurationAndSave(CurationLocationType locationType, CreateCurationRequestDto requestDto) {
         Curation curation = Curation.createCuration(locationType, requestDto);
-        curationRepository.save(curation);
+        return curationRepository.save(curation);
     }
 
     public Curation findCurationByIdOrThrow(Long curationId) {
