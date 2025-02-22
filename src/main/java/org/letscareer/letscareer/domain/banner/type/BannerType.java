@@ -11,7 +11,8 @@ public enum BannerType implements EnumField {
     MAIN(1, "메인"),
     PROGRAM(2, "프로그램"),
     LINE(3, "띠"),
-    POPUP(4, "팝업");
+    POPUP(4, "팝업"),
+    MAIN_BOTTOM(5, "메인 하단");
 
     private final Integer code;
     private final String desc;
