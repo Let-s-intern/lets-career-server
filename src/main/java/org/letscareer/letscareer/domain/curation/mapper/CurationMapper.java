@@ -4,6 +4,7 @@ import org.letscareer.letscareer.domain.curation.dto.response.GetAdminCurationRe
 import org.letscareer.letscareer.domain.curation.dto.response.GetAdminCurationsResponseDto;
 import org.letscareer.letscareer.domain.curation.vo.AdminCurationDetailVo;
 import org.letscareer.letscareer.domain.curation.vo.AdminCurationVo;
+import org.letscareer.letscareer.domain.curation.vo.CurationItemVo;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,7 +15,8 @@ public class CurationMapper {
         return GetAdminCurationsResponseDto.of(adminCurationVoList);
     }
 
-    public GetAdminCurationResponseDto toGetAdminCurationResponseDto(AdminCurationDetailVo adminCurationDetailVo) {
-        return GetAdminCurationResponseDto.of(adminCurationDetailVo);
+    public GetAdminCurationResponseDto toGetAdminCurationResponseDto(AdminCurationDetailVo adminCurationDetailVo,
+                                                                     List<CurationItemVo> curationItemVos) {
+        return GetAdminCurationResponseDto.of(adminCurationDetailVo, curationItemVos);
     }
 }
