@@ -35,8 +35,6 @@ public class BlogBanner extends BaseTimeEntity {
 
     private String file;
 
-    private Integer weight;
-
     public static BlogBanner createBlogBanner(CreateBlogBannerRequestDto requestDto){
         return BlogBanner.builder()
                 .title(requestDto.title())
@@ -44,7 +42,6 @@ public class BlogBanner extends BaseTimeEntity {
                 .startDate(requestDto.startDate())
                 .endDate(requestDto.endDate())
                 .file(requestDto.file())
-                .weight(requestDto.weight())
                 .build();
     }
 
@@ -55,6 +52,5 @@ public class BlogBanner extends BaseTimeEntity {
         this.startDate = updateValue(this.startDate, requestDto.startDate());
         this.endDate = updateValue(this.endDate, requestDto.endDate());
         this.file = updateValue(this.file, requestDto.file());
-        this.weight = updateValue(this.weight, requestDto.weight());
     }
 }

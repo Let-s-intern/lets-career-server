@@ -32,17 +32,14 @@ public class BlogBannerQueryRepositoryImpl implements BlogBannerQueryRepository 
                         blogBanner.file,
                         blogBanner.startDate,
                         blogBanner.endDate,
-                        blogBanner.weight,
                         blogBanner.isVisible))
                 .from(blogBanner)
-                .orderBy(
-                        blogBanner.weight.desc()
-                )
                 .where(
                         eqIsVisible(true),
                         isActive()
                 )
                 .groupBy(blogBanner.id)
+                .orderBy(blogBanner.createDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -68,7 +65,6 @@ public class BlogBannerQueryRepositoryImpl implements BlogBannerQueryRepository 
                         blogBanner.link,
                         blogBanner.startDate,
                         blogBanner.endDate,
-                        blogBanner.weight,
                         blogBanner.isVisible))
                 .from(blogBanner)
                 .orderBy(
@@ -87,7 +83,6 @@ public class BlogBannerQueryRepositoryImpl implements BlogBannerQueryRepository 
                         blogBanner.file,
                         blogBanner.startDate,
                         blogBanner.endDate,
-                        blogBanner.weight,
                         blogBanner.isVisible))
                 .from(blogBanner)
                 .where(
