@@ -39,6 +39,7 @@ public class BlogBannerQueryRepositoryImpl implements BlogBannerQueryRepository 
                         isActive()
                 )
                 .groupBy(blogBanner.id)
+                .orderBy(blogBanner.createDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
