@@ -15,7 +15,8 @@ public enum FileType {
     VOD(6, "program/vod/"),
     BLOG(7, "blog/"),
     REPORT(8, "report/"),
-    BLOG_REVIEW(9, "review/blog/");
+    BLOG_REVIEW(9, "review/blog/"),
+    CURATION_ITEM(10, "curation/item/");
 
     private final Integer code;
     private final String desc;
