@@ -2,7 +2,7 @@ package org.letscareer.letscareer.domain.curation.vo;
 
 import org.letscareer.letscareer.domain.curation.type.CurationItemProgramType;
 
-public record CurationItemVo(
+public record AdminCurationItemVo(
         Long id,
         CurationItemProgramType programType,
         Long programId,
