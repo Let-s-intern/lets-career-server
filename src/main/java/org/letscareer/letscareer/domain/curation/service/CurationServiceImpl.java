@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.curation.service;
 
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
 import org.letscareer.letscareer.domain.curation.dto.request.CreateCurationItemRequestDto;
 import org.letscareer.letscareer.domain.curation.dto.request.CreateCurationRequestDto;
 import org.letscareer.letscareer.domain.curation.dto.request.UpdateCurationRequestDto;
@@ -33,6 +34,7 @@ public class CurationServiceImpl implements CurationService {
     private final CurationHelper curationHelper;
     private final CurationItemHelper curationItemHelper;
     private final ProgramHelper programHelper;
+    private final ChallengeHelper challengeHelper;
     private final CurationMapper curationMapper;
 
     @Override
@@ -56,7 +58,17 @@ public class CurationServiceImpl implements CurationService {
             if(curationVo.showImminentList()) curationItemVos = programHelper.findCurationImminentProgramVos();
             curationItemVos.addAll(curationItemHelper.findAllCurationItemVosByCurationId(curationVo.curationId()));
             curationItemVos = curationItemVos.stream()
-                    .filter(distinctByKey(curationItemVo -> curationItemVo.programType().getDesc() + " " + curationItemVo.programId()))
+                    .filter(distinctByKey(curationItemVo ->
+                            curationItemVo.programType().getDesc() + " " + curationItemVo.programId()))
+                    .map(curationItemVo -> {
+                        if (curationItemVo.url() != null && curationItemVo.url().startsWith("latest:")) {
+                            String keyword = curationItemVo.url().substring(7);
+                            CurationItemVo challengeItem = challengeHelper.findCurationItemVoByKeyword(keyword);
+                            return challengeItem;
+                        }
+                        return curationItemVo;
+                    })
+                    .filter(Objects::nonNull)
                     .distinct()
                     .collect(Collectors.toList());
         }
