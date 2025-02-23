@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.curation.entity;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.letscareer.letscareer.domain.curation.dto.request.CreateCurationRequestDto;
 import org.letscareer.letscareer.domain.curation.dto.request.UpdateCurationRequestDto;
@@ -36,6 +37,9 @@ public class Curation extends BaseTimeEntity {
 
     private String moreUrl;
 
+    @NotNull
+    private Boolean showImminentList;
+
     private LocalDateTime startDate;
 
     private LocalDateTime endDate;
@@ -53,6 +57,7 @@ public class Curation extends BaseTimeEntity {
                 .title(requestDto.title())
                 .subTitle(requestDto.subTitle())
                 .moreUrl(requestDto.moreUrl())
+                .showImminentList(requestDto.showImminentList())
                 .startDate(requestDto.startDate())
                 .endDate(requestDto.endDate())
                 .build();
@@ -63,6 +68,7 @@ public class Curation extends BaseTimeEntity {
         this.title = updateValue(this.title, requestDto.title());
         this.subTitle = updateValue(this.subTitle, requestDto.subTitle());
         this.moreUrl = updateValue(this.moreUrl, requestDto.moreUrl());
+        this.showImminentList = updateValue(this.showImminentList, requestDto.showImminentList());
         this.startDate = updateValue(this.startDate, requestDto.startDate());
         this.endDate = updateValue(this.endDate, requestDto.endDate());
         this.isVisible = updateValue(this.isVisible, requestDto.isVisible());

@@ -9,6 +9,7 @@ public record UpdateCurationRequestDto(
         String title,
         String subTitle,
         String moreUrl,
+        Boolean showImminentList,
         LocalDateTime startDate,
         LocalDateTime endDate,
         CurationLocationType locationType,

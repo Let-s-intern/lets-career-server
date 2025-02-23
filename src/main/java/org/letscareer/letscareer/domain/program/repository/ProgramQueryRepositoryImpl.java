@@ -2,21 +2,20 @@ package org.letscareer.letscareer.domain.program.repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.CaseBuilder;
-import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.*;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
+import org.letscareer.letscareer.domain.curation.vo.CurationItemVo;
 import org.letscareer.letscareer.domain.program.entity.SearchCondition;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.program.vo.ProgramForAdminVo;
 import org.letscareer.letscareer.domain.program.vo.ProgramForConditionVo;
 import org.letscareer.letscareer.domain.program.vo.ProgramReviewNotificationVo;
+import org.letscareer.letscareer.domain.report.type.ReportType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.support.PageableExecutionUtils;
 
@@ -36,9 +35,6 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
 
     @Override
     public Page<ProgramForConditionVo> findProgramForConditionVos(SearchCondition condition) {
-        long page = condition.pageable().getOffset();
-        System.out.println("[page]::" + page);
-        System.out.println("[size]::" + condition.pageable().getPageSize());
         List<ProgramForConditionVo> contents = queryFactory
                 .select(Projections.constructor(ProgramForConditionVo.class,
                         vWProgram.programId,
@@ -161,6 +157,36 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                     isDayAfterEndDate()
                 )
                 .fetch();
+    }
+
+    @Override
+    public List<CurationItemVo> findCurationImminentProgramVos() {
+        return queryFactory
+                .select(Projections.constructor(CurationItemVo.class,
+                        Expressions.constant(0L),
+                        vWProgram.curationItemProgramType,
+                        vWProgram.programId,
+                        vWProgram.startDate,
+                        vWProgram.endDate,
+                        vWProgram.deadline,
+                        Expressions.nullExpression(ReportType.class),
+                        vWProgram.title,
+                        Expressions.nullExpression(String.class),
+                        vWProgram.thumbnail))
+                .from(vWProgram)
+                .where(
+                        eqIsVisible(),
+                        isImminent()
+                )
+                .orderBy(
+                        vWProgram.deadline.asc()
+                )
+                .fetch();
+    }
+
+    private BooleanExpression isImminent() {
+        LocalDateTime nowMinusFiveDay = LocalDateTime.now().minusDays(5);
+        return vWProgram.deadline.goe(nowMinusFiveDay);
     }
 
     private BooleanExpression isDayAfterEndDate() {

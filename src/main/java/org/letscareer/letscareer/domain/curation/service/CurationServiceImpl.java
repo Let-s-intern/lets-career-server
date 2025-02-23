@@ -13,12 +13,17 @@ import org.letscareer.letscareer.domain.curation.helper.CurationItemHelper;
 import org.letscareer.letscareer.domain.curation.mapper.CurationMapper;
 import org.letscareer.letscareer.domain.curation.type.CurationLocationType;
 import org.letscareer.letscareer.domain.curation.vo.*;
+import org.letscareer.letscareer.domain.program.helper.ProgramHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -27,6 +32,7 @@ import java.util.stream.Collectors;
 public class CurationServiceImpl implements CurationService {
     private final CurationHelper curationHelper;
     private final CurationItemHelper curationItemHelper;
+    private final ProgramHelper programHelper;
     private final CurationMapper curationMapper;
 
     @Override
@@ -45,7 +51,15 @@ public class CurationServiceImpl implements CurationService {
     @Override
     public GetCurationResponseDto getCuration(CurationLocationType locationType) {
         CurationVo curationVo = curationHelper.findCurationVoByLocationType(locationType);
-        List<CurationItemVo> curationItemVos = curationVo != null ? curationItemHelper.findAllCurationItemVosByCurationId(curationVo.curationId()) : null;
+        List<CurationItemVo> curationItemVos = new ArrayList<>();
+        if(curationVo != null) {
+            if(curationVo.showImminentList()) curationItemVos = programHelper.findCurationImminentProgramVos();
+            curationItemVos.addAll(curationItemHelper.findAllCurationItemVosByCurationId(curationVo.curationId()));
+            curationItemVos = curationItemVos.stream()
+                    .filter(distinctByKey(curationItemVo -> curationItemVo.programType().getDesc() + " " + curationItemVo.programId()))
+                    .distinct()
+                    .collect(Collectors.toList());
+        }
         return curationMapper.toGetCurationResponseDto(curationVo, curationItemVos);
     }
 
@@ -79,5 +93,10 @@ public class CurationServiceImpl implements CurationService {
         curationItemHelper.deleteAllCurationItemsByCurationId(curation.getId());
         curation.setInitCurationItemList();
         createCurationItemListAndSave(curation, curationItemList);
+    }
+
+    public static <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {
+        Map<Object, Boolean> map = new ConcurrentHashMap<>();
+        return t -> map.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
     }
 }

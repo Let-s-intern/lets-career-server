@@ -12,6 +12,7 @@ public record CurationVo(
     String title,
     String subTitle,
     String moreUrl,
+    Boolean showImminentList,
     LocalDateTime startDate,
     LocalDateTime endDate
 ) {

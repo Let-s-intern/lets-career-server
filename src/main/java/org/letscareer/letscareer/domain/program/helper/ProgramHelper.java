@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.program.helper;
 
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.curation.vo.CurationItemVo;
 import org.letscareer.letscareer.domain.program.entity.SearchCondition;
 import org.letscareer.letscareer.domain.program.repository.ProgramRepository;
 import org.letscareer.letscareer.domain.program.vo.ProgramForAdminVo;
@@ -26,5 +27,9 @@ public class ProgramHelper {
 
     public List<ProgramReviewNotificationVo> findProgramReviewNotificationVos() {
         return programRepository.findProgramReviewNotificationVos();
+    }
+
+    public List<CurationItemVo> findCurationImminentProgramVos() {
+        return programRepository.findCurationImminentProgramVos();
     }
 }
