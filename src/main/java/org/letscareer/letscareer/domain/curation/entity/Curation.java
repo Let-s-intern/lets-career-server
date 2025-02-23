@@ -34,6 +34,8 @@ public class Curation extends BaseTimeEntity {
 
     private String subTitle;
 
+    private String moreUrl;
+
     private LocalDateTime startDate;
 
     private LocalDateTime endDate;
@@ -50,6 +52,7 @@ public class Curation extends BaseTimeEntity {
                 .locationType(locationType)
                 .title(requestDto.title())
                 .subTitle(requestDto.subTitle())
+                .moreUrl(requestDto.moreUrl())
                 .startDate(requestDto.startDate())
                 .endDate(requestDto.endDate())
                 .build();
@@ -59,6 +62,7 @@ public class Curation extends BaseTimeEntity {
         this.locationType = updateValue(this.locationType, requestDto.locationType());
         this.title = updateValue(this.title, requestDto.title());
         this.subTitle = updateValue(this.subTitle, requestDto.subTitle());
+        this.moreUrl = updateValue(this.moreUrl, requestDto.moreUrl());
         this.startDate = updateValue(this.startDate, requestDto.startDate());
         this.endDate = updateValue(this.endDate, requestDto.endDate());
         this.isVisible = updateValue(this.isVisible, requestDto.isVisible());

@@ -11,6 +11,7 @@ public record CurationVo(
     CurationLocationType locationType,
     String title,
     String subTitle,
+    String moreUrl,
     LocalDateTime startDate,
     LocalDateTime endDate
 ) {
