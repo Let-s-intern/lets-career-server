@@ -47,6 +47,7 @@ public class CurationQueryRepositoryImpl implements CurationQueryRepository {
                         curation.locationType,
                         curation.title,
                         curation.subTitle,
+                        curation.moreUrl,
                         curation.startDate,
                         curation.endDate,
                         curation.isVisible))
@@ -65,6 +66,8 @@ public class CurationQueryRepositoryImpl implements CurationQueryRepository {
                         curation.locationType,
                         curation.title,
                         curation.subTitle,
+                        curation.moreUrl,
+                        curation.showImminentList,
                         curation.startDate,
                         curation.endDate))
                 .from(curation)

@@ -8,6 +8,8 @@ import java.util.List;
 public record CreateCurationRequestDto(
         @NotNull String title,
         String subTitle,
+        String moreUrl,
+        @NotNull Boolean showImminentList,
         @NotNull LocalDateTime startDate,
         @NotNull LocalDateTime endDate,
         List<CreateCurationItemRequestDto> curationItemList

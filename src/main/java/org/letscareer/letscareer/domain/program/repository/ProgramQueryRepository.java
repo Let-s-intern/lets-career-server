@@ -1,5 +1,6 @@
 package org.letscareer.letscareer.domain.program.repository;
 
+import org.letscareer.letscareer.domain.curation.vo.CurationItemVo;
 import org.letscareer.letscareer.domain.program.entity.SearchCondition;
 import org.letscareer.letscareer.domain.program.vo.ProgramForAdminVo;
 import org.letscareer.letscareer.domain.program.vo.ProgramForConditionVo;
@@ -15,4 +16,6 @@ public interface ProgramQueryRepository {
     Page<ProgramForAdminVo> findProgramForAdminVos(SearchCondition condition);
 
     List<ProgramReviewNotificationVo> findProgramReviewNotificationVos();
+
+    List<CurationItemVo> findCurationImminentProgramVos();
 }
