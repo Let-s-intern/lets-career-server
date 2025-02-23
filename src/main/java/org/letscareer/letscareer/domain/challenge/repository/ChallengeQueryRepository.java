@@ -3,6 +3,7 @@ package org.letscareer.letscareer.domain.challenge.repository;
 import org.letscareer.letscareer.domain.challenge.type.ChallengeType;
 import org.letscareer.letscareer.domain.challenge.vo.*;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
+import org.letscareer.letscareer.domain.curation.vo.CurationItemVo;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,4 +33,6 @@ public interface ChallengeQueryRepository {
     List<Long> findAllOTRemindNotificationChallengeId();
 
     ChallengeRecommendVo findChallengeRecommendVoByChallengeType(ChallengeType challengeType);
+
+    CurationItemVo findCurationItemVoByKeyword(String keyword);
 }
