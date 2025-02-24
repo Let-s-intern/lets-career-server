@@ -48,6 +48,7 @@ public class CurationQueryRepositoryImpl implements CurationQueryRepository {
                         curation.title,
                         curation.subTitle,
                         curation.moreUrl,
+                        curation.showImminentList,
                         curation.startDate,
                         curation.endDate,
                         curation.isVisible))
