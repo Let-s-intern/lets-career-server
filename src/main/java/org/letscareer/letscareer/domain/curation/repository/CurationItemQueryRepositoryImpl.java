@@ -7,12 +7,12 @@ import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.curation.type.CurationItemProgramType;
+import org.letscareer.letscareer.domain.curation.vo.AdminCurationItemVo;
 import org.letscareer.letscareer.domain.curation.vo.CurationItemVo;
 import org.letscareer.letscareer.domain.report.type.ReportType;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import static org.letscareer.letscareer.domain.blog.entity.QBlog.blog;
 import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
@@ -24,6 +24,43 @@ import static org.letscareer.letscareer.domain.vod.entity.QVod.vod;
 @RequiredArgsConstructor
 public class CurationItemQueryRepositoryImpl implements CurationItemQueryRepository {
     private final JPAQueryFactory queryFactory;
+
+    @Override
+    public List<AdminCurationItemVo> findAllAdminCurationItemVosByCurationId(Long curationId) {
+        return queryFactory.select(Projections.constructor(AdminCurationItemVo.class,
+                        curationItem.id,
+                        curationItem.programType,
+                        curationItem.programId,
+                        reportTypeExpression(),
+                        titleExpression(),
+                        urlExpression(),
+                        thumbnailExpression()))
+                .from(curationItem)
+                .leftJoin(challenge).on(
+                        curationItem.programType.eq(CurationItemProgramType.CHALLENGE)
+                                .and(curationItem.programId.eq(challenge.id))
+                )
+                .leftJoin(live).on(
+                        curationItem.programType.eq(CurationItemProgramType.LIVE)
+                                .and(curationItem.programId.eq(live.id))
+                )
+                .leftJoin(vod).on(
+                        curationItem.programType.eq(CurationItemProgramType.VOD)
+                                .and(curationItem.programId.eq(vod.id))
+                )
+                .leftJoin(report).on(
+                        curationItem.programType.eq(CurationItemProgramType.REPORT)
+                                .and(curationItem.programId.eq(report.id))
+                )
+                .leftJoin(blog).on(
+                        curationItem.programType.eq(CurationItemProgramType.BLOG)
+                                .and(curationItem.programId.eq(blog.id))
+                )
+                .where(
+                        eqCurationId(curationId)
+                )
+                .fetch();
+    }
 
     @Override
     public List<CurationItemVo> findAllCurationItemVosByCurationId(Long curationId) {
