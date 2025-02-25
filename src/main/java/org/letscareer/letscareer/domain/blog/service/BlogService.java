@@ -9,9 +9,11 @@ import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public interface BlogService {
-    GetBlogsResponseDto getBlogs(User user, BlogType type, Long tagId, Pageable pageable);
+    GetBlogsResponseDto getBlogs(User user, List<BlogType> types, Long tagId, Pageable pageable);
 
     GetBlogResponseDto getBlogDetail(Long blogId);
 
