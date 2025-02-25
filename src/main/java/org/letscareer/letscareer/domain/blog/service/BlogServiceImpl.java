@@ -37,8 +37,8 @@ public class BlogServiceImpl implements BlogService {
     private final BlogHashTagHelper blogHashTagHelper;
 
     @Override
-    public GetBlogsResponseDto getBlogs(User user, BlogType type, Long tagId, Pageable pageable) {
-        Page<BlogThumbnailVo> blogThumbnailVos = blogHelper.findBlogThumbnailVos(user, type, tagId, pageable);
+    public GetBlogsResponseDto getBlogs(User user, List<BlogType> types, Long tagId, Pageable pageable) {
+        Page<BlogThumbnailVo> blogThumbnailVos = blogHelper.findBlogThumbnailVos(user, types, tagId, pageable);
         PageInfo pageInfo = PageInfo.of(blogThumbnailVos);
         List<BlogsElementInfo> blogsElementInfos = createBlogsElementInfos(blogThumbnailVos.getContent());
         return blogMapper.toGetBlogsResponseDto(blogsElementInfos, pageInfo);

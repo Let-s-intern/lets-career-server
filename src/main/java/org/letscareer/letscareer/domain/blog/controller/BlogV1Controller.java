@@ -20,6 +20,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/blog")
 @RestController
@@ -31,10 +33,10 @@ public class BlogV1Controller {
     })
     @GetMapping
     public ResponseEntity<SuccessResponse<?>> getBlogs(@CurrentUser final User user,
-                                                       @RequestParam(required = false) final BlogType type,
+                                                       @RequestParam(required = false) final List<BlogType> types,
                                                        @RequestParam(required = false) final Long tagId,
                                                        final Pageable pageable) {
-        final GetBlogsResponseDto responseDto = blogService.getBlogs(user, type, tagId, pageable);
+        final GetBlogsResponseDto responseDto = blogService.getBlogs(user, types, tagId, pageable);
         return SuccessResponse.ok(responseDto);
     }
 

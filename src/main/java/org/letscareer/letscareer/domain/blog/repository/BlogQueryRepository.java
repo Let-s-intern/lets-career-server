@@ -7,10 +7,11 @@ import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface BlogQueryRepository {
     Optional<BlogDetailVo> findBlogDetailVo(Long blogId);
 
-    Page<BlogThumbnailVo> findBlogThumbnailVos(User user, BlogType type, Long tagId, Pageable pageable);
+    Page<BlogThumbnailVo> findBlogThumbnailVos(User user, List<BlogType> types, Long tagId, Pageable pageable);
 }
