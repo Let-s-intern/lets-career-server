@@ -20,6 +20,7 @@ public record ChallengeRemindParameter(
         @JsonFormat(pattern = "yyyy년 MM월 dd일 HH:mm", timezone = "Asia/Seoul")
         LocalDateTime programOtEnd,
         String chatLink,
+        String chatPassword,
         String zoomLink
         ) {
     public static ChallengeRemindParameter of(String userName,
@@ -32,6 +33,7 @@ public record ChallengeRemindParameter(
                 .programOtStart(challenge.getStartDate())
                 .programOtEnd(challenge.getStartDate().plusMinutes(40))
                 .chatLink(challenge.getChatLink())
+                .chatPassword(challenge.getChatPassword())
                 .zoomLink(challenge.getZoomLink().substring(8))
                 .build();
     }
