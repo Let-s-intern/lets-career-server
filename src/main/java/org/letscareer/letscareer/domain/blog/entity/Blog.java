@@ -56,7 +56,7 @@ public class Blog extends BaseTimeEntity {
                 .content(requestDto.content())
                 .ctaLink(requestDto.ctaLink())
                 .ctaText(requestDto.ctaText())
-                .isDisplayed(Boolean.FALSE)
+                .isDisplayed(requestDto.isDisplayed())
                 .displayDate(requestDto.displayDate())
                 .build();
     }
