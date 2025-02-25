@@ -42,12 +42,15 @@ public class BlogQueryRepositoryImpl implements BlogQueryRepository {
                         blog.isDisplayed,
                         blog.displayDate,
                         blog.createDate,
-                        blog.lastModifiedDate
+                        blog.lastModifiedDate,
+                        blogLike.id.count().intValue()
                 ))
                 .from(blog)
+                .leftJoin(blog.blogLikes, blogLike)
                 .where(
                         eqBlogId(blogId)
                 )
+                .groupBy(blog.id)
                 .fetchOne()
         );
     }
