@@ -80,15 +80,4 @@ public class BlogV1Controller {
         blogService.deleteBlog(blogId);
         return SuccessResponse.ok(null);
     }
-
-    @Operation(summary = "블로그 좋아요 클릭", responses = {
-            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
-    })
-    @ApiErrorCode({SwaggerEnum.BLOG_NOT_FOUND})
-    @PostMapping("/{blogId}/like")
-    public ResponseEntity<SuccessResponse<?>> addBlogLike(@CurrentUser final User user,
-                                                          @PathVariable final Long blogId){
-        blogService.addBlogLike(blogId, user);
-        return SuccessResponse.ok(null);
-    }
 }
