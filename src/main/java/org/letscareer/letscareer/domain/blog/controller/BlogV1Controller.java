@@ -80,4 +80,25 @@ public class BlogV1Controller {
         blogService.deleteBlog(blogId);
         return SuccessResponse.ok(null);
     }
+
+    @Operation(summary = "블로그 좋아요 설정", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    })
+    @ApiErrorCode({SwaggerEnum.BLOG_NOT_FOUND})
+    @PatchMapping("/{blogId}/like")
+    public ResponseEntity<SuccessResponse<?>> updateBlogLike(@PathVariable final Long blogId) {
+        blogService.updateBlogLike(blogId);
+        return SuccessResponse.ok(null);
+    }
+
+    @Operation(summary = "블로그 좋아요 취소", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    })
+    @ApiErrorCode({SwaggerEnum.BLOG_NOT_FOUND})
+    @PatchMapping("/{blogId}/dislike")
+    public ResponseEntity<SuccessResponse<?>> updateBlogDislike(@PathVariable final Long blogId) {
+        blogService.updateBlogDislike(blogId);
+        return SuccessResponse.ok(null);
+    }
+
 }

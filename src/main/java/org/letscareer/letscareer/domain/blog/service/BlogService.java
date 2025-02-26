@@ -22,4 +22,8 @@ public interface BlogService {
     void updateBlog(Long blogId, UpdateBlogRequestDto requestDto);
 
     void deleteBlog(Long blogId);
+
+    void updateBlogLike(Long blogId);
+
+    void updateBlogDislike(Long blogId);
 }
