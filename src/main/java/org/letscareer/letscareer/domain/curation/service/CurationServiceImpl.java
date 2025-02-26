@@ -8,6 +8,7 @@ import org.letscareer.letscareer.domain.curation.dto.request.UpdateCurationReque
 import org.letscareer.letscareer.domain.curation.dto.response.GetAdminCurationResponseDto;
 import org.letscareer.letscareer.domain.curation.dto.response.GetAdminCurationsResponseDto;
 import org.letscareer.letscareer.domain.curation.dto.response.GetCurationResponseDto;
+import org.letscareer.letscareer.domain.curation.dto.response.GetCurationsResponseDto;
 import org.letscareer.letscareer.domain.curation.entity.Curation;
 import org.letscareer.letscareer.domain.curation.helper.CurationHelper;
 import org.letscareer.letscareer.domain.curation.helper.CurationItemHelper;
@@ -51,28 +52,30 @@ public class CurationServiceImpl implements CurationService {
     }
 
     @Override
-    public GetCurationResponseDto getCuration(CurationLocationType locationType) {
-        CurationVo curationVo = curationHelper.findCurationVoByLocationType(locationType);
-        List<CurationItemVo> curationItemVos = new ArrayList<>();
-        if(curationVo != null) {
-            if(curationVo.showImminentList()) curationItemVos = programHelper.findCurationImminentProgramVos();
-            curationItemVos.addAll(curationItemHelper.findAllCurationItemVosByCurationId(curationVo.curationId()));
-            curationItemVos = curationItemVos.stream()
-                    .filter(distinctByKey(curationItemVo ->
-                            curationItemVo.programType().getDesc() + " " + curationItemVo.programId()))
-                    .map(curationItemVo -> {
-                        if (curationItemVo.url() != null && curationItemVo.url().startsWith("latest:")) {
-                            String keyword = curationItemVo.url().substring(7);
-                            CurationItemVo challengeItem = challengeHelper.findCurationItemVoByKeyword(keyword);
-                            return challengeItem;
-                        }
-                        return curationItemVo;
-                    })
-                    .filter(Objects::nonNull)
-                    .distinct()
-                    .collect(Collectors.toList());
-        }
-        return curationMapper.toGetCurationResponseDto(curationVo, curationItemVos);
+    public GetCurationsResponseDto getCuration(CurationLocationType locationType) {
+        List<CurationVo> curationVos = curationHelper.findAllCurationVosByLocationType(locationType);
+        List<GetCurationResponseDto> curationList = curationVos.stream()
+                .map(curationVo -> {
+                    List<CurationItemVo> curationItemVos = new ArrayList<>();
+                    if (curationVo != null) {
+                        if (curationVo.showImminentList()) curationItemVos = programHelper.findCurationImminentProgramVos();
+                        curationItemVos.addAll(curationItemHelper.findAllCurationItemVosByCurationId(curationVo.curationId()));
+                        curationItemVos = curationItemVos.stream()
+                                .filter(distinctByKey(curationItemVo -> curationItemVo.programType().getDesc() + " " + curationItemVo.programId()))
+                                .map(curationItemVo -> {
+                                    if (curationItemVo.url() != null && curationItemVo.url().startsWith("latest:")) {
+                                        String keyword = curationItemVo.url().substring(7);
+                                        return challengeHelper.findCurationItemVoByKeyword(keyword);
+                                    }
+                                    return curationItemVo;
+                                })
+                                .filter(Objects::nonNull)
+                                .distinct()
+                                .collect(Collectors.toList());
+                    }
+                    return curationMapper.toGetCurationResponseDto(curationVo, curationItemVos);
+                }).toList();
+        return GetCurationsResponseDto.of(curationList);
     }
 
     @Override

@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface CurationQueryRepository {
     List<AdminCurationVo> findAdminCurationVosByLocationType(CurationLocationType locationType);
     Optional<AdminCurationDetailVo> findAdminCurationDetailVoById(Long curationId);
-    CurationVo findCurationVoByLocationType(CurationLocationType locationType);
+    List<CurationVo> findAllCurationVosByLocationType(CurationLocationType locationType);
 }

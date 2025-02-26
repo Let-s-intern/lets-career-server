@@ -60,7 +60,7 @@ public class CurationQueryRepositoryImpl implements CurationQueryRepository {
     }
 
     @Override
-    public CurationVo findCurationVoByLocationType(CurationLocationType locationType) {
+    public List<CurationVo> findAllCurationVosByLocationType(CurationLocationType locationType) {
         return queryFactory
                 .select(Projections.constructor(CurationVo.class,
                         curation.id,
@@ -80,7 +80,7 @@ public class CurationQueryRepositoryImpl implements CurationQueryRepository {
                 .orderBy(
                         curation.id.desc()
                 )
-                .fetchFirst();
+                .fetch();
     }
 
     private BooleanExpression eqCurationId(Long curationId) {
