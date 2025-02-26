@@ -11,9 +11,7 @@ import org.springframework.http.HttpStatus;
 public enum BlogErrorCode implements ErrorCode {
     BLOG_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 블로그입니다."),
     HASHTAG_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 해시태그입니다."),
-    HASHTAG_CANNOT_DELETED(HttpStatus.BAD_REQUEST, "삭제가 불가능한 해시태그입니다."),
-    BLOG_LIKE_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 좋아요를 누른 블로그입니다.");
-
+    HASHTAG_CANNOT_DELETED(HttpStatus.BAD_REQUEST, "삭제가 불가능한 해시태그입니다.");
     private final HttpStatus httpStatus;
     private final String message;
 }
