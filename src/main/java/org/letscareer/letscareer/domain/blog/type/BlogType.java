@@ -13,7 +13,7 @@ public enum BlogType implements EnumField {
     CAREER_STORIES(3, "취뽀 & 근무 후기"),
     JUNIOR_STORIES(5, "주니어 이야기"),
     LETSCAREER_NEWS(6, "렛츠커리어 소식"),
-    JOB_POSTING(7, "채용 정보");
+    JOB_POSTING(7, "채용 공고");
 
     private final Integer code;
     private final String desc;
