@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.curation.vo;
 
 import lombok.Builder;
+import org.letscareer.letscareer.domain.blog.type.BlogType;
 import org.letscareer.letscareer.domain.curation.type.CurationItemProgramType;
 import org.letscareer.letscareer.domain.report.type.ReportType;
 
@@ -15,6 +16,7 @@ public record CurationItemVo(
         LocalDateTime startDate,
         LocalDateTime endDate,
         LocalDateTime deadline,
+        BlogType category,
         ReportType reportType,
         String tag,
         String title,
