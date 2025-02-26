@@ -16,6 +16,7 @@ public record BlogDetailVo(
         Boolean isDisplayed,
         LocalDateTime displayDate,
         LocalDateTime createDate,
-        LocalDateTime lastModifiedDate
+        LocalDateTime lastModifiedDate,
+        Integer likeCount
 ) {
 }

@@ -20,6 +20,7 @@ import java.util.Optional;
 
 import static org.letscareer.letscareer.domain.blog.entity.QBlog.blog;
 import static org.letscareer.letscareer.domain.blog.entity.QBlogHashTag.blogHashTag;
+import static org.letscareer.letscareer.domain.blog.entity.QBlogLike.blogLike;
 import static org.letscareer.letscareer.domain.blog.entity.QHashTag.hashTag;
 
 @RequiredArgsConstructor
@@ -41,12 +42,15 @@ public class BlogQueryRepositoryImpl implements BlogQueryRepository {
                         blog.isDisplayed,
                         blog.displayDate,
                         blog.createDate,
-                        blog.lastModifiedDate
+                        blog.lastModifiedDate,
+                        blogLike.id.count().intValue()
                 ))
                 .from(blog)
+                .leftJoin(blog.blogLikes, blogLike)
                 .where(
                         eqBlogId(blogId)
                 )
+                .groupBy(blog.id)
                 .fetchOne()
         );
     }
@@ -63,16 +67,19 @@ public class BlogQueryRepositoryImpl implements BlogQueryRepository {
                         blog.isDisplayed,
                         blog.displayDate,
                         blog.createDate,
-                        blog.lastModifiedDate
+                        blog.lastModifiedDate,
+                        blogLike.id.count().intValue()
                 ))
                 .from(blog)
                 .leftJoin(blog.blogHashTags, blogHashTag)
                 .leftJoin(blogHashTag.hashTag, hashTag)
+                .leftJoin(blog.blogLikes, blogLike)
                 .where(
                         eqBlogType(types),
                         eqTagId(tagId),
                         eqIsDisplayedForUserRole(user)
                 )
+                .groupBy(blog.id)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(blog.displayDate.desc())

@@ -43,8 +43,10 @@ public class Blog extends BaseTimeEntity {
     @Builder.Default
     private List<BlogRating> blogRatingList = new ArrayList<>();
 
+
     @Builder.Default
     private Integer likes = 0;
+
 
     public static Blog createBlog(CreateBlogRequestDto requestDto) {
         return Blog.builder()
@@ -55,7 +57,7 @@ public class Blog extends BaseTimeEntity {
                 .content(requestDto.content())
                 .ctaLink(requestDto.ctaLink())
                 .ctaText(requestDto.ctaText())
-                .isDisplayed(Boolean.FALSE)
+                .isDisplayed(requestDto.isDisplayed())
                 .displayDate(requestDto.displayDate())
                 .build();
     }

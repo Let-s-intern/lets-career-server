@@ -16,6 +16,7 @@ public record OTRemindParameter(
         @JsonFormat(pattern = "yyyy년 MM월 dd일 HH:mm", timezone = "Asia/Seoul")
         LocalDateTime programOtEnd,
         String chatLink,
+        String chatPassword,
         String zoomLink,
         Long programId
 
@@ -28,6 +29,7 @@ public record OTRemindParameter(
                 .programOtStart(challenge.getStartDate())
                 .programOtEnd(challenge.getStartDate().plusMinutes(40))
                 .chatLink(challenge.getChatLink())
+                .chatPassword(challenge.getChatPassword())
                 .zoomLink(challenge.getZoomLink().substring(8))
                 .programId(challenge.getId())
                 .build();

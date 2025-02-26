@@ -10,6 +10,7 @@ import org.letscareer.letscareer.domain.blog.entity.Blog;
 import org.letscareer.letscareer.domain.blog.entity.HashTag;
 import org.letscareer.letscareer.domain.blog.helper.BlogHashTagHelper;
 import org.letscareer.letscareer.domain.blog.helper.BlogHelper;
+import org.letscareer.letscareer.domain.blog.helper.LikeHelper;
 import org.letscareer.letscareer.domain.blog.helper.HashTagHelper;
 import org.letscareer.letscareer.domain.blog.mapper.BlogMapper;
 import org.letscareer.letscareer.domain.blog.type.BlogType;
@@ -35,6 +36,7 @@ public class BlogServiceImpl implements BlogService {
     private final BlogMapper blogMapper;
     private final HashTagHelper hashTagHelper;
     private final BlogHashTagHelper blogHashTagHelper;
+    private final LikeHelper likeHelper;
 
     @Override
     public GetBlogsResponseDto getBlogs(User user, List<BlogType> types, Long tagId, Pageable pageable) {

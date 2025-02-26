@@ -37,7 +37,7 @@ public class ChallengeRemindNotificationTasklet implements Tasklet {
             List<ChallengeRemindParameter> requestParameterList = userList.stream()
                     .map(user -> ChallengeRemindParameter.of(user.getName(), challenge))
                     .collect(Collectors.toList());
-            nhnProvider.sendKakaoMessages(userList, requestParameterList, "d_challenge_remind");  // DEV_TEST
+            nhnProvider.sendKakaoMessages(userList, requestParameterList, "challenge_remind");
         }
         return RepeatStatus.FINISHED;
     }
