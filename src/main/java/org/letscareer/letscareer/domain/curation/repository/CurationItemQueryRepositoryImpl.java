@@ -6,6 +6,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.blog.type.BlogType;
 import org.letscareer.letscareer.domain.curation.type.CurationItemProgramType;
 import org.letscareer.letscareer.domain.curation.vo.AdminCurationItemVo;
 import org.letscareer.letscareer.domain.curation.vo.CurationItemVo;
@@ -74,6 +75,7 @@ public class CurationItemQueryRepositoryImpl implements CurationItemQueryReposit
                         startDateExpression(),
                         endDateExpression(),
                         deadlineExpression(),
+                        blogTypeExpression(),
                         reportTypeExpression(),
                         curationItem.tag,
                         titleExpression(),
@@ -138,6 +140,12 @@ public class CurationItemQueryRepositoryImpl implements CurationItemQueryReposit
                 .when(curationItem.programType.eq(CurationItemProgramType.REPORT)).then(report.createDate)
                 .when(curationItem.programType.eq(CurationItemProgramType.BLOG)).then(blog.createDate)
                 .otherwise(curationItem.createDate);
+    }
+
+    private Expression<BlogType> blogTypeExpression() {
+        return new CaseBuilder()
+                .when(curationItem.programType.eq(CurationItemProgramType.BLOG)).then(blog.category)
+                .otherwise((BlogType) null);
     }
 
     private Expression<ReportType> reportTypeExpression() {
