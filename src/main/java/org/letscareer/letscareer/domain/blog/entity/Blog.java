@@ -43,6 +43,9 @@ public class Blog extends BaseTimeEntity {
     @Builder.Default
     private List<BlogRating> blogRatingList = new ArrayList<>();
 
+    @Builder.Default
+    private Integer likes = 0;
+
     public static Blog createBlog(CreateBlogRequestDto requestDto) {
         return Blog.builder()
                 .title(requestDto.title())
