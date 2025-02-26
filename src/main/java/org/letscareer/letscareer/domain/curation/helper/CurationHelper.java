@@ -28,8 +28,8 @@ public class CurationHelper {
         return curationRepository.findAdminCurationDetailVoById(curationId).orElseThrow(() -> new EntityNotFoundException(CURATION_NOT_FOUND));
     }
 
-    public CurationVo findCurationVoByLocationType(CurationLocationType locationType) {
-        return curationRepository.findCurationVoByLocationType(locationType);
+    public List<CurationVo> findAllCurationVosByLocationType(CurationLocationType locationType) {
+        return curationRepository.findAllCurationVosByLocationType(locationType);
     }
 
     public Curation createCurationAndSave(CurationLocationType locationType, CreateCurationRequestDto requestDto) {

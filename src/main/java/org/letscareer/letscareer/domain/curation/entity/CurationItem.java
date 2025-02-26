@@ -25,6 +25,8 @@ public class CurationItem extends BaseTimeEntity {
 
     private Long programId;
 
+    private String tag;
+
     private String title;
 
     private String thumbnail;
@@ -40,6 +42,7 @@ public class CurationItem extends BaseTimeEntity {
             return CurationItem.builder()
                     .curation(curation)
                     .programType(CurationItemProgramType.ETC)
+                    .tag(requestDto.tag())
                     .title(requestDto.title())
                     .thumbnail(requestDto.thumbnail())
                     .url(requestDto.url())
@@ -49,6 +52,7 @@ public class CurationItem extends BaseTimeEntity {
                 .curation(curation)
                 .programType(requestDto.programType())
                 .programId(requestDto.programId())
+                .tag(requestDto.tag())
                 .build();
     }
 }

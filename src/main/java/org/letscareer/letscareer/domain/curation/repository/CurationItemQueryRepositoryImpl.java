@@ -31,7 +31,9 @@ public class CurationItemQueryRepositoryImpl implements CurationItemQueryReposit
                         curationItem.id,
                         curationItem.programType,
                         curationItem.programId,
+                        programCreateDateExpression(),
                         reportTypeExpression(),
+                        curationItem.tag,
                         titleExpression(),
                         urlExpression(),
                         thumbnailExpression()))
@@ -66,15 +68,17 @@ public class CurationItemQueryRepositoryImpl implements CurationItemQueryReposit
     public List<CurationItemVo> findAllCurationItemVosByCurationId(Long curationId) {
         return queryFactory.select(Projections.constructor(CurationItemVo.class,
                         curationItem.id,
-                    curationItem.programType,
-                    curationItem.programId,
-                    startDateExpression(),
-                    endDateExpression(),
-                    deadlineExpression(),
-                    reportTypeExpression(),
-                    titleExpression(),
-                    urlExpression(),
-                    thumbnailExpression()))
+                        curationItem.programType,
+                        curationItem.programId,
+                        programCreateDateExpression(),
+                        startDateExpression(),
+                        endDateExpression(),
+                        deadlineExpression(),
+                        reportTypeExpression(),
+                        curationItem.tag,
+                        titleExpression(),
+                        urlExpression(),
+                        thumbnailExpression()))
                 .from(curationItem)
                 .leftJoin(challenge).on(
                         curationItem.programType.eq(CurationItemProgramType.CHALLENGE)
@@ -125,6 +129,15 @@ public class CurationItemQueryRepositoryImpl implements CurationItemQueryReposit
                 .when(curationItem.programType.eq(CurationItemProgramType.CHALLENGE)).then(challenge.deadline)
                 .when(curationItem.programType.eq(CurationItemProgramType.LIVE)).then(live.deadline)
                 .otherwise((LocalDateTime) null);
+    }
+
+    private Expression<LocalDateTime> programCreateDateExpression() {
+        return new CaseBuilder()
+                .when(curationItem.programType.eq(CurationItemProgramType.CHALLENGE)).then(challenge.createDate)
+                .when(curationItem.programType.eq(CurationItemProgramType.LIVE)).then(live.createDate)
+                .when(curationItem.programType.eq(CurationItemProgramType.REPORT)).then(report.createDate)
+                .when(curationItem.programType.eq(CurationItemProgramType.BLOG)).then(blog.createDate)
+                .otherwise(curationItem.createDate);
     }
 
     private Expression<ReportType> reportTypeExpression() {
