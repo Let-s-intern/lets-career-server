@@ -11,10 +11,12 @@ public record CurationItemVo(
         Long id,
         CurationItemProgramType programType,
         Long programId,
+        LocalDateTime programCreateDate,
         LocalDateTime startDate,
         LocalDateTime endDate,
         LocalDateTime deadline,
         ReportType reportType,
+        String tag,
         String title,
         String url,
         String thumbnail

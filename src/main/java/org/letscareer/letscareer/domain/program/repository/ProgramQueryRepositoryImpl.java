@@ -166,10 +166,12 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                         Expressions.constant(0L),
                         vWProgram.curationItemProgramType,
                         vWProgram.programId,
+                        Expressions.nullExpression(LocalDateTime.class),
                         vWProgram.startDate,
                         vWProgram.endDate,
                         vWProgram.deadline,
                         Expressions.nullExpression(ReportType.class),
+                        Expressions.nullExpression(String.class),
                         vWProgram.title,
                         Expressions.nullExpression(String.class),
                         vWProgram.thumbnail))
