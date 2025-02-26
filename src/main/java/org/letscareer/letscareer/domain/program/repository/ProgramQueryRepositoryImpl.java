@@ -185,8 +185,9 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
     }
 
     private BooleanExpression isImminent() {
-        LocalDateTime nowMinusFiveDay = LocalDateTime.now().minusDays(5);
-        return vWProgram.deadline.goe(nowMinusFiveDay);
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime nowPlusFiveDay = LocalDateTime.now().plusDays(5);
+        return vWProgram.deadline.goe(now).and(vWProgram.deadline.loe(nowPlusFiveDay));
     }
 
     private BooleanExpression isDayAfterEndDate() {
