@@ -43,9 +43,10 @@ public class Blog extends BaseTimeEntity {
     @Builder.Default
     private List<BlogRating> blogRatingList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL)
+
     @Builder.Default
-    private List<BlogLike> blogLikes = new ArrayList<>();
+    private Integer likes = 0;
+
 
     public static Blog createBlog(CreateBlogRequestDto requestDto) {
         return Blog.builder()
@@ -75,9 +76,5 @@ public class Blog extends BaseTimeEntity {
 
     public void addBlogHashTag(BlogHashTag blogHashTag) {
         this.blogHashTags.add(blogHashTag);
-    }
-
-    public void addBlogLike(BlogLike blogLike) {
-        this.blogLikes.add(blogLike);
     }
 }
