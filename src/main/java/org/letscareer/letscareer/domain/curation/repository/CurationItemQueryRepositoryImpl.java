@@ -138,7 +138,7 @@ public class CurationItemQueryRepositoryImpl implements CurationItemQueryReposit
                 .when(curationItem.programType.eq(CurationItemProgramType.CHALLENGE)).then(challenge.createDate)
                 .when(curationItem.programType.eq(CurationItemProgramType.LIVE)).then(live.createDate)
                 .when(curationItem.programType.eq(CurationItemProgramType.REPORT)).then(report.createDate)
-                .when(curationItem.programType.eq(CurationItemProgramType.BLOG)).then(blog.createDate)
+                .when(curationItem.programType.eq(CurationItemProgramType.BLOG)).then(blog.displayDate)
                 .otherwise(curationItem.createDate);
     }
 
