@@ -60,8 +60,11 @@ public class CurationServiceImpl implements CurationService {
                     if (curationVo != null) {
                         if (curationVo.showImminentList()) curationItemVos = programHelper.findCurationImminentProgramVos();
                         curationItemVos.addAll(curationItemHelper.findAllCurationItemVosByCurationId(curationVo.curationId()));
+                        for(CurationItemVo curationItemVo : curationItemVos) {
+                            System.out.println(curationItemVo.toString());
+                        }
                         curationItemVos = curationItemVos.stream()
-                                .filter(distinctByKey(curationItemVo -> curationItemVo.programType().getDesc() + " " + curationItemVo.programId()))
+                                .filter(distinctByKey(curationItemVo -> curationItemVo.id() + " " + curationItemVo.programType().getDesc() + " " + curationItemVo.programId()))
                                 .map(curationItemVo -> {
                                     if (curationItemVo.url() != null && curationItemVo.url().startsWith("latest:")) {
                                         String keyword = curationItemVo.url().substring(7);
@@ -72,6 +75,9 @@ public class CurationServiceImpl implements CurationService {
                                 .filter(Objects::nonNull)
                                 .distinct()
                                 .collect(Collectors.toList());
+                        for(CurationItemVo curationItemVo : curationItemVos) {
+                            System.out.println(curationItemVo.toString());
+                        }
                     }
                     return curationMapper.toGetCurationResponseDto(curationVo, curationItemVos);
                 }).toList();
