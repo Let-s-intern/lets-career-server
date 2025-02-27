@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.blog.type.BlogType;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.curation.vo.CurationItemVo;
 import org.letscareer.letscareer.domain.program.entity.SearchCondition;
@@ -170,6 +171,7 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                         vWProgram.startDate,
                         vWProgram.endDate,
                         vWProgram.deadline,
+                        Expressions.nullExpression(BlogType.class),
                         Expressions.nullExpression(ReportType.class),
                         Expressions.nullExpression(String.class),
                         vWProgram.title,
