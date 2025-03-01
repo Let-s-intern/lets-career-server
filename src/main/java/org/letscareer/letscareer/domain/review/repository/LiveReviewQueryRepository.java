@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface LiveReviewQueryRepository {
     List<LiveReviewAdminVo> findAllLiveReviewAdminVos();
     Optional<LiveReviewVo> findLiveReviewVoByReviewId(Long reviewId);
+    List<String> findLiveReviewByLiveId(Long liveId);
 }

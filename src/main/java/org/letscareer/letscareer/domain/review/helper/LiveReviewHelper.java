@@ -36,4 +36,8 @@ public class LiveReviewHelper {
     public LiveReviewVo findLiveReviewVoOrThrow(Long reviewId) {
         return liveReviewRepository.findLiveReviewVoByReviewId(reviewId).orElseThrow(() -> new EntityNotFoundException(REVIEW_NOT_FOUND));
     }
+
+    public List<String> findLiveReviewContentByLiveId(Long liveId) {
+        return liveReviewRepository.findLiveReviewByLiveId(liveId);
+    }
 }

@@ -14,6 +14,8 @@ import java.util.Optional;
 
 import static org.letscareer.letscareer.domain.application.entity.QApplication.application;
 import static org.letscareer.letscareer.domain.review.entity.QLiveReview.liveReview;
+import static org.letscareer.letscareer.domain.review.entity.QReview.review;
+import static org.letscareer.letscareer.domain.review.entity.QReviewItem.reviewItem;
 import static org.letscareer.letscareer.domain.user.entity.QUser.user;
 
 @RequiredArgsConstructor
@@ -59,6 +61,18 @@ public class LiveReviewQueryRepositoryImpl implements LiveReviewQueryRepository 
         );
     }
 
+    @Override
+    public List<String> findLiveReviewByLiveId(Long liveId) {
+        return queryFactory
+                .select(reviewItem.answer)
+                .from(liveReview)
+                .leftJoin(liveReview.reviewItemList, reviewItem)
+                .where(
+                        eqLiveId(liveId)
+                )
+                .fetch();
+    }
+
     private StringExpression userNameExpression() {
         return new CaseBuilder()
                 .when(application.isNotNull()).then(user.name)
@@ -67,5 +81,9 @@ public class LiveReviewQueryRepositoryImpl implements LiveReviewQueryRepository 
 
     private BooleanExpression eqReviewId(Long reviewId) {
         return reviewId != null ? liveReview.id.eq(reviewId) : null;
+    }
+
+    private BooleanExpression eqLiveId(Long liveId) {
+        return liveId != null ? liveReview.live.id.eq(liveId) : null;
     }
 }
