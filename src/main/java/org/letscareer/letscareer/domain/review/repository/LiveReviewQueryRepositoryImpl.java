@@ -6,6 +6,7 @@ import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.review.dto.response.GetLiveMentorReviewResponseDto;
 import org.letscareer.letscareer.domain.review.vo.LiveReviewAdminVo;
 import org.letscareer.letscareer.domain.review.vo.LiveReviewVo;
 
@@ -62,9 +63,11 @@ public class LiveReviewQueryRepositoryImpl implements LiveReviewQueryRepository 
     }
 
     @Override
-    public List<String> findLiveReviewByLiveId(Long liveId) {
+    public List<GetLiveMentorReviewResponseDto> findLiveReviewByLiveId(Long liveId) {
         return queryFactory
-                .select(reviewItem.answer)
+                .select(Projections.constructor(GetLiveMentorReviewResponseDto.class,
+                        reviewItem.questionType,
+                        reviewItem.answer))
                 .from(liveReview)
                 .leftJoin(liveReview.reviewItemList, reviewItem)
                 .where(
