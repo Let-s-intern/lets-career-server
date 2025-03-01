@@ -6,6 +6,7 @@ import org.letscareer.letscareer.domain.faq.vo.FaqDetailVo;
 import org.letscareer.letscareer.domain.live.dto.response.*;
 import org.letscareer.letscareer.domain.live.vo.*;
 import org.letscareer.letscareer.domain.price.vo.LivePriceDetailVo;
+import org.letscareer.letscareer.domain.review.dto.response.GetLiveMentorReviewResponseDto;
 import org.letscareer.letscareer.domain.review.dto.response.GetOldReviewResponseDto;
 import org.letscareer.letscareer.domain.review.vo.old.OldReviewAdminVo;
 import org.letscareer.letscareer.domain.user.entity.User;
@@ -56,7 +57,7 @@ public class LiveMapper {
         return GetLiveApplicationFormResponseDto.of(user, applied, applicationFormVo, livePriceDetailVo);
     }
 
-    public GetLiveMentorContentsResponse toGetLiveMentorContentsResponse(LiveMentorVo liveMentorVo, List<String> questionList, List<String> motivateList, List<String> reviewList) {
+    public GetLiveMentorContentsResponse toGetLiveMentorContentsResponse(LiveMentorVo liveMentorVo, List<String> questionList, List<String> motivateList, List<GetLiveMentorReviewResponseDto> reviewList) {
         return GetLiveMentorContentsResponse.of(liveMentorVo, questionList, motivateList, reviewList);
     }
 }

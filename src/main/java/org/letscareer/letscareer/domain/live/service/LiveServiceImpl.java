@@ -31,9 +31,13 @@ import org.letscareer.letscareer.domain.price.helper.LivePriceHelper;
 import org.letscareer.letscareer.domain.price.vo.LivePriceDetailVo;
 import org.letscareer.letscareer.domain.program.dto.response.ZoomMeetingResponseDto;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
+import org.letscareer.letscareer.domain.review.dto.response.GetLiveMentorReviewResponseDto;
 import org.letscareer.letscareer.domain.review.dto.response.GetOldReviewResponseDto;
+import org.letscareer.letscareer.domain.review.helper.LiveReviewHelper;
 import org.letscareer.letscareer.domain.review.helper.OldReviewHelper;
+import org.letscareer.letscareer.domain.review.helper.ReviewHelper;
 import org.letscareer.letscareer.domain.review.mapper.OldReviewMapper;
+import org.letscareer.letscareer.domain.review.mapper.ReviewMapper;
 import org.letscareer.letscareer.domain.review.vo.old.OldReviewAdminVo;
 import org.letscareer.letscareer.domain.review.vo.old.OldReviewVo;
 import org.letscareer.letscareer.domain.user.entity.User;
@@ -65,6 +69,7 @@ public class LiveServiceImpl implements LiveService {
     private final LiveClassificationHelper liveClassificationHelper;
     private final LiveAdminClassificationHelper liveAdminClassificationHelper;
     private final LivePriceHelper livePriceHelper;
+    private final LiveReviewHelper liveReviewHelper;
     private final OldReviewHelper oldReviewHelper;
     private final OldReviewMapper oldReviewMapper;
     private final FaqHelper faqHelper;
@@ -157,7 +162,8 @@ public class LiveServiceImpl implements LiveService {
         LiveMentorVo liveMentorVo = liveHelper.findLiveMentorVoOrThrow(liveId);
         List<String> questionList = mentorContentsType.equals(MentorContentsType.PREV) ? liveApplicationHelper.findQuestionListByLiveId(liveId) : new ArrayList<>();
         List<String> motivateList = mentorContentsType.equals(MentorContentsType.PREV) ? liveApplicationHelper.findMotivateListByLiveId(liveId) : new ArrayList<>();
-        List<String> reviewList = mentorContentsType.equals(MentorContentsType.REVIEW) ? oldReviewHelper.findLiveReviewContentByLiveId(liveId) : new ArrayList<>();
+        List<GetLiveMentorReviewResponseDto> reviewList = mentorContentsType.equals(MentorContentsType.REVIEW) ? liveReviewHelper.findLiveReviewContentByLiveId(liveId) : new ArrayList<>();
+//        oldReviewHelper.findLiveReviewContentByLiveId(liveId) : new ArrayList<>();
         return liveMapper.toGetLiveMentorContentsResponse(liveMentorVo, questionList, motivateList, reviewList);
     }
 
