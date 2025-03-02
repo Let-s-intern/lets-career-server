@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.review.dto.response.GetLiveMentorReviewResponseDto;
+import org.letscareer.letscareer.domain.review.type.ReviewQuestionType;
 import org.letscareer.letscareer.domain.review.vo.LiveReviewAdminVo;
 import org.letscareer.letscareer.domain.review.vo.LiveReviewVo;
 
@@ -71,7 +72,8 @@ public class LiveReviewQueryRepositoryImpl implements LiveReviewQueryRepository 
                 .from(liveReview)
                 .leftJoin(liveReview.reviewItemList, reviewItem)
                 .where(
-                        eqLiveId(liveId)
+                        eqLiveId(liveId),
+                        eqReviewQuestionType(ReviewQuestionType.GOOD_POINT)
                 )
                 .fetch();
     }
@@ -88,5 +90,9 @@ public class LiveReviewQueryRepositoryImpl implements LiveReviewQueryRepository 
 
     private BooleanExpression eqLiveId(Long liveId) {
         return liveId != null ? liveReview.live.id.eq(liveId) : null;
+    }
+
+    private BooleanExpression eqReviewQuestionType(ReviewQuestionType questionType) {
+        return questionType != null ? reviewItem.questionType.eq(questionType) : null;
     }
 }

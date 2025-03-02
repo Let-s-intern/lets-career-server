@@ -163,7 +163,6 @@ public class LiveServiceImpl implements LiveService {
         List<String> questionList = mentorContentsType.equals(MentorContentsType.PREV) ? liveApplicationHelper.findQuestionListByLiveId(liveId) : new ArrayList<>();
         List<String> motivateList = mentorContentsType.equals(MentorContentsType.PREV) ? liveApplicationHelper.findMotivateListByLiveId(liveId) : new ArrayList<>();
         List<GetLiveMentorReviewResponseDto> reviewList = mentorContentsType.equals(MentorContentsType.REVIEW) ? liveReviewHelper.findLiveReviewContentByLiveId(liveId) : new ArrayList<>();
-//        oldReviewHelper.findLiveReviewContentByLiveId(liveId) : new ArrayList<>();
         return liveMapper.toGetLiveMentorContentsResponse(liveMentorVo, questionList, motivateList, reviewList);
     }
 
