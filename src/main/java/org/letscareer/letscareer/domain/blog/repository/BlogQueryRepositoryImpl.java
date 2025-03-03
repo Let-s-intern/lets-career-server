@@ -41,18 +41,20 @@ public class BlogQueryRepositoryImpl implements BlogQueryRepository {
                         blog.isDisplayed,
                         blog.displayDate,
                         blog.createDate,
-                        blog.lastModifiedDate
+                        blog.lastModifiedDate,
+                        blog.likes
                 ))
                 .from(blog)
                 .where(
                         eqBlogId(blogId)
                 )
+                .groupBy(blog.id)
                 .fetchOne()
         );
     }
 
     @Override
-    public Page<BlogThumbnailVo> findBlogThumbnailVos(User user, BlogType type, Long tagId, Pageable pageable) {
+    public Page<BlogThumbnailVo> findBlogThumbnailVos(User user, List<BlogType> types, Long tagId, Pageable pageable) {
         List<BlogThumbnailVo> contents = queryFactory
                 .select(Projections.constructor(BlogThumbnailVo.class,
                         blog.id,
@@ -63,13 +65,14 @@ public class BlogQueryRepositoryImpl implements BlogQueryRepository {
                         blog.isDisplayed,
                         blog.displayDate,
                         blog.createDate,
-                        blog.lastModifiedDate
+                        blog.lastModifiedDate,
+                        blog.likes
                 ))
                 .from(blog)
                 .leftJoin(blog.blogHashTags, blogHashTag)
                 .leftJoin(blogHashTag.hashTag, hashTag)
                 .where(
-                        eqBlogType(type),
+                        eqBlogType(types),
                         eqTagId(tagId),
                         eqIsDisplayedForUserRole(user)
                 )
@@ -85,7 +88,7 @@ public class BlogQueryRepositoryImpl implements BlogQueryRepository {
                 .leftJoin(blog.blogHashTags, blogHashTag)
                 .leftJoin(blogHashTag.hashTag, hashTag)
                 .where(
-                        eqBlogType(type),
+                        eqBlogType(types),
                         eqTagId(tagId),
                         eqIsDisplayedForUserRole(user)
                 )
@@ -98,8 +101,8 @@ public class BlogQueryRepositoryImpl implements BlogQueryRepository {
         return blogId != null ? blog.id.eq(blogId) : null;
     }
 
-    private BooleanExpression eqBlogType(BlogType type) {
-        return type != null ? blog.category.eq(type) : null;
+    private BooleanExpression eqBlogType(List<BlogType> types) {
+        return (types == null || types.isEmpty()) ? null : blog.category.in(types);
     }
 
     private BooleanExpression eqTagId(Long tagId) {

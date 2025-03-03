@@ -8,6 +8,7 @@ import org.letscareer.letscareer.domain.challenge.repository.ChallengeRepository
 import org.letscareer.letscareer.domain.challenge.type.ChallengeType;
 import org.letscareer.letscareer.domain.challenge.vo.*;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
+import org.letscareer.letscareer.domain.curation.vo.CurationItemVo;
 import org.letscareer.letscareer.domain.program.dto.response.ZoomMeetingResponseDto;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.global.common.utils.string.StringUtils;
@@ -94,6 +95,10 @@ public class ChallengeHelper {
                 .map(challengeRepository::findChallengeRecommendVoByChallengeType)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
+    }
+
+    public CurationItemVo findCurationItemVoByKeyword(String keyword) {
+        return challengeRepository.findCurationItemVoByKeyword(keyword);
     }
 
     public void deleteChallengeById(Long challengeId) {

@@ -14,6 +14,7 @@ public record CreateBlogRequestDto(
         String ctaLink,
         String ctaText,
         LocalDateTime displayDate,
+        Boolean isDisplayed,
         List<Long> tagList
 ) {
 }

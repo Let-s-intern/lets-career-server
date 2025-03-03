@@ -58,17 +58,26 @@ public class VodQueryRepositoryImpl implements VodQueryRepository {
                         vod.classificationList, vodClassification
                 )
                 .where(
+                        eqIsVisible(true),
                         eqVodClassification(type)
+                )
+                .groupBy(
+                        vod.id
                 )
                 .orderBy(vod.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        JPAQuery<Vod> countQuery = jpaQueryFactory
-                .selectFrom(vod)
+        JPAQuery<Long> countQuery = jpaQueryFactory
+                .select(vod.countDistinct())
+                .from(vod)
                 .where(
+                        eqIsVisible(true),
                         eqVodClassification(type)
+                )
+                .groupBy(
+                        vod.id
                 );
 
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);

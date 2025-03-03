@@ -20,6 +20,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/blog")
 @RestController
@@ -31,10 +33,10 @@ public class BlogV1Controller {
     })
     @GetMapping
     public ResponseEntity<SuccessResponse<?>> getBlogs(@CurrentUser final User user,
-                                                       @RequestParam(required = false) final BlogType type,
+                                                       @RequestParam(required = false) final List<BlogType> types,
                                                        @RequestParam(required = false) final Long tagId,
                                                        final Pageable pageable) {
-        final GetBlogsResponseDto responseDto = blogService.getBlogs(user, type, tagId, pageable);
+        final GetBlogsResponseDto responseDto = blogService.getBlogs(user, types, tagId, pageable);
         return SuccessResponse.ok(responseDto);
     }
 
@@ -78,4 +80,25 @@ public class BlogV1Controller {
         blogService.deleteBlog(blogId);
         return SuccessResponse.ok(null);
     }
+
+    @Operation(summary = "블로그 좋아요 설정", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    })
+    @ApiErrorCode({SwaggerEnum.BLOG_NOT_FOUND})
+    @PatchMapping("/{blogId}/like")
+    public ResponseEntity<SuccessResponse<?>> updateBlogLike(@PathVariable final Long blogId) {
+        blogService.updateBlogLike(blogId);
+        return SuccessResponse.ok(null);
+    }
+
+    @Operation(summary = "블로그 좋아요 취소", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    })
+    @ApiErrorCode({SwaggerEnum.BLOG_NOT_FOUND})
+    @PatchMapping("/{blogId}/dislike")
+    public ResponseEntity<SuccessResponse<?>> updateBlogDislike(@PathVariable final Long blogId) {
+        blogService.updateBlogDislike(blogId);
+        return SuccessResponse.ok(null);
+    }
+
 }

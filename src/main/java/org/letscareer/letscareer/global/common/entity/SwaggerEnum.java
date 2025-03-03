@@ -4,11 +4,13 @@ import org.letscareer.letscareer.domain.application.error.ApplicationErrorCode;
 import org.letscareer.letscareer.domain.attendance.error.AttendanceErrorCode;
 import org.letscareer.letscareer.domain.banner.error.BannerErrorCode;
 import org.letscareer.letscareer.domain.blog.error.BlogErrorCode;
+import org.letscareer.letscareer.domain.blogbanner.error.BlogBannerErrorCode;
 import org.letscareer.letscareer.domain.challenge.error.ChallengeErrorCode;
 import org.letscareer.letscareer.domain.challengeguide.error.ChallengeGuideErrorCode;
 import org.letscareer.letscareer.domain.classification.error.ChallengeClassificationErrorCode;
 import org.letscareer.letscareer.domain.contents.error.ContentsErrorCode;
 import org.letscareer.letscareer.domain.coupon.error.CouponErrorCode;
+import org.letscareer.letscareer.domain.curation.error.CurationErrorCode;
 import org.letscareer.letscareer.domain.faq.error.FaqErrorCode;
 import org.letscareer.letscareer.domain.live.error.LiveErrorCode;
 import org.letscareer.letscareer.domain.mission.error.MissionErrorCode;
@@ -45,6 +47,9 @@ public enum SwaggerEnum {
     // Blog
     BLOG_NOT_FOUND(BlogErrorCode.BLOG_NOT_FOUND),
     HASHTAG_CANNOT_DELETED(BlogErrorCode.HASHTAG_CANNOT_DELETED),
+
+    // Blog Banner
+    BLOG_BANNER_NOT_FOUND(BlogBannerErrorCode.BLOG_BANNER_NOT_FOUND),
 
     // challenge
     CHALLENGE_NOT_FOUND(ChallengeErrorCode.CHALLENGE_NOT_FOUND),
@@ -99,6 +104,9 @@ public enum SwaggerEnum {
     REVIEW_ITEM_NOT_FOUND(ReviewErrorCode.REVIEW_ITEM_NOT_FOUND),
     BLOG_REVIEW_ITEM_NOT_FOUND(ReviewErrorCode.BLOG_REVIEW_NOT_FOUND),
     REVIEW_ALREADY_EXISTS(ReviewErrorCode.REVIEW_ALREADY_EXISTS),
+
+    // curation
+    CURATION_NOT_FOUND(CurationErrorCode.CURATION_NOT_FOUND),
 
     // user
     INVALID_EMAIL(UserErrorCode.INVALID_EMAIL),

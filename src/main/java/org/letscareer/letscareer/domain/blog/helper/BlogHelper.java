@@ -13,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 import static org.letscareer.letscareer.domain.blog.error.BlogErrorCode.BLOG_NOT_FOUND;
 
 @RequiredArgsConstructor
@@ -20,8 +22,8 @@ import static org.letscareer.letscareer.domain.blog.error.BlogErrorCode.BLOG_NOT
 public class BlogHelper {
     private final BlogRepository blogRepository;
 
-    public Page<BlogThumbnailVo> findBlogThumbnailVos(User user, BlogType type, Long tagId, Pageable pageable) {
-        return blogRepository.findBlogThumbnailVos(user, type, tagId, pageable);
+    public Page<BlogThumbnailVo> findBlogThumbnailVos(User user, List<BlogType> types, Long tagId, Pageable pageable) {
+        return blogRepository.findBlogThumbnailVos(user, types, tagId, pageable);
     }
 
     public BlogDetailVo findBlogDetailVoOrThrow(Long blogId) {
