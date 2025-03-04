@@ -115,8 +115,8 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final ZoomUtils zoomUtils;
 
     @Override
-    public GetChallengeResponseDto getChallengeList(List<ProgramClassification> typeList, List<ProgramStatusType> statusList, Pageable pageable) {
-        Page<ChallengeProfileVo> challengeProfileVos = challengeHelper.findChallengeProfiles(typeList, statusList, pageable);
+    public GetChallengeResponseDto getChallengeList(List<ProgramClassification> typeList, List<ProgramStatusType> statusList, ChallengeType challengeType, Pageable pageable) {
+        Page<ChallengeProfileVo> challengeProfileVos = challengeHelper.findChallengeProfiles(typeList, statusList, challengeType, pageable);
         return challengeMapper.toGetChallengesResponseDto(challengeProfileVos);
     }
 

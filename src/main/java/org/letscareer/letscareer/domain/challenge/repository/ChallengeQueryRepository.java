@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface ChallengeQueryRepository {
     Optional<ChallengeDetailVo> findChallengeDetailById(Long challengeId);
 
-    Page<ChallengeProfileVo> findChallengeProfiles(List<ProgramClassification> typeList, List<ProgramStatusType> statusList, Pageable pageable);
+    Page<ChallengeProfileVo> findChallengeProfiles(List<ProgramClassification> typeList, List<ProgramStatusType> statusList, ChallengeType challengeType, Pageable pageable);
 
     List<ChallengeSimpleProfileVo> findActiveChallengeProfiles(ChallengeType challengeType);
 
