@@ -63,7 +63,7 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
     }
 
     @Override
-    public Page<ChallengeProfileVo> findChallengeProfiles(List<ProgramClassification> typeList, List<ProgramStatusType> statusList, Pageable pageable) {
+    public Page<ChallengeProfileVo> findChallengeProfiles(List<ProgramClassification> typeList, List<ProgramStatusType> statusList, ChallengeType challengeType, Pageable pageable) {
         List<ChallengeProfileVo> contents = queryFactory
                 .select(Projections.constructor(ChallengeProfileVo.class,
                         challenge.id,
@@ -81,7 +81,8 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
                 .orderBy(challenge.id.desc())
                 .where(
                         inChallengeClassification(typeList),
-                        inChallengeStatus(statusList)
+                        inChallengeStatus(statusList),
+                        eqChallengeType(challengeType)
                 )
                 .groupBy(challenge.id)
                 .offset(pageable.getOffset())

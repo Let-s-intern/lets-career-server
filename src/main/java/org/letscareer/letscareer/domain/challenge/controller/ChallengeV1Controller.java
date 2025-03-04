@@ -42,8 +42,9 @@ public class ChallengeV1Controller {
     @GetMapping
     public ResponseEntity<SuccessResponse<?>> getChallengeList(@RequestParam(required = false) final List<ProgramClassification> typeList,
                                                                @RequestParam(required = false) final List<ProgramStatusType> statusList,
+                                                               @RequestParam(required = false) final ChallengeType type,
                                                                final Pageable pageable) {
-        final GetChallengeResponseDto responseDto = challengeService.getChallengeList(typeList, statusList, pageable);
+        final GetChallengeResponseDto responseDto = challengeService.getChallengeList(typeList, statusList, type, pageable);
         return SuccessResponse.ok(responseDto);
     }
 
