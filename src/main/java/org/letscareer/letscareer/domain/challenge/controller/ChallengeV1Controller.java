@@ -48,6 +48,18 @@ public class ChallengeV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
+    @Operation(summary = "홈화면 챌린지 목록 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeResponseDto.class)))
+    })
+    @GetMapping("/home")
+    public ResponseEntity<SuccessResponse<?>> getHomeChallengeList(@RequestParam(required = false) final List<ProgramClassification> typeList,
+                                                                   @RequestParam(required = false) final List<ProgramStatusType> statusList,
+                                                                   @RequestParam(required = false) final ChallengeType type,
+                                                                   final Pageable pageable) {
+        final GetChallengeResponseDto responseDto = challengeService.getHomeChallengeList(typeList, statusList, type, pageable);
+        return SuccessResponse.ok(responseDto);
+    }
+
     @Operation(summary = "모집중인 챌린지 목록 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetTypeChallengeResponseDto.class)))
     })

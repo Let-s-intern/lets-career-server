@@ -103,6 +103,49 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
     }
 
     @Override
+    public Page<ChallengeProfileVo> findHomeChallengeProfiles(List<ProgramClassification> typeList, List<ProgramStatusType> statusList, ChallengeType challengeType, Pageable pageable) {
+        List<ChallengeProfileVo> contents = queryFactory
+                .select(Projections.constructor(ChallengeProfileVo.class,
+                        challenge.id,
+                        challenge.title,
+                        challenge.shortDesc,
+                        challenge.thumbnail,
+                        challenge.startDate,
+                        challenge.endDate,
+                        challenge.beginning,
+                        challenge.deadline,
+                        challenge.createDate
+                ))
+                .from(challenge)
+                .leftJoin(challenge.classificationList, challengeClassification)
+                .orderBy(
+                        orderByHomeCondition().toArray(new OrderSpecifier[0])
+                )
+                .where(
+                        eqIsVisible(true),
+                        inChallengeClassification(typeList),
+                        inChallengeStatus(statusList),
+                        eqChallengeType(challengeType)
+                )
+                .groupBy(challenge.id)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> countQuery = queryFactory
+                .select(challenge.id.countDistinct())
+                .from(challenge)
+                .leftJoin(challenge.classificationList, challengeClassification)
+                .where(
+                        inChallengeClassification(typeList),
+                        inChallengeStatus(statusList)
+                )
+                .groupBy(challenge.id);
+
+        return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
+    }
+
+    @Override
     public List<ChallengeSimpleProfileVo> findActiveChallengeProfiles(ChallengeType challengeType) {
         return queryFactory
                 .select(Projections.constructor(ChallengeSimpleProfileVo.class,
@@ -367,4 +410,29 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
 
         return List.of(recruitingOrder, dateOrder);
     }
+
+    private List<OrderSpecifier<?>> orderByHomeCondition() {
+        LocalDateTime now = LocalDateTime.now();
+        BooleanExpression recruitingChallenge = challenge.beginning.loe(now).and(challenge.deadline.goe(now));
+        BooleanExpression postChallenge = challenge.deadline.lt(now);
+
+        NumberExpression<Integer> recruitingOrderExpression = new CaseBuilder()
+                .when(recruitingChallenge).then(0)
+                .when(postChallenge).then(1)
+                .otherwise(2);
+        OrderSpecifier<Integer> recruitingOrder = new OrderSpecifier<>(Order.ASC, recruitingOrderExpression);
+
+        NumberExpression<Long> numericDateOrderExpression = new CaseBuilder()
+                .when(recruitingChallenge).then(challenge.deadline.castToNum(Long.class))
+                .otherwise(challenge.deadline.castToNum(Long.class).multiply(-1));
+        OrderSpecifier<Long> dateOrder = new OrderSpecifier<>(Order.ASC, numericDateOrderExpression);
+
+        return List.of(recruitingOrder, dateOrder);
+    }
+
+
+
+
+
+
 }
