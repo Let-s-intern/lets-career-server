@@ -21,6 +21,7 @@ import java.util.List;
 @Service
 public interface ChallengeService {
     GetChallengeResponseDto getChallengeList(List<ProgramClassification> typeList, List<ProgramStatusType> statusList, ChallengeType type, Pageable pageable);
+    GetChallengeResponseDto getHomeChallengeList(List<ProgramClassification> typeList, List<ProgramStatusType> statusList, ChallengeType type, Pageable pageable);
 
     GetTypeChallengeResponseDto getTypeChallengeList(ChallengeType challengeType);
 

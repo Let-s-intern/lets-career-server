@@ -59,6 +59,10 @@ public class ChallengeHelper {
         return challengeRepository.findChallengeProfiles(typeList, statusList, challengeType, pageable);
     }
 
+    public Page<ChallengeProfileVo> findHomeChallengeProfiles(List<ProgramClassification> typeList, List<ProgramStatusType> statusList, ChallengeType challengeType, Pageable pageable) {
+        return challengeRepository.findHomeChallengeProfiles(typeList, statusList, challengeType, pageable);
+    }
+
     public List<ChallengeSimpleProfileVo> findActiveChallengeSimpleProfiles(ChallengeType challengeType) {
         return challengeRepository.findActiveChallengeProfiles(challengeType);
     }
