@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.challenge.service;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.letscareer.letscareer.domain.admincalssification.helper.ChallengeAdminClassificationHelper;
 import org.letscareer.letscareer.domain.admincalssification.request.CreateChallengeAdminClassificationRequestDto;
 import org.letscareer.letscareer.domain.admincalssification.vo.ChallengeAdminClassificationDetailVo;
@@ -35,6 +36,7 @@ import org.letscareer.letscareer.domain.classification.helper.ChallengeClassific
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.classification.vo.ChallengeClassificationDetailVo;
 import org.letscareer.letscareer.domain.coupon.entity.Coupon;
+import org.letscareer.letscareer.domain.coupon.helper.CouponHelper;
 import org.letscareer.letscareer.domain.faq.dto.request.CreateProgramFaqRequestDto;
 import org.letscareer.letscareer.domain.faq.dto.response.GetFaqResponseDto;
 import org.letscareer.letscareer.domain.faq.entity.Faq;
@@ -61,7 +63,6 @@ import org.letscareer.letscareer.domain.price.vo.ChallengePriceDetailVo;
 import org.letscareer.letscareer.domain.program.dto.response.ZoomMeetingResponseDto;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.domain.review.dto.response.GetOldReviewResponseDto;
-import org.letscareer.letscareer.domain.review.helper.ChallengeReviewHelper;
 import org.letscareer.letscareer.domain.review.helper.OldReviewHelper;
 import org.letscareer.letscareer.domain.review.mapper.OldReviewMapper;
 import org.letscareer.letscareer.domain.review.mapper.ReviewMapper;
@@ -108,9 +109,8 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final OldReviewMapper oldReviewMapper;
     private final FaqHelper faqHelper;
     private final FaqMapper faqMapper;
-    private final ChallengeReviewHelper challengeReviewHelper;
     private final ReviewMapper reviewMapper;
-
+    private final CouponHelper couponHelper;
     private final TossProvider tossProvider;
     private final ZoomUtils zoomUtils;
 
@@ -329,6 +329,7 @@ public class ChallengeServiceImpl implements ChallengeService {
         createAdminClassificationListAndSave(createChallengeRequestDto.adminProgramTypeInfo(), challenge);
         createPriceListAndSave(createChallengeRequestDto.priceInfo(), challenge);
         createFaqListAndSave(createChallengeRequestDto.faqInfo(), challenge);
+        createChallengeCouponAndSave(challenge);
     }
 
     @Override
@@ -432,6 +433,13 @@ public class ChallengeServiceImpl implements ChallengeService {
                                       Challenge challenge) {
         List<Faq> faqs = getFaqsById(requestDtoList);
         faqs.stream().forEach(faq -> faqHelper.createFaqChallengeAndSave(faq, challenge));
+    }
+
+    private void createChallengeCouponAndSave(Challenge challenge) {
+        ChallengeType challengeType = challenge.getChallengeType();
+        if(challengeType.equals(ChallengeType.CAREER_START) || challengeType.equals(ChallengeType.PERSONAL_STATEMENT) || challengeType.equals(ChallengeType.PORTFOLIO)) {
+            couponHelper.createChallengeCouponAndSave(challenge);
+        }
     }
 
     private void updateChallengeClassifications(Challenge challenge, List<CreateChallengeClassificationRequestDto> programInfo) {
