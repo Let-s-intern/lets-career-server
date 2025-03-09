@@ -121,6 +121,12 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
+    public GetChallengeResponseDto getHomeChallengeList(List<ProgramClassification> typeList, List<ProgramStatusType> statusList, ChallengeType challengeType, Pageable pageable) {
+        Page<ChallengeProfileVo> challengeProfileVos = challengeHelper.findHomeChallengeProfiles(typeList, statusList, challengeType, pageable);
+        return challengeMapper.toGetChallengesResponseDto(challengeProfileVos);
+    }
+
+    @Override
     public GetTypeChallengeResponseDto getTypeChallengeList(ChallengeType challengeType) {
         List<ChallengeSimpleProfileVo> challengeSimpleProfileVos = challengeHelper.findActiveChallengeSimpleProfiles(challengeType);
         return challengeMapper.toGetTypeChallengeResponseDto(challengeSimpleProfileVos);
