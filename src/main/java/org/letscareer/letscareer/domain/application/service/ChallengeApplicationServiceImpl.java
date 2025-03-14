@@ -104,13 +104,16 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
         CreditConfirmParameter paymentRequestParameter = CreditConfirmParameter.of(user.getName(), challenge.getTitle(), paymentInfo);
         ChallengePaymentParameter programRequestParameter = isLiveChallenge(challenge) ? ChallengePaymentParameter.of(user.getName(), challenge) : null;
 
-        LocalDateTime today = LocalDateTime.now();
-        LocalDateTime challengeStartDate = challenge.getStartDate();
-        String messageType;
-        if (challengeStartDate.minusHours(1).isAfter(today)) { messageType = "challenge_payment"; }
-        else { messageType = "challenge_overpay"; }
+        String messageType = challenge.getStartDate().minusHours(1).isAfter(LocalDateTime.now()) ? "challenge_payment" : "challenge_overpay";
 
+        if (!isValidLink(challenge.getChatLink())) {
+            messageType = "re_" + messageType;
+        }
         nhnProvider.sendProgramPaymentKakaoMessages(user, paymentRequestParameter, programRequestParameter, "payment_confirm", messageType);
+    }
+
+    private boolean isValidLink(String link) {
+        return link != null && (link.startsWith("https://") || link.startsWith("http://"));
     }
 
     private void sendCreditRefundKakaoMessage(Challenge challenge, User user, Payment payment, RefundType refundType, Integer finalPrice, Integer cancelAmount) {
