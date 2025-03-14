@@ -86,8 +86,9 @@ public class UserV1Controller {
     public ResponseEntity<SuccessResponse<?>> getUsersForAdmin(@RequestParam(required = false) String email,
                                                                @RequestParam(required = false) String name,
                                                                @RequestParam(required = false) String phoneNum,
+                                                               @RequestParam(required = false) String role,
                                                                @PageableDefault Pageable pageable) {
-        final UserAdminListResponseDto responseDto = userService.getUsers(email, name, phoneNum, pageable);
+        final UserAdminListResponseDto responseDto = userService.getUsers(email, name, phoneNum, role, pageable);
         return SuccessResponse.ok(responseDto);
     }
 
