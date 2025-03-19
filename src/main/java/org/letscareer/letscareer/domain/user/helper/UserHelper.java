@@ -134,8 +134,8 @@ public class UserHelper {
         userRepository.save(user);
     }
 
-    public Page<UserAdminVo> findAllUserAdminVos(String email, String name, String phoneNum, Pageable pageable) {
-        return userRepository.findAllUserAdminVos(email, name, phoneNum, pageable);
+    public Page<UserAdminVo> findAllUserAdminVos(String email, String name, String phoneNum, String role, Pageable pageable) {
+        return userRepository.findAllUserAdminVos(email, name, phoneNum, role, pageable);
     }
 
     public Boolean checkUserChallengeInfo(User user) {

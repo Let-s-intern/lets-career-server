@@ -12,6 +12,7 @@ public record UpdateUserForAdminRequestDto(
         UserGrade grade,
         String major,
         String wishJob,
-        String wishCompany
+        String wishCompany,
+        String role
 ) {
 }

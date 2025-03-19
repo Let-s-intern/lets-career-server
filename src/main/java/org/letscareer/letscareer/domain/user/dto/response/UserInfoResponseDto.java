@@ -23,7 +23,8 @@ public record UserInfoResponseDto(
         AccountType accountType,
         String accountNum,
         Boolean marketingAgree,
-        AuthProvider authProvider
+        AuthProvider authProvider,
+        String role
 ) {
     public static UserInfoResponseDto of(User user, String id) {
         return UserInfoResponseDto.builder()
@@ -42,6 +43,7 @@ public record UserInfoResponseDto(
                 .accountNum(user.getAccountNum())
                 .marketingAgree(user.getMarketingAgree())
                 .authProvider(user.getAuthProvider())
+                .role(user.getRole().getDesc())
                 .build();
     }
 }

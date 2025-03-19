@@ -1,6 +1,8 @@
 package org.letscareer.letscareer.domain.coupon.helper;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.coupon.repository.CouponRepository;
 import org.letscareer.letscareer.domain.coupon.dto.request.CreateCouponRequestDto;
 import org.letscareer.letscareer.domain.coupon.entity.Coupon;
@@ -36,6 +38,12 @@ public class CouponHelper {
 
     public Coupon createCouponAndSave(CreateCouponRequestDto createCouponRequestDto) {
         Coupon newCoupon = Coupon.createCoupon(createCouponRequestDto);
+        return couponRepository.save(newCoupon);
+    }
+
+    public Coupon createChallengeCouponAndSave(Challenge challenge) {
+        String code = RandomStringUtils.randomAlphanumeric(10);
+        Coupon newCoupon = Coupon.createCouponOfChallenge(challenge, code);
         return couponRepository.save(newCoupon);
     }
 

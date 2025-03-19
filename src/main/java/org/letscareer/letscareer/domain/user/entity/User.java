@@ -151,6 +151,7 @@ public class User extends BaseTimeEntity {
         this.wishCompany = updateValue(this.wishCompany, requestDto.wishCompany());
         this.inflowPath = updateValue(this.inflowPath, requestDto.inflowPath());
         this.contactEmail = updateValue(this.contactEmail, requestDto.contactEmail());
+        this.role = updateValue(this.role, UserRole.valueOf(requestDto.role()));
     }
 
     public void updateUserPassword(String encodedPassword) {

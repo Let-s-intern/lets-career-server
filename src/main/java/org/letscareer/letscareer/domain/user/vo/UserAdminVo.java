@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.user.vo;
 
 import lombok.Builder;
 import org.letscareer.letscareer.domain.user.type.AccountType;
+import org.letscareer.letscareer.domain.user.type.UserRole;
 
 import java.time.LocalDateTime;
 
@@ -15,6 +16,7 @@ public record UserAdminVo(
         LocalDateTime createdDate,
         AccountType accountType,
         String accountNum,
-        Boolean marketingAgree
+        Boolean marketingAgree,
+        UserRole role
 ) {
 }

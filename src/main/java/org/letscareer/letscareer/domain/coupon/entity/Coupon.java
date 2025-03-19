@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.coupon.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.coupon.dto.request.CreateCouponRequestDto;
 import org.letscareer.letscareer.domain.coupon.type.CouponType;
 import org.letscareer.letscareer.domain.coupon.type.converter.CouponTypeConverter;
@@ -50,6 +51,18 @@ public class Coupon extends BaseTimeEntity {
                 .couponType(couponRequestDto.couponType())
                 .startDate(couponRequestDto.startDate())
                 .endDate(couponRequestDto.endDate())
+                .build();
+    }
+
+    public static Coupon createCouponOfChallenge(Challenge challenge, String code) {
+        return Coupon.builder()
+                .name(challenge.getTitle() + " 참여자 대상 할인 쿠폰")
+                .code(code)
+                .discount(8000)
+                .time(1)
+                .couponType(CouponType.CHALLENGE)
+                .startDate(challenge.getEndDate())
+                .endDate(challenge.getEndDate().plusMonths(2))
                 .build();
     }
 
