@@ -15,7 +15,8 @@ public enum ChallengeType implements EnumField {
     PERSONAL_STATEMENT(5, "자기소개서"),
     PORTFOLIO(6, "포트폴리오"),
     PERSONAL_STATEMENT_LARGE_CORP(7, "대기업 자기소개서"),
-    MARKETING(8, "마케팅");
+    MARKETING(8, "마케팅"),
+    EXPERIENCE_SUMMARY(9, "경험 정리");
 
     private final Integer code;
     private final String desc;
