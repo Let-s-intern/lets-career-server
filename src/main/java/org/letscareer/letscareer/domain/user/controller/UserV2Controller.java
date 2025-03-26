@@ -10,7 +10,10 @@ import org.letscareer.letscareer.domain.application.dto.response.GetMyApplicatio
 import org.letscareer.letscareer.domain.application.type.ApplicationStatus;
 import org.letscareer.letscareer.domain.user.dto.request.*;
 import org.letscareer.letscareer.domain.user.dto.response.TokenResponseDto;
+import org.letscareer.letscareer.domain.user.dto.response.UserChallengeInfoResponseDto;
+import org.letscareer.letscareer.domain.user.dto.response.UserParticipationResponseDto;
 import org.letscareer.letscareer.domain.user.entity.User;
+import org.letscareer.letscareer.domain.user.service.UserParticipationService;
 import org.letscareer.letscareer.domain.user.service.UserService;
 import org.letscareer.letscareer.global.common.annotation.ApiErrorCode;
 import org.letscareer.letscareer.global.common.annotation.CurrentUser;
@@ -24,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserV2Controller {
     private final UserService userService;
+    private final UserParticipationService userParticipationService;
 
     @Operation(summary = "나의 신청서 전체 조회 - 후기 작성용", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetMyApplicationsResponseDto.class)))
@@ -94,4 +98,35 @@ public class UserV2Controller {
         TokenResponseDto responseDto = userService.reissueToken(tokenReissueRequestDto);
         return SuccessResponse.ok(responseDto);
     }
+
+    @Operation(summary = "나의 신청서 전체 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetMyApplicationsResponseDto.class)))
+    })
+    @GetMapping("/applications")
+    public ResponseEntity<SuccessResponse<?>> getMyApplications(@CurrentUser User user,
+                                                                @RequestParam(required = false) final ApplicationStatus status) {
+        GetMyApplicationsResponseDto responseDto = userService.getMyApplications(user, status);
+        return SuccessResponse.ok(responseDto);
+    }
+
+
+    @Operation(summary = "참여자 정보 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserParticipationResponseDto.class)))
+    })
+    @ApiErrorCode({SwaggerEnum.USER_NOT_FOUND})
+    @GetMapping("/participation-info")
+    public ResponseEntity<SuccessResponse<?>> getUserParticipationInfo(@CurrentUser User user) {
+        final UserParticipationResponseDto responseDto = userParticipationService.execute(user);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "유저 챌린지 필수 정보 입력 확인", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserChallengeInfoResponseDto.class)))
+    })
+    @GetMapping("/challenge-info")
+    public ResponseEntity<SuccessResponse<?>> checkUserChallengeInfo(@CurrentUser User user) {
+        UserChallengeInfoResponseDto responseDto = userService.checkUserChallengeInfo(user);
+        return SuccessResponse.ok(responseDto);
+    }
+
 }
