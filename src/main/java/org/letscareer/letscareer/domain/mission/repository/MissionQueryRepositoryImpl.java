@@ -47,6 +47,7 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
                         mission.missionStatusType,
                         getAttendanceCount(),
                         getLateAttendanceCount(),
+                        getWrongAttendanceCount(),
                         missionScore.successScore,
                         missionScore.lateScore,
                         missionTemplate.id,
@@ -300,7 +301,6 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
                 .where(
                         attendance.mission.eq(mission)
                                 .and(attendance.status.notIn(AttendanceStatus.ABSENT))
-                                .and(attendance.result.notIn(AttendanceResult.WRONG))
                 );
     }
 
@@ -310,7 +310,15 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
                 .where(
                         attendance.mission.eq(mission)
                                 .and(attendance.status.in(AttendanceStatus.LATE))
-                                .and(attendance.result.notIn(AttendanceResult.WRONG))
+                );
+    }
+
+    private Expression<Long> getWrongAttendanceCount() {
+        return JPAExpressions.select(attendance.result.count())
+                .from(attendance)
+                .where(
+                        attendance.mission.eq(mission)
+                                .and(attendance.result.in(AttendanceResult.WRONG))
                 );
     }
 

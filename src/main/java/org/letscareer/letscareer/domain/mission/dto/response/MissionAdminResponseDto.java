@@ -18,6 +18,7 @@ public record MissionAdminResponseDto(
         MissionStatusType missionStatusType,
         Long attendanceCount,
         Long lateAttendanceCount,
+        Long wrongAttendanceCount,
         Long applicationCount,
         Integer score,
         Integer lateScore,
@@ -39,6 +40,7 @@ public record MissionAdminResponseDto(
                 .missionStatusType(vo.missionStatusType())
                 .attendanceCount(vo.attendanceCount())
                 .lateAttendanceCount(vo.lateAttendanceCount())
+                .wrongAttendanceCount(vo.wrongAttendanceCount())
                 .applicationCount(applicationCount)
                 .score(vo.score())
                 .lateScore(vo.lateScore())
