@@ -14,6 +14,7 @@ public record MissionForChallengeVo(
         MissionStatusType missionStatusType,
         Long attendanceCount,
         Long lateAttendanceCount,
+        Long wrongAttendanceCount,
         Integer score,
         Integer lateScore,
         Long missionTemplateId,
