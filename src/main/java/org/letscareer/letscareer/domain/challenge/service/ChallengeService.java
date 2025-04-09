@@ -86,4 +86,6 @@ public interface ChallengeService {
     void updateGoal(Long challengeId, UpdateChallengeApplicationRequestDto requestDto, Long userId);
 
     void deleteChallenge(Long challengeId);
+
+    void copyChallengeDashBoard(Long fromChallengeId, Long toChallengeId);
 }

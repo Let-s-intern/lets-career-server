@@ -46,6 +46,15 @@ public class ChallengeNotice extends BaseTimeEntity {
                 .build();
     }
 
+    public static ChallengeNotice copyChallengeNotice(Challenge challenge, ChallengeNotice challengeNotice) {
+        return ChallengeNotice.builder()
+                .title(challengeNotice.getTitle())
+                .link(challengeNotice.getLink())
+                .type(challengeNotice.getType())
+                .challenge(challenge)
+                .build();
+    }
+
     public void updateChallengeNotice(CreateChallengeNoticeRequestDto updateChallengeNoticeRequestDto) {
         this.type = updateValue(this.type, updateChallengeNoticeRequestDto.type());
         this.title = updateValue(this.title, updateChallengeNoticeRequestDto.title());
