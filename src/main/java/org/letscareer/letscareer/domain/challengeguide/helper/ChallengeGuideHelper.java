@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.challengeguide.helper;
 
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challengeguide.entity.ChallengeGuide;
 import org.letscareer.letscareer.domain.challengeguide.repository.ChallengeGuideRepository;
 import org.letscareer.letscareer.domain.challengeguide.vo.ChallengeGuideVo;
@@ -30,5 +31,9 @@ public class ChallengeGuideHelper {
 
     public void deleteChallengeGuide(ChallengeGuide challengeGuide) {
         challengeGuideRepository.delete(challengeGuide);
+    }
+
+    public void deleteAllByChallengeId(Long challengeId) {
+        challengeGuideRepository.deleteAllByChallengeId(challengeId);
     }
 }

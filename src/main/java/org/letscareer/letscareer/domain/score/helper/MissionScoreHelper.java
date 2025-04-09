@@ -16,4 +16,9 @@ public class MissionScoreHelper {
         MissionScore missionScore = MissionScore.createMissionScore(createMissionRequestDto, newMission);
         return missionScoreRepository.save(missionScore);
     }
+
+    public MissionScore copyMissionScore(MissionScore fromMissionScore, Mission mission) {
+        MissionScore missionScore = MissionScore.copyMissionScore(fromMissionScore, mission);
+        return missionScoreRepository.save(missionScore);
+    }
 }

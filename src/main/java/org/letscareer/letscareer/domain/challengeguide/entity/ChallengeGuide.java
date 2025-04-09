@@ -41,6 +41,14 @@ public class ChallengeGuide extends BaseTimeEntity {
                 .build();
     }
 
+    public static ChallengeGuide copyChallengeGuide(Challenge challenge, ChallengeGuide challengeGuide) {
+        return ChallengeGuide.builder()
+                .title(challengeGuide.getTitle())
+                .link(challengeGuide.getLink())
+                .challenge(challenge)
+                .build();
+    }
+
     public void updateChallengeGuide(UpdateChallengeGuideRequestDto updateChallengeGuideRequestDto) {
         this.title = updateValue(this.title, updateChallengeGuideRequestDto.title());
         this.link = updateValue(this.link, updateChallengeGuideRequestDto.link());

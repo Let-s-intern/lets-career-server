@@ -75,6 +75,17 @@ public class Mission extends BaseTimeEntity {
                 .build();
     }
 
+    public static Mission copyMission(Challenge challenge, Mission mission, long dayDifference) {
+        return Mission.builder()
+                .th(mission.getTh())
+                .title(mission.getTitle())
+                .startDate(mission.getStartDate().plusDays(dayDifference))
+                .endDate(mission.getEndDate().plusDays(dayDifference))
+                .challenge(challenge)
+                .missionTemplate(mission.missionTemplate)
+                .build();
+    }
+
     public void updateMission(UpdateMissionRequestDto requestDto) {
         this.th = updateValue(this.th, requestDto.th());
         this.title = updateValue(this.title, requestDto.title());
