@@ -45,10 +45,10 @@ public class Mission extends BaseTimeEntity {
     @NotNull
     private LocalDateTime endDate;
 
-    @OneToMany(mappedBy = "mission", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "mission", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<MissionContents> essentialContentsList = new ArrayList<>();
-    @OneToMany(mappedBy = "mission", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "mission", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<MissionContents> additionalContentsList = new ArrayList<>();
     @OneToMany(mappedBy = "mission", cascade = CascadeType.ALL, orphanRemoval = true)

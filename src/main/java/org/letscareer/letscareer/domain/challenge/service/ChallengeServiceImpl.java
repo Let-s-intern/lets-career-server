@@ -36,6 +36,8 @@ import org.letscareer.letscareer.domain.classification.dto.request.CreateChallen
 import org.letscareer.letscareer.domain.classification.helper.ChallengeClassificationHelper;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.classification.vo.ChallengeClassificationDetailVo;
+import org.letscareer.letscareer.domain.contents.entity.Contents;
+import org.letscareer.letscareer.domain.contents.type.ContentsType;
 import org.letscareer.letscareer.domain.coupon.entity.Coupon;
 import org.letscareer.letscareer.domain.coupon.helper.CouponHelper;
 import org.letscareer.letscareer.domain.faq.dto.request.CreateProgramFaqRequestDto;
@@ -84,6 +86,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -533,14 +536,22 @@ public class ChallengeServiceImpl implements ChallengeService {
             if(fromChallengeMission.getMissionScore() != null) {
                 missionScoreHelper.copyMissionScore(fromChallengeMission.getMissionScore(), mission);
             }
-            List<MissionContents> copiedEssentialMissionContentsList = fromChallengeMission.getEssentialContentsList().stream()
-                    .map(missionContents -> missionContentsHelper.createMissionContentsAndSave(mission, missionContents.getContents()))
+
+            List<MissionContents> fromEssentialContentsList = missionContentsHelper.findAllMissionContentsByMissionIdAndContentsType(fromChallengeMission.getId(), ContentsType.ESSENTIAL);
+            List<MissionContents> newEssentialContents = fromEssentialContentsList.stream()
+                    .map(mc -> MissionContents.createMissionContents(mission, mc.getContents(), ContentsType.ESSENTIAL))
                     .toList();
-            mission.setEssentialContentsList(copiedEssentialMissionContentsList);
-            List<MissionContents> copiedAdditionalMissionContentsList = fromChallengeMission.getAdditionalContentsList().stream()
-                    .map(missionContents -> missionContentsHelper.createMissionContentsAndSave(mission, missionContents.getContents()))
+
+            List<MissionContents> fromAdditionalContentsList = missionContentsHelper.findAllMissionContentsByMissionIdAndContentsType(fromChallengeMission.getId(), ContentsType.ADDITIONAL);
+            List<MissionContents> newAdditionalContents = fromAdditionalContentsList.stream()
+                    .map(mc -> MissionContents.createMissionContents(mission, mc.getContents(), ContentsType.ADDITIONAL))
                     .toList();
-            mission.setAdditionalContentsList(copiedAdditionalMissionContentsList);
+
+            mission.getEssentialContentsList().clear();
+            mission.getEssentialContentsList().addAll(newEssentialContents);
+            mission.getAdditionalContentsList().clear();
+            mission.getAdditionalContentsList().addAll(newAdditionalContents);
+
             toChallenge.getMissionList().add(mission);
         }
     }
