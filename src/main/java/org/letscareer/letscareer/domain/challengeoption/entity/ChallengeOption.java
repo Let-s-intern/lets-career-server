@@ -3,10 +3,13 @@ package org.letscareer.letscareer.domain.challengeoption.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.letscareer.letscareer.domain.challengeoption.dto.request.CreateChallengeOptionRequestDto;
+import org.letscareer.letscareer.domain.challengeoption.dto.request.UpdateChallengeOptionRequestDto;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.letscareer.letscareer.global.common.utils.entity.EntityUpdateValueUtils.updateValue;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -39,5 +42,12 @@ public class ChallengeOption extends BaseTimeEntity {
 
     public void addChallengePriceOptionList(ChallengePriceOption challengePriceOption) {
         this.challengePriceOptionList.add(challengePriceOption);
+    }
+
+    public void updateChallengeOption(UpdateChallengeOptionRequestDto requestDto) {
+        this.title = updateValue(this.title, requestDto.title());
+        this.code = updateValue(this.code, requestDto.code());
+        this.price = updateValue(this.price, requestDto.price());
+        this.discountPrice = updateValue(this.discountPrice, requestDto.discountPrice());
     }
 }

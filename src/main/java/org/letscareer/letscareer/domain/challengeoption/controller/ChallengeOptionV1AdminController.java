@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.challengeoption.dto.request.CreateChallengeOptionRequestDto;
+import org.letscareer.letscareer.domain.challengeoption.dto.request.UpdateChallengeOptionRequestDto;
 import org.letscareer.letscareer.domain.challengeoption.dto.response.GetAllChallengeOptionListResponseDto;
 import org.letscareer.letscareer.domain.challengeoption.service.ChallengeOptionService;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
@@ -34,5 +35,15 @@ public class ChallengeOptionV1AdminController {
     public ResponseEntity<SuccessResponse<?>> createChallengeOption(@RequestBody final CreateChallengeOptionRequestDto requestDto) {
         challengeOptionService.createChallengeOption(requestDto);
         return SuccessResponse.created(null);
+    }
+
+    @Operation(summary = "챌린지 옵션 수정", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    })
+    @PatchMapping("/{challengeOptionId}")
+    public ResponseEntity<SuccessResponse<?>> updateChallengeOption(@PathVariable final Long challengeOptionId,
+                                                                    @RequestBody final UpdateChallengeOptionRequestDto requestDto) {
+        challengeOptionService.updateChallengeOption(challengeOptionId, requestDto);
+        return SuccessResponse.ok(null);
     }
 }
