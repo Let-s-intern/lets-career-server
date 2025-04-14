@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.challengeoption.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.letscareer.letscareer.domain.challengeoption.dto.request.CreateChallengeOptionRequestDto;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 import java.util.ArrayList;
@@ -26,6 +27,15 @@ public class ChallengeOption extends BaseTimeEntity {
     @OneToMany(mappedBy = "challengeOption", cascade = CascadeType.ALL)
     @Builder.Default
     private List<ChallengePriceOption> challengePriceOptionList = new ArrayList<>();
+
+    public static ChallengeOption createChallengeOption(CreateChallengeOptionRequestDto requestDto) {
+        return ChallengeOption.builder()
+                .title(requestDto.title())
+                .code(requestDto.code())
+                .price(requestDto.price())
+                .discountPrice(requestDto.discountPrice())
+                .build();
+    }
 
     public void addChallengePriceOptionList(ChallengePriceOption challengePriceOption) {
         this.challengePriceOptionList.add(challengePriceOption);
