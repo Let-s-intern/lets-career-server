@@ -29,6 +29,10 @@ import org.letscareer.letscareer.domain.challenge.vo.*;
 import org.letscareer.letscareer.domain.challengeguide.entity.ChallengeGuide;
 import org.letscareer.letscareer.domain.challengeguide.helper.ChallengeGuideHelper;
 import org.letscareer.letscareer.domain.challengeguide.vo.ChallengeGuideVo;
+import org.letscareer.letscareer.domain.challengeoption.entity.ChallengeOption;
+import org.letscareer.letscareer.domain.challengeoption.entity.ChallengePriceOption;
+import org.letscareer.letscareer.domain.challengeoption.helper.ChallengeOptionHelper;
+import org.letscareer.letscareer.domain.challengeoption.helper.ChallengePriceOptionHelper;
 import org.letscareer.letscareer.domain.challlengenotice.entity.ChallengeNotice;
 import org.letscareer.letscareer.domain.challlengenotice.helper.ChallengeNoticeHelper;
 import org.letscareer.letscareer.domain.challlengenotice.vo.ChallengeNoticeVo;
@@ -63,6 +67,7 @@ import org.letscareer.letscareer.domain.payment.type.RefundType;
 import org.letscareer.letscareer.domain.pg.provider.TossProvider;
 import org.letscareer.letscareer.domain.pg.type.CancelReason;
 import org.letscareer.letscareer.domain.price.dto.request.CreateChallengePriceRequestDto;
+import org.letscareer.letscareer.domain.price.entity.ChallengePrice;
 import org.letscareer.letscareer.domain.price.helper.ChallengePriceHelper;
 import org.letscareer.letscareer.domain.price.vo.ChallengePriceDetailVo;
 import org.letscareer.letscareer.domain.program.dto.response.ZoomMeetingResponseDto;
@@ -106,6 +111,8 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final ChallengeApplicationMapper challengeApplicationMapper;
     private final ChallengeNoticeHelper challengeNoticeHelper;
     private final ChallengePriceHelper challengePriceHelper;
+    private final ChallengeOptionHelper challengeOptionHelper;
+    private final ChallengePriceOptionHelper challengePriceOptionHelper;
     private final ChallengeGuideHelper challengeGuideHelper;
     private final AttendanceHelper attendanceHelper;
     private final AttendanceMapper attendanceMapper;
@@ -443,9 +450,13 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     private void createPriceListAndSave(List<CreateChallengePriceRequestDto> requestDtoList,
                                         Challenge challenge) {
-        requestDtoList.stream()
-                .map(requestDto -> challengePriceHelper.createChallengePriceAndSave(requestDto, challenge))
-                .collect(Collectors.toList());
+        requestDtoList.forEach(requestDto -> {
+            ChallengePrice challengePrice = challengePriceHelper.createChallengePriceAndSave(requestDto, challenge);
+            List<ChallengeOption> challengeOptionList = challengeOptionHelper.findAllChallengeOptionById(requestDto.challengeOptionIdList());
+            for(ChallengeOption challengeOption : challengeOptionList) {
+                challengePriceOptionHelper.createChallengePriceOptionAndSave(challengePrice, challengeOption);
+            }
+        });
     }
 
     private void createFaqListAndSave(List<CreateProgramFaqRequestDto> requestDtoList,

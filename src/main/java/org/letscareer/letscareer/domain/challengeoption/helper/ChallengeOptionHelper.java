@@ -29,4 +29,8 @@ public class ChallengeOptionHelper {
     public ChallengeOption findChallengeOptionByChallengeOptionIdOrThrow(Long challengeOptionId) {
         return challengeOptionRepository.findById(challengeOptionId).orElseThrow(() -> new EntityNotFoundException(CHALLENGE_OPTION_NOT_FOUND));
     }
+
+    public List<ChallengeOption> findAllChallengeOptionById(List<Long> challengeOptionIdList) {
+        return challengeOptionRepository.findAllById(challengeOptionIdList);
+    }
 }
