@@ -45,10 +45,10 @@ public class Mission extends BaseTimeEntity {
     @NotNull
     private LocalDateTime endDate;
 
-    @OneToMany(mappedBy = "mission", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "mission", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<MissionContents> essentialContentsList = new ArrayList<>();
-    @OneToMany(mappedBy = "mission", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "mission", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<MissionContents> additionalContentsList = new ArrayList<>();
     @OneToMany(mappedBy = "mission", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -75,6 +75,17 @@ public class Mission extends BaseTimeEntity {
                 .build();
     }
 
+    public static Mission copyMission(Challenge challenge, Mission mission, long dayDifference) {
+        return Mission.builder()
+                .th(mission.getTh())
+                .title(mission.getTitle())
+                .startDate(mission.getStartDate().plusDays(dayDifference))
+                .endDate(mission.getEndDate().plusDays(dayDifference))
+                .challenge(challenge)
+                .missionTemplate(mission.missionTemplate)
+                .build();
+    }
+
     public void updateMission(UpdateMissionRequestDto requestDto) {
         this.th = updateValue(this.th, requestDto.th());
         this.title = updateValue(this.title, requestDto.title());
@@ -88,18 +99,13 @@ public class Mission extends BaseTimeEntity {
     }
 
     public void setEssentialContentsList(List<MissionContents> missionContentsList) {
-        this.essentialContentsList = missionContentsList;
+        this.essentialContentsList.clear();
+        this.essentialContentsList.addAll(missionContentsList);
     }
 
     public void setAdditionalContentsList(List<MissionContents> missionContentsList) {
-        this.additionalContentsList = missionContentsList;
-    }
-
-    public void setInitMissionContentsList(ContentsType contentsType) {
-        switch (contentsType) {
-            case ESSENTIAL -> this.essentialContentsList = new ArrayList<>();
-            case ADDITIONAL -> this.additionalContentsList = new ArrayList<>();
-        }
+        this.additionalContentsList.clear();
+        this.additionalContentsList.addAll(missionContentsList);
     }
 
     public void updateMissionTemplate(MissionTemplate missionTemplate) {

@@ -10,6 +10,7 @@ import static org.letscareer.letscareer.global.common.utils.entity.EntityUpdateV
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder(access = AccessLevel.PRIVATE)
 @DiscriminatorValue("mission_score")
 @Getter
 @Entity
@@ -21,21 +22,24 @@ public class MissionScore extends Score {
     @JoinColumn(name = "mission_id")
     private Mission mission;
 
-    @Builder(access = AccessLevel.PRIVATE)
-    public MissionScore(CreateMissionRequestDto createMissionRequestDto, Mission mission) {
-        super();
-        this.successScore = createMissionRequestDto.score();
-        this.lateScore = createMissionRequestDto.lateScore();
-        this.mission = mission;
-    }
-
     public static MissionScore createMissionScore(CreateMissionRequestDto createMissionRequestDto, Mission mission) {
         MissionScore missionScore = MissionScore.builder()
-                .createMissionRequestDto(createMissionRequestDto)
+                .successScore(createMissionRequestDto.score())
+                .lateScore(createMissionRequestDto.lateScore())
                 .mission(mission)
                 .build();
         mission.setMissionScore(missionScore);
         return missionScore;
+    }
+
+    public static MissionScore copyMissionScore(MissionScore missionScore, Mission mission) {
+        MissionScore copiedMissionScore = MissionScore.builder()
+                .successScore(missionScore.getSuccessScore())
+                .lateScore(missionScore.getLateScore())
+                .mission(mission)
+                .build();
+        mission.setMissionScore(copiedMissionScore);
+        return copiedMissionScore;
     }
 
     public void updateMissionScore(UpdateMissionRequestDto requestDto) {

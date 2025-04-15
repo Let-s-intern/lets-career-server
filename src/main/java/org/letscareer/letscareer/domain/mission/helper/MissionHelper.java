@@ -92,4 +92,8 @@ public class MissionHelper {
     public List<Long> findEndNotificationMissionIds() {
         return missionRepository.findALlEndNotificationMissionId();
     }
+
+    public void deleteAllByChallengeId(Long challengeId) {
+        missionRepository.deleteAllByChallengeId(challengeId);
+    }
 }

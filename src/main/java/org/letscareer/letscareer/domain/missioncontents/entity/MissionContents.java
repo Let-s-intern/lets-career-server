@@ -24,15 +24,19 @@ public class MissionContents {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mission_id")
     private Mission mission;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "contents_id")
     private Contents contents;
 
-    public static MissionContents createMissionContents(Mission mission, Contents contents) {
+    public static MissionContents createMissionContents(Mission mission, Contents contents, ContentsType contentsType) {
         return MissionContents.builder()
                 .mission(mission)
-                .contentsType(contents.getType())
                 .contents(contents)
+                .contentsType(contentsType)
                 .build();
+    }
+
+    public void setMission(Mission mission) {
+        this.mission = mission;
     }
 }

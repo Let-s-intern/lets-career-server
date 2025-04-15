@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Component
 public class ChallengeNoticeHelper {
@@ -26,7 +28,15 @@ public class ChallengeNoticeHelper {
         return challengeNoticeRepository.findAllChallengeNoticeVos(challengeId, pageable);
     }
 
+    public List<ChallengeNotice> findAllByChallengeId(Long challengeId) {
+        return challengeNoticeRepository.findAllByChallengeId(challengeId);
+    }
+
     public void deleteChallengeNotice(ChallengeNotice challengeNotice) {
         challengeNoticeRepository.delete(challengeNotice);
+    }
+
+    public void deleteAllByChallengeId(Long challengeId) {
+        challengeNoticeRepository.deleteAllByChallengeId(challengeId);
     }
 }

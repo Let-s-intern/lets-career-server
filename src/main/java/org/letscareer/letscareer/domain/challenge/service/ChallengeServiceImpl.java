@@ -1,7 +1,6 @@
 package org.letscareer.letscareer.domain.challenge.service;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.letscareer.letscareer.domain.admincalssification.helper.ChallengeAdminClassificationHelper;
 import org.letscareer.letscareer.domain.admincalssification.request.CreateChallengeAdminClassificationRequestDto;
 import org.letscareer.letscareer.domain.admincalssification.vo.ChallengeAdminClassificationDetailVo;
@@ -27,14 +26,18 @@ import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
 import org.letscareer.letscareer.domain.challenge.mapper.ChallengeMapper;
 import org.letscareer.letscareer.domain.challenge.type.ChallengeType;
 import org.letscareer.letscareer.domain.challenge.vo.*;
+import org.letscareer.letscareer.domain.challengeguide.entity.ChallengeGuide;
 import org.letscareer.letscareer.domain.challengeguide.helper.ChallengeGuideHelper;
 import org.letscareer.letscareer.domain.challengeguide.vo.ChallengeGuideVo;
+import org.letscareer.letscareer.domain.challlengenotice.entity.ChallengeNotice;
 import org.letscareer.letscareer.domain.challlengenotice.helper.ChallengeNoticeHelper;
 import org.letscareer.letscareer.domain.challlengenotice.vo.ChallengeNoticeVo;
 import org.letscareer.letscareer.domain.classification.dto.request.CreateChallengeClassificationRequestDto;
 import org.letscareer.letscareer.domain.classification.helper.ChallengeClassificationHelper;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.classification.vo.ChallengeClassificationDetailVo;
+import org.letscareer.letscareer.domain.contents.entity.Contents;
+import org.letscareer.letscareer.domain.contents.type.ContentsType;
 import org.letscareer.letscareer.domain.coupon.entity.Coupon;
 import org.letscareer.letscareer.domain.coupon.helper.CouponHelper;
 import org.letscareer.letscareer.domain.faq.dto.request.CreateProgramFaqRequestDto;
@@ -52,6 +55,8 @@ import org.letscareer.letscareer.domain.mission.type.MissionQueryType;
 import org.letscareer.letscareer.domain.mission.vo.DailyMissionVo;
 import org.letscareer.letscareer.domain.mission.vo.MissionScheduleVo;
 import org.letscareer.letscareer.domain.mission.vo.MyDailyMissionVo;
+import org.letscareer.letscareer.domain.missioncontents.entity.MissionContents;
+import org.letscareer.letscareer.domain.missioncontents.helper.MissionContentsHelper;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.payment.helper.PaymentHelper;
 import org.letscareer.letscareer.domain.payment.type.RefundType;
@@ -70,6 +75,7 @@ import org.letscareer.letscareer.domain.review.vo.old.OldReviewAdminVo;
 import org.letscareer.letscareer.domain.review.vo.old.OldReviewVo;
 import org.letscareer.letscareer.domain.score.entity.AdminScore;
 import org.letscareer.letscareer.domain.score.helper.AdminScoreHelper;
+import org.letscareer.letscareer.domain.score.helper.MissionScoreHelper;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.global.common.entity.PageInfo;
 import org.letscareer.letscareer.global.common.utils.zoom.ZoomUtils;
@@ -79,6 +85,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -104,6 +112,8 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final AdminScoreHelper adminScoreHelper;
     private final MissionHelper missionHelper;
     private final MissionMapper missionMapper;
+    private final MissionScoreHelper missionScoreHelper;
+    private final MissionContentsHelper missionContentsHelper;
     private final PaymentHelper paymentHelper;
     private final OldReviewHelper oldReviewHelper;
     private final OldReviewMapper oldReviewMapper;
@@ -369,7 +379,17 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     @Override
     public void deleteChallenge(Long challengeId) {
+
         challengeHelper.deleteChallengeById(challengeId);
+    }
+
+    @Override
+    public void copyChallengeDashBoard(Long fromChallengeId, Long toChallengeId) {
+        Challenge fromChallenge = challengeHelper.findChallengeByIdOrThrow(fromChallengeId);
+        Challenge toChallenge = challengeHelper.findChallengeByIdOrThrow(toChallengeId);
+        copyChallengeGuides(fromChallenge, toChallenge);
+        copyChallengeNotices(fromChallenge, toChallenge);
+        copyMissions(fromChallenge, toChallenge);
     }
 
     private void createClassificationListAndSave(List<CreateChallengeClassificationRequestDto> requestDtoList,
@@ -488,5 +508,52 @@ public class ChallengeServiceImpl implements ChallengeService {
         String cancelReason = Objects.isNull(requestDto.reason()) ? CancelReason.PAYBACK.getDesc() : requestDto.reason();
         tossProvider.cancelPayments(RefundType.PAYBACK, payment.getPaymentKey(), requestDto.price(), cancelReason);
         payment.updatePaybackInfo(requestDto.price());
+    }
+
+    private void copyChallengeGuides(Challenge fromChallenge, Challenge toChallenge) {
+        challengeGuideHelper.deleteAllByChallengeId(toChallenge.getId());
+        for (ChallengeGuide fromChallengeGuide : fromChallenge.getChallengeGuideList()) {
+            ChallengeGuide guide = ChallengeGuide.copyChallengeGuide(toChallenge, fromChallengeGuide);
+            toChallenge.getChallengeGuideList().add(guide);
+        }
+    }
+
+    private void copyChallengeNotices(Challenge fromChallenge, Challenge toChallenge) {
+        challengeNoticeHelper.deleteAllByChallengeId(toChallenge.getId());
+        List<ChallengeNotice> fromChallengeNoticeList = challengeNoticeHelper.findAllByChallengeId(fromChallenge.getId());
+        for (ChallengeNotice fromChallengeNotice : fromChallengeNoticeList) {
+            ChallengeNotice notice = ChallengeNotice.copyChallengeNotice(toChallenge, fromChallengeNotice);
+            challengeNoticeHelper.saveChallengeNotice(notice);
+        }
+    }
+
+    private void copyMissions(Challenge fromChallenge, Challenge toChallenge) {
+        missionHelper.deleteAllByChallengeId(toChallenge.getId());
+        LocalDateTime fromStartDate = fromChallenge.getStartDate();
+        LocalDateTime toStartDate = toChallenge.getStartDate();
+        long dayDifference = java.time.Duration.between(fromStartDate, toStartDate).toDays();
+        for (Mission fromChallengeMission : fromChallenge.getMissionList()) {
+            Mission mission = Mission.copyMission(toChallenge, fromChallengeMission, dayDifference);
+            if(fromChallengeMission.getMissionScore() != null) {
+                missionScoreHelper.copyMissionScore(fromChallengeMission.getMissionScore(), mission);
+            }
+
+            List<MissionContents> fromEssentialContentsList = missionContentsHelper.findAllMissionContentsByMissionIdAndContentsType(fromChallengeMission.getId(), ContentsType.ESSENTIAL);
+            List<MissionContents> newEssentialContents = fromEssentialContentsList.stream()
+                    .map(mc -> MissionContents.createMissionContents(mission, mc.getContents(), ContentsType.ESSENTIAL))
+                    .toList();
+
+            List<MissionContents> fromAdditionalContentsList = missionContentsHelper.findAllMissionContentsByMissionIdAndContentsType(fromChallengeMission.getId(), ContentsType.ADDITIONAL);
+            List<MissionContents> newAdditionalContents = fromAdditionalContentsList.stream()
+                    .map(mc -> MissionContents.createMissionContents(mission, mc.getContents(), ContentsType.ADDITIONAL))
+                    .toList();
+
+            mission.getEssentialContentsList().clear();
+            mission.getEssentialContentsList().addAll(newEssentialContents);
+            mission.getAdditionalContentsList().clear();
+            mission.getAdditionalContentsList().addAll(newAdditionalContents);
+
+            toChallenge.getMissionList().add(mission);
+        }
     }
 }
