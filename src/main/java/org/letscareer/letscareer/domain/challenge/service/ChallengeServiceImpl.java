@@ -379,6 +379,7 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     @Override
     public void deleteChallenge(Long challengeId) {
+
         challengeHelper.deleteChallengeById(challengeId);
     }
 
