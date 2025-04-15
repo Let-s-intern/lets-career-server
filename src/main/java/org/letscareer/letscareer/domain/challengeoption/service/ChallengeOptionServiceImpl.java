@@ -34,4 +34,9 @@ public class ChallengeOptionServiceImpl implements ChallengeOptionService {
         ChallengeOption challengeOption = challengeOptionHelper.findChallengeOptionByChallengeOptionIdOrThrow(challengeOptionId);
         challengeOption.updateChallengeOption(requestDto);
     }
+
+    @Override
+    public void deleteChallengeOption(Long challengeOptionId) {
+        challengeOptionHelper.deleteChallengeOptionById(challengeOptionId);
+    }
 }

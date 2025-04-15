@@ -33,4 +33,8 @@ public class ChallengeOptionHelper {
     public List<ChallengeOption> findAllChallengeOptionById(List<Long> challengeOptionIdList) {
         return challengeOptionRepository.findAllById(challengeOptionIdList);
     }
+
+    public void deleteChallengeOptionById(Long challengeOptionId) {
+        challengeOptionRepository.deleteById(challengeOptionId);
+    }
 }

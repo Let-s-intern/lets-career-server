@@ -46,4 +46,13 @@ public class ChallengeOptionV1AdminController {
         challengeOptionService.updateChallengeOption(challengeOptionId, requestDto);
         return SuccessResponse.ok(null);
     }
+
+    @Operation(summary = "챌린지 옵션 삭제", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    })
+    @DeleteMapping("/{challengeOptionId}")
+    public ResponseEntity<SuccessResponse<?>> deleteChallengeOption(@PathVariable final Long challengeOptionId) {
+        challengeOptionService.deleteChallengeOption(challengeOptionId);
+        return SuccessResponse.ok(null);
+    }
 }

@@ -10,4 +10,5 @@ public interface ChallengeOptionService {
     GetAllChallengeOptionListResponseDto getChallengeOptionList();
     void createChallengeOption(CreateChallengeOptionRequestDto requestDto);
     void updateChallengeOption(Long challengeOptionId, UpdateChallengeOptionRequestDto requestDto);
+    void deleteChallengeOption(Long challengeOptionId);
 }
