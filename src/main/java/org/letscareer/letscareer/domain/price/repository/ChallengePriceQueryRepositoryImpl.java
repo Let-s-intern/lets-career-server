@@ -4,13 +4,19 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.challengeoption.vo.ChallengeOptionVo;
 import org.letscareer.letscareer.domain.price.entity.ChallengePrice;
 import org.letscareer.letscareer.domain.price.vo.ChallengePriceDetailVo;
 import org.letscareer.letscareer.domain.price.vo.PriceDetailVo;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import static org.letscareer.letscareer.domain.challengeoption.entity.QChallengeOption.challengeOption;
+import static org.letscareer.letscareer.domain.challengeoption.entity.QChallengePriceOption.challengePriceOption;
 import static org.letscareer.letscareer.domain.price.entity.QChallengePrice.challengePrice;
 import static org.letscareer.letscareer.domain.price.entity.QPrice.price1;
 
@@ -20,7 +26,7 @@ public class ChallengePriceQueryRepositoryImpl implements ChallengePriceQueryRep
 
     @Override
     public List<ChallengePriceDetailVo> findChallengePriceDetailVos(Long challengeId) {
-        return jpaQueryFactory
+        List<ChallengePriceDetailVo> challengePriceDetailVos = jpaQueryFactory
                 .select(Projections.constructor(ChallengePriceDetailVo.class,
                         challengePrice.id,
                         challengePrice.price,
@@ -30,7 +36,7 @@ public class ChallengePriceQueryRepositoryImpl implements ChallengePriceQueryRep
                         challengePrice.deadline,
                         challengePrice.accountType,
                         challengePrice.challengePriceType,
-                        challengePrice.challengeUserType,
+                        challengePrice.challengePricePlanType,
                         challengePrice.challengeParticipationType
                 ))
                 .from(challengePrice)
@@ -38,6 +44,30 @@ public class ChallengePriceQueryRepositoryImpl implements ChallengePriceQueryRep
                         eqChallengeId(challengeId)
                 )
                 .fetch();
+
+        Map<Long, List<ChallengeOptionVo>> challengeOptionListMap = jpaQueryFactory
+                .select(challengePrice.id,
+                        Projections.constructor(ChallengeOptionVo.class,
+                                challengeOption.id,
+                                challengeOption.title,
+                                challengeOption.price,
+                                challengeOption.discountPrice)
+                )
+                .from(challengePriceOption)
+                .join(challengePriceOption.challengeOption, challengeOption)
+                .stream()
+                .collect(
+                        Collectors.groupingBy(
+                                tuple -> tuple.get(0, Long.class),
+                                Collectors.mapping(tuple -> tuple.get(1, ChallengeOptionVo.class), Collectors.toList())
+                        )
+                );
+
+        for (ChallengePriceDetailVo vo : challengePriceDetailVos) {
+            vo.setChallengeOptionList(challengeOptionListMap.getOrDefault(vo.getPriceId(), Collections.emptyList()));
+        }
+
+        return challengePriceDetailVos;
     }
 
     @Override
