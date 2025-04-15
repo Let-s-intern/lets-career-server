@@ -103,7 +103,6 @@ public class MissionServiceImpl implements MissionService {
     private void updateMissionContents(Mission mission, ContentsType contentsType, List<Long> contentsIdList) {
         if (contentsIdList == null || contentsIdList.isEmpty()) return;
         missionContentsHelper.deleteAllMissionContentsByMissionIdAndContentsType(mission.getId(), contentsType);
-        mission.setInitMissionContentsList(contentsType);
         findContentsAndCreateMissionContents(contentsType, contentsIdList, mission);
     }
 
