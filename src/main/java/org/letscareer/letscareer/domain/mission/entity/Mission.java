@@ -99,18 +99,13 @@ public class Mission extends BaseTimeEntity {
     }
 
     public void setEssentialContentsList(List<MissionContents> missionContentsList) {
-        this.essentialContentsList = missionContentsList;
+        this.essentialContentsList.clear();
+        this.essentialContentsList.addAll(missionContentsList);
     }
 
     public void setAdditionalContentsList(List<MissionContents> missionContentsList) {
-        this.additionalContentsList = missionContentsList;
-    }
-
-    public void setInitMissionContentsList(ContentsType contentsType) {
-        switch (contentsType) {
-            case ESSENTIAL -> this.essentialContentsList = new ArrayList<>();
-            case ADDITIONAL -> this.additionalContentsList = new ArrayList<>();
-        }
+        this.additionalContentsList.clear();
+        this.additionalContentsList.addAll(missionContentsList);
     }
 
     public void updateMissionTemplate(MissionTemplate missionTemplate) {
