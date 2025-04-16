@@ -51,9 +51,7 @@ public class ChallengeApplicationHelper {
     }
 
     public List<AdminChallengeApplicationWithOptionsVo> findAdminChallengeApplicationVos(Long challengeId, Boolean isCanceled) {
-//        List<AdminChallengeApplicationVo> responseVos = challengeApplicationRepository.findAdminChallengeApplicationVos(challengeId, isCanceled);
-
-        return challengeApplicationRepository.findAdminChallengeApplicationWithOptions(challengeId, isCanceled);
+        return challengeApplicationRepository.findAdminChallengeApplicationVo(challengeId, isCanceled);
     }
 
     public ChallengeApplication findChallengeApplicationByIdOrThrow(Long applicationId) {

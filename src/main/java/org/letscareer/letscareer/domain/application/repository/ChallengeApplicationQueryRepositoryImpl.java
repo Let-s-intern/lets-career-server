@@ -53,7 +53,7 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
     }
 
     @Override
-    public List<AdminChallengeApplicationWithOptionsVo> findAdminChallengeApplicationWithOptions(Long challengeId, Boolean isCanceled) {
+    public List<AdminChallengeApplicationWithOptionsVo> findAdminChallengeApplicationVo(Long challengeId, Boolean isCanceled) {
         List<Tuple> tuples = queryFactory
                 .select(
                         Projections.constructor(AdminChallengeApplicationVo.class,

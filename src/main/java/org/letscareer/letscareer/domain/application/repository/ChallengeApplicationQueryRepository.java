@@ -15,7 +15,7 @@ import java.util.Optional;
 public interface ChallengeApplicationQueryRepository {
     Optional<ChallengeApplication> findChallengeApplicationByChallengeIdAndUserId(Long challengeId, Long userId);
 
-    List<AdminChallengeApplicationWithOptionsVo> findAdminChallengeApplicationWithOptions(Long challengeId, Boolean isCanceled);
+    List<AdminChallengeApplicationWithOptionsVo> findAdminChallengeApplicationVo(Long challengeId, Boolean isCanceled);
 
     Page<UserChallengeApplicationVo> findUserChallengeApplicationVo(Long challengeId, Pageable pageable);
 
