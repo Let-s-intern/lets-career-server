@@ -5,6 +5,7 @@ import org.letscareer.letscareer.domain.admincalssification.helper.ChallengeAdmi
 import org.letscareer.letscareer.domain.admincalssification.request.CreateChallengeAdminClassificationRequestDto;
 import org.letscareer.letscareer.domain.admincalssification.vo.ChallengeAdminClassificationDetailVo;
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationWithOptionsVo;
+import org.letscareer.letscareer.domain.attendance.vo.MissionAttendanceWithOptionsVo;
 import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApplicationRequestDto;
 import org.letscareer.letscareer.domain.application.dto.response.GetChallengeApplicationsResponseDto;
 import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
@@ -207,7 +208,7 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     @Override
     public GetChallengeMissionAttendancesResponseDto getMissionAttendances(Long challengeId, Long missionId) {
-        List<MissionAttendanceVo> attendanceVos = attendanceHelper.findMissionAttendanceVo(challengeId, missionId);
+        List<MissionAttendanceWithOptionsVo> attendanceVos = attendanceHelper.findMissionAttendanceVo(challengeId, missionId);
         return attendanceMapper.toGetChallengeMissionAttendancesResponseDto(attendanceVos);
     }
 
