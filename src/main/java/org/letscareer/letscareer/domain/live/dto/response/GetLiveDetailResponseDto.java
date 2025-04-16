@@ -20,6 +20,7 @@ public record GetLiveDetailResponseDto(
         String criticalNotice,
         Integer participationCount,
         String thumbnail,
+        String desktopThumbnail,
         String mentorName,
         String mentorImg,
         String mentorCompany,
