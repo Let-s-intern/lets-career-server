@@ -29,6 +29,7 @@ public class ChallengePriceQueryRepositoryImpl implements ChallengePriceQueryRep
         List<ChallengePriceDetailVo> challengePriceDetailVos = jpaQueryFactory
                 .select(Projections.constructor(ChallengePriceDetailVo.class,
                         challengePrice.id,
+                        challengePrice.title,
                         challengePrice.price,
                         challengePrice.refund,
                         challengePrice.discount,
