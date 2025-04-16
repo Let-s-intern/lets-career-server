@@ -20,6 +20,8 @@ public record CreateChallengeRequestDto(
         @NotNull
         String thumbnail,
         @NotNull
+        String desktopThumbnail,
+        @NotNull
         LocalDateTime startDate,
         @NotNull
         LocalDateTime endDate,

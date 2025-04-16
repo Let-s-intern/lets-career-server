@@ -20,6 +20,7 @@ public record GetChallengeDetailResponseDto(
         String criticalNotice,
         Integer participationCount,
         String thumbnail,
+        String desktopThumbnail,
         LocalDateTime startDate,
         LocalDateTime endDate,
         LocalDateTime beginning,
@@ -44,6 +45,7 @@ public record GetChallengeDetailResponseDto(
                 .criticalNotice(challengeInfo.criticalNotice())
                 .participationCount(challengeInfo.participationCount())
                 .thumbnail(challengeInfo.thumbnail())
+                .desktopThumbnail(challengeInfo.desktopThumbnail())
                 .startDate(challengeInfo.startDate())
                 .endDate(challengeInfo.endDate())
                 .beginning(challengeInfo.beginning())

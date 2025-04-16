@@ -16,6 +16,7 @@ public record UpdateChallengeRequestDto(
         String criticalNotice,
         Integer participationCount,
         String thumbnail,
+        String desktopThumbnail,
         LocalDateTime startDate,
         LocalDateTime endDate,
         LocalDateTime beginning,

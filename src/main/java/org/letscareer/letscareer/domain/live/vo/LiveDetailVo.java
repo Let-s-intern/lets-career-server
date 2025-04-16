@@ -12,6 +12,7 @@ public record LiveDetailVo(
         String criticalNotice,
         Integer participationCount,
         String thumbnail,
+        String desktopThumbnail,
         String mentorName,
         String mentorImg,
         String mentorCompany,
