@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.admincalssification.helper.ChallengeAdminClassificationHelper;
 import org.letscareer.letscareer.domain.admincalssification.request.CreateChallengeAdminClassificationRequestDto;
 import org.letscareer.letscareer.domain.admincalssification.vo.ChallengeAdminClassificationDetailVo;
+import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationWithOptionsVo;
 import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApplicationRequestDto;
 import org.letscareer.letscareer.domain.application.dto.response.GetChallengeApplicationsResponseDto;
 import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
@@ -167,7 +168,7 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     @Override
     public GetChallengeApplicationsResponseDto getApplications(Long challengeId, Boolean isCanceled) {
-        List<AdminChallengeApplicationVo> applicationVos = challengeApplicationHelper.findAdminChallengeApplicationVos(challengeId, isCanceled);
+        List<AdminChallengeApplicationWithOptionsVo> applicationVos = challengeApplicationHelper.findAdminChallengeApplicationVos(challengeId, isCanceled);
         return challengeApplicationMapper.toGetChallengeApplicationsResponseDto(applicationVos);
     }
 

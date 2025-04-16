@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.application.repository;
 
 import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
+import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationWithOptionsVo;
 import org.letscareer.letscareer.domain.application.vo.ReviewNotificationUserVo;
 import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
 import org.letscareer.letscareer.domain.user.entity.User;
@@ -14,7 +15,7 @@ import java.util.Optional;
 public interface ChallengeApplicationQueryRepository {
     Optional<ChallengeApplication> findChallengeApplicationByChallengeIdAndUserId(Long challengeId, Long userId);
 
-    List<AdminChallengeApplicationVo> findAdminChallengeApplicationVos(Long challengeId, Boolean isCanceled);
+    List<AdminChallengeApplicationWithOptionsVo> findAdminChallengeApplicationWithOptions(Long challengeId, Boolean isCanceled);
 
     Page<UserChallengeApplicationVo> findUserChallengeApplicationVo(Long challengeId, Pageable pageable);
 

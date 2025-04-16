@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
 import org.letscareer.letscareer.domain.application.repository.ChallengeApplicationRepository;
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
+import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationWithOptionsVo;
 import org.letscareer.letscareer.domain.application.vo.ReviewNotificationUserVo;
 import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
@@ -49,8 +50,10 @@ public class ChallengeApplicationHelper {
         return challengeApplicationRepository.findApplicationIdByChallengeIdAndUserId(challengeId, userId);
     }
 
-    public List<AdminChallengeApplicationVo> findAdminChallengeApplicationVos(Long challengeId, Boolean isCanceled) {
-        return challengeApplicationRepository.findAdminChallengeApplicationVos(challengeId, isCanceled);
+    public List<AdminChallengeApplicationWithOptionsVo> findAdminChallengeApplicationVos(Long challengeId, Boolean isCanceled) {
+//        List<AdminChallengeApplicationVo> responseVos = challengeApplicationRepository.findAdminChallengeApplicationVos(challengeId, isCanceled);
+
+        return challengeApplicationRepository.findAdminChallengeApplicationWithOptions(challengeId, isCanceled);
     }
 
     public ChallengeApplication findChallengeApplicationByIdOrThrow(Long applicationId) {
