@@ -46,6 +46,7 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
                         challenge.criticalNotice,
                         challenge.participationCount,
                         challenge.thumbnail,
+                        challenge.desktopThumbnail,
                         challenge.startDate,
                         challenge.endDate,
                         challenge.beginning,
