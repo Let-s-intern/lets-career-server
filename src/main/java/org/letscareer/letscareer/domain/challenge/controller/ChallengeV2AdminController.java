@@ -1,8 +1,11 @@
 package org.letscareer.letscareer.domain.challenge.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.application.dto.response.GetChallengeApplicationsResponseDto;
 import org.letscareer.letscareer.domain.challenge.service.ChallengeService;
 import org.letscareer.letscareer.global.common.annotation.ApiErrorCode;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
@@ -25,5 +28,17 @@ public class ChallengeV2AdminController {
                                                                      @PathVariable final Long toChallengeId) {
         challengeService.copyChallengeDashBoard(fromChallengeId, toChallengeId);
         return SuccessResponse.ok(null);
+    }
+
+    @Operation(summary = "챌린지 참여자 목록 조회", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true,
+            content = @Content(schema = @Schema(implementation = GetChallengeApplicationsResponseDto.class)))
+    })
+    @ApiErrorCode({SwaggerEnum.CHALLENGE_NOT_FOUND})
+    @GetMapping("/{challengeId}/applications")
+    public ResponseEntity<SuccessResponse<?>> getChallengeApplications(@PathVariable final Long challengeId,
+                                                                       @RequestParam(required = false) final Boolean isCanceled) {
+        final GetChallengeApplicationsResponseDto responseDto = challengeService.getApplications(challengeId, isCanceled);
+        return SuccessResponse.ok(responseDto);
     }
 }

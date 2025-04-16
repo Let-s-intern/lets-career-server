@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.application.vo;
 
 import lombok.Builder;
+import org.letscareer.letscareer.domain.price.type.ChallengePricePlanType;
 import org.letscareer.letscareer.domain.user.type.AccountType;
 import org.letscareer.letscareer.domain.user.type.UserGrade;
 
@@ -29,6 +30,7 @@ public record AdminChallengeApplicationVo(
         String inflowPath,
         LocalDateTime createDate,
         AccountType accountType,
-        String accountNum
+        String accountNum,
+        ChallengePricePlanType challengePricePlanType
 ) {
 }

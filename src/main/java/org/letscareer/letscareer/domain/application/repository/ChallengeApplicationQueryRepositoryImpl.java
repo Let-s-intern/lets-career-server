@@ -73,7 +73,8 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                         user.inflowPath,
                         challengeApplication.createDate,
                         user.accountType,
-                        user.accountNum
+                        user.accountNum,
+                        payment.challengePricePlanType
                 ))
                 .from(challengeApplication)
                 .leftJoin(challengeApplication.challenge, challenge)
@@ -85,6 +86,7 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                 .where(
                         eqChallengeId(challengeId)
                 )
+                .distinct()
                 .fetch();
     }
 
