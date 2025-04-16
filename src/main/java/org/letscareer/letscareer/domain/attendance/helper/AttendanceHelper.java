@@ -37,7 +37,7 @@ public class AttendanceHelper {
         return attendanceRepository.findAttendanceScoreVos(applicationId, challengeId);
     }
 
-    public List<MissionAttendanceVo> findMissionAttendanceVo(Long challengeId, Long missionId) {
+    public List<MissionAttendanceWithOptionsVo> findMissionAttendanceVo(Long challengeId, Long missionId) {
         return attendanceRepository.findMissionAttendanceVo(challengeId, missionId);
     }
 

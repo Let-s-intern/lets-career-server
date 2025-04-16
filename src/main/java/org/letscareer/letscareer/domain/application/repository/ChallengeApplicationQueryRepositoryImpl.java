@@ -1,5 +1,6 @@
 package org.letscareer.letscareer.domain.application.repository;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
@@ -10,6 +11,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
+import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationWithOptionsVo;
 import org.letscareer.letscareer.domain.application.vo.ReviewNotificationUserVo;
 import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
 import org.letscareer.letscareer.domain.user.entity.User;
@@ -17,12 +19,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.letscareer.letscareer.domain.application.entity.QChallengeApplication.challengeApplication;
 import static org.letscareer.letscareer.domain.attendance.entity.QAttendance.attendance;
 import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
+import static org.letscareer.letscareer.domain.challengeoption.entity.QChallengeOption.challengeOption;
+import static org.letscareer.letscareer.domain.challengeoption.entity.QChallengePriceOption.challengePriceOption;
 import static org.letscareer.letscareer.domain.coupon.entity.QCoupon.coupon;
 import static org.letscareer.letscareer.domain.payment.entity.QPayment.payment;
 import static org.letscareer.letscareer.domain.price.entity.QChallengePrice.challengePrice;
@@ -49,44 +53,78 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
     }
 
     @Override
-    public List<AdminChallengeApplicationVo> findAdminChallengeApplicationVos(Long challengeId, Boolean isCanceled) {
-        return queryFactory
-                .select(Projections.constructor(AdminChallengeApplicationVo.class,
-                        challengeApplication.id,
-                        payment.id,
-                        user.name,
-                        user.contactEmail,
-                        user.phoneNum,
-                        user.university,
-                        user.grade,
-                        user.major,
-                        coupon.name,
-                        coupon.discount,
-                        payment.finalPrice,
-                        payment.programPrice,
-                        payment.programDiscount,
-                        challengePrice.refund,
-                        payment.orderId,
-                        challengeApplication._super.isCanceled,
-                        user.wishJob,
-                        user.wishCompany,
-                        user.inflowPath,
-                        challengeApplication.createDate,
-                        user.accountType,
-                        user.accountNum
-                ))
+    public List<AdminChallengeApplicationWithOptionsVo> findAdminChallengeApplicationVo(Long challengeId, Boolean isCanceled) {
+        List<Tuple> tuples = queryFactory
+                .select(
+                        Projections.constructor(AdminChallengeApplicationVo.class,
+                                challengeApplication.id,
+                                payment.id,
+                                user.name,
+                                user.contactEmail,
+                                user.phoneNum,
+                                user.university,
+                                user.grade,
+                                user.major,
+                                coupon.name,
+                                coupon.discount,
+                                payment.finalPrice,
+                                payment.programPrice,
+                                payment.programDiscount,
+                                challengePrice.refund,
+                                payment.orderId,
+                                challengeApplication._super.isCanceled,
+                                user.wishJob,
+                                user.wishCompany,
+                                user.inflowPath,
+                                challengeApplication.createDate,
+                                user.accountType,
+                                user.accountNum,
+                                payment.challengePricePlanType
+                        ),
+                        challengeOption.code
+                )
                 .from(challengeApplication)
                 .leftJoin(challengeApplication.challenge, challenge)
-                .leftJoin(challengeApplication.challenge.priceList, challengePrice)
                 .leftJoin(challengeApplication.user, user)
                 .leftJoin(challengeApplication.payment, payment)
-                .leftJoin(challengeApplication.payment.coupon, coupon)
+                .leftJoin(payment.coupon, coupon)
+
+                // challengeId + pricePlanType 로 challengePrice 연결
+                .leftJoin(challengePrice)
+                .on(challengePrice.challenge.id.eq(challenge.id)
+                        .and(challengePrice.challengePricePlanType.eq(payment.challengePricePlanType)))
+
+                .leftJoin(challengePriceOption).on(challengePriceOption.challengePrice.id.eq(challengePrice.id))
+                .leftJoin(challengeOption).on(challengeOption.id.eq(challengePriceOption.challengeOption.id))
+
+                .where(eqChallengeId(challengeId))
                 .orderBy(challengeApplication.id.desc())
-                .where(
-                        eqChallengeId(challengeId)
-                )
                 .fetch();
+
+        // 신청자별 옵션 코드 리스트 구성
+        Map<AdminChallengeApplicationVo, List<String>> grouped = new LinkedHashMap<>();
+
+        for (Tuple tuple : tuples) {
+            AdminChallengeApplicationVo vo = tuple.get(0, AdminChallengeApplicationVo.class);
+            String optionCode = tuple.get(1, String.class);
+
+            grouped.computeIfAbsent(vo, k -> new ArrayList<>());
+
+            if (optionCode != null) {
+                grouped.get(vo).add(optionCode);
+            }
+        }
+
+        return grouped.entrySet().stream()
+                .map(entry -> new AdminChallengeApplicationWithOptionsVo(
+                        entry.getKey(),
+                        entry.getValue()
+                ))
+                .collect(Collectors.toList());
     }
+
+
+
 
     @Override
     public Page<UserChallengeApplicationVo> findUserChallengeApplicationVo(Long challengeId, Pageable pageable) {

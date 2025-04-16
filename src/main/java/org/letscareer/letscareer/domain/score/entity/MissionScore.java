@@ -15,8 +15,8 @@ import static org.letscareer.letscareer.global.common.utils.entity.EntityUpdateV
 @Getter
 @Entity
 public class MissionScore extends Score {
-    private Integer successScore = 0;
-    private Integer lateScore = 0;
+    private Integer successScore;
+    private Integer lateScore;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "mission_id")
