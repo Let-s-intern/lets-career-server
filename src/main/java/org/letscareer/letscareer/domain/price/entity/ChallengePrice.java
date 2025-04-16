@@ -23,6 +23,7 @@ import java.util.List;
 @Getter
 @Entity
 public class ChallengePrice extends Price {
+    private String title;
     private Integer charge = 0;
     private Integer refund = 0;
     @Convert(converter = ChallengeUserTypeConverter.class)
@@ -44,6 +45,7 @@ public class ChallengePrice extends Price {
                           Challenge challenge) {
         super(requestDto.priceInfo());
         this.challenge = challenge;
+        this.title = requestDto.title();
         this.charge = requestDto.charge();
         this.refund = requestDto.refund();
         this.challengePriceType = requestDto.challengePriceType();
