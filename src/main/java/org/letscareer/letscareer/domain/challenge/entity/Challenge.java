@@ -42,7 +42,6 @@ public class Challenge extends BaseTimeEntity {
     private Integer currentCount = 0;
     private Integer participationCount;
     private String thumbnail;
-    private String desktopThumbnail;
     private String chatLink;
     private String chatPassword;
     private String zoomLink;
@@ -89,7 +88,6 @@ public class Challenge extends BaseTimeEntity {
                 .criticalNotice(requestDto.criticalNotice())
                 .participationCount(requestDto.participationCount())
                 .thumbnail(requestDto.thumbnail())
-                .desktopThumbnail(requestDto.desktopThumbnail())
                 .startDate(requestDto.startDate())
                 .endDate(requestDto.endDate())
                 .beginning(requestDto.beginning())
@@ -109,7 +107,6 @@ public class Challenge extends BaseTimeEntity {
         this.criticalNotice = updateValue(this.criticalNotice, requestDto.criticalNotice());
         this.participationCount = updateValue(this.participationCount, requestDto.participationCount());
         this.thumbnail = updateValue(this.thumbnail, requestDto.thumbnail());
-        this.desktopThumbnail = updateValue(this.desktopThumbnail, requestDto.desktopThumbnail());
         this.startDate = updateValue(this.startDate, requestDto.startDate());
         this.endDate = updateValue(this.endDate, requestDto.endDate());
         this.beginning = updateValue(this.beginning, requestDto.beginning());

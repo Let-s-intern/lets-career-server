@@ -42,7 +42,6 @@ public class Live extends BaseTimeEntity {
     private Integer currentCount = 0;
     private Integer participationCount;
     private String thumbnail;
-    private String desktopThumbnail;
     private String mentorName;
     private String mentorImg;
     private String mentorCompany;
@@ -93,7 +92,6 @@ public class Live extends BaseTimeEntity {
                 .criticalNotice(requestDto.criticalNotice())
                 .participationCount(requestDto.participationCount())
                 .thumbnail(requestDto.thumbnail())
-                .desktopThumbnail(requestDto.desktopThumbnail())
                 .mentorName(requestDto.mentorName())
                 .mentorImg(requestDto.mentorImg())
                 .mentorCompany(requestDto.mentorCompany())
@@ -121,7 +119,6 @@ public class Live extends BaseTimeEntity {
         this.criticalNotice = updateValue(this.criticalNotice, requestDto.criticalNotice());
         this.participationCount = updateValue(this.participationCount, requestDto.participationCount());
         this.thumbnail = updateValue(this.thumbnail, requestDto.thumbnail());
-        this.desktopThumbnail = updateValue(this.desktopThumbnail, requestDto.desktopThumbnail());
         this.mentorName = updateValue(this.mentorName, requestDto.mentorName());
         this.mentorImg = updateValue(this.mentorImg, requestDto.mentorImg());
         this.mentorCompany = updateValue(this.mentorCompany, requestDto.mentorCompany());

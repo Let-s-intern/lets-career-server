@@ -42,7 +42,6 @@ public class LiveQueryRepositoryImpl implements LiveQueryRepository {
                         live.criticalNotice,
                         live.participationCount,
                         live.thumbnail,
-                        live.desktopThumbnail,
                         live.mentorName,
                         live.mentorImg,
                         live.mentorCompany,

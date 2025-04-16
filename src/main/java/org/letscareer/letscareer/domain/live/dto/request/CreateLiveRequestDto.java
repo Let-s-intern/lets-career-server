@@ -20,8 +20,6 @@ public record CreateLiveRequestDto(
         @NotNull
         String thumbnail,
         @NotNull
-        String desktopThumbnail,
-        @NotNull
         String mentorName,
         @NotNull
         String mentorImg,
