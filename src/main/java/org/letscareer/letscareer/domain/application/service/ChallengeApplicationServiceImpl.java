@@ -92,7 +92,7 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
     private void validateConditionForCreateApplication(Challenge challenge, Coupon coupon, Price price, User user, CreateApplicationRequestDto requestDto) {
         challengeApplicationHelper.validateExistingApplication(challenge.getId(), user.getId());
         challengeApplicationHelper.validateChallengeDuration(challenge);
-        validatePrice(price, coupon, Integer.parseInt(requestDto.paymentInfo().amount()));
+        // validatePrice(price, coupon, Integer.parseInt(requestDto.paymentInfo().amount()));
     }
 
     private void createEntityAndSave(Challenge challenge, Coupon coupon, Price price, User user, CreateApplicationRequestDto requestDto) {
