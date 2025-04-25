@@ -280,15 +280,16 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
         return null;
     }
 
-    private Map<Long, Integer> findChallengeOptionTotalPriceMap(List<Long> challengeIds) {
+    public Map<Long, Integer> findChallengeOptionTotalPriceMap(List<Long> challengeIds) {
         if (challengeIds.isEmpty()) {
-            return Map.of(); // 빈 리스트인 경우 빈 Map 반환
+            return Map.of(); // 챌린지 없으면 빈 Map 반환
         }
 
         List<Tuple> tuples = queryFactory
                 .select(
                         challengePrice.challenge.id,
-                        challengeOption.price.sum()
+                        challengeOption.price.sum(),
+                        challengeOption.discountPrice.sum()
                 )
                 .from(challengePrice)
                 .leftJoin(challengePriceOption).on(challengePriceOption.challengePrice.id.eq(challengePrice.id))
@@ -299,11 +300,15 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
 
         return tuples.stream()
                 .collect(Collectors.toMap(
-                        tuple -> tuple.get(0, Long.class),
+                        tuple -> tuple.get(0, Long.class), // challengeId
                         tuple -> {
-                            Integer sum = tuple.get(1, Integer.class);
-                            return sum != null ? sum : 0;
+                            Integer priceSum = tuple.get(1, Integer.class);
+                            Integer discountSum = tuple.get(2, Integer.class);
+                            // null safety 처리
+                            int total = (priceSum != null ? priceSum : 0) - (discountSum != null ? discountSum : 0);
+                            return Math.max(total, 0); // 혹시 마이너스가 될 경우 0으로
                         }
                 ));
     }
+
 }

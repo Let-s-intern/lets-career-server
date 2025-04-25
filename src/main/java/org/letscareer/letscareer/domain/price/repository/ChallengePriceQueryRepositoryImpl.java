@@ -1,5 +1,6 @@
 package org.letscareer.letscareer.domain.price.repository;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -74,13 +75,20 @@ public class ChallengePriceQueryRepositoryImpl implements ChallengePriceQueryRep
 
     @Override
     public Optional<PriceDetailVo> findPriceDetailVoByChallengeId(Long programId) {
-        Integer optionTotalPrice = jpaQueryFactory
-                .select(challengeOption.price.sum())
+        Tuple optionPriceTuple = jpaQueryFactory
+                .select(
+                        challengeOption.price.sum(),
+                        challengeOption.discountPrice.sum()
+                )
                 .from(challengePriceOption)
                 .leftJoin(challengeOption).on(challengePriceOption.challengeOption.id.eq(challengeOption.id))
                 .leftJoin(challengePrice).on(challengePriceOption.challengePrice.id.eq(challengePrice.id))
                 .where(challengePrice.challenge.id.eq(programId))
                 .fetchOne();
+
+        Integer priceSum = optionPriceTuple != null ? optionPriceTuple.get(0, Integer.class) : 0;
+        Integer discountSum = optionPriceTuple != null ? optionPriceTuple.get(1, Integer.class) : 0;
+        int optionTotalPrice = Math.max((priceSum != null ? priceSum : 0) - (discountSum != null ? discountSum : 0), 0); // 음수 방지
 
         return Optional.ofNullable(jpaQueryFactory
                 .select(Projections.constructor(PriceDetailVo.class,
@@ -88,13 +96,13 @@ public class ChallengePriceQueryRepositoryImpl implements ChallengePriceQueryRep
                         challengePrice.price,
                         challengePrice.discount,
                         challengePrice.refund,
-                        Expressions.constant(optionTotalPrice != null ? optionTotalPrice : 0) // 옵션 없으면 0!
+                        Expressions.constant(optionTotalPrice) // 계산된 값 넣기!
                 ))
                 .from(challengePrice)
                 .where(challengePrice.challenge.id.eq(programId))
                 .fetchFirst());
     }
-
+    
     @Override
     public Optional<Integer> findPriceRefundByChallengeId(Long challengeId) {
         return Optional.ofNullable(jpaQueryFactory
