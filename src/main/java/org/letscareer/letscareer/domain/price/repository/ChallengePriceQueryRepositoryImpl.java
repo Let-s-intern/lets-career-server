@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.price.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.challengeoption.vo.ChallengeOptionVo;
@@ -73,17 +74,24 @@ public class ChallengePriceQueryRepositoryImpl implements ChallengePriceQueryRep
 
     @Override
     public Optional<PriceDetailVo> findPriceDetailVoByChallengeId(Long programId) {
+        Integer optionTotalPrice = jpaQueryFactory
+                .select(challengeOption.price.sum())
+                .from(challengePriceOption)
+                .leftJoin(challengeOption).on(challengePriceOption.challengeOption.id.eq(challengeOption.id))
+                .leftJoin(challengePrice).on(challengePriceOption.challengePrice.id.eq(challengePrice.id))
+                .where(challengePrice.challenge.id.eq(programId))
+                .fetchOne();
+
         return Optional.ofNullable(jpaQueryFactory
                 .select(Projections.constructor(PriceDetailVo.class,
                         challengePrice.id,
                         challengePrice.price,
                         challengePrice.discount,
-                        challengePrice.refund
+                        challengePrice.refund,
+                        Expressions.constant(optionTotalPrice != null ? optionTotalPrice : 0) // 옵션 없으면 0!
                 ))
                 .from(challengePrice)
-                .where(
-                        challengePrice.challenge.id.eq(programId)
-                )
+                .where(challengePrice.challenge.id.eq(programId))
                 .fetchFirst());
     }
 

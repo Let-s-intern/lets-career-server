@@ -10,7 +10,8 @@ public record PriceDetailVo(
         Long id,
         Integer price,
         Integer discount,
-        Integer refund
+        Integer refund,
+        Integer option
 ) {
 
 }

@@ -21,6 +21,7 @@ public class ReportPriceQueryRepositoryImpl implements ReportPriceQueryRepositor
                         reportPrice.id,
                         reportPrice.price,
                         reportPrice.discountPrice,
+                        Expressions.constant(0),
                         Expressions.constant(0)))
                         .from(reportPrice)
                         .where(
