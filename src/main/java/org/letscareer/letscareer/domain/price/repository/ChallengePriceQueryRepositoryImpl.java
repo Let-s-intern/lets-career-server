@@ -78,7 +78,6 @@ public class ChallengePriceQueryRepositoryImpl implements ChallengePriceQueryRep
 
     @Override
     public Optional<PriceDetailVo> findPriceDetailVoByChallengeId(Long programId, Long applicationId) {
-        // 1. 먼저 applicationId → challengePricePlanType 조회
         ChallengePricePlanType planType = jpaQueryFactory
                 .select(payment.challengePricePlanType)
                 .from(challengeApplication)
@@ -86,15 +85,10 @@ public class ChallengePriceQueryRepositoryImpl implements ChallengePriceQueryRep
                 .where(challengeApplication.id.eq(applicationId))
                 .fetchOne();
 
-        if (planType == null) {
-            return Optional.empty(); // 결제 계획 없으면 옵션도 없음
-        }
-
-        // 2. 옵션 가격 정가 합계 + 할인 합계 둘 다 조회
         Tuple optionPriceTuple = jpaQueryFactory
                 .select(
-                        challengeOption.price.sum(),           // optionPrice (정가)
-                        challengeOption.discountPrice.sum()    // optionDiscount (할인)
+                        challengeOption.price.sum(),
+                        challengeOption.discountPrice.sum()
                 )
                 .from(challengePrice)
                 .leftJoin(challengePriceOption).on(challengePriceOption.challengePrice.id.eq(challengePrice.id))
@@ -107,8 +101,7 @@ public class ChallengePriceQueryRepositoryImpl implements ChallengePriceQueryRep
 
         Integer optionPriceSum = optionPriceTuple != null ? optionPriceTuple.get(0, Integer.class) : 0;
         Integer optionDiscountSum = optionPriceTuple != null ? optionPriceTuple.get(1, Integer.class) : 0;
-
-        // 3. PriceDetailVo 생성
+        
         return Optional.ofNullable(jpaQueryFactory
                 .select(Projections.constructor(PriceDetailVo.class,
                         challengePrice.id,
