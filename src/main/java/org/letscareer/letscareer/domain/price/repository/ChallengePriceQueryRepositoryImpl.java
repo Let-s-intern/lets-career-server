@@ -101,7 +101,7 @@ public class ChallengePriceQueryRepositoryImpl implements ChallengePriceQueryRep
 
         Integer optionPriceSum = optionPriceTuple != null ? optionPriceTuple.get(0, Integer.class) : 0;
         Integer optionDiscountSum = optionPriceTuple != null ? optionPriceTuple.get(1, Integer.class) : 0;
-        
+
         return Optional.ofNullable(jpaQueryFactory
                 .select(Projections.constructor(PriceDetailVo.class,
                         challengePrice.id,

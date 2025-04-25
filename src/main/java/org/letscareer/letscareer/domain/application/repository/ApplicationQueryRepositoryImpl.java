@@ -123,23 +123,20 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
                 .leftJoin(liveApplication.live, live)
                 .leftJoin(reportApplication).on(application.id.eq(reportApplication.id))
                 .leftJoin(reportApplication.report, report)
-                .where(
-                        eqUserEntityId(userId)
-                )
+                .where(eqUserEntityId(userId))
                 .orderBy(payment.createDate.desc())
                 .fetch();
 
-        List<Long> challengeProgramIds = rawResults.stream()
-                .filter(vo -> "CHALLENGE".equals(vo.programType()))
-                .map(PaymentProgramVo::programId)
+        List<Long> applicationIds = rawResults.stream()
+                .map(PaymentProgramVo::applicationId)
                 .distinct()
                 .toList();
 
-        Map<Long, Integer> optionPriceMap = findChallengeOptionTotalPriceMap(challengeProgramIds);
+        Map<Long, Integer> optionPriceMap = findChallengeOptionTotalPriceMapByApplicationIds(applicationIds);
 
         return rawResults.stream()
                 .map(vo -> {
-                    Integer optionPrice = optionPriceMap.getOrDefault(vo.programId(), 0);
+                    Integer optionPrice = optionPriceMap.getOrDefault(vo.applicationId(), 0);
                     return new PaymentProgramVo(
                             vo.paymentId(),
                             vo.applicationId(),
@@ -280,35 +277,37 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
         return null;
     }
 
-    public Map<Long, Integer> findChallengeOptionTotalPriceMap(List<Long> challengeIds) {
-        if (challengeIds.isEmpty()) {
-            return Map.of(); // 챌린지 없으면 빈 Map 반환
+    private Map<Long, Integer> findChallengeOptionTotalPriceMapByApplicationIds(List<Long> applicationIds) {
+        if (applicationIds.isEmpty()) {
+            return Map.of();
         }
 
         List<Tuple> tuples = queryFactory
                 .select(
-                        challengePrice.challenge.id,
-                        challengeOption.price.sum(),
-                        challengeOption.discountPrice.sum()
+                        challengeApplication.id,
+                        challengeOption.price.sum()
                 )
-                .from(challengePrice)
+                .from(challengeApplication)
+                .leftJoin(challengeApplication.payment, payment)
+                .leftJoin(challengePrice)
+                .on(challengePrice.challenge.id.eq(challengeApplication.challenge.id)
+                        .and(challengePrice.challengePricePlanType.eq(payment.challengePricePlanType)))
                 .leftJoin(challengePriceOption).on(challengePriceOption.challengePrice.id.eq(challengePrice.id))
                 .leftJoin(challengeOption).on(challengeOption.id.eq(challengePriceOption.challengeOption.id))
-                .where(challengePrice.challenge.id.in(challengeIds))
-                .groupBy(challengePrice.challenge.id)
+                .where(challengeApplication.id.in(applicationIds))
+                .groupBy(challengeApplication.id)
                 .fetch();
 
         return tuples.stream()
                 .collect(Collectors.toMap(
-                        tuple -> tuple.get(0, Long.class), // challengeId
+                        tuple -> tuple.get(0, Long.class),
                         tuple -> {
-                            Integer priceSum = tuple.get(1, Integer.class);
-                            Integer discountSum = tuple.get(2, Integer.class);
-                            // null safety 처리
-                            int total = (priceSum != null ? priceSum : 0) - (discountSum != null ? discountSum : 0);
-                            return Math.max(total, 0); // 혹시 마이너스가 될 경우 0으로
+                            Integer sum = tuple.get(1, Integer.class);
+                            return sum != null ? sum : 0;
                         }
                 ));
     }
+
+
 
 }
