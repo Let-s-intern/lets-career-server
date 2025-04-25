@@ -8,6 +8,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.challengeoption.vo.ChallengeOptionVo;
 import org.letscareer.letscareer.domain.price.entity.ChallengePrice;
+import org.letscareer.letscareer.domain.price.type.ChallengePricePlanType;
 import org.letscareer.letscareer.domain.price.vo.ChallengePriceDetailVo;
 import org.letscareer.letscareer.domain.price.vo.PriceDetailVo;
 
@@ -17,8 +18,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static org.letscareer.letscareer.domain.application.entity.QChallengeApplication.challengeApplication;
 import static org.letscareer.letscareer.domain.challengeoption.entity.QChallengeOption.challengeOption;
 import static org.letscareer.letscareer.domain.challengeoption.entity.QChallengePriceOption.challengePriceOption;
+import static org.letscareer.letscareer.domain.payment.entity.QPayment.payment;
 import static org.letscareer.letscareer.domain.price.entity.QChallengePrice.challengePrice;
 import static org.letscareer.letscareer.domain.price.entity.QPrice.price1;
 
@@ -74,35 +77,55 @@ public class ChallengePriceQueryRepositoryImpl implements ChallengePriceQueryRep
     }
 
     @Override
-    public Optional<PriceDetailVo> findPriceDetailVoByChallengeId(Long programId) {
-        Tuple optionPriceTuple = jpaQueryFactory
-                .select(
-                        challengeOption.price.sum(),
-                        challengeOption.discountPrice.sum()
-                )
-                .from(challengePriceOption)
-                .leftJoin(challengeOption).on(challengePriceOption.challengeOption.id.eq(challengeOption.id))
-                .leftJoin(challengePrice).on(challengePriceOption.challengePrice.id.eq(challengePrice.id))
-                .where(challengePrice.challenge.id.eq(programId))
+    public Optional<PriceDetailVo> findPriceDetailVoByChallengeId(Long programId, Long applicationId) {
+        // 1. 먼저 applicationId → challengePricePlanType 조회
+        ChallengePricePlanType planType = jpaQueryFactory
+                .select(payment.challengePricePlanType)
+                .from(challengeApplication)
+                .leftJoin(challengeApplication.payment, payment)
+                .where(challengeApplication.id.eq(applicationId))
                 .fetchOne();
 
-        Integer priceSum = optionPriceTuple != null ? optionPriceTuple.get(0, Integer.class) : 0;
-        Integer discountSum = optionPriceTuple != null ? optionPriceTuple.get(1, Integer.class) : 0;
-        int optionTotalPrice = Math.max((priceSum != null ? priceSum : 0) - (discountSum != null ? discountSum : 0), 0); // 음수 방지
+        if (planType == null) {
+            return Optional.empty(); // 결제 계획 없으면 옵션도 없음
+        }
 
+        // 2. 옵션 가격 정가 합계 + 할인 합계 둘 다 조회
+        Tuple optionPriceTuple = jpaQueryFactory
+                .select(
+                        challengeOption.price.sum(),           // optionPrice (정가)
+                        challengeOption.discountPrice.sum()    // optionDiscount (할인)
+                )
+                .from(challengePrice)
+                .leftJoin(challengePriceOption).on(challengePriceOption.challengePrice.id.eq(challengePrice.id))
+                .leftJoin(challengeOption).on(challengeOption.id.eq(challengePriceOption.challengeOption.id))
+                .where(
+                        challengePrice.challenge.id.eq(programId),
+                        challengePrice.challengePricePlanType.eq(planType)
+                )
+                .fetchOne();
+
+        Integer optionPriceSum = optionPriceTuple != null ? optionPriceTuple.get(0, Integer.class) : 0;
+        Integer optionDiscountSum = optionPriceTuple != null ? optionPriceTuple.get(1, Integer.class) : 0;
+
+        // 3. PriceDetailVo 생성
         return Optional.ofNullable(jpaQueryFactory
                 .select(Projections.constructor(PriceDetailVo.class,
                         challengePrice.id,
                         challengePrice.price,
                         challengePrice.discount,
                         challengePrice.refund,
-                        Expressions.constant(optionTotalPrice) // 계산된 값 넣기!
+                        Expressions.constant(optionPriceSum != null ? optionPriceSum : 0),            // option (정가 총합)
+                        Expressions.constant(optionDiscountSum != null ? optionDiscountSum : 0)       // optionDiscount (할인 총합)
                 ))
                 .from(challengePrice)
-                .where(challengePrice.challenge.id.eq(programId))
+                .where(
+                        challengePrice.challenge.id.eq(programId),
+                        challengePrice.challengePricePlanType.eq(planType)
+                )
                 .fetchFirst());
     }
-    
+
     @Override
     public Optional<Integer> findPriceRefundByChallengeId(Long challengeId) {
         return Optional.ofNullable(jpaQueryFactory

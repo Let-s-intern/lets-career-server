@@ -43,8 +43,8 @@ public class ChallengePriceHelper {
         challengePriceRepository.deleteAllByChallengeId(challengeId);
     }
 
-    public PriceDetailVo findPriceDetailVoByChallengeId(Long programId) {
-        return challengePriceRepository.findPriceDetailVoByChallengeId(programId)
+    public PriceDetailVo findPriceDetailVoByChallengeId(Long programId, Long applicationId) {
+        return challengePriceRepository.findPriceDetailVoByChallengeId(programId, applicationId)
                 .orElseThrow(() -> new EntityNotFoundException(CHALLENGE_PRICE_NOT_FOUND));
     }
 

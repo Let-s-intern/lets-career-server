@@ -11,7 +11,8 @@ public record PriceDetailVo(
         Integer price,
         Integer discount,
         Integer refund,
-        Integer option
+        Integer option,
+        Integer optionDiscount
 ) {
 
 }

@@ -76,7 +76,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     private PriceDetailVo findPriceInfoForProgramType(ProgramSimpleVo programSimpleVo) {
         switch(programSimpleVo.programType()) {
-            case CHALLENGE: return challengePriceHelper.findPriceDetailVoByChallengeId(programSimpleVo.id());
+            case CHALLENGE: return challengePriceHelper.findPriceDetailVoByChallengeId(programSimpleVo.id(), programSimpleVo.applicationId());
             case LIVE: return livePriceHelper.findLivePriceDetailVoByLiveId(programSimpleVo.id());
             case REPORT: return reportPriceHelper.findReportPriceDetailVoByReportId(programSimpleVo.id());
         }
