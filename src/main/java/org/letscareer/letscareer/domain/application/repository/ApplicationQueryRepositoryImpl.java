@@ -1,5 +1,6 @@
 package org.letscareer.letscareer.domain.application.repository;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.*;
@@ -15,7 +16,9 @@ import org.letscareer.letscareer.domain.user.dto.response.UserApplicationInfo;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static org.letscareer.letscareer.domain.application.entity.QApplication.application;
 import static org.letscareer.letscareer.domain.application.entity.QChallengeApplication.challengeApplication;
@@ -126,9 +129,17 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
                 .orderBy(payment.createDate.desc())
                 .fetch();
 
+        List<Long> challengeProgramIds = rawResults.stream()
+                .filter(vo -> "CHALLENGE".equals(vo.programType()))
+                .map(PaymentProgramVo::programId)
+                .distinct()
+                .toList();
+
+        Map<Long, Integer> optionPriceMap = findChallengeOptionTotalPriceMap(challengeProgramIds);
+
         return rawResults.stream()
                 .map(vo -> {
-                    Integer optionPriceSum = findChallengeOptionTotalPrice(vo.programId());
+                    Integer optionPrice = optionPriceMap.getOrDefault(vo.programId(), 0);
                     return new PaymentProgramVo(
                             vo.paymentId(),
                             vo.applicationId(),
@@ -139,7 +150,7 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
                             vo.reportType(),
                             vo.price(),
                             vo.finalPrice(),
-                            optionPriceSum != null ? optionPriceSum : 0,
+                            optionPrice,
                             vo.paymentKey(),
                             vo.isCanceled(),
                             vo.isRefunded(),
@@ -269,13 +280,30 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
         return null;
     }
 
-    private Integer findChallengeOptionTotalPrice(Long challengeId) {
-        return queryFactory
-                .select(challengeOption.price.sum())
+    private Map<Long, Integer> findChallengeOptionTotalPriceMap(List<Long> challengeIds) {
+        if (challengeIds.isEmpty()) {
+            return Map.of(); // 빈 리스트인 경우 빈 Map 반환
+        }
+
+        List<Tuple> tuples = queryFactory
+                .select(
+                        challengePrice.challenge.id,
+                        challengeOption.price.sum()
+                )
                 .from(challengePrice)
                 .leftJoin(challengePriceOption).on(challengePriceOption.challengePrice.id.eq(challengePrice.id))
                 .leftJoin(challengeOption).on(challengeOption.id.eq(challengePriceOption.challengeOption.id))
-                .where(challengePrice.challenge.id.eq(challengeId))
-                .fetchOne();
+                .where(challengePrice.challenge.id.in(challengeIds))
+                .groupBy(challengePrice.challenge.id)
+                .fetch();
+
+        return tuples.stream()
+                .collect(Collectors.toMap(
+                        tuple -> tuple.get(0, Long.class),
+                        tuple -> {
+                            Integer sum = tuple.get(1, Integer.class);
+                            return sum != null ? sum : 0;
+                        }
+                ));
     }
 }
