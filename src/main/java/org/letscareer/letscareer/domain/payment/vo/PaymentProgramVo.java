@@ -14,6 +14,7 @@ public record PaymentProgramVo(
         ReportType reportType,
         Integer price,
         Integer finalPrice,
+        Integer optionPrice,
         String paymentKey,
         Boolean isCanceled,
         Boolean isRefunded,

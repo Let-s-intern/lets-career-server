@@ -1,5 +1,6 @@
 package org.letscareer.letscareer.domain.application.repository;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.*;
@@ -15,7 +16,9 @@ import org.letscareer.letscareer.domain.user.dto.response.UserApplicationInfo;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static org.letscareer.letscareer.domain.application.entity.QApplication.application;
 import static org.letscareer.letscareer.domain.application.entity.QChallengeApplication.challengeApplication;
@@ -23,8 +26,11 @@ import static org.letscareer.letscareer.domain.application.entity.QLiveApplicati
 import static org.letscareer.letscareer.domain.application.entity.QVWApplication.vWApplication;
 import static org.letscareer.letscareer.domain.application.entity.report.QReportApplication.reportApplication;
 import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
+import static org.letscareer.letscareer.domain.challengeoption.entity.QChallengeOption.challengeOption;
+import static org.letscareer.letscareer.domain.challengeoption.entity.QChallengePriceOption.challengePriceOption;
 import static org.letscareer.letscareer.domain.live.entity.QLive.live;
 import static org.letscareer.letscareer.domain.payment.entity.QPayment.payment;
+import static org.letscareer.letscareer.domain.price.entity.QChallengePrice.challengePrice;
 import static org.letscareer.letscareer.domain.report.entity.QReport.report;
 import static org.letscareer.letscareer.domain.user.entity.QUser.user;
 
@@ -91,7 +97,7 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
 
     @Override
     public List<PaymentProgramVo> findPaymentProgramVos(Long userId) {
-        return queryFactory
+        List<PaymentProgramVo> rawResults = queryFactory
                 .select(Projections.constructor(PaymentProgramVo.class,
                         payment.id,
                         application.id,
@@ -102,6 +108,7 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
                         reportTypeExpression(),
                         payment.programPrice,
                         payment.finalPrice,
+                        Expressions.constant(0),
                         payment.paymentKey,
                         application.isCanceled,
                         payment.isRefunded,
@@ -116,11 +123,38 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
                 .leftJoin(liveApplication.live, live)
                 .leftJoin(reportApplication).on(application.id.eq(reportApplication.id))
                 .leftJoin(reportApplication.report, report)
-                .where(
-                        eqUserEntityId(userId)
-                )
+                .where(eqUserEntityId(userId))
                 .orderBy(payment.createDate.desc())
                 .fetch();
+
+        List<Long> applicationIds = rawResults.stream()
+                .map(PaymentProgramVo::applicationId)
+                .distinct()
+                .toList();
+
+        Map<Long, Integer> optionPriceMap = findChallengeOptionTotalPriceMapByApplicationIds(applicationIds);
+
+        return rawResults.stream()
+                .map(vo -> {
+                    Integer optionPrice = optionPriceMap.getOrDefault(vo.applicationId(), 0);
+                    return new PaymentProgramVo(
+                            vo.paymentId(),
+                            vo.applicationId(),
+                            vo.programId(),
+                            vo.programType(),
+                            vo.title(),
+                            vo.thumbnail(),
+                            vo.reportType(),
+                            vo.price(),
+                            vo.finalPrice(),
+                            optionPrice,
+                            vo.paymentKey(),
+                            vo.isCanceled(),
+                            vo.isRefunded(),
+                            vo.createDate()
+                    );
+                })
+                .toList();
     }
 
     @Override
@@ -242,4 +276,38 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
         }
         return null;
     }
+
+    private Map<Long, Integer> findChallengeOptionTotalPriceMapByApplicationIds(List<Long> applicationIds) {
+        if (applicationIds.isEmpty()) {
+            return Map.of();
+        }
+
+        List<Tuple> tuples = queryFactory
+                .select(
+                        challengeApplication.id,
+                        challengeOption.price.sum()
+                )
+                .from(challengeApplication)
+                .leftJoin(challengeApplication.payment, payment)
+                .leftJoin(challengePrice)
+                .on(challengePrice.challenge.id.eq(challengeApplication.challenge.id)
+                        .and(challengePrice.challengePricePlanType.eq(payment.challengePricePlanType)))
+                .leftJoin(challengePriceOption).on(challengePriceOption.challengePrice.id.eq(challengePrice.id))
+                .leftJoin(challengeOption).on(challengeOption.id.eq(challengePriceOption.challengeOption.id))
+                .where(challengeApplication.id.in(applicationIds))
+                .groupBy(challengeApplication.id)
+                .fetch();
+
+        return tuples.stream()
+                .collect(Collectors.toMap(
+                        tuple -> tuple.get(0, Long.class),
+                        tuple -> {
+                            Integer sum = tuple.get(1, Integer.class);
+                            return sum != null ? sum : 0;
+                        }
+                ));
+    }
+
+
+
 }
