@@ -23,8 +23,11 @@ import static org.letscareer.letscareer.domain.application.entity.QLiveApplicati
 import static org.letscareer.letscareer.domain.application.entity.QVWApplication.vWApplication;
 import static org.letscareer.letscareer.domain.application.entity.report.QReportApplication.reportApplication;
 import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
+import static org.letscareer.letscareer.domain.challengeoption.entity.QChallengeOption.challengeOption;
+import static org.letscareer.letscareer.domain.challengeoption.entity.QChallengePriceOption.challengePriceOption;
 import static org.letscareer.letscareer.domain.live.entity.QLive.live;
 import static org.letscareer.letscareer.domain.payment.entity.QPayment.payment;
+import static org.letscareer.letscareer.domain.price.entity.QChallengePrice.challengePrice;
 import static org.letscareer.letscareer.domain.report.entity.QReport.report;
 import static org.letscareer.letscareer.domain.user.entity.QUser.user;
 
@@ -91,7 +94,7 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
 
     @Override
     public List<PaymentProgramVo> findPaymentProgramVos(Long userId) {
-        return queryFactory
+        List<PaymentProgramVo> rawResults = queryFactory
                 .select(Projections.constructor(PaymentProgramVo.class,
                         payment.id,
                         application.id,
@@ -102,6 +105,7 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
                         reportTypeExpression(),
                         payment.programPrice,
                         payment.finalPrice,
+                        Expressions.constant(0),
                         payment.paymentKey,
                         application.isCanceled,
                         payment.isRefunded,
@@ -121,6 +125,28 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
                 )
                 .orderBy(payment.createDate.desc())
                 .fetch();
+
+        return rawResults.stream()
+                .map(vo -> {
+                    Integer optionPriceSum = findChallengeOptionTotalPrice(vo.programId());
+                    return new PaymentProgramVo(
+                            vo.paymentId(),
+                            vo.applicationId(),
+                            vo.programId(),
+                            vo.programType(),
+                            vo.title(),
+                            vo.thumbnail(),
+                            vo.reportType(),
+                            vo.price(),
+                            vo.finalPrice(),
+                            optionPriceSum != null ? optionPriceSum : 0,
+                            vo.paymentKey(),
+                            vo.isCanceled(),
+                            vo.isRefunded(),
+                            vo.createDate()
+                    );
+                })
+                .toList();
     }
 
     @Override
@@ -241,5 +267,15 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
             }
         }
         return null;
+    }
+
+    private Integer findChallengeOptionTotalPrice(Long challengeId) {
+        return queryFactory
+                .select(challengeOption.price.sum())
+                .from(challengePrice)
+                .leftJoin(challengePriceOption).on(challengePriceOption.challengePrice.id.eq(challengePrice.id))
+                .leftJoin(challengeOption).on(challengeOption.id.eq(challengePriceOption.challengeOption.id))
+                .where(challengePrice.challenge.id.eq(challengeId))
+                .fetchOne();
     }
 }

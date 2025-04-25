@@ -18,6 +18,7 @@ public record GetPaymentProgramResponseDto(
         String thumbnail,
         Integer price,
         Integer paybackPrice,
+        Integer optionPrice,
         Boolean isCanceled,
         Boolean isRefunded,
         LocalDateTime createDate
@@ -32,6 +33,7 @@ public record GetPaymentProgramResponseDto(
                 .thumbnail(vo.thumbnail())
                 .price(vo.price())
                 .paybackPrice(paybackPrice)
+                .optionPrice(vo.optionPrice())
                 .isCanceled(vo.isCanceled())
                 .isRefunded(vo.isRefunded())
                 .createDate(vo.createDate())
