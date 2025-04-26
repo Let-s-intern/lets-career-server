@@ -52,6 +52,7 @@ public record GetLiveDetailResponseDto(
                 .criticalNotice(liveInfo.criticalNotice())
                 .participationCount(liveInfo.participationCount())
                 .thumbnail(liveInfo.thumbnail())
+                .desktopThumbnail(liveInfo.desktopThumbnail())
                 .mentorName(liveInfo.mentorName())
                 .mentorImg(liveInfo.mentorImg())
                 .mentorCompany(liveInfo.mentorCompany())

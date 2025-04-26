@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface ChallengePriceQueryRepository {
     List<ChallengePriceDetailVo> findChallengePriceDetailVos(Long challengeId);
 
-    Optional<PriceDetailVo> findPriceDetailVoByChallengeId(Long programId);
+    Optional<PriceDetailVo> findPriceDetailVoByChallengeId(Long programId, Long applicationId);
 
     Optional<Integer> findPriceRefundByChallengeId(Long challengeId);
 
