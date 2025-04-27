@@ -38,7 +38,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.letscareer.letscareer.domain.price.error.PriceErrorCode.INVALID_PRICE;
 
@@ -81,8 +80,9 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
         Coupon coupon = payment.getCoupon();
         Challenge challenge = application.getChallenge();
         RefundType refundType = RefundType.ofChallenge(challenge);
-        Integer finalPrice = payment.getFinalPrice();
-        Integer cancelAmount = priceHelper.calculateCancelAmount(payment, coupon, refundType);
+        ChallengePrice challengePrice = challengePriceHelper.findChallengePriceByChallengeIdAndChallengePricePlanType(challenge.getId(), payment.getChallengePricePlanType());
+        Integer finalPrice =  payment.getFinalPrice() - calculateTotalPriceOfChallengeOptions(challengePrice);
+        Integer cancelAmount = priceHelper.calculateCancelAmount(finalPrice, coupon, refundType);
         tossProvider.cancelPayments(refundType, payment.getPaymentKey(), cancelAmount, CancelReason.CUSTOMER.getDesc());
         sendCreditRefundKakaoMessage(challenge, user, payment, refundType, finalPrice, cancelAmount);
         application.updateIsCanceled(true);
@@ -92,7 +92,7 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
     private void validateConditionForCreateApplication(Challenge challenge, Coupon coupon, Price price, User user, CreateApplicationRequestDto requestDto) {
         challengeApplicationHelper.validateExistingApplication(challenge.getId(), user.getId());
         challengeApplicationHelper.validateChallengeDuration(challenge);
-        validatePrice(price, coupon, Integer.parseInt(requestDto.paymentInfo().amount()));
+        // validatePrice(price, coupon, Integer.parseInt(requestDto.paymentInfo().amount()));
     }
 
     private void createEntityAndSave(Challenge challenge, Coupon coupon, Price price, User user, CreateApplicationRequestDto requestDto) {
@@ -118,18 +118,30 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
                 .map(challengePriceOption -> challengePriceOption.getChallengeOption()).toList();
 
         int finalPrice = price.getPrice() - price.getDiscount();
-        if (coupon != null) {
-            if (coupon.getDiscount() == -1) return 0;
-            finalPrice -= coupon.getDiscount();
-        }
+
         if(challengePrice.getChallengePriceType().equals(ChallengePriceType.REFUND)) {
             finalPrice += challengePrice.getRefund();
         }
+
+        if (coupon != null) {
+            if (coupon.getDiscount() == -1) finalPrice = 0;
+            else finalPrice -= coupon.getDiscount();
+        }
+
         for(ChallengeOption challengeOption : challengeOptionList) {
             finalPrice += (challengeOption.getPrice() - challengeOption.getDiscountPrice());
         }
 
         return finalPrice;
+    }
+
+    private int calculateTotalPriceOfChallengeOptions(ChallengePrice challengePrice) {
+        int totalPrice = 0;
+        List<ChallengeOption> challengeOptionList = challengePrice.getChallengePriceOptionList().stream().map(ChallengePriceOption::getChallengeOption).toList();
+        for(ChallengeOption challengeOption : challengeOptionList) {
+            totalPrice += (challengeOption.getPrice() - challengeOption.getDiscountPrice());
+        }
+        return totalPrice;
     }
 
     private void validateConditionForCancelApplication(ChallengeApplication application, User user) {

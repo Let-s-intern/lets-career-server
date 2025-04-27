@@ -70,7 +70,7 @@ public class LiveApplicationServiceImpl implements ApplicationService {
         Live live = application.getLive();
         RefundType refundType = RefundType.ofLive(live);
         Integer finalPrice = payment.getFinalPrice();
-        Integer cancelAmount = priceHelper.calculateCancelAmount(payment, coupon, refundType);
+        Integer cancelAmount = priceHelper.calculateCancelAmount(finalPrice, coupon, refundType);
         tossProvider.cancelPayments(refundType, payment.getPaymentKey(), cancelAmount, CancelReason.CUSTOMER.getDesc());
         sendCreditRefundKakaoMessage(live, user, payment, refundType, finalPrice, cancelAmount);
         application.updateIsCanceled(true);

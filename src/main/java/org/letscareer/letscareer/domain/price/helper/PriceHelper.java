@@ -25,12 +25,11 @@ public class PriceHelper {
                 .orElseThrow(() -> new EntityNotFoundException(PRICE_NOT_FOUND));
     }
 
-    public int calculateCancelAmount(Payment payment, Coupon coupon, RefundType refundType) {
-        if (refundType.equals(RefundType.ZERO))
-            throw new InvalidValueException(APPLICATION_CANNOT_CANCELED);
+    public int calculateCancelAmount(int finalPrice, Coupon coupon, RefundType refundType) {
+        if (refundType.equals(RefundType.ZERO)) throw new InvalidValueException(APPLICATION_CANNOT_CANCELED);
         int couponPrice = Objects.isNull(coupon) ? 0 : coupon.getDiscount();
         couponPrice = couponPrice == -1 ? 0 : couponPrice;
-        int regularPrice = payment.getFinalPrice() + couponPrice;
+        int regularPrice = finalPrice + couponPrice;
         int refundPrice = roundOffNearestTen(((int) (regularPrice * refundType.getPercent())) - couponPrice);
         return Math.max(refundPrice, 0);
     }
