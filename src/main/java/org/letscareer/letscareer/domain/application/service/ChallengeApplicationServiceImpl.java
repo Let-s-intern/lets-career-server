@@ -118,13 +118,19 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
                 .map(challengePriceOption -> challengePriceOption.getChallengeOption()).toList();
 
         int finalPrice = price.getPrice() - price.getDiscount();
-        if (coupon != null) {
-            if (coupon.getDiscount() == -1) return 0;
-            finalPrice -= coupon.getDiscount();
-        }
+
         if(challengePrice.getChallengePriceType().equals(ChallengePriceType.REFUND)) {
             finalPrice += challengePrice.getRefund();
         }
+
+        if (coupon != null) {
+            if (coupon.getDiscount() == -1) {
+                finalPrice = 0;
+            } else {
+                finalPrice -= coupon.getDiscount();
+            }
+        }
+
         for(ChallengeOption challengeOption : challengeOptionList) {
             finalPrice += (challengeOption.getPrice() - challengeOption.getDiscountPrice());
         }
