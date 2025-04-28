@@ -81,8 +81,9 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
         Challenge challenge = application.getChallenge();
         RefundType refundType = RefundType.ofChallenge(challenge);
         ChallengePrice challengePrice = challengePriceHelper.findChallengePriceByChallengeIdAndChallengePricePlanType(challenge.getId(), payment.getChallengePricePlanType());
-        Integer finalPrice =  payment.getFinalPrice() - calculateTotalPriceOfChallengeOptions(challengePrice);
-        Integer cancelAmount = priceHelper.calculateCancelAmount(finalPrice, coupon, refundType);
+        int finalPrice =  payment.getFinalPrice();
+        int optionPrice = calculateTotalPriceOfChallengeOptions(challengePrice);
+        int cancelAmount = refundType.equals(RefundType.ALL) ? finalPrice : priceHelper.calculateCancelAmount(finalPrice - optionPrice, coupon, refundType);
         tossProvider.cancelPayments(refundType, payment.getPaymentKey(), cancelAmount, CancelReason.CUSTOMER.getDesc());
         sendCreditRefundKakaoMessage(challenge, user, payment, refundType, finalPrice, cancelAmount);
         application.updateIsCanceled(true);
@@ -92,7 +93,7 @@ public class ChallengeApplicationServiceImpl implements ApplicationService {
     private void validateConditionForCreateApplication(Challenge challenge, Coupon coupon, Price price, User user, CreateApplicationRequestDto requestDto) {
         challengeApplicationHelper.validateExistingApplication(challenge.getId(), user.getId());
         challengeApplicationHelper.validateChallengeDuration(challenge);
-        // validatePrice(price, coupon, Integer.parseInt(requestDto.paymentInfo().amount()));
+        validatePrice(price, coupon, Integer.parseInt(requestDto.paymentInfo().amount()));
     }
 
     private void createEntityAndSave(Challenge challenge, Coupon coupon, Price price, User user, CreateApplicationRequestDto requestDto) {
