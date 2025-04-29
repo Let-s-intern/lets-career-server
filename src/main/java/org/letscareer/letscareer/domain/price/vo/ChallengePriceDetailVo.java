@@ -11,6 +11,7 @@ import java.util.List;
 public class ChallengePriceDetailVo {
     private Long priceId;
     private String title;
+    private String description;
     private Integer price;
     private Integer refund;
     private Integer discount;
@@ -23,13 +24,14 @@ public class ChallengePriceDetailVo {
 
     private List<ChallengeOptionVo> challengeOptionList;
 
-    public ChallengePriceDetailVo(Long priceId, String title, Integer price, Integer refund, Integer discount,
+    public ChallengePriceDetailVo(Long priceId, String title, String description, Integer price, Integer refund, Integer discount,
                                   String accountNumber, LocalDateTime deadline,
                                   AccountType accountType, ChallengePriceType challengePriceType,
                                   ChallengePricePlanType challengePricePlanType,
                                   ChallengeParticipationType challengeParticipationType) {
         this.priceId = priceId;
         this.title = title;
+        this.description = description;
         this.price = price;
         this.refund = refund;
         this.discount = discount;

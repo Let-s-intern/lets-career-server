@@ -9,6 +9,7 @@ import java.util.List;
 public record CreateChallengePriceRequestDto(
         CreatePriceRequestDto priceInfo,
         String title,
+        String description,
         Integer charge,
         Integer refund,
         ChallengePriceType challengePriceType,
