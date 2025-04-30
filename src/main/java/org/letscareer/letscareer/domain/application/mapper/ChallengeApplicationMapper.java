@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.application.mapper;
 
 import org.letscareer.letscareer.domain.application.dto.response.GetChallengeApplicationsResponseDto;
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
+import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationWithOptionsVo;
 import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
 import org.letscareer.letscareer.domain.challenge.dto.response.*;
 import org.letscareer.letscareer.domain.mission.dto.response.MissionApplicationScoreResponseDto;
@@ -13,7 +14,7 @@ import java.util.List;
 @Component
 public class ChallengeApplicationMapper {
 
-    public GetChallengeApplicationsResponseDto toGetChallengeApplicationsResponseDto(List<AdminChallengeApplicationVo> vos) {
+    public GetChallengeApplicationsResponseDto toGetChallengeApplicationsResponseDto(List<AdminChallengeApplicationWithOptionsVo> vos) {
         return GetChallengeApplicationsResponseDto.of(vos);
     }
 

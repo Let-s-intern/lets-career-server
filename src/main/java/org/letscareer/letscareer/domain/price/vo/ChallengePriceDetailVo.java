@@ -1,25 +1,50 @@
 package org.letscareer.letscareer.domain.price.vo;
 
-import lombok.Builder;
-import org.letscareer.letscareer.domain.price.dto.request.CreatePriceRequestDto;
-import org.letscareer.letscareer.domain.price.type.AccountType;
-import org.letscareer.letscareer.domain.price.type.ChallengeParticipationType;
-import org.letscareer.letscareer.domain.price.type.ChallengePriceType;
-import org.letscareer.letscareer.domain.price.type.ChallengeUserType;
+import lombok.Getter;
+import org.letscareer.letscareer.domain.challengeoption.vo.ChallengeOptionVo;
+import org.letscareer.letscareer.domain.price.type.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-@Builder
-public record ChallengePriceDetailVo(
-        Long priceId,
-        Integer price,
-        Integer refund,
-        Integer discount,
-        String accountNumber,
-        LocalDateTime deadline,
-        AccountType accountType,
-        ChallengePriceType challengePriceType,
-        ChallengeUserType challengeUserType,
-        ChallengeParticipationType challengeParticipationType
-) {
+@Getter
+public class ChallengePriceDetailVo {
+    private Long priceId;
+    private String title;
+    private String description;
+    private Integer price;
+    private Integer refund;
+    private Integer discount;
+    private String accountNumber;
+    private LocalDateTime deadline;
+    private AccountType accountType;
+    private ChallengePriceType challengePriceType;
+    private ChallengePricePlanType challengePricePlanType;
+    private ChallengeParticipationType challengeParticipationType;
+
+    private List<ChallengeOptionVo> challengeOptionList;
+
+    public ChallengePriceDetailVo(Long priceId, String title, String description, Integer price, Integer refund, Integer discount,
+                                  String accountNumber, LocalDateTime deadline,
+                                  AccountType accountType, ChallengePriceType challengePriceType,
+                                  ChallengePricePlanType challengePricePlanType,
+                                  ChallengeParticipationType challengeParticipationType) {
+        this.priceId = priceId;
+        this.title = title;
+        this.description = description;
+        this.price = price;
+        this.refund = refund;
+        this.discount = discount;
+        this.accountNumber = accountNumber;
+        this.deadline = deadline;
+        this.accountType = accountType;
+        this.challengePriceType = challengePriceType;
+        this.challengePricePlanType = challengePricePlanType;
+        this.challengeParticipationType = challengeParticipationType;
+    }
+
+    public void setChallengeOptionList(List<ChallengeOptionVo> challengeOptionList) {
+        this.challengeOptionList = challengeOptionList;
+    }
 }
+

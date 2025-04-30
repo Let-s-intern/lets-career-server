@@ -10,6 +10,9 @@ import org.letscareer.letscareer.domain.coupon.entity.Coupon;
 import org.letscareer.letscareer.domain.payment.dto.request.CreatePaymentRequestDto;
 import org.letscareer.letscareer.domain.payment.dto.request.UpdatePaymentRequestDto;
 import org.letscareer.letscareer.domain.price.entity.Price;
+import org.letscareer.letscareer.domain.price.type.ChallengePricePlanType;
+import org.letscareer.letscareer.domain.price.type.ChallengePriceType;
+import org.letscareer.letscareer.domain.price.type.converter.ChallengePricePlanTypeConverter;
 import org.letscareer.letscareer.domain.report.dto.req.CreateReportApplicationRequestDto;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
@@ -36,6 +39,8 @@ public class Payment extends BaseTimeEntity {
     private Integer paybackPrice = 0;
     @Builder.Default
     private Boolean isRefunded = false;
+    @Convert(converter = ChallengePricePlanTypeConverter.class)
+    private ChallengePricePlanType challengePricePlanType;
     @NotNull
     private String paymentKey;
     private String orderId;
@@ -93,5 +98,9 @@ public class Payment extends BaseTimeEntity {
 
     public void updateRefundPrice(Integer price) {
         this.finalPrice = price;
+    }
+
+    public void setChallengePricePlanType(ChallengePricePlanType challengePricePlanType) {
+        this.challengePricePlanType = challengePricePlanType;
     }
 }

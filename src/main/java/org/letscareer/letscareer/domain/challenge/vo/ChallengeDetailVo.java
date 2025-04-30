@@ -14,6 +14,7 @@ public record ChallengeDetailVo(
         String criticalNotice,
         Integer participationCount,
         String thumbnail,
+        String desktopThumbnail,
         LocalDateTime startDate,
         LocalDateTime endDate,
         LocalDateTime beginning,

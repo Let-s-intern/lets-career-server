@@ -43,6 +43,8 @@ public class LivePriceQueryRepositoryImpl implements LivePriceQueryRepository {
                         livePrice.id,
                         livePrice.price,
                         livePrice.discount,
+                        Expressions.constant(0),
+                        Expressions.constant(0),
                         Expressions.constant(0)))
                         .from(livePrice)
                         .where(

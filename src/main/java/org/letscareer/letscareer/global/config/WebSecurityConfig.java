@@ -61,7 +61,7 @@ public class WebSecurityConfig {
             "/api/v1/attendance/**", "/api/v1/banner/admin/**", "/api/v1/contents/admin/**",
             "/api/v1/coupon/admin/**", "/api/v1/mission-template/admin/**", "/api/v1/program/admin",
             "/api/v1/user/admin", "/api/v1/report", "/api/v1/report/applications", "/api/v1/report/application/options",
-            "/api/v2/admin/**"
+            "/api/v1/admin/**", "/api/v2/admin/**"
     };
 
     private final String[] AdminPostPatterns = {
@@ -69,7 +69,7 @@ public class WebSecurityConfig {
             "/api/v1/challenge-notice/**", "/api/v1/contents", "/api/v1/coupon",
             "/api/v1/faq", "/api/v1/live", "/api/v1/mission/**",
             "/api/v1/mission-template", "/api/v1/vod", "/api/v1/report",
-            "/api/v2/admin/**"
+            "/api/v1/admin/**", "/api/v2/admin/**"
     };
 
     private final String[] AdminPatchPatterns = {
@@ -77,7 +77,7 @@ public class WebSecurityConfig {
             "/api/v1/challenge-notice/**", "/api/v1/contents/**", "/api/v1/coupon/**",
             "/api/v1/faq/**", "/api/v1/live/**", "/api/v1/mission/**", "/api/v1/mission-template/**",
             "/api/v1/payment/**", "/api/v1/vod/**", "/api/v2/review/**",
-            "/api/v2/admin/**"
+            "/api/v1/admin/**", "/api/v2/admin/**"
     };
 
     private final String[] AdminDeletePatterns = {
@@ -85,7 +85,7 @@ public class WebSecurityConfig {
             "/api/v1/challenge-notice/**", "/api/v1/contents/**", "/api/v1/coupon/**",
             "/api/v1/faq/**", "/api/v1/live/**", "/api/v1/mission/**", "/api/v1/mission-template/**",
             "/api/v1/vod/**", "/api/v1/report/admin/application/**",
-            "/api/v2/admin/**"
+            "/api/v1/admin/**", "/api/v2/admin/**"
     };
 
     private final String[] UserGetPatterns = {

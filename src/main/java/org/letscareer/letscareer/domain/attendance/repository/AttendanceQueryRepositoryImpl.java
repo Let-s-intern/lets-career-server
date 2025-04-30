@@ -1,5 +1,6 @@
 package org.letscareer.letscareer.domain.attendance.repository;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
@@ -9,12 +10,20 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.attendance.type.AttendanceResult;
 import org.letscareer.letscareer.domain.attendance.vo.*;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.letscareer.letscareer.domain.application.entity.QChallengeApplication.challengeApplication;
 import static org.letscareer.letscareer.domain.attendance.entity.QAttendance.attendance;
 import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
+import static org.letscareer.letscareer.domain.challengeoption.entity.QChallengeOption.challengeOption;
+import static org.letscareer.letscareer.domain.challengeoption.entity.QChallengePriceOption.challengePriceOption;
 import static org.letscareer.letscareer.domain.mission.entity.QMission.mission;
+import static org.letscareer.letscareer.domain.payment.entity.QPayment.payment;
+import static org.letscareer.letscareer.domain.price.entity.QChallengePrice.challengePrice;
 import static org.letscareer.letscareer.domain.user.entity.QUser.user;
 import static org.letscareer.letscareer.domain.user.repository.UserQueryRepositoryImpl.activeEmail;
 
@@ -63,24 +72,47 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
     }
 
     @Override
-    public List<MissionAttendanceVo> findMissionAttendanceVo(Long challengeId, Long missionId) {
-        return queryFactory
-                .select(Projections.constructor(MissionAttendanceVo.class,
-                        attendance.id,
-                        attendance.user.name,
-                        activeEmail(attendance.user),
-                        attendance.status,
-                        attendance.link,
-                        attendance.result,
-                        attendance.comments,
-                        attendance.createDate,
-                        attendance.lastModifiedDate,
-                        attendance.review,
-                        attendance.reviewIsVisible
-                ))
+    public List<MissionAttendanceWithOptionsVo> findMissionAttendanceVo(Long challengeId, Long missionId) {
+        List<Tuple> tuples = queryFactory
+                .select(
+                        Projections.constructor(MissionAttendanceVo.class,
+                                attendance.id,
+                                attendance.user.name,
+                                activeEmail(attendance.user),
+                                attendance.status,
+                                attendance.link,
+                                attendance.result,
+                                attendance.comments,
+                                attendance.createDate,
+                                attendance.lastModifiedDate,
+                                attendance.review,
+                                attendance.reviewIsVisible,
+                                payment.challengePricePlanType
+                        ),
+                        challengeOption.code
+                )
                 .from(attendance)
                 .leftJoin(attendance.mission, mission)
-                .leftJoin(attendance.mission.challenge, challenge)
+                .leftJoin(mission.challenge, challenge)
+                .leftJoin(attendance.user, user)
+
+                // ChallengeApplication 조인 (userId + challengeId 기준)
+                .leftJoin(challengeApplication)
+                .on(challengeApplication.user.id.eq(user.id)
+                        .and(challengeApplication.challenge.id.eq(challenge.id)))
+
+                // ChallengeApplication → Payment
+                .leftJoin(challengeApplication.payment, payment)
+
+                // ChallengePrice: challengeId + planType
+                .leftJoin(challengePrice)
+                .on(challengePrice.challenge.id.eq(challenge.id)
+                        .and(challengePrice.challengePricePlanType.eq(payment.challengePricePlanType)))
+
+                // 옵션 조인
+                .leftJoin(challengePriceOption).on(challengePriceOption.challengePrice.id.eq(challengePrice.id))
+                .leftJoin(challengeOption).on(challengeOption.id.eq(challengePriceOption.challengeOption.id))
+
                 .where(
                         eqChallengeId(challengeId),
                         eqMissionId(missionId)
@@ -90,6 +122,22 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
                         attendance.id.desc()
                 )
                 .fetch();
+
+        Map<MissionAttendanceVo, List<String>> grouped = new LinkedHashMap<>();
+
+        for (Tuple tuple : tuples) {
+            MissionAttendanceVo vo = tuple.get(0, MissionAttendanceVo.class);
+            String optionCode = tuple.get(1, String.class);
+
+            grouped.computeIfAbsent(vo, k -> new ArrayList<>());
+            if (optionCode != null) {
+                grouped.get(vo).add(optionCode);
+            }
+        }
+
+        return grouped.entrySet().stream()
+                .map(entry -> new MissionAttendanceWithOptionsVo(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList());
     }
 
     @Override
