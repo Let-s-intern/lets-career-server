@@ -14,6 +14,7 @@ import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplication
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationWithOptionsVo;
 import org.letscareer.letscareer.domain.application.vo.ReviewNotificationUserVo;
 import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
+import org.letscareer.letscareer.domain.challengeoption.vo.ChallengeOptionApplicationVo;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -81,7 +82,10 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                                 user.accountNum,
                                 payment.challengePricePlanType
                         ),
-                        challengeOption.code
+                        Projections.constructor(ChallengeOptionApplicationVo.class,
+                                challengeOption.price,
+                                challengeOption.discountPrice
+                        )
                 )
                 .from(challengeApplication)
                 .leftJoin(challengeApplication.challenge, challenge)
@@ -102,29 +106,31 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
                 .fetch();
 
         // 신청자별 옵션 코드 리스트 구성
-        Map<AdminChallengeApplicationVo, List<String>> grouped = new LinkedHashMap<>();
+        Map<AdminChallengeApplicationVo, List<ChallengeOptionApplicationVo>> grouped = new LinkedHashMap<>();
 
         for (Tuple tuple : tuples) {
             AdminChallengeApplicationVo vo = tuple.get(0, AdminChallengeApplicationVo.class);
-            String optionCode = tuple.get(1, String.class);
+            ChallengeOptionApplicationVo optionVo = tuple.get(1, ChallengeOptionApplicationVo.class);
 
             grouped.computeIfAbsent(vo, k -> new ArrayList<>());
 
-            if (optionCode != null) {
-                grouped.get(vo).add(optionCode);
+            if (optionVo != null) {
+                grouped.get(vo).add(optionVo);
             }
         }
 
         return grouped.entrySet().stream()
                 .map(entry -> new AdminChallengeApplicationWithOptionsVo(
                         entry.getKey(),
-                        entry.getValue()
+                        entry.getValue().stream()
+                                .mapToInt(o -> Optional.ofNullable(o.price()).orElse(0))
+                                .sum(),
+                        entry.getValue().stream()
+                                .mapToInt(o -> Optional.ofNullable(o.discountPrice()).orElse(0))
+                                .sum()
                 ))
                 .collect(Collectors.toList());
     }
-
-
-
 
     @Override
     public Page<UserChallengeApplicationVo> findUserChallengeApplicationVo(Long challengeId, Pageable pageable) {
