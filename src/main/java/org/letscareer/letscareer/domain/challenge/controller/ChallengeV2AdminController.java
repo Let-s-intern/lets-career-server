@@ -9,6 +9,7 @@ import org.letscareer.letscareer.domain.application.dto.response.GetChallengeApp
 import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeMissionAttendancesResponseDto;
 import org.letscareer.letscareer.domain.challenge.service.ChallengeService;
 import org.letscareer.letscareer.domain.challengementor.dto.request.CreateChallengeMentorsRequestDto;
+import org.letscareer.letscareer.domain.challengementor.dto.response.GetChallengeMentorsResponseDto;
 import org.letscareer.letscareer.global.common.annotation.ApiErrorCode;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
 import org.letscareer.letscareer.global.common.entity.SwaggerEnum;
@@ -52,6 +53,17 @@ public class ChallengeV2AdminController {
     public ResponseEntity<SuccessResponse<?>> getMissionAttendances(@PathVariable final Long challengeId,
                                                                     @PathVariable final Long missionId) {
         final GetChallengeMissionAttendancesResponseDto responseDto = challengeService.getMissionAttendances(challengeId, missionId);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "챌린지 멘토 목록 조회", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true,
+                    content = @Content(schema = @Schema(implementation = GetChallengeApplicationsResponseDto.class)))
+    })
+    @ApiErrorCode({SwaggerEnum.CHALLENGE_NOT_FOUND})
+    @GetMapping("/{challengeId}/mentor")
+    public ResponseEntity<SuccessResponse<?>> getChallengeMentors(@PathVariable final Long challengeId) {
+        GetChallengeMentorsResponseDto responseDto = challengeService.getChallengeMentors(challengeId);
         return SuccessResponse.ok(responseDto);
     }
 

@@ -30,7 +30,9 @@ import org.letscareer.letscareer.domain.challengeguide.entity.ChallengeGuide;
 import org.letscareer.letscareer.domain.challengeguide.helper.ChallengeGuideHelper;
 import org.letscareer.letscareer.domain.challengeguide.vo.ChallengeGuideVo;
 import org.letscareer.letscareer.domain.challengementor.dto.request.CreateChallengeMentorsRequestDto;
+import org.letscareer.letscareer.domain.challengementor.dto.response.GetChallengeMentorsResponseDto;
 import org.letscareer.letscareer.domain.challengementor.helper.ChallengeMentorHelper;
+import org.letscareer.letscareer.domain.challengementor.vo.ChallengeMentorAdminVo;
 import org.letscareer.letscareer.domain.challengeoption.entity.ChallengeOption;
 import org.letscareer.letscareer.domain.challengeoption.helper.ChallengeOptionHelper;
 import org.letscareer.letscareer.domain.challengeoption.helper.ChallengePriceOptionHelper;
@@ -332,6 +334,12 @@ public class ChallengeServiceImpl implements ChallengeService {
         if(Objects.isNull(applicationId)) throw new EntityNotFoundException(APPLICATION_NOT_FOUND);
         Long reviewId = challengeApplicationHelper.findReviewByApplicationId(applicationId);
         return reviewMapper.toGetChallengeReviewStatusResponseDto(reviewId);
+    }
+
+    @Override
+    public GetChallengeMentorsResponseDto getChallengeMentors(Long challengeId) {
+        List<ChallengeMentorAdminVo> challengeMentorAdminVos = challengeMentorHelper.findChallengeMentorAdminVosByChallengeId(challengeId);
+        return GetChallengeMentorsResponseDto.of(challengeMentorAdminVos);
     }
 
     @Override
