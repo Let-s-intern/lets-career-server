@@ -8,6 +8,7 @@ import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApp
 import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.response.*;
 import org.letscareer.letscareer.domain.challenge.type.ChallengeType;
+import org.letscareer.letscareer.domain.challengementor.dto.request.CreateChallengeMentorsRequestDto;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.faq.dto.response.GetFaqResponseDto;
 import org.letscareer.letscareer.domain.mission.type.MissionQueryType;
@@ -88,4 +89,6 @@ public interface ChallengeService {
     void deleteChallenge(Long challengeId);
 
     void copyChallengeDashBoard(Long fromChallengeId, Long toChallengeId);
+
+    void createChallengeMentors(Long challengeId, CreateChallengeMentorsRequestDto requestDto);
 }

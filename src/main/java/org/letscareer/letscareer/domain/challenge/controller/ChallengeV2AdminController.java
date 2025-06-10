@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.dto.response.GetChallengeApplicationsResponseDto;
 import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeMissionAttendancesResponseDto;
 import org.letscareer.letscareer.domain.challenge.service.ChallengeService;
+import org.letscareer.letscareer.domain.challengementor.dto.request.CreateChallengeMentorsRequestDto;
 import org.letscareer.letscareer.global.common.annotation.ApiErrorCode;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
 import org.letscareer.letscareer.global.common.entity.SwaggerEnum;
@@ -52,5 +53,16 @@ public class ChallengeV2AdminController {
                                                                     @PathVariable final Long missionId) {
         final GetChallengeMissionAttendancesResponseDto responseDto = challengeService.getMissionAttendances(challengeId, missionId);
         return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "챌린지 멘토 등록", responses = {
+            @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
+    })
+    @ApiErrorCode({SwaggerEnum.CHALLENGE_NOT_FOUND})
+    @PostMapping("/{challengeId}/mentor")
+    public ResponseEntity<SuccessResponse<?>> createChallengeMentors(@PathVariable final Long challengeId,
+                                                                     @RequestBody final CreateChallengeMentorsRequestDto requestDto) {
+        challengeService.createChallengeMentors(challengeId, requestDto);
+        return SuccessResponse.ok(null);
     }
 }
