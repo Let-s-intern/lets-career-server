@@ -4,4 +4,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface ChallengeMentorService {
+    void deleteChallengeMentor(Long challengeMentorId);
 }

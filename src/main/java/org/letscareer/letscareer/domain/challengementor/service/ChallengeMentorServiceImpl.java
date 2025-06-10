@@ -11,5 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class ChallengeMentorServiceImpl implements ChallengeMentorService {
     private final ChallengeMentorHelper challengeMentorHelper;
 
-
+    @Override
+    public void deleteChallengeMentor(Long challengeMentorId) {
+        challengeMentorHelper.deleteChallengeMentorById(challengeMentorId);
+    }
 }
