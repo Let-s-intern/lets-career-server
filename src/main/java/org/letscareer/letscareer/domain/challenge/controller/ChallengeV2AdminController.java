@@ -10,6 +10,8 @@ import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeMissi
 import org.letscareer.letscareer.domain.challenge.service.ChallengeService;
 import org.letscareer.letscareer.domain.challengementor.dto.request.CreateChallengeMentorsRequestDto;
 import org.letscareer.letscareer.domain.challengementor.dto.response.GetChallengeMentorsResponseDto;
+import org.letscareer.letscareer.domain.mission.dto.response.MissionAdminListResponseDto;
+import org.letscareer.letscareer.domain.mission.service.MissionService;
 import org.letscareer.letscareer.global.common.annotation.ApiErrorCode;
 import org.letscareer.letscareer.global.common.entity.SuccessResponse;
 import org.letscareer.letscareer.global.common.entity.SwaggerEnum;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class ChallengeV2AdminController {
     public final ChallengeService challengeService;
+    public final MissionService missionService;
 
     @Operation(summary = "챌린지 대시보드 복제", responses = {
             @ApiResponse(responseCode = "200", useReturnTypeSchema = true)
@@ -42,6 +45,16 @@ public class ChallengeV2AdminController {
     public ResponseEntity<SuccessResponse<?>> getChallengeApplications(@PathVariable final Long challengeId,
                                                                        @RequestParam(required = false) final Boolean isCanceled) {
         final GetChallengeApplicationsResponseDto responseDto = challengeService.getApplications(challengeId, isCanceled);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "챌린지 미션 전체 목록", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = MissionAdminListResponseDto.class)))
+    })
+    @ApiErrorCode({SwaggerEnum.MISSION_NOT_FOUND})
+    @GetMapping("/{challengeId}/mission")
+    public ResponseEntity<SuccessResponse<?>> getMissionsForAdmin(@PathVariable Long challengeId) {
+        MissionAdminListResponseDto responseDto = missionService.getMissionsForAdmin(challengeId);
         return SuccessResponse.ok(responseDto);
     }
 
