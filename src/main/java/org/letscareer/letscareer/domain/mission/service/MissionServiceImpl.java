@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.helper.ChallengeApplicationHelper;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
+import org.letscareer.letscareer.domain.challengeoption.entity.ChallengeOption;
+import org.letscareer.letscareer.domain.challengeoption.helper.ChallengeOptionHelper;
 import org.letscareer.letscareer.domain.contents.helper.ContentsHelper;
 import org.letscareer.letscareer.domain.contents.type.ContentsType;
 import org.letscareer.letscareer.domain.mission.dto.request.CreateMissionRequestDto;
@@ -39,6 +41,7 @@ public class MissionServiceImpl implements MissionService {
     private final MissionScoreHelper missionScoreHelper;
     private final ChallengeApplicationHelper challengeApplicationHelper;
     private final ChallengeHelper challengeHelper;
+    private final ChallengeOptionHelper challengeOptionHelper;
     private final ContentsHelper contentsHelper;
 
     @Override
@@ -66,14 +69,15 @@ public class MissionServiceImpl implements MissionService {
     }
 
     @Override
-    public void updateMission(Long missionId, UpdateMissionRequestDto updateMissionRequestDto) {
+    public void updateMission(Long missionId, UpdateMissionRequestDto requestDto) {
         Mission mission = missionHelper.findMissionByIdOrThrow(missionId);
-        mission.updateMission(updateMissionRequestDto);
-        updateMissionTemplate(mission, updateMissionRequestDto.missionTemplateId());
-        updateMissionContents(mission, ContentsType.ESSENTIAL, updateMissionRequestDto.essentialContentsIdList());
-        updateMissionContents(mission, ContentsType.ADDITIONAL, updateMissionRequestDto.additionalContentsIdList());
+        mission.updateMission(requestDto);
+        updateMissionTemplate(mission, requestDto.missionTemplateId());
+        updateMissionContents(mission, ContentsType.ESSENTIAL, requestDto.essentialContentsIdList());
+        updateMissionContents(mission, ContentsType.ADDITIONAL, requestDto.additionalContentsIdList());
+        updateChallengeOption(mission, requestDto.challengeOptionId());
         MissionScore missionScore = mission.getMissionScore();
-        missionScore.updateMissionScore(updateMissionRequestDto);
+        missionScore.updateMissionScore(requestDto);
     }
 
     @Override
@@ -104,6 +108,16 @@ public class MissionServiceImpl implements MissionService {
         if (contentsIdList == null || contentsIdList.isEmpty()) return;
         missionContentsHelper.deleteAllMissionContentsByMissionIdAndContentsType(mission.getId(), contentsType);
         findContentsAndCreateMissionContents(contentsType, contentsIdList, mission);
+    }
+
+    private void updateChallengeOption(Mission mission, Long challengeOptionId) {
+        if(challengeOptionId == null) return;
+        if(challengeOptionId == 0L) {
+            mission.initChallengeOption();
+            return;
+        }
+        ChallengeOption challengeOption = challengeOptionHelper.findChallengeOptionByChallengeOptionIdOrThrow(challengeOptionId);
+        mission.updateChallengeOption(challengeOption);
     }
 
     private void findContentsAndCreateMissionContents(ContentsType contentsType, List<Long> contentsIdList, Mission mission) {
