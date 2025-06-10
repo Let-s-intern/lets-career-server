@@ -8,6 +8,7 @@ import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.repository.UserRepository;
 import org.letscareer.letscareer.domain.user.type.AuthProvider;
 import org.letscareer.letscareer.domain.user.type.UserRole;
+import org.letscareer.letscareer.domain.user.vo.MentorAdminVo;
 import org.letscareer.letscareer.domain.user.vo.UserAdminVo;
 import org.letscareer.letscareer.global.error.exception.ConflictException;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
@@ -22,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -136,6 +138,10 @@ public class UserHelper {
 
     public Page<UserAdminVo> findAllUserAdminVos(String email, String name, String phoneNum, String role, Pageable pageable) {
         return userRepository.findAllUserAdminVos(email, name, phoneNum, role, pageable);
+    }
+
+    public List<MentorAdminVo> findAllMentorAdminVos() {
+        return userRepository.findAllMentorAdminVos();
     }
 
     public Boolean checkUserChallengeInfo(User user) {

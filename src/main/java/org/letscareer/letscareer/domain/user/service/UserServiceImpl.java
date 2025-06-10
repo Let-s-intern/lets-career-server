@@ -16,6 +16,7 @@ import org.letscareer.letscareer.domain.user.helper.UserHelper;
 import org.letscareer.letscareer.domain.user.mapper.UserMapper;
 import org.letscareer.letscareer.domain.user.type.AuthProvider;
 import org.letscareer.letscareer.domain.user.type.UserRole;
+import org.letscareer.letscareer.domain.user.vo.MentorAdminVo;
 import org.letscareer.letscareer.domain.user.vo.UserAdminVo;
 import org.letscareer.letscareer.domain.withdraw.helper.WithdrawHelper;
 import org.letscareer.letscareer.global.common.entity.PageInfo;
@@ -111,6 +112,12 @@ public class UserServiceImpl implements UserService {
         List<UserAdminListInfo> userAdminListInfo = createUserAdminListInfo(userAdminList.getContent());
         PageInfo pageInfo = PageInfo.of(userAdminList);
         return userMapper.toUserAdminListResponseDto(userAdminListInfo, pageInfo);
+    }
+
+    @Override
+    public MentorListResponseDto getMentors() {
+        List<MentorAdminVo> mentorAdminVos = userHelper.findAllMentorAdminVos();
+        return userMapper.toMentorListResponseDto(mentorAdminVos);
     }
 
     @Override

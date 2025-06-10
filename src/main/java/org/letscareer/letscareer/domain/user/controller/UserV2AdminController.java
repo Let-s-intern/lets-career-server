@@ -5,9 +5,9 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.user.dto.response.MentorListResponseDto;
 import org.letscareer.letscareer.domain.user.dto.response.UserAdminListResponseDto;
 import org.letscareer.letscareer.domain.user.entity.User;
-import org.letscareer.letscareer.domain.user.service.UserParticipationService;
 import org.letscareer.letscareer.domain.user.service.UserService;
 import org.letscareer.letscareer.global.common.annotation.ApiErrorCode;
 import org.letscareer.letscareer.global.common.annotation.CurrentUser;
@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserV2AdminController {
     private final UserService userService;
-    private final UserParticipationService userParticipationService;
 
     @Operation(summary = "유저 전체 목록", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserAdminListResponseDto.class)))
@@ -36,6 +35,16 @@ public class UserV2AdminController {
                                                                @RequestParam(required = false) String role,
                                                                @PageableDefault Pageable pageable) {
         final UserAdminListResponseDto responseDto = userService.getUsers(email, name, phoneNum, role, pageable);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "멘토 전체 목록", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserAdminListResponseDto.class)))
+    })
+    @ApiErrorCode({SwaggerEnum.IS_NOT_ADMIN})
+    @GetMapping("/mentor")
+    public ResponseEntity<SuccessResponse<?>> getMentorsForAdmin() {
+        final MentorListResponseDto responseDto = userService.getMentors();
         return SuccessResponse.ok(responseDto);
     }
 

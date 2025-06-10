@@ -26,6 +26,8 @@ public interface UserService {
 
     UserAdminListResponseDto getUsers(String email, String name, String phoneNum, String role, Pageable pageable);
 
+    MentorListResponseDto getMentors();
+
     TokenResponseDto reissueToken(TokenReissueRequestDto tokenReissueRequestDto);
 
     GetMyApplicationsResponseDto getMyApplications(User user, ApplicationStatus status);
