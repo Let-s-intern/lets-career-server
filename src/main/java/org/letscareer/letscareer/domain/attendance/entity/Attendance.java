@@ -38,6 +38,7 @@ public class Attendance extends BaseTimeEntity {
     @Convert(converter = AttendanceResultConverter.class)
     private AttendanceResult result = AttendanceResult.WAITING;
     private String comments;
+    private String feedback;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mission_id")
@@ -45,6 +46,9 @@ public class Attendance extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "mentor_id")
+    private User mentor;
 
     public static Attendance createAttendance(Mission mission,
                                               CreateAttendanceRequestDto createRequestDto,
@@ -82,5 +86,13 @@ public class Attendance extends BaseTimeEntity {
 
     public void updateAttendanceReview(String review) {
         this.review = updateValue(this.review, review);
+    }
+
+    public void updateAttendanceMentor(User mentor) {
+        this.mentor = updateValue(this.mentor, mentor);
+    }
+
+    public void initAttendanceMentor() {
+        this.mentor = null;
     }
 }

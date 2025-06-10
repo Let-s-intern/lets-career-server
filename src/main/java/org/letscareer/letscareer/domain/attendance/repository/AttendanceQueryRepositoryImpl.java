@@ -115,7 +115,8 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
 
                 .where(
                         eqChallengeId(challengeId),
-                        eqMissionId(missionId)
+                        eqMissionId(missionId),
+                        eqChallengeApplicationIsCanceled(false)
                 )
                 .orderBy(
                         resultOrder().asc(),
@@ -188,6 +189,10 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
 
     private BooleanExpression eqChallengeApplicationId(Long applicationId) {
         return applicationId != null ? challengeApplication._super.id.eq(applicationId) : null;
+    }
+
+    private BooleanExpression eqChallengeApplicationIsCanceled(Boolean isCanceled) {
+        return isCanceled != null ? challengeApplication.isCanceled.eq(isCanceled) : null;
     }
 
     private BooleanExpression eqMissionId(Long missionId) {

@@ -92,14 +92,24 @@ public class AttendanceServiceImpl implements AttendanceService {
         attendance.updateAttendanceReview(requestDto.review());
     }
 
-    private void updateAttendanceByAdmin(Attendance attendance, UpdateAttendanceRequestDto updateRequestDto) {
-        if ((isUpdatedAttendance(attendance) && !Objects.isNull(updateRequestDto.result()))) {
-            if (wrongToPass(attendance, updateRequestDto))
+    private void updateAttendanceByAdmin(Attendance attendance, UpdateAttendanceRequestDto requestDto) {
+        if ((isUpdatedAttendance(attendance) && !Objects.isNull(requestDto.result()))) {
+            if (wrongToPass(attendance, requestDto))
                 attendance.updateAttendanceStatus(AttendanceStatus.LATE);
-            else if (wrongToWrong(attendance, updateRequestDto))
+            else if (wrongToWrong(attendance, requestDto))
                 attendance.updateAttendanceStatus(AttendanceStatus.ABSENT);
         }
-        attendance.updateAttendanceAdmin(updateRequestDto);
+
+        if(requestDto.mentorUserId() != null) {
+            if(requestDto.mentorUserId() == 0L) {
+                attendance.initAttendanceMentor();
+            } else {
+                User mentor = userHelper.findUserByIdOrThrow(requestDto.mentorUserId());
+                attendance.updateAttendanceMentor(mentor);
+            }
+        }
+
+        attendance.updateAttendanceAdmin(requestDto);
     }
 
     private AttendanceStatus getAttendanceStatus(LocalDateTime missionStartDate, LocalDateTime missionEndDate, LocalDateTime challengeEndDate) {

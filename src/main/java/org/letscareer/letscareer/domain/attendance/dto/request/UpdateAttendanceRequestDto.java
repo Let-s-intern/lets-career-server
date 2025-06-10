@@ -9,6 +9,7 @@ public record UpdateAttendanceRequestDto(
         AttendanceResult result,
         String comments,
         String review,
-        Boolean reviewIsVisible
+        Boolean reviewIsVisible,
+        Long mentorUserId
 ) {
 }
