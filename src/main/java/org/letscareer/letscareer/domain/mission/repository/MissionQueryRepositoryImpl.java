@@ -25,6 +25,7 @@ import java.util.Optional;
 import static org.letscareer.letscareer.domain.application.entity.QApplication.application;
 import static org.letscareer.letscareer.domain.attendance.entity.QAttendance.attendance;
 import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
+import static org.letscareer.letscareer.domain.challengeoption.entity.QChallengeOption.challengeOption;
 import static org.letscareer.letscareer.domain.contents.entity.QContents.contents;
 import static org.letscareer.letscareer.domain.mission.entity.QMission.mission;
 import static org.letscareer.letscareer.domain.missioncontents.entity.QMissionContents.missionContents;
@@ -52,12 +53,14 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
                         missionScore.lateScore,
                         missionTemplate.id,
                         mission.startDate,
-                        mission.endDate
+                        mission.endDate,
+                        mission.challengeOption.code
                 ))
                 .from(mission)
                 .leftJoin(mission.challenge, challenge)
                 .leftJoin(mission.missionScore, missionScore)
                 .leftJoin(mission.missionTemplate, missionTemplate)
+                .leftJoin(mission.challengeOption, challengeOption)
                 .where(
                         eqChallengeId(challengeId)
                 )
