@@ -10,10 +10,7 @@ import org.letscareer.letscareer.domain.coupon.entity.Coupon;
 import org.letscareer.letscareer.domain.mission.dto.request.CreateMissionRequestDto;
 import org.letscareer.letscareer.domain.mission.dto.response.*;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
-import org.letscareer.letscareer.domain.mission.vo.DailyMissionVo;
-import org.letscareer.letscareer.domain.mission.vo.MissionDetailVo;
-import org.letscareer.letscareer.domain.mission.vo.MyDailyMissionVo;
-import org.letscareer.letscareer.domain.mission.vo.MissionForChallengeVo;
+import org.letscareer.letscareer.domain.mission.vo.*;
 import org.letscareer.letscareer.domain.missiontemplate.entity.MissionTemplate;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.attendance.vo.MissionScoreVo;
@@ -48,6 +45,10 @@ public class MissionMapper {
                                                              List<ContentsMissionVo> essentialContentsList,
                                                              List<ContentsMissionVo> additionalContentsList) {
         return MissionAdminResponseDto.of(vo, applicationCount, essentialContentsList, additionalContentsList);
+    }
+
+    public FeedbackMissionAdminListResponseDto toFeedbackMissionAdminListResponseDto(List<FeedbackMissionAdminVo> feedbackMissionAdminVos) {
+        return FeedbackMissionAdminListResponseDto.of(feedbackMissionAdminVos);
     }
 
     public MissionApplicationScoreResponseDto toMissionApplicationScoreResponseDto(UserChallengeApplicationVo userChallengeApplicationVo,

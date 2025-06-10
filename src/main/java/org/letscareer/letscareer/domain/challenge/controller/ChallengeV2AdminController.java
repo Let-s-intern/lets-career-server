@@ -10,6 +10,7 @@ import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeMissi
 import org.letscareer.letscareer.domain.challenge.service.ChallengeService;
 import org.letscareer.letscareer.domain.challengementor.dto.request.CreateChallengeMentorsRequestDto;
 import org.letscareer.letscareer.domain.challengementor.dto.response.GetChallengeMentorsResponseDto;
+import org.letscareer.letscareer.domain.mission.dto.response.FeedbackMissionAdminListResponseDto;
 import org.letscareer.letscareer.domain.mission.dto.response.MissionAdminListResponseDto;
 import org.letscareer.letscareer.domain.mission.service.MissionService;
 import org.letscareer.letscareer.global.common.annotation.ApiErrorCode;
@@ -55,6 +56,16 @@ public class ChallengeV2AdminController {
     @GetMapping("/{challengeId}/mission")
     public ResponseEntity<SuccessResponse<?>> getMissionsForAdmin(@PathVariable Long challengeId) {
         MissionAdminListResponseDto responseDto = missionService.getMissionsForAdmin(challengeId);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "챌린지 피드백 미션 전체 목록", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = FeedbackMissionAdminListResponseDto.class)))
+    })
+    @ApiErrorCode({SwaggerEnum.MISSION_NOT_FOUND})
+    @GetMapping("/{challengeId}/mission/feedback")
+    public ResponseEntity<SuccessResponse<?>> getFeedbackMissionsForAdmin(@PathVariable Long challengeId) {
+        FeedbackMissionAdminListResponseDto responseDto = missionService.getFeedbackMissionsForAdmin(challengeId);
         return SuccessResponse.ok(responseDto);
     }
 

@@ -10,12 +10,14 @@ import org.letscareer.letscareer.domain.contents.helper.ContentsHelper;
 import org.letscareer.letscareer.domain.contents.type.ContentsType;
 import org.letscareer.letscareer.domain.mission.dto.request.CreateMissionRequestDto;
 import org.letscareer.letscareer.domain.mission.dto.request.UpdateMissionRequestDto;
+import org.letscareer.letscareer.domain.mission.dto.response.FeedbackMissionAdminListResponseDto;
 import org.letscareer.letscareer.domain.mission.dto.response.GetMissionDetailResponseDto;
 import org.letscareer.letscareer.domain.mission.dto.response.MissionAdminListResponseDto;
 import org.letscareer.letscareer.domain.mission.dto.response.MissionAdminResponseDto;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.mission.helper.MissionHelper;
 import org.letscareer.letscareer.domain.mission.mapper.MissionMapper;
+import org.letscareer.letscareer.domain.mission.vo.FeedbackMissionAdminVo;
 import org.letscareer.letscareer.domain.mission.vo.MissionDetailVo;
 import org.letscareer.letscareer.domain.mission.vo.MissionForChallengeVo;
 import org.letscareer.letscareer.domain.missioncontents.entity.MissionContents;
@@ -66,6 +68,12 @@ public class MissionServiceImpl implements MissionService {
         List<MissionForChallengeVo> missionForChallengeVos = missionHelper.findMissionForChallengeVos(challengeId);
         List<MissionAdminResponseDto> missionAdminResponseDtoList = createMissionAdminResponseDtoList(missionForChallengeVos, challengeId);
         return missionMapper.toMissionAdminListResponseDto(missionAdminResponseDtoList);
+    }
+
+    @Override
+    public FeedbackMissionAdminListResponseDto getFeedbackMissionsForAdmin(Long challengeId) {
+        List<FeedbackMissionAdminVo> feedbackMissionAdminVos = missionHelper.findFeedbackMissionAdminVodByChallengeId(challengeId);
+        return missionMapper.toFeedbackMissionAdminListResponseDto(feedbackMissionAdminVos);
     }
 
     @Override

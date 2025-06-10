@@ -81,6 +81,21 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
     }
 
     @Override
+    public List<FeedbackMissionAdminVo> findFeedbackMissionAdminVodByChallengeId(Long challengeId) {
+        return queryFactory
+                .select(Projections.constructor(FeedbackMissionAdminVo.class,
+                        mission.id,
+                        mission.title,
+                        mission.th,
+                        mission.startDate,
+                        mission.endDate,
+                        mission.challengeOption.code))
+                .from(mission)
+                .orderBy(mission.th.asc())
+                .fetch();
+    }
+
+    @Override
     public Optional<DailyMissionVo> findDailyMissionVoByChallengeId(Long challengeId) {
         return Optional.ofNullable(
                 queryFactory
