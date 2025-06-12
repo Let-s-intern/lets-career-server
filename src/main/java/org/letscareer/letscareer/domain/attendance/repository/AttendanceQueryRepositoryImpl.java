@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.attendance.repository;
 
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
@@ -8,7 +9,9 @@ import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.attendance.type.AttendanceResult;
+import org.letscareer.letscareer.domain.attendance.type.AttendanceStatus;
 import org.letscareer.letscareer.domain.attendance.vo.*;
+import org.letscareer.letscareer.domain.user.entity.QUser;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -72,7 +75,7 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
     }
 
     @Override
-    public List<MissionAttendanceWithOptionsVo> findMissionAttendanceVo(Long challengeId, Long missionId) {
+    public List<MissionAttendanceWithOptionsVo> findMissionAttendanceVos(Long challengeId, Long missionId) {
         List<Tuple> tuples = queryFactory
                 .select(
                         Projections.constructor(MissionAttendanceVo.class,
@@ -142,6 +145,45 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
     }
 
     @Override
+    public List<FeedbackMissionAttendanceVo> findFeedbackMissionAttendanceVos(Long challengeId, Long missionId, Long challengeOptionId) {
+        QUser mentor = new QUser("mentor");
+        return queryFactory
+                .select(Projections.constructor(FeedbackMissionAttendanceVo.class,
+                        attendance.id,
+                        mentor.name,
+                        user.name,
+                        user.major,
+                        user.wishJob,
+                        user.wishCompany,
+                        attendance.link,
+                        attendance.status,
+                        attendance.result,
+                        payment.challengePricePlanType))
+                .from(attendance)
+                .leftJoin(attendance.user, user)
+                .leftJoin(attendance.mentor, mentor)
+                .leftJoin(attendance.mission, mission)
+                .join(mission.challenge, challenge)
+                .join(challengeApplication)
+                    .on(challengeApplication.user.id.eq(user.id).and(challengeApplication.challenge.id.eq(challenge.id)))
+                .join(challengeApplication.payment, payment)
+                .join(challengePrice)
+                .on(challengePrice.challenge.id.eq(challenge.id).and(challengePrice.challengePricePlanType.eq(payment.challengePricePlanType)))
+                .join(challengePrice.challengePriceOptionList, challengePriceOption)
+                .join(challengePriceOption.challengeOption, challengeOption)
+                .where(
+                        eqChallengeId(challengeId),
+                        eqMissionId(missionId),
+                        eqAttendanceStatus(AttendanceStatus.PRESENT),
+                        eqChallengeApplicationIsCanceled(false),
+                        eqChallengeOptionId(challengeOptionId),
+                        eqChallengeOptionIsFeedback(true)
+                )
+                .distinct()
+                .fetch();
+    }
+
+    @Override
     public AttendanceDashboardVo findAttendanceDashboardVo(Long missionId, Long userId) {
         return queryFactory
                 .select(Projections.constructor(AttendanceDashboardVo.class,
@@ -197,6 +239,18 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
 
     private BooleanExpression eqMissionId(Long missionId) {
         return missionId != null ? mission.id.eq(missionId) : null;
+    }
+
+    private BooleanExpression eqChallengeOptionId(Long challengeOptionId) {
+        return challengeOptionId != null ? challengeOption.id.eq(challengeOptionId) : null;
+    }
+
+    private BooleanExpression eqChallengeOptionIsFeedback(Boolean isFeedback) {
+        return isFeedback != null ? challengeOption.isFeedback.eq(isFeedback) : null;
+    }
+
+    private BooleanExpression eqAttendanceStatus(AttendanceStatus attendanceStatus) {
+        return attendanceStatus != null ? attendance.status.eq(attendanceStatus) : null;
     }
 
     private NumberExpression<Integer> resultOrder() {

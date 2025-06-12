@@ -45,6 +45,8 @@ public interface ChallengeService {
 
     GetChallengeMissionAttendancesResponseDto getMissionAttendances(Long challengeId, Long missionId);
 
+    GetChallengeFeedbackMissionAttendancesResponseDto getFeedbackMissionAttendances(Long challengeId, Long missionId);
+
     GetChallengeAdminReviewResponseDto getReviewsForAdmin(Long challengeId, Pageable pageable);
 
     GetChallengeReviewResponseDto getReviews(Pageable pageable);
@@ -93,5 +95,4 @@ public interface ChallengeService {
 
     void copyChallengeDashBoard(Long fromChallengeId, Long toChallengeId);
 
-    void createChallengeMentors(Long challengeId, CreateChallengeMentorsRequestDto requestDto);
-}
+    void createChallengeMentors(Long challengeId, CreateChallengeMentorsRequestDto requestDto);}

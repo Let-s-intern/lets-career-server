@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.challengeoption.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.letscareer.letscareer.domain.challengeoption.dto.request.CreateChallengeOptionRequestDto;
 import org.letscareer.letscareer.domain.challengeoption.dto.request.UpdateChallengeOptionRequestDto;
@@ -26,6 +27,8 @@ public class ChallengeOption extends BaseTimeEntity {
     private String code;
     private Integer price;
     private Integer discountPrice;
+    @NotNull
+    private Boolean isFeedback;
 
     @OneToMany(mappedBy = "challengeOption", cascade = CascadeType.ALL)
     @Builder.Default
@@ -37,6 +40,7 @@ public class ChallengeOption extends BaseTimeEntity {
                 .code(requestDto.code())
                 .price(requestDto.price())
                 .discountPrice(requestDto.discountPrice())
+                .isFeedback(requestDto.isFeedback())
                 .build();
     }
 
@@ -49,5 +53,6 @@ public class ChallengeOption extends BaseTimeEntity {
         this.code = updateValue(this.code, requestDto.code());
         this.price = updateValue(this.price, requestDto.price());
         this.discountPrice = updateValue(this.discountPrice, requestDto.discountPrice());
+        this.isFeedback = updateValue(this.isFeedback, requestDto.isFeedback());
     }
 }

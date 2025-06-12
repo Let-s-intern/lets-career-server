@@ -5,6 +5,7 @@ import org.letscareer.letscareer.domain.admincalssification.helper.ChallengeAdmi
 import org.letscareer.letscareer.domain.admincalssification.request.CreateChallengeAdminClassificationRequestDto;
 import org.letscareer.letscareer.domain.admincalssification.vo.ChallengeAdminClassificationDetailVo;
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationWithOptionsVo;
+import org.letscareer.letscareer.domain.attendance.vo.FeedbackMissionAttendanceVo;
 import org.letscareer.letscareer.domain.attendance.vo.MissionAttendanceWithOptionsVo;
 import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApplicationRequestDto;
 import org.letscareer.letscareer.domain.application.dto.response.GetChallengeApplicationsResponseDto;
@@ -94,6 +95,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -210,8 +212,16 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     @Override
     public GetChallengeMissionAttendancesResponseDto getMissionAttendances(Long challengeId, Long missionId) {
-        List<MissionAttendanceWithOptionsVo> attendanceVos = attendanceHelper.findMissionAttendanceVo(challengeId, missionId);
+        List<MissionAttendanceWithOptionsVo> attendanceVos = attendanceHelper.findMissionAttendanceVos(challengeId, missionId);
         return attendanceMapper.toGetChallengeMissionAttendancesResponseDto(attendanceVos);
+    }
+
+    @Override
+    public GetChallengeFeedbackMissionAttendancesResponseDto getFeedbackMissionAttendances(Long challengeId, Long missionId) {
+        Mission mission = missionHelper.findMissionByIdOrThrow(missionId);
+        if(Objects.isNull(mission.getChallengeOption())) return null;
+        List<FeedbackMissionAttendanceVo> attendanceVos = attendanceHelper.findFeedbackMissionAttendanceVos(challengeId, missionId, mission.getChallengeOption().getId());
+        return attendanceMapper.toGetChallengeFeedbackMissionAttendancesResponseDto(attendanceVos);
     }
 
     @Override

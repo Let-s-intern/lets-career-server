@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.dto.response.GetChallengeApplicationsResponseDto;
+import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeFeedbackMissionAttendancesResponseDto;
 import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeMissionAttendancesResponseDto;
 import org.letscareer.letscareer.domain.challenge.service.ChallengeService;
 import org.letscareer.letscareer.domain.challengementor.dto.request.CreateChallengeMentorsRequestDto;
@@ -77,6 +78,17 @@ public class ChallengeV2AdminController {
     public ResponseEntity<SuccessResponse<?>> getMissionAttendances(@PathVariable final Long challengeId,
                                                                     @PathVariable final Long missionId) {
         final GetChallengeMissionAttendancesResponseDto responseDto = challengeService.getMissionAttendances(challengeId, missionId);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "챌린지 피드백 미션별 제출자 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeFeedbackMissionAttendancesResponseDto.class)))
+    })
+    @ApiErrorCode({SwaggerEnum.PAYMENT_NOT_FOUND})
+    @GetMapping("/{challengeId}/mission/{missionId}/feedback/attendances")
+    public ResponseEntity<SuccessResponse<?>> getFeedbackMissionAttendances(@PathVariable final Long challengeId,
+                                                                            @PathVariable final Long missionId) {
+        final GetChallengeFeedbackMissionAttendancesResponseDto responseDto = challengeService.getFeedbackMissionAttendances(challengeId, missionId);
         return SuccessResponse.ok(responseDto);
     }
 
