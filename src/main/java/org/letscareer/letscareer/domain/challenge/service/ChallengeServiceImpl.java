@@ -86,9 +86,11 @@ import org.letscareer.letscareer.domain.score.helper.AdminScoreHelper;
 import org.letscareer.letscareer.domain.score.helper.MissionScoreHelper;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.helper.UserHelper;
+import org.letscareer.letscareer.domain.user.type.UserRole;
 import org.letscareer.letscareer.global.common.entity.PageInfo;
 import org.letscareer.letscareer.global.common.utils.zoom.ZoomUtils;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
+import org.letscareer.letscareer.global.error.exception.UnauthorizedException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -102,6 +104,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static org.letscareer.letscareer.domain.application.error.ApplicationErrorCode.APPLICATION_NOT_FOUND;
+import static org.letscareer.letscareer.domain.user.error.UserErrorCode.IS_NOT_MENTOR;
 
 @RequiredArgsConstructor
 @Transactional
@@ -218,6 +221,15 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     @Override
     public GetChallengeFeedbackMissionAttendancesResponseDto getFeedbackMissionAttendances(Long challengeId, Long missionId) {
+        Mission mission = missionHelper.findMissionByIdOrThrow(missionId);
+        if(Objects.isNull(mission.getChallengeOption())) return null;
+        List<FeedbackMissionAttendanceVo> attendanceVos = attendanceHelper.findFeedbackMissionAttendanceVos(challengeId, missionId, mission.getChallengeOption().getId());
+        return attendanceMapper.toGetChallengeFeedbackMissionAttendancesResponseDto(attendanceVos);
+    }
+
+    @Override
+    public GetChallengeFeedbackMissionAttendancesResponseDto getFeedbackMissionAttendancesForMentor(Long challengeId, Long missionId, User user) {
+        if(!user.getIsMentor()) throw new UnauthorizedException(IS_NOT_MENTOR);
         Mission mission = missionHelper.findMissionByIdOrThrow(missionId);
         if(Objects.isNull(mission.getChallengeOption())) return null;
         List<FeedbackMissionAttendanceVo> attendanceVos = attendanceHelper.findFeedbackMissionAttendanceVos(challengeId, missionId, mission.getChallengeOption().getId());
