@@ -10,6 +10,7 @@ public record UpdateAttendanceRequestDto(
         String comments,
         String review,
         Boolean reviewIsVisible,
-        Long mentorUserId
+        Long mentorUserId,
+        String feedback
 ) {
 }

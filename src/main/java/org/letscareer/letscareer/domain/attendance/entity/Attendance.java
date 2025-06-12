@@ -95,4 +95,8 @@ public class Attendance extends BaseTimeEntity {
     public void initAttendanceMentor() {
         this.mentor = null;
     }
+
+    public void updateAttendanceFeedback(String feedback) {
+        this.feedback = updateValue(this.feedback, feedback);
+    }
 }
