@@ -110,7 +110,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     private void updateAttendanceByMentor(Attendance attendance, UpdateAttendanceRequestDto requestDto) {
-        attendance.updateAttendanceFeedback(requestDto.feedback());
+        attendance.updateAttendanceFeedback(requestDto);
     }
 
     private AttendanceStatus getAttendanceStatus(LocalDateTime missionStartDate, LocalDateTime missionEndDate, LocalDateTime challengeEndDate) {

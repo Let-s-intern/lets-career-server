@@ -158,7 +158,8 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
                         attendance.link,
                         attendance.status,
                         attendance.result,
-                        payment.challengePricePlanType))
+                        payment.challengePricePlanType,
+                        attendance.feedbackStatus))
                 .from(attendance)
                 .leftJoin(attendance.user, user)
                 .leftJoin(attendance.mentor, mentor)
