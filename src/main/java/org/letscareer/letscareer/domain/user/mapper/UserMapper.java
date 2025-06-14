@@ -4,6 +4,7 @@ import org.letscareer.letscareer.domain.user.dto.request.UserPwSignUpRequestDto;
 import org.letscareer.letscareer.domain.user.dto.response.*;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.type.AuthProvider;
+import org.letscareer.letscareer.domain.user.vo.MentorAdminVo;
 import org.letscareer.letscareer.domain.user.vo.UserAdminVo;
 import org.letscareer.letscareer.global.common.entity.PageInfo;
 import org.letscareer.letscareer.global.security.oauth2.userinfo.OAuth2UserInfo;
@@ -43,6 +44,10 @@ public class UserMapper {
     public UserAdminListInfo toUserAdminListInfo(UserAdminVo userInfo,
                                                  List<UserApplicationInfo> applicationInfos) {
         return UserAdminListInfo.of(userInfo, applicationInfos);
+    }
+
+    public MentorListResponseDto toMentorListResponseDto(List<MentorAdminVo> mentorAdminVos) {
+        return MentorListResponseDto.of(mentorAdminVos);
     }
 
     public UserInfoResponseDto toUserInfoResponseDto(User user, String stringId) {

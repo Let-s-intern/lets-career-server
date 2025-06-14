@@ -208,8 +208,21 @@ public class ChallengeV1Controller {
     @ApiErrorCode({SwaggerEnum.PAYMENT_NOT_FOUND})
     @GetMapping("/{challengeId}/mission/{missionId}/attendances")
     public ResponseEntity<SuccessResponse<?>> getMissionAttendances(@PathVariable final Long challengeId,
-                                                                    @PathVariable final Long missionId) {
+                                                                    @PathVariable final Long missionId,
+                                                                    @CurrentUser final User user) {
         final GetChallengeMissionAttendancesResponseDto responseDto = challengeService.getMissionAttendances(challengeId, missionId);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "[멘토용] 챌린지 피드백 미션별 제출자 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeFeedbackMissionAttendancesResponseDto.class)))
+    })
+    @ApiErrorCode({SwaggerEnum.PAYMENT_NOT_FOUND})
+    @GetMapping("/{challengeId}/mission/{missionId}/feedback/attendances")
+    public ResponseEntity<SuccessResponse<?>> getFeedbackMissionAttendances(@PathVariable final Long challengeId,
+                                                                            @PathVariable final Long missionId,
+                                                                            @CurrentUser final User user) {
+        final GetChallengeFeedbackMissionAttendancesResponseDto responseDto = challengeService.getFeedbackMissionAttendancesForMentor(challengeId, missionId, user);
         return SuccessResponse.ok(responseDto);
     }
 

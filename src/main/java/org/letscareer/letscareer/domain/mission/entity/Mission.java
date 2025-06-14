@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.letscareer.letscareer.domain.attendance.entity.Attendance;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
+import org.letscareer.letscareer.domain.challengeoption.entity.ChallengeOption;
 import org.letscareer.letscareer.domain.contents.type.ContentsType;
 import org.letscareer.letscareer.domain.mission.dto.request.CreateMissionRequestDto;
 import org.letscareer.letscareer.domain.mission.dto.request.UpdateMissionRequestDto;
@@ -58,6 +59,9 @@ public class Mission extends BaseTimeEntity {
     @JoinColumn(name = "challenge_id")
     private Challenge challenge;
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "challenge_option_id")
+    private ChallengeOption challengeOption;
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mission_template_id")
     private MissionTemplate missionTemplate;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -110,5 +114,13 @@ public class Mission extends BaseTimeEntity {
 
     public void updateMissionTemplate(MissionTemplate missionTemplate) {
         this.missionTemplate = updateValue(this.missionTemplate, missionTemplate);
+    }
+
+    public void updateChallengeOption(ChallengeOption challengeOption) {
+        this.challengeOption = updateValue(this.challengeOption, challengeOption);
+    }
+
+    public void initChallengeOption() {
+        this.challengeOption = null;
     }
 }

@@ -41,14 +41,14 @@ public class AttendanceServiceImpl implements AttendanceService {
     private final UserHelper userHelper;
 
     @Override
-    public void createAttendance(Long missionId, CreateAttendanceRequestDto createRequestDto, Long userId) {
+    public void createAttendance(Long missionId, CreateAttendanceRequestDto requestDto, Long userId) {
         Mission mission = missionHelper.findMissionByIdOrThrow(missionId);
         Challenge challenge = mission.getChallenge();
         User user = userHelper.findUserByIdOrThrow(userId);
         challengeApplicationHelper.validateChallengeDashboardAccessibleUser(challenge.getId(), user);
         attendanceHelper.checkExistingAttendance(mission.getId(), user.getId());
         AttendanceStatus status = getAttendanceStatus(mission.getStartDate(), mission.getEndDate(), challenge.getEndDate());
-        attendanceHelper.createAttendanceAndSave(mission, createRequestDto, status, user);
+        attendanceHelper.createAttendanceAndSave(mission, requestDto, status, user);
     }
 
     @Override
@@ -58,16 +58,12 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public void updateAttendance(Long attendanceId, User user, UpdateAttendanceRequestDto updateRequestDto) {
+    public void updateAttendance(Long attendanceId, User user, UpdateAttendanceRequestDto requestDto) {
         Attendance attendance = attendanceHelper.findAttendanceByIdOrThrow(attendanceId);
         validateAuthorizedUser(user, attendance);
-        if (user.getRole().equals(UserRole.ADMIN)) updateAttendanceByAdmin(attendance, updateRequestDto);
-        else updateAttendanceByUser(attendance, updateRequestDto);
-    }
-
-    @Override
-    public void sendLink(Long attendanceId, User user, UpdateAttendanceUserRequestDto link) {
-
+        if (user.getRole().equals(UserRole.ADMIN)) updateAttendanceByAdmin(attendance, requestDto);
+        else updateAttendanceByUser(attendance, requestDto);
+        if (validateAuthorizedMentor(attendance, user)) updateAttendanceByMentor(attendance, requestDto);
     }
 
     private void validateAuthorizedUser(User user, Attendance attendance) {
@@ -77,11 +73,14 @@ public class AttendanceServiceImpl implements AttendanceService {
         }
     }
 
+    private boolean validateAuthorizedMentor(Attendance attendance, User user) {
+        return user.getIsMentor() && attendance.getMentor().getId().equals(user.getId());
+    }
+
     private void updateAttendanceByUser(Attendance attendance, UpdateAttendanceRequestDto requestDto) {
         Mission mission = attendance.getMission();
         Challenge challenge = mission.getChallenge();
         AttendanceStatus status = getAttendanceStatus(mission.getStartDate(), mission.getEndDate(), challenge.getEndDate());
-
         if (isGeneralUpdate(status, attendance)) {
             attendance.updateAttendanceLink(requestDto.link());
         } else if (isReSubmit(status, attendance)) {
@@ -92,14 +91,26 @@ public class AttendanceServiceImpl implements AttendanceService {
         attendance.updateAttendanceReview(requestDto.review());
     }
 
-    private void updateAttendanceByAdmin(Attendance attendance, UpdateAttendanceRequestDto updateRequestDto) {
-        if ((isUpdatedAttendance(attendance) && !Objects.isNull(updateRequestDto.result()))) {
-            if (wrongToPass(attendance, updateRequestDto))
+    private void updateAttendanceByAdmin(Attendance attendance, UpdateAttendanceRequestDto requestDto) {
+        if ((isUpdatedAttendance(attendance) && !Objects.isNull(requestDto.result()))) {
+            if (wrongToPass(attendance, requestDto))
                 attendance.updateAttendanceStatus(AttendanceStatus.LATE);
-            else if (wrongToWrong(attendance, updateRequestDto))
+            else if (wrongToWrong(attendance, requestDto))
                 attendance.updateAttendanceStatus(AttendanceStatus.ABSENT);
         }
-        attendance.updateAttendanceAdmin(updateRequestDto);
+        if (requestDto.mentorUserId() != null) {
+            if (requestDto.mentorUserId() == 0L) {
+                attendance.initAttendanceMentor();
+            } else {
+                User mentor = userHelper.findUserByIdOrThrow(requestDto.mentorUserId());
+                attendance.updateAttendanceMentor(mentor);
+            }
+        }
+        attendance.updateAttendanceAdmin(requestDto);
+    }
+
+    private void updateAttendanceByMentor(Attendance attendance, UpdateAttendanceRequestDto requestDto) {
+        attendance.updateAttendanceFeedback(requestDto);
     }
 
     private AttendanceStatus getAttendanceStatus(LocalDateTime missionStartDate, LocalDateTime missionEndDate, LocalDateTime challengeEndDate) {

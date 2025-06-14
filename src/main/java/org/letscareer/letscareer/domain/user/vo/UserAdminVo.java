@@ -17,6 +17,7 @@ public record UserAdminVo(
         AccountType accountType,
         String accountNum,
         Boolean marketingAgree,
-        UserRole role
+        UserRole role,
+        Boolean isMentor
 ) {
 }

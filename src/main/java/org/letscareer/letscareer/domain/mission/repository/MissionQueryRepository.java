@@ -12,6 +12,7 @@ import java.util.Optional;
 public interface MissionQueryRepository {
     List<MissionForChallengeVo> findMissionForChallengeVos(Long challengeId);
     List<Mission> findMissionsByChallengeId(Long challengeId);
+    List<FeedbackMissionAdminVo> findFeedbackMissionAdminVodByChallengeId(Long challengeId);
     Optional<DailyMissionVo> findDailyMissionVoByChallengeId(Long challengeId);
     Optional<MyDailyMissionVo> findMyDailyMissionVoByChallengeId(Long challengeId);
     Optional<MyDailyMissionVo> findMyDailyMissionVoByMissionId(Long missionId);

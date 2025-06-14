@@ -80,6 +80,9 @@ public class User extends BaseTimeEntity {
     @Builder.Default
     @Convert(converter = UserRoleConverter.class)
     private UserRole role = UserRole.USER;
+    @NotNull
+    @Builder.Default
+    private Boolean isMentor = false;
     @Nullable
     @Convert(converter = AccountTypeConverter.class)
     private AccountType accountType;
@@ -151,7 +154,8 @@ public class User extends BaseTimeEntity {
         this.wishCompany = updateValue(this.wishCompany, requestDto.wishCompany());
         this.inflowPath = updateValue(this.inflowPath, requestDto.inflowPath());
         this.contactEmail = updateValue(this.contactEmail, requestDto.contactEmail());
-        this.role = updateValue(this.role, UserRole.valueOf(requestDto.role()));
+        this.role = updateValue(this.role, requestDto.role());
+        this.isMentor = updateValue(this.isMentor, requestDto.isMentor());
     }
 
     public void updateUserPassword(String encodedPassword) {
