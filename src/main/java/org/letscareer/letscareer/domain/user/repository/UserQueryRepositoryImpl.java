@@ -16,7 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.letscareer.letscareer.domain.user.entity.QUser.user;
@@ -38,7 +37,8 @@ public class UserQueryRepositoryImpl implements UserQueryRepository {
                         user.accountType,
                         user.accountNum,
                         user.marketingAgree,
-                        user.role))
+                        user.role,
+                        user.isMentor))
                 .from(user)
                 .where(
                         containsEmail(email),
