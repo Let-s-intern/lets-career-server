@@ -39,7 +39,7 @@ public class UserV2AdminController {
     }
 
     @Operation(summary = "멘토 전체 목록", responses = {
-            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserAdminListResponseDto.class)))
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = MentorListResponseDto.class)))
     })
     @ApiErrorCode({SwaggerEnum.IS_NOT_ADMIN})
     @GetMapping("/mentor")
