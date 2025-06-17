@@ -5,18 +5,17 @@ import org.letscareer.letscareer.domain.admincalssification.helper.ChallengeAdmi
 import org.letscareer.letscareer.domain.admincalssification.request.CreateChallengeAdminClassificationRequestDto;
 import org.letscareer.letscareer.domain.admincalssification.vo.ChallengeAdminClassificationDetailVo;
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationWithOptionsVo;
+import org.letscareer.letscareer.domain.attendance.vo.FeedbackMissionAttendanceVo;
 import org.letscareer.letscareer.domain.attendance.vo.MissionAttendanceWithOptionsVo;
 import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApplicationRequestDto;
 import org.letscareer.letscareer.domain.application.dto.response.GetChallengeApplicationsResponseDto;
 import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
 import org.letscareer.letscareer.domain.application.helper.ChallengeApplicationHelper;
 import org.letscareer.letscareer.domain.application.mapper.ChallengeApplicationMapper;
-import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
 import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
 import org.letscareer.letscareer.domain.attendance.helper.AttendanceHelper;
 import org.letscareer.letscareer.domain.attendance.mapper.AttendanceMapper;
 import org.letscareer.letscareer.domain.attendance.vo.AttendanceDashboardVo;
-import org.letscareer.letscareer.domain.attendance.vo.MissionAttendanceVo;
 import org.letscareer.letscareer.domain.attendance.vo.MissionScoreVo;
 import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApplicationPaybackRequestDto;
@@ -31,8 +30,11 @@ import org.letscareer.letscareer.domain.challenge.vo.*;
 import org.letscareer.letscareer.domain.challengeguide.entity.ChallengeGuide;
 import org.letscareer.letscareer.domain.challengeguide.helper.ChallengeGuideHelper;
 import org.letscareer.letscareer.domain.challengeguide.vo.ChallengeGuideVo;
+import org.letscareer.letscareer.domain.challengementor.dto.request.CreateChallengeMentorsRequestDto;
+import org.letscareer.letscareer.domain.challengementor.dto.response.GetChallengeMentorsResponseDto;
+import org.letscareer.letscareer.domain.challengementor.helper.ChallengeMentorHelper;
+import org.letscareer.letscareer.domain.challengementor.vo.ChallengeMentorAdminVo;
 import org.letscareer.letscareer.domain.challengeoption.entity.ChallengeOption;
-import org.letscareer.letscareer.domain.challengeoption.entity.ChallengePriceOption;
 import org.letscareer.letscareer.domain.challengeoption.helper.ChallengeOptionHelper;
 import org.letscareer.letscareer.domain.challengeoption.helper.ChallengePriceOptionHelper;
 import org.letscareer.letscareer.domain.challlengenotice.entity.ChallengeNotice;
@@ -42,7 +44,6 @@ import org.letscareer.letscareer.domain.classification.dto.request.CreateChallen
 import org.letscareer.letscareer.domain.classification.helper.ChallengeClassificationHelper;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.classification.vo.ChallengeClassificationDetailVo;
-import org.letscareer.letscareer.domain.contents.entity.Contents;
 import org.letscareer.letscareer.domain.contents.type.ContentsType;
 import org.letscareer.letscareer.domain.coupon.entity.Coupon;
 import org.letscareer.letscareer.domain.coupon.helper.CouponHelper;
@@ -84,9 +85,12 @@ import org.letscareer.letscareer.domain.score.entity.AdminScore;
 import org.letscareer.letscareer.domain.score.helper.AdminScoreHelper;
 import org.letscareer.letscareer.domain.score.helper.MissionScoreHelper;
 import org.letscareer.letscareer.domain.user.entity.User;
+import org.letscareer.letscareer.domain.user.helper.UserHelper;
+import org.letscareer.letscareer.domain.user.type.UserRole;
 import org.letscareer.letscareer.global.common.entity.PageInfo;
 import org.letscareer.letscareer.global.common.utils.zoom.ZoomUtils;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
+import org.letscareer.letscareer.global.error.exception.UnauthorizedException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -100,6 +104,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static org.letscareer.letscareer.domain.application.error.ApplicationErrorCode.APPLICATION_NOT_FOUND;
+import static org.letscareer.letscareer.domain.user.error.UserErrorCode.IS_NOT_MENTOR;
 
 @RequiredArgsConstructor
 @Transactional
@@ -116,6 +121,8 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final ChallengeOptionHelper challengeOptionHelper;
     private final ChallengePriceOptionHelper challengePriceOptionHelper;
     private final ChallengeGuideHelper challengeGuideHelper;
+    private final ChallengeMentorHelper challengeMentorHelper;
+    private final UserHelper userHelper;
     private final AttendanceHelper attendanceHelper;
     private final AttendanceMapper attendanceMapper;
     private final AdminScoreHelper adminScoreHelper;
@@ -208,8 +215,25 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     @Override
     public GetChallengeMissionAttendancesResponseDto getMissionAttendances(Long challengeId, Long missionId) {
-        List<MissionAttendanceWithOptionsVo> attendanceVos = attendanceHelper.findMissionAttendanceVo(challengeId, missionId);
+        List<MissionAttendanceWithOptionsVo> attendanceVos = attendanceHelper.findMissionAttendanceVos(challengeId, missionId);
         return attendanceMapper.toGetChallengeMissionAttendancesResponseDto(attendanceVos);
+    }
+
+    @Override
+    public GetChallengeFeedbackMissionAttendancesResponseDto getFeedbackMissionAttendances(Long challengeId, Long missionId) {
+        Mission mission = missionHelper.findMissionByIdOrThrow(missionId);
+        if(Objects.isNull(mission.getChallengeOption())) return null;
+        List<FeedbackMissionAttendanceVo> attendanceVos = attendanceHelper.findFeedbackMissionAttendanceVos(challengeId, missionId, mission.getChallengeOption().getId());
+        return attendanceMapper.toGetChallengeFeedbackMissionAttendancesResponseDto(attendanceVos);
+    }
+
+    @Override
+    public GetChallengeFeedbackMissionAttendancesResponseDto getFeedbackMissionAttendancesForMentor(Long challengeId, Long missionId, User user) {
+        if(!user.getIsMentor()) throw new UnauthorizedException(IS_NOT_MENTOR);
+        Mission mission = missionHelper.findMissionByIdOrThrow(missionId);
+        if(Objects.isNull(mission.getChallengeOption())) return null;
+        List<FeedbackMissionAttendanceVo> attendanceVos = attendanceHelper.findFeedbackMissionAttendanceVos(challengeId, missionId, mission.getChallengeOption().getId());
+        return attendanceMapper.toGetChallengeFeedbackMissionAttendancesResponseDto(attendanceVos);
     }
 
     @Override
@@ -335,6 +359,12 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
+    public GetChallengeMentorsResponseDto getChallengeMentors(Long challengeId) {
+        List<ChallengeMentorAdminVo> challengeMentorAdminVos = challengeMentorHelper.findChallengeMentorAdminVosByChallengeId(challengeId);
+        return GetChallengeMentorsResponseDto.of(challengeMentorAdminVos);
+    }
+
+    @Override
     public GetChallengeExisingApplicationResponseDto getChallengeExistingApplication(Long challengeId, Long userId) {
         Boolean applied = challengeApplicationHelper.existChallengeApplicationByChallengeIdAndUserId(challengeId, userId);
         return challengeApplicationMapper.toChallengeExistingApplicationResponseDto(applied);
@@ -388,7 +418,6 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     @Override
     public void deleteChallenge(Long challengeId) {
-
         challengeHelper.deleteChallengeById(challengeId);
     }
 
@@ -399,6 +428,18 @@ public class ChallengeServiceImpl implements ChallengeService {
         copyChallengeGuides(fromChallenge, toChallenge);
         copyChallengeNotices(fromChallenge, toChallenge);
         copyMissions(fromChallenge, toChallenge);
+    }
+
+    @Override
+    public void createChallengeMentors(Long challengeId, CreateChallengeMentorsRequestDto requestDto) {
+        Challenge challenge = challengeHelper.findChallengeByIdOrThrow(challengeId);
+        requestDto.mentorIdList()
+                .forEach(mentorId -> {
+                    User mentor = userHelper.findUserByIdOrElseNull(mentorId);
+                    if(isValidNewChallengeMentor(challenge, mentor)) {
+                        challengeMentorHelper.createChallengeMentorAndSave(challenge, mentor);
+                    }
+                });
     }
 
     private void createClassificationListAndSave(List<CreateChallengeClassificationRequestDto> requestDtoList,
@@ -568,5 +609,9 @@ public class ChallengeServiceImpl implements ChallengeService {
 
             toChallenge.getMissionList().add(mission);
         }
+    }
+
+    private boolean isValidNewChallengeMentor(Challenge challenge, User mentor) {
+        return mentor != null && Boolean.TRUE.equals(mentor.getIsMentor()) && !challengeMentorHelper.existsByChallengeAndMentor(challenge, mentor);
     }
 }

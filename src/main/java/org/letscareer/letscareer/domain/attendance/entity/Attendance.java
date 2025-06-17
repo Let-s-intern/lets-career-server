@@ -5,8 +5,10 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.letscareer.letscareer.domain.attendance.dto.request.CreateAttendanceRequestDto;
 import org.letscareer.letscareer.domain.attendance.dto.request.UpdateAttendanceRequestDto;
+import org.letscareer.letscareer.domain.attendance.type.AttendanceFeedbackStatus;
 import org.letscareer.letscareer.domain.attendance.type.AttendanceResult;
 import org.letscareer.letscareer.domain.attendance.type.AttendanceStatus;
+import org.letscareer.letscareer.domain.attendance.type.converter.AttendanceFeedbackStatusConverter;
 import org.letscareer.letscareer.domain.attendance.type.converter.AttendanceResultConverter;
 import org.letscareer.letscareer.domain.attendance.type.converter.AttendanceStatusConverter;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
@@ -38,6 +40,10 @@ public class Attendance extends BaseTimeEntity {
     @Convert(converter = AttendanceResultConverter.class)
     private AttendanceResult result = AttendanceResult.WAITING;
     private String comments;
+    private String feedback;
+    @Builder.Default
+    @Convert(converter = AttendanceFeedbackStatusConverter.class)
+    private AttendanceFeedbackStatus feedbackStatus = AttendanceFeedbackStatus.WAITING;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mission_id")
@@ -45,6 +51,9 @@ public class Attendance extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "mentor_id")
+    private User mentor;
 
     public static Attendance createAttendance(Mission mission,
                                               CreateAttendanceRequestDto createRequestDto,
@@ -82,5 +91,18 @@ public class Attendance extends BaseTimeEntity {
 
     public void updateAttendanceReview(String review) {
         this.review = updateValue(this.review, review);
+    }
+
+    public void updateAttendanceMentor(User mentor) {
+        this.mentor = updateValue(this.mentor, mentor);
+    }
+
+    public void initAttendanceMentor() {
+        this.mentor = null;
+    }
+
+    public void updateAttendanceFeedback(UpdateAttendanceRequestDto requestDto) {
+        this.feedback = updateValue(this.feedback, requestDto.feedback());
+        this.feedbackStatus = updateValue(this.feedbackStatus, requestDto.feedbackStatus());
     }
 }

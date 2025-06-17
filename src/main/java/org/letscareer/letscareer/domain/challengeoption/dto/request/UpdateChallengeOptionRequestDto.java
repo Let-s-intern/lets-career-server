@@ -4,6 +4,7 @@ public record UpdateChallengeOptionRequestDto(
         String title,
         String code,
         Integer price,
-        Integer discountPrice
+        Integer discountPrice,
+        Boolean isFeedback
 ) {
 }

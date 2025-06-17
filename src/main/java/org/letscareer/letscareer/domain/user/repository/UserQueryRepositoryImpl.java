@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.user.repository;
 
 import com.querydsl.core.types.Expression;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
@@ -9,12 +10,12 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.user.entity.QUser;
 import org.letscareer.letscareer.domain.user.type.UserRole;
+import org.letscareer.letscareer.domain.user.vo.MentorAdminVo;
 import org.letscareer.letscareer.domain.user.vo.UserAdminVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.letscareer.letscareer.domain.user.entity.QUser.user;
@@ -36,7 +37,8 @@ public class UserQueryRepositoryImpl implements UserQueryRepository {
                         user.accountType,
                         user.accountNum,
                         user.marketingAgree,
-                        user.role))
+                        user.role,
+                        user.isMentor))
                 .from(user)
                 .where(
                         containsEmail(email),
@@ -59,6 +61,18 @@ public class UserQueryRepositoryImpl implements UserQueryRepository {
         return PageableExecutionUtils.getPage(userAdminVoList, pageable, countQuery::fetchOne);
     }
 
+    @Override
+    public List<MentorAdminVo> findAllMentorAdminVos() {
+        return queryFactory
+                .select(Projections.constructor(MentorAdminVo.class,
+                        user.id,
+                        user.name))
+                .from(user)
+                .where(isMentor())
+                .orderBy(user.id.desc())
+                .fetch();
+    }
+
     public static Expression<String> activeEmail(QUser user) {
         return new CaseBuilder()
                 .when(user.contactEmail.isNotNull()).then(user.contactEmail)
@@ -79,5 +93,9 @@ public class UserQueryRepositoryImpl implements UserQueryRepository {
 
     private BooleanExpression containsRole(String role) {
         return role != null ? user.role.stringValue().containsIgnoreCase(String.valueOf(UserRole.valueOf(role).getCode())) : null;
+    }
+
+    private BooleanExpression isMentor() {
+        return user.isMentor.eq(true);
     }
 }
