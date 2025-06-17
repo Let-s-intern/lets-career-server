@@ -200,6 +200,11 @@ public class UserServiceImpl implements UserService {
         return user.getRole().equals(UserRole.ADMIN);
     }
 
+    @Override
+    public Boolean isMentor(User user) {
+        return user.getIsMentor().equals(Boolean.TRUE);
+    }
+
     private void sendSignUpKakaoMessage(User newUser) {
         SignUpParameter requestParameter = SignUpParameter.of(newUser);
         nhnProvider.sendKakaoMessage(newUser, requestParameter, "sign_up_confirm");

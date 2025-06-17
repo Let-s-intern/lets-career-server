@@ -24,6 +24,8 @@ public interface UserService {
 
     Boolean isAdmin(User user);
 
+    Boolean isMentor(User user);
+
     UserAdminListResponseDto getUsers(String email, String name, String phoneNum, String role, Pageable pageable);
 
     MentorListResponseDto getMentors();
