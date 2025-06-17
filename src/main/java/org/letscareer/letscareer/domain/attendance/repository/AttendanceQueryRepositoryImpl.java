@@ -145,7 +145,7 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
     }
 
     @Override
-    public List<FeedbackMissionAttendanceVo> findFeedbackMissionAttendanceVos(Long challengeId, Long missionId, Long challengeOptionId) {
+    public List<FeedbackMissionAttendanceVo> findFeedbackMissionAttendanceVos(Long mentorId, Long challengeId, Long missionId, Long challengeOptionId) {
         QUser mentor = new QUser("mentor");
         return queryFactory
                 .select(Projections.constructor(FeedbackMissionAttendanceVo.class,
@@ -175,6 +175,7 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
                 .where(
                         eqChallengeId(challengeId),
                         eqMissionId(missionId),
+                        eqMentorId(mentorId),
                         eqAttendanceStatus(AttendanceStatus.PRESENT),
                         eqChallengeApplicationIsCanceled(false),
                         eqChallengeOptionId(challengeOptionId),
@@ -240,6 +241,10 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
 
     private BooleanExpression eqMissionId(Long missionId) {
         return missionId != null ? mission.id.eq(missionId) : null;
+    }
+
+    private BooleanExpression eqMentorId(Long mentorId) {
+        return mentorId != null ? attendance.mentor.id.eq(mentorId) : null;
     }
 
     private BooleanExpression eqChallengeOptionId(Long challengeOptionId) {
