@@ -13,7 +13,6 @@ import org.letscareer.letscareer.global.error.exception.ConflictException;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -41,8 +40,8 @@ public class AttendanceHelper {
         return attendanceRepository.findMissionAttendanceVos(challengeId, missionId);
     }
 
-    public List<FeedbackMissionAttendanceVo> findFeedbackMissionAttendanceVos(Long challengeId, Long missionId, Long challengeOptionId) {
-        return attendanceRepository.findFeedbackMissionAttendanceVos(challengeId, missionId, challengeOptionId);
+    public List<FeedbackMissionAttendanceVo> findFeedbackMissionAttendanceVos(Long mentorId, Long challengeId, Long missionId, Long challengeOptionId) {
+        return attendanceRepository.findFeedbackMissionAttendanceVos(mentorId, challengeId, missionId, challengeOptionId);
     }
 
     public AttendanceDashboardVo findAttendanceDashboardVoOrNull(Long missionId, Long userId) {

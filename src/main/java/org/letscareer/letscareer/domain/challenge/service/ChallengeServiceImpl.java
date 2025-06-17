@@ -223,7 +223,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     public GetChallengeFeedbackMissionAttendancesResponseDto getFeedbackMissionAttendances(Long challengeId, Long missionId) {
         Mission mission = missionHelper.findMissionByIdOrThrow(missionId);
         if(Objects.isNull(mission.getChallengeOption())) return null;
-        List<FeedbackMissionAttendanceVo> attendanceVos = attendanceHelper.findFeedbackMissionAttendanceVos(challengeId, missionId, mission.getChallengeOption().getId());
+        List<FeedbackMissionAttendanceVo> attendanceVos = attendanceHelper.findFeedbackMissionAttendanceVos(null, challengeId, missionId, mission.getChallengeOption().getId());
         return attendanceMapper.toGetChallengeFeedbackMissionAttendancesResponseDto(attendanceVos);
     }
 
@@ -232,7 +232,7 @@ public class ChallengeServiceImpl implements ChallengeService {
         if(!user.getIsMentor()) throw new UnauthorizedException(IS_NOT_MENTOR);
         Mission mission = missionHelper.findMissionByIdOrThrow(missionId);
         if(Objects.isNull(mission.getChallengeOption())) return null;
-        List<FeedbackMissionAttendanceVo> attendanceVos = attendanceHelper.findFeedbackMissionAttendanceVos(challengeId, missionId, mission.getChallengeOption().getId());
+        List<FeedbackMissionAttendanceVo> attendanceVos = attendanceHelper.findFeedbackMissionAttendanceVos(user.getId(), challengeId, missionId, mission.getChallengeOption().getId());
         return attendanceMapper.toGetChallengeFeedbackMissionAttendancesResponseDto(attendanceVos);
     }
 
