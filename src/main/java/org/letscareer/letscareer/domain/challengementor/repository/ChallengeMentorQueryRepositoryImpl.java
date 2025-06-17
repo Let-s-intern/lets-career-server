@@ -5,11 +5,13 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.challengementor.vo.ChallengeMentorAdminVo;
+import org.letscareer.letscareer.domain.challengementor.vo.MyChallengeMentorVo;
 
 import java.util.List;
 
 import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
 import static org.letscareer.letscareer.domain.challengementor.entity.QChallengeMentor.challengeMentor;
+import static org.letscareer.letscareer.domain.user.entity.QUser.user;
 
 @RequiredArgsConstructor
 public class ChallengeMentorQueryRepositoryImpl implements ChallengeMentorQueryRepository {
@@ -28,7 +30,29 @@ public class ChallengeMentorQueryRepositoryImpl implements ChallengeMentorQueryR
                 .fetch();
     }
 
+    @Override
+    public List<MyChallengeMentorVo> findAllMyChallengeMentorVosByMentorId(Long mentorId) {
+        return queryFactory
+                .select(Projections.constructor(MyChallengeMentorVo.class,
+                        challenge.id,
+                        challenge.title,
+                        challenge.shortDesc,
+                        challenge.thumbnail,
+                        challenge.startDate,
+                        challenge.endDate))
+                .from(challengeMentor)
+                .leftJoin(challengeMentor.challenge, challenge)
+                .leftJoin(challengeMentor.mentor, user)
+                .where(eqMentorId(mentorId))
+                .orderBy(challenge.endDate.desc())
+                .fetch();
+    }
+
     private BooleanExpression eqChallengeId(Long challengeId) {
         return challengeId != null ? challenge.id.eq(challengeId) : null;
+    }
+
+    private BooleanExpression eqMentorId(Long mentorId) {
+        return mentorId != null ? user.id.eq(mentorId) : null;
     }
 }

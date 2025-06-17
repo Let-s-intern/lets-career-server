@@ -7,6 +7,7 @@ import org.letscareer.letscareer.domain.blog.error.BlogErrorCode;
 import org.letscareer.letscareer.domain.blogbanner.error.BlogBannerErrorCode;
 import org.letscareer.letscareer.domain.challenge.error.ChallengeErrorCode;
 import org.letscareer.letscareer.domain.challengeguide.error.ChallengeGuideErrorCode;
+import org.letscareer.letscareer.domain.challengementor.error.ChallengeMentorErrorCode;
 import org.letscareer.letscareer.domain.classification.error.ChallengeClassificationErrorCode;
 import org.letscareer.letscareer.domain.contents.error.ContentsErrorCode;
 import org.letscareer.letscareer.domain.coupon.error.CouponErrorCode;
@@ -59,6 +60,9 @@ public enum SwaggerEnum {
 
     // challenge classification
     CHALLENGE_CLASSIFICATION_NOT_FOUND(ChallengeClassificationErrorCode.CHALLENGE_CLASSIFICATION_NOT_FOUND),
+
+    // challenge mentor
+    NOT_CHALLENGE_MENTOR(ChallengeMentorErrorCode.NOT_CHALLENGE_MENTOR),
 
     // coupon
     COUPON_NOT_FOUND(CouponErrorCode.COUPON_NOT_FOUND),
