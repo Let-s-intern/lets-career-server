@@ -169,6 +169,7 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
                         eqUserId(userId)
                 )
                 .orderBy(vWApplication.paymentCreateDate.desc())
+                .distinct()
                 .fetch();
     }
 
