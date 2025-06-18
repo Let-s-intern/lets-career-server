@@ -20,6 +20,7 @@ public record MissionForChallengeVo(
         Long missionTemplateId,
         LocalDateTime startDate,
         LocalDateTime endDate,
+        Long challengeOptionId,
         String challengeOptionCode
 ) {
 }
