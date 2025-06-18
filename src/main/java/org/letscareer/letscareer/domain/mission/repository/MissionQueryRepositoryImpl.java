@@ -54,6 +54,7 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
                         missionTemplate.id,
                         mission.startDate,
                         mission.endDate,
+                        mission.challengeOption.id,
                         mission.challengeOption.code
                 ))
                 .from(mission)

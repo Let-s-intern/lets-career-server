@@ -27,6 +27,7 @@ public record MissionAdminResponseDto(
         LocalDateTime endDate,
         List<ContentsMissionVo> essentialContentsList,
         List<ContentsMissionVo> additionalContentsList,
+        Long challengeOptionId,
         String challengeOptionCode
 ) {
     public static MissionAdminResponseDto of(MissionForChallengeVo vo,
@@ -50,6 +51,7 @@ public record MissionAdminResponseDto(
                 .endDate(vo.endDate())
                 .essentialContentsList(essentialContentsList)
                 .additionalContentsList(additionalContentsList)
+                .challengeOptionId(vo.challengeOptionId())
                 .challengeOptionCode(vo.challengeOptionCode())
                 .build();
     }
