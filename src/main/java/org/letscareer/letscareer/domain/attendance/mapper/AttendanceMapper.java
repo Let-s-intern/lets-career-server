@@ -1,10 +1,8 @@
 package org.letscareer.letscareer.domain.attendance.mapper;
 
 import org.letscareer.letscareer.domain.attendance.dto.response.AttendanceAdminListResponseDto;
-import org.letscareer.letscareer.domain.attendance.vo.AttendanceAdminVo;
-import org.letscareer.letscareer.domain.attendance.vo.FeedbackMissionAttendanceVo;
-import org.letscareer.letscareer.domain.attendance.vo.MissionAttendanceVo;
-import org.letscareer.letscareer.domain.attendance.vo.MissionAttendanceWithOptionsVo;
+import org.letscareer.letscareer.domain.attendance.vo.*;
+import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeFeedbackMissionAttendanceResponseDto;
 import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeFeedbackMissionAttendancesResponseDto;
 import org.letscareer.letscareer.domain.challenge.dto.response.GetChallengeMissionAttendancesResponseDto;
 import org.springframework.stereotype.Component;
@@ -23,5 +21,9 @@ public class AttendanceMapper {
 
     public GetChallengeFeedbackMissionAttendancesResponseDto toGetChallengeFeedbackMissionAttendancesResponseDto(List<FeedbackMissionAttendanceVo> attendanceVos) {
         return GetChallengeFeedbackMissionAttendancesResponseDto.of(attendanceVos);
+    }
+
+    public GetChallengeFeedbackMissionAttendanceResponseDto toGetChallengeFeedbackMissionAttendanceResponseDto(FeedbackMissionAttendanceDetailVo attendanceVo) {
+        return GetChallengeFeedbackMissionAttendanceResponseDto.of(attendanceVo);
     }
 }

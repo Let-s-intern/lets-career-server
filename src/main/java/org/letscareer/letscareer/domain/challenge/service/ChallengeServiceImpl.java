@@ -95,7 +95,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -232,6 +231,13 @@ public class ChallengeServiceImpl implements ChallengeService {
         if(Objects.isNull(mission.getChallengeOption())) return null;
         List<FeedbackMissionAttendanceVo> attendanceVos = attendanceHelper.findFeedbackMissionAttendanceVos(user.getId(), challengeId, missionId, mission.getChallengeOption().getId());
         return attendanceMapper.toGetChallengeFeedbackMissionAttendancesResponseDto(attendanceVos);
+    }
+
+    @Override
+    public GetChallengeFeedbackMissionAttendanceResponseDto getFeedbackMissionAttendanceForMentor(Long challengeId, Long missionId, Long attendanceId, User user) {
+        if(!user.getRole().equals(UserRole.ADMIN) && !user.getIsMentor()) throw new UnauthorizedException(IS_NOT_MENTOR);
+        FeedbackMissionAttendanceDetailVo attendanceVo = attendanceHelper.findFeedbackMissionAttendanceDetailVoByAttendanceIdOrElseThrow(attendanceId);
+        return attendanceMapper.toGetChallengeFeedbackMissionAttendanceResponseDto(attendanceVo);
     }
 
     @Override
