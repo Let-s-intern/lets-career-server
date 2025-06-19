@@ -5,8 +5,7 @@ import org.letscareer.letscareer.domain.admincalssification.helper.ChallengeAdmi
 import org.letscareer.letscareer.domain.admincalssification.request.CreateChallengeAdminClassificationRequestDto;
 import org.letscareer.letscareer.domain.admincalssification.vo.ChallengeAdminClassificationDetailVo;
 import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationWithOptionsVo;
-import org.letscareer.letscareer.domain.attendance.vo.FeedbackMissionAttendanceVo;
-import org.letscareer.letscareer.domain.attendance.vo.MissionAttendanceWithOptionsVo;
+import org.letscareer.letscareer.domain.attendance.vo.*;
 import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApplicationRequestDto;
 import org.letscareer.letscareer.domain.application.dto.response.GetChallengeApplicationsResponseDto;
 import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
@@ -15,8 +14,6 @@ import org.letscareer.letscareer.domain.application.mapper.ChallengeApplicationM
 import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
 import org.letscareer.letscareer.domain.attendance.helper.AttendanceHelper;
 import org.letscareer.letscareer.domain.attendance.mapper.AttendanceMapper;
-import org.letscareer.letscareer.domain.attendance.vo.AttendanceDashboardVo;
-import org.letscareer.letscareer.domain.attendance.vo.MissionScoreVo;
 import org.letscareer.letscareer.domain.challenge.dto.request.CreateChallengeRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApplicationPaybackRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApplicationPaybacksRequestDto;
@@ -62,6 +59,7 @@ import org.letscareer.letscareer.domain.mission.type.MissionQueryType;
 import org.letscareer.letscareer.domain.mission.vo.DailyMissionVo;
 import org.letscareer.letscareer.domain.mission.vo.MissionScheduleVo;
 import org.letscareer.letscareer.domain.mission.vo.MyDailyMissionVo;
+import org.letscareer.letscareer.domain.mission.vo.MyMissionFeedbackVo;
 import org.letscareer.letscareer.domain.missioncontents.entity.MissionContents;
 import org.letscareer.letscareer.domain.missioncontents.helper.MissionContentsHelper;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
@@ -327,6 +325,14 @@ public class ChallengeServiceImpl implements ChallengeService {
         MyDailyMissionVo missionInfo = missionHelper.findMyDailyMissionVoByMissionId(missionId);
         AttendanceDashboardVo attendanceInfo = missionInfo != null ? attendanceHelper.findAttendanceDashboardVoOrNull(missionInfo.id(), user.getId()) : null;
         return missionMapper.toGetChallengeMyMissionDetailResponseDto(missionInfo, attendanceInfo);
+    }
+
+    @Override
+    public GetChallengeMyMissionFeedbackDetailResponseDto getMyMissionFeedbackDetail(Long challengeId, Long missionId, User user) {
+        challengeApplicationHelper.validateChallengeDashboardAccessibleUser(challengeId, user);
+        MyMissionFeedbackVo missionInfo = missionHelper.findMyMissionFeedbackVoByMissionId(missionId);
+        AttendanceFeedbackVo attendanceInfo = missionInfo != null ? attendanceHelper.findAttendanceFeedbackVoOrNull(missionInfo.id(), user.getId()) : null;
+        return missionMapper.toGetChallengeMyMissionFeedbackDetailResponseDto(missionInfo, attendanceInfo);
     }
 
     @Override

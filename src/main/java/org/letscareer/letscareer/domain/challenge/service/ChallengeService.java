@@ -70,6 +70,7 @@ public interface ChallengeService {
     GetChallengeMyMissionsResponseDto getMyMissions(Long challengeId, MissionQueryType queryType, User user);
 
     GetChallengeMyMissionDetailResponseDto getMyMissionDetail(Long challengeId, Long missionId, User user);
+    GetChallengeMyMissionFeedbackDetailResponseDto getMyMissionFeedbackDetail(Long challengeId, Long missionId, User user);
 
     GetChallengeApplicationEmailListResponseDto getApplicationEmails(Long challengeId);
 

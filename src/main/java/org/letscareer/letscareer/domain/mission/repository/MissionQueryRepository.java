@@ -16,6 +16,7 @@ public interface MissionQueryRepository {
     Optional<DailyMissionVo> findDailyMissionVoByChallengeId(Long challengeId);
     Optional<MyDailyMissionVo> findMyDailyMissionVoByChallengeId(Long challengeId);
     Optional<MyDailyMissionVo> findMyDailyMissionVoByMissionId(Long missionId);
+    Optional<MyMissionFeedbackVo> findMyMissionFeedbackVoByMissionId(Long missionId);
     List<ContentsMissionVo> findMissionContentsVos(Long missionId, ContentsType contentsType);
     List<MissionScheduleVo> findMissionScheduleVosByChallengeId(Long challengeId);
     List<MySubmittedMissionVo> findMySubmittedMissionVosByChallengeIdAndUserId(Long challengeId, Long userId);

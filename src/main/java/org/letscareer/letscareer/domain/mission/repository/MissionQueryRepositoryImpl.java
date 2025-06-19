@@ -298,6 +298,22 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
     }
 
     @Override
+    public Optional<MyMissionFeedbackVo> findMyMissionFeedbackVoByMissionId(Long missionId) {
+        return Optional.ofNullable(
+                queryFactory
+                        .select(Projections.constructor(MyMissionFeedbackVo.class,
+                                mission.id,
+                                mission.th,
+                                mission.title))
+                        .from(mission)
+                        .where(
+                                eqMissionId(missionId)
+                        )
+                        .fetchFirst()
+        );
+    }
+
+    @Override
     public List<Long> findALlEndNotificationMissionId() {
         return queryFactory
                 .select(mission.id)

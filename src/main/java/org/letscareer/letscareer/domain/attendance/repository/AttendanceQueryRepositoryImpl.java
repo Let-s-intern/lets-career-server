@@ -1,13 +1,13 @@
 package org.letscareer.letscareer.domain.attendance.repository;
 
 import com.querydsl.core.Tuple;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.attendance.type.AttendanceFeedbackStatus;
 import org.letscareer.letscareer.domain.attendance.type.AttendanceResult;
 import org.letscareer.letscareer.domain.attendance.type.AttendanceStatus;
 import org.letscareer.letscareer.domain.attendance.vo.*;
@@ -201,6 +201,27 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
     }
 
     @Override
+    public AttendanceFeedbackVo findAttendanceFeedbackVo(Long missionId, Long userId) {
+        return queryFactory
+                .select(Projections.constructor(AttendanceFeedbackVo.class,
+                        attendance.link,
+                        attendance.feedbackStatus,
+                        attendance.feedback,
+                        attendance.mentor.name))
+                .from(attendance)
+                .leftJoin(attendance.mission, mission)
+                .leftJoin(attendance.user, user)
+                .where(
+                        eqMissionId(missionId),
+                        eqUserId(userId),
+                        eqAttendanceStatus(AttendanceStatus.PRESENT),
+                        eqAttendanceResult(AttendanceResult.PASS),
+                        eqAttendanceFeedbackStatus(AttendanceFeedbackStatus.CONFIRMED)
+                )
+                .fetchFirst();
+    }
+
+    @Override
     public List<MissionReviewAdminVo> findAllMissionReviewAdminVos() {
         return queryFactory
                 .select(Projections.constructor(MissionReviewAdminVo.class,
@@ -257,6 +278,14 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
 
     private BooleanExpression eqAttendanceStatus(AttendanceStatus attendanceStatus) {
         return attendanceStatus != null ? attendance.status.eq(attendanceStatus) : null;
+    }
+
+    private BooleanExpression eqAttendanceResult(AttendanceResult attendanceResult) {
+        return attendanceResult != null ? attendance.result.eq(attendanceResult) : null;
+    }
+
+    private BooleanExpression eqAttendanceFeedbackStatus(AttendanceFeedbackStatus attendanceFeedbackStatus) {
+        return attendanceFeedbackStatus != null ? attendance.feedbackStatus.eq(attendanceFeedbackStatus) : null;
     }
 
     private NumberExpression<Integer> resultOrder() {
