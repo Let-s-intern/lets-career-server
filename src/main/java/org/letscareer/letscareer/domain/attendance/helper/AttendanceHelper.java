@@ -50,6 +50,10 @@ public class AttendanceHelper {
         return attendanceDashboardVo;
     }
 
+    public AttendanceFeedbackVo findAttendanceFeedbackVoOrNull(Long missionId, Long userId) {
+        return attendanceRepository.findAttendanceFeedbackVo(missionId, userId);
+    }
+
     public void checkExistingAttendance(Long missionId, Long userId) {
         if(attendanceRepository.findAttendanceByMissionIdAndUserId(missionId, userId).isPresent()) {
             throw new ConflictException(CONFLICT_ATTENDANCE);

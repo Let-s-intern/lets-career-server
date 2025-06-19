@@ -58,6 +58,11 @@ public class MissionHelper {
                 .orElseThrow(() -> new EntityNotFoundException(MISSION_NOT_FOUND));
     }
 
+    public MyMissionFeedbackVo findMyMissionFeedbackVoByMissionId(Long missionId) {
+        return missionRepository.findMyMissionFeedbackVoByMissionId(missionId)
+                .orElseThrow(() -> new EntityNotFoundException(MISSION_NOT_FOUND));
+    }
+
     public List<MissionScheduleVo> findMissionScheduleVosByChallengeId(Long challengeId) {
         return missionRepository.findMissionScheduleVosByChallengeId(challengeId);
     }

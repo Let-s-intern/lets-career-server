@@ -339,6 +339,18 @@ public class ChallengeV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
+    @Operation(summary = "챌린지 나의 기록장 미션 피드백 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeMyMissionFeedbackDetailResponseDto.class)))
+    })
+    @ApiErrorCode({SwaggerEnum.MISSION_NOT_FOUND})
+    @GetMapping("/{challengeId}/missions/{missionId}/feedback")
+    public ResponseEntity<SuccessResponse<?>> getMyMissionFeedbackDetail(@PathVariable final Long challengeId,
+                                                                                 @PathVariable final Long missionId,
+                                                                                 @CurrentUser User user) {
+        GetChallengeMyMissionFeedbackDetailResponseDto responseDto = challengeService.getMyMissionFeedbackDetail(challengeId, missionId, user);
+        return SuccessResponse.ok(responseDto);
+    }
+
     @Operation(summary = "[어드민] 챌린지 생성", responses = {
             @ApiResponse(responseCode = "201", useReturnTypeSchema = true)
     })

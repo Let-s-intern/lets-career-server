@@ -10,5 +10,6 @@ public interface AttendanceQueryRepository {
     List<MissionAttendanceWithOptionsVo> findMissionAttendanceVos(Long challengeId, Long missionId);
     List<FeedbackMissionAttendanceVo> findFeedbackMissionAttendanceVos(Long mentorId, Long challengeId, Long missionId, Long challengeOptionId);
     AttendanceDashboardVo findAttendanceDashboardVo(Long missionId, Long userId);
+    AttendanceFeedbackVo findAttendanceFeedbackVo(Long missionId, Long userId);
     List<MissionReviewAdminVo> findAllMissionReviewAdminVos();
 }
