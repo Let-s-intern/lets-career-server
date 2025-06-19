@@ -177,6 +177,7 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
                         eqMissionId(missionId),
                         eqMentorId(mentorId),
                         eqAttendanceStatus(AttendanceStatus.PRESENT),
+                        eqAttendanceResult(AttendanceResult.PASS),
                         eqChallengeApplicationIsCanceled(false),
                         eqChallengeOptionId(challengeOptionId),
                         eqChallengeOptionIsFeedback(true)
