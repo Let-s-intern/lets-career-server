@@ -90,6 +90,7 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
                         mission.th,
                         mission.startDate,
                         mission.endDate,
+                        mission.challengeOption.title,
                         mission.challengeOption.code))
                 .from(mission)
                 .orderBy(mission.th.asc())
