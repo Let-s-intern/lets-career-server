@@ -187,6 +187,7 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
     public Optional<FeedbackMissionAttendanceDetailVo> findFeedbackMissionAttendanceDetailVoByAttendanceId(Long attendanceId) {
         return Optional.ofNullable(queryFactory
                 .select(Projections.constructor(FeedbackMissionAttendanceDetailVo.class,
+                        attendance.id,
                         attendance.feedback)
                 )
                 .from(attendance)
