@@ -147,6 +147,7 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
         return queryFactory
                 .select(Projections.constructor(FeedbackMissionAttendanceVo.class,
                         attendance.id,
+                        mentor.id,
                         mentor.name,
                         user.name,
                         user.major,
