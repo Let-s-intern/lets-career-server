@@ -25,6 +25,7 @@ import java.util.Optional;
 import static org.letscareer.letscareer.domain.application.entity.QApplication.application;
 import static org.letscareer.letscareer.domain.attendance.entity.QAttendance.attendance;
 import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
+import static org.letscareer.letscareer.domain.challengeoption.entity.QChallengeOption.challengeOption;
 import static org.letscareer.letscareer.domain.contents.entity.QContents.contents;
 import static org.letscareer.letscareer.domain.mission.entity.QMission.mission;
 import static org.letscareer.letscareer.domain.missioncontents.entity.QMissionContents.missionContents;
@@ -52,12 +53,15 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
                         missionScore.lateScore,
                         missionTemplate.id,
                         mission.startDate,
-                        mission.endDate
+                        mission.endDate,
+                        mission.challengeOption.id,
+                        mission.challengeOption.code
                 ))
                 .from(mission)
                 .leftJoin(mission.challenge, challenge)
                 .leftJoin(mission.missionScore, missionScore)
                 .leftJoin(mission.missionTemplate, missionTemplate)
+                .leftJoin(mission.challengeOption, challengeOption)
                 .where(
                         eqChallengeId(challengeId)
                 )
@@ -74,6 +78,26 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
                 .where(
                         eqChallengeId(challengeId)
                 )
+                .fetch();
+    }
+
+    @Override
+    public List<FeedbackMissionAdminVo> findFeedbackMissionAdminVodByChallengeId(Long challengeId) {
+        return queryFactory
+                .select(Projections.constructor(FeedbackMissionAdminVo.class,
+                        mission.id,
+                        mission.title,
+                        mission.th,
+                        mission.startDate,
+                        mission.endDate,
+                        mission.challengeOption.title,
+                        mission.challengeOption.code))
+                .from(mission)
+                .join(mission.challenge, challenge)
+                .where(
+                        eqChallengeId(challengeId)
+                )
+                .orderBy(mission.th.asc())
                 .fetch();
     }
 
@@ -271,6 +295,22 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
                                 missionTemplate.templateLink))
                         .from(mission)
                         .leftJoin(mission.missionTemplate, missionTemplate)
+                        .where(
+                                eqMissionId(missionId)
+                        )
+                        .fetchFirst()
+        );
+    }
+
+    @Override
+    public Optional<MyMissionFeedbackVo> findMyMissionFeedbackVoByMissionId(Long missionId) {
+        return Optional.ofNullable(
+                queryFactory
+                        .select(Projections.constructor(MyMissionFeedbackVo.class,
+                                mission.id,
+                                mission.th,
+                                mission.title))
+                        .from(mission)
                         .where(
                                 eqMissionId(missionId)
                         )

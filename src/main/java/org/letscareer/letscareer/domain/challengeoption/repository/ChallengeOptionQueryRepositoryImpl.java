@@ -21,7 +21,8 @@ public class ChallengeOptionQueryRepositoryImpl implements ChallengeOptionQueryR
                         challengeOption.title,
                         challengeOption.code,
                         challengeOption.price,
-                        challengeOption.discountPrice)
+                        challengeOption.discountPrice,
+                        challengeOption.isFeedback)
                 )
                 .from(challengeOption)
                 .orderBy(

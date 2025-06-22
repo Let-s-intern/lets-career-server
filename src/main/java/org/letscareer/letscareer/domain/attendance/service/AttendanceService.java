@@ -2,7 +2,6 @@ package org.letscareer.letscareer.domain.attendance.service;
 
 import org.letscareer.letscareer.domain.attendance.dto.request.CreateAttendanceRequestDto;
 import org.letscareer.letscareer.domain.attendance.dto.request.UpdateAttendanceRequestDto;
-import org.letscareer.letscareer.domain.attendance.dto.request.UpdateAttendanceUserRequestDto;
 import org.letscareer.letscareer.domain.attendance.dto.response.AttendanceAdminListResponseDto;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.stereotype.Service;
@@ -14,6 +13,4 @@ public interface AttendanceService {
     AttendanceAdminListResponseDto getAttendancesOfChallenge(Long challengeId);
 
     void updateAttendance(Long attendanceId, User user, UpdateAttendanceRequestDto updateAttendanceRequestDto);
-
-    void sendLink(Long attendanceId, User user, UpdateAttendanceUserRequestDto link);
 }

@@ -17,6 +17,8 @@ import org.letscareer.letscareer.domain.challenge.service.ChallengeService;
 import org.letscareer.letscareer.domain.challenge.type.ChallengeType;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.faq.dto.response.GetFaqResponseDto;
+import org.letscareer.letscareer.domain.mission.dto.response.FeedbackMissionAdminListResponseDto;
+import org.letscareer.letscareer.domain.mission.service.MissionService;
 import org.letscareer.letscareer.domain.mission.type.MissionQueryType;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.domain.user.entity.User;
@@ -35,6 +37,7 @@ import java.util.List;
 @RestController
 public class ChallengeV1Controller {
     private final ChallengeService challengeService;
+    public final MissionService missionService;
 
     @Operation(summary = "챌린지 목록 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeResponseDto.class)))
@@ -208,8 +211,45 @@ public class ChallengeV1Controller {
     @ApiErrorCode({SwaggerEnum.PAYMENT_NOT_FOUND})
     @GetMapping("/{challengeId}/mission/{missionId}/attendances")
     public ResponseEntity<SuccessResponse<?>> getMissionAttendances(@PathVariable final Long challengeId,
-                                                                    @PathVariable final Long missionId) {
+                                                                    @PathVariable final Long missionId,
+                                                                    @CurrentUser final User user) {
         final GetChallengeMissionAttendancesResponseDto responseDto = challengeService.getMissionAttendances(challengeId, missionId);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "[멘토용] 챌린지 피드백 미션 전체 목록", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = FeedbackMissionAdminListResponseDto.class)))
+    })
+    @ApiErrorCode({SwaggerEnum.MISSION_NOT_FOUND})
+    @GetMapping("/{challengeId}/mission/feedback")
+    public ResponseEntity<SuccessResponse<?>> getFeedbackMissionsForAdmin(@PathVariable final Long challengeId,
+                                                                          @CurrentUser final User user) {
+        FeedbackMissionAdminListResponseDto responseDto = missionService.getFeedbackMissionsForMentor(challengeId, user);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "[멘토용] 챌린지 피드백 미션별 제출자 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeFeedbackMissionAttendancesResponseDto.class)))
+    })
+    @ApiErrorCode({SwaggerEnum.PAYMENT_NOT_FOUND})
+    @GetMapping("/{challengeId}/mission/{missionId}/feedback/attendances")
+    public ResponseEntity<SuccessResponse<?>> getFeedbackMissionAttendances(@PathVariable final Long challengeId,
+                                                                            @PathVariable final Long missionId,
+                                                                            @CurrentUser final User user) {
+        final GetChallengeFeedbackMissionAttendancesResponseDto responseDto = challengeService.getFeedbackMissionAttendancesForMentor(challengeId, missionId, user);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "[멘토용] 챌린지 피드백 미션별 제출자 상세 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeFeedbackMissionAttendanceResponseDto.class)))
+    })
+    @ApiErrorCode({SwaggerEnum.ATTENDANCE_NOT_FOUND})
+    @GetMapping("/{challengeId}/mission/{missionId}/feedback/attendances/{attendanceId}")
+    public ResponseEntity<SuccessResponse<?>> getFeedbackMissionAttendance(@PathVariable final Long challengeId,
+                                                                           @PathVariable final Long missionId,
+                                                                           @PathVariable final Long attendanceId,
+                                                                           @CurrentUser final User user) {
+        final GetChallengeFeedbackMissionAttendanceResponseDto responseDto = challengeService.getFeedbackMissionAttendanceForMentor(challengeId, missionId, attendanceId, user);
         return SuccessResponse.ok(responseDto);
     }
 
@@ -323,6 +363,18 @@ public class ChallengeV1Controller {
                                                                  @PathVariable final Long missionId,
                                                                  @CurrentUser User user) {
         GetChallengeMyMissionDetailResponseDto responseDto = challengeService.getMyMissionDetail(challengeId, missionId, user);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "챌린지 나의 기록장 미션 피드백 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeMyMissionFeedbackDetailResponseDto.class)))
+    })
+    @ApiErrorCode({SwaggerEnum.MISSION_NOT_FOUND})
+    @GetMapping("/{challengeId}/missions/{missionId}/feedback")
+    public ResponseEntity<SuccessResponse<?>> getMyMissionFeedbackDetail(@PathVariable final Long challengeId,
+                                                                                 @PathVariable final Long missionId,
+                                                                                 @CurrentUser User user) {
+        GetChallengeMyMissionFeedbackDetailResponseDto responseDto = challengeService.getMyMissionFeedbackDetail(challengeId, missionId, user);
         return SuccessResponse.ok(responseDto);
     }
 

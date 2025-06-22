@@ -19,6 +19,8 @@ public record MissionForChallengeVo(
         Integer lateScore,
         Long missionTemplateId,
         LocalDateTime startDate,
-        LocalDateTime endDate
+        LocalDateTime endDate,
+        Long challengeOptionId,
+        String challengeOptionCode
 ) {
 }

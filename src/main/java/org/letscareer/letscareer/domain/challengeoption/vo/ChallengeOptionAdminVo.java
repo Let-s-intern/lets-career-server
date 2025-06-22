@@ -5,6 +5,7 @@ public record ChallengeOptionAdminVo(
         String title,
         String code,
         Integer price,
-        Integer discountPrice
+        Integer discountPrice,
+        Boolean isFeedback
 ) {
 }

@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.mission.mapper;
 
 import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
 import org.letscareer.letscareer.domain.attendance.vo.AttendanceDashboardVo;
+import org.letscareer.letscareer.domain.attendance.vo.AttendanceFeedbackVo;
 import org.letscareer.letscareer.domain.challenge.dto.response.*;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challenge.vo.ChallengeScheduleVo;
@@ -10,10 +11,7 @@ import org.letscareer.letscareer.domain.coupon.entity.Coupon;
 import org.letscareer.letscareer.domain.mission.dto.request.CreateMissionRequestDto;
 import org.letscareer.letscareer.domain.mission.dto.response.*;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
-import org.letscareer.letscareer.domain.mission.vo.DailyMissionVo;
-import org.letscareer.letscareer.domain.mission.vo.MissionDetailVo;
-import org.letscareer.letscareer.domain.mission.vo.MyDailyMissionVo;
-import org.letscareer.letscareer.domain.mission.vo.MissionForChallengeVo;
+import org.letscareer.letscareer.domain.mission.vo.*;
 import org.letscareer.letscareer.domain.missiontemplate.entity.MissionTemplate;
 import org.letscareer.letscareer.domain.payment.entity.Payment;
 import org.letscareer.letscareer.domain.attendance.vo.MissionScoreVo;
@@ -50,6 +48,10 @@ public class MissionMapper {
         return MissionAdminResponseDto.of(vo, applicationCount, essentialContentsList, additionalContentsList);
     }
 
+    public FeedbackMissionAdminListResponseDto toFeedbackMissionAdminListResponseDto(List<FeedbackMissionAdminVo> feedbackMissionAdminVos) {
+        return FeedbackMissionAdminListResponseDto.of(feedbackMissionAdminVos);
+    }
+
     public MissionApplicationScoreResponseDto toMissionApplicationScoreResponseDto(UserChallengeApplicationVo userChallengeApplicationVo,
                                                                                    List<MissionScoreResponseDto> scoreResponseDtoList,
                                                                                    Payment payment,
@@ -76,5 +78,9 @@ public class MissionMapper {
 
     public GetChallengeMyMissionDetailResponseDto toGetChallengeMyMissionDetailResponseDto(MyDailyMissionVo missionInfo, AttendanceDashboardVo attendanceInfo) {
         return GetChallengeMyMissionDetailResponseDto.of(missionInfo, attendanceInfo);
+    }
+
+    public GetChallengeMyMissionFeedbackDetailResponseDto toGetChallengeMyMissionFeedbackDetailResponseDto(MyMissionFeedbackVo missionInfo, AttendanceFeedbackVo attendanceInfo) {
+        return GetChallengeMyMissionFeedbackDetailResponseDto.of(missionInfo, attendanceInfo);
     }
 }
