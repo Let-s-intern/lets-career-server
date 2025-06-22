@@ -9,6 +9,7 @@ import org.letscareer.letscareer.domain.attendance.dto.response.AttendanceAdminL
 import org.letscareer.letscareer.domain.attendance.entity.Attendance;
 import org.letscareer.letscareer.domain.attendance.helper.AttendanceHelper;
 import org.letscareer.letscareer.domain.attendance.mapper.AttendanceMapper;
+import org.letscareer.letscareer.domain.attendance.type.AttendanceFeedbackStatus;
 import org.letscareer.letscareer.domain.attendance.type.AttendanceResult;
 import org.letscareer.letscareer.domain.attendance.type.AttendanceStatus;
 import org.letscareer.letscareer.domain.attendance.vo.AttendanceAdminVo;
@@ -111,6 +112,9 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     private void updateAttendanceByMentor(Attendance attendance, UpdateAttendanceRequestDto requestDto) {
+        if(attendance.getFeedbackStatus().equals(AttendanceFeedbackStatus.WAITING) && requestDto.feedback() != null) {
+            attendance.updateAttendanceFeedbackStatus(AttendanceFeedbackStatus.IN_PROGRESS);
+        }
         attendance.updateAttendanceFeedback(requestDto);
     }
 
