@@ -107,4 +107,8 @@ public class Attendance extends BaseTimeEntity {
         this.feedback = updateValue(this.feedback, requestDto.feedback());
         this.feedbackStatus = updateValue(this.feedbackStatus, requestDto.feedbackStatus());
     }
+
+    public void updateAttendanceFeedbackStatus(AttendanceFeedbackStatus feedbackStatus) {
+        this.feedbackStatus = updateValue(this.feedbackStatus, feedbackStatus);
+    }
 }
