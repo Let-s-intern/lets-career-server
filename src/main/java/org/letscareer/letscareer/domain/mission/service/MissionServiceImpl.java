@@ -26,11 +26,15 @@ import org.letscareer.letscareer.domain.missiontemplate.entity.MissionTemplate;
 import org.letscareer.letscareer.domain.missiontemplate.helper.MissionTemplateHelper;
 import org.letscareer.letscareer.domain.score.entity.MissionScore;
 import org.letscareer.letscareer.domain.score.helper.MissionScoreHelper;
+import org.letscareer.letscareer.domain.user.entity.User;
+import org.letscareer.letscareer.global.error.exception.UnauthorizedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.letscareer.letscareer.domain.user.error.UserErrorCode.IS_NOT_MENTOR;
 
 @RequiredArgsConstructor
 @Transactional
@@ -72,6 +76,13 @@ public class MissionServiceImpl implements MissionService {
 
     @Override
     public FeedbackMissionAdminListResponseDto getFeedbackMissionsForAdmin(Long challengeId) {
+        List<FeedbackMissionAdminVo> feedbackMissionAdminVos = missionHelper.findFeedbackMissionAdminVodByChallengeId(challengeId);
+        return missionMapper.toFeedbackMissionAdminListResponseDto(feedbackMissionAdminVos);
+    }
+
+    @Override
+    public FeedbackMissionAdminListResponseDto getFeedbackMissionsForMentor(Long challengeId, User user) {
+        if(!user.getIsMentor()) throw new UnauthorizedException(IS_NOT_MENTOR);
         List<FeedbackMissionAdminVo> feedbackMissionAdminVos = missionHelper.findFeedbackMissionAdminVodByChallengeId(challengeId);
         return missionMapper.toFeedbackMissionAdminListResponseDto(feedbackMissionAdminVos);
     }

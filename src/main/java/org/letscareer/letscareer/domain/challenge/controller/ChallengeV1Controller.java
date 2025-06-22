@@ -17,6 +17,8 @@ import org.letscareer.letscareer.domain.challenge.service.ChallengeService;
 import org.letscareer.letscareer.domain.challenge.type.ChallengeType;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.faq.dto.response.GetFaqResponseDto;
+import org.letscareer.letscareer.domain.mission.dto.response.FeedbackMissionAdminListResponseDto;
+import org.letscareer.letscareer.domain.mission.service.MissionService;
 import org.letscareer.letscareer.domain.mission.type.MissionQueryType;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.domain.user.entity.User;
@@ -35,6 +37,7 @@ import java.util.List;
 @RestController
 public class ChallengeV1Controller {
     private final ChallengeService challengeService;
+    public final MissionService missionService;
 
     @Operation(summary = "챌린지 목록 조회", responses = {
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeResponseDto.class)))
@@ -211,6 +214,17 @@ public class ChallengeV1Controller {
                                                                     @PathVariable final Long missionId,
                                                                     @CurrentUser final User user) {
         final GetChallengeMissionAttendancesResponseDto responseDto = challengeService.getMissionAttendances(challengeId, missionId);
+        return SuccessResponse.ok(responseDto);
+    }
+
+    @Operation(summary = "[멘토용] 챌린지 피드백 미션 전체 목록", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = FeedbackMissionAdminListResponseDto.class)))
+    })
+    @ApiErrorCode({SwaggerEnum.MISSION_NOT_FOUND})
+    @GetMapping("/{challengeId}/mission/feedback")
+    public ResponseEntity<SuccessResponse<?>> getFeedbackMissionsForAdmin(@PathVariable final Long challengeId,
+                                                                          @CurrentUser final User user) {
+        FeedbackMissionAdminListResponseDto responseDto = missionService.getFeedbackMissionsForMentor(challengeId, user);
         return SuccessResponse.ok(responseDto);
     }
 

@@ -5,6 +5,7 @@ import org.letscareer.letscareer.domain.mission.dto.request.UpdateMissionRequest
 import org.letscareer.letscareer.domain.mission.dto.response.FeedbackMissionAdminListResponseDto;
 import org.letscareer.letscareer.domain.mission.dto.response.GetMissionDetailResponseDto;
 import org.letscareer.letscareer.domain.mission.dto.response.MissionAdminListResponseDto;
+import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,6 +15,8 @@ public interface MissionService {
     MissionAdminListResponseDto getMissionsForAdmin(Long challengeId);
 
     FeedbackMissionAdminListResponseDto getFeedbackMissionsForAdmin(Long challengeId);
+
+    FeedbackMissionAdminListResponseDto getFeedbackMissionsForMentor(Long challengeId, User user);
 
     void createMission(Long challengeId, CreateMissionRequestDto createMissionRequestDto);
 
