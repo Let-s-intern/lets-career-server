@@ -75,6 +75,8 @@ public class Attendance extends BaseTimeEntity {
         this.comments = updateValue(this.comments, updateAttendanceRequestDto.comments());
         this.review = updateValue(this.review, updateAttendanceRequestDto.review());
         this.reviewIsVisible = updateValue(this.reviewIsVisible, updateAttendanceRequestDto.reviewIsVisible());
+        this.feedback = updateValue(this.feedback, updateAttendanceRequestDto.feedback());
+        this.feedbackStatus = updateValue(this.feedbackStatus, updateAttendanceRequestDto.feedbackStatus());
     }
 
     public void updateAttendanceLink(String link) {

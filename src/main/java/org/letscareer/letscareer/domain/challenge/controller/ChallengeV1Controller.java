@@ -226,6 +226,19 @@ public class ChallengeV1Controller {
         return SuccessResponse.ok(responseDto);
     }
 
+    @Operation(summary = "[멘토용] 챌린지 피드백 미션별 제출자 상세 조회", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GetChallengeFeedbackMissionAttendanceResponseDto.class)))
+    })
+    @ApiErrorCode({SwaggerEnum.ATTENDANCE_NOT_FOUND})
+    @GetMapping("/{challengeId}/mission/{missionId}/feedback/attendances/{attendanceId}")
+    public ResponseEntity<SuccessResponse<?>> getFeedbackMissionAttendance(@PathVariable final Long challengeId,
+                                                                           @PathVariable final Long missionId,
+                                                                           @PathVariable final Long attendanceId,
+                                                                           @CurrentUser final User user) {
+        final GetChallengeFeedbackMissionAttendanceResponseDto responseDto = challengeService.getFeedbackMissionAttendanceForMentor(challengeId, missionId, attendanceId, user);
+        return SuccessResponse.ok(responseDto);
+    }
+
     @Operation(summary = "챌린지 접근 권한 확인", responses = {
             @ApiResponse(responseCode = "200")
     })
