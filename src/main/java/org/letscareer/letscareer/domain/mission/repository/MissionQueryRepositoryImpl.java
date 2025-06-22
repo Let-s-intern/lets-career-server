@@ -93,6 +93,10 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
                         mission.challengeOption.title,
                         mission.challengeOption.code))
                 .from(mission)
+                .join(mission.challenge, challenge)
+                .where(
+                        eqChallengeId(challengeId)
+                )
                 .orderBy(mission.th.asc())
                 .fetch();
     }
