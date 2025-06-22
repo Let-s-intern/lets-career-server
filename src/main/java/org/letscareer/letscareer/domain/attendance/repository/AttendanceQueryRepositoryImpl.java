@@ -13,10 +13,7 @@ import org.letscareer.letscareer.domain.attendance.type.AttendanceStatus;
 import org.letscareer.letscareer.domain.attendance.vo.*;
 import org.letscareer.letscareer.domain.user.entity.QUser;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.letscareer.letscareer.domain.application.entity.QChallengeApplication.challengeApplication;
@@ -150,6 +147,7 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
         return queryFactory
                 .select(Projections.constructor(FeedbackMissionAttendanceVo.class,
                         attendance.id,
+                        mentor.id,
                         mentor.name,
                         user.name,
                         user.major,
@@ -184,6 +182,20 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
                 )
                 .distinct()
                 .fetch();
+    }
+
+    @Override
+    public Optional<FeedbackMissionAttendanceDetailVo> findFeedbackMissionAttendanceDetailVoByAttendanceId(Long attendanceId) {
+        return Optional.ofNullable(queryFactory
+                .select(Projections.constructor(FeedbackMissionAttendanceDetailVo.class,
+                        attendance.id,
+                        attendance.feedback)
+                )
+                .from(attendance)
+                .where(
+                        eqAttendanceId(attendanceId)
+                )
+                .fetchFirst());
     }
 
     @Override
@@ -243,6 +255,10 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
                 .where(attendance.review.isNotEmpty())
                 .orderBy(attendance.createDate.desc())
                 .fetch();
+    }
+
+    private BooleanExpression eqAttendanceId(Long attendanceId) {
+        return attendanceId != null ? attendance.id.eq(attendanceId) : null;
     }
 
     private BooleanExpression eqUserId(Long userId) {

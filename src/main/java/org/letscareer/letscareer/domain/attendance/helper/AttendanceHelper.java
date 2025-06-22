@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Objects;
 
+import static org.letscareer.letscareer.domain.attendance.error.AttendanceErrorCode.ATTENDANCE_NOT_FOUND;
 import static org.letscareer.letscareer.domain.attendance.error.AttendanceErrorCode.CONFLICT_ATTENDANCE;
 
 @RequiredArgsConstructor
@@ -42,6 +43,10 @@ public class AttendanceHelper {
 
     public List<FeedbackMissionAttendanceVo> findFeedbackMissionAttendanceVos(Long mentorId, Long challengeId, Long missionId, Long challengeOptionId) {
         return attendanceRepository.findFeedbackMissionAttendanceVos(mentorId, challengeId, missionId, challengeOptionId);
+    }
+
+    public FeedbackMissionAttendanceDetailVo findFeedbackMissionAttendanceDetailVoByAttendanceIdOrElseThrow(Long attendanceId) {
+        return attendanceRepository.findFeedbackMissionAttendanceDetailVoByAttendanceId(attendanceId).orElseThrow(() -> new EntityNotFoundException(ATTENDANCE_NOT_FOUND));
     }
 
     public AttendanceDashboardVo findAttendanceDashboardVoOrNull(Long missionId, Long userId) {

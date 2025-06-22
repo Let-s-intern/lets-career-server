@@ -7,6 +7,7 @@ import org.letscareer.letscareer.domain.price.type.ChallengePricePlanType;
 
 public record FeedbackMissionAttendanceVo(
         Long id,
+        Long mentorId,
         String mentorName,
         String name,
         String major,
