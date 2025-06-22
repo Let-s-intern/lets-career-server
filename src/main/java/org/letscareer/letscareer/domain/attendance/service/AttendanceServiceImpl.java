@@ -74,7 +74,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     private boolean validateAuthorizedMentor(Attendance attendance, User user) {
-        return user.getIsMentor() && attendance.getMentor().getId().equals(user.getId());
+        return user.getIsMentor() && attendance.getMentor() != null && attendance.getMentor().getId().equals(user.getId());
     }
 
     private void updateAttendanceByUser(Attendance attendance, UpdateAttendanceRequestDto requestDto) {
