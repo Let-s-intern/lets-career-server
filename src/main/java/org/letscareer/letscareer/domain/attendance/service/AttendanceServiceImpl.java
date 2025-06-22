@@ -68,6 +68,7 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     private void validateAuthorizedUser(User user, Attendance attendance) {
         if (user.getRole().equals(UserRole.ADMIN)) return;
+        if (user.getIsMentor()) return;
         if (!user.getId().equals(attendance.getUser().getId())) {
             throw new UnauthorizedException(ATTENDANCE_UNAUTHORIZED);
         }
