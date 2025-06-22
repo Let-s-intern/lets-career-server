@@ -11,6 +11,7 @@ public record FeedbackMissionAdminVo(
         Integer th,
         LocalDateTime startDate,
         LocalDateTime endDate,
+        Long challengeOptionId,
         String challengeOptionCode
 ) {
 }
