@@ -2,6 +2,7 @@ package org.letscareer.letscareer.global.batch.tasklet;
 
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.helper.ChallengeApplicationHelper;
+import org.letscareer.letscareer.domain.application.vo.NotificationUserVo;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
 import org.letscareer.letscareer.domain.nhn.dto.request.challenge.ChallengeRemindParameter;
@@ -32,10 +33,10 @@ public class ChallengeRemindNotificationTasklet implements Tasklet {
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) {
         Challenge challenge = challengeHelper.findChallengeByIdOrThrow(challengeId);
-        List<User> userList = challengeApplicationHelper.getNotificationUsers(challengeId);
+        List<NotificationUserVo> userList = challengeApplicationHelper.getNotificationUserVos(challengeId);
         if(!userList.isEmpty()) {
             List<ChallengeRemindParameter> requestParameterList = userList.stream()
-                    .map(user -> ChallengeRemindParameter.of(user.getName(), challenge))
+                    .map(notificationUserVo -> ChallengeRemindParameter.of(notificationUserVo.user().getName(), challenge))
                     .collect(Collectors.toList());
             nhnProvider.sendKakaoMessages(userList, requestParameterList, "challenge_remind");
         }

@@ -2,11 +2,11 @@ package org.letscareer.letscareer.global.batch.tasklet;
 
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.helper.ChallengeApplicationHelper;
+import org.letscareer.letscareer.domain.application.vo.NotificationUserVo;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
 import org.letscareer.letscareer.domain.nhn.dto.request.challenge.OTRemindParameter;
 import org.letscareer.letscareer.domain.nhn.provider.NhnProvider;
-import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.scope.context.ChunkContext;
@@ -32,10 +32,10 @@ public class ChallengeOTRemindNotificationTasklet implements Tasklet {
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) {
         Challenge challenge = challengeHelper.findChallengeByIdOrThrow(challengeId);
-        List<User> userList = challengeApplicationHelper.getNotificationUsers(challengeId);
+        List<NotificationUserVo> userList = challengeApplicationHelper.getNotificationUserVos(challengeId);
         if(!userList.isEmpty()) {
             List<OTRemindParameter> requestParameterList = userList.stream()
-                    .map(user -> OTRemindParameter.of(user.getName(), challenge))
+                    .map(notificationUserVo -> OTRemindParameter.of(notificationUserVo.user().getName(), challenge, notificationUserVo.applicationId()))
                     .collect(Collectors.toList());
             nhnProvider.sendKakaoMessages(userList, requestParameterList, "OT_remind");
         }
