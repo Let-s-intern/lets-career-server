@@ -35,10 +35,13 @@ public class MissionEndNotificationTasklet implements Tasklet {
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) {
         Mission mission = missionHelper.findMissionByIdOrThrow(missionId);
         Challenge challenge = mission.getChallenge();
-        List<NotificationUserVo> userList = challengeApplicationHelper.getAttendanceNullNotificationUserVos(challenge.getId(), mission.getId());
-        if(!userList.isEmpty()) {
-            List<MissionEndParameter> requestParameterList = userList.stream()
+        List<NotificationUserVo> notificationUserVos = challengeApplicationHelper.getAttendanceNullNotificationUserVos(challenge.getId(), mission.getId());
+        if(!notificationUserVos.isEmpty()) {
+            List<MissionEndParameter> requestParameterList = notificationUserVos.stream()
                     .map(notificationUserVo -> MissionEndParameter.of(notificationUserVo.user().getName(), mission, challenge, notificationUserVo.applicationId()))
+                    .collect(Collectors.toList());
+            List<User> userList = notificationUserVos.stream()
+                    .map(notificationUserVo -> notificationUserVo.user())
                     .collect(Collectors.toList());
             nhnProvider.sendKakaoMessages(userList, requestParameterList, "mission_end");
         }

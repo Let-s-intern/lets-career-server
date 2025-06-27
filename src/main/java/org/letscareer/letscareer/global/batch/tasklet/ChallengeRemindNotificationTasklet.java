@@ -33,10 +33,13 @@ public class ChallengeRemindNotificationTasklet implements Tasklet {
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) {
         Challenge challenge = challengeHelper.findChallengeByIdOrThrow(challengeId);
-        List<NotificationUserVo> userList = challengeApplicationHelper.getNotificationUserVos(challengeId);
-        if(!userList.isEmpty()) {
-            List<ChallengeRemindParameter> requestParameterList = userList.stream()
+        List<NotificationUserVo> notificationUserVos = challengeApplicationHelper.getNotificationUserVos(challengeId);
+        if(!notificationUserVos.isEmpty()) {
+            List<ChallengeRemindParameter> requestParameterList = notificationUserVos.stream()
                     .map(notificationUserVo -> ChallengeRemindParameter.of(notificationUserVo.user().getName(), challenge))
+                    .collect(Collectors.toList());
+            List<User> userList = notificationUserVos.stream()
+                    .map(notificationUserVo -> notificationUserVo.user())
                     .collect(Collectors.toList());
             nhnProvider.sendKakaoMessages(userList, requestParameterList, "challenge_remind");
         }
