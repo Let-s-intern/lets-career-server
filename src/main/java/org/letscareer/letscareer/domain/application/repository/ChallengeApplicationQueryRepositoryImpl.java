@@ -10,10 +10,7 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
-import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
-import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationWithOptionsVo;
-import org.letscareer.letscareer.domain.application.vo.ReviewNotificationUserVo;
-import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
+import org.letscareer.letscareer.domain.application.vo.*;
 import org.letscareer.letscareer.domain.challengeoption.vo.ChallengeOptionApplicationVo;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.data.domain.Page;
@@ -262,9 +259,11 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
     }
 
     @Override
-    public List<User> findAllNotificationUser(Long challengeId) {
+    public List<NotificationUserVo> findAllNotificationUserVo(Long challengeId) {
         return queryFactory
-                .select(challengeApplication._super.user)
+                .select(Projections.constructor(NotificationUserVo.class,
+                        challengeApplication._super.user,
+                        challengeApplication.id))
                 .from(challengeApplication)
                 .leftJoin(challengeApplication.challenge, challenge)
                 .where(
@@ -276,9 +275,11 @@ public class ChallengeApplicationQueryRepositoryImpl implements ChallengeApplica
     }
 
     @Override
-    public List<User> findAllAttendanceNullNotificationUser(Long challengeId, Long missionId) {
+    public List<NotificationUserVo> findAllAttendanceNullNotificationUserVo(Long challengeId, Long missionId) {
         return queryFactory
-                .select(challengeApplication._super.user)
+                .select(Projections.constructor(NotificationUserVo.class,
+                        challengeApplication._super.user,
+                        challengeApplication.id))
                 .from(challengeApplication)
                 .leftJoin(challengeApplication.challenge, challenge)
                 .leftJoin(challengeApplication.user, user)

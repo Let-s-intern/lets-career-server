@@ -1,10 +1,7 @@
 package org.letscareer.letscareer.domain.application.repository;
 
 import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
-import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
-import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationWithOptionsVo;
-import org.letscareer.letscareer.domain.application.vo.ReviewNotificationUserVo;
-import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
+import org.letscareer.letscareer.domain.application.vo.*;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,9 +28,9 @@ public interface ChallengeApplicationQueryRepository {
 
     List<ReviewNotificationUserVo> findAllReviewNotificationUserVo(Long challengeId);
 
-    List<User> findAllNotificationUser(Long challengeId);
+    List<NotificationUserVo> findAllNotificationUserVo(Long challengeId);
 
-    List<User> findAllAttendanceNullNotificationUser(Long challengeId, Long missionId);
+    List<NotificationUserVo> findAllAttendanceNullNotificationUserVo(Long challengeId, Long missionId);
 
     String findGoalByApplicationId(Long applicationId);
 

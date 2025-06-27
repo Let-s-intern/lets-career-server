@@ -18,11 +18,13 @@ public record OTRemindParameter(
         String chatLink,
         String chatPassword,
         String zoomLink,
-        Long programId
+        Long programId,
+        Long applicationId
 
 ) {
     public static OTRemindParameter of(String userName,
-                                       Challenge challenge) {
+                                       Challenge challenge,
+                                       Long applicationId) {
         return OTRemindParameter.builder()
                 .userName(userName)
                 .programTitle(challenge.getTitle())
@@ -32,6 +34,7 @@ public record OTRemindParameter(
                 .chatPassword(challenge.getChatPassword())
                 .zoomLink(challenge.getZoomLink().substring(8))
                 .programId(challenge.getId())
+                .applicationId(applicationId)
                 .build();
     }
 }
