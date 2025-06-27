@@ -7,6 +7,7 @@ import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
 import org.letscareer.letscareer.domain.nhn.dto.request.challenge.ChallengeEndParameter;
 import org.letscareer.letscareer.domain.nhn.provider.NhnProvider;
+import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.scope.context.ChunkContext;
@@ -32,10 +33,13 @@ public class ChallengeEndNotificationTasklet implements Tasklet {
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) {
         Challenge challenge = challengeHelper.findChallengeByIdOrThrow(challengeId);
-        List<NotificationUserVo> userList = challengeApplicationHelper.getNotificationUserVos(challengeId);
-        if(!userList.isEmpty()) {
-            List<ChallengeEndParameter> requestParameterList = userList.stream()
+        List<NotificationUserVo> notificationUserVos = challengeApplicationHelper.getNotificationUserVos(challengeId);
+        if(!notificationUserVos.isEmpty()) {
+            List<ChallengeEndParameter> requestParameterList = notificationUserVos.stream()
                     .map(notificationUserVo -> ChallengeEndParameter.of(notificationUserVo.user().getName(), challenge.getTitle(), challenge.getId(), notificationUserVo.applicationId()))
+                    .collect(Collectors.toList());
+            List<User> userList = notificationUserVos.stream()
+                    .map(notificationUserVo -> notificationUserVo.user())
                     .collect(Collectors.toList());
             nhnProvider.sendKakaoMessages(userList, requestParameterList, "challenge_end");
         }
