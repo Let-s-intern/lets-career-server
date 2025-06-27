@@ -7,13 +7,13 @@ import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.attendance.type.AttendanceFeedbackStatus;
 import org.letscareer.letscareer.domain.attendance.type.AttendanceResult;
+import org.letscareer.letscareer.domain.attendance.type.AttendanceStatus;
 import org.letscareer.letscareer.domain.attendance.vo.*;
+import org.letscareer.letscareer.domain.user.entity.QUser;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.letscareer.letscareer.domain.application.entity.QChallengeApplication.challengeApplication;
@@ -72,7 +72,7 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
     }
 
     @Override
-    public List<MissionAttendanceWithOptionsVo> findMissionAttendanceVo(Long challengeId, Long missionId) {
+    public List<MissionAttendanceWithOptionsVo> findMissionAttendanceVos(Long challengeId, Long missionId) {
         List<Tuple> tuples = queryFactory
                 .select(
                         Projections.constructor(MissionAttendanceVo.class,
@@ -142,6 +142,63 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
     }
 
     @Override
+    public List<FeedbackMissionAttendanceVo> findFeedbackMissionAttendanceVos(Long mentorId, Long challengeId, Long missionId, Long challengeOptionId) {
+        QUser mentor = new QUser("mentor");
+        return queryFactory
+                .select(Projections.constructor(FeedbackMissionAttendanceVo.class,
+                        attendance.id,
+                        mentor.id,
+                        mentor.name,
+                        user.name,
+                        user.major,
+                        user.wishJob,
+                        user.wishCompany,
+                        attendance.link,
+                        attendance.status,
+                        attendance.result,
+                        payment.challengePricePlanType,
+                        attendance.feedbackStatus))
+                .from(attendance)
+                .leftJoin(attendance.user, user)
+                .leftJoin(attendance.mentor, mentor)
+                .leftJoin(attendance.mission, mission)
+                .join(mission.challenge, challenge)
+                .join(challengeApplication)
+                    .on(challengeApplication.user.id.eq(user.id).and(challengeApplication.challenge.id.eq(challenge.id)))
+                .join(challengeApplication.payment, payment)
+                .join(challengePrice)
+                .on(challengePrice.challenge.id.eq(challenge.id).and(challengePrice.challengePricePlanType.eq(payment.challengePricePlanType)))
+                .join(challengePrice.challengePriceOptionList, challengePriceOption)
+                .join(challengePriceOption.challengeOption, challengeOption)
+                .where(
+                        eqChallengeId(challengeId),
+                        eqMissionId(missionId),
+                        eqMentorId(mentorId),
+                        eqAttendanceStatus(AttendanceStatus.PRESENT),
+                        eqAttendanceResult(AttendanceResult.PASS),
+                        eqChallengeApplicationIsCanceled(false),
+                        eqChallengeOptionId(challengeOptionId),
+                        eqChallengeOptionIsFeedback(true)
+                )
+                .distinct()
+                .fetch();
+    }
+
+    @Override
+    public Optional<FeedbackMissionAttendanceDetailVo> findFeedbackMissionAttendanceDetailVoByAttendanceId(Long attendanceId) {
+        return Optional.ofNullable(queryFactory
+                .select(Projections.constructor(FeedbackMissionAttendanceDetailVo.class,
+                        attendance.id,
+                        attendance.feedback)
+                )
+                .from(attendance)
+                .where(
+                        eqAttendanceId(attendanceId)
+                )
+                .fetchFirst());
+    }
+
+    @Override
     public AttendanceDashboardVo findAttendanceDashboardVo(Long missionId, Long userId) {
         return queryFactory
                 .select(Projections.constructor(AttendanceDashboardVo.class,
@@ -152,6 +209,27 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
                 .where(
                         eqMissionId(missionId),
                         eqUserId(userId)
+                )
+                .fetchFirst();
+    }
+
+    @Override
+    public AttendanceFeedbackVo findAttendanceFeedbackVo(Long missionId, Long userId) {
+        return queryFactory
+                .select(Projections.constructor(AttendanceFeedbackVo.class,
+                        attendance.link,
+                        attendance.feedbackStatus,
+                        attendance.feedback,
+                        attendance.mentor.name))
+                .from(attendance)
+                .leftJoin(attendance.mission, mission)
+                .leftJoin(attendance.user, user)
+                .where(
+                        eqMissionId(missionId),
+                        eqUserId(userId),
+                        eqAttendanceStatus(AttendanceStatus.PRESENT),
+                        eqAttendanceResult(AttendanceResult.PASS),
+                        eqAttendanceFeedbackStatus(AttendanceFeedbackStatus.CONFIRMED)
                 )
                 .fetchFirst();
     }
@@ -179,6 +257,10 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
                 .fetch();
     }
 
+    private BooleanExpression eqAttendanceId(Long attendanceId) {
+        return attendanceId != null ? attendance.id.eq(attendanceId) : null;
+    }
+
     private BooleanExpression eqUserId(Long userId) {
         return userId != null ? attendance.user.id.eq(userId) : null;
     }
@@ -197,6 +279,30 @@ public class AttendanceQueryRepositoryImpl implements AttendanceQueryRepository 
 
     private BooleanExpression eqMissionId(Long missionId) {
         return missionId != null ? mission.id.eq(missionId) : null;
+    }
+
+    private BooleanExpression eqMentorId(Long mentorId) {
+        return mentorId != null ? attendance.mentor.id.eq(mentorId) : null;
+    }
+
+    private BooleanExpression eqChallengeOptionId(Long challengeOptionId) {
+        return challengeOptionId != null ? challengeOption.id.eq(challengeOptionId) : null;
+    }
+
+    private BooleanExpression eqChallengeOptionIsFeedback(Boolean isFeedback) {
+        return isFeedback != null ? challengeOption.isFeedback.eq(isFeedback) : null;
+    }
+
+    private BooleanExpression eqAttendanceStatus(AttendanceStatus attendanceStatus) {
+        return attendanceStatus != null ? attendance.status.eq(attendanceStatus) : null;
+    }
+
+    private BooleanExpression eqAttendanceResult(AttendanceResult attendanceResult) {
+        return attendanceResult != null ? attendance.result.eq(attendanceResult) : null;
+    }
+
+    private BooleanExpression eqAttendanceFeedbackStatus(AttendanceFeedbackStatus attendanceFeedbackStatus) {
+        return attendanceFeedbackStatus != null ? attendance.feedbackStatus.eq(attendanceFeedbackStatus) : null;
     }
 
     private NumberExpression<Integer> resultOrder() {

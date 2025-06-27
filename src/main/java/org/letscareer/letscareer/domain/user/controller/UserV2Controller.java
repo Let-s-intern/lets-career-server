@@ -129,4 +129,13 @@ public class UserV2Controller {
         return SuccessResponse.ok(responseDto);
     }
 
+    @Operation(summary = "유저 멘토 여부", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Boolean.class)))
+    })
+    @ApiErrorCode({SwaggerEnum.USER_NOT_FOUND})
+    @GetMapping("/is-mentor")
+    public ResponseEntity<SuccessResponse<?>> isMentor(@CurrentUser final User user) {
+        return SuccessResponse.ok(userService.isMentor(user));
+    }
+
 }

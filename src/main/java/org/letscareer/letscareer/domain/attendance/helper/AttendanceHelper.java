@@ -13,10 +13,10 @@ import org.letscareer.letscareer.global.error.exception.ConflictException;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
+import static org.letscareer.letscareer.domain.attendance.error.AttendanceErrorCode.ATTENDANCE_NOT_FOUND;
 import static org.letscareer.letscareer.domain.attendance.error.AttendanceErrorCode.CONFLICT_ATTENDANCE;
 
 @RequiredArgsConstructor
@@ -37,14 +37,26 @@ public class AttendanceHelper {
         return attendanceRepository.findAttendanceScoreVos(applicationId, challengeId);
     }
 
-    public List<MissionAttendanceWithOptionsVo> findMissionAttendanceVo(Long challengeId, Long missionId) {
-        return attendanceRepository.findMissionAttendanceVo(challengeId, missionId);
+    public List<MissionAttendanceWithOptionsVo> findMissionAttendanceVos(Long challengeId, Long missionId) {
+        return attendanceRepository.findMissionAttendanceVos(challengeId, missionId);
+    }
+
+    public List<FeedbackMissionAttendanceVo> findFeedbackMissionAttendanceVos(Long mentorId, Long challengeId, Long missionId, Long challengeOptionId) {
+        return attendanceRepository.findFeedbackMissionAttendanceVos(mentorId, challengeId, missionId, challengeOptionId);
+    }
+
+    public FeedbackMissionAttendanceDetailVo findFeedbackMissionAttendanceDetailVoByAttendanceIdOrElseThrow(Long attendanceId) {
+        return attendanceRepository.findFeedbackMissionAttendanceDetailVoByAttendanceId(attendanceId).orElseThrow(() -> new EntityNotFoundException(ATTENDANCE_NOT_FOUND));
     }
 
     public AttendanceDashboardVo findAttendanceDashboardVoOrNull(Long missionId, Long userId) {
         AttendanceDashboardVo attendanceDashboardVo = attendanceRepository.findAttendanceDashboardVo(missionId, userId);
         if(Objects.isNull(attendanceDashboardVo)) return new AttendanceDashboardVo(null);
         return attendanceDashboardVo;
+    }
+
+    public AttendanceFeedbackVo findAttendanceFeedbackVoOrNull(Long missionId, Long userId) {
+        return attendanceRepository.findAttendanceFeedbackVo(missionId, userId);
     }
 
     public void checkExistingAttendance(Long missionId, Long userId) {

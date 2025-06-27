@@ -4,16 +4,20 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.helper.ChallengeApplicationHelper;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
+import org.letscareer.letscareer.domain.challengeoption.entity.ChallengeOption;
+import org.letscareer.letscareer.domain.challengeoption.helper.ChallengeOptionHelper;
 import org.letscareer.letscareer.domain.contents.helper.ContentsHelper;
 import org.letscareer.letscareer.domain.contents.type.ContentsType;
 import org.letscareer.letscareer.domain.mission.dto.request.CreateMissionRequestDto;
 import org.letscareer.letscareer.domain.mission.dto.request.UpdateMissionRequestDto;
+import org.letscareer.letscareer.domain.mission.dto.response.FeedbackMissionAdminListResponseDto;
 import org.letscareer.letscareer.domain.mission.dto.response.GetMissionDetailResponseDto;
 import org.letscareer.letscareer.domain.mission.dto.response.MissionAdminListResponseDto;
 import org.letscareer.letscareer.domain.mission.dto.response.MissionAdminResponseDto;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.mission.helper.MissionHelper;
 import org.letscareer.letscareer.domain.mission.mapper.MissionMapper;
+import org.letscareer.letscareer.domain.mission.vo.FeedbackMissionAdminVo;
 import org.letscareer.letscareer.domain.mission.vo.MissionDetailVo;
 import org.letscareer.letscareer.domain.mission.vo.MissionForChallengeVo;
 import org.letscareer.letscareer.domain.missioncontents.entity.MissionContents;
@@ -22,11 +26,15 @@ import org.letscareer.letscareer.domain.missiontemplate.entity.MissionTemplate;
 import org.letscareer.letscareer.domain.missiontemplate.helper.MissionTemplateHelper;
 import org.letscareer.letscareer.domain.score.entity.MissionScore;
 import org.letscareer.letscareer.domain.score.helper.MissionScoreHelper;
+import org.letscareer.letscareer.domain.user.entity.User;
+import org.letscareer.letscareer.global.error.exception.UnauthorizedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.letscareer.letscareer.domain.user.error.UserErrorCode.IS_NOT_MENTOR;
 
 @RequiredArgsConstructor
 @Transactional
@@ -39,6 +47,7 @@ public class MissionServiceImpl implements MissionService {
     private final MissionScoreHelper missionScoreHelper;
     private final ChallengeApplicationHelper challengeApplicationHelper;
     private final ChallengeHelper challengeHelper;
+    private final ChallengeOptionHelper challengeOptionHelper;
     private final ContentsHelper contentsHelper;
 
     @Override
@@ -66,14 +75,28 @@ public class MissionServiceImpl implements MissionService {
     }
 
     @Override
-    public void updateMission(Long missionId, UpdateMissionRequestDto updateMissionRequestDto) {
+    public FeedbackMissionAdminListResponseDto getFeedbackMissionsForAdmin(Long challengeId) {
+        List<FeedbackMissionAdminVo> feedbackMissionAdminVos = missionHelper.findFeedbackMissionAdminVodByChallengeId(challengeId);
+        return missionMapper.toFeedbackMissionAdminListResponseDto(feedbackMissionAdminVos);
+    }
+
+    @Override
+    public FeedbackMissionAdminListResponseDto getFeedbackMissionsForMentor(Long challengeId, User user) {
+        if(!user.getIsMentor()) throw new UnauthorizedException(IS_NOT_MENTOR);
+        List<FeedbackMissionAdminVo> feedbackMissionAdminVos = missionHelper.findFeedbackMissionAdminVodByChallengeId(challengeId);
+        return missionMapper.toFeedbackMissionAdminListResponseDto(feedbackMissionAdminVos);
+    }
+
+    @Override
+    public void updateMission(Long missionId, UpdateMissionRequestDto requestDto) {
         Mission mission = missionHelper.findMissionByIdOrThrow(missionId);
-        mission.updateMission(updateMissionRequestDto);
-        updateMissionTemplate(mission, updateMissionRequestDto.missionTemplateId());
-        updateMissionContents(mission, ContentsType.ESSENTIAL, updateMissionRequestDto.essentialContentsIdList());
-        updateMissionContents(mission, ContentsType.ADDITIONAL, updateMissionRequestDto.additionalContentsIdList());
+        mission.updateMission(requestDto);
+        updateMissionTemplate(mission, requestDto.missionTemplateId());
+        updateMissionContents(mission, ContentsType.ESSENTIAL, requestDto.essentialContentsIdList());
+        updateMissionContents(mission, ContentsType.ADDITIONAL, requestDto.additionalContentsIdList());
+        updateChallengeOption(mission, requestDto.challengeOptionId());
         MissionScore missionScore = mission.getMissionScore();
-        missionScore.updateMissionScore(updateMissionRequestDto);
+        missionScore.updateMissionScore(requestDto);
     }
 
     @Override
@@ -104,6 +127,16 @@ public class MissionServiceImpl implements MissionService {
         if (contentsIdList == null || contentsIdList.isEmpty()) return;
         missionContentsHelper.deleteAllMissionContentsByMissionIdAndContentsType(mission.getId(), contentsType);
         findContentsAndCreateMissionContents(contentsType, contentsIdList, mission);
+    }
+
+    private void updateChallengeOption(Mission mission, Long challengeOptionId) {
+        if(challengeOptionId == null) return;
+        if(challengeOptionId == 0L) {
+            mission.initChallengeOption();
+            return;
+        }
+        ChallengeOption challengeOption = challengeOptionHelper.findChallengeOptionByChallengeOptionIdOrThrow(challengeOptionId);
+        mission.updateChallengeOption(challengeOption);
     }
 
     private void findContentsAndCreateMissionContents(ContentsType contentsType, List<Long> contentsIdList, Mission mission) {

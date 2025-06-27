@@ -16,6 +16,7 @@ import org.letscareer.letscareer.domain.user.helper.UserHelper;
 import org.letscareer.letscareer.domain.user.mapper.UserMapper;
 import org.letscareer.letscareer.domain.user.type.AuthProvider;
 import org.letscareer.letscareer.domain.user.type.UserRole;
+import org.letscareer.letscareer.domain.user.vo.MentorAdminVo;
 import org.letscareer.letscareer.domain.user.vo.UserAdminVo;
 import org.letscareer.letscareer.domain.withdraw.helper.WithdrawHelper;
 import org.letscareer.letscareer.global.common.entity.PageInfo;
@@ -114,6 +115,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public MentorListResponseDto getMentors() {
+        List<MentorAdminVo> mentorAdminVos = userHelper.findAllMentorAdminVos();
+        return userMapper.toMentorListResponseDto(mentorAdminVos);
+    }
+
+    @Override
     public void resetPassword(PasswordResetRequestDto passwordResetRequestDto) {
         User user = userHelper.findUserByEmailAndNameAndPhoneNumOrThrow(passwordResetRequestDto);
         userHelper.validateAuthProvider(user.getAuthProvider());
@@ -191,6 +198,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean isAdmin(User user) {
         return user.getRole().equals(UserRole.ADMIN);
+    }
+
+    @Override
+    public Boolean isMentor(User user) {
+        return user.getIsMentor().equals(Boolean.TRUE);
     }
 
     private void sendSignUpKakaoMessage(User newUser) {

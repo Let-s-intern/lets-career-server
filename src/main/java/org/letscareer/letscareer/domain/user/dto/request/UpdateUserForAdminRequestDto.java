@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.user.dto.request;
 
 import org.letscareer.letscareer.domain.user.type.UserGrade;
+import org.letscareer.letscareer.domain.user.type.UserRole;
 
 public record UpdateUserForAdminRequestDto(
         String name,
@@ -13,6 +14,7 @@ public record UpdateUserForAdminRequestDto(
         String major,
         String wishJob,
         String wishCompany,
-        String role
+        UserRole role,
+        Boolean isMentor
 ) {
 }

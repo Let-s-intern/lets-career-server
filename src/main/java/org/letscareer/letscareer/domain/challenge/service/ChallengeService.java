@@ -8,6 +8,8 @@ import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeApp
 import org.letscareer.letscareer.domain.challenge.dto.request.UpdateChallengeRequestDto;
 import org.letscareer.letscareer.domain.challenge.dto.response.*;
 import org.letscareer.letscareer.domain.challenge.type.ChallengeType;
+import org.letscareer.letscareer.domain.challengementor.dto.request.CreateChallengeMentorsRequestDto;
+import org.letscareer.letscareer.domain.challengementor.dto.response.GetChallengeMentorsResponseDto;
 import org.letscareer.letscareer.domain.classification.type.ProgramClassification;
 import org.letscareer.letscareer.domain.faq.dto.response.GetFaqResponseDto;
 import org.letscareer.letscareer.domain.mission.type.MissionQueryType;
@@ -43,6 +45,12 @@ public interface ChallengeService {
 
     GetChallengeMissionAttendancesResponseDto getMissionAttendances(Long challengeId, Long missionId);
 
+    GetChallengeFeedbackMissionAttendancesResponseDto getFeedbackMissionAttendances(Long challengeId, Long missionId);
+
+    GetChallengeFeedbackMissionAttendancesResponseDto getFeedbackMissionAttendancesForMentor(Long challengeId, Long missionId, User user);
+
+    GetChallengeFeedbackMissionAttendanceResponseDto getFeedbackMissionAttendanceForMentor(Long challengeId, Long missionId, Long attendanceId, User user);
+
     GetChallengeAdminReviewResponseDto getReviewsForAdmin(Long challengeId, Pageable pageable);
 
     GetChallengeReviewResponseDto getReviews(Pageable pageable);
@@ -64,6 +72,7 @@ public interface ChallengeService {
     GetChallengeMyMissionsResponseDto getMyMissions(Long challengeId, MissionQueryType queryType, User user);
 
     GetChallengeMyMissionDetailResponseDto getMyMissionDetail(Long challengeId, Long missionId, User user);
+    GetChallengeMyMissionFeedbackDetailResponseDto getMyMissionFeedbackDetail(Long challengeId, Long missionId, User user);
 
     GetChallengeApplicationEmailListResponseDto getApplicationEmails(Long challengeId);
 
@@ -74,6 +83,8 @@ public interface ChallengeService {
     GetChallengeExisingApplicationResponseDto getChallengeExistingApplication(Long challengeId, Long userId);
 
     GetChallengeReviewStatusResponseDto getChallengeReviewStatus(Long challengeId, Long userId);
+
+    GetChallengeMentorsResponseDto getChallengeMentors(Long challengeId);
 
     void createChallenge(CreateChallengeRequestDto createChallengeRequestDto);
 
@@ -88,4 +99,6 @@ public interface ChallengeService {
     void deleteChallenge(Long challengeId);
 
     void copyChallengeDashBoard(Long fromChallengeId, Long toChallengeId);
+
+    void createChallengeMentors(Long challengeId, CreateChallengeMentorsRequestDto requestDto);
 }
