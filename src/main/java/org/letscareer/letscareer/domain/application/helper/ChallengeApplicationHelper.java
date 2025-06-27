@@ -3,10 +3,7 @@ package org.letscareer.letscareer.domain.application.helper;
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.entity.ChallengeApplication;
 import org.letscareer.letscareer.domain.application.repository.ChallengeApplicationRepository;
-import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationVo;
-import org.letscareer.letscareer.domain.application.vo.AdminChallengeApplicationWithOptionsVo;
-import org.letscareer.letscareer.domain.application.vo.ReviewNotificationUserVo;
-import org.letscareer.letscareer.domain.application.vo.UserChallengeApplicationVo;
+import org.letscareer.letscareer.domain.application.vo.*;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.letscareer.letscareer.domain.user.type.UserRole;
@@ -91,12 +88,12 @@ public class ChallengeApplicationHelper {
         return challengeApplicationRepository.findAllReviewNotificationUserVo(challengeId);
     }
 
-    public List<User> getNotificationUsers(Long challengeId) {
-        return challengeApplicationRepository.findAllNotificationUser(challengeId);
+    public List<NotificationUserVo> getNotificationUserVos(Long challengeId) {
+        return challengeApplicationRepository.findAllNotificationUserVo(challengeId);
     }
 
-    public List<User> getAttendanceNullNotificationUsers(Long challengeId, Long missionId) {
-        return challengeApplicationRepository.findAllAttendanceNullNotificationUser(challengeId, missionId);
+    public List<NotificationUserVo> getAttendanceNullNotificationUserVos(Long challengeId, Long missionId) {
+        return challengeApplicationRepository.findAllAttendanceNullNotificationUserVo(challengeId, missionId);
     }
 
     public String findGoalByApplicationId(Long applicationId) {

@@ -7,15 +7,18 @@ import lombok.Builder;
 public record ChallengeEndParameter(
         String userName,
         String programTitle,
-        Long programId
+        Long programId,
+        Long applicationId
 ) {
     public static ChallengeEndParameter of(String userName,
                                            String programTitle,
-                                           Long programId) {
+                                           Long programId,
+                                           Long applicationId) {
         return ChallengeEndParameter.builder()
                 .userName(userName)
                 .programTitle(programTitle)
                 .programId(programId)
+                .applicationId(applicationId)
                 .build();
     }
 }

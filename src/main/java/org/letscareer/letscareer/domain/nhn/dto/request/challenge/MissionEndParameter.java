@@ -17,11 +17,13 @@ public record MissionEndParameter(
         LocalDateTime missionStartDate,
         @JsonFormat(pattern = "yyyy년 MM월 dd일 HH:mm", timezone = "Asia/Seoul")
         LocalDateTime missionEndDate,
-        Long programId
+        Long programId,
+        Long applicationId
 ) {
     public static MissionEndParameter of(String userName,
                                          Mission mission,
-                                         Challenge challenge) {
+                                         Challenge challenge,
+                                         Long applicationId) {
         return MissionEndParameter.builder()
                 .userName(userName)
                 .th(mission.getTh())
@@ -29,6 +31,7 @@ public record MissionEndParameter(
                 .missionStartDate(mission.getStartDate())
                 .missionEndDate(mission.getEndDate())
                 .programId(challenge.getId())
+                .applicationId(applicationId)
                 .build();
     }
 }

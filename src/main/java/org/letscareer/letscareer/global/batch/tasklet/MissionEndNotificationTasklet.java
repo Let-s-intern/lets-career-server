@@ -2,6 +2,7 @@ package org.letscareer.letscareer.global.batch.tasklet;
 
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.helper.ChallengeApplicationHelper;
+import org.letscareer.letscareer.domain.application.vo.NotificationUserVo;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.mission.helper.MissionHelper;
@@ -34,10 +35,10 @@ public class MissionEndNotificationTasklet implements Tasklet {
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) {
         Mission mission = missionHelper.findMissionByIdOrThrow(missionId);
         Challenge challenge = mission.getChallenge();
-        List<User> userList = challengeApplicationHelper.getAttendanceNullNotificationUsers(challenge.getId(), mission.getId());
+        List<NotificationUserVo> userList = challengeApplicationHelper.getAttendanceNullNotificationUserVos(challenge.getId(), mission.getId());
         if(!userList.isEmpty()) {
             List<MissionEndParameter> requestParameterList = userList.stream()
-                    .map(user -> MissionEndParameter.of(user.getName(), mission, challenge))
+                    .map(notificationUserVo -> MissionEndParameter.of(notificationUserVo.user().getName(), mission, challenge, notificationUserVo.applicationId()))
                     .collect(Collectors.toList());
             nhnProvider.sendKakaoMessages(userList, requestParameterList, "mission_end");
         }
