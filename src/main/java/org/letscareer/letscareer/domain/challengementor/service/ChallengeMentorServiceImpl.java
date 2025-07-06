@@ -5,7 +5,7 @@ import org.letscareer.letscareer.domain.challengementor.dto.response.GetMyChalle
 import org.letscareer.letscareer.domain.challengementor.helper.ChallengeMentorHelper;
 import org.letscareer.letscareer.domain.challengementor.vo.MyChallengeMentorVo;
 import org.letscareer.letscareer.domain.user.entity.User;
-import org.letscareer.letscareer.global.error.exception.UnauthorizedException;
+import org.letscareer.letscareer.global.error.exception.ForbiddenException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +21,7 @@ public class ChallengeMentorServiceImpl implements ChallengeMentorService {
 
     @Override
     public GetMyChallengeMentorsResponseDto getMyChallengeMentors(User mentor) {
-        if(!mentor.getIsMentor()) throw new UnauthorizedException(NOT_CHALLENGE_MENTOR);
+        if(!mentor.getIsMentor()) throw new ForbiddenException(NOT_CHALLENGE_MENTOR);
         List<MyChallengeMentorVo> myChallengeMentorVoList = challengeMentorHelper.findAllMyChallengeMentorVosByMentorId(mentor.getId());
         return GetMyChallengeMentorsResponseDto.of(myChallengeMentorVoList);
     }
