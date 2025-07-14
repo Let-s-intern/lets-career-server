@@ -17,7 +17,6 @@ public record OTRemindParameter(
         LocalDateTime programOtEnd,
         String chatLink,
         String chatPassword,
-        String zoomLink,
         Long programId,
         Long applicationId
 
@@ -32,7 +31,6 @@ public record OTRemindParameter(
                 .programOtEnd(challenge.getStartDate().plusMinutes(40))
                 .chatLink(challenge.getChatLink())
                 .chatPassword(challenge.getChatPassword())
-                .zoomLink(challenge.getZoomLink().substring(8))
                 .programId(challenge.getId())
                 .applicationId(applicationId)
                 .build();

@@ -17,11 +17,6 @@ public record ChallengePaymentParameter(
         LocalDateTime programEndDate,
         String chatLink,
         String chatPassword,
-        @JsonFormat(pattern = "yyyy년 MM월 dd일 HH:mm", timezone = "Asia/Seoul")
-        LocalDateTime programOtStart,
-        @JsonFormat(pattern = "yyyy년 MM월 dd일 HH:mm", timezone = "Asia/Seoul")
-        LocalDateTime programOtEnd,
-        String zoomLink,
         Long programId
         ) {
     public static ChallengePaymentParameter of(String userName,
@@ -33,9 +28,6 @@ public record ChallengePaymentParameter(
                 .programEndDate(challenge.getEndDate())
                 .chatLink(challenge.getChatLink())
                 .chatPassword(challenge.getChatPassword())
-                .programOtStart(challenge.getStartDate())
-                .programOtEnd(challenge.getStartDate().plusMinutes(40))
-                .zoomLink(challenge.getZoomLink().substring(8))
                 .programId(challenge.getId())
                 .build();
     }
