@@ -24,7 +24,8 @@ public class MissionTemplateQueryRepositoryImpl implements MissionTemplateQueryR
                         missionTemplate.title,
                         missionTemplate.description,
                         missionTemplate.guide,
-                        missionTemplate.templateLink))
+                        missionTemplate.templateLink,
+                        missionTemplate.vodLink))
                 .from(missionTemplate)
                 .orderBy(missionTemplate.id.desc())
                 .fetch();
