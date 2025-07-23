@@ -8,6 +8,7 @@ public record CreateMissionTemplateRequestDto(
         @NotEmpty String title,
         @NotEmpty String description,
         @NotEmpty String guide,
-        @NotEmpty String templateLink
+        String templateLink,
+        String vodLink
 ) {
 }

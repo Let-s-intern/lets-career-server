@@ -5,6 +5,7 @@ public record UpdateMissionTemplateRequestDto(
         String title,
         String description,
         String guide,
-        String templateLink
+        String templateLink,
+        String vodLink
 ) {
 }
