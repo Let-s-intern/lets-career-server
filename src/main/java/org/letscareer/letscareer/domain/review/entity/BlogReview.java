@@ -3,6 +3,7 @@ package org.letscareer.letscareer.domain.review.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.letscareer.letscareer.domain.attendance.entity.Attendance;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.program.type.converter.ProgramTypeConverter;
 import org.letscareer.letscareer.domain.review.dto.request.CreateBlogReviewRequestDto;
@@ -44,6 +45,10 @@ public class BlogReview {
     @Builder.Default
     @NotNull
     private Boolean isVisible = false;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "attendance_id")
+    private Attendance attendance;
 
     public static BlogReview createBlogReview(CreateBlogReviewRequestDto requestDto, BlogReviewOpenGraphVo openGraphVo) {
         return BlogReview.builder()

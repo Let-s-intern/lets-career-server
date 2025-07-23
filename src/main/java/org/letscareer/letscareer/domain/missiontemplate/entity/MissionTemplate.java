@@ -32,8 +32,8 @@ public class MissionTemplate extends BaseTimeEntity {
     private String description;
     @NotNull
     private String guide;
-    @NotNull
     private String templateLink;
+    private String vodLink;
 
     @OneToMany(mappedBy = "missionTemplate", cascade = CascadeType.ALL)
     @Builder.Default
@@ -46,6 +46,7 @@ public class MissionTemplate extends BaseTimeEntity {
                 .description(createMissionTemplateRequestDto.description())
                 .guide(createMissionTemplateRequestDto.guide())
                 .templateLink(createMissionTemplateRequestDto.templateLink())
+                .vodLink(createMissionTemplateRequestDto.vodLink())
                 .build();
     }
 
@@ -55,5 +56,6 @@ public class MissionTemplate extends BaseTimeEntity {
         this.description = updateValue(this.description, updateMissionTemplateRequestDto.description());
         this.guide = updateValue(this.guide, updateMissionTemplateRequestDto.guide());
         this.templateLink = updateValue(this.templateLink, updateMissionTemplateRequestDto.templateLink());
+        this.vodLink = updateValue(this.vodLink, updateMissionTemplateRequestDto.vodLink());
     }
 }

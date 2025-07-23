@@ -13,6 +13,8 @@ import org.letscareer.letscareer.domain.attendance.type.converter.AttendanceResu
 import org.letscareer.letscareer.domain.attendance.type.converter.AttendanceStatusConverter;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.user.entity.User;
+import org.letscareer.letscareer.domain.user.type.AccountType;
+import org.letscareer.letscareer.domain.user.type.converter.AccountTypeConverter;
 import org.letscareer.letscareer.global.common.entity.BaseTimeEntity;
 
 import static org.letscareer.letscareer.global.common.utils.entity.EntityUpdateValueUtils.updateValue;
@@ -44,6 +46,9 @@ public class Attendance extends BaseTimeEntity {
     @Builder.Default
     @Convert(converter = AttendanceFeedbackStatusConverter.class)
     private AttendanceFeedbackStatus feedbackStatus = AttendanceFeedbackStatus.WAITING;
+    @Convert(converter = AccountTypeConverter.class)
+    private AccountType accountType;
+    private String accountNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mission_id")
