@@ -54,8 +54,10 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
                         vWApplication.programStartDate,
                         vWApplication.programEndDate,
                         vWApplication.reviewId,
-                        vWApplication.paymentId))
+                        vWApplication.paymentId,
+                        payment.challengePricePlanType))
                 .from(vWApplication)
+                .leftJoin(payment).on(payment.id.eq(vWApplication.paymentId))
                 .where(
                         eqUserId(userId),
                         eqIsCanceled(false),
@@ -81,8 +83,10 @@ public class ApplicationQueryRepositoryImpl implements ApplicationQueryRepositor
                         vWApplication.programStartDate,
                         vWApplication.programEndDate,
                         vWApplication.reviewId,
-                        vWApplication.paymentId))
+                        vWApplication.paymentId,
+                        payment.challengePricePlanType))
                 .from(vWApplication)
+                .leftJoin(payment).on(payment.id.eq(vWApplication.paymentId))
                 .where(
                         eqUserId(userId),
                         eqIsCanceled(false),
