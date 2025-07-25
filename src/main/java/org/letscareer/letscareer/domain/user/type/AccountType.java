@@ -21,4 +21,15 @@ public enum AccountType implements EnumField {
 
     private final Integer code;
     private final String desc;
+    
+    public static AccountType fromBankName(String bankName) {
+        if (bankName == null) return null;
+        
+        for (AccountType type : AccountType.values()) {
+            if (type.desc.equals(bankName) || bankName.contains(type.desc)) {
+                return type;
+            }
+        }
+        return null;
+    }
 }
