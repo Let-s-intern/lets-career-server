@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.challenge.type.ChallengeType;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.review.dto.request.*;
+import org.letscareer.letscareer.domain.review.dto.response.CreateUserBlogReviewResponseDto;
 import org.letscareer.letscareer.domain.review.dto.response.GetBlogReviewResponseDto;
 import org.letscareer.letscareer.domain.review.dto.response.GetMyReviewResponseDto;
 import org.letscareer.letscareer.domain.review.dto.response.GetReviewCountResponseDto;
@@ -101,5 +102,17 @@ public class ReviewV2Controller {
                                                             @CurrentUser final User user) {
         reviewServiceFactory.getReviewService(requestDto.type()).createReview(user, applicationId, requestDto);
         return SuccessResponse.created(null);
+    }
+
+    @Operation(
+            summary = "보너스 미션 블로그 후기 제출",
+            description = "참여자가 보너스 미션의 블로그 후기 URL을 제출하면 자동으로 BlogReview와 Attendance가 생성됩니다.",
+            responses = {@ApiResponse(responseCode = "201", content = @Content(schema = @Schema(implementation = CreateUserBlogReviewResponseDto.class)))}
+    )
+    @PostMapping("/blog/bonus")
+    private ResponseEntity<SuccessResponse<?>> createUserBlogReview(@RequestBody @Valid final CreateUserBlogReviewRequestDto requestDto,
+                                                                   @CurrentUser final User user) {
+        CreateUserBlogReviewResponseDto responseDto = blogReviewService.createUserBlogReview(requestDto, user);
+        return SuccessResponse.created(responseDto);
     }
 }

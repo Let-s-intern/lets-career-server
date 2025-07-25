@@ -88,6 +88,7 @@ import org.letscareer.letscareer.domain.user.type.UserRole;
 import org.letscareer.letscareer.global.common.entity.PageInfo;
 import org.letscareer.letscareer.global.common.utils.zoom.ZoomUtils;
 import org.letscareer.letscareer.global.error.exception.EntityNotFoundException;
+import org.letscareer.letscareer.global.error.exception.InvalidValueException;
 import org.letscareer.letscareer.global.error.exception.UnauthorizedException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -101,6 +102,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static org.letscareer.letscareer.domain.application.error.ApplicationErrorCode.APPLICATION_NOT_FOUND;
+import static org.letscareer.letscareer.domain.attendance.error.AttendanceErrorCode.ATTENDANCE_OT_REQUIRED;
 import static org.letscareer.letscareer.domain.user.error.UserErrorCode.IS_NOT_MENTOR;
 
 @RequiredArgsConstructor
@@ -329,6 +331,11 @@ public class ChallengeServiceImpl implements ChallengeService {
     public GetChallengeMyMissionDetailResponseDto getMyMissionDetail(Long challengeId, Long missionId, User user) {
         challengeApplicationHelper.validateChallengeDashboardAccessibleUser(challengeId, user);
         MyDailyMissionVo missionInfo = missionHelper.findMyDailyMissionVoByMissionId(missionId);
+        
+        if (missionInfo != null && missionInfo.th() >= 1 && !attendanceHelper.isOTCompleted(challengeId, user.getId())) {
+            throw new InvalidValueException(ATTENDANCE_OT_REQUIRED);
+        }
+        
         AttendanceDashboardVo attendanceInfo = missionInfo != null ? attendanceHelper.findAttendanceDashboardVoOrNull(missionInfo.id(), user.getId()) : null;
         return missionMapper.toGetChallengeMyMissionDetailResponseDto(missionInfo, attendanceInfo);
     }

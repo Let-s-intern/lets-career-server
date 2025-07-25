@@ -62,7 +62,21 @@ public class BlogReview {
                 .build();
     }
 
-    public void setThumbnail(String thumbnail) {
+    public static BlogReview createBonusBlogReview(CreateBlogReviewRequestDto requestDto, BlogReviewOpenGraphVo openGraphVo, Attendance attendance) {
+        return BlogReview.builder()
+                .programType(requestDto.programType())
+                .programTitle(requestDto.programTitle())
+                .name(requestDto.name())
+                .title(openGraphVo.title())
+                .description(openGraphVo.description())
+                .url(openGraphVo.url())
+                .postDate(requestDto.postDate())
+                .attendance(attendance)
+                .isVisible(true)
+                .build();
+    }
+
+    public void updateThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
     }
 
@@ -79,5 +93,9 @@ public class BlogReview {
         this.description = updateValue(this.description, openGraphVo.description());
         this.url = updateValue(this.url, openGraphVo.url());
         this.thumbnail = updateValue(this.thumbnail, thumbnail);
+    }
+
+    public void approveForBonus() {
+        this.isVisible = true;
     }
 }

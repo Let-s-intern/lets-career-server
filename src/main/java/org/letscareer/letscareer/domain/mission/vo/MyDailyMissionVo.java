@@ -22,9 +22,9 @@ public record MyDailyMissionVo(
         String missionTag,
         String description,
         String guide,
-        String templateLink
-) {
-    public MyDailyMissionVo(Mission mission, String missionTag, String description, String guide, String templateLink) {
+        String templateLink,
+        String vodLink) {
+    public MyDailyMissionVo(Mission mission, String missionTag, String description, String guide, String templateLink, String vodLink) {
         this(
                 mission.getId(),
                 mission.getTh(),
@@ -41,8 +41,8 @@ public record MyDailyMissionVo(
                 missionTag,
                 description,
                 guide,
-                templateLink
-        );
+                templateLink,
+                vodLink);
 
     }
 }

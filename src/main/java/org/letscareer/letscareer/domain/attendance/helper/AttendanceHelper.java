@@ -5,6 +5,7 @@ import org.letscareer.letscareer.domain.attendance.dto.request.CreateAttendanceR
 import org.letscareer.letscareer.domain.attendance.entity.Attendance;
 import org.letscareer.letscareer.domain.attendance.error.AttendanceErrorCode;
 import org.letscareer.letscareer.domain.attendance.repository.AttendanceRepository;
+import org.letscareer.letscareer.domain.attendance.type.AttendanceResult;
 import org.letscareer.letscareer.domain.attendance.type.AttendanceStatus;
 import org.letscareer.letscareer.domain.attendance.vo.*;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
@@ -65,8 +66,10 @@ public class AttendanceHelper {
         }
     }
 
-    public Attendance createAttendanceAndSave(Mission mission, CreateAttendanceRequestDto createRequestDto, AttendanceStatus status, User user) {
-        Attendance newAttendance = Attendance.createAttendance(mission, createRequestDto, status, user);
+    public Attendance createAttendanceAndSave(Mission mission, CreateAttendanceRequestDto createRequestDto,
+            AttendanceStatus status, User user) {
+        AttendanceResult result = (mission.getTh() == 0) ? AttendanceResult.PASS : AttendanceResult.WAITING;
+        Attendance newAttendance = Attendance.createAttendance(mission, createRequestDto, status, user, result);
         return attendanceRepository.save(newAttendance);
     }
 
@@ -76,5 +79,14 @@ public class AttendanceHelper {
 
     public List<MissionReviewAdminVo> findAllMissionReviewAdminVos() {
         return attendanceRepository.findAllMissionReviewAdminVos();
+    }
+
+    public Attendance saveAttendance(Attendance attendance) {
+        return attendanceRepository.save(attendance);
+    }
+
+    public boolean isOTCompleted(Long challengeId, Long userId) {
+        return attendanceRepository.existsByMissionChallengeIdAndMissionThAndUserIdAndResult(challengeId, 0, userId,
+                AttendanceResult.PASS);
     }
 }
