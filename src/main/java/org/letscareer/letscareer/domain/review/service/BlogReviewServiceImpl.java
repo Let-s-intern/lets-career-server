@@ -26,7 +26,6 @@ import org.letscareer.letscareer.domain.attendance.type.AttendanceResult;
 import org.letscareer.letscareer.domain.mission.entity.Mission;
 import org.letscareer.letscareer.domain.mission.helper.MissionHelper;
 import org.letscareer.letscareer.domain.user.entity.User;
-import org.letscareer.letscareer.domain.user.type.AccountType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -104,9 +103,7 @@ public class BlogReviewServiceImpl implements BlogReviewService {
                 user, 
                 AttendanceResult.PASS
         );
-        AccountType accountType = requestDto.bankName() != null ? 
-                AccountType.fromBankName(requestDto.bankName()) : null;
-        attendance.updateAccountInfo(accountType, requestDto.accountNumber());
+        attendance.updateAccountInfo(requestDto.accountType(), requestDto.accountNumber());
         
         attendance = attendanceHelper.saveAttendance(attendance);
         BlogReviewOpenGraphVo openGraphVo = openGraphUtils.getBlogReviewOpenGraphVo(requestDto.url());
