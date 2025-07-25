@@ -1,6 +1,7 @@
 package org.letscareer.letscareer.domain.review.helper;
 
 import lombok.RequiredArgsConstructor;
+import org.letscareer.letscareer.domain.attendance.entity.Attendance;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.review.dto.request.CreateBlogReviewRequestDto;
 import org.letscareer.letscareer.domain.review.entity.BlogReview;
@@ -24,6 +25,11 @@ public class BlogReviewHelper {
 
     public BlogReview createBlogReviewAndSave(CreateBlogReviewRequestDto requestDto, BlogReviewOpenGraphVo openGraphVo) {
         BlogReview blogReview = BlogReview.createBlogReview(requestDto, openGraphVo);
+        return blogReviewRepository.save(blogReview);
+    }
+
+    public BlogReview createBonusBlogReviewAndSave(CreateBlogReviewRequestDto requestDto, BlogReviewOpenGraphVo openGraphVo, Attendance attendance) {
+        BlogReview blogReview = BlogReview.createBonusBlogReview(requestDto, openGraphVo, attendance);
         return blogReviewRepository.save(blogReview);
     }
 
