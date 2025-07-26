@@ -57,15 +57,26 @@ public class AttendanceServiceImpl implements AttendanceService {
         List<AttendanceAdminVo> attendanceAdminList = attendanceHelper.getAttendancesOfChallenge(challengeId);
         return attendanceMapper.toAttendanceAdminListResponseDto(attendanceAdminList);
     }
-
+    
     @Override
     public void updateAttendance(Long attendanceId, User user, UpdateAttendanceRequestDto requestDto) {
-        Attendance attendance = attendanceHelper.findAttendanceByIdOrThrow(attendanceId);
-        validateAuthorizedUser(user, attendance);
-        if (user.getRole().equals(UserRole.ADMIN)) updateAttendanceByAdmin(attendance, requestDto);
-        else updateAttendanceByUser(attendance, requestDto);
-        if (validateAuthorizedMentor(attendance, user)) updateAttendanceByMentor(attendance, requestDto);
+        Attendance attendance = attendanceHelper.findAttendanceByIdOrThrow(attendanceId);
+        validateAuthorizedUser(user, attendance);
+
+        boolean isAdmin = user.getRole().equals(UserRole.ADMIN);
+        boolean isMentor = validateAuthorizedMentor(attendance, user);
+
+        if (isAdmin) {
+            updateAttendanceByAdmin(attendance, requestDto);
+        } else if (!isMentor) {
+            updateAttendanceByUser(attendance, requestDto);
+        }
+
+        if (isMentor) {
+            updateAttendanceByMentor(attendance, requestDto);
+        }
     }
+
 
     private void validateAuthorizedUser(User user, Attendance attendance) {
         if (user.getRole().equals(UserRole.ADMIN)) return;
