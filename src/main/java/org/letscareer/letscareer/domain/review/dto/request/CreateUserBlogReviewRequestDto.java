@@ -8,6 +8,6 @@ public record CreateUserBlogReviewRequestDto(
         @NotNull Long missionId,
         @NotBlank String url,
         AccountType accountType,
-        String accountNumber
+        String accountNum
 ) {
 }

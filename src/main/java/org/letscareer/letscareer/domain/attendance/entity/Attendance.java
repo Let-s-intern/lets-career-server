@@ -48,7 +48,7 @@ public class Attendance extends BaseTimeEntity {
     private AttendanceFeedbackStatus feedbackStatus = AttendanceFeedbackStatus.WAITING;
     @Convert(converter = AccountTypeConverter.class)
     private AccountType accountType;
-    private String accountNumber;
+    private String accountNum;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mission_id")
@@ -118,8 +118,8 @@ public class Attendance extends BaseTimeEntity {
         this.feedbackStatus = updateValue(this.feedbackStatus, feedbackStatus);
     }
 
-    public void updateAccountInfo(AccountType accountType, String accountNumber) {
+    public void updateAccountInfo(AccountType accountType, String accountNum) {
         this.accountType = accountType;
-        this.accountNumber = accountNumber;
+        this.accountNum = accountNum;
     }
 }
