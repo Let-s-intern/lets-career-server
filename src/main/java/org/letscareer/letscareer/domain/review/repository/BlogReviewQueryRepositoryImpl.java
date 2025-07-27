@@ -1,6 +1,5 @@
 package org.letscareer.letscareer.domain.review.repository;
 
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -34,7 +33,7 @@ public class BlogReviewQueryRepositoryImpl implements BlogReviewQueryRepository 
                         blogReview.name,
                         attendance.user.phoneNum,
                         attendance.accountType,
-                        attendance.accountNumber,
+                        attendance.accountNum,
                         blogReview.title,
                         blogReview.url,
                         blogReview.thumbnail,

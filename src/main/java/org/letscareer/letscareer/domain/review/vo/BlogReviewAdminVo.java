@@ -15,7 +15,7 @@ public record BlogReviewAdminVo(
         String name,
         String phoneNum,
         AccountType accountType,
-        String accountNumber,
+        String accountNum,
         String title,
         String url,
         String thumbnail,

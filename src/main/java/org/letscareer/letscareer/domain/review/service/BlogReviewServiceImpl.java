@@ -103,7 +103,7 @@ public class BlogReviewServiceImpl implements BlogReviewService {
                 user, 
                 AttendanceResult.PASS
         );
-        attendance.updateAccountInfo(requestDto.accountType(), requestDto.accountNumber());
+        attendance.updateAccountInfo(requestDto.accountType(), requestDto.accountNum());
         
         attendance = attendanceHelper.saveAttendance(attendance);
         BlogReviewOpenGraphVo openGraphVo = openGraphUtils.getBlogReviewOpenGraphVo(requestDto.url());
