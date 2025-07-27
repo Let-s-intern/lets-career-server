@@ -8,7 +8,5 @@ import java.util.Optional;
 
 public interface AttendanceRepository extends JpaRepository<Attendance, Long>, AttendanceQueryRepository {
     Optional<Attendance> findAttendanceByMissionIdAndUserId(Long missionId, Long userId);
-
-    boolean existsByMissionChallengeIdAndMissionThAndUserIdAndResult(
-            Long challengeId, Integer th, Long userId, AttendanceResult result);
+    boolean existsByMissionChallengeIdAndMissionThAndUserIdAndResult(Long challengeId, Integer th, Long userId, AttendanceResult result);
 }

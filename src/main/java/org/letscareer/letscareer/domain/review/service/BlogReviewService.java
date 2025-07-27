@@ -2,9 +2,12 @@ package org.letscareer.letscareer.domain.review.service;
 
 import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.review.dto.request.CreateBlogReviewRequestDto;
+import org.letscareer.letscareer.domain.review.dto.request.CreateUserBlogReviewRequestDto;
 import org.letscareer.letscareer.domain.review.dto.request.UpdateBlogReviewRequestDto;
+import org.letscareer.letscareer.domain.review.dto.response.CreateUserBlogReviewResponseDto;
 import org.letscareer.letscareer.domain.review.dto.response.GetBlogReviewForAdminResponseDto;
 import org.letscareer.letscareer.domain.review.dto.response.GetBlogReviewResponseDto;
+import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -15,4 +18,5 @@ public interface BlogReviewService {
     void createBlogReview(CreateBlogReviewRequestDto requestDto);
     void updateBlogReview(Long blogReviewId, UpdateBlogReviewRequestDto requestDto);
     void deleteBlogReview(Long blogReviewId);
+    CreateUserBlogReviewResponseDto createUserBlogReview(CreateUserBlogReviewRequestDto requestDto, User user);
 }

@@ -117,4 +117,9 @@ public class Attendance extends BaseTimeEntity {
     public void updateAttendanceFeedbackStatus(AttendanceFeedbackStatus feedbackStatus) {
         this.feedbackStatus = updateValue(this.feedbackStatus, feedbackStatus);
     }
+
+    public void updateAccountInfo(AccountType accountType, String accountNumber) {
+        this.accountType = accountType;
+        this.accountNumber = accountNumber;
+    }
 }

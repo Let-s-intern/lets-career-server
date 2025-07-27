@@ -81,6 +81,10 @@ public class AttendanceHelper {
         return attendanceRepository.findAllMissionReviewAdminVos();
     }
 
+    public Attendance saveAttendance(Attendance attendance) {
+        return attendanceRepository.save(attendance);
+    }
+
     public boolean isOTCompleted(Long challengeId, Long userId) {
         return attendanceRepository.existsByMissionChallengeIdAndMissionThAndUserIdAndResult(challengeId, 0, userId,
                 AttendanceResult.PASS);
