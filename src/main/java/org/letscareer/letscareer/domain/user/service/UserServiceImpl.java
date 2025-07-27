@@ -7,8 +7,13 @@ import org.letscareer.letscareer.domain.application.helper.ApplicationHelper;
 import org.letscareer.letscareer.domain.application.mapper.ApplicationMapper;
 import org.letscareer.letscareer.domain.application.type.ApplicationStatus;
 import org.letscareer.letscareer.domain.application.vo.MyApplicationVo;
+import org.letscareer.letscareer.domain.application.vo.MyApplicationWithChallengeOptionVo;
+import org.letscareer.letscareer.domain.challengeoption.helper.ChallengePriceOptionHelper;
 import org.letscareer.letscareer.domain.nhn.dto.request.SignUpParameter;
 import org.letscareer.letscareer.domain.nhn.provider.NhnProvider;
+import org.letscareer.letscareer.domain.price.entity.ChallengePrice;
+import org.letscareer.letscareer.domain.price.helper.ChallengePriceHelper;
+import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.user.dto.request.*;
 import org.letscareer.letscareer.domain.user.dto.response.*;
 import org.letscareer.letscareer.domain.user.entity.User;
@@ -42,6 +47,8 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final ApplicationHelper applicationHelper;
     private final ApplicationMapper applicationMapper;
+    private final ChallengePriceHelper challengePriceHelper;
+    private final ChallengePriceOptionHelper challengePriceOptionHelper;
     private final WithdrawHelper withdrawHelper;
     private final TokenProvider tokenProvider;
     private final EmailUtils emailUtils;
@@ -164,14 +171,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public GetMyApplicationsResponseDto getMyApplications(User user, ApplicationStatus status) {
-        List<MyApplicationVo> applicationList = applicationHelper.getMyApplications(user.getId(), status);
-        return applicationMapper.toGetMyApplicationsResponseDto(applicationList);
+        List<MyApplicationVo> applicationVos = applicationHelper.getMyApplications(user.getId(), status);
+        List<MyApplicationWithChallengeOptionVo> applicationWithChallengeOptionVos = toMyApplicationWithChallengeOptionVos(applicationVos);
+        return applicationMapper.toGetMyApplicationsResponseDto(applicationWithChallengeOptionVos);
     }
 
     @Override
     public GetMyApplicationsResponseDto getMyReviewApplications(User user, ApplicationStatus status) {
-        List<MyApplicationVo> applicationList = applicationHelper.getMyReviewApplications(user.getId(), status);
-        return applicationMapper.toGetMyApplicationsResponseDto(applicationList);
+        List<MyApplicationVo> applicationVos = applicationHelper.getMyReviewApplications(user.getId(), status);
+        List<MyApplicationWithChallengeOptionVo> applicationWithChallengeOptionVos = toMyApplicationWithChallengeOptionVos(applicationVos);
+        return applicationMapper.toGetMyApplicationsResponseDto(applicationWithChallengeOptionVos);
     }
 
     @Override
@@ -223,6 +232,20 @@ public class UserServiceImpl implements UserService {
                         userAdminVo,
                         applicationHelper.findUserApplicationInfo(userAdminVo.id())
                 ))
+                .collect(Collectors.toList());
+    }
+
+    private List<MyApplicationWithChallengeOptionVo> toMyApplicationWithChallengeOptionVos(List<MyApplicationVo> myApplicationVos) {
+        return myApplicationVos.stream()
+                .map(myApplicationVo -> {
+                    if(myApplicationVo.programType().equals(ProgramType.CHALLENGE)) {
+                        ChallengePrice challengePrice = challengePriceHelper.findChallengePriceByChallengeIdAndChallengePricePlanType(myApplicationVo.programId(), myApplicationVo.pricePlanType());
+                        List<String> challengePriceOptionTitleList = challengePriceOptionHelper.findAllChallengeOptionTitlesByChallengePriceId(challengePrice.getId());
+                        return MyApplicationWithChallengeOptionVo.of(myApplicationVo, challengePriceOptionTitleList);
+                    } else {
+                        return MyApplicationWithChallengeOptionVo.of(myApplicationVo, null);
+                    }
+                })
                 .collect(Collectors.toList());
     }
 }

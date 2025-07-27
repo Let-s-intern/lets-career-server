@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.application.repository;
 
 import org.letscareer.letscareer.domain.application.type.ApplicationStatus;
 import org.letscareer.letscareer.domain.application.vo.MyApplicationVo;
+import org.letscareer.letscareer.domain.application.vo.MyApplicationWithChallengeOptionVo;
 import org.letscareer.letscareer.domain.payment.vo.PaymentProgramVo;
 import org.letscareer.letscareer.domain.program.vo.ProgramSimpleVo;
 import org.letscareer.letscareer.domain.user.dto.response.UserApplicationInfo;

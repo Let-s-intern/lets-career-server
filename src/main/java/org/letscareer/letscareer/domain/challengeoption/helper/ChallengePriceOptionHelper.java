@@ -7,6 +7,8 @@ import org.letscareer.letscareer.domain.challengeoption.repository.ChallengePric
 import org.letscareer.letscareer.domain.price.entity.ChallengePrice;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Component
 public class ChallengePriceOptionHelper {
@@ -15,5 +17,9 @@ public class ChallengePriceOptionHelper {
     public void createChallengePriceOptionAndSave(ChallengePrice challengePrice, ChallengeOption challengeOption) {
         ChallengePriceOption challengePriceOption = ChallengePriceOption.createChallengePriceOption(challengePrice, challengeOption);
         challengePriceOptionRepository.save(challengePriceOption);
+    }
+
+    public List<String> findAllChallengeOptionTitlesByChallengePriceId(Long challengePriceId) {
+        return challengePriceOptionRepository.findAllByChallengePriceId(challengePriceId);
     }
 }
