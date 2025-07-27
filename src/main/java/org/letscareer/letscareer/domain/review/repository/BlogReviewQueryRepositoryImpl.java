@@ -15,7 +15,9 @@ import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
 
+import static org.letscareer.letscareer.domain.attendance.entity.QAttendance.attendance;
 import static org.letscareer.letscareer.domain.review.entity.QBlogReview.blogReview;
+import static org.letscareer.letscareer.domain.user.entity.QUser.user;
 
 @RequiredArgsConstructor
 public class BlogReviewQueryRepositoryImpl implements BlogReviewQueryRepository {
@@ -30,11 +32,16 @@ public class BlogReviewQueryRepositoryImpl implements BlogReviewQueryRepository 
                         blogReview.programType,
                         blogReview.programTitle,
                         blogReview.name,
+                        attendance.user.phoneNum,
+                        attendance.accountType,
+                        attendance.accountNumber,
                         blogReview.title,
                         blogReview.url,
                         blogReview.thumbnail,
                         blogReview.isVisible))
                 .from(blogReview)
+                .leftJoin(blogReview.attendance, attendance)
+                .leftJoin(attendance.user, user)
                 .orderBy(blogReview.id.desc())
                 .fetch();
     }
@@ -47,7 +54,6 @@ public class BlogReviewQueryRepositoryImpl implements BlogReviewQueryRepository 
                         blogReview.postDate,
                         blogReview.programType,
                         blogReview.programTitle,
-                        blogReview.name,
                         blogReview.title,
                         blogReview.description,
                         blogReview.url,
