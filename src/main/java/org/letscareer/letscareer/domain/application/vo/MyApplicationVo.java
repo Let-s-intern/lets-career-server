@@ -2,6 +2,7 @@ package org.letscareer.letscareer.domain.application.vo;
 
 import lombok.Builder;
 import org.letscareer.letscareer.domain.application.type.ApplicationStatus;
+import org.letscareer.letscareer.domain.price.type.ChallengePricePlanType;
 import org.letscareer.letscareer.domain.program.type.ProgramStatusType;
 import org.letscareer.letscareer.domain.program.type.ProgramType;
 import org.letscareer.letscareer.domain.report.type.ReportType;
@@ -23,7 +24,8 @@ public record MyApplicationVo(
         LocalDateTime programStartDate,
         LocalDateTime programEndDate,
         Long reviewId,
-        Long paymentId
+        Long paymentId,
+        ChallengePricePlanType pricePlanType
 ) {
     public MyApplicationVo(Long id,
                            LocalDateTime createDate,
@@ -37,7 +39,8 @@ public record MyApplicationVo(
                            LocalDateTime programStartDate,
                            LocalDateTime programEndDate,
                            Long reviewId,
-                           Long paymentId) {
+                           Long paymentId,
+                           ChallengePricePlanType pricePlanType) {
         this(
                 id,
                 createDate,
@@ -52,7 +55,8 @@ public record MyApplicationVo(
                 programStartDate,
                 programEndDate,
                 reviewId,
-                paymentId
+                paymentId,
+                pricePlanType
         );
     }
 }

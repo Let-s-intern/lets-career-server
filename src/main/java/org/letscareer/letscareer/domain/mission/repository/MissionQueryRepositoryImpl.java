@@ -132,7 +132,8 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
                                 missionTemplate.missionTag,
                                 missionTemplate.description,
                                 missionTemplate.guide,
-                                missionTemplate.templateLink))
+                                missionTemplate.templateLink,
+                                missionTemplate.vodLink))
                         .from(mission)
                         .leftJoin(mission.missionTemplate, missionTemplate)
                         .where(
@@ -292,7 +293,8 @@ public class MissionQueryRepositoryImpl implements MissionQueryRepository {
                                 missionTemplate.missionTag,
                                 missionTemplate.description,
                                 missionTemplate.guide,
-                                missionTemplate.templateLink))
+                                missionTemplate.templateLink,
+                                missionTemplate.vodLink))
                         .from(mission)
                         .leftJoin(mission.missionTemplate, missionTemplate)
                         .where(

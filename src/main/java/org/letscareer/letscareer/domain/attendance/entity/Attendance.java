@@ -61,13 +61,14 @@ public class Attendance extends BaseTimeEntity {
     private User mentor;
 
     public static Attendance createAttendance(Mission mission,
-                                              CreateAttendanceRequestDto createRequestDto,
-                                              AttendanceStatus status,
-                                              User user) {
+            CreateAttendanceRequestDto createRequestDto,
+            AttendanceStatus status,
+            User user, AttendanceResult result) {
         return Attendance.builder()
                 .link(createRequestDto.link())
                 .review(createRequestDto.review())
                 .status(status)
+                .result(result)
                 .mission(mission)
                 .user(user)
                 .build();
@@ -115,5 +116,10 @@ public class Attendance extends BaseTimeEntity {
 
     public void updateAttendanceFeedbackStatus(AttendanceFeedbackStatus feedbackStatus) {
         this.feedbackStatus = updateValue(this.feedbackStatus, feedbackStatus);
+    }
+
+    public void updateAccountInfo(AccountType accountType, String accountNumber) {
+        this.accountType = accountType;
+        this.accountNumber = accountNumber;
     }
 }
