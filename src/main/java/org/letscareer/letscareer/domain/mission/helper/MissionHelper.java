@@ -104,4 +104,8 @@ public class MissionHelper {
     public void deleteAllByChallengeId(Long challengeId) {
         missionRepository.deleteAllByChallengeId(challengeId);
     }
+
+    public boolean hasOTMission(Long challengeId) {
+        return missionRepository.existsByChallengeIdAndTh(challengeId, 0);
+    }
 }

@@ -332,7 +332,9 @@ public class ChallengeServiceImpl implements ChallengeService {
         challengeApplicationHelper.validateChallengeDashboardAccessibleUser(challengeId, user);
         MyDailyMissionVo missionInfo = missionHelper.findMyDailyMissionVoByMissionId(missionId);
         
-        if (missionInfo != null && missionInfo.th() >= 1 && !attendanceHelper.isOTCompleted(challengeId, user.getId())) {
+        if (missionInfo != null && missionInfo.th() >= 1 && 
+            missionHelper.hasOTMission(challengeId) && 
+            !attendanceHelper.isOTCompleted(challengeId, user.getId())) {
             throw new InvalidValueException(ATTENDANCE_OT_REQUIRED);
         }
         
