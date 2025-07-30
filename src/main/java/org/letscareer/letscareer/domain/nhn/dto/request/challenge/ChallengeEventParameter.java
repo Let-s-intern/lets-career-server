@@ -13,19 +13,22 @@ public record ChallengeEventParameter(
         @JsonFormat(pattern = "yyyy년 MM월 dd일 HH:mm", timezone = "Asia/Seoul")
         LocalDateTime missionEndDate,
         Long programId,
-        Long applicationId
+        Long applicationId,
+        Long missionId
 ) {
     public static ChallengeEventParameter of(String userName,
                                              String programTitle,
                                              LocalDateTime missionEndDate,
                                              Long programId,
-                                             Long applicationId) {
+                                             Long applicationId,
+                                             Long missionId) {
         return ChallengeEventParameter.builder()
                 .userName(userName)
                 .programTitle(programTitle)
                 .missionEndDate(missionEndDate)
                 .programId(programId)
                 .applicationId(applicationId)
+                .missionId(missionId)
                 .build();
     }
 }

@@ -39,7 +39,7 @@ public class ChallengeEventNotificationTasklet implements Tasklet {
         List<NotificationUserVo> notificationUserVos = challengeApplicationHelper.getAttendanceNullNotificationUserVos(challengeId, missionId);
         if(!notificationUserVos.isEmpty()) {
             List<ChallengeEventParameter> requestParameterList = notificationUserVos.stream()
-                    .map(notificationUserVo -> ChallengeEventParameter.of(notificationUserVo.user().getName(), challenge.getTitle(),challenge.getEndDate().plusDays(2), challenge.getId(), notificationUserVo.applicationId()))
+                    .map(notificationUserVo -> ChallengeEventParameter.of(notificationUserVo.user().getName(), challenge.getTitle(),challenge.getEndDate().plusDays(2), challenge.getId(), notificationUserVo.applicationId(), missionId))
                     .collect(Collectors.toList());
             List<User> userList = notificationUserVos.stream()
                     .map(notificationUserVo -> notificationUserVo.user())
