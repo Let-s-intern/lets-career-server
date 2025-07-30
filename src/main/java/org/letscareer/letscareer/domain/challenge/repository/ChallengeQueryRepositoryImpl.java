@@ -277,8 +277,8 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
                 .join(challenge.missionList, mission)
                 .where(
                         eqChallengeParticipationType(ChallengeParticipationType.LIVE),
-                        mission.th.eq(99),
-                        isDayAfterEndDate(2)
+                        isDayAfterEndDate(2),
+                        mission.th.eq(99)
                 )
                 .groupBy(challenge.id)
                 .fetch();
