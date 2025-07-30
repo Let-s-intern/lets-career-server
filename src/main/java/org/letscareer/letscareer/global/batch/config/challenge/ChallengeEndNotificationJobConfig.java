@@ -1,7 +1,7 @@
-package org.letscareer.letscareer.global.batch.config;
+package org.letscareer.letscareer.global.batch.config.challenge;
 
 import lombok.RequiredArgsConstructor;
-import org.letscareer.letscareer.global.batch.tasklet.MissionEndNotificationTasklet;
+import org.letscareer.letscareer.global.batch.tasklet.challenge.ChallengeEndNotificationTasklet;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -15,22 +15,22 @@ import org.springframework.transaction.PlatformTransactionManager;
 @EnableBatchProcessing
 @RequiredArgsConstructor
 @Configuration
-public class MissionEndNotificationJobConfig {
+public class ChallengeEndNotificationJobConfig {
     private final JobRepository jobRepository;
     private final PlatformTransactionManager transactionManager;
-    private final MissionEndNotificationTasklet missionEndNotificationTasklet;
+    private final ChallengeEndNotificationTasklet challengeEndNotificationTasklet;
 
     @Bean
-    public Job missionEndNotificationJob() {
-        return new JobBuilder("missionEndNotificationJob", jobRepository)
-                .start(sendMissionEndNotificationStep())
+    public Job challengeEndNotificationJob() {
+        return new JobBuilder("challengeEndNotificationJob", jobRepository)
+                .start(sendChallengeEndNotificationStep())
                 .build();
     }
 
     @Bean
-    protected Step sendMissionEndNotificationStep() {
-        return new StepBuilder("sendMissionEndNotificationStep", jobRepository)
-                .tasklet(missionEndNotificationTasklet, transactionManager)
+    protected Step sendChallengeEndNotificationStep() {
+        return new StepBuilder("sendChallengeEndNotificationStep", jobRepository)
+                .tasklet(challengeEndNotificationTasklet, transactionManager)
                 .build();
     }
 }

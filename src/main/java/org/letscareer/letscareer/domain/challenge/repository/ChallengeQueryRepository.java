@@ -34,6 +34,8 @@ public interface ChallengeQueryRepository {
 
     List<Long> findAllOTRemindNotificationChallengeId();
 
+    List<ChallengeEventVo> findAllEventNotificationChallengeVo();
+
     ChallengeRecommendVo findChallengeRecommendVoByChallengeType(ChallengeType challengeType);
 
     CurationItemVo findCurationItemVoByKeyword(String keyword);

@@ -94,6 +94,10 @@ public class ChallengeHelper {
         return challengeRepository.findAllOTRemindNotificationChallengeId();
     }
 
+    public List<ChallengeEventVo> findEventNotificationChallengeVos() {
+        return challengeRepository.findAllEventNotificationChallengeVo();
+    }
+
     public List<ChallengeRecommendVo> findAllChallengeRecommendVos() {
         return recommendChallengeTypeList.stream()
                 .map(challengeRepository::findChallengeRecommendVoByChallengeType)

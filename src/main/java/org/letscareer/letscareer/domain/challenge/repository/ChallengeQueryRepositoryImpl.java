@@ -29,6 +29,7 @@ import java.util.Optional;
 
 import static org.letscareer.letscareer.domain.challenge.entity.QChallenge.challenge;
 import static org.letscareer.letscareer.domain.classification.entity.QChallengeClassification.challengeClassification;
+import static org.letscareer.letscareer.domain.mission.entity.QMission.mission;
 import static org.letscareer.letscareer.domain.price.entity.QChallengePrice.challengePrice;
 
 @RequiredArgsConstructor
@@ -262,6 +263,24 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
                         eqChallengeParticipationType(ChallengeParticipationType.LIVE),
                         isHourBeforeStartDate(1)
                 )
+                .fetch();
+    }
+
+    @Override
+    public List<ChallengeEventVo> findAllEventNotificationChallengeVo() {
+        return queryFactory
+                .select(Projections.constructor(ChallengeEventVo.class,
+                        challenge.id,
+                        mission.id.max()
+                ))
+                .from(challenge)
+                .join(challenge.missionList, mission)
+                .where(
+                        eqChallengeParticipationType(ChallengeParticipationType.LIVE),
+                        mission.th.eq(99),
+                        isDayAfterEndDate(2)
+                )
+                .groupBy(challenge.id)
                 .fetch();
     }
 
