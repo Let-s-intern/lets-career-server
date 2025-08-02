@@ -72,7 +72,7 @@ public class BlogReview {
                 .url(openGraphVo.url())
                 .postDate(requestDto.postDate())
                 .attendance(attendance)
-                .isVisible(true)
+                .isVisible(false)
                 .build();
     }
 
