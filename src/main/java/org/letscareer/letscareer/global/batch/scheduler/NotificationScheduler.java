@@ -3,11 +3,13 @@ package org.letscareer.letscareer.global.batch.scheduler;
 import lombok.RequiredArgsConstructor;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
+import org.letscareer.letscareer.domain.challenge.vo.ChallengeEventVo;
 import org.letscareer.letscareer.domain.live.helper.LiveHelper;
 import org.letscareer.letscareer.domain.mission.helper.MissionHelper;
 import org.letscareer.letscareer.domain.program.helper.ProgramHelper;
 import org.letscareer.letscareer.domain.program.vo.ProgramReviewNotificationVo;
 import org.letscareer.letscareer.global.batch.config.*;
+import org.letscareer.letscareer.global.batch.config.challenge.*;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.JobParametersInvalidException;
 import org.springframework.batch.core.launch.JobLauncher;
@@ -35,6 +37,7 @@ public class NotificationScheduler {
     private final LiveRemindNotificationJobConfig liveRemindNotificationJobConfig;
     private final ChallengeEndNotificationJobConfig challengeEndNotificationJobConfig;
     private final ChallengeOTRemindNotificationJobConfig challengeOTRemindNotificationJobConfig;
+    private final ChallengeEventNotificationJobConfig challengeEventNotificationJobConfig;
     private final MissionEndNotificationJobConfig missionEndNotificationJobConfig;
 
     @Scheduled(cron = "0 5 10 * * ?")
@@ -107,6 +110,22 @@ public class NotificationScheduler {
                     challengeOTRemindNotificationJobConfig.challengeOTRemindNotificationJob(),
                     new JobParametersBuilder()
                             .addLong("challengeId", challengeId)
+                            .addLocalDateTime("now", LocalDateTime.now())
+                            .toJobParameters()
+            );
+        }
+    }
+
+    @Scheduled(cron = "0 30 10 * * ?")
+    @SchedulerLock(name = "challengeEventNotificationJob", lockAtMostFor = "3m", lockAtLeastFor = "3m")
+    public void sendChallengeEventNotification() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
+        List<ChallengeEventVo> challengeVoList = challengeHelper.findEventNotificationChallengeVos();
+        for(ChallengeEventVo challengeVo : challengeVoList) {
+            jobLauncher.run(
+                    challengeEventNotificationJobConfig.challengeEventNotificationJob(),
+                    new JobParametersBuilder()
+                            .addLong("challengeId", challengeVo.challengeId())
+                            .addLong("missionId", challengeVo.bonusMissionId())
                             .addLocalDateTime("now", LocalDateTime.now())
                             .toJobParameters()
             );

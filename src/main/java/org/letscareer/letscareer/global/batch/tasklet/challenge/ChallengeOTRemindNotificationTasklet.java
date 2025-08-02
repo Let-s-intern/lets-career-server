@@ -1,11 +1,11 @@
-package org.letscareer.letscareer.global.batch.tasklet;
+package org.letscareer.letscareer.global.batch.tasklet.challenge;
 
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.helper.ChallengeApplicationHelper;
 import org.letscareer.letscareer.domain.application.vo.NotificationUserVo;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
 import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
-import org.letscareer.letscareer.domain.nhn.dto.request.challenge.ChallengeRemindParameter;
+import org.letscareer.letscareer.domain.nhn.dto.request.challenge.OTRemindParameter;
 import org.letscareer.letscareer.domain.nhn.provider.NhnProvider;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.batch.core.StepContribution;
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Component
 @StepScope
-public class ChallengeRemindNotificationTasklet implements Tasklet {
+public class ChallengeOTRemindNotificationTasklet implements Tasklet {
     private final ChallengeHelper challengeHelper;
     private final ChallengeApplicationHelper challengeApplicationHelper;
     private final NhnProvider nhnProvider;
@@ -35,13 +35,13 @@ public class ChallengeRemindNotificationTasklet implements Tasklet {
         Challenge challenge = challengeHelper.findChallengeByIdOrThrow(challengeId);
         List<NotificationUserVo> notificationUserVos = challengeApplicationHelper.getNotificationUserVos(challengeId);
         if(!notificationUserVos.isEmpty()) {
-            List<ChallengeRemindParameter> requestParameterList = notificationUserVos.stream()
-                    .map(notificationUserVo -> ChallengeRemindParameter.of(notificationUserVo.user().getName(), challenge))
+            List<OTRemindParameter> requestParameterList = notificationUserVos.stream()
+                    .map(notificationUserVo -> OTRemindParameter.of(notificationUserVo.user().getName(), challenge, notificationUserVo.applicationId()))
                     .collect(Collectors.toList());
             List<User> userList = notificationUserVos.stream()
                     .map(notificationUserVo -> notificationUserVo.user())
                     .collect(Collectors.toList());
-            nhnProvider.sendKakaoMessages(userList, requestParameterList, "challenge_remind");
+            nhnProvider.sendKakaoMessages(userList, requestParameterList, "OT_remind");
         }
         return RepeatStatus.FINISHED;
     }

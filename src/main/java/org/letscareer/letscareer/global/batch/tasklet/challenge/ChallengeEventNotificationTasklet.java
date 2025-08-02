@@ -1,12 +1,11 @@
-package org.letscareer.letscareer.global.batch.tasklet;
+package org.letscareer.letscareer.global.batch.tasklet.challenge;
 
 import lombok.RequiredArgsConstructor;
 import org.letscareer.letscareer.domain.application.helper.ChallengeApplicationHelper;
 import org.letscareer.letscareer.domain.application.vo.NotificationUserVo;
 import org.letscareer.letscareer.domain.challenge.entity.Challenge;
-import org.letscareer.letscareer.domain.mission.entity.Mission;
-import org.letscareer.letscareer.domain.mission.helper.MissionHelper;
-import org.letscareer.letscareer.domain.nhn.dto.request.challenge.MissionEndParameter;
+import org.letscareer.letscareer.domain.challenge.helper.ChallengeHelper;
+import org.letscareer.letscareer.domain.nhn.dto.request.challenge.ChallengeEventParameter;
 import org.letscareer.letscareer.domain.nhn.provider.NhnProvider;
 import org.letscareer.letscareer.domain.user.entity.User;
 import org.springframework.batch.core.StepContribution;
@@ -23,27 +22,29 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Component
 @StepScope
-public class MissionEndNotificationTasklet implements Tasklet {
-    private final MissionHelper missionHelper;
+public class ChallengeEventNotificationTasklet implements Tasklet {
+    private final ChallengeHelper challengeHelper;
     private final ChallengeApplicationHelper challengeApplicationHelper;
     private final NhnProvider nhnProvider;
+
+    @Value("#{jobParameters[challengeId]}")
+    private Long challengeId;
 
     @Value("#{jobParameters[missionId]}")
     private Long missionId;
 
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) {
-        Mission mission = missionHelper.findMissionByIdOrThrow(missionId);
-        Challenge challenge = mission.getChallenge();
-        List<NotificationUserVo> notificationUserVos = challengeApplicationHelper.getAttendanceNullNotificationUserVos(challenge.getId(), mission.getId());
+        Challenge challenge = challengeHelper.findChallengeByIdOrThrow(challengeId);
+        List<NotificationUserVo> notificationUserVos = challengeApplicationHelper.getAttendanceNullNotificationUserVos(challengeId, missionId);
         if(!notificationUserVos.isEmpty()) {
-            List<MissionEndParameter> requestParameterList = notificationUserVos.stream()
-                    .map(notificationUserVo -> MissionEndParameter.of(notificationUserVo.user().getName(), mission, challenge, notificationUserVo.applicationId()))
+            List<ChallengeEventParameter> requestParameterList = notificationUserVos.stream()
+                    .map(notificationUserVo -> ChallengeEventParameter.of(notificationUserVo.user().getName(), challenge.getTitle(),challenge.getEndDate().plusDays(2), challenge.getId(), notificationUserVo.applicationId(), missionId))
                     .collect(Collectors.toList());
             List<User> userList = notificationUserVos.stream()
                     .map(notificationUserVo -> notificationUserVo.user())
                     .collect(Collectors.toList());
-            nhnProvider.sendKakaoMessages(userList, requestParameterList, "mission_end");
+            nhnProvider.sendKakaoMessages(userList, requestParameterList, "challenge_event_test");
         }
         return RepeatStatus.FINISHED;
     }
